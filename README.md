@@ -17,3 +17,4 @@ No additional instructions required.
 Name | Mobile | Email | Development OS/Toolchain
 -:|:-:|:-|-|
 Kelvin Wong| 86994809 | e0415515@u.nus.edu | Windows 10/Visual Studio 2019
+Teo Hoe Keat| 83388769 | e0407184@u.nus.edu | Windows 10/Visual Studio 2019
