@@ -15,10 +15,27 @@
     <ClCompile Include="..\source\Parser.cpp" />
     <ClCompile Include="..\source\PKB.cpp" />
     <ClCompile Include="..\source\TNode.cpp" />
+    <ClCompile Include="Entity.cpp" />
+    <ClCompile Include="Pattern.cpp" />
+    <ClCompile Include="PKBAdapter.cpp" />
+    <ClCompile Include="Query.cpp" />
+    <ClCompile Include="QueryEvaluator.cpp" />
+    <ClCompile Include="QueryPreprocessor.cpp" />
+    <ClCompile Include="QuerySystem.cpp" />
+    <ClCompile Include="RelRef.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\source\PKB.h" />
     <ClInclude Include="..\source\TNode.h" />
+    <ClInclude Include="Common.h" />
+    <ClInclude Include="Entity.h" />
+    <ClInclude Include="Pattern.h" />
+    <ClInclude Include="PKBAdapter.h" />
+    <ClInclude Include="Query.h" />
+    <ClInclude Include="QueryEvaluator.h" />
+    <ClInclude Include="QueryPreprocessor.h" />
+    <ClInclude Include="QuerySystem.h" />
+    <ClInclude Include="RelRef.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{DC21A1EA-D2C6-4D14-A2B4-E025B64BDE81}</ProjectGuid>

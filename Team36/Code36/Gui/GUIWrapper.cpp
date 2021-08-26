@@ -1,6 +1,8 @@
 #include "GUIWrapper.h"
 
 #include <iostream>
+#include "..\SPA\QuerySystem.h"
+
 
 // a default constructor
 GUIWrapper::GUIWrapper() {
@@ -21,7 +23,8 @@ void GUIWrapper::evaluate(std::string query, std::list<std::string>& results){
   // ...code to evaluate query...
 
 	std::cout << "query=  " << query << std::endl;
-	results.push_back(query + "\nQuery result: ...");
+	QuerySystem querySystem;
+	results.push_back(query + "\nQuery result: " + querySystem.processQuery(query));
   // store the answers to the query in the results list (it is initially empty)
   // each result must be a string.
 }
