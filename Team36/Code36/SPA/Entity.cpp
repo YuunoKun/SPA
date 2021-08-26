@@ -6,6 +6,9 @@ Entity::Entity(EntityType entity_type, string name) {
 	this->name = name;
 }
 
+Entity::Entity() {
+}
+
 EntityType Entity::getType() {
 	return entity_type;
 }

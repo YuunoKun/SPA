@@ -21,6 +21,7 @@ enum EntityType {
 class Entity {
 public:
 	Entity(EntityType, string);
+	Entity();
 
 	EntityType getType();
 	string getName();
