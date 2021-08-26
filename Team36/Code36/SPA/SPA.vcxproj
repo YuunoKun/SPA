@@ -17,7 +17,11 @@
     <ClCompile Include="..\source\TNode.cpp" />
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="Pattern.cpp" />
+    <ClCompile Include="PKBAdapter.cpp" />
     <ClCompile Include="Query.cpp" />
+    <ClCompile Include="QueryEvaluator.cpp" />
+    <ClCompile Include="QueryPreprocessor.cpp" />
+    <ClCompile Include="QuerySystem.cpp" />
     <ClCompile Include="RelRef.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -26,7 +30,11 @@
     <ClInclude Include="Common.h" />
     <ClInclude Include="Entity.h" />
     <ClInclude Include="Pattern.h" />
+    <ClInclude Include="PKBAdapter.h" />
     <ClInclude Include="Query.h" />
+    <ClInclude Include="QueryEvaluator.h" />
+    <ClInclude Include="QueryPreprocessor.h" />
+    <ClInclude Include="QuerySystem.h" />
     <ClInclude Include="RelRef.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
