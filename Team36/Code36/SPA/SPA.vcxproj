@@ -23,6 +23,7 @@
     <ClCompile Include="QueryPreprocessor.cpp" />
     <ClCompile Include="QuerySystem.cpp" />
     <ClCompile Include="RelRef.cpp" />
+    <ClCompile Include="Stmt.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\source\PKB.h" />
@@ -36,6 +37,7 @@
     <ClInclude Include="QueryPreprocessor.h" />
     <ClInclude Include="QuerySystem.h" />
     <ClInclude Include="RelRef.h" />
+    <ClInclude Include="Stmt.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{DC21A1EA-D2C6-4D14-A2B4-E025B64BDE81}</ProjectGuid>
