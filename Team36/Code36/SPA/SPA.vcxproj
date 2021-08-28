@@ -23,9 +23,12 @@
 		<ClCompile Include="..\source\QueryPreprocessor.cpp" />
 		<ClCompile Include="..\source\QuerySystem.cpp" />
 		<ClCompile Include="..\source\RelRef.cpp" />
+		<ClCompile Include="..\source\Stmt.cpp" />
 	</ItemGroup>
 	<ItemGroup>
 		<ClInclude Include="..\source\PKB.h" />
+		<ClCompile Include="..\source\Parser.h" />
+		<ClCompile Include="..\source\Stmt.h" />
 		<ClInclude Include="..\source\TNode.h" />
 		<ClInclude Include="..\source\Common.h" />
 		<ClInclude Include="..\source\Entity.h" />
