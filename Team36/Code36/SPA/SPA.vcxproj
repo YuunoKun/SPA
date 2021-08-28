@@ -27,11 +27,11 @@
 	</ItemGroup>
 	<ItemGroup>
 		<ClInclude Include="..\source\PKB.h" />
+		<ClCompile Include="..\source\Parser.h" />
 		<ClInclude Include="..\source\TNode.h" />
 		<ClInclude Include="..\source\Common.h" />
 		<ClInclude Include="..\source\Entity.h" />
 		<ClInclude Include="..\source\Pattern.h" />
-		<ClInclude Include="..\source\Parser.h" />
 		<ClInclude Include="..\source\PKBAdapter.h" />
 		<ClInclude Include="..\source\Query.h" />
 		<ClInclude Include="..\source\QueryEvaluator.h" />

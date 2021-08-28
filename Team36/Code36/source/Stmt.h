@@ -4,8 +4,6 @@
 #include <unordered_map>
 #include "Common.h"
 
-using namespace std;
-
 enum StmtType {
 	read,
 	print,
@@ -17,7 +15,6 @@ enum StmtType {
 
 class Stmt {
 public:
-	Stmt();
 	Stmt(StmtType, stmt_index);
 
 	StmtType getType();
