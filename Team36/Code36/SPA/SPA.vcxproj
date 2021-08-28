@@ -23,6 +23,7 @@
 		<ClCompile Include="..\source\QueryPreprocessor.cpp" />
 		<ClCompile Include="..\source\QuerySystem.cpp" />
 		<ClCompile Include="..\source\RelRef.cpp" />
+		<ClCompile Include="..\source\Stmt.cpp" />
 	</ItemGroup>
 	<ItemGroup>
 		<ClInclude Include="..\source\PKB.h" />
@@ -30,12 +31,14 @@
 		<ClInclude Include="..\source\Common.h" />
 		<ClInclude Include="..\source\Entity.h" />
 		<ClInclude Include="..\source\Pattern.h" />
+		<ClInclude Include="..\source\Parser.h" />
 		<ClInclude Include="..\source\PKBAdapter.h" />
 		<ClInclude Include="..\source\Query.h" />
 		<ClInclude Include="..\source\QueryEvaluator.h" />
 		<ClInclude Include="..\source\QueryPreprocessor.h" />
 		<ClInclude Include="..\source\QuerySystem.h" />
 		<ClInclude Include="..\source\RelRef.h" />
+		<ClInclude Include="..\source\Stmt.h" />
 	</ItemGroup>
 	<PropertyGroup Label="Globals">
 		<ProjectGuid>{DC21A1EA-D2C6-4D14-A2B4-E025B64BDE81}</ProjectGuid>
