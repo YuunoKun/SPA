@@ -13,12 +13,18 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Source Files\PQL">
+      <UniqueIdentifier>{37070778-2b1c-4155-8b73-677a8fb86f0c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\PQL">
+      <UniqueIdentifier>{e447ebf1-a739-4a70-a6a3-67e0b55ff202}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Common">
+      <UniqueIdentifier>{2d0e0325-edf1-47cf-bb37-0472e2021428}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\source\DesignExtractor.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\Parser.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\source\PKB.cpp">
@@ -27,28 +33,31 @@
     <ClCompile Include="..\source\TNode.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Entity.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="..\source\PQL\Entity.cpp">
+      <Filter>Source Files\PQL</Filter>
     </ClCompile>
-    <ClCompile Include="RelRef.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="..\source\PQL\Pattern.cpp">
+      <Filter>Source Files\PQL</Filter>
     </ClCompile>
-    <ClCompile Include="Pattern.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="..\source\PQL\PKBAdapter.cpp">
+      <Filter>Source Files\PQL</Filter>
     </ClCompile>
-    <ClCompile Include="Query.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="..\source\PQL\Query.cpp">
+      <Filter>Source Files\PQL</Filter>
     </ClCompile>
-    <ClCompile Include="QueryPreprocessor.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="..\source\PQL\QueryEvaluator.cpp">
+      <Filter>Source Files\PQL</Filter>
     </ClCompile>
-    <ClCompile Include="QuerySystem.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="..\source\PQL\QueryPreprocessor.cpp">
+      <Filter>Source Files\PQL</Filter>
     </ClCompile>
-    <ClCompile Include="QueryEvaluator.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="..\source\PQL\QuerySystem.cpp">
+      <Filter>Source Files\PQL</Filter>
     </ClCompile>
-    <ClCompile Include="PKBAdapter.cpp">
+    <ClCompile Include="..\source\PQL\RelRef.cpp">
+      <Filter>Source Files\PQL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\Parser.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -59,32 +68,32 @@
     <ClInclude Include="..\source\TNode.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Common.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\source\PQL\Entity.h">
+      <Filter>Header Files\PQL</Filter>
     </ClInclude>
-    <ClInclude Include="Entity.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\source\PQL\Pattern.h">
+      <Filter>Header Files\PQL</Filter>
     </ClInclude>
-    <ClInclude Include="RelRef.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\source\PQL\PKBAdapter.h">
+      <Filter>Header Files\PQL</Filter>
     </ClInclude>
-    <ClInclude Include="Pattern.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\source\PQL\Query.h">
+      <Filter>Header Files\PQL</Filter>
     </ClInclude>
-    <ClInclude Include="Query.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\source\PQL\QueryEvaluator.h">
+      <Filter>Header Files\PQL</Filter>
     </ClInclude>
-    <ClInclude Include="QueryPreprocessor.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\source\PQL\QueryPreprocessor.h">
+      <Filter>Header Files\PQL</Filter>
     </ClInclude>
-    <ClInclude Include="QuerySystem.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\source\PQL\QuerySystem.h">
+      <Filter>Header Files\PQL</Filter>
     </ClInclude>
-    <ClInclude Include="QueryEvaluator.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\source\PQL\RelRef.h">
+      <Filter>Header Files\PQL</Filter>
     </ClInclude>
-    <ClInclude Include="PKBAdapter.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\source\Common\Common.h">
+      <Filter>Header Files\Common</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
