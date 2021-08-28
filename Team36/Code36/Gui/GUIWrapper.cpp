@@ -1,7 +1,7 @@
 #include "GUIWrapper.h"
 
 #include <iostream>
-#include "..\source\PQL\QuerySystem.h"
+#include "..\source\QuerySystem.h"
 
 // a default constructor
 GUIWrapper::GUIWrapper() {
