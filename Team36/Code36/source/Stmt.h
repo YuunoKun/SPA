@@ -15,13 +15,13 @@ enum StmtType {
 
 class Stmt {
 public:
-	Stmt(STMT_TYPE, stmt_index);
+	Stmt(StmtType, stmt_index);
 
-	STMT_TYPE getType();
+	StmtType getType();
 	stmt_index getNum();
 
 private:
 	//Member Variable
-	STMT_TYPE stmt_type;
+	StmtType stmt_type;
 	stmt_index stmt_num;
 };
