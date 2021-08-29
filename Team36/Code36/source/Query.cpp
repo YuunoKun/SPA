@@ -15,6 +15,14 @@ std::vector<Pattern> Query::getPatterns() {
 	return patterns;
 }
 
+Entity Query::getSelected() {
+	return selected;
+}
+
+void Query::setSelected(Entity selected) {
+	this->selected = selected;
+}
+
 void Query::addEntity(Entity entity) {
 	entities.insert({ entity.getName(), entity });
 }
