@@ -3,23 +3,20 @@
 #include <string>
 
 #include "Entity.h"
-
-using namespace std;
-
-
+#include "TNode.h"
 
 class Pattern {
 public:
-	Pattern(Entity, string, bool);
+	Pattern(Entity, TNode, bool);
 
 	Entity getEntityRef();
-	string getExpression();
+	TNode getExpression();
 	bool isWild();
 
 private:
 
 	//Member Variable
 	Entity ent_ref;
-	string expression;
-	bool wild;
+	TNode expression;
+	bool is_wild;
 };

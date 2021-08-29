@@ -4,22 +4,22 @@
 PKBAdapter::PKBAdapter() {
 }
 
-vector<variable_name> PKB::getVariables()
+std::vector<variable_name> PKBAdapter::getVariables()
 {
-	return PKB::getVariables();
+	//return PKB::getVariables();
 }
 
-vector<Stmt> PKB::getStmts()
+std::vector<Stmt> PKBAdapter::getStmts()
 {
-	return PKB::getStmts();
+	//return PKB::getStmts();
 }
 
-vector<constant> PKB::getConstants()
+std::vector<constant> PKBAdapter::getConstants()
 {
-	return PKB::getConstants();
+	//return PKB::getConstants();
 }
 
-vector<procedure_name> PKB::getProcedures()
+std::vector<procedure_name> PKBAdapter::getProcedures()
 {
-	return PKB::getProcedures();
+	//return PKB::getProcedures();
 }
