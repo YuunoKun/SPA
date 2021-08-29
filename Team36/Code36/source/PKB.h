@@ -14,22 +14,25 @@ typedef short PROC;
 class TNode;
 
 class PKB {
-	std::unordered_set<procedure_name> proc_table;
-	std::unordered_set<constant> const_table;
-	std::unordered_set<variable_name> var_table;
-	std::unordered_set<Stmt> stmt_table;
-
 public:
 	static int setProcToAST(PROC p, TNode* r);
 	static TNode* getRootAST(PROC p);
 
-	void setProcedures(vector<procedure_name> proc_set);
-	void setConstants(vector<constant> const_set);
-	void setVariables(vector<variable_name> var_set);
-	void setStmts(vector<Stmt> stmt_set);
+	void setProcedures(std::vector<procedure_name> proc_set);
+	void setConstants(std::vector<constant> const_set);
+	void setVariables(std::vector<variable_name> var_set);
+	void setStmts(std::vector<Stmt> stmt_set);
 
-	vector<procedure_name> getProcedures();
-	vector<constant> getConstants();
-	vector<variable_name> getVariables();
-	vector<Stmt> getStmts();
+	std::vector<procedure_name> getProcedures();
+	std::vector<constant> getConstants();
+	std::vector<variable_name> getVariables();
+	std::vector<Stmt> getStmts();
+
+private:
+	std::unordered_set<procedure_name> proc_table;
+	std::unordered_set<constant> const_table;
+	std::unordered_set<variable_name> var_table;
+
+	/* To add hash function for Stmt */
+	//std::unordered_set<Stmt> stmt_table;
 };

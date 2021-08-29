@@ -4,24 +4,24 @@
 #include <unordered_map>
 #include "Common.h"
 
-enum StmtType {
-	read,
-	print,
-	call,
+enum STMT_TYPE {
+	readStmt,
+	printStmt,
+	callStmt,
 	whileStmt,
 	ifStmt,
-	assign,
+	assignStmt,
 };
 
 class Stmt {
 public:
-	Stmt(StmtType, stmt_index);
+	Stmt(STMT_TYPE, stmt_index);
 
-	StmtType getType();
+	STMT_TYPE getType();
 	stmt_index getNum();
 
 private:
 	//Member Variable
-	StmtType stmt_type;
+	STMT_TYPE stmt_type;
 	stmt_index stmt_num;
 };
