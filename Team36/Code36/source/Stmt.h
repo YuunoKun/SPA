@@ -10,7 +10,7 @@ enum STMT_TYPE {
 	callStmt,
 	whileStmt,
 	ifStmt,
-	assignStmt,
+	assignStmt
 };
 
 class Stmt {
