@@ -16,6 +16,8 @@ class TNode;
 class PKB {
 public:
 	static PKB& PKB::getInstance();
+	PKB(PKB const&) = delete;
+	void operator=(PKB const&) = delete;
 
 	static int setProcToAST(PROC p, TNode* r);
 	static TNode* getRootAST(PROC p);
