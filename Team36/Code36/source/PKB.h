@@ -15,6 +15,8 @@ class TNode;
 
 class PKB {
 public:
+	static PKB& PKB::getInstance();
+
 	static int setProcToAST(PROC p, TNode* r);
 	static TNode* getRootAST(PROC p);
 
@@ -35,4 +37,6 @@ private:
 
 	/* To add hash function for Stmt */
 	//std::unordered_set<Stmt> stmt_table;
+
+	PKB() {};
 };

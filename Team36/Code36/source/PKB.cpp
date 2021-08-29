@@ -6,6 +6,12 @@
 #include "PKB.h"
 #include "TNode.h"
 
+PKB& PKB::getInstance()
+{
+	static PKB pkb;
+	return pkb;
+}
+
 int PKB::setProcToAST(PROC p, TNode* r) {
 	return 0;
 }

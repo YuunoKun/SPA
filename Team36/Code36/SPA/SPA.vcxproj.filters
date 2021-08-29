@@ -22,12 +22,15 @@
     <Filter Include="Header Files\Common">
       <UniqueIdentifier>{2d0e0325-edf1-47cf-bb37-0472e2021428}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\FrontEnd">
+      <UniqueIdentifier>{c72e00e4-904b-43c5-8221-784617ccd7a5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\FrontEnd">
+      <UniqueIdentifier>{737b3613-2c75-4ed3-99fe-e0eb635fdfec}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\source\DesignExtractor.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\PKB.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\source\TNode.cpp">
@@ -60,16 +63,19 @@
     <ClCompile Include="..\source\Parser.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\source\PKB.cpp">
+      <Filter>Source Files\FrontEnd</Filter>
+    </ClCompile>
     <ClCompile Include="..\source\Stmt.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\FrontEnd</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\Stmt.h">
+      <Filter>Header Files\FrontEnd</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\source\Common.h">
       <Filter>Header Files\Common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\PKB.h">
-      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\source\TNode.h">
       <Filter>Header Files</Filter>
@@ -101,8 +107,8 @@
     <ClInclude Include="..\source\RelRef.h">
       <Filter>Header Files\PQL</Filter>
     </ClInclude>
-    <ClCompile Include="..\source\Stmt.h">
-      <Filter>Header Files</Filter>
-    </ClCompile>
+    <ClInclude Include="..\source\PKB.h">
+      <Filter>Header Files\FrontEnd</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
