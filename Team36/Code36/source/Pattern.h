@@ -21,5 +21,5 @@ private:
 	//Member Variable
 	Entity ent_ref;
 	string expression;
-	bool wild;
+	bool is_wild;
 };

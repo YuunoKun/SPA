@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <vector>
 
 #include "Entity.h"
 
@@ -19,16 +20,14 @@ enum RelType {
 
 class RelRef {
 public:
-	RelRef(RelType, Entity, Entity);
+	RelRef(RelType, vector<Entity>);
 
 	RelType getType();
-	Entity getFirstClause();
-	Entity getSecondClause();
+	vector<Entity> getClauses();
 
 private:
 
 	//Member Variable
 	RelType rel_type;
-	Entity first_clause;
-	Entity second_clause;
+	vector<Entity> clauses;
 };
