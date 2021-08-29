@@ -3,38 +3,35 @@
 #include <string>
 #include <unordered_set>
 
-using namespace std;
-
 enum EntityType {
-	stmt,
-	read,
-	print,
-	whileStmt,
-	ifStmt,
-	assign,
-	variable,
-	constant,
-	procedure,
-	wild
+	STMT,
+	READ,
+	PRINT,
+	CALL,
+	WHILE,
+	IF,
+	ASSIGN,
+	VARIABLE,
+	CONSTANT,
+	PROCEDURE,
+	WILD
 };
 
 class Entity {
 public:
-	Entity(EntityType, string);
+	Entity(EntityType, std::string);
 	Entity();
 
 	EntityType getType();
-	string getName();
-	unordered_set<string> getValues();
-	void addValue(string);
-	void removeValue(string);
+	std::string getName();
+	std::unordered_set<std::string> getValues();
+	void addValue(std::string);
+	void removeValue(std::string);
 
 private:
 
 	//Member Variable
 	EntityType entity_type;
-	string name;
-	unordered_set<string> values;
+	std::string name;
+	std::unordered_set<std::string> values;
 };
-
-

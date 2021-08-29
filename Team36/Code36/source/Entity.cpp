@@ -1,7 +1,6 @@
 #include "Entity.h"
 
-
-Entity::Entity(EntityType entity_type, string name) {
+Entity::Entity(EntityType entity_type, std::string name) {
 	this->entity_type = entity_type;
 	this->name = name;
 }
@@ -13,18 +12,18 @@ EntityType Entity::getType() {
 	return entity_type;
 }
 
-string Entity::getName() {
+std::string Entity::getName() {
 	return name;
 }
 
-unordered_set<string> Entity::getValues() {
+std::unordered_set<std::string> Entity::getValues() {
 	return values;
 }
 
-void Entity::addValue(string value) {
+void Entity::addValue(std::string value) {
 	values.insert(value);
 }
 
-void Entity::removeValue(string value) {
+void Entity::removeValue(std::string value) {
 	values.erase(value);
 }

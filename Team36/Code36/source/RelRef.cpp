@@ -1,20 +1,14 @@
 #include "RelRef.h"
 
-
-RelRef::RelRef(RelType rel_type, Entity first_clause, Entity second_clause) {
+RelRef::RelRef(RelType rel_type, std::vector<Entity> clauses) {
 	this->rel_type = rel_type;
-	this->first_clause = first_clause;
-	this->second_clause = second_clause;
+	this->clauses = clauses;
 }
 
 RelType RelRef::getType() {
 	return rel_type;
 }
 
-Entity RelRef::getFirstClause() {
-	return first_clause;
-}
-
-Entity RelRef::getSecondClause() {
-	return second_clause;
+std::vector<Entity> RelRef::getClauses() {
+	return clauses;
 }

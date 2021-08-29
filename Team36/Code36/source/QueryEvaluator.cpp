@@ -1,5 +1,5 @@
 #include "QueryEvaluator.h"
 
-string QueryEvaluator::evaluateQuery(Query) {
+std::string QueryEvaluator::evaluateQuery(Query) {
 	return "QueryEvaluated";
 }

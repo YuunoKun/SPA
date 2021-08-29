@@ -2,9 +2,7 @@
 
 #include "Query.h"
 
-
 class QueryEvaluator {
 public:
-	string evaluateQuery(Query);
+	std::string evaluateQuery(Query);
 };
-

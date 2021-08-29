@@ -2,8 +2,7 @@
 
 #include "Query.h"
 
-
 class QueryPreprocessor {
 public:
-	Query process(string);
+	Query process(std::string);
 };

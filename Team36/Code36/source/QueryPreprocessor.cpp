@@ -1,6 +1,5 @@
 #include "QueryPreprocessor.h"
 
-
-Query QueryPreprocessor::process(string) {
+Query QueryPreprocessor::process(std::string) {
 	return Query();
 }
