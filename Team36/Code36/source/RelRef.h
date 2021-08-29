@@ -5,8 +5,6 @@
 
 #include "Entity.h"
 
-using namespace std;
-
 enum RelType {
 	MODIFIES_S,
 	MODIFIES_P,
@@ -20,14 +18,14 @@ enum RelType {
 
 class RelRef {
 public:
-	RelRef(RelType, vector<Entity>);
+	RelRef(RelType, std::vector<Entity>);
 
 	RelType getType();
-	vector<Entity> getClauses();
+	std::vector<Entity> getClauses();
 
 private:
 
 	//Member Variable
 	RelType rel_type;
-	vector<Entity> clauses;
+	std::vector<Entity> clauses;
 };

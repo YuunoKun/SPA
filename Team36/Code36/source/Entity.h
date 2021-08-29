@@ -3,8 +3,6 @@
 #include <string>
 #include <unordered_set>
 
-using namespace std;
-
 enum EntityType {
 	STMT,
 	READ,
@@ -21,21 +19,21 @@ enum EntityType {
 
 class Entity {
 public:
-	Entity(EntityType, string);
+	Entity(EntityType, std::string);
 	Entity();
 
 	EntityType getType();
-	string getName();
-	unordered_set<string> getValues();
-	void addValue(string);
-	void removeValue(string);
+	std::string getName();
+	std::unordered_set<std::string> getValues();
+	void addValue(std::string);
+	void removeValue(std::string);
 
 private:
 
 	//Member Variable
 	EntityType entity_type;
-	string name;
-	unordered_set<string> values;
+	std::string name;
+	std::unordered_set<std::string> values;
 };
 
 

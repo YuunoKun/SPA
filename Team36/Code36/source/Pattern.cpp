@@ -1,19 +1,19 @@
 #include "Pattern.h"
 
-Pattern::Pattern(Entity ent_ref, string expression, bool wild) {
+Pattern::Pattern(Entity ent_ref, TNode expression, bool is_wild) {
 	this->ent_ref = ent_ref;
 	this->expression = expression;
-	this->wild = wild;
+	this->is_wild = is_wild;
 }
 
 Entity Pattern::getEntityRef() {
 	return ent_ref;
 }
 
-string Pattern::getExpression() {
+TNode Pattern::getExpression() {
 	return expression;
 }
 
 bool Pattern::isWild() {
-	return wild;
+	return is_wild;
 }

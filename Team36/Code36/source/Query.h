@@ -7,16 +7,13 @@
 #include "RelRef.h"
 #include "Pattern.h"
 
-using namespace std;
-
-
 class Query {
 public:
 	Query();
 
-	unordered_map<string, Entity> getEntities();
-	vector<RelRef> getRelations();
-	vector<Pattern> getPatterns();
+	std::unordered_map<std::string, Entity> getEntities();
+	std::vector<RelRef> getRelations();
+	std::vector<Pattern> getPatterns();
 	void addEntity(Entity);
 	void addRelation(RelRef);
 	void addPattern(Pattern);
@@ -24,9 +21,9 @@ public:
 private:
 
 	//Member Variable
-	unordered_map<string, Entity> entities;
-	vector<RelRef> relations;
-	vector<Pattern> patterns;
+	std::unordered_map<std::string, Entity> entities;
+	std::vector<RelRef> relations;
+	std::vector<Pattern> patterns;
 };
 
 
