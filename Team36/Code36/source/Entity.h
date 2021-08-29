@@ -35,5 +35,3 @@ private:
 	std::string name;
 	std::unordered_set<std::string> values;
 };
-
-
