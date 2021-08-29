@@ -5,23 +5,23 @@
 #include "Common.h"
 
 enum StmtType {
-	read,
-	print,
-	call,
-	whileStmt,
-	ifStmt,
-	assign,
+	STMT_READ,
+	STMT_PRINT,
+	STMT_CALL,
+	STMT_WHILE,
+	STMT_IF,
+	STMT_ASSIGN
 };
 
 class Stmt {
 public:
-	Stmt(StmtType, stmt_index);
+	Stmt(STMT_TYPE, stmt_index);
 
-	StmtType getType();
+	STMT_TYPE getType();
 	stmt_index getNum();
 
 private:
 	//Member Variable
-	StmtType stmt_type;
+	STMT_TYPE stmt_type;
 	stmt_index stmt_num;
 };

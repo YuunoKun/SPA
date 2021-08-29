@@ -8,4 +8,3 @@ class QuerySystem {
 public:
 	std::string processQuery(std::string);
 };
-
