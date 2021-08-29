@@ -7,12 +7,14 @@
 using namespace std;
 
 enum RelType {
-	modifiesS,
-	usesS,
-	parent,
-	parentT,
-	follows,
-	followsT,
+	MODIFIES_S,
+	MODIFIES_P,
+	USES_S,
+	USE_P,
+	PARENT,
+	PARENT_T,
+	FOLLOWS,
+	FOLLOWS_T
 };
 
 class RelRef {

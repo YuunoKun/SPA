@@ -6,16 +6,17 @@
 using namespace std;
 
 enum EntityType {
-	stmt,
-	read,
-	print,
-	whileStmt,
-	ifStmt,
-	assign,
-	variable,
-	constant,
-	procedure,
-	wild
+	STMT,
+	READ,
+	PRINT,
+	CALL,
+	WHILE,
+	IF,
+	ASSIGN,
+	VARIABLE,
+	CONSTANT,
+	PROCEDURE,
+	WILD
 };
 
 class Entity {
