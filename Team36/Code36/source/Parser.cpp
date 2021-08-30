@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <unordered_set>
 #include <stdexcept>
 #include "PKB.h"
 #include "TNode.h"
@@ -15,7 +16,7 @@ Parser::Parser() {
 }
 
 
-void Parser::load_file(const char* file) {
+void Parser::load_file(std::string file) {
 
 	FILE* input_file = fopen(file, "r");
 	try {
@@ -47,4 +48,24 @@ void Parser::parse() {
 	*/
 
 	m_tokenizer.parse(m_source_program);
+
+	const vector<Tokenizer::Token> v = m_tokenizer.get_token_chain();
+	std::vector<procedure_name> p_n;
+	std::unordered_set<constant> con;
+	Tokenizer::Token tk;
+
+	for (Tokenizer::Token token : v) {
+		if (tk.m_type == Tokenizer::TokenType::PROCEDURE && token.m_type == Tokenizer::TokenType::IDENTIFIER) {
+			p_n.push_back(token.m_token_value);
+		}
+
+		if(tk.m_type == Tokenizer::TokenType::CONSTANT) {
+			con.insert(atoi(token.m_token_value.c_str));
+		}
+		tk = token;
+	}
+
+	PKB::getInstance().setProcedures(p_n);
+	PKB::getInstance().setConstants(con);
+
 }

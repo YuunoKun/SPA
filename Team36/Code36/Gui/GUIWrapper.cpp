@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include "..\source\QuerySystem.h"
+#include "..\source\Parser.h"
 
 // a default constructor
 GUIWrapper::GUIWrapper() {
@@ -12,6 +13,9 @@ GUIWrapper::GUIWrapper() {
 // method for parsing the SIMPLE source
 void GUIWrapper::parse(std::string filename) {
 	// call your parser to do the parsing
+	Parser::Parser parser;
+	parser.load_file(filename);
+	parser.parse();
 	std::cout << "parsed " << filename << std::endl;
 	// ...rest of your code...
 }

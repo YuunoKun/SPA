@@ -3,7 +3,6 @@
 #include <string>
 #include "Token.h"
 #include "Tokenizer.h"
-#include "DesignExtractor.h"
 
 
 namespace Parser {
@@ -14,7 +13,7 @@ namespace Parser {
 		Parser();
 
 		// Load source file
-		void load_file(const char* file);
+		void load_file(std::string file);
 
 		// Load and parse source file
 		void parse();
