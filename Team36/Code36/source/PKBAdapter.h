@@ -1,5 +1,10 @@
 #pragma once
 
+#include <iostream>
+#include <vector>
+
+#include "Stmt.h"
+#include "Common.h"
 
 class PKBAdapter {
 public:

@@ -15,7 +15,6 @@ public:
 			EntityType type = static_cast<EntityType>(i);
 			Entity testEntity(type, "test");
 			Assert::IsTrue(testEntity.getType() == type);
-
 		}
 	}
 

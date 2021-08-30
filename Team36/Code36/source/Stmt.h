@@ -5,12 +5,12 @@
 #include "Common.h"
 
 enum StmtType {
-	read,
-	print,
-	call,
-	whileStmt,
-	ifStmt,
-	assign,
+	STMT_READ,
+	STMT_PRINT,
+	STMT_CALL,
+	STMT_WHILE,
+	STMT_IF,
+	STMT_ASSIGN
 };
 
 class Stmt {

@@ -27,5 +27,3 @@ private:
 	std::vector<Pattern> patterns;
 	Entity selected;
 };
-
-
