@@ -49,7 +49,7 @@ Query QueryPreprocessor::process(std::string str) {
 		// assign declarations to entites
 		// add enetities 
 		std::string CONSTANT = "constant";
-		std::string PROC = "proc";
+		std::string PROCEDURE = "proc";
 		std::string SELECT = "Select";
 
 		const char tempDelim = ' ';
@@ -60,7 +60,7 @@ Query QueryPreprocessor::process(std::string str) {
 			Entity entity(EntityType::CONSTANT, tempTokens[1]);
 			query.addEntity(entity);
 		}
-		else if (tokens[i].find(PROC) != std::string::npos) {
+		else if (tokens[i].find(PROCEDURE) != std::string::npos) {
 			Entity entity(EntityType::PROCEDURE, tempTokens[1]);
 			query.addEntity(entity);
 		}
@@ -78,6 +78,6 @@ Query QueryPreprocessor::process(std::string str) {
 		//== "Select"
 	}
 
-	return Query();
+	return query;
 }
 
