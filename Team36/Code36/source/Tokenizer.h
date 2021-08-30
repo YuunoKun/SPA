@@ -16,6 +16,7 @@ namespace Tokenizer {
 
 		// General tokenizing. Parse input into a chain of tokens for further use.
 		// Separator validations happens here.
+		// IMPORTANT : due to the nature of fopen and fread, I am unsure about \n \r characters, this is only a temporary solution!
 		void parse_into_tokens(const char* input);
 
 		// Provide access to token_chain
@@ -34,6 +35,9 @@ namespace Tokenizer {
 
 		// To simplify the parsing process, it is broken down into parsing procedure, stmts etc.
 		// The following is defined according to the SIMPLE concrete syntax grammar definition order.
+
+		/*
+		* temporarily commented out as it will be shifted to another component.
 		void expect_procedure();
 		void expect_statement_list();
 		void expect_statement();
@@ -49,7 +53,7 @@ namespace Tokenizer {
 		void expect_relational_factor();
 		void expect_term();
 		void expect_factor();
-
+		*/
 	};
 
 }
