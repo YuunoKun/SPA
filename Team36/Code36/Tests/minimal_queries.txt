@@ -1,0 +1,10 @@
+1 - comment
+procedure p;
+Select p
+main, printY
+5000
+2 - comment
+constant c;
+Select c
+4, 5
+5000
