@@ -20,6 +20,7 @@ public:
 	void addRelation(RelRef);
 	void addPattern(Pattern);
 
+
 private:
 	//Member Variable
 	std::unordered_map<std::string, Entity> entities;

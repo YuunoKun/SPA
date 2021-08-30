@@ -8,8 +8,7 @@ namespace UnitTesting {
 		for (int i = EntityType::STMT; i != EntityType::WILD; ++i) {
 			EntityType type = static_cast<EntityType>(i);
 			Entity testEntity(type, "test");
-			TNode tnode;
-			Pattern pattern(testEntity, tnode, true);
+			Pattern pattern({ type, "test" }, {}, true);
 			EXPECT_EQ(pattern.getEntityRef(), testEntity);
 		}
 	}

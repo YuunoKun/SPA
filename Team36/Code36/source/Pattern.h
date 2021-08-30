@@ -13,6 +13,8 @@ public:
 	TNode getExpression();
 	bool isWild();
 
+	bool operator==(const Pattern&) const;
+
 private:
 
 	//Member Variable

@@ -41,6 +41,7 @@
   <ItemGroup>
     <ClCompile Include="EntityTest.cpp" />
     <ClCompile Include="PatternTest.cpp" />
+    <ClCompile Include="QueryTest.cpp" />
     <ClCompile Include="RelRefTest.cpp" />
     <ClCompile Include="TestPKB.cpp">
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(MSBuildThisFileDirectory)include;%(AdditionalIncludeDirectories):</AdditionalIncludeDirectories>
