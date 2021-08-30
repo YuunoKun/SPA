@@ -12,3 +12,8 @@ RelType RelRef::getType() {
 std::vector<Entity> RelRef::getClauses() {
 	return clauses;
 }
+
+bool RelRef::operator==(const RelRef& entity) const {
+	return rel_type == entity.rel_type
+		&& clauses == entity.clauses;
+}

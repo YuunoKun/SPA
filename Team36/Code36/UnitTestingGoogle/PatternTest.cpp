@@ -4,7 +4,6 @@
 #include "Common.h"
 
 namespace UnitTesting {
-	
 	TEST(Pattern, getEntityRef) {
 		for (int i = EntityType::STMT; i != EntityType::WILD; ++i) {
 			EntityType type = static_cast<EntityType>(i);
@@ -14,8 +13,8 @@ namespace UnitTesting {
 			EXPECT_EQ(pattern.getEntityRef(), testEntity);
 		}
 	}
-	
-	//TODO: test case to be update with expression parser 
+
+	//TODO: test case to be update with expression parser
 	TEST(Pattern, getExpression) {
 		/*
 		Entity testEntity(STMT, "test");
@@ -24,7 +23,7 @@ namespace UnitTesting {
 		EXPECT_EQ(pattern.getExpression(), tnode);
 		*/
 	}
-	
+
 	TEST(Pattern, isWild) {
 		Entity testEntity(STMT, "test");
 		TNode tnode;

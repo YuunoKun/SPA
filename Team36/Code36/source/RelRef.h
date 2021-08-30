@@ -5,7 +5,7 @@
 
 #include "Entity.h"
 
-enum class RelType {
+enum RelType {
 	MODIFIES_S,
 	MODIFIES_P,
 	USES_S,
@@ -22,6 +22,8 @@ public:
 
 	RelType getType();
 	std::vector<Entity> getClauses();
+
+	bool operator==(const RelRef&) const;
 
 private:
 

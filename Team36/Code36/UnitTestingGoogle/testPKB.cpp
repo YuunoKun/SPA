@@ -1,6 +1,7 @@
 #include "pch.h"
 
 #include "PKB.h"
+#include "PKB.cpp"
 #include "Common.h"
 
 namespace UnitTesting {
