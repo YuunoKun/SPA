@@ -4,8 +4,7 @@
 #include "Token.h"
 #include "Tokenizer.h"
 
-
-namespace Parser {
+namespace SourceProcessor {
 
 	class Parser {
 	public:
@@ -13,14 +12,18 @@ namespace Parser {
 		Parser();
 
 		// Load source file
-		void load_file(std::string file);
+		void load_file(const char* file);
 
+		// Return input string
+		std::string get_source_program();
+			
 		// Load and parse source file
 		void parse();
 
-	private:
 
+	private:
 		std::string m_source_program;
-		Tokenizer::Tokenizer m_tokenizer;
+		Tokenizer m_tokenizer;
 	};
-}
+
+} // namespace SourceProcessor

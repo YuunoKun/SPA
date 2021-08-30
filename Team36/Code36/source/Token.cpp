@@ -1,12 +1,14 @@
 #include <string>
 #include "Token.h"
 
-using namespace Tokenizer;
+using namespace SourceProcessor;
+
 
 Token::Token(TokenType type, std::string token_value) {
 	m_type = type;
 	m_token_value = token_value;
 }
+
 
 std::string Token::to_string() {
 	if (m_token_value = "") {

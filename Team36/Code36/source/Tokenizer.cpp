@@ -5,11 +5,8 @@
 #include "Token.h"
 #include "Tokenizer.h"
 
-using namespace Tokenizer;
+using namespace SourceProcessor;
 
-Tokenizer::Tokenizer() {
-	m_token_cache = {};
-}
 
 void Tokenizer::parse_into_tokens(const char* input) {
 	Token current_token;
@@ -162,9 +159,11 @@ void Tokenizer::parse_into_tokens(const char* input) {
 	}
 }
 
-const std::vector<Token> &Tokenizer::get_token_chain() const {
+
+const std::vector<Token> Tokenizer::get_token_chain() const {
 	return m_token_chain;
 }
+
 
 void Tokenizer::add_token(Token& token) {
 

@@ -5,18 +5,19 @@
 #include <stdexcept>
 #include "PKB.h"
 #include "TNode.h"
-#include "Parser.hpp"
+#include "Parser.h"
 #include "Token.h"
-#include "Tokenizer.hpp"
+#include "Tokenizer.h"
+
+using namespace SourceProcessor;
 
 
-// Constructor
 Parser::Parser() {
-	m_tokenizer = Tokenizer::Tokenizer();
+	m_tokenizer = Tokenizer();
 }
 
 
-void Parser::load_file(std::string file) {
+void Parser::load_file(const char* file) {
 
 	FILE* input_file = fopen(file, "r");
 	try {
@@ -39,6 +40,12 @@ void Parser::load_file(std::string file) {
 	}
 }
 
+
+std::string Parser::get_source_program() {
+	return m_source_program;
+}
+
+
 void Parser::parse() {
 	// Actual parsing workflow
 
@@ -46,26 +53,28 @@ void Parser::parse() {
 	If m_source_program = "";
 	An error message should be pushed
 	*/
+	Tokenizer tokenizer;
 
-	m_tokenizer.parse(m_source_program);
 
-	const vector<Tokenizer::Token> v = m_tokenizer.get_token_chain();
+	tokenizer.parse_into_tokens(m_source_program.c_str());
+
+	const std::vector<Token> v = tokenizer.get_token_chain();
 	std::vector<procedure_name> p_n;
 	std::unordered_set<constant> con;
-	Tokenizer::Token tk;
+	Token tk;
 
-	for (Tokenizer::Token token : v) {
-		if (tk.m_type == Tokenizer::TokenType::PROCEDURE && token.m_type == Tokenizer::TokenType::IDENTIFIER) {
+	for (Token token : v) {
+		if (tk.m_type == TokenType::PROCEDURE && token.m_type == TokenType::IDENTIFIER) {
 			p_n.push_back(token.m_token_value);
 		}
 
-		if(tk.m_type == Tokenizer::TokenType::CONSTANT) {
-			con.insert(atoi(token.m_token_value.c_str));
+		if(tk.m_type == TokenType::CONSTANT) {
+			con.insert(atoi(token.m_token_value.c_str()));
 		}
 		tk = token;
 	}
 
 	PKB::getInstance().setProcedures(p_n);
-	PKB::getInstance().setConstants(con);
+	PKB::getInstance().setConstants(std::vector<constant>(con.begin(), con.end()));
 
 }

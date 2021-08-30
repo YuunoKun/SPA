@@ -2,17 +2,13 @@
 
 #include <string>
 #include <vector>
-#include "Token.hpp"
+#include "Token.h"
 
 
-
-namespace Tokenizer {
+namespace SourceProcessor {
 
 	class Tokenizer {
 	public:
-
-		//Constructor
-		Tokenizer();
 
 		// General tokenizing. Parse input into a chain of tokens for further use.
 		// Separator validations happens here.
@@ -26,7 +22,7 @@ namespace Tokenizer {
 		void build();
 
 	private:
-		std::vector<Token> m_token_cache;
+		std::vector<Token> m_token_cache{ {} };
 
 		// Push token to token_cache
 		void add_token(Token& token);
@@ -56,4 +52,4 @@ namespace Tokenizer {
 		*/
 	};
 
-}
+} // namespace SourceProcessor

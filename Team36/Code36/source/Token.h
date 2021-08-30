@@ -8,7 +8,7 @@ Defining SIMPLE tokens for parsing.
 #include <string>
 #include <vector>
 
-namespace Tokenizer {
+namespace SourceProcessor {
 
 	enum TokenType {
 		// Does not exist
@@ -118,5 +118,5 @@ namespace Tokenizer {
 
 		std::string to_string();
 	};
-}
+} // namespace SourceProcessor
 
