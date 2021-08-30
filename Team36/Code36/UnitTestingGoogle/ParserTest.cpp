@@ -1,6 +1,6 @@
-#include "../pch.h"
+#include "pch.h"
 
-#include "../../source/Parser.h"
+#include "../source/Parser.h"
 
 namespace UnitTesting {
 	// The fixture for testing class Foo.
@@ -31,7 +31,7 @@ namespace UnitTesting {
 
 	TEST(ParserTest, ParserLoadsFile) {
 		SourceProcessor::Parser parser;
-		parser.load_file("TestSource/Sample1.txt");
+		parser.load_file("SPTest/TestSource/Sample1.txt");
 		EXPECT_EQ(parser.get_source_program(), "This is test file without any newline.");
 	}
 

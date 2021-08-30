@@ -2,11 +2,13 @@
 #include <vector>
 #include <stack>
 #include <stdexcept>
-#include "Token.h"
 #include "Tokenizer.h"
 
 using namespace SourceProcessor;
 
+Tokenizer::Tokenizer(void) {
+	m_token_cache = {};
+}
 
 void Tokenizer::parse_into_tokens(const char* input) {
 	Token current_token;

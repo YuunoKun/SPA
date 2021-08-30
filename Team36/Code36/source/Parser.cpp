@@ -3,16 +3,13 @@
 #include <vector>
 #include <unordered_set>
 #include <stdexcept>
-#include "PKB.h"
-#include "TNode.h"
 #include "Parser.h"
-#include "Token.h"
-#include "Tokenizer.h"
+#include "PKB.h"
 
 using namespace SourceProcessor;
 
 
-Parser::Parser() {
+Parser::Parser(void) {
 	m_tokenizer = Tokenizer();
 }
 
@@ -38,7 +35,7 @@ void Parser::load_file(const char* file) {
 		m_source_program = "";
 		fclose(input_file);
 	}
-}
+};
 
 
 std::string Parser::get_source_program() {
@@ -53,12 +50,10 @@ void Parser::parse() {
 	If m_source_program = "";
 	An error message should be pushed
 	*/
-	Tokenizer tokenizer;
 
+	m_tokenizer.parse_into_tokens(m_source_program.c_str());
 
-	tokenizer.parse_into_tokens(m_source_program.c_str());
-
-	const std::vector<Token> v = tokenizer.get_token_chain();
+	const std::vector<Token> v = m_tokenizer.get_token_chain();
 	std::vector<procedure_name> p_n;
 	std::unordered_set<constant> con;
 	Token tk;

@@ -10,6 +10,9 @@ namespace SourceProcessor {
 	class Tokenizer {
 	public:
 
+		//Constructor
+		Tokenizer();
+
 		// General tokenizing. Parse input into a chain of tokens for further use.
 		// Separator validations happens here.
 		// IMPORTANT : due to the nature of fopen and fread, I am unsure about \n \r characters, this is only a temporary solution!
@@ -19,10 +22,10 @@ namespace SourceProcessor {
 		const std::vector<Token> &get_token_chain() const;
 
 		// Pseudo FSM to expect and accept tokens, interact PKB to build.
-		void build();
+		//void build();
 
 	private:
-		std::vector<Token> m_token_cache{ {} };
+		std::vector<Token> m_token_cache;
 
 		// Push token to token_cache
 		void add_token(Token& token);

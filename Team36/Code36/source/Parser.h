@@ -1,7 +1,6 @@
 #pragma once
 
 #include <string>
-#include "Token.h"
 #include "Tokenizer.h"
 
 namespace SourceProcessor {
