@@ -1,6 +1,5 @@
 #include "Entity.h"
 
-
 Entity::Entity(EntityType entity_type, std::string name) {
 	this->entity_type = entity_type;
 	this->name = name;
