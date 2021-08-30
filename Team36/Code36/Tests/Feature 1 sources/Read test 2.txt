@@ -1,0 +1,3 @@
+Procedure a {
+	read;
+}

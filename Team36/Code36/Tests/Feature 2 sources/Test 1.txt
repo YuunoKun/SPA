@@ -1,0 +1,13 @@
+Procedure main {
+	x = 7;
+	y = 3;
+	while (x > y) {
+		if (x > 5) then {
+			x = x – 1;
+		} else {
+			y = y – 1;
+print x;
+		}
+	}
+	print y;
+}
