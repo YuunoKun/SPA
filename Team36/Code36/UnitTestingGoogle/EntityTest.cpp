@@ -39,4 +39,19 @@ namespace UnitTesting {
 			EXPECT_EQ(testEntity.getValues(), values);
 		}
 	}
+
+	TEST(Entity, equal) {
+		Entity e1(STMT, "test");
+		Entity e2(STMT, "test");
+		EXPECT_EQ(e1, e2);
+
+		Entity e3(READ, "test");
+		EXPECT_FALSE(e1 == e3);
+
+		Entity e4(STMT, "test1");
+		EXPECT_FALSE(e1 == e4);
+
+		Entity e5(WHILE, "test1");
+		EXPECT_FALSE(e1 == e5);
+	}
 }

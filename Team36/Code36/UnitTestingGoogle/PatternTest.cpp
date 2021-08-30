@@ -25,12 +25,31 @@ namespace UnitTesting {
 
 	TEST(Pattern, isWild) {
 		Entity testEntity(STMT, "test");
-		TNode tnode;
 
-		Pattern pattern1(testEntity, tnode, true);
+		Pattern pattern1(testEntity, {}, true);
 		EXPECT_TRUE(pattern1.isWild());
 
-		Pattern pattern2(testEntity, tnode, false);
+		Pattern pattern2(testEntity, {}, false);
 		EXPECT_FALSE(pattern2.isWild());
+	}
+
+	TEST(Pattern, equal) {
+		Entity testEntity(STMT, "test");
+
+		Pattern e1(testEntity, {}, true);
+		Pattern e2(testEntity, {}, true);
+		EXPECT_EQ(e1, e2);
+
+		Pattern e3(testEntity, {}, false);
+		EXPECT_FALSE(e1 == e3);
+
+		Entity testEntity1(STMT, "test1");
+		Pattern e4(testEntity1, {}, true);
+		EXPECT_FALSE(e1 == e4);
+
+		Entity testEntity2(WHILE, "test1");
+		Pattern e5(testEntity2, {}, true);
+		EXPECT_FALSE(e1 == e5);
+
 	}
 }
