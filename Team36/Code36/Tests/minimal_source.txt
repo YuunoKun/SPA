@@ -1,0 +1,23 @@
+procedure main { 
+
+         read x; 
+
+         print y; 
+
+         y = 4; 
+
+         if (y == 5) then { 
+
+            read y; 
+
+              } else { 
+           print y; 
+
+              } 
+}
+
+procedure printY { 
+
+         print y; 
+
+}
