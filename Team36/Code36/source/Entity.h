@@ -28,6 +28,8 @@ public:
 	void addValue(std::string);
 	void removeValue(std::string);
 
+	bool operator==(const Entity& entity) const;
+
 private:
 
 	//Member Variable

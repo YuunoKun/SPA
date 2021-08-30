@@ -27,3 +27,9 @@ void Entity::addValue(std::string value) {
 void Entity::removeValue(std::string value) {
 	values.erase(value);
 }
+
+bool Entity::operator==(const Entity& entity) const {
+	return entity_type == entity.entity_type
+		&& name == entity.name
+		&& values == entity.values;
+}

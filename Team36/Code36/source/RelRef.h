@@ -5,7 +5,7 @@
 
 #include "Entity.h"
 
-enum RelType {
+enum class RelType {
 	MODIFIES_S,
 	MODIFIES_P,
 	USES_S,
