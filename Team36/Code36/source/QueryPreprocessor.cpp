@@ -49,7 +49,7 @@ Query QueryPreprocessor::process(std::string str) {
 		// assign declarations to entites
 		// add enetities 
 		std::string CONSTANT = "constant";
-		std::string PROCEDURE = "proc";
+		std::string PROCEDURE = "procedure";
 		std::string SELECT = "Select";
 
 		const char tempDelim = ' ';
