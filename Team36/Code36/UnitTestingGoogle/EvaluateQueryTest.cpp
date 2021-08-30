@@ -10,6 +10,5 @@ namespace UnitTesting {
 		e.addValue("1");
 
 		QueryEvaluator qe;
-		qe.
 	}
 }
