@@ -74,9 +74,9 @@ namespace UnitTesting {
 
 		EXPECT_EQ(q.getPatterns(), o);
 
-		q.addPattern({ { ASSIGN, "patternType" }, { ASSIGN, "leftExpr"}, {}, true });
+		q.addPattern({ { ASSIGN, "patternType" }, { VARIABLE, "leftExpr"}, {}, true });
 		EXPECT_NE(q.getPatterns(), o);
-		o.push_back({ { ASSIGN, "patternType" }, { ASSIGN, "leftExpr"}, {}, true });
+		o.push_back({ { ASSIGN, "patternType" }, { VARIABLE, "leftExpr"}, {}, true });
 		EXPECT_EQ(q.getPatterns(), o);
 	}
 

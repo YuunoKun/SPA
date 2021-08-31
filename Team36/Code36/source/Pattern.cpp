@@ -7,6 +7,11 @@ Pattern::Pattern(Entity pattern_type, Entity left_expression, TNode expression, 
 		throw std::invalid_argument("Pattern Type is invalid");
 	}
 
+	if (left_expression.getType() != static_cast<EntityType>(VARIABLE) &&
+		left_expression.getType() != static_cast<EntityType>(WILD)) {
+		throw std::invalid_argument("Left Expression Type is invalid");
+	}
+
 	this->pattern_type = pattern_type;
 	this->left_expression = left_expression;
 	this->expression = expression;

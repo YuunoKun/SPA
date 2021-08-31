@@ -4,12 +4,20 @@
 #include "Common.h"
 
 namespace UnitTesting {
+	Entity validLeftExpressionType1(VARIABLE, "variableType");
+	Entity validLeftExpressionType2(WILD, "wildType");
+	Entity validPatternType(ASSIGN, "assignType");
+	Entity invalidType1(STMT, "assignType");
+	Entity invalidType2(IF, "assignType");
+	Entity invalidType3(CALL, "assignType");
+
 	TEST(Pattern, pattern) {
 		try {
 			// Negative Test Cases
-			Entity invalidPatternType1(IF, "invalidPatternType");
-			Entity invalidPatternType2(STMT, "invalidPatternType");
-			Entity invalidPatternType3(WHILE, "invalidPatternType");
+			Pattern patternWithInvalidPatternType(invalidType1, validLeftExpressionType2, {}, true);
+			Pattern patternWithInvalidPatternType2(invalidType2, validLeftExpressionType1, {}, true);
+			Pattern patternWithInvalidLeftExpressionType(validLeftExpressionType1, invalidType2, {}, true);
+			Pattern patternWithInvalidTypes(invalidType1, invalidType3, {}, true);
 		}
 		catch (std::invalid_argument const& err) {
 			EXPECT_EQ(err.what(), std::string("Pattern Type is invalid"));
@@ -21,15 +29,12 @@ namespace UnitTesting {
 	}
 
 	TEST(Pattern, getLeftExpression) {
-		Entity patternType(ASSIGN, "patternType");
-		Entity leftExpr(VARIABLE, "leftExpr");
-		Pattern pattern(patternType, leftExpr, {}, true);
-		EXPECT_EQ(pattern.getLeftExpression(), leftExpr);
+		Pattern pattern(validPatternType, validLeftExpressionType2, {}, true);
+		EXPECT_EQ(pattern.getLeftExpression(), validLeftExpressionType2);
 	}
 	TEST(Pattern, getPatternType) {
-		Entity testEntity(ASSIGN, "test");
-		Pattern pattern(testEntity, testEntity, {}, true);
-		EXPECT_EQ(pattern.getPatternType(), testEntity);
+		Pattern pattern(validPatternType, validLeftExpressionType2, {}, true);
+		EXPECT_EQ(pattern.getPatternType(), validPatternType);
 	}
 
 	//TODO: test case to be update with expression parser
@@ -41,31 +46,25 @@ namespace UnitTesting {
 	}
 
 	TEST(Pattern, isWild) {
-		Entity testEntity(ASSIGN, "test");
-
-		Pattern pattern1(testEntity, testEntity, {}, true);
+		Pattern pattern1(validPatternType, validLeftExpressionType1, {}, true);
 		EXPECT_TRUE(pattern1.isWild());
 
-		Pattern pattern2(testEntity, testEntity, {}, false);
+		Pattern pattern2(validPatternType, validLeftExpressionType1, {}, false);
 		EXPECT_FALSE(pattern2.isWild());
 	}
 
 	TEST(Pattern, equal) {
-		Entity testEntity(ASSIGN, "test");
-
-		Pattern e1(testEntity, testEntity, {}, true);
-		Pattern e2(testEntity, testEntity, {}, true);
+		Pattern e1(validPatternType, validLeftExpressionType1, {}, true);
+		Pattern e2(validPatternType, validLeftExpressionType1, {}, true);
 		EXPECT_EQ(e1, e2);
 
-		Pattern e3(testEntity, testEntity, {}, false);
+		Pattern e3(validPatternType, validLeftExpressionType1, {}, false);
 		EXPECT_FALSE(e1 == e3);
 
-		Entity testEntity1(ASSIGN, "test1");
-		Pattern e4(testEntity1, testEntity, {}, true);
+		Pattern e4(validPatternType, validLeftExpressionType2, {}, true);
 		EXPECT_FALSE(e1 == e4);
 
-		Entity testEntity2(ASSIGN, "test1");
-		Pattern e5(testEntity2, testEntity, {}, true);
+		Pattern e5(validPatternType, validLeftExpressionType2, {}, false);
 		EXPECT_FALSE(e1 == e5);
 	}
 }
