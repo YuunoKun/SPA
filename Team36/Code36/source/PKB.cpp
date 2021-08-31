@@ -12,12 +12,22 @@ PKB& PKB::getInstance()
 	return pkb;
 }
 
-int PKB::setProcToAST(PROC p, TNode* r) {
-	return 0;
+void PKB::resetCache()
+{
+	proc_table.clear();
+	const_table.clear();
+	var_table.clear();
 }
 
-TNode* PKB::getRootAST(PROC p) {
-	return nullptr;
+void PKB::resetEntities()
+{
+	proc_table.clear();
+	const_table.clear();
+	var_table.clear();
+}
+
+void PKB::resetRelations()
+{
 }
 
 void PKB::setProcedures(std::vector<procedure_name> proc_set) {

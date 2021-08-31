@@ -1,4 +1,0 @@
-Procedure readAndprint {
-	read ;
-	print x;
-}

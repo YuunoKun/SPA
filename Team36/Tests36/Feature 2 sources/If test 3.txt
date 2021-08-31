@@ -1,8 +1,0 @@
-Procedure b {
-	y = 2;
-	if (y > 0) {
-		y = y – 1;
-	} else {
-		y = y + 1;
-	}
-}
