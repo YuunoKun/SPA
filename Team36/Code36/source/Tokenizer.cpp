@@ -2,6 +2,7 @@
 #include <vector>
 #include <stack>
 #include <stdexcept>
+#include <iostream>
 #include "Tokenizer.h"
 
 using namespace SourceProcessor;
@@ -13,8 +14,9 @@ Tokenizer::Tokenizer(void) {
 void Tokenizer::parse_into_tokens(const char* input) {
 	Token current_token;
 	std::stack<char> separator_validation_stk;
-
-	for (char c : input) {
+	std::string source = std::string(input);
+	for (char c : source) {
+		//std::cout << (int)c << " ";
 		switch (c) {
 		case '{':
 			add_token(current_token);
@@ -27,7 +29,7 @@ void Tokenizer::parse_into_tokens(const char* input) {
 				separator_validation_stk.pop();
 			}
 			else {
-				std::runtime_error("Unexpected symbol : \'" + c + "\'");
+				std::runtime_error("Unexpected symbol : \'" + c + '\'');
 			}
 			add_token(current_token);
 			current_token.m_type = TokenType::STATEMENT_LIST_CLOSE;
@@ -44,7 +46,7 @@ void Tokenizer::parse_into_tokens(const char* input) {
 				separator_validation_stk.pop();
 			}
 			else {
-				std::runtime_error("Unexpected symbol : \'" + c + "\'");
+				std::runtime_error("Unexpected symbol : \'" + c + '\'');
 			}
 			add_token(current_token);
 			current_token.m_type = TokenType::PARENTHESIS_CLOSE;
@@ -96,23 +98,21 @@ void Tokenizer::parse_into_tokens(const char* input) {
 		case '=':
 			if (current_token.m_type == TokenType::BOOL_NEGATE) {
 				current_token.m_type = TokenType::BOOL_NEQUIV;
-				add_token(current_token);
 			}
 			else if (current_token.m_type == TokenType::BOOL_LT) {
 				current_token.m_type = TokenType::BOOL_LTEQ;
-				add_token(current_token);
 			}
 			else if (current_token.m_type == TokenType::BOOL_GT) {
 				current_token.m_type = TokenType::BOOL_GTEQ;
-				add_token(current_token);
 			}
 			else if (current_token.m_type == TokenType::ASSIGN) {
 				current_token.m_type = TokenType::BOOL_EQUIV;
-				add_token(current_token);
 			}
 			else {
+				add_token(current_token);
 				current_token.m_type = TokenType::ASSIGN;
 			}
+			add_token(current_token);
 			break;
 		case '+':
 			add_token(current_token);
@@ -150,11 +150,11 @@ void Tokenizer::parse_into_tokens(const char* input) {
 				}
 			}
 			else if (isalpha(c)) {
-				current_token.m_type = TokenType::INDENTIFIER;
+				current_token.m_type = TokenType::IDENTIFIER;
 				current_token.m_token_value.push_back(c);
 			}
 			else {
-				std::runtime_error("Unknown symbol : \'" + c + "\'");
+				std::runtime_error("Unknown symbol : \'" + c + '\'');
 			}
 			break;
 		}
@@ -163,7 +163,7 @@ void Tokenizer::parse_into_tokens(const char* input) {
 
 
 const std::vector<Token> Tokenizer::get_token_chain() const {
-	return m_token_chain;
+	return m_token_cache;
 }
 
 
@@ -175,33 +175,29 @@ void Tokenizer::add_token(Token& token) {
 	}
 
 	if (token.m_type == TokenType::IDENTIFIER) {
-		switch (token.m_token_value) {
-		case "procedure":
+		if (token.m_token_value == "procedure") {
 			token.m_type = TokenType::PROCEDURE;
-			break;
-		case "read":
+		}
+		else if (token.m_token_value == "read") {
 			token.m_type = TokenType::READ;
-			break;
-		case "print":
+		}
+		else if (token.m_token_value == "print") {
 			token.m_type = TokenType::PRINT;
-			break;
-		case "call":
+		}
+		else if (token.m_token_value == "call") {
 			token.m_type = TokenType::CALL;
-			break;
-		case "if":
+		}
+		else if (token.m_token_value == "if") {
 			token.m_type = TokenType::IF;
-			break;
-		case "while":
+		}
+		else if (token.m_token_value == "while") {
 			token.m_type = TokenType::WHILE;
-			break;
-		case "then":
+		}
+		else if (token.m_token_value == "then") {
 			token.m_type = TokenType::THEN;
-			break;
-		case "else":
+		}
+		else if (token.m_token_value == "else") {
 			token.m_type = TokenType::ELSE;
-			break;
-		default:
-			break;
 		}
 	}
 

@@ -1,13 +1,14 @@
 #include "pch.h"
-
+#include <iostream>
 #include "../source/Parser.h"
+#include "../source/PKB.h"
 
 namespace UnitTesting {
 	// The fixture for testing class Foo.
-	class FooTest : public ::testing::Test {
+	class ParserTest : public ::testing::Test {
 	protected:
 
-		FooTest() {
+		ParserTest() {
 			// You can do set-up work for each test here.
 		}
 
@@ -29,10 +30,20 @@ namespace UnitTesting {
 	};
 
 
-	TEST(ParserTest, ParserLoadsFile) {
+
+	TEST(ParserTest, Sample3TokenizerTest) {
 		SourceProcessor::Parser parser;
-		parser.load_file("SPTest/TestSource/Sample1.txt");
-		EXPECT_EQ(parser.get_source_program(), "This is test file without any newline.");
+		parser.load_file("../UnitTestingGoogle/SPTest/TestSource/Sample3.txt");
+		parser.parse();
+		ASSERT_EQ(PKB::getInstance().getProcedures().size(), 1);
+		ASSERT_EQ(PKB::getInstance().getConstants().size(), 1);
 	}
 
+	TEST(ParserTest, Sample4TokenizerTest) {
+		SourceProcessor::Parser parser;
+		parser.load_file("../UnitTestingGoogle/SPTest/TestSource/Sample4.txt");
+		parser.parse();
+		ASSERT_EQ(PKB::getInstance().getProcedures().size(), 2);
+		ASSERT_EQ(PKB::getInstance().getConstants().size(), 4);
+	}
 } // namespace UnitTesting

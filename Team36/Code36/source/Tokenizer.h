@@ -19,7 +19,7 @@ namespace SourceProcessor {
 		void parse_into_tokens(const char* input);
 
 		// Provide access to token_chain
-		const std::vector<Token> &get_token_chain() const;
+		const std::vector<Token> get_token_chain() const;
 
 		// Pseudo FSM to expect and accept tokens, interact PKB to build.
 		//void build();

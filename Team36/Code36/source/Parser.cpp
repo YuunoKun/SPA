@@ -3,6 +3,7 @@
 #include <vector>
 #include <unordered_set>
 #include <stdexcept>
+#include <fstream>
 #include "Parser.h"
 #include "PKB.h"
 
@@ -14,8 +15,8 @@ Parser::Parser(void) {
 }
 
 
-void Parser::load_file(const char* file) {
-
+void Parser::load_file(std::string file) {
+	/*
 	FILE* input_file = fopen(file, "r");
 	try {
 		if (!input_file) {
@@ -35,6 +36,20 @@ void Parser::load_file(const char* file) {
 		m_source_program = "";
 		fclose(input_file);
 	}
+	*/
+
+	std::ifstream input_file;
+	input_file.open(file);
+	if (input_file.is_open()) {
+		std::string temp;
+		while (std::getline(input_file, temp)) {
+			m_source_program.append(temp);
+		}
+	}
+	else {
+		std::cout << "Cannot open file." << std::endl;
+	}
+	input_file.close();
 };
 
 
@@ -59,11 +74,13 @@ void Parser::parse() {
 	Token tk;
 
 	for (Token token : v) {
+		std::cout << "TYPE : " << tokenTypeStrings[token.m_type] << "  Value : " << token.m_token_value << std::endl;
 		if (tk.m_type == TokenType::PROCEDURE && token.m_type == TokenType::IDENTIFIER) {
 			p_n.push_back(token.m_token_value);
 		}
 
-		if(tk.m_type == TokenType::CONSTANT) {
+		if(token.m_type == TokenType::CONSTANT) {
+			std::cout << "CONSTANT : " << token.m_token_value << std::endl;
 			con.insert(atoi(token.m_token_value.c_str()));
 		}
 		tk = token;

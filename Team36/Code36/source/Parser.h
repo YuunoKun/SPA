@@ -11,7 +11,7 @@ namespace SourceProcessor {
 		Parser();
 
 		// Load source file
-		void load_file(const char* file);
+		void load_file(std::string file);
 
 		// Return input string
 		std::string get_source_program();

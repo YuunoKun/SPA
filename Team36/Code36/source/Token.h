@@ -11,13 +11,10 @@ Defining SIMPLE tokens for parsing.
 namespace SourceProcessor {
 
 	enum TokenType {
-		// Does not exist
 		INVAL,
 
 		IDENTIFIER,
-
 		WHITESPACE,
-
 		CONSTANT,
 
 		// SIMPLE Keyword
@@ -68,9 +65,7 @@ namespace SourceProcessor {
 		"INVAL",
 
 		"IDENTIFIER",
-
 		"WHITESPACE",
-
 		"CONSTANT",
 
 		"PROCEDURE",
@@ -101,7 +96,7 @@ namespace SourceProcessor {
 		"BOOL_LT",
 		"BOOL_LTEQ",
 		"BOOL_GT",
-		"BOOL_GTEQ"
+		"BOOL_GTEQ",
 
 		"PARENTHESIS_OPEN",
 		"PARENTHESIS_CLOSE",
@@ -113,9 +108,14 @@ namespace SourceProcessor {
 
 	class Token {
 	public : 
-		enum TokenType m_type {WHITESPACE};
-		std::string m_token_value{" "};
 
+		//Constructor
+		Token();
+
+		Token(TokenType type, std::string token_value);
+
+		TokenType m_type;
+		std::string m_token_value;
 		std::string to_string();
 	};
 } // namespace SourceProcessor
