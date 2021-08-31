@@ -5,12 +5,10 @@ Stmt::Stmt(StmtType stmt_type, stmt_index stmt_num) {
 	this->stmt_num = stmt_num;
 }
 
-StmtType Stmt::getType()
-{
+StmtType Stmt::getType() {
 	return stmt_type;
 }
 
-stmt_index Stmt::getNum()
-{
+stmt_index Stmt::getNum() {
 	return stmt_num;
 }

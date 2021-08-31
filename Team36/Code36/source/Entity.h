@@ -28,7 +28,6 @@ public:
 	void addValue(std::string);
 	void removeValue(std::string);
 
-
 	bool operator==(const Entity&) const;
 
 private:
