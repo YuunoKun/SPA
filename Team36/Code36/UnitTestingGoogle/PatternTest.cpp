@@ -11,16 +11,29 @@ namespace UnitTesting {
 	Entity invalidType2(IF, "assignType");
 	Entity invalidType3(CALL, "assignType");
 
-	TEST(Pattern, pattern) {
+	TEST(Pattern, patternTypeInvalid) {
 		try {
 			// Negative Test Cases
 			Pattern patternWithInvalidPatternType(invalidType1, validLeftExpressionType2, {}, true);
 			Pattern patternWithInvalidPatternType2(invalidType2, validLeftExpressionType1, {}, true);
-			Pattern patternWithInvalidLeftExpressionType(validLeftExpressionType1, invalidType2, {}, true);
-			Pattern patternWithInvalidTypes(invalidType1, invalidType3, {}, true);
+			//Pattern patternWithInvalidLeftExpressionType(validLeftExpressionType1, invalidType2, {}, true);
 		}
 		catch (std::invalid_argument const& err) {
 			EXPECT_EQ(err.what(), std::string("Pattern Type is invalid"));
+		}
+		catch (...) {
+			// Test case should fail if not caught as std::invalid argument
+			FAIL();
+		}
+	}
+
+	TEST(Pattern, leftExpressionTypeInvalid) {
+		try {
+			// Negative Test Cases
+			Pattern patternWithInvalidLeftExpressionType(validPatternType, invalidType2, {}, true);
+		}
+		catch (std::invalid_argument const& err) {
+			EXPECT_EQ(err.what(), std::string("Left Expression Type is invalid"));
 		}
 		catch (...) {
 			// Test case should fail if not caught as std::invalid argument
