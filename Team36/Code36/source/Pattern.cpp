@@ -1,6 +1,12 @@
 #include "Pattern.h"
+#include <iostream>
 
 Pattern::Pattern(Entity pattern_type, Entity left_expression, TNode expression, bool is_wild) {
+	// Checks that pattern types are valid
+	if (pattern_type.getType() != static_cast<EntityType>(ASSIGN)) {
+		throw std::invalid_argument("Pattern Type is invalid");
+	}
+
 	this->pattern_type = pattern_type;
 	this->left_expression = left_expression;
 	this->expression = expression;
