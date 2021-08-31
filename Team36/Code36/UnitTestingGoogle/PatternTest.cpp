@@ -16,7 +16,6 @@ namespace UnitTesting {
 			// Negative Test Cases
 			Pattern patternWithInvalidPatternType(invalidType1, validLeftExpressionType2, {}, true);
 			Pattern patternWithInvalidPatternType2(invalidType2, validLeftExpressionType1, {}, true);
-			//Pattern patternWithInvalidLeftExpressionType(validLeftExpressionType1, invalidType2, {}, true);
 		}
 		catch (std::invalid_argument const& err) {
 			EXPECT_EQ(err.what(), std::string("Pattern Type is invalid"));
