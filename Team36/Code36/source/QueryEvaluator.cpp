@@ -7,7 +7,7 @@ QueryEvaluator::QueryEvaluator(PKBAdapter pkb) {
 	this->pkb = pkb;
 }
 
-std::string QueryEvaluator::evaluateQuery(Query query) {
+std::list<std::string> QueryEvaluator::evaluateQuery(Query query) {
 	initEntity(query);
 	return getResult(query);;
 }
@@ -69,19 +69,11 @@ void QueryEvaluator::initEntityVariables(Entity* entity, std::vector<variable_na
 	printf("added variable count:%d\n", entity->getValues().size());
 }
 
-std::string QueryEvaluator::getResult(Query& query) {
+std::list<std::string> QueryEvaluator::getResult(Query& query) {
 	std::unordered_set<std::string> values = query.getSelected().getValues();
 	printf("result size %d\n", values.size());
 	printf("entity size:%d\n", query.getEntities().at(query.getSelected().getName())->getValues().size());
-	std::vector<std::string> results(values.begin(), values.end());
+	std::list<std::string> results(values.begin(), values.end());
 
-	std::string result;
-	for (int i = 0; i < results.size(); i++) {
-		result += results[i];
-		if (i + 1 != results.size()) {
-			result += ", ";
-		}
-	}
-
-	return result;
+	return results;
 }

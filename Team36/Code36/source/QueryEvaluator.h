@@ -8,7 +8,7 @@ public:
 	QueryEvaluator();
 	QueryEvaluator(PKBAdapter pkb);
 
-	std::string evaluateQuery(Query);
+	std::list<std::string> evaluateQuery(Query);
 
 private:
 	void initEntity(Query&);
@@ -17,7 +17,7 @@ private:
 	void initEntityStmts(Entity*, std::vector<Stmt>);
 	void initEntityVariables(Entity*, std::vector<variable_name>);
 
-	std::string getResult(Query&);
+	std::list<std::string> getResult(Query&);
 
 	PKBAdapter pkb;
 };
