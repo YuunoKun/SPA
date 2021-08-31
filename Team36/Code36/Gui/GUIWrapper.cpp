@@ -1,6 +1,7 @@
 #include "GUIWrapper.h"
 
 #include <iostream>
+
 #include "..\source\QuerySystem.h"
 #include "..\source\Parser.h"
 
