@@ -65,7 +65,7 @@ Query QueryPreprocessor::process(std::string str) {
 			query.addEntity(entity);
 		}
 		else if (tokens[i].find(SELECT) != std::string::npos) {
-			// need new type for SELECT?
+			//  nneedew type for SELECT?
 			Entity entity(EntityType::CONSTANT, tempTokens[1]);
 			query.setSelected(entity);
 		}

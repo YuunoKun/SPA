@@ -23,6 +23,8 @@ public:
 	RelType getType();
 	std::vector<Entity> getClauses();
 
+	bool operator==(const RelRef&) const;
+
 private:
 
 	//Member Variable
