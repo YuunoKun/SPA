@@ -91,7 +91,7 @@ namespace UnitTesting {
 	}
 
 
-
+	// Negative test cases for declaration and selected
 	TEST(QueryPreprocessor, processFail) {
 		QueryPreprocessor preprocessor;
 		Query query = preprocessor.process("procedure p; Select p");
