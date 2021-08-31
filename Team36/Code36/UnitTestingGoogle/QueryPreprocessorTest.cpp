@@ -92,6 +92,22 @@ namespace UnitTesting {
 
 
 
+	TEST(QueryPreprocessor, processFail) {
+		QueryPreprocessor preprocessor;
+		Query query = preprocessor.process("procedure p; Select p");
+
+		Entity procedureP = query.getEntities()["p"];
+		std::string procedureNameP = procedureP.getName();
+		EXPECT_FALSE(procedureNameP == "s");
+
+		EntityType procedureTypeP = procedureP.getType();
+		EXPECT_FALSE(procedureTypeP == EntityType::CONSTANT) << "Wrong procedure type";
+
+		std::string out = query.getSelected().getName();
+		EXPECT_FALSE(out == "s") << "Wrong name for selected procedure";
+	}
+
+
 
 	// test to see if selected variable comes from entity's map
 
