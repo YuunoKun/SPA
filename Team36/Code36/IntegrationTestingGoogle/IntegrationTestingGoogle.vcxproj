@@ -19,7 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{fa6b185f-38c7-41af-a1fd-e33dcc21afd0}</ProjectGuid>
+    <ProjectGuid>{0faec1d2-3c7e-4c75-b0ea-d7eea98f2c14}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <WindowsTargetPlatformVersion>10.0.19041.0</WindowsTargetPlatformVersion>
     <ConfigurationType>Application</ConfigurationType>
@@ -39,21 +39,14 @@
     <ClInclude Include="pch.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="EntityTest.cpp" />
-    <ClCompile Include="EvaluateQueryTest.cpp" />
-    <ClCompile Include="PatternTest.cpp" />
-    <ClCompile Include="QueryTest.cpp" />
-    <ClCompile Include="RelRefTest.cpp" />
-    <ClCompile Include="TestPKB.cpp">
-      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(MSBuildThisFileDirectory)include;%(AdditionalIncludeDirectories):</AdditionalIncludeDirectories>
-    </ClCompile>
+    <ClCompile Include="ParserPKBTest.cpp" />
+    <ClCompile Include="test.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="PKBTest.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SPA\SPA.vcxproj">
@@ -77,7 +70,7 @@
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>$(MSBuildThisFileDirectory)include;%(AdditionalIncludeDirectories):$(SolutionDir)source</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(MSBuildThisFileDirectory)include;%(AdditionalIncludeDirectories); $(SolutionDir)source</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
