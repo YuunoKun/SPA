@@ -1,0 +1,124 @@
+diff a/Team36/Code36/source/QueryEvaluator.cpp b/Team36/Code36/source/QueryEvaluator.cpp	(rejected hunks)
+@@ -3,68 +3,79 @@
+ QueryEvaluator::QueryEvaluator() {
+ }
+ 
+-std::string QueryEvaluator::evaluateQuery(Query query) {
++QueryEvaluator::QueryEvaluator(PKBAdapter pkb) {
++	this->pkb = pkb;
++}
+ 
++std::string QueryEvaluator::evaluateQuery(Query query) {
+ 	initEntity(query);
+ 	return getResult(query);;
+ }
+ 
+-
+-
+-void QueryEvaluator::initEntity(Query query) {
+-	std::unordered_map<std::string, Entity>::iterator it;
+-
+-	for (it = query.getEntities().begin(); it != query.getEntities().end(); it++) {
+-		switch (it->second.getType()) {
+-		case STMT: initEntityStmts(it->second, pkb.getStmts()); break;
++void QueryEvaluator::initEntity(Query& query) {
++	std::unordered_map<std::string, Entity*>::iterator it;
++	for (auto it : query.getEntities()) {
++		printf("init entity: %s\n", it.second->getName().c_str());
++		printf("variable size: %d\n", pkb.getVariables().size());
++		printf("constant size: %d\n", pkb.getConstants().size());
++		printf("procedure size: %d\n", pkb.getProcedures().size());
++		switch (it.second->getType()) {
++		case STMT: initEntityStmts(it.second, pkb.getStmts()); break;
+ 		case READ: break;
+ 		case PRINT: break;
+ 		case CALL: break;
+ 		case WHILE: break;
+ 		case IF: break;
+ 		case ASSIGN: break;
+-		case VARIABLE: initEntityVariables(it->second, pkb.getVariables());  break;
+-		case CONSTANT: initEntityConstants(it->second, pkb.getConstants());  break;
+-		case PROCEDURE: initEntityProcedures(it->second, pkb.getProcedures());  break;
++		case VARIABLE: initEntityVariables(it.second, pkb.getVariables());  break;
++		case CONSTANT: initEntityConstants(it.second, pkb.getConstants());  break;
++		case PROCEDURE: initEntityProcedures(it.second, pkb.getProcedures());  break;
+ 		}
+ 	}
+-
++	for (auto it : query.getEntities()) {
++		printf("after entities size: %d\n", it.second->getValues().size());
++	}
+ }
+ 
+-void QueryEvaluator::initEntityConstants(Entity entity, std::vector<constant> v) {
++void QueryEvaluator::initEntityConstants(Entity* entity, std::vector<constant> v) {
+ 	for each (constant c in v) {
+-		entity.addValue(std::to_string(c));
++		entity->addValue(std::to_string(c));
++		printf("added const: %d\n", c);
+ 	}
+-
+ }
+ 
+-void QueryEvaluator::initEntityProcedures(Entity entity, std::vector<procedure_name> v) {
++void QueryEvaluator::initEntityProcedures(Entity* entity, std::vector<procedure_name> v) {
+ 	for each (procedure_name name in v) {
+-		entity.addValue(name);
++		entity->addValue(name);
+ 	}
+-
+ }
+ 
+-void QueryEvaluator::initEntityStmts(Entity entity, std::vector<Stmt> v) {
++void QueryEvaluator::initEntityStmts(Entity* entity, std::vector<Stmt> v) {
+ 	for each (Stmt stmt in v) {
+-		entity.addValue(std::to_string(stmt.getNum()));
+-	}
+-}
++		entity->addValue(std::to_string(stmt.getNum()));
+ 
++		printf("added num: %d\n", stmt.getNum());
++	}
+ 
++	printf("added stmts\n");
++}
+ 
+-void QueryEvaluator::initEntityVariables(Entity entity, std::vector<variable_name> v) {
++void QueryEvaluator::initEntityVariables(Entity* entity, std::vector<variable_name> v) {
+ 	for each (variable_name name in v) {
+-		entity.addValue(name);
++		entity->addValue(name.c_str());
++		printf("added var: %s\n", name.c_str());
+ 	}
+-}
+ 
++	printf("added variable count:%d\n", entity->getValues().size());
++}
+ 
+-std::string QueryEvaluator::getResult(Query query) {
+-	std::vector<std::string> results(query.getSelected().getValues().begin(), query.getSelected().getValues().end()); ;
++std::string QueryEvaluator::getResult(Query& query) {
++	std::unordered_set<std::string> values = query.getSelected().getValues();
++	printf("result size %d\n", values.size());
++	printf("entity size:%d\n", query.getEntities().at(query.getSelected().getName())->getValues().size());
++	std::vector<std::string> results(values.begin(), values.end());
+ 
+ 	std::string result;
+-
+ 	for (int i = 0; i < results.size(); i++) {
+ 		result += results[i];
+ 		if (i + 1 != results.size()) {
+@@ -72,10 +83,5 @@
+ 		}
+ 	}
+ 
+-	return std::string();
+-}
+-
+-
+-
+-
+-
++	return result;
++}
+\ No newline at end of file

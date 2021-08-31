@@ -28,18 +28,19 @@ namespace UnitTesting {
 		Entity testEntity(STMT, "");
 
 		for each (std::string input in testInput) {
-			testEntity.addValue(input);
-			values.insert(input);
-			EXPECT_EQ(testEntity.getValues(), values);
-		}
 
-		for each (std::string input in testInput) {
-			testEntity.removeValue(input);
-			values.erase(input);
-			EXPECT_EQ(testEntity.getValues(), values);
+			Entity testEntity(STMT, "", input);
+			EXPECT_EQ(testEntity.getValue(), input);
 		}
 	}
 
+	TEST(Entity, isDeclartion) {
+		Entity testEntity(STMT, "test");
+		EXPECT_TRUE(testEntity.isDeclaration());
+
+		Entity testEntity2(STMT, "", "test");
+		EXPECT_FALSE(testEntity2.isDeclaration());
+	}
 	TEST(Entity, equal) {
 		Entity e1(STMT, "test");
 		Entity e2(STMT, "test");
