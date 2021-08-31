@@ -74,13 +74,13 @@ void Parser::parse() {
 	Token tk;
 
 	for (Token token : v) {
-		std::cout << "TYPE : " << tokenTypeStrings[token.m_type] << "  Value : " << token.m_token_value << std::endl;
+		//std::cout << "TYPE : " << tokenTypeStrings[token.m_type] << "  Value : " << token.m_token_value << std::endl;
 		if (tk.m_type == TokenType::PROCEDURE && token.m_type == TokenType::IDENTIFIER) {
 			p_n.push_back(token.m_token_value);
 		}
 
 		if(token.m_type == TokenType::CONSTANT) {
-			std::cout << "CONSTANT : " << token.m_token_value << std::endl;
+			//std::cout << "CONSTANT : " << token.m_token_value << std::endl;
 			con.insert(atoi(token.m_token_value.c_str()));
 		}
 		tk = token;
