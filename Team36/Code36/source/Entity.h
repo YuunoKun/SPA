@@ -19,15 +19,15 @@ enum EntityType {
 
 class Entity {
 public:
-	Entity(EntityType, std::string);
 	Entity();
+	Entity(EntityType, std::string);
+	Entity(EntityType, std::string, std::string);
 
 	EntityType getType();
 	std::string getName();
-	std::unordered_set<std::string> getValues();
-	void addValue(std::string);
-	void removeValue(std::string);
-
+	std::string getValue();
+	bool isDeclaration();
+	
 	bool operator==(const Entity&) const;
 
 private:
@@ -35,5 +35,5 @@ private:
 	//Member Variable
 	EntityType entity_type;
 	std::string name;
-	std::unordered_set<std::string> values;
+	std::string value;
 };
