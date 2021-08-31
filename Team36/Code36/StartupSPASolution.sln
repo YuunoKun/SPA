@@ -27,6 +27,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Gui", "Gui\Gui.vcxproj", "{
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UnitTestingGoogle", "UnitTestingGoogle\UnitTestingGoogle.vcxproj", "{FA6B185F-38C7-41AF-A1FD-E33DCC21AFD0}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "IntegrationTestingGoogle", "IntegrationTestingGoogle\IntegrationTestingGoogle.vcxproj", "{0FAEC1D2-3C7E-4C75-B0EA-D7EEA98F2C14}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -77,6 +79,14 @@ Global
 		{FA6B185F-38C7-41AF-A1FD-E33DCC21AFD0}.Release|Win32.Build.0 = Release|Win32
 		{FA6B185F-38C7-41AF-A1FD-E33DCC21AFD0}.Release|x64.ActiveCfg = Release|x64
 		{FA6B185F-38C7-41AF-A1FD-E33DCC21AFD0}.Release|x64.Build.0 = Release|x64
+		{0FAEC1D2-3C7E-4C75-B0EA-D7EEA98F2C14}.Debug|Win32.ActiveCfg = Debug|Win32
+		{0FAEC1D2-3C7E-4C75-B0EA-D7EEA98F2C14}.Debug|Win32.Build.0 = Debug|Win32
+		{0FAEC1D2-3C7E-4C75-B0EA-D7EEA98F2C14}.Debug|x64.ActiveCfg = Debug|x64
+		{0FAEC1D2-3C7E-4C75-B0EA-D7EEA98F2C14}.Debug|x64.Build.0 = Debug|x64
+		{0FAEC1D2-3C7E-4C75-B0EA-D7EEA98F2C14}.Release|Win32.ActiveCfg = Release|Win32
+		{0FAEC1D2-3C7E-4C75-B0EA-D7EEA98F2C14}.Release|Win32.Build.0 = Release|Win32
+		{0FAEC1D2-3C7E-4C75-B0EA-D7EEA98F2C14}.Release|x64.ActiveCfg = Release|x64
+		{0FAEC1D2-3C7E-4C75-B0EA-D7EEA98F2C14}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
