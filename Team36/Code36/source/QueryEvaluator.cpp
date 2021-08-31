@@ -3,10 +3,6 @@
 QueryEvaluator::QueryEvaluator() {
 }
 
-QueryEvaluator::QueryEvaluator(PKBAdapter pkb) {
-	this->pkb = pkb;
-}
-
 std::list<std::string> QueryEvaluator::evaluateQuery(Query query) {
 	QueryResult result;
 	return getResult(query, result);;

@@ -7,7 +7,6 @@
 class QueryEvaluator {
 public:
 	QueryEvaluator();
-	QueryEvaluator(PKBAdapter pkb);
 
 	std::list<std::string> evaluateQuery(Query);
 
