@@ -1,13 +1,18 @@
 #include "Pattern.h"
 
-Pattern::Pattern(Entity ent_ref, TNode expression, bool is_wild) {
-	this->ent_ref = ent_ref;
+Pattern::Pattern(Entity pattern_type, Entity left_expression, TNode expression, bool is_wild) {
+	this->pattern_type = pattern_type;
+	this->left_expression = left_expression;
 	this->expression = expression;
 	this->is_wild = is_wild;
 }
 
-Entity Pattern::getEntityRef() {
-	return ent_ref;
+Entity Pattern::getPatternType() {
+	return pattern_type;
+}
+
+Entity Pattern::getLeftExpression() {
+	return left_expression;
 }
 
 TNode Pattern::getExpression() {
@@ -20,7 +25,8 @@ bool Pattern::isWild() {
 
 //TODO: compare expression when == TNode is updated
 bool Pattern::operator==(const Pattern& pattern) const {
-	return ent_ref == pattern.ent_ref
+	return pattern_type == pattern.pattern_type
+		&& left_expression == pattern.left_expression
 		//&& expression == pattern.expression
 		&& is_wild == pattern.is_wild;
 }
