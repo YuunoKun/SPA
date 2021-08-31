@@ -5,10 +5,10 @@
 
 namespace UnitTesting {
 	// The fixture for testing class Foo.
-	class ParserTest : public ::testing::Test {
+	class ParserPKBTest : public ::testing::Test {
 	protected:
 
-		ParserTest() {
+		ParserPKBTest() {
 			// You can do set-up work for each test here.
 		}
 
@@ -29,9 +29,22 @@ namespace UnitTesting {
 		// for Foo.
 	};
 
-	TEST(ParserTest, Sample3TokenizerTest) {
+	TEST(ParserPKBTest, Sample3TokenizerTest) {
+		PKB::getInstance().resetCache();
+
+		SourceProcessor::Parser parser;
+		parser.load_file("../UnitTestingGoogle/SPTest/TestSource/Sample3.txt");
+		parser.parse();
+		ASSERT_EQ(PKB::getInstance().getProcedures().size(), 1);
+		ASSERT_EQ(PKB::getInstance().getConstants().size(), 1);
 	}
 
-	TEST(ParserTest, Sample4TokenizerTest) {
+	TEST(ParserPKBTest, Sample4TokenizerTest) {
+		PKB::getInstance().resetCache();
+		SourceProcessor::Parser parser;
+		parser.load_file("../UnitTestingGoogle/SPTest/TestSource/Sample4.txt");
+		parser.parse();
+		ASSERT_EQ(PKB::getInstance().getProcedures().size(), 2);
+		ASSERT_EQ(PKB::getInstance().getConstants().size(), 4);
 	}
 } // namespace UnitTesting

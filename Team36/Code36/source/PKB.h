@@ -19,9 +19,6 @@ public:
 	PKB(PKB const&) = delete;
 	void operator=(PKB const&) = delete;
 
-	static int setProcToAST(PROC p, TNode* r);
-	static TNode* getRootAST(PROC p);
-
 	void setProcedures(std::vector<procedure_name> proc_set);
 	void setConstants(std::vector<constant> const_set);
 	void setVariables(std::vector<variable_name> var_set);
@@ -31,6 +28,10 @@ public:
 	std::vector<constant> getConstants();
 	std::vector<variable_name> getVariables();
 	std::vector<Stmt> getStmts();
+
+	void resetCache();
+	void resetEntities();
+	void resetRelations();
 
 private:
 	std::unordered_set<procedure_name> proc_table;
