@@ -17,3 +17,10 @@ TNode Pattern::getExpression() {
 bool Pattern::isWild() {
 	return is_wild;
 }
+
+//TODO: compare expression when == TNode is updated
+bool Pattern::operator==(const Pattern& pattern) const {
+	return ent_ref == pattern.ent_ref
+		//&& expression == pattern.expression
+		&& is_wild == pattern.is_wild;
+}

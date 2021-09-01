@@ -6,5 +6,5 @@
 
 class QuerySystem {
 public:
-	std::string processQuery(std::string);
+	std::list<std::string> processQuery(std::string);
 };

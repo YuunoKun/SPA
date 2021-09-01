@@ -15,22 +15,22 @@ std::vector<Pattern> Query::getPatterns() {
 	return patterns;
 }
 
-Entity Query::getSelected() {
+Entity& Query::getSelected() {
 	return selected;
 }
 
-void Query::setSelected(Entity selected) {
+void Query::setSelected(Entity& selected) {
 	this->selected = selected;
 }
 
-void Query::addEntity(Entity entity) {
+void Query::addEntity(Entity& entity) {
 	entities.insert({ entity.getName(), entity });
 }
 
-void Query::addRelation(RelRef relation) {
+void Query::addRelation(RelRef& relation) {
 	relations.push_back(relation);
 }
 
-void Query::addPattern(Pattern pattern) {
+void Query::addPattern(Pattern& pattern) {
 	patterns.push_back(pattern);
 }

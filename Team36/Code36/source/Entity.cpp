@@ -1,11 +1,18 @@
 #include "Entity.h"
 
+
+Entity::Entity() {
+}
+
 Entity::Entity(EntityType entity_type, std::string name) {
 	this->entity_type = entity_type;
 	this->name = name;
 }
 
-Entity::Entity() {
+Entity::Entity(EntityType entity_type, std::string name, std::string value) {
+	this->entity_type = entity_type;
+	this->name = name;
+	this->value = value;
 }
 
 EntityType Entity::getType() {
@@ -16,14 +23,17 @@ std::string Entity::getName() {
 	return name;
 }
 
-std::unordered_set<std::string> Entity::getValues() {
-	return values;
+std::string Entity::getValue() {
+	return value;
 }
 
-void Entity::addValue(std::string value) {
-	values.insert(value);
+bool Entity::isDeclaration() {
+	return name != "";
 }
 
-void Entity::removeValue(std::string value) {
-	values.erase(value);
+
+bool Entity::operator==(const Entity& entity) const {
+	return entity_type == entity.entity_type
+		&& name == entity.name
+		&& value == entity.value;
 }

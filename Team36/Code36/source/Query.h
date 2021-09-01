@@ -14,11 +14,11 @@ public:
 	std::unordered_map<std::string, Entity> getEntities();
 	std::vector<RelRef> getRelations();
 	std::vector<Pattern> getPatterns();
-	Entity getSelected();
-	void setSelected(Entity);
-	void addEntity(Entity);
-	void addRelation(RelRef);
-	void addPattern(Pattern);
+	Entity& getSelected();
+	void setSelected(Entity&);
+	void addEntity(Entity&);
+	void addRelation(RelRef&);
+	void addPattern(Pattern&);
 
 private:
 	//Member Variable
