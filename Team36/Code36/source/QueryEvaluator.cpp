@@ -66,7 +66,6 @@ std::list<std::string> QueryEvaluator::getResult(Query& query, QueryResult& resu
 		//if selected type is not in table, return all.
 		return getRawResult(query.getSelected());
 	}
-
 	//TODO: remove
 	return getRawResult(query.getSelected());
 }
