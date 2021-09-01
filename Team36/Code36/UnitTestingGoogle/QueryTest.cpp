@@ -51,7 +51,7 @@ namespace UnitTesting {
 
 		EXPECT_EQ(q.getRelations(), o);
 
-		RelRef e({ MODIFIES_S, {} });
+		RelRef e({ MODIFIES_P, {} });
 		q.addRelation(e);
 		EXPECT_NE(q.getRelations(), o);
 		o.push_back(e);
