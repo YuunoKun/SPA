@@ -1,7 +1,9 @@
 #include "GUIWrapper.h"
 
 #include <iostream>
+
 #include "..\source\QuerySystem.h"
+#include "..\source\Parser.h"
 
 // a default constructor
 GUIWrapper::GUIWrapper() {
@@ -12,6 +14,9 @@ GUIWrapper::GUIWrapper() {
 // method for parsing the SIMPLE source
 void GUIWrapper::parse(std::string filename) {
 	// call your parser to do the parsing
+	SourceProcessor::Parser parser;
+	parser.load_file(filename);
+	parser.parse();
 	std::cout << "parsed " << filename << std::endl;
 	// ...rest of your code...
 }
@@ -23,7 +28,10 @@ void GUIWrapper::evaluate(std::string query, std::list<std::string>& results) {
 
 	std::cout << "query=  " << query << std::endl;
 	QuerySystem querySystem;
-	results.push_back(query + "\nQuery result: " + querySystem.processQuery(query));
+	results.push_back(query + "\nQuery result: ");
+	for each (std::string s in querySystem.processQuery(query)) {
+		results.push_back(s);
+	}
 	// store the answers to the query in the results list (it is initially empty)
 	// each result must be a string.
 }

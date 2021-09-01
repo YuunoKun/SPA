@@ -3,7 +3,7 @@
 Query::Query() {
 }
 
-std::unordered_map<std::string, Entity> Query::getEntities() {
+std::unordered_map<std::string, Entity*> Query::getEntities() {
 	return entities;
 }
 
@@ -15,16 +15,16 @@ std::vector<Pattern> Query::getPatterns() {
 	return patterns;
 }
 
-Entity Query::getSelected() {
-	return selected;
+Entity& Query::getSelected() {
+	return *selected;
 }
 
-void Query::setSelected(Entity selected) {
-	this->selected = selected;
+void Query::setSelected(Entity& selected) {
+	this->selected = &selected;
 }
 
-void Query::addEntity(Entity entity) {
-	entities.insert({ entity.getName(), entity });
+void Query::addEntity(Entity& entity) {
+	entities.insert({ entity.getName(), &entity });
 }
 
 void Query::addRelation(RelRef relation) {

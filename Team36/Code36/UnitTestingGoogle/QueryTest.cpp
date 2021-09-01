@@ -8,12 +8,13 @@
 namespace UnitTesting {
 	TEST(Query, entities) {
 		Query q;
-		std::unordered_map<std::string, Entity> o;
+		std::unordered_map<std::string, Entity*> o;
 
 		EXPECT_EQ(q.getEntities(), o);
 
-		q.addEntity({ STMT,"test1" });
-		o.insert({ "test1" ,{ STMT,"test1" } });
+		Entity e(STMT, "test1");
+		q.addEntity(e);
+		o.insert({ "test1" , &e });
 		EXPECT_EQ(q.getEntities(), o);
 
 		q.addEntity({ WHILE,"test1231" });
@@ -24,18 +25,19 @@ namespace UnitTesting {
 		o.insert({ "test14151" ,{ IF,"test14151" } });
 		EXPECT_EQ(q.getEntities(), o);
 
-		q.addEntity({ WILD,"test123" });
-		o.insert({ "test123" ,{ WILD,"test123" } });
+		e = Entity(WILD, "test123");
+		q.addEntity(e);
+		o.insert({ "test123" , &e });
 		EXPECT_EQ(q.getEntities(), o);
 
 		q.addEntity({ READ,"test14151" });
 		EXPECT_EQ(q.getEntities(), o);
-		o.insert({ "test14151" ,{ READ,"test14151" } });
+		o.insert({ "test14151" , &e });
 		EXPECT_EQ(q.getEntities(), o);
 
 		q.addEntity({ READ,"test141511" });
 		EXPECT_NE(q.getEntities(), o);
-		o.insert({ "test1415111" ,{ READ,"test141511" } });
+		o.insert({ "test1415111" , &e });
 		EXPECT_NE(q.getEntities(), o);
 	}
 
@@ -84,7 +86,7 @@ namespace UnitTesting {
 		Query q;
 
 		Entity e(STMT, "test1");
-		q.setSelected({ STMT,"test1" });
+		q.setSelected(e);
 		EXPECT_EQ(q.getSelected(), e);
 
 		e = Entity(WHILE, "test1231");
@@ -92,7 +94,7 @@ namespace UnitTesting {
 		EXPECT_EQ(q.getSelected(), e);
 
 		e = Entity(IF, "test14151");
-		q.setSelected({ IF,"test14151" });
+		q.setSelected(e);
 		EXPECT_EQ(q.getSelected(), e);
 
 		e = Entity(WILD, "test123");
@@ -100,10 +102,12 @@ namespace UnitTesting {
 		EXPECT_EQ(q.getSelected(), e);
 
 		e = Entity(READ, "test123");
-		q.setSelected({ READ,"test123" });
+		q.setSelected(e);
 		EXPECT_EQ(q.getSelected(), e);
 
-		q.setSelected({ READ,"test141511" });
-		EXPECT_TRUE(!(q.getSelected() == e));
+		e = Entity({ READ,"test141511" });
+		Entity e1(IF,"test141511");
+		q.setSelected(e);
+		EXPECT_TRUE(!(q.getSelected() == e1));
 	}
 }

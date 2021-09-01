@@ -6,18 +6,27 @@
 #include "PKB.h"
 #include "TNode.h"
 
-PKB& PKB::getInstance()
-{
+PKB& PKB::getInstance() {
 	static PKB pkb;
 	return pkb;
 }
 
-int PKB::setProcToAST(PROC p, TNode* r) {
-	return 0;
+void PKB::resetCache()
+{
+	proc_table.clear();
+	const_table.clear();
+	var_table.clear();
 }
 
-TNode* PKB::getRootAST(PROC p) {
-	return nullptr;
+void PKB::resetEntities()
+{
+	proc_table.clear();
+	const_table.clear();
+	var_table.clear();
+}
+
+void PKB::resetRelations()
+{
 }
 
 void PKB::setProcedures(std::vector<procedure_name> proc_set) {
@@ -36,23 +45,19 @@ void PKB::setStmts(std::vector<Stmt> stmt_set) {
 	//std::copy(stmt_set.begin(), stmt_set.end(), std::inserter(stmt_table, stmt_table.end()));
 }
 
-std::vector<variable_name> PKB::getVariables()
-{
+std::vector<variable_name> PKB::getVariables() {
 	return std::vector<variable_name>(var_table.begin(), var_table.end());
 }
 
-std::vector<Stmt> PKB::getStmts()
-{
+std::vector<Stmt> PKB::getStmts() {
 	//return std::vector<Stmt>(stmt_table.begin(), stmt_table.end());    --- To add hash function for Stmt
 	return std::vector<Stmt>();
 }
 
-std::vector<constant> PKB::getConstants()
-{
+std::vector<constant> PKB::getConstants() {
 	return std::vector<constant>(const_table.begin(), const_table.end());
 }
 
-std::vector<procedure_name> PKB::getProcedures()
-{
+std::vector<procedure_name> PKB::getProcedures() {
 	return std::vector<procedure_name>(proc_table.begin(), proc_table.end());
 }
