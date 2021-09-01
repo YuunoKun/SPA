@@ -32,12 +32,14 @@ namespace UnitTesting {
 		o.insert({ "test123" , e });
 		EXPECT_EQ(q.getEntities(), o);
 
-		q.addEntity({ READ,"test14151" });
+		e = Entity(READ, "test14151");
+		q.addEntity(e);
 		EXPECT_EQ(q.getEntities(), o);
 		o.insert({ "test14151" , e });
 		EXPECT_EQ(q.getEntities(), o);
 
-		q.addEntity({ READ,"test141511" });
+		e = Entity(READ, "test141511");
+		q.addEntity(e);
 		EXPECT_NE(q.getEntities(), o);
 		o.insert({ "test1415111" , e });
 		EXPECT_NE(q.getEntities(), o);
@@ -81,24 +83,11 @@ namespace UnitTesting {
 
 		EXPECT_EQ(q.getPatterns(), o);
 
-		Pattern e({ { STMT, "test" }, {}, true });
+		Pattern e({ { ASSIGN, "patternType" }, { VARIABLE, "leftExpr"}, {}, true });
 		q.addPattern(e);
 		EXPECT_NE(q.getPatterns(), o);
 		o.push_back(e);
 		EXPECT_EQ(q.getPatterns(), o);
-
-		e = Pattern({ { WHILE, "test1" }, {}, false });
-		q.addPattern(e);
-		EXPECT_NE(q.getPatterns(), o);
-		o.push_back(e);
-		EXPECT_EQ(q.getPatterns(), o);
-
-		e = Pattern({ { READ, "test1" }, {}, true });
-		q.addPattern(e);
-		EXPECT_NE(q.getPatterns(), o);
-		e = Pattern({ { PRINT, "test1" }, {}, true });
-		o.push_back(e);
-		EXPECT_NE(q.getPatterns(), o);
 	}
 
 	TEST(Query, selected) {
@@ -125,7 +114,7 @@ namespace UnitTesting {
 		EXPECT_EQ(q.getSelected(), e);
 
 		e = Entity({ READ,"test141511" });
-		Entity e1(IF,"test141511");
+		Entity e1(IF, "test141511");
 		q.setSelected(e);
 		EXPECT_TRUE(!(q.getSelected() == e1));
 	}
