@@ -65,12 +65,13 @@ Query QueryPreprocessor::process(std::string str) {
 			query.addEntity(entity);
 		}
 		else if (tokens[i].find(SELECT) != std::string::npos) {
-			//  nneedew type for SELECT?
+			// selected type to get from unordered map entity
 			Entity entity(EntityType::CONSTANT, tempTokens[1]);
 			query.setSelected(entity);
 		}
 		else {
-			//cout << "invalid query" << endl;
+
+			std::cout << "invalid query" << std::endl;
 		}
 
 		// assign select to selected

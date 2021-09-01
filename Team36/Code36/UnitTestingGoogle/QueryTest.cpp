@@ -8,36 +8,38 @@
 namespace UnitTesting {
 	TEST(Query, entities) {
 		Query q;
-		std::unordered_map<std::string, Entity*> o;
+		std::unordered_map<std::string, Entity> o;
 
 		EXPECT_EQ(q.getEntities(), o);
 
 		Entity e(STMT, "test1");
 		q.addEntity(e);
-		o.insert({ "test1" , &e });
+		o.insert({ "test1" , e });
 		EXPECT_EQ(q.getEntities(), o);
 
-		q.addEntity({ WHILE,"test1231" });
-		o.insert({ "test1231" ,{ WHILE,"test1231" } });
+		e = Entity(WHILE, "test1231");
+		q.addEntity(e);
+		o.insert({ "test1231" , e });
 		EXPECT_EQ(q.getEntities(), o);
 
-		q.addEntity({ IF,"test14151" });
-		o.insert({ "test14151" ,{ IF,"test14151" } });
+		e = Entity(IF, "test14151");
+		q.addEntity(e);
+		o.insert({ "test14151" , e });
 		EXPECT_EQ(q.getEntities(), o);
 
 		e = Entity(WILD, "test123");
 		q.addEntity(e);
-		o.insert({ "test123" , &e });
+		o.insert({ "test123" , e });
 		EXPECT_EQ(q.getEntities(), o);
 
 		q.addEntity({ READ,"test14151" });
 		EXPECT_EQ(q.getEntities(), o);
-		o.insert({ "test14151" , &e });
+		o.insert({ "test14151" , e });
 		EXPECT_EQ(q.getEntities(), o);
 
 		q.addEntity({ READ,"test141511" });
 		EXPECT_NE(q.getEntities(), o);
-		o.insert({ "test1415111" , &e });
+		o.insert({ "test1415111" , e });
 		EXPECT_NE(q.getEntities(), o);
 	}
 
@@ -47,24 +49,29 @@ namespace UnitTesting {
 
 		EXPECT_EQ(q.getRelations(), o);
 
-		q.addRelation({ MODIFIES_S, {} });
+		RelRef e({ MODIFIES_S, {} });
+		q.addRelation(e);
 		EXPECT_NE(q.getRelations(), o);
-		o.push_back({ MODIFIES_S,{} });
+		o.push_back(e);
 		EXPECT_EQ(q.getRelations(), o);
 
-		q.addRelation({ FOLLOWS, {{STMT,"test1"}} });
+		e = RelRef({ FOLLOWS, {{STMT,"test1"}} });
+		q.addRelation(e);
 		EXPECT_NE(q.getRelations(), o);
-		o.push_back({ FOLLOWS,{{STMT,"test1"}} });
+		o.push_back(e);
 		EXPECT_EQ(q.getRelations(), o);
 
-		q.addRelation({ FOLLOWS, {{STMT,"test1"},{READ, "test2"}} });
+		e = RelRef({ FOLLOWS, {{STMT,"test1"},{READ, "test2"}} });
+		q.addRelation(e);
 		EXPECT_NE(q.getRelations(), o);
-		o.push_back({ FOLLOWS,{{STMT,"test1"},{READ, "test2"}} });
+		o.push_back(e);
 		EXPECT_EQ(q.getRelations(), o);
 
-		q.addRelation({ FOLLOWS, {{STMT,"test1"},{READ, "test2"}} });
+		e = RelRef({ FOLLOWS, {{STMT,"test1"},{READ, "test2"}} });
+		q.addRelation(e);
 		EXPECT_NE(q.getRelations(), o);
-		o.push_back({ FOLLOWS_T,{{STMT,"test1"},{READ, "test2"}} });
+		e = RelRef({ FOLLOWS_T, {{STMT,"test1"},{READ, "test2"}} });
+		o.push_back(e);
 		EXPECT_NE(q.getRelations(), o);
 	}
 
@@ -72,14 +79,26 @@ namespace UnitTesting {
 		Query q;
 		std::vector<Pattern> o;
 
-		TNode tnode;
-
 		EXPECT_EQ(q.getPatterns(), o);
 
-		q.addPattern({ { ASSIGN, "patternType" }, { VARIABLE, "leftExpr"}, {}, true });
+		Pattern e({ { STMT, "test" }, {}, true });
+		q.addPattern(e);
 		EXPECT_NE(q.getPatterns(), o);
-		o.push_back({ { ASSIGN, "patternType" }, { VARIABLE, "leftExpr"}, {}, true });
+		o.push_back(e);
 		EXPECT_EQ(q.getPatterns(), o);
+
+		e = Pattern({ { WHILE, "test1" }, {}, false });
+		q.addPattern(e);
+		EXPECT_NE(q.getPatterns(), o);
+		o.push_back(e);
+		EXPECT_EQ(q.getPatterns(), o);
+
+		e = Pattern({ { READ, "test1" }, {}, true });
+		q.addPattern(e);
+		EXPECT_NE(q.getPatterns(), o);
+		e = Pattern({ { PRINT, "test1" }, {}, true });
+		o.push_back(e);
+		EXPECT_NE(q.getPatterns(), o);
 	}
 
 	TEST(Query, selected) {
