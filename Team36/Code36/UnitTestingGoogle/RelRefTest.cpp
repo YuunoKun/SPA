@@ -42,12 +42,12 @@ namespace UnitTesting {
 		assignEntity.push_back({ PROCEDURE, "procedure" });
 		assignEntity.push_back({ CALL, "call" });
 		assignEntity.push_back({ CONSTANT, "constant" });
-		RelRef validRelRefModifiesP(USES_P, assignEntity);
+		RelRef validRelRefModifiesP(MODIFIES_P, assignEntity);
 
 		// invalid ModifiesP
 		try {
 			assignEntity.push_back({ PRINT, "statement" });
-			RelRef invalidRelRefModifiesP(USES_P, assignEntity);
+			RelRef invalidRelRefModifiesP(MODIFIES_P, assignEntity);
 		}
 		catch (std::invalid_argument const& err) {
 			EXPECT_EQ(err.what(), std::string("Clause Type is invalid for MODIFIES_P type"));
