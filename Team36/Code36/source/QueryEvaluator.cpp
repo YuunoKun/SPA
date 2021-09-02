@@ -35,7 +35,7 @@ std::list<std::string> QueryEvaluator::getResult(Query& query, QueryResult& resu
 		return {};
 	}
 	//If the variable is not found in one of the result table, return all entity
-	if (!result.isInTable(query.getSelected())) {
+	if (!result.isInTables(query.getSelected())) {
 		return getRawResult(query.getSelected());
 	}
 

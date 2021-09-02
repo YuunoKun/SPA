@@ -5,9 +5,13 @@
 
 class QueryResult {
 public:
+	QueryResult();
+
 	bool haveResult();
-	bool isInTable(Entity);
+	void setNoResult();
+	bool isInTables(Entity);
 	void addResult(ResultTable);
+	std::list<std::string> getResult(Entity);
 
 private:
 	std::vector<ResultTable> results;

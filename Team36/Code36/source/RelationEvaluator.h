@@ -5,5 +5,5 @@
 
 class RelationEvaluator {
 public:
-	ResultTable evaluateRelation(Query, RelRef);
+	void evaluateRelation(QueryResult&, RelRef&);
 };

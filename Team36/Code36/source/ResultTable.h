@@ -8,6 +8,7 @@ public:
 
 	bool merge(ResultTable);
 	bool isInTable(Entity);
+	bool isEmpty();
 	std::list<std::string> getEntityResult(Entity);
 
 private:

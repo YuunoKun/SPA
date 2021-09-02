@@ -42,6 +42,7 @@
     <ClCompile Include="EntityTest.cpp" />
     <ClCompile Include="QueryEvaluatorTest.cpp" />
     <ClCompile Include="PatternTest.cpp" />
+    <ClCompile Include="QueryResultTest.cpp" />
     <ClCompile Include="QueryTest.cpp" />
     <ClCompile Include="RelRefTest.cpp" />
     <ClCompile Include="pch.cpp">

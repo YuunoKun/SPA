@@ -6,14 +6,20 @@ ResultTable::ResultTable(std::vector<Entity> header, std::vector<std::vector<std
 	this->table = table;
 }
 
-//Return true if merge result in an non-empty table
+//Return true if merge is successful
 bool ResultTable::merge(ResultTable t) {
 	//TODO
+	
 	return false;
 }
 
 bool ResultTable::isInTable(Entity e) {
 	return std::find(header.begin(), header.end(), e) != header.end();
+}
+
+//if table contain no value
+bool ResultTable::isEmpty() {
+	return table.size() == 0;
 }
 
 std::list<std::string> ResultTable::getEntityResult(Entity e) {

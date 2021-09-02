@@ -5,5 +5,5 @@
 
 class PatternEvaluator {
 public:
-	QueryResult evaluatePattern(Query, Pattern);
+	void evaluatePattern(QueryResult&, Pattern&);
 };

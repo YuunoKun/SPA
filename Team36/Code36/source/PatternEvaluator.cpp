@@ -1,5 +1,5 @@
 #include "PatternEvaluator.h"
 
-QueryResult PatternEvaluator::evaluatePattern(Query, Pattern) {
-	return QueryResult();
+void PatternEvaluator::evaluatePattern(QueryResult&, Pattern&) {
+
 }
