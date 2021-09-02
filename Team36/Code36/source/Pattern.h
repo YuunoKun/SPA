@@ -7,9 +7,10 @@
 
 class Pattern {
 public:
-	Pattern(Entity, TNode, bool);
+	Pattern(Entity, Entity, TNode, bool);
 
-	Entity getEntityRef();
+	Entity getPatternType();
+	Entity getLeftExpression();
 	TNode getExpression();
 	bool isWild();
 
@@ -18,7 +19,8 @@ public:
 private:
 
 	//Member Variable
-	Entity ent_ref;
+	Entity pattern_type;
+	Entity left_expression;
 	TNode expression;
 	bool is_wild;
 };

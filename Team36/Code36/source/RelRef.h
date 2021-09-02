@@ -6,10 +6,10 @@
 #include "Entity.h"
 
 enum RelType {
-	MODIFIES_S,
+	//MODIFIES_S,
 	MODIFIES_P,
-	USES_S,
-	USE_P,
+	//USES_S,
+	USES_P,
 	PARENT,
 	PARENT_T,
 	FOLLOWS,
