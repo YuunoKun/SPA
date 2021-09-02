@@ -29,6 +29,8 @@
 		<ClCompile Include="..\source\QueryResult.cpp" />
 		<ClCompile Include="..\source\RelationEvaluator.cpp" />
 		<ClCompile Include="..\source\PatternEvaluator.cpp" />
+		<ClCompile Include="..\source\Convertor.cpp" />
+		<ClCompile Include="..\source\ResultTable.cpp" />
 	</ItemGroup>
 	<ItemGroup>
 		<ClInclude Include="..\source\PKB.h" />
@@ -49,6 +51,8 @@
 		<ClCompile Include="..\source\QueryResult.h" />
 		<ClCompile Include="..\source\RelationEvaluator.h" />
 		<ClCompile Include="..\source\PatternEvaluator.h" />
+		<ClCompile Include="..\source\Convertor.h" />
+		<ClCompile Include="..\source\ResultTable.h" />
 	</ItemGroup>
 	<PropertyGroup Label="Globals">
 		<ProjectGuid>{DC21A1EA-D2C6-4D14-A2B4-E025B64BDE81}</ProjectGuid>
