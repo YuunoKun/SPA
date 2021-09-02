@@ -29,21 +29,17 @@ std::list<std::string> QueryEvaluator::getRawResult(Entity selected) {
 	return result;
 }
 
-
 std::list<std::string> QueryEvaluator::getResult(Query& query, QueryResult& result) {
 	//If some of the relation/pattern return empty list / false
 	if (!result.haveResult()) {
 		return {};
 	}
+	//If the variable is not found in one of the result table, return all entity
+	if (!result.isInTable(query.getSelected())) {
+		return getRawResult(query.getSelected());
+	}
 
 	//If the variable is found in one of the result table
-	if (result.isInTable(query.getSelected())) {
-		//TODO
-
-		return getRawResult(query.getSelected());
-	}
-	else {
-		//if selected type is not in table, return all.
-		return getRawResult(query.getSelected());
-	}
+	//TODO
+	return getRawResult(query.getSelected());
 }

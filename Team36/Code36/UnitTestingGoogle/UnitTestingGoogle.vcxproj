@@ -52,6 +52,7 @@
     </ClCompile>
     <ClCompile Include="PKBTest.cpp" />
     <ClCompile Include="QueryPreprocessorTest.cpp" />
+    <ClCompile Include="ResultTableTest.cpp" />
     <ClCompile Include="UtilityTest.cpp" />
   </ItemGroup>
   <ItemGroup>

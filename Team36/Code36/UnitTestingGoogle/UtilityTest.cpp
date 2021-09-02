@@ -41,7 +41,6 @@ namespace UnitTesting {
 
 		EXPECT_EQ(Utility::stmtsToStringList(a), b);
 
-
 		std::list<std::string> c{ "1", "2", "3", "4" };
 		EXPECT_NE(Utility::stmtsToStringList(a), c);
 
@@ -64,5 +63,37 @@ namespace UnitTesting {
 		std::list<std::string> e{ "a", "b" };
 
 		EXPECT_EQ(Utility::variablesToStringList(d), e);
+	}
+
+	TEST(Utility, unorderedSetToStringList) {
+		std::unordered_set<std::string> a{ "a", "b", "c", "d", "e" };
+		std::list<std::string> b{ "a", "b", "c", "d", "e" };
+
+		EXPECT_EQ(Utility::unorderedSetToStringList(a), b);
+
+		std::list<std::string> c{ "a", "b", "c", "d" };
+		EXPECT_NE(Utility::unorderedSetToStringList(a), c);
+
+		std::unordered_set<std::string> d{ "a", "b" };
+		std::list<std::string> e{ "a", "b" };
+
+		EXPECT_EQ(Utility::unorderedSetToStringList(d), e);
+	}
+	TEST(Utility, getIndexString) {
+		std::vector<std::string> c{ "a", "b", "c", "d", "e" };
+		EXPECT_EQ(Utility::getIndex(c, c[0]), 0);
+		EXPECT_EQ(Utility::getIndex(c, c[1]), 1);
+		EXPECT_EQ(Utility::getIndex(c, c[2]), 2);
+		EXPECT_EQ(Utility::getIndex(c, c[3]), 3);
+		EXPECT_EQ(Utility::getIndex(c, c[4]), 4);
+	}
+
+	TEST(Utility, getIndexEntity) {
+		std::vector<Entity> e{ {WHILE, "test" }, { READ,"hello" }, { PRINT,"test1" }, { STMT,"test3" } };
+
+		EXPECT_EQ(Utility::getIndex(e, e[0]), 0);
+		EXPECT_EQ(Utility::getIndex(e, e[1]), 1);
+		EXPECT_EQ(Utility::getIndex(e, e[2]), 2);
+		EXPECT_EQ(Utility::getIndex(e, e[3]), 3);
 	}
 }

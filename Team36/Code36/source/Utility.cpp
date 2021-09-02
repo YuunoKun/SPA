@@ -1,6 +1,5 @@
 #include "Utility.h"
 
-
 std::list<std::string> Utility::constantsToStringList(std::vector<constant>& from) {
 	std::list<std::string> to;
 	for each (constant c in from) {
@@ -33,16 +32,28 @@ std::list<std::string> Utility::variablesToStringList(std::vector<variable_name>
 	return to;
 }
 
-/* 
-template<class T>
-int Utility::getIndex(std::vector<T> v, T t) {
-	auto it = std::find(v.begin(), v.end(), t);
+std::list<std::string> Utility::unorderedSetToStringList(std::unordered_set<std::string>& from) {
+	return std::list<std::string>(from.begin(), from.end());
+}
+
+int Utility::getIndex(std::vector<std::string> v, std::string s) {
+	auto it = std::find(v.begin(), v.end(), s);
 	if (it != v.end()) {
 		int index = it - v.begin();
 		return index;
 	}
 	else {
-		return -1
+		return -1;
 	}
 }
-*/
+
+int Utility::getIndex(std::vector<Entity> v, Entity s) {
+	auto it = std::find(v.begin(), v.end(), s);
+	if (it != v.end()) {
+		int index = it - v.begin();
+		return index;
+	}
+	else {
+		return -1;
+	}
+}

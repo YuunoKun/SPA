@@ -9,5 +9,4 @@ bool QueryResult::isInTable(Entity e) {
 }
 
 void QueryResult::addResult(ResultTable table) {
-
 }
