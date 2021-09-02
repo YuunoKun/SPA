@@ -1,5 +1,5 @@
 #include "RelationEvaluator.h"
 
-QueryResult RelationEvaluator::evaluateRelation(Query, RelRef) {
-	return QueryResult();
+ResultTable RelationEvaluator::evaluateRelation(Query, RelRef) {
+	return ResultTable({}, { {} });
 }

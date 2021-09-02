@@ -14,7 +14,7 @@ bool ResultTable::isInTable(Entity e) {
 	return std::find(header.begin(), header.end(), e) != header.end();
 }
 
-std::vector<std::string> ResultTable::getEntityResult(Entity) {
-	header.
+std::vector<std::string> ResultTable::getEntityResult(Entity e) {
+	
 	return std::vector<std::string>();
 }

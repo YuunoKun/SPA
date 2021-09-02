@@ -1,12 +1,13 @@
 #include "QueryResult.h"
 
 bool QueryResult::haveResult() {
+	return true;
+}
+
+bool QueryResult::isInTable(Entity e) {
 	return false;
 }
 
-bool QueryResult::isInTable(Entity) {
-	return false;
-}
+void QueryResult::addResult(ResultTable table) {
 
-void QueryResult::join(QueryResult) {
 }

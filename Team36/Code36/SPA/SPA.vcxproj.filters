@@ -68,27 +68,24 @@
     </ClCompile>
     <ClCompile Include="..\source\Tokenizer.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>    
+    </ClCompile>
     <ClCompile Include="..\source\QueryResult.cpp">
       <Filter>Source Files\PQL</Filter>
     </ClCompile>
-	<ClCompile Include="..\source\PatternEvaluator.cpp">
-		<Filter>Source Files\PQL</Filter>
-	</ClCompile>
-	<ClCompile Include="..\source\RelationEvaluator.cpp">
-		<Filter>Source Files\PQL</Filter>
-	</ClCompile>
-	<ClCompile Include="..\source\Convertor.cpp">
-		<Filter>Source Files\PQL</Filter>
-	</ClCompile>
-	<ClCompile Include="..\source\ResultTable.cpp">
-		<Filter>Source Files\PQL</Filter>
-	</ClCompile>
+    <ClCompile Include="..\source\PatternEvaluator.cpp">
+      <Filter>Source Files\PQL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\RelationEvaluator.cpp">
+      <Filter>Source Files\PQL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\Utility.cpp">
+      <Filter>Source Files\PQL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\ResultTable.cpp">
+      <Filter>Source Files\PQL</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\source\Parser.h">
-      <Filter>Header Files</Filter>
-    </ClCompile>
     <ClInclude Include="..\source\PKB.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -131,20 +128,25 @@
     <ClInclude Include="..\source\Tokenizer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\source\QueryResult.h">
-      <Filter>Header Files\PQL</Filter>
+    <ClInclude Include="..\source\Parser.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
-	<ClInclude Include="..\source\PatternEvaluator.h">
-		<Filter>Header Files\PQL</Filter>
-	</ClInclude>
-	<ClInclude Include="..\source\RelationEvaluator.h">
-		<Filter>Header Files\PQL</Filter>
-	</ClInclude>
-	<ClInclude Include="..\source\Convertor.h">
-		<Filter>Header Files\PQL</Filter>
-	</ClInclude>
-	<ClInclude Include="..\source\ResultTable.h">
-		<Filter>Header Files\PQL</Filter>
-	</ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\source\PatternEvaluator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\QueryResult.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\RelationEvaluator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\ResultTable.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\Utility.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -1,6 +1,5 @@
 #include "Entity.h"
 
-
 Entity::Entity() {
 }
 
@@ -30,7 +29,6 @@ std::string Entity::getValue() {
 bool Entity::isDeclaration() {
 	return name != "";
 }
-
 
 bool Entity::operator==(const Entity& entity) const {
 	return entity_type == entity.entity_type

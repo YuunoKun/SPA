@@ -40,7 +40,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="EntityTest.cpp" />
-    <ClCompile Include="EvaluateQueryTest.cpp" />
+    <ClCompile Include="QueryEvaluatorTest.cpp" />
     <ClCompile Include="PatternTest.cpp" />
     <ClCompile Include="QueryTest.cpp" />
     <ClCompile Include="RelRefTest.cpp" />
@@ -52,6 +52,7 @@
     </ClCompile>
     <ClCompile Include="PKBTest.cpp" />
     <ClCompile Include="QueryPreprocessorTest.cpp" />
+    <ClCompile Include="UtilityTest.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SPA\SPA.vcxproj">

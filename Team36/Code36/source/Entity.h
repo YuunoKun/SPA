@@ -27,7 +27,7 @@ public:
 	std::string getName();
 	std::string getValue();
 	bool isDeclaration();
-	
+
 	bool operator==(const Entity&) const;
 
 private:

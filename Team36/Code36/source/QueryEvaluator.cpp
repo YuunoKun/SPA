@@ -1,5 +1,7 @@
 #include "QueryEvaluator.h"
+
 #include "Utility.h"
+#include "ResultTable.h"
 
 QueryEvaluator::QueryEvaluator() {
 }
