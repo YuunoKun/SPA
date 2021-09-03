@@ -173,17 +173,17 @@
     <ClInclude Include="..\source\Utility.h">
       <Filter>Header Files\PQL</Filter>
     </ClInclude>
-    <ClInclude Include="..\source\ParentEvaluator.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\source\ParentTEvaluator.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\PQL</Filter>
     </ClInclude>
     <ClInclude Include="..\source\ModifiesEvaluator.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\PQL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\ParentEvaluator.h">
+      <Filter>Header Files\PQL</Filter>
     </ClInclude>
     <ClInclude Include="..\source\UsesEvaluator.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\PQL</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

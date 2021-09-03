@@ -34,7 +34,6 @@ public:
 	virtual ResultTable getRelationMatchRight(Entity, Entity);
 
 
-
-private:
+protected:
 	PKBAdapter pkb;
 };

@@ -31,7 +31,7 @@ bool ParentTEvaluator::haveRelationAtLeft(Entity e) {
 	return pkb.isChildT(c);;
 }
 
-//If both side is declartion: e.g Follows(a, b)
+//If both side is declartion: e.g Relation(a, b)
 ResultTable ParentTEvaluator::getRelations(Entity left, Entity right) {
 	std::vector<std::vector<Stmt>> results = pkb.getAllParentRelation();
 	std::vector<Entity> header{ left, right };
@@ -39,7 +39,7 @@ ResultTable ParentTEvaluator::getRelations(Entity left, Entity right) {
 	return result;
 }
 
-//If left side is WILD and right side is declartion: e.g Follows(_, a)
+//If left side is WILD and right side is declartion: e.g Relation(_, a)
 ResultTable ParentTEvaluator::getRightRelations(Entity header) {
 	return ResultTable(header, pkb.getChildT());
 }

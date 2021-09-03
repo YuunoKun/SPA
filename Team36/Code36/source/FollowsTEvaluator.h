@@ -36,7 +36,4 @@ public:
 	ResultTable getRelationMatchRight(Entity, Entity);
 
 
-
-private:
-	PKBAdapter pkb;
 };

@@ -30,7 +30,7 @@ bool FollowsEvaluator::haveRelationAtLeft(Entity e) {
 	return pkb.isFollowing(c);;
 }
 
-//If both side is declartion: e.g Follows(a, b)
+//If both side is declartion: e.g Relation(a, b)
 ResultTable FollowsEvaluator::getRelations(Entity left, Entity right) {
 	std::vector<std::vector<Stmt>> results = pkb.getFollows();
 	std::vector<Entity> header{ left, right };
@@ -38,7 +38,7 @@ ResultTable FollowsEvaluator::getRelations(Entity left, Entity right) {
 	return result;
 }
 
-//If left side is WILD and right side is declartion: e.g Follows(_, a)
+//If left side is WILD and right side is declartion: e.g Relation(_, a)
 ResultTable FollowsEvaluator::getRightRelations(Entity header) {
 	return ResultTable(header, pkb.getFollowing());
 }

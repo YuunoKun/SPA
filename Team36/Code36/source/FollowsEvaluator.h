@@ -35,8 +35,4 @@ public:
 	//Handle right declartion, left constant: e.g Relation(a, 1)
 	ResultTable getRelationMatchRight(Entity, Entity);
 
-
-
-private:
-	PKBAdapter pkb;
 };

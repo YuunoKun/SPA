@@ -6,7 +6,7 @@
 #include "QueryResult.h"
 #include "PKBAdapter.h"
 
-class FollowEvaluator : public RelationEvaluatorInterface {
+class ParentEvaluator : public RelationEvaluatorInterface {
 public:
 	//Handle both wild : e.g Relation(_, _)
 	bool haveRelation();
@@ -36,7 +36,4 @@ public:
 	ResultTable getRelationMatchRight(Entity, Entity);
 
 
-
-private:
-	PKBAdapter pkb;
 };
