@@ -17,8 +17,8 @@ void RelationsEvaluator::evaluateRelation(QueryResult& result, RelRef& relation)
 }
 
 void RelationsEvaluator::evaluateRelation(QueryResult& queryResult, RelRef& relation, RelationEvaluatorInterface& evaluator) {
-	Entity clauses1 = relation.getClauses()[0];
-	Entity clauses2 = relation.getClauses()[1];
+	Entity clauses1 = relation.getFirstClause();
+	Entity clauses2 = relation.getSecondClause();
 
 	//if there is at least one side is declaration
 	if (clauses1.isDeclaration() || clauses2.isDeclaration()) {

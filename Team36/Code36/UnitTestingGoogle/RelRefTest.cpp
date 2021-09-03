@@ -15,12 +15,14 @@ namespace UnitTesting {
 		assignEntity.push_back({ PROCEDURE, "procedure" });
 		assignEntity.push_back({ CALL, "call" });
 		assignEntity.push_back({ CONSTANT, "constant" });
-		RelRef validRelRefUsesP(USES_P, assignEntity);
+		for (auto& it : assignEntity) {
+			RelRef validRelRefUsesP(USES_P, it, it);
+		}
 
 		// invalid UsesP
 		try {
-			assignEntity.push_back({ READ, "statement" });
-			RelRef invalidRelRefUsesP(USES_P, assignEntity);
+			Entity invalidEntityUseP = { READ, "statement" };
+			RelRef invalidRelRefUsesP(USES_P, invalidEntityUseP, invalidEntityUseP);
 		}
 		catch (std::invalid_argument const& err) {
 			EXPECT_EQ(err.what(), std::string("Clause Type is invalid for USES_P type"));
@@ -42,12 +44,14 @@ namespace UnitTesting {
 		assignEntity.push_back({ PROCEDURE, "procedure" });
 		assignEntity.push_back({ CALL, "call" });
 		assignEntity.push_back({ CONSTANT, "constant" });
-		RelRef validRelRefModifiesP(MODIFIES_P, assignEntity);
+		for (auto& it : assignEntity) {
+			RelRef validRelRefModifiesP(MODIFIES_P, it, it);
+		}
 
 		// invalid ModifiesP
 		try {
+			Entity invalidEntityUseP = { PRINT, "statement" };
 			assignEntity.push_back({ PRINT, "statement" });
-			RelRef invalidRelRefModifiesP(MODIFIES_P, assignEntity);
 		}
 		catch (std::invalid_argument const& err) {
 			EXPECT_EQ(err.what(), std::string("Clause Type is invalid for MODIFIES_P type"));
@@ -58,34 +62,33 @@ namespace UnitTesting {
 		}
 	}
 	TEST(RelRef, getType) {
-		std::vector<Entity> assignEntity;
-		assignEntity.push_back({ ASSIGN, "assign" });
-		RelRef validRelRef(USES_P, assignEntity);
+		Entity entity( ASSIGN, "assign" );
+		RelRef validRelRef(USES_P, entity, entity);
 
 		EXPECT_EQ(validRelRef.getType(), USES_P);
 		EXPECT_NE(validRelRef.getType(), MODIFIES_P);
 	}
 
 	TEST(RelRef, getClauses) {
-		std::vector<Entity> assignEntity;
-		assignEntity.push_back({ ASSIGN, "assign" });
-		RelRef validRelRef(USES_P, assignEntity);
+		Entity entity(ASSIGN, "assign");
+		RelRef validRelRef(USES_P, entity, entity);
 
-		EXPECT_EQ(validRelRef.getClauses(), assignEntity);
+		EXPECT_EQ(validRelRef.getFirstClause(), entity);
+		EXPECT_EQ(validRelRef.getSecondClause(), entity);
 	}
 
 	TEST(RelRef, equal) {
-		RelRef e1(USES_P, { { WHILE,"test1" }, { ASSIGN, "test2" } });
-		RelRef e2(USES_P, { { WHILE,"test1" }, { ASSIGN, "test2" } });
+		RelRef e1(USES_P,  { WHILE,"test1" }, { ASSIGN, "test2" } );
+		RelRef e2(USES_P,  { WHILE,"test1" }, { ASSIGN, "test2" } );
 		EXPECT_EQ(e1, e2);
 
-		RelRef e3(MODIFIES_P, { { WHILE,"test1" }, { ASSIGN, "test2" } });
+		RelRef e3(MODIFIES_P, { WHILE,"test1" }, { ASSIGN, "test2" } );
 		EXPECT_FALSE(e1 == e3);
 
-		RelRef e4(MODIFIES_P, { { WHILE,"test1" } });
+		RelRef e4(MODIFIES_P, { WHILE,"test1" }, { WHILE,"test11" });
 		EXPECT_FALSE(e1 == e4);
 
-		RelRef e5(FOLLOWS, { { WHILE,"test1" } });
+		RelRef e5(FOLLOWS, { WHILE,"test1" }, { WHILE,"test13" });
 		EXPECT_FALSE(e1 == e5);
 	}
 }
