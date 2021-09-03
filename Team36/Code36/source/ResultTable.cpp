@@ -21,6 +21,7 @@ ResultTable::ResultTable(std::vector<Entity>& header, std::vector<std::vector<st
 	init(header, table);
 }
 
+
 //Return true if merge is successful
 bool ResultTable::merge(ResultTable t) {
 	//TODO

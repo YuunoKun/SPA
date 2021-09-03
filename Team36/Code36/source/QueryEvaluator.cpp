@@ -20,6 +20,9 @@ std::list<std::string> QueryEvaluator::evaluateQuery(Query query) {
 void QueryEvaluator::evaluateRelations(Query& query, QueryResult& queryResult) {
 	RelationsEvaluator evaluator;
 	for (auto& it : query.getRelations()) {
+		if (!queryResult.haveResult()) {
+			break;
+		}
 		evaluator.evaluateRelation(queryResult, it);
 	}
 }
@@ -27,6 +30,10 @@ void QueryEvaluator::evaluateRelations(Query& query, QueryResult& queryResult) {
 void QueryEvaluator::evaluatePatterns(Query& query, QueryResult& queryResult) {
 	PatternEvaluator evaluator;
 	for (auto& it : query.getPatterns()) {
+		if (!queryResult.haveResult()) {
+			break;
+		}
+
 		evaluator.evaluatePattern(queryResult, it);
 	}
 }

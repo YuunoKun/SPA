@@ -62,4 +62,20 @@ public:
 	std::vector<Stmt> getChildT(stmt_index);
 	std::vector<Stmt> getParentT(stmt_index);
 	std::vector<std::vector<Stmt>> getAllParentTRelation();
+
+	//ModifiesP relation Function
+	bool isModifies(procedure_name, variable_name);
+	bool isModifies(procedure_name);
+	std::vector<std::pair<std::string, std::string>> getModifiesPRelation();
+	std::vector<std::string> getModifiesP();
+	std::vector<std::string> getModifiesP(variable_name);
+	std::vector<std::string> getModifiedP(procedure_name);
+
+	//ModifiesS relation Function
+	bool isModifies(stmt_index, variable_name);
+	bool isModifies(stmt_index);
+	std::vector<std::pair<Stmt, variable_name>> getModifiesSRelation();
+	std::vector<Stmt> getModifiesS();
+	std::vector<Stmt> getModifiesS(variable_name);
+	std::vector<std::string> getModifiedS(stmt_index);
 };

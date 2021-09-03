@@ -13,15 +13,15 @@ bool ModifiesSEvaluator::haveRelation() {
 
 //Handle both constant : e.g Relation(1, 2)
 bool ModifiesSEvaluator::isRelation(Entity e1, Entity e2) {
-	stmt_index c1 = stoi(e1.getValue());
-	stmt_index c2 = stoi(e2.getValue());
-	return pkb.isFollow(c1, c2);;
+	stmt_index s = stoi(e1.getName());
+	variable_name v = e2.getName();
+	return pkb.isModifies(s, v);
 }
 
 //Handle left constant, right wild: e.g Relation(1, _)
 bool ModifiesSEvaluator::haveRelationAtRight(Entity e) {
-	stmt_index c = stoi(e.getValue());
-	return pkb.isFollowed(c);;
+	stmt_index s = stoi(e.getValue());
+	return pkb.isModifies(s);
 }
 
 //Handle right wild, left constant: e.g Relation(_, 1)
@@ -31,10 +31,12 @@ bool ModifiesSEvaluator::haveRelationAtLeft(Entity e) {
 
 //If both side is declartion: e.g Relation(a, b)
 ResultTable ModifiesSEvaluator::getRelations(Entity left, Entity right) {
-	std::vector<std::vector<Stmt>> results = pkb.getFollows();
+	std::vector<std::pair<Stmt, std::string>> results = pkb.getModifiesSRelation();
 	std::vector<Entity> header{ left, right };
-	ResultTable result = ResultTable(header, results);
-	return result;
+	//TODO
+	//ResultTable result = ResultTable(header, results);
+	//return result;
+	throw std::invalid_argument("TODO");
 }
 
 //If left side is WILD and right side is declartion: e.g Relation(_, a)
@@ -44,17 +46,17 @@ ResultTable ModifiesSEvaluator::getRightRelations(Entity header) {
 
 //Handle right declartion, left constant: e.g Relation(a, _)
 ResultTable ModifiesSEvaluator::getLeftRelations(Entity header) {
-	return ResultTable(header, pkb.getFollowed());
+	return ResultTable(header, pkb.getModifiesS());
 }
 
 //Handle left constant, right declartion: e.g Relation(1, a)
 ResultTable ModifiesSEvaluator::getRelationMatchLeft(Entity constant, Entity header) {
-	stmt_index c = stoi(constant.getValue());
-	return ResultTable(header, pkb.getFollowing(c));
+	stmt_index s = stoi(constant.getValue());
+	return ResultTable(header, pkb.getModifiedS(s));
 }
 
 //Handle right declartion, left constant: e.g Relation(a, 1)
 ResultTable ModifiesSEvaluator::getRelationMatchRight(Entity header, Entity constant) {
-	stmt_index c = stoi(constant.getValue());
-	return ResultTable(header, pkb.getFollowed(c));
+	variable_name v = constant.getName();
+	return ResultTable(header, pkb.getModifiesS(v));
 }
