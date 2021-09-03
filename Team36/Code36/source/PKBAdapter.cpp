@@ -135,7 +135,7 @@ std::vector<Stmt> PKBAdapter::getParent(stmt_index) {
 	return std::vector<Stmt>();
 }
 
-std::vector<std::vector<Stmt>> PKBAdapter::getAllParent() {
+std::vector<std::vector<Stmt>> PKBAdapter::getAllParentRelation() {
 	//Todo
 	return std::vector<std::vector<Stmt>>();
 }
@@ -175,7 +175,7 @@ std::vector<Stmt> PKBAdapter::getParentT(stmt_index) {
 	return std::vector<Stmt>();
 }
 
-std::vector<std::vector<Stmt>> PKBAdapter::getAllParentT() {
+std::vector<std::vector<Stmt>> PKBAdapter::getAllParentTRelation() {
 	//Todo
 	return std::vector<std::vector<Stmt>>();
 }

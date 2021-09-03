@@ -84,7 +84,22 @@
     <ClCompile Include="..\source\ResultTable.cpp">
       <Filter>Source Files\PQL</Filter>
     </ClCompile>
-    <ClCompile Include="..\source\FollowEvaluator.cpp">
+    <ClCompile Include="..\source\FollowsEvaluator.cpp">
+      <Filter>Source Files\PQL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\FollowsTEvaluator.cpp">
+      <Filter>Source Files\PQL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\ParentEvaluator.cpp">
+      <Filter>Source Files\PQL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\ParentTEvaluator.cpp">
+      <Filter>Source Files\PQL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\ModifiesEvaluator.cpp">
+      <Filter>Source Files\PQL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\UsesEvaluator.cpp">
       <Filter>Source Files\PQL</Filter>
     </ClCompile>
   </ItemGroup>
@@ -146,15 +161,28 @@
     <ClInclude Include="..\source\PatternEvaluator.h">
       <Filter>Header Files\PQL</Filter>
     </ClInclude>
-    <ClInclude Include="..\source\FollowEvaluator.h">
+    <ClInclude Include="..\source\FollowsEvaluator.h">
       <Filter>Header Files\PQL</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
+    <ClInclude Include="..\source\FollowsTEvaluator.h">
+      <Filter>Header Files\PQL</Filter>
+    </ClInclude>
     <ClInclude Include="..\source\ResultTable.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\PQL</Filter>
     </ClInclude>
     <ClInclude Include="..\source\Utility.h">
+      <Filter>Header Files\PQL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\ParentEvaluator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\ParentTEvaluator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\ModifiesEvaluator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\UsesEvaluator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -44,7 +44,7 @@ public:
 	std::vector<Stmt> getParent();
 	std::vector<Stmt> getChild(stmt_index);
 	std::vector<Stmt> getParent(stmt_index);
-	std::vector<std::vector<Stmt>> getAllParent();
+	std::vector<std::vector<Stmt>> getAllParentRelation();
 
 	//ParentT relation function
 	bool isParentT(stmt_index, stmt_index);
@@ -54,5 +54,5 @@ public:
 	std::vector<Stmt> getParentT();
 	std::vector<Stmt> getChildT(stmt_index);
 	std::vector<Stmt> getParentT(stmt_index);
-	std::vector<std::vector<Stmt>> getAllParentT();
+	std::vector<std::vector<Stmt>> getAllParentTRelation();
 };
