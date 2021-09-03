@@ -1,19 +1,29 @@
 #include "RelationsEvaluator.h"
 
 #include "Utility.h"
+#include "FollowsEvaluator.h"
+#include "FollowsTEvaluator.h"
+#include "ParentEvaluator.h"
+#include "ParentTEvaluator.h"
+#include "ModifiesPEvaluator.h"
+#include "ModifiesSEvaluator.h"
+#include "UsesPEvaluator.h"
+#include "UsesSEvaluator.h"
 
 void RelationsEvaluator::evaluateRelation(QueryResult& result, RelRef& relation) {
-	/*
+	
 	switch (relation.getType()) {
-	case FOLLOWS: evaluateFollowsRelation(result, relation); break;
-	case FOLLOWS_T: evaluateFollowsTRelation(result, relation); break;
-	case PARENT: evaluateParentRelation(result, relation); break;
-	case PARENT_T: evaluateParentTRelation(result, relation); break;
-	case MODIFIES_P: evaluateModifiesRelation(result, relation); break;
-	case USES_P: evaluateUsesRelation(result, relation); break;
+	case FOLLOWS: evaluateRelation(result, relation, FollowsEvaluator()); break;
+	case FOLLOWS_T: evaluateRelation(result, relation, FollowsTEvaluator()); break;
+	case PARENT: evaluateRelation(result, relation, ParentEvaluator()); break;
+	case PARENT_T: evaluateRelation(result, relation, ParentTEvaluator()); break;
+	case MODIFIES_P: evaluateRelation(result, relation, ModifiesPEvaluator()); break;
+	case MODIFIES_S: evaluateRelation(result, relation, ModifiesSEvaluator()); break;
+	case USES_P: evaluateRelation(result, relation, UsesPEvaluator()); break;
+	case USES_S: evaluateRelation(result, relation, UsesSEvaluator()); break;
 	default: throw std::domain_error("Some Relation is not being handle!!!!");
 	}
-	*/
+	
 }
 
 void RelationsEvaluator::evaluateRelation(QueryResult& queryResult, RelRef& relation, RelationEvaluatorInterface& evaluator) {
