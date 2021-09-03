@@ -46,7 +46,7 @@ std::list<std::string> ResultTable::getEntityResult(Entity e) {
 	return Utility::unorderedSetToStringList(result);
 }
 
-void ResultTable::init(Entity, std::vector<std::string>) {
+void ResultTable::init(Entity header, std::vector<std::string> table) {
 	this->header = { header };
 	for (auto& it : table) {
 		this->table.push_back({ it });

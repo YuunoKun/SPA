@@ -70,11 +70,12 @@ namespace UnitTesting {
 	}
 
 	TEST(RelRef, getClauses) {
-		Entity entity(ASSIGN, "assign");
-		RelRef validRelRef(USES_P, entity, entity);
+		Entity entity1(ASSIGN, "assign");
+		Entity entity2(ASSIGN, "assign1");
+		RelRef validRelRef(USES_P, entity1, entity2);
 
-		EXPECT_EQ(validRelRef.getFirstClause(), entity);
-		EXPECT_EQ(validRelRef.getSecondClause(), entity);
+		EXPECT_EQ(validRelRef.getFirstClause(), entity1);
+		EXPECT_EQ(validRelRef.getSecondClause(), entity2);
 	}
 
 	TEST(RelRef, equal) {

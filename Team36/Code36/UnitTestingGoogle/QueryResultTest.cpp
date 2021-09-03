@@ -57,6 +57,20 @@ namespace UnitTesting {
 
 		result.setNoResult();
 		EXPECT_FALSE(result.haveResult());
+
+
+		QueryResult result1;
+		Entity e({ WHILE, "test" });
+		std::vector<std::string> v;
+		result1.addResult({ e, v });
+		EXPECT_FALSE(result1.haveResult());
+
+
+		QueryResult result2;
+		Entity e1({ WHILE, "test" });
+		std::vector<std::string> v1({"String"});
+		result2.addResult({ e1, v1 });
+		EXPECT_TRUE(result2.haveResult());
 	}
 	
 	TEST(QueryResult, getEntityResult) {

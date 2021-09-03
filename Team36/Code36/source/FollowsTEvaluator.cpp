@@ -15,19 +15,19 @@ bool FollowsTEvaluator::haveRelation() {
 bool FollowsTEvaluator::isRelation(Entity e1, Entity e2) {
 	stmt_index c1 = stoi(e1.getValue());
 	stmt_index c2 = stoi(e2.getValue());
-	return pkb.isFollowT(c1, c2);;
+	return pkb.isFollowT(c1, c2);
 }
 
 //Handle left constant, right wild: e.g Relation(1, _)
 bool FollowsTEvaluator::haveRelationAtRight(Entity e) {
 	stmt_index c = stoi(e.getValue());
-	return pkb.isFollowedT(c);;
+	return pkb.isFollowedT(c);
 }
 
 //Handle right wild, left constant: e.g Relation(_, 1)
 bool FollowsTEvaluator::haveRelationAtLeft(Entity e) {
 	stmt_index c = stoi(e.getValue());
-	return pkb.isFollowingT(c);;
+	return pkb.isFollowingT(c);
 }
 
 //If both side is declartion: e.g Relation(a, b)

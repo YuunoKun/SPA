@@ -21,13 +21,13 @@ bool FollowsEvaluator::isRelation(Entity e1, Entity e2) {
 //Handle left constant, right wild: e.g Relation(1, _)
 bool FollowsEvaluator::haveRelationAtRight(Entity e) {
 	stmt_index c = stoi(e.getValue());
-	return pkb.isFollowed(c);;
+	return pkb.isFollowed(c);
 }
 
 //Handle right wild, left constant: e.g Relation(_, 1)
 bool FollowsEvaluator::haveRelationAtLeft(Entity e) {
 	stmt_index c = stoi(e.getValue());
-	return pkb.isFollowing(c);;
+	return pkb.isFollowing(c);
 }
 
 //If both side is declartion: e.g Relation(a, b)

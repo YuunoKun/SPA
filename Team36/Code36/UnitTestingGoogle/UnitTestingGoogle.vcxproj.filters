@@ -31,6 +31,30 @@
     <ClCompile Include="RelationsEvaluatorTest.cpp">
       <Filter>PQL</Filter>
     </ClCompile>
+    <ClCompile Include="FollowsEvaluatorTest.cpp">
+      <Filter>PQL</Filter>
+    </ClCompile>
+    <ClCompile Include="FollowsTEvaluatorTest.cpp">
+      <Filter>PQL</Filter>
+    </ClCompile>
+    <ClCompile Include="ParentEvaluatorTest.cpp">
+      <Filter>PQL</Filter>
+    </ClCompile>
+    <ClCompile Include="ParentTEvaluatorTest.cpp">
+      <Filter>PQL</Filter>
+    </ClCompile>
+    <ClCompile Include="ModifiesSEvaluatorTest.cpp">
+      <Filter>PQL</Filter>
+    </ClCompile>
+    <ClCompile Include="ModifiesPEvaluatorTest.cpp">
+      <Filter>PQL</Filter>
+    </ClCompile>
+    <ClCompile Include="UsesSEvaluatorTest.cpp">
+      <Filter>PQL</Filter>
+    </ClCompile>
+    <ClCompile Include="UsesPEvaluatorTest.cpp">
+      <Filter>PQL</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
