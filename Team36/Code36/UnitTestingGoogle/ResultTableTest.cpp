@@ -11,7 +11,7 @@ namespace UnitTesting {
 		{ "13", "14", "15", "16" },
 		{ "17", "18", "19", "20" } };
 
-	std::vector<Entity> resultTableHeader2{ {WHILE, "t1" }, { READ,"t2" }};
+	std::vector<Entity> resultTableHeader2{ {WHILE, "t1" }, { READ,"t2" } };
 	std::vector<std::vector<std::string>> resultTableTable2{
 		{ "1", "11", },
 		{ "2", "12", },
@@ -26,6 +26,10 @@ namespace UnitTesting {
 		{ "8", "18",},
 		{ "9", "19",},
 		{ "10", "20", } };
+
+	TEST(ResultTable, init) {
+		//TODO
+	}
 
 	TEST(ResultTable, merge) {
 		//TODO
@@ -45,14 +49,15 @@ namespace UnitTesting {
 	TEST(ResultTable, isEmpty) {
 		ResultTable table(resultTableHeader1, resultTableTable1);
 		EXPECT_FALSE(table.isEmpty());
-
-		ResultTable table1(resultTableHeader1, { });
+			
+		std::vector<std::vector<std::string>> tables;
+		ResultTable table1(resultTableHeader1, tables);
 		EXPECT_TRUE(table1.isEmpty());
 	}
 
 	TEST(ResultTable, getEntityResult) {
 		ResultTable table(resultTableHeader1, resultTableTable1);
-		
+
 		std::list<std::string> result{ "1", "5", "9", "13", "17" };
 		std::list<std::string> tableResult = table.getEntityResult(resultTableHeader1[0]);
 		result.sort();

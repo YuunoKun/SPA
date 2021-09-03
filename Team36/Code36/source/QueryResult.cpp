@@ -38,7 +38,6 @@ void QueryResult::addResult(ResultTable t) {
 }
 
 std::list<std::string> QueryResult::getResult(Entity e) {
-	
 	for (auto& table : results) {
 		if (table.isInTable(e)) {
 			return table.getEntityResult(e);

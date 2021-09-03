@@ -79,6 +79,15 @@ namespace UnitTesting {
 
 		EXPECT_EQ(Utility::unorderedSetToStringList(d), e);
 	}
+
+	TEST(Utility, stmtsToStringVector) {
+		//Todo
+	}
+
+	TEST(Utility, entityToEntityTypeVector) {
+		//Todo
+	}
+
 	TEST(Utility, getIndexString) {
 		std::vector<std::string> c{ "a", "b", "c", "d", "e" };
 		EXPECT_EQ(Utility::getIndex(c, c[0]), 0);
@@ -95,5 +104,18 @@ namespace UnitTesting {
 		EXPECT_EQ(Utility::getIndex(e, e[1]), 1);
 		EXPECT_EQ(Utility::getIndex(e, e[2]), 2);
 		EXPECT_EQ(Utility::getIndex(e, e[3]), 3);
+	}
+
+
+	TEST(Utility, convertType) {
+		//Todo
+	}
+
+	TEST(Utility, filterResult) {
+		//Todo
+	}
+
+	TEST(Utility, filterResults) {
+		//Todo
 	}
 }
