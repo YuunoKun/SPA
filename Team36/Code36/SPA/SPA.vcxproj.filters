@@ -96,12 +96,18 @@
     <ClCompile Include="..\source\ParentTEvaluator.cpp">
       <Filter>Source Files\PQL</Filter>
     </ClCompile>
-    <ClCompile Include="..\source\ModifiesEvaluator.cpp">
-      <Filter>Source Files\PQL</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\UsesEvaluator.cpp">
-      <Filter>Source Files\PQL</Filter>
-    </ClCompile>
+	<ClCompile Include="..\source\ModifiesSEvaluator.cpp">
+		<Filter>Source Files\PQL</Filter>
+	</ClCompile>
+	<ClCompile Include="..\source\ModifiesPEvaluator.cpp">
+		<Filter>Source Files\PQL</Filter>
+	</ClCompile>
+	<ClCompile Include="..\source\UsesSEvaluator.cpp">
+		<Filter>Source Files\PQL</Filter>
+	</ClCompile>
+	<ClCompile Include="..\source\UsesPEvaluator.cpp">
+		<Filter>Source Files\PQL</Filter>
+	</ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\source\PKB.h">
@@ -176,14 +182,20 @@
     <ClInclude Include="..\source\ParentTEvaluator.h">
       <Filter>Header Files\PQL</Filter>
     </ClInclude>
-    <ClInclude Include="..\source\ModifiesEvaluator.h">
-      <Filter>Header Files\PQL</Filter>
-    </ClInclude>
     <ClInclude Include="..\source\ParentEvaluator.h">
       <Filter>Header Files\PQL</Filter>
     </ClInclude>
-    <ClInclude Include="..\source\UsesEvaluator.h">
-      <Filter>Header Files\PQL</Filter>
-    </ClInclude>
+	<ClInclude Include="..\source\ModifiesSEvaluator.h">
+		<Filter>Header Files\PQL</Filter>
+	</ClInclude>
+	<ClInclude Include="..\source\ModifiesPEvaluator.h">
+		<Filter>Header Files\PQL</Filter>
+	</ClInclude>
+	<ClInclude Include="..\source\UsesSEvaluator.h">
+		<Filter>Header Files\PQL</Filter>
+	</ClInclude>
+	<ClInclude Include="..\source\UsesPEvaluator.h">
+		<Filter>Header Files\PQL</Filter>
+	</ClInclude>
   </ItemGroup>
 </Project>

@@ -32,8 +32,10 @@
     <ClCompile Include="..\source\FollowsTEvaluator.cpp" />
     <ClCompile Include="..\source\ParentEvaluator.cpp" />
     <ClCompile Include="..\source\ParentTEvaluator.cpp" />
-    <ClCompile Include="..\source\ModifiesEvaluator.cpp" />
-    <ClCompile Include="..\source\UsesEvaluator.cpp" />
+	<ClCompile Include="..\source\ModifiesSEvaluator.cpp" />
+	<ClCompile Include="..\source\ModifiesPEvaluator.cpp" />
+	<ClCompile Include="..\source\UsesSEvaluator.cpp" />
+	<ClCompile Include="..\source\UsesPEvaluator.cpp" />
     <ClCompile Include="..\source\PatternEvaluator.cpp" />
     <ClCompile Include="..\source\ResultTable.cpp" />
     <ClCompile Include="..\source\Utility.cpp" />
@@ -62,8 +64,10 @@
     <ClInclude Include="..\source\FollowsTEvaluator.h" />
     <ClInclude Include="..\source\ParentEvaluator.h" />
     <ClInclude Include="..\source\ParentTEvaluator.h" />
-    <ClInclude Include="..\source\ModifiesEvaluator.h" />
-    <ClInclude Include="..\source\UsesEvaluator.h" />
+	<ClInclude Include="..\source\ModifiesSEvaluator.h" />
+	<ClInclude Include="..\source\ModifiesPEvaluator.h" />
+	<ClInclude Include="..\source\UsesSEvaluator.h" />
+	<ClInclude Include="..\source\UsesPEvaluator.h" />
     <ClInclude Include="..\source\ResultTable.h" />
     <ClInclude Include="..\source\Utility.h" />
   </ItemGroup>

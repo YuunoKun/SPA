@@ -6,7 +6,7 @@
 #include "QueryResult.h"
 #include "PKBAdapter.h"
 
-class UsesEvaluator : public RelationEvaluatorInterface {
+class UsesSEvaluator : public RelationEvaluatorInterface {
 public:
 	//Handle both wild : e.g Relation(_, _)
 	bool haveRelation();

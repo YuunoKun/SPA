@@ -3,35 +3,34 @@
 #include "Query.h"
 #include "QueryResult.h"
 #include "PKBAdapter.h"
-#include "ModifiesEvaluator.h"
+#include "UsesPEvaluator.h"
 
 
 //Handle both wild : e.g Relation(_, _)
-bool ModifiesEvaluator::haveRelation() {
-	return pkb.getFollows().empty();
+bool UsesPEvaluator::haveRelation() {
+	throw std::invalid_argument("haveRelation(): Wild is not allowed for first argument of Uses_P");
 }
 
 //Handle both constant : e.g Relation(1, 2)
-bool ModifiesEvaluator::isRelation(Entity e1, Entity e2) {
+bool UsesPEvaluator::isRelation(Entity e1, Entity e2) {
 	stmt_index c1 = stoi(e1.getValue());
 	stmt_index c2 = stoi(e2.getValue());
 	return pkb.isFollow(c1, c2);;
 }
 
 //Handle left constant, right wild: e.g Relation(1, _)
-bool ModifiesEvaluator::haveRelationAtRight(Entity e) {
+bool UsesPEvaluator::haveRelationAtRight(Entity e) {
 	stmt_index c = stoi(e.getValue());
 	return pkb.isFollowed(c);;
 }
 
 //Handle right wild, left constant: e.g Relation(_, 1)
-bool ModifiesEvaluator::haveRelationAtLeft(Entity e) {
-	stmt_index c = stoi(e.getValue());
-	return pkb.isFollowing(c);;
+bool UsesPEvaluator::haveRelationAtLeft(Entity e) {
+	throw std::invalid_argument("haveRelationAtLeft(): Wild is not allowed for first argument of Uses_P");
 }
 
 //If both side is declartion: e.g Relation(a, b)
-ResultTable ModifiesEvaluator::getRelations(Entity left, Entity right) {
+ResultTable UsesPEvaluator::getRelations(Entity left, Entity right) {
 	std::vector<std::vector<Stmt>> results = pkb.getFollows();
 	std::vector<Entity> header{ left, right };
 	ResultTable result = ResultTable(header, results);
@@ -39,23 +38,23 @@ ResultTable ModifiesEvaluator::getRelations(Entity left, Entity right) {
 }
 
 //If left side is WILD and right side is declartion: e.g Relation(_, a)
-ResultTable ModifiesEvaluator::getRightRelations(Entity header) {
-	return ResultTable(header, pkb.getFollowing());
+ResultTable UsesPEvaluator::getRightRelations(Entity header) {
+	throw std::invalid_argument("getRightRelations(): Wild is not allowed for first argument of Uses_P");
 }
 
 //Handle right declartion, left constant: e.g Relation(a, _)
-ResultTable ModifiesEvaluator::getLeftRelations(Entity header) {
+ResultTable UsesPEvaluator::getLeftRelations(Entity header) {
 	return ResultTable(header, pkb.getFollowed());
 }
 
 //Handle left constant, right declartion: e.g Relation(1, a)
-ResultTable ModifiesEvaluator::getRelationMatchLeft(Entity constant, Entity header) {
+ResultTable UsesPEvaluator::getRelationMatchLeft(Entity constant, Entity header) {
 	stmt_index c = stoi(constant.getValue());
 	return ResultTable(header, pkb.getFollowing(c));
 }
 
 //Handle right declartion, left constant: e.g Relation(a, 1)
-ResultTable ModifiesEvaluator::getRelationMatchRight(Entity header, Entity constant) {
+ResultTable UsesPEvaluator::getRelationMatchRight(Entity header, Entity constant) {
 	stmt_index c = stoi(constant.getValue());
 	return ResultTable(header, pkb.getFollowed(c));
 }

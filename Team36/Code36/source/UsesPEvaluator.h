@@ -6,7 +6,7 @@
 #include "QueryResult.h"
 #include "PKBAdapter.h"
 
-class ModifiesEvaluator : public RelationEvaluatorInterface {
+class UsesPEvaluator : public RelationEvaluatorInterface {
 public:
 	//Handle both wild : e.g Relation(_, _)
 	bool haveRelation();
@@ -34,6 +34,4 @@ public:
 
 	//Handle right declartion, left constant: e.g Relation(a, 1)
 	ResultTable getRelationMatchRight(Entity, Entity);
-
-
 };

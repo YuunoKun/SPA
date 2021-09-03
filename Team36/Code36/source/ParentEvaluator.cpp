@@ -15,19 +15,19 @@ bool ParentEvaluator::haveRelation() {
 bool ParentEvaluator::isRelation(Entity e1, Entity e2) {
 	stmt_index c1 = stoi(e1.getValue());
 	stmt_index c2 = stoi(e2.getValue());
-	return pkb.isParent(c1, c2);;
+	return pkb.isParent(c1, c2);
 }
 
 //Handle left constant, right wild: e.g Relation(1, _)
 bool ParentEvaluator::haveRelationAtRight(Entity e) {
 	stmt_index c = stoi(e.getValue());
-	return pkb.isParent(c);;
+	return pkb.isParent(c);
 }
 
 //Handle right wild, left constant: e.g Relation(_, 1)
 bool ParentEvaluator::haveRelationAtLeft(Entity e) {
 	stmt_index c = stoi(e.getValue());
-	return pkb.isChild(c);;
+	return pkb.isChild(c);
 }
 
 //If both side is declartion: e.g Relation(a, b)
