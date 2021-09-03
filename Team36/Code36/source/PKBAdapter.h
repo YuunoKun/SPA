@@ -10,6 +10,7 @@ class PKBAdapter {
 public:
 	PKBAdapter();
 
+	//Retrieve Design Entities Functions
 	std::vector<variable_name> getVariables();
 	std::vector<Stmt> getStmts();
 	std::vector<constant> getConstants();
