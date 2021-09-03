@@ -14,6 +14,12 @@ public:
 	std::vector<Stmt> getStmts();
 	std::vector<constant> getConstants();
 	std::vector<procedure_name> getProcedures();
+	std::vector<Stmt> getAssigns();
+	std::vector<Stmt> getPrints();
+	std::vector<Stmt> getCalls();
+	std::vector<Stmt> getReads();
+	std::vector<Stmt> getWhiles();
+	std::vector<Stmt> getIfs();
 
 	//Follow relation function
 	bool isFollow(stmt_index, stmt_index);

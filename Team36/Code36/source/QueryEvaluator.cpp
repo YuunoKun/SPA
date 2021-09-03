@@ -15,12 +15,12 @@ std::list<std::string> QueryEvaluator::getRawResult(Entity selected) {
 	std::list<std::string> result;
 	switch (selected.getType()) {
 	case STMT: result = Utility::stmtsToStringList(pkb.getStmts()); break;
-	case READ: break;
-	case PRINT: break;
-	case CALL: break;
-	case WHILE: break;
-	case IF: break;
-	case ASSIGN: break;
+	case READ: result = Utility::stmtsToStringList(pkb.getReads());  break;
+	case PRINT: result = Utility::stmtsToStringList(pkb.getPrints()); break;
+	case CALL: result = Utility::stmtsToStringList(pkb.getCalls()); break;
+	case WHILE: result = Utility::stmtsToStringList(pkb.getWhiles()); break;
+	case IF: result = Utility::stmtsToStringList(pkb.getIfs()); break;
+	case ASSIGN: result = Utility::stmtsToStringList(pkb.getAssigns()); break;
 	case VARIABLE: result = Utility::variablesToStringList(pkb.getVariables());  break;
 	case CONSTANT: result = Utility::constantsToStringList(pkb.getConstants());  break;
 	case PROCEDURE: result = Utility::proceduresToStringList(pkb.getProcedures());  break;

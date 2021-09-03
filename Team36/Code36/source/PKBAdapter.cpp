@@ -20,6 +20,36 @@ std::vector<procedure_name> PKBAdapter::getProcedures() {
 	return PKB::getInstance().PKB::getProcedures();
 }
 
+std::vector<Stmt> PKBAdapter::getAssigns() {
+	//TODO
+	return std::vector<Stmt>();
+}
+
+std::vector<Stmt> PKBAdapter::getPrints() {
+	//TODO
+	return std::vector<Stmt>();
+}
+
+std::vector<Stmt> PKBAdapter::getCalls() {
+	//TODO
+	return std::vector<Stmt>();
+}
+
+std::vector<Stmt> PKBAdapter::getReads() {
+	//TODO
+	return std::vector<Stmt>();
+}
+
+std::vector<Stmt> PKBAdapter::getWhiles() {
+	//TODO
+	return std::vector<Stmt>();
+}
+
+std::vector<Stmt> PKBAdapter::getIfs() {
+	//TODO
+	return std::vector<Stmt>();
+}
+
 bool PKBAdapter::isFollow(stmt_index, stmt_index) {
 	//TODO
 	return false;
