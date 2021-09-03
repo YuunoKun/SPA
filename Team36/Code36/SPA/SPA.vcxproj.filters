@@ -84,6 +84,9 @@
     <ClCompile Include="..\source\ResultTable.cpp">
       <Filter>Source Files\PQL</Filter>
     </ClCompile>
+    <ClCompile Include="..\source\FollowEvaluator.cpp">
+      <Filter>Source Files\PQL</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\source\PKB.h">
@@ -131,20 +134,23 @@
     <ClInclude Include="..\source\Parser.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\source\PatternEvaluator.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="..\source\RelationEvaluatorInterface.h">
+      <Filter>Header Files\PQL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\RelationsEvaluator.h">
+      <Filter>Header Files\PQL</Filter>
     </ClInclude>
     <ClInclude Include="..\source\QueryResult.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\PQL</Filter>
     </ClInclude>
-	<ClInclude Include="..\source\RelationsEvaluator.h">
-		<Filter>Header Files</Filter>
-	</ClInclude>
-	<ClInclude Include="..\source\RelationEvaluatorInterface.h">
-		<Filter>Header Files</Filter>
-	</ClInclude>
+    <ClInclude Include="..\source\PatternEvaluator.h">
+      <Filter>Header Files\PQL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\FollowEvaluator.h">
+      <Filter>Header Files\PQL</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
     <ClInclude Include="..\source\ResultTable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
