@@ -95,11 +95,4 @@ public:
 	std::vector<Stmt> getUsesS(var_name);
 	std::vector<std::string> getUsedS(stmt_index);
 
-	//Pattern relation Function
-	bool isUses(stmt_index, var_name);
-	bool isUses(stmt_index);
-	std::vector<std::pair<Stmt, var_name>> getUsesSRelation();
-	std::vector<Stmt> getUsesS();
-	std::vector<Stmt> getUsesS(var_name);
-	std::vector<std::string> getUsedS(stmt_index);
 };

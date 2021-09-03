@@ -209,3 +209,123 @@ std::vector<std::vector<Stmt>> PKBAdapter::getAllParentTRelation() {
 	//Todo
 	return std::vector<std::vector<Stmt>>();
 }
+
+bool PKBAdapter::isModifies(proc_name, var_name) {
+	//TODO
+	return false;
+}
+
+bool PKBAdapter::isModifies(proc_name) {
+	//TODO
+	return false;
+}
+
+std::vector<std::pair<std::string, std::string>> PKBAdapter::getModifiesPRelation() {
+	//TODO
+	return std::vector<std::pair<std::string, std::string>>();
+}
+
+std::vector<std::string> PKBAdapter::getModifiesP() {
+	//TODO
+	return std::vector<std::string>();
+}
+
+std::vector<std::string> PKBAdapter::getModifiesP(var_name) {
+	//TODO
+	return std::vector<std::string>();
+}
+
+std::vector<std::string> PKBAdapter::getModifiedP(proc_name) {
+	//TODO
+	return std::vector<std::string>();
+}
+
+bool PKBAdapter::isModifies(stmt_index, var_name) {
+	//TODO
+	return false;
+}
+
+bool PKBAdapter::isModifies(stmt_index) {
+	//TODO
+	return false;
+}
+
+std::vector<std::pair<Stmt, var_name>> PKBAdapter::getModifiesSRelation() {
+	//TODO
+	return std::vector<std::pair<Stmt, var_name>>();
+}
+
+std::vector<Stmt> PKBAdapter::getModifiesS() {
+	//TODO
+	return std::vector<Stmt>();
+}
+
+std::vector<Stmt> PKBAdapter::getModifiesS(var_name) {
+	//TODO
+	return std::vector<Stmt>();
+}
+
+std::vector<std::string> PKBAdapter::getModifiedS(stmt_index) {
+	//TODO
+	return std::vector<std::string>();
+}
+
+bool PKBAdapter::isUses(proc_name, var_name) {
+	//TODO
+	return false;
+}
+
+bool PKBAdapter::isUses(proc_name) {
+	//TODO
+	return false;
+}
+
+std::vector<std::pair<std::string, std::string>> PKBAdapter::getUsesPRelation() {
+	//TODO
+	return std::vector<std::pair<std::string, std::string>>();
+}
+
+std::vector<std::string> PKBAdapter::getUsesP() {
+	//TODO
+	return std::vector<std::string>();
+}
+
+std::vector<std::string> PKBAdapter::getUsesP(var_name) {
+	//TODO
+	return std::vector<std::string>();
+}
+
+std::vector<std::string> PKBAdapter::getUsedP(proc_name) {
+	//TODO
+	return std::vector<std::string>();
+}
+
+bool PKBAdapter::isUses(stmt_index, var_name) {
+	//TODO
+	return false;
+}
+
+bool PKBAdapter::isUses(stmt_index) {
+	//TODO
+	return false;
+}
+
+std::vector<std::pair<Stmt, var_name>> PKBAdapter::getUsesSRelation() {
+	//TODO
+	return std::vector<std::pair<Stmt, var_name>>();
+}
+
+std::vector<Stmt> PKBAdapter::getUsesS() {
+	//TODO
+	return std::vector<Stmt>();
+}
+
+std::vector<Stmt> PKBAdapter::getUsesS(var_name) {
+	//TODO
+	return std::vector<Stmt>();
+}
+
+std::vector<std::string> PKBAdapter::getUsedS(stmt_index) {
+	//TODO
+	return std::vector<std::string>();
+}
