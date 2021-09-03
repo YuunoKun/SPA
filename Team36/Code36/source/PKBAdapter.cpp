@@ -35,14 +35,14 @@ bool PKBAdapter::isFollowing(stmt_index) {
 	return false;
 }
 
-std::vector<std::string> PKBAdapter::getFollowed() {
+std::vector<Stmt> PKBAdapter::getFollowed() {
 	//TODO
-	return std::vector<std::string>();
+	return std::vector<Stmt>();
 }
 
-std::vector<std::string> PKBAdapter::getFollowing() {
+std::vector<Stmt> PKBAdapter::getFollowing() {
 	//TODO
-	return std::vector<std::string>();
+	return std::vector<Stmt>();
 }
 
 std::vector<Stmt> PKBAdapter::getFollowed(stmt_index) {
@@ -56,5 +56,126 @@ std::vector<Stmt> PKBAdapter::getFollowing(stmt_index) {
 }
 
 std::vector<std::vector<Stmt>> PKBAdapter::getFollows() {
+	//Todo
+	return std::vector<std::vector<Stmt>>();
+}
+
+bool PKBAdapter::isFollowT(stmt_index, stmt_index) {
+	//Todo
+	return false;
+}
+
+bool PKBAdapter::isFollowedT(stmt_index) {
+	//Todo
+	return false;
+}
+
+bool PKBAdapter::isFollowingT(stmt_index) {
+	//Todo
+	return false;
+}
+
+std::vector<Stmt> PKBAdapter::getFollowedT() {
+	//Todo
+	return std::vector<Stmt>();
+}
+
+std::vector<Stmt> PKBAdapter::getFollowingT() {
+	//Todo
+	return std::vector<Stmt>();
+}
+
+std::vector<Stmt> PKBAdapter::getFollowedT(stmt_index) {
+	//Todo
+	return std::vector<Stmt>();
+}
+
+std::vector<Stmt> PKBAdapter::getFollowingT(stmt_index) {
+	//Todo
+	return std::vector<Stmt>();
+}
+
+std::vector<std::vector<Stmt>> PKBAdapter::getFollowsT() {
+	//Todo
+	return std::vector<std::vector<Stmt>>();
+}
+
+bool PKBAdapter::isParent(stmt_index, stmt_index) {
+	//Todo
+	return false;
+}
+
+bool PKBAdapter::isChild(stmt_index) {
+	//Todo
+	return false;
+}
+
+bool PKBAdapter::isParent(stmt_index) {
+	//Todo
+	return false;
+}
+
+std::vector<Stmt> PKBAdapter::getChild() {
+	//Todo
+	return std::vector<Stmt>();
+}
+
+std::vector<Stmt> PKBAdapter::getParent() {
+	//Todo
+	return std::vector<Stmt>();
+}
+
+std::vector<Stmt> PKBAdapter::getChild(stmt_index) {
+	//Todo
+	return std::vector<Stmt>();
+}
+
+std::vector<Stmt> PKBAdapter::getParent(stmt_index) {
+	//Todo
+	return std::vector<Stmt>();
+}
+
+std::vector<std::vector<Stmt>> PKBAdapter::getAllParent() {
+	//Todo
+	return std::vector<std::vector<Stmt>>();
+}
+
+bool PKBAdapter::isParentT(stmt_index, stmt_index) {
+	//Todo
+	return false;
+}
+
+bool PKBAdapter::isChildT(stmt_index) {
+	//Todo
+	return false;
+}
+
+bool PKBAdapter::isParentT(stmt_index) {
+	//Todo
+	return false;
+}
+
+std::vector<Stmt> PKBAdapter::getChildT() {
+	//Todo
+	return std::vector<Stmt>();
+}
+
+std::vector<Stmt> PKBAdapter::getParentT() {
+	//Todo
+	return std::vector<Stmt>();
+}
+
+std::vector<Stmt> PKBAdapter::getChildT(stmt_index) {
+	//Todo
+	return std::vector<Stmt>();
+}
+
+std::vector<Stmt> PKBAdapter::getParentT(stmt_index) {
+	//Todo
+	return std::vector<Stmt>();
+}
+
+std::vector<std::vector<Stmt>> PKBAdapter::getAllParentT() {
+	//Todo
 	return std::vector<std::vector<Stmt>>();
 }

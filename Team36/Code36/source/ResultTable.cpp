@@ -53,7 +53,7 @@ void ResultTable::init(Entity, std::vector<std::string>) {
 	}
 }
 
-void ResultTable::init(std::vector<Entity>, std::vector<std::vector<std::string>>) {
+void ResultTable::init(std::vector<Entity> header, std::vector<std::vector<std::string>> table) {
 	this->header = header;
 	this->table = table;
 }

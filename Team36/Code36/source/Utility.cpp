@@ -140,7 +140,7 @@ std::vector<std::vector<Stmt>> Utility::filterResults(std::vector<EntityType> et
 bool Utility::isAllStmt(std::vector<EntityType> v) {
 	for (auto& it : v) {
 		if (it != STMT) {
-			return false
+			return false;
 		}
 	}
 	return true;

@@ -28,7 +28,7 @@
     <ClCompile Include="..\source\Stmt.cpp" />
     <ClCompile Include="..\source\Token.cpp" />
     <ClCompile Include="..\source\Tokenizer.cpp" />
-    <ClCompile Include="..\source\RelationEvaluator.cpp" />
+    <ClCompile Include="..\source\RelationsEvaluator.cpp" />
     <ClCompile Include="..\source\PatternEvaluator.cpp" />
     <ClCompile Include="..\source\ResultTable.cpp" />
   </ItemGroup>
@@ -51,7 +51,8 @@
     <ClInclude Include="..\source\Stmt.h" />
     <ClInclude Include="..\source\Token.h" />
     <ClInclude Include="..\source\Tokenizer.h" />
-    <ClInclude Include="..\source\RelationEvaluator.h" />
+    <ClInclude Include="..\source\RelationsEvaluator.h" />
+	<ClInclude Include="..\source\RelationEvaluatorInterface.h" />
     <ClInclude Include="..\source\PatternEvaluator.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

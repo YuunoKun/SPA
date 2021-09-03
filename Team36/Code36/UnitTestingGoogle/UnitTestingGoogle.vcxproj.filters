@@ -28,6 +28,9 @@
     <ClCompile Include="QueryResultTest.cpp">
       <Filter>PQL</Filter>
     </ClCompile>
+    <ClCompile Include="RelationsEvaluatorTest.cpp">
+      <Filter>PQL</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />

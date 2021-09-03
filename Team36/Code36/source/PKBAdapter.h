@@ -34,4 +34,25 @@ public:
 	std::vector<Stmt> getFollowedT(stmt_index);
 	std::vector<Stmt> getFollowingT(stmt_index);
 	std::vector<std::vector<Stmt>> getFollowsT();
+
+
+	//Parent relation function
+	bool isParent(stmt_index, stmt_index);
+	bool isChild(stmt_index);
+	bool isParent(stmt_index);
+	std::vector<Stmt> getChild();
+	std::vector<Stmt> getParent();
+	std::vector<Stmt> getChild(stmt_index);
+	std::vector<Stmt> getParent(stmt_index);
+	std::vector<std::vector<Stmt>> getAllParent();
+
+	//ParentT relation function
+	bool isParentT(stmt_index, stmt_index);
+	bool isChildT(stmt_index);
+	bool isParentT(stmt_index);
+	std::vector<Stmt> getChildT();
+	std::vector<Stmt> getParentT();
+	std::vector<Stmt> getChildT(stmt_index);
+	std::vector<Stmt> getParentT(stmt_index);
+	std::vector<std::vector<Stmt>> getAllParentT();
 };

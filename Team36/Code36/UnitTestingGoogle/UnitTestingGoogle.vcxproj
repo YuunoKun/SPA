@@ -44,6 +44,7 @@
     <ClCompile Include="PatternTest.cpp" />
     <ClCompile Include="QueryResultTest.cpp" />
     <ClCompile Include="QueryTest.cpp" />
+    <ClCompile Include="RelationsEvaluatorTest.cpp" />
     <ClCompile Include="RelRefTest.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

@@ -75,7 +75,7 @@
     <ClCompile Include="..\source\PatternEvaluator.cpp">
       <Filter>Source Files\PQL</Filter>
     </ClCompile>
-    <ClCompile Include="..\source\RelationEvaluator.cpp">
+    <ClCompile Include="..\source\RelationsEvaluator.cpp">
       <Filter>Source Files\PQL</Filter>
     </ClCompile>
     <ClCompile Include="..\source\Utility.cpp">
@@ -139,9 +139,12 @@
     <ClInclude Include="..\source\QueryResult.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\source\RelationEvaluator.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
+	<ClInclude Include="..\source\RelationsEvaluator.h">
+		<Filter>Header Files</Filter>
+	</ClInclude>
+	<ClInclude Include="..\source\RelationEvaluatorInterface.h">
+		<Filter>Header Files</Filter>
+	</ClInclude>
     <ClInclude Include="..\source\ResultTable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
