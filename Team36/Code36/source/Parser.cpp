@@ -69,7 +69,7 @@ void Parser::parse() {
 	m_tokenizer.parse_into_tokens(m_source_program.c_str());
 
 	const std::vector<Token> v = m_tokenizer.get_token_chain();
-	std::vector<procedure_name> p_n;
+	std::vector<proc_name> p_n;
 	std::unordered_set<constant> con;
 	Token tk;
 

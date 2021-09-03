@@ -11,10 +11,10 @@ public:
 	PKBAdapter();
 
 	//Retrieve Design Entities Functions
-	std::vector<variable_name> getVariables();
+	std::vector<var_name> getVariables();
 	std::vector<Stmt> getStmts();
 	std::vector<constant> getConstants();
-	std::vector<procedure_name> getProcedures();
+	std::vector<proc_name> getProcedures();
 	std::vector<Stmt> getAssigns();
 	std::vector<Stmt> getPrints();
 	std::vector<Stmt> getCalls();
@@ -64,18 +64,34 @@ public:
 	std::vector<std::vector<Stmt>> getAllParentTRelation();
 
 	//ModifiesP relation Function
-	bool isModifies(procedure_name, variable_name);
-	bool isModifies(procedure_name);
+	bool isModifies(proc_name, var_name);
+	bool isModifies(proc_name);
 	std::vector<std::pair<std::string, std::string>> getModifiesPRelation();
 	std::vector<std::string> getModifiesP();
-	std::vector<std::string> getModifiesP(variable_name);
-	std::vector<std::string> getModifiedP(procedure_name);
+	std::vector<std::string> getModifiesP(var_name);
+	std::vector<std::string> getModifiedP(proc_name);
 
 	//ModifiesS relation Function
-	bool isModifies(stmt_index, variable_name);
+	bool isModifies(stmt_index, var_name);
 	bool isModifies(stmt_index);
-	std::vector<std::pair<Stmt, variable_name>> getModifiesSRelation();
+	std::vector<std::pair<Stmt, var_name>> getModifiesSRelation();
 	std::vector<Stmt> getModifiesS();
-	std::vector<Stmt> getModifiesS(variable_name);
+	std::vector<Stmt> getModifiesS(var_name);
 	std::vector<std::string> getModifiedS(stmt_index);
+
+	//UsesP relation Function
+	bool isUses(proc_name, var_name);
+	bool isUses(proc_name);
+	std::vector<std::pair<std::string, std::string>> getUsesPRelation();
+	std::vector<std::string> getUsesP();
+	std::vector<std::string> getUsesP(var_name);
+	std::vector<std::string> getUsedP(proc_name);
+
+	//UsesS relation Function
+	bool isUses(stmt_index, var_name);
+	bool isUses(stmt_index);
+	std::vector<std::pair<Stmt, var_name>> getUsesSRelation();
+	std::vector<Stmt> getUsesS();
+	std::vector<Stmt> getUsesS(var_name);
+	std::vector<std::string> getUsedS(stmt_index);
 };

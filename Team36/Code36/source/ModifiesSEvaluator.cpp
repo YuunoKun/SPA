@@ -14,7 +14,7 @@ bool ModifiesSEvaluator::haveRelation() {
 //Handle both constant : e.g Relation(1, 2)
 bool ModifiesSEvaluator::isRelation(Entity e1, Entity e2) {
 	stmt_index s = stoi(e1.getName());
-	variable_name v = e2.getName();
+	var_name v = e2.getName();
 	return pkb.isModifies(s, v);
 }
 
@@ -57,6 +57,6 @@ ResultTable ModifiesSEvaluator::getRelationMatchLeft(Entity constant, Entity hea
 
 //Handle right declartion, left constant: e.g Relation(a, 1)
 ResultTable ModifiesSEvaluator::getRelationMatchRight(Entity header, Entity constant) {
-	variable_name v = constant.getName();
+	var_name v = constant.getName();
 	return ResultTable(header, pkb.getModifiesS(v));
 }

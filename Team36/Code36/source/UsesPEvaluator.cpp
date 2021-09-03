@@ -5,7 +5,6 @@
 #include "PKBAdapter.h"
 #include "UsesPEvaluator.h"
 
-
 //Handle both wild : e.g Relation(_, _)
 bool UsesPEvaluator::haveRelation() {
 	throw std::invalid_argument("haveRelation(): Wild is not allowed for first argument of Uses_P");
@@ -13,15 +12,15 @@ bool UsesPEvaluator::haveRelation() {
 
 //Handle both constant : e.g Relation(1, 2)
 bool UsesPEvaluator::isRelation(Entity e1, Entity e2) {
-	stmt_index c1 = stoi(e1.getValue());
-	stmt_index c2 = stoi(e2.getValue());
-	return pkb.isFollow(c1, c2);;
+	proc_name p = e1.getName();
+	var_name v = e2.getName();
+	return pkb.isUses(p, v);
 }
 
 //Handle left constant, right wild: e.g Relation(1, _)
 bool UsesPEvaluator::haveRelationAtRight(Entity e) {
-	stmt_index c = stoi(e.getValue());
-	return pkb.isFollowed(c);;
+	proc_name p = e.getName();
+	return pkb.isUses(p);
 }
 
 //Handle right wild, left constant: e.g Relation(_, 1)
@@ -31,10 +30,12 @@ bool UsesPEvaluator::haveRelationAtLeft(Entity e) {
 
 //If both side is declartion: e.g Relation(a, b)
 ResultTable UsesPEvaluator::getRelations(Entity left, Entity right) {
-	std::vector<std::vector<Stmt>> results = pkb.getFollows();
+	std::vector<std::pair<std::string, std::string>> results = pkb.getUsesPRelation();
 	std::vector<Entity> header{ left, right };
-	ResultTable result = ResultTable(header, results);
-	return result;
+	//TODO
+	//ResultTable result = ResultTable(header, results);
+	//return result;
+	throw std::invalid_argument("TODO");
 }
 
 //If left side is WILD and right side is declartion: e.g Relation(_, a)
@@ -44,17 +45,17 @@ ResultTable UsesPEvaluator::getRightRelations(Entity header) {
 
 //Handle right declartion, left constant: e.g Relation(a, _)
 ResultTable UsesPEvaluator::getLeftRelations(Entity header) {
-	return ResultTable(header, pkb.getFollowed());
+	return ResultTable(header, pkb.getUsesP());
 }
 
 //Handle left constant, right declartion: e.g Relation(1, a)
 ResultTable UsesPEvaluator::getRelationMatchLeft(Entity constant, Entity header) {
-	stmt_index c = stoi(constant.getValue());
-	return ResultTable(header, pkb.getFollowing(c));
+	proc_name p = constant.getName();
+	return ResultTable(header, pkb.getUsedP(p));
 }
 
 //Handle right declartion, left constant: e.g Relation(a, 1)
 ResultTable UsesPEvaluator::getRelationMatchRight(Entity header, Entity constant) {
-	stmt_index c = stoi(constant.getValue());
-	return ResultTable(header, pkb.getFollowed(c));
+	var_name v = constant.getName();
+	return ResultTable(header, pkb.getUsesP(v));
 }

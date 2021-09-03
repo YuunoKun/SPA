@@ -127,9 +127,9 @@ namespace UnitTesting {
 	//TEST(PKB, getProcedures) {
 	//	PKB::getInstance().resetCache();
 
-	//	procedure_name first_procedure = "main";
-	//	procedure_name second_procedure = "printY";
-	//	std::vector<procedure_name> v{ first_procedure, second_procedure };
+	//	proc_name first_procedure = "main";
+	//	proc_name second_procedure = "printY";
+	//	std::vector<proc_name> v{ first_procedure, second_procedure };
 	//	PKB::getInstance().setProcedures(v);
 	//	EXPECT_EQ(v, PKB::getInstance().getProcedures());
 	//}
@@ -137,7 +137,7 @@ namespace UnitTesting {
 	//	PKB::getInstance().resetCache();
 
 	//	std::vector<constant> vc{ 3 };
-	//	std::vector<procedure_name> vp{ "main" };
+	//	std::vector<proc_name> vp{ "main" };
 	//	PKB::getInstance().setConstants(vc);
 	//	PKB::getInstance().setProcedures(vp);
 	//	PKB::getInstance().resetCache();

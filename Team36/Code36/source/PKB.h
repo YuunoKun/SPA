@@ -19,14 +19,14 @@ public:
 	PKB(PKB const&) = delete;
 	void operator=(PKB const&) = delete;
 
-	void setProcedures(std::vector<procedure_name> proc_set);
+	void setProcedures(std::vector<proc_name> proc_set);
 	void setConstants(std::vector<constant> const_set);
-	void setVariables(std::vector<variable_name> var_set);
+	void setVariables(std::vector<var_name> var_set);
 	void setStmts(std::vector<Stmt> stmt_set);
 
-	std::vector<procedure_name> getProcedures();
+	std::vector<proc_name> getProcedures();
 	std::vector<constant> getConstants();
-	std::vector<variable_name> getVariables();
+	std::vector<var_name> getVariables();
 	std::vector<Stmt> getStmts();
 
 	void resetCache();
@@ -34,9 +34,9 @@ public:
 	void resetRelations();
 
 private:
-	std::unordered_set<procedure_name> proc_table;
+	std::unordered_set<proc_name> proc_table;
 	std::unordered_set<constant> const_table;
-	std::unordered_set<variable_name> var_table;
+	std::unordered_set<var_name> var_table;
 
 	/* To add hash function for Stmt */
 	//std::unordered_set<Stmt> stmt_table;

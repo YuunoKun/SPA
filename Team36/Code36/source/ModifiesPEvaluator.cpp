@@ -13,14 +13,14 @@ bool ModifiesPEvaluator::haveRelation() {
 
 //Handle both constant : e.g Relation(1, 2)
 bool ModifiesPEvaluator::isRelation(Entity e1, Entity e2) {
-	procedure_name p = e1.getName();
-	variable_name v = e2.getName();
+	proc_name p = e1.getName();
+	var_name v = e2.getName();
 	return pkb.isModifies(p, v);
 }
 
 //Handle left constant, right wild: e.g Relation(1, _)
 bool ModifiesPEvaluator::haveRelationAtRight(Entity e) {
-	procedure_name p = e.getName();
+	proc_name p = e.getName();
 	return pkb.isModifies(p);
 }
 
@@ -51,12 +51,12 @@ ResultTable ModifiesPEvaluator::getLeftRelations(Entity header) {
 
 //Handle left constant, right declartion: e.g Relation(1, a)
 ResultTable ModifiesPEvaluator::getRelationMatchLeft(Entity constant, Entity header) {
-	procedure_name p = constant.getName();
+	proc_name p = constant.getName();
 	return ResultTable(header, pkb.getModifiedP(p));
 }
 
 //Handle right declartion, left constant: e.g Relation(a, 1)
 ResultTable ModifiesPEvaluator::getRelationMatchRight(Entity header, Entity constant) {
-	variable_name v = constant.getName();
+	var_name v = constant.getName();
 	return ResultTable(header, pkb.getModifiesP(v));
 }

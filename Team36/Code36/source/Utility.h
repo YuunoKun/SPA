@@ -8,9 +8,9 @@ class Utility {
 public:
 
 	static std::list<std::string> constantsToStringList(std::vector<constant>&);
-	static std::list<std::string> proceduresToStringList(std::vector<procedure_name>&);
+	static std::list<std::string> proceduresToStringList(std::vector<proc_name>&);
 	static std::list<std::string> stmtsToStringList(std::vector<Stmt>&);
-	static std::list<std::string> variablesToStringList(std::vector<variable_name>&);
+	static std::list<std::string> variablesToStringList(std::vector<var_name>&);
 	static std::list<std::string> unorderedSetToStringList(std::unordered_set<std::string>&);
 
 	static std::vector<std::string> stmtsToStringVector(std::vector<Stmt>&);

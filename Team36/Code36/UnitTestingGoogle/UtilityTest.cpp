@@ -20,7 +20,7 @@ namespace UnitTesting {
 	}
 
 	TEST(Utility, proceduresToStringList) {
-		std::vector<procedure_name> a{ "a", "b", "c", "d", "e" };
+		std::vector<proc_name> a{ "a", "b", "c", "d", "e" };
 		std::list<std::string> b{ "a", "b", "c", "d", "e" };
 
 		EXPECT_EQ(Utility::proceduresToStringList(a), b);
@@ -28,7 +28,7 @@ namespace UnitTesting {
 		std::list<std::string> c{ "a", "b", "c", "d" };
 		EXPECT_NE(Utility::proceduresToStringList(a), c);
 
-		std::vector<procedure_name> d{ "a", "b" };
+		std::vector<proc_name> d{ "a", "b" };
 		std::list<std::string> e{ "a", "b" };
 
 		EXPECT_EQ(Utility::proceduresToStringList(d), e);
@@ -51,7 +51,7 @@ namespace UnitTesting {
 	}
 
 	TEST(Utility, variablesToStringList) {
-		std::vector<variable_name> a{ "a", "b", "c", "d", "e" };
+		std::vector<var_name> a{ "a", "b", "c", "d", "e" };
 		std::list<std::string> b{ "a", "b", "c", "d", "e" };
 
 		EXPECT_EQ(Utility::variablesToStringList(a), b);
@@ -59,7 +59,7 @@ namespace UnitTesting {
 		std::list<std::string> c{ "a", "b", "c", "d" };
 		EXPECT_NE(Utility::variablesToStringList(a), c);
 
-		std::vector<variable_name> d{ "a", "b" };
+		std::vector<var_name> d{ "a", "b" };
 		std::list<std::string> e{ "a", "b" };
 
 		EXPECT_EQ(Utility::variablesToStringList(d), e);

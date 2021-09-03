@@ -8,7 +8,7 @@ std::list<std::string> Utility::constantsToStringList(std::vector<constant>& fro
 	return to;
 }
 
-std::list<std::string> Utility::proceduresToStringList(std::vector<procedure_name>& from) {
+std::list<std::string> Utility::proceduresToStringList(std::vector<proc_name>& from) {
 	std::list<std::string> to;
 	for (auto& it : from) {
 		to.push_back(it.c_str());
@@ -40,7 +40,7 @@ std::vector<std::vector<std::string>> Utility::stmtsTableToStringTable(std::vect
 	return to;
 }
 
-std::list<std::string> Utility::variablesToStringList(std::vector<variable_name>& from) {
+std::list<std::string> Utility::variablesToStringList(std::vector<var_name>& from) {
 	std::list<std::string> to;
 	for (auto& it : from) {
 		to.push_back(it.c_str());

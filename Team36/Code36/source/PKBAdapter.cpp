@@ -4,7 +4,7 @@
 PKBAdapter::PKBAdapter() {
 }
 
-std::vector<variable_name> PKBAdapter::getVariables() {
+std::vector<var_name> PKBAdapter::getVariables() {
 	return PKB::getInstance().PKB::getVariables();
 }
 
@@ -16,7 +16,7 @@ std::vector<constant> PKBAdapter::getConstants() {
 	return PKB::getInstance().getConstants();
 }
 
-std::vector<procedure_name> PKBAdapter::getProcedures() {
+std::vector<proc_name> PKBAdapter::getProcedures() {
 	return PKB::getInstance().PKB::getProcedures();
 }
 
