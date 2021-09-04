@@ -28,17 +28,22 @@ public:
 		VARIABLE,
 		CONSTANT,
 		PROCEDURE,
+		AND,
 		PATTERN,
 		SUCHTHAT,
 
 		// PQL Variable Operators
 		WILDCARD,
+		QUOTATION_OPEN,
+		QUOTATION_CLOSE,
+		ASTERISK,
 
-		/*	PLUS,
-			MINUS,
-			MUL,
-			DIV,
-			MOD,*/
+		PLUS,
+		MINUS,
+		//remove mul for a more general asterisk?
+		MUL,
+		DIV,
+		MOD,
 
 			//  PQL Conditional Operators
 		/*	BOOL_AND,
@@ -55,10 +60,10 @@ public:
 			BOOL_GT,
 			BOOL_GTEQ,*/
 
-			// PQL Separators
-			PARENTHESIS_OPEN,
-			PARENTHESIS_CLOSE,
-			TERMINATOR
+		// PQL Separators
+		PARENTHESIS_OPEN,
+		PARENTHESIS_CLOSE,
+		TERMINATOR
 	};
 
 	//Constructors

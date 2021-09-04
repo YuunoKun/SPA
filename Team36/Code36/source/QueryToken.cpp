@@ -7,6 +7,6 @@ QueryToken::QueryToken() {
 }
 
 QueryToken::QueryToken(QueryTokenType type, std::string token_value) {
-	type = type;
-	token_value = token_value;
+	this->type = type;
+	this->token_value = token_value;
 }
