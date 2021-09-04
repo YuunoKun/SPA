@@ -8,19 +8,19 @@
 #include <vector>
 #include "Common.h"
 
-template <class T>
+template <class T, class S>
 class RelationTable {
 public:
 	RelationTable() {
 		uniqueKey = false;
 	};
 	bool isUniqueKey();
-	bool insert(T key, T value);
-	std::vector<T> getValues(T);
+	bool insert(T key, S value);
+	std::vector<S> getValues(T);
 	std::vector<T> getKeys();
-	std::vector<std::pair<T, T>> getPairs();
+	std::vector<std::pair<T, S>> getPairs();
 	bool containsKey(T);
-	bool containsPair(T, T);
+	bool containsPair(T, S);
 	RelationTable findTransitiveClosure();
 	RelationTable findReverse();
 	void clear();
@@ -29,17 +29,17 @@ public:
 	bool operator!=(const RelationTable&) const;
 
 protected:
-	std::unordered_map<T, std::vector<T>> table;
+	std::unordered_map<T, std::vector<S>> table;
 	bool uniqueKey;
 
-	std::unordered_map<T, std::vector<T>> getTable();
+	std::unordered_map<T, std::vector<S>> getTable();
 };
 
-template <class T>
-class UniqueRelationTable : public RelationTable<T> {
+template <class T, class S>
+class UniqueRelationTable : public RelationTable<T, S> {
 public:
 	UniqueRelationTable() {
 		uniqueKey = true;
 	};
-	bool insert(T key, T value);
+	bool insert(T key, S value);
 };
