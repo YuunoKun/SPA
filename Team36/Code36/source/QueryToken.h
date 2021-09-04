@@ -64,7 +64,7 @@ public:
 	//Constructors
 	QueryToken();
 
-	QueryToken(QueryTokenType type, std::string token_value);
+	QueryToken(QueryTokenType type_input, std::string token_value_input);
 
 	QueryTokenType type;
 
