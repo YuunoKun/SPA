@@ -40,4 +40,5 @@ public:
 	UniqueRelationTable() {
 		uniqueKey = true;
 	};
+	bool insert(T key, T value);
 };

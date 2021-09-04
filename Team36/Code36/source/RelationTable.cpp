@@ -16,36 +16,21 @@ template <class T>
 bool RelationTable<T>::insert(T key, T value)
 {
 	auto iter = table.find(key);
-	if (uniqueKey) {
-		// only add if key is not in table
-		if (iter == table.end()) {
-			std::vector<T> newV;
-			newV.push_back(value);
-			table.emplace(key, newV);
-			return true;
-		}
-		else {
-			return false;
-		}
+	// only add if key-value pair is unique
+	if (iter == table.end()) {
+		std::vector<T> newV;
+		newV.push_back(value);
+		table.emplace(key, newV);
+		return true;
 	}
 	else {
-		// only add if key-value pair is unique
-		if (iter == table.end()) {
-			std::vector<T> newV;
-			newV.push_back(value);
-			table.emplace(key, newV);
-			return true;
+		auto v = iter->second;
+		if (std::find(v.begin(), v.end(), value) != v.end()) {
+			return false;
 		}
 		else {
-			auto v = iter->second;
-			// only add if key-value pair does not already exist
-			if (std::find(v.begin(), v.end(), value) != v.end()) {
-				return false;
-			}
-			else {
-				table[key].push_back(value);
-				return true;
-			}
+			table[key].push_back(value);
+			return true;
 		}
 	}
 }
@@ -125,4 +110,20 @@ bool RelationTable<T>::operator==(const RelationTable& other_table) const {
 template <class T>
 bool RelationTable<T>::operator!= (const RelationTable& other_table) const {
 	return table != other_table.table;
+}
+
+template <class T>
+bool UniqueRelationTable<T>::insert(T key, T value)
+{
+	auto iter = table.find(key);
+	// only add if key is not in table
+	if (iter == table.end()) {
+		std::vector<T> newV;
+		newV.push_back(value);
+		table.emplace(key, newV);
+		return true;
+	}
+	else {
+		return false;
+	}
 }
