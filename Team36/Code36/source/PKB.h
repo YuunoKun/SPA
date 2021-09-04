@@ -10,11 +10,7 @@
 
 #include "Common.h"
 #include "Stmt.h"
-
-typedef short PROC;
-
-class Procedure {};
-class Variable {};
+#include "RelationTable.h"
 
 class PKB {
 public:
@@ -29,14 +25,14 @@ public:
 	void addProcedures(proc_name proc_name);
 	void addVariable(var_name var_name);
 	void addStmt(StmtType stmt_type);
-	void addExprTree(stmt_index stmt_index, std::string expr);
+	void addExprTree(var_index var_index, std::string expr);
 
 	void addParent(stmt_index parent, stmt_index child);
-	void addParentT(stmt_index parent, stmt_index child);
-	void addFollows(stmt_index followed, stmt_index follower);
-	void addFollowsT(stmt_index followed, stmt_index follower);
-	void addUses(stmt_index user, var_name used);
-	void addModifies(stmt_index modifier, var_name modified);
+	void addFollows(stmt_index first, stmt_index second);
+	void addUsesS(stmt_index user, var_name used);
+	void addModifiesS(stmt_index modifier, var_name modified);
+	void generateParentT();
+	void generateFollowT();
 
 	void setProcedures(std::vector<proc_name> proc_set);
 	void setConstants(std::vector<constant> const_set);
@@ -47,24 +43,50 @@ public:
 	std::vector<var_name> getVariables();
 	std::vector<Stmt> getStmts();
 
+	const std::unordered_map<proc_index, proc_name>& get_procedures();
+	const std::unordered_map<var_index, var_name>& get_variables();
+	const std::vector<StmtInfo>& get_stmts();
+	const std::unordered_set<constant>& get_consts();
+	const std::unordered_map<stmt_index, var_index> get_assignment_table();
+	const std::unordered_map<var_index, std::string> get_expr_table();
+	const UniqueRelationTable<StmtInfo, StmtInfo>& get_follows_table();
+	const RelationTable<StmtInfo, StmtInfo>& get_parent_table();
+	const RelationTable<StmtInfo, StmtInfo>& get_followsT_table();
+	const RelationTable<StmtInfo, StmtInfo>& get_parentT_table();
+	const RelationTable<StmtInfo, StmtInfo>& get_usesS_table();
+	const RelationTable<StmtInfo, StmtInfo>& get_modifiesS_table();
+	const RelationTable<StmtInfo, StmtInfo>& get_follows_reverse_table();
+	const RelationTable<StmtInfo, StmtInfo>& get_parent_reverse_table();
+	const RelationTable<StmtInfo, StmtInfo>& get_followsT_reverse_table();
+	const RelationTable<StmtInfo, StmtInfo>& get_parentT_reverse_table();
+	const RelationTable<StmtInfo, StmtInfo>& get_usesS_reverse_table();
+	const RelationTable<StmtInfo, StmtInfo>& get_modifiesS_reverse_table();
+
 	void resetCache();
 	void resetEntities();
 
 private:
-	std::unordered_set<proc_name> old_proc_table;
-	std::unordered_set<var_name> old_var_table;
-	std::unordered_set<constant> const_table;
 	std::unordered_map<proc_index, proc_name> proc_table;
 	std::unordered_map<var_index, var_name> var_table;
-	std::unordered_set<stmt_index> stmt_table;
-	std::unordered_set<stmt_index> assign_table;
-	std::unordered_map<var_index, std::string> assignment_table;
-	std::unordered_map<stmt_index, stmt_index> follows_table;
-	std::unordered_multimap<stmt_index, stmt_index> parents_table;
-	std::unordered_multimap<stmt_index, stmt_index> followsT_table;
-	std::unordered_multimap<stmt_index, stmt_index> parentsT_table;
-	std::unordered_multimap<stmt_index, var_index> usesS_table;
-	std::unordered_multimap<stmt_index, var_index> modifiesS_table;
+	std::vector<StmtInfo> stmt_table;
+	std::unordered_set<constant> const_table;
+	std::unordered_map<stmt_index, var_index> assignment_table;
+	std::unordered_map<var_index, std::string> expr_table;
+	UniqueRelationTable<StmtInfo, StmtInfo> follows_table;
+	RelationTable<StmtInfo, StmtInfo> parent_table;
+	RelationTable<StmtInfo, StmtInfo> followsT_table;
+	RelationTable<StmtInfo, StmtInfo> parentT_table;
+	RelationTable<StmtInfo, StmtInfo> usesS_table;
+	RelationTable<StmtInfo, StmtInfo> modifiesS_table;
+	RelationTable<StmtInfo, StmtInfo> follows_reverse_table;
+	RelationTable<StmtInfo, StmtInfo> parents_reverse_table;
+	RelationTable<StmtInfo, StmtInfo> followsT_reverse_table;
+	RelationTable<StmtInfo, StmtInfo> parentsT_reverse_table;
+	RelationTable<StmtInfo, StmtInfo> usesS_reverse_table;
+	RelationTable<StmtInfo, StmtInfo> modifiesS_reverse_table;
+
+	std::unordered_set<proc_name> old_proc_table;
+	std::unordered_set<var_name> old_var_table;
 
 	PKB() {};
 };

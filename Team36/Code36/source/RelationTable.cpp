@@ -101,7 +101,7 @@ RelationTable<T, S> RelationTable<T, S>::findTransitiveClosure()
 }
 
 template <class T, class S>
-RelationTable<T, S> RelationTable<T, S>::findReverse()
+RelationTable<S, T> RelationTable<T, S>::findReverse()
 {
 	RelationTable reversed;
 	for (auto const& pair : table) {

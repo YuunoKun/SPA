@@ -5,6 +5,9 @@
 
 #include "PKB.h"
 #include "TNode.h"
+#include "RelationTable.h"
+// need to include this .cpp for template classes
+#include "RelationTable.cpp"
 
 PKB& PKB::getInstance() {
 	static PKB pkb;
@@ -39,47 +42,118 @@ void PKB::addConstant(constant constant)
 	return;
 }
 
+void PKB::addProcedures(proc_name proc_name)
+{
+	for (auto const& pair : proc_table) {
+		if (pair.second == proc_name) {
+			return;
+		}
+	};
+	proc_index proc_index = proc_table.size() + 1;
+	proc_table.emplace(proc_index, proc_name);
+}
+
+void PKB::addVariable(var_name var_name)
+{
+	for (auto const& pair : var_table) {
+		if (pair.second == var_name) {
+			return;
+		}
+	};
+	var_index var_index = var_table.size() + 1;
+	var_table.emplace(var_index, var_name);
+}
+
+void PKB::addStmt(StmtType stmt_type)
+{
+	stmt_index stmt_index = stmt_table.size() + 1;
+	StmtInfo new_stmt_info{ stmt_index, stmt_type };
+	stmt_table.push_back(new_stmt_info);
+}
+
+void PKB::addExprTree(var_index var_index, std::string expr)
+{
+	expr_table.emplace(var_index, expr);
+}
+
 void PKB::addParent(stmt_index parent, stmt_index child)
 {
-	parents_table.emplace(parent, child);
-}
-
-void PKB::addParentT(stmt_index parent, stmt_index child)
-{
-	auto iter = parentsT_table.find(parent);
-	if (iter != parentsT_table.end() && iter->second != child)
-		// only add if key-value pair is unique
-	{
-		parentsT_table.emplace(parent, child);
+	try {
+		StmtInfo parent_stmt_info{ parent, stmt_table.at(parent).stmt_type };
+		StmtInfo child_stmt_info{ child, stmt_table.at(child).stmt_type };
+		parent_table.insert(parent_stmt_info, child_stmt_info);
+	}
+	catch (std::out_of_range& e) {
+		throw std::invalid_argument("addParent: Invalid stmt indexes: [" + std::to_string(parent)
+			+ "," + std::to_string(child) + "]");
 	}
 }
 
-void PKB::addFollows(stmt_index followed, stmt_index follower)
+void PKB::addFollows(stmt_index first, stmt_index second)
 {
-	follows_table.emplace(followed, follower);
+	try {
+		StmtInfo first_stmt_info{ first, stmt_table.at(first).stmt_type };
+		StmtInfo second_stmt_info{ second, stmt_table.at(second).stmt_type };
+		parent_table.insert(second_stmt_info, second_stmt_info);
+	}
+	catch (std::out_of_range& e) {
+		throw std::invalid_argument("addFollows: Invalid stmt indexes: [" + std::to_string(first)
+			+ "," + std::to_string(second) + "]");
+	}
 }
 
-void PKB::addFollowsT(stmt_index followed, stmt_index follower)
+void PKB::addUsesS(stmt_index user, var_name used)
 {
-	auto iter = parentsT_table.find(followed);
-	if (iter != parentsT_table.end() && iter->second != follower)
-		// only add if key-value pair is unique
-	{
-		parentsT_table.emplace(followed, follower);
-	}
+}
+
+void PKB::addModifiesS(stmt_index modifier, var_name modified)
+{
+}
+
+void PKB::generateParentT()
+{
+	parentT_table = parent_table.findTransitiveClosure();
+}
+
+void PKB::generateFollowT()
+{
+	followsT_table = followsT_table.findTransitiveClosure();
 }
 
 void PKB::resetCache()
 {
-	old_proc_table.clear();
 	const_table.clear();
+	proc_table.clear();
+	var_table.clear();
+	stmt_table.clear();
+	const_table.clear();
+	assignment_table.clear();
+	expr_table.clear();
+	follows_table.clear();
+	parent_table.clear();
+	followsT_table.clear();
+	parentT_table.clear();
+	usesS_table.clear();
+	modifiesS_table.clear();
+	follows_reverse_table.clear();
+	parents_reverse_table.clear();
+	followsT_reverse_table.clear();
+	parentsT_reverse_table.clear();
+	usesS_reverse_table.clear();
+	modifiesS_reverse_table.clear();
+
+	old_proc_table.clear();
 	old_var_table.clear();
 }
 
 void PKB::resetEntities()
 {
-	old_proc_table.clear();
 	const_table.clear();
+	proc_table.clear();
+	stmt_table.clear();
+	const_table.clear();
+
+	old_proc_table.clear();
 	old_var_table.clear();
 }
 

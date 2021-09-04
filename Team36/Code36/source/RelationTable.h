@@ -21,8 +21,8 @@ public:
 	std::vector<std::pair<T, S>> getPairs();
 	bool containsKey(T);
 	bool containsPair(T, S);
-	RelationTable findTransitiveClosure();
-	RelationTable findReverse();
+	RelationTable<T, S> findTransitiveClosure();
+	RelationTable<S, T> findReverse();
 	void clear();
 
 	bool operator==(const RelationTable&) const;
