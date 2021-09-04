@@ -4,7 +4,7 @@ RelationTable::RelationTable()
 {
 }
 
-std::unordered_map<stmt_index, std::vector<stmt_index>> RelationTable::getTable()
+std::unordered_map<int, std::vector<int>> RelationTable::getTable()
 {
 	return table;
 }
@@ -14,16 +14,16 @@ bool RelationTable::isUniqueKey()
 	return uniqueKey;
 }
 
-bool RelationTable::insert(stmt_index key, stmt_index value)
+bool RelationTable::insert(int key, int value)
 {
 	if ((key == 0) | (value == 0)) {
-		throw std::invalid_argument("Received stmt_index of 0");
+		throw std::invalid_argument("Received int of 0");
 	}
 	auto iter = table.find(key);
 	if (uniqueKey) {
 		// only add if key is not in table
 		if (iter == table.end()) {
-			std::vector<stmt_index> newV;
+			std::vector<int> newV;
 			newV.push_back(value);
 			table.emplace(key, newV);
 			return true;
@@ -35,7 +35,7 @@ bool RelationTable::insert(stmt_index key, stmt_index value)
 	else {
 		// only add if key-value pair is unique
 		if (iter == table.end()) {
-			std::vector<stmt_index> newV;
+			std::vector<int> newV;
 			newV.push_back(value);
 			table.emplace(key, newV);
 			return true;
@@ -54,19 +54,19 @@ bool RelationTable::insert(stmt_index key, stmt_index value)
 	}
 }
 
-std::vector<stmt_index> RelationTable::getValues(stmt_index key) {
+std::vector<int> RelationTable::getValues(int key) {
 	auto iter = table.find(key);
 	if (iter != table.end()) {
 		return iter->second;
 	}
 	else {
-		return std::vector<stmt_index> {};
+		return std::vector<int> {};
 	}
 }
 
-std::vector<stmt_index> RelationTable::getKeys()
+std::vector<int> RelationTable::getKeys()
 {
-	std::vector<stmt_index> keys;
+	std::vector<int> keys;
 	keys.reserve(table.size());
 
 	for (auto kv : table) {
@@ -75,13 +75,13 @@ std::vector<stmt_index> RelationTable::getKeys()
 	return keys;
 }
 
-bool RelationTable::containsKey(stmt_index key)
+bool RelationTable::containsKey(int key)
 {
 	auto iter = table.find(key);
 	return iter != table.end();
 }
 
-bool RelationTable::containsPair(stmt_index key, stmt_index value)
+bool RelationTable::containsPair(int key, int value)
 {
 	auto iter = table.find(key);
 	auto v = getValues(key);

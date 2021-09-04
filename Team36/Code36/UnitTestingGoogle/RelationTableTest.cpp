@@ -14,7 +14,7 @@ namespace UnitTesting {
 
 	TEST(RelationTable, insertUniqueKey) {
 		RelationTable table1 = RelationTable(true);
-		std::vector<std::pair<stmt_index, stmt_index>> testInput{ {1, 2}, {1, 3}, {2, 2}, {2, 2} };
+		std::vector<std::pair<int, int>> testInput{ {1, 2}, {1, 3}, {2, 2}, {2, 2} };
 
 		EXPECT_EQ(table1.insert(testInput[0].first, testInput[0].second), true);
 		EXPECT_EQ(table1.insert(testInput[1].first, testInput[1].second), false);
@@ -24,7 +24,7 @@ namespace UnitTesting {
 
 	TEST(RelationTable, insertNonUniqueKey) {
 		RelationTable table1 = RelationTable(false);
-		std::vector<std::pair<stmt_index, stmt_index>> testInput{ {1, 2}, {1, 3}, {2, 2}, {2, 2} };
+		std::vector<std::pair<int, int>> testInput{ {1, 2}, {1, 3}, {2, 2}, {2, 2} };
 
 		EXPECT_EQ(table1.insert(testInput[0].first, testInput[0].second), true);
 		EXPECT_EQ(table1.insert(testInput[1].first, testInput[1].second), true);
@@ -35,7 +35,7 @@ namespace UnitTesting {
 	TEST(RelationTable, insertInvalidArg) {
 		RelationTable table1 = RelationTable(true);
 		RelationTable table2 = RelationTable(false);
-		std::vector<std::pair<stmt_index, stmt_index>> testInput{ {0,0}, {1, 0}, {0, 1} };
+		std::vector<std::pair<int, int>> testInput{ {0,0}, {1, 0}, {0, 1} };
 
 		EXPECT_THROW(table1.insert(testInput[0].first, testInput[0].second), std::invalid_argument);
 		EXPECT_THROW(table2.insert(testInput[0].first, testInput[0].second), std::invalid_argument);
@@ -51,9 +51,9 @@ namespace UnitTesting {
 		RelationTable table1 = RelationTable(true);
 		RelationTable table2 = RelationTable(false);
 		RelationTable table3 = RelationTable(true);
-		std::vector<std::pair<stmt_index, stmt_index>> testInput{ {1, 2}, {1, 3}, {2, 2}, {2, 2} };
-		std::vector<stmt_index> expectedKeys{ 1, 2 };
-		std::vector<stmt_index> blankKeys{ };
+		std::vector<std::pair<int, int>> testInput{ {1, 2}, {1, 3}, {2, 2}, {2, 2} };
+		std::vector<int> expectedKeys{ 1, 2 };
+		std::vector<int> blankKeys{ };
 
 		table1.insert(testInput[0].first, testInput[0].second);
 		table1.insert(testInput[1].first, testInput[1].second);
@@ -74,10 +74,10 @@ namespace UnitTesting {
 		RelationTable table1 = RelationTable(true);
 		RelationTable table2 = RelationTable(false);
 		RelationTable table3 = RelationTable(true);
-		std::vector<std::pair<stmt_index, stmt_index>> testInput{ {1, 2}, {1, 3}, {2, 2}, {2, 2}, {2, 3} };
-		std::vector<stmt_index> expectedValuesOne{ 2 };
-		std::vector<stmt_index> expectedValuesTwo{ 2, 3 };
-		std::vector<stmt_index> blankValues{ };
+		std::vector<std::pair<int, int>> testInput{ {1, 2}, {1, 3}, {2, 2}, {2, 2}, {2, 3} };
+		std::vector<int> expectedValuesOne{ 2 };
+		std::vector<int> expectedValuesTwo{ 2, 3 };
+		std::vector<int> blankValues{ };
 
 		table1.insert(testInput[0].first, testInput[0].second);
 		table1.insert(testInput[1].first, testInput[1].second);
@@ -100,7 +100,7 @@ namespace UnitTesting {
 
 	TEST(RelationTable, containsKey) {
 		RelationTable table1 = RelationTable(true);
-		std::vector<std::pair<stmt_index, stmt_index>> testInput{ {1, 2} };
+		std::vector<std::pair<int, int>> testInput{ {1, 2} };
 
 		table1.insert(testInput[0].first, testInput[0].second);
 
@@ -111,10 +111,10 @@ namespace UnitTesting {
 	TEST(RelationTable, containsPair) {
 		RelationTable table1 = RelationTable(true);
 		RelationTable table2 = RelationTable(false);
-		std::vector<std::pair<stmt_index, stmt_index>> testInput{ {1, 2}, {1, 3}, {2, 2}, {2, 2}, {2, 3} };
-		std::vector<stmt_index> expectedValuesOne{ 2 };
-		std::vector<stmt_index> expectedValuesTwo{ 2, 3 };
-		std::vector<stmt_index> blankValues{ };
+		std::vector<std::pair<int, int>> testInput{ {1, 2}, {1, 3}, {2, 2}, {2, 2}, {2, 3} };
+		std::vector<int> expectedValuesOne{ 2 };
+		std::vector<int> expectedValuesTwo{ 2, 3 };
+		std::vector<int> blankValues{ };
 
 		table1.insert(testInput[0].first, testInput[0].second);
 		table1.insert(testInput[1].first, testInput[1].second);
@@ -147,7 +147,7 @@ namespace UnitTesting {
 		RelationTable reversed_table1 = RelationTable(false);
 		RelationTable table2 = RelationTable(false);
 		RelationTable table3 = RelationTable(true);
-		std::vector<std::pair<stmt_index, stmt_index>> testInput{ {1, 2}, {1, 3}, {2, 2}, {2, 2}, {2, 4} };
+		std::vector<std::pair<int, int>> testInput{ {1, 2}, {1, 3}, {2, 2}, {2, 2}, {2, 4} };
 
 		table1.insert(testInput[0].first, testInput[0].second);
 		table1.insert(testInput[1].first, testInput[1].second);

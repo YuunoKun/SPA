@@ -14,11 +14,11 @@ public:
 		this->uniqueKey = uniqueKey;
 	};
 	bool isUniqueKey();
-	bool insert(stmt_index key, stmt_index value);
-	std::vector<stmt_index> getValues(stmt_index);
-	std::vector<stmt_index> getKeys();
-	bool containsKey(stmt_index);
-	bool containsPair(stmt_index, stmt_index);
+	bool insert(int key, int value);
+	std::vector<int> getValues(int);
+	std::vector<int> getKeys();
+	bool containsKey(int);
+	bool containsPair(int, int);
 	RelationTable findTransitiveClosure();
 	RelationTable findReverse();
 
@@ -26,9 +26,9 @@ public:
 	bool operator!=(const RelationTable&) const;
 
 private:
-	std::unordered_map<stmt_index, std::vector<stmt_index>> table;
+	std::unordered_map<int, std::vector<int>> table;
 	bool uniqueKey = true;
 
 	RelationTable();
-	std::unordered_map<stmt_index, std::vector<stmt_index>> getTable();
+	std::unordered_map<int, std::vector<int>> getTable();
 };
