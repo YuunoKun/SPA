@@ -1,25 +1,25 @@
 #include "RelationTable.h"
 
-std::unordered_map<int, std::vector<int>> RelationTable::getTable()
+template <class T>
+std::unordered_map<T, std::vector<T>> RelationTable<T>::getTable()
 {
 	return table;
 }
 
-bool RelationTable::isUniqueKey()
+template <class T>
+bool RelationTable<T>::isUniqueKey()
 {
 	return uniqueKey;
 }
 
-bool RelationTable::insert(int key, int value)
+template <class T>
+bool RelationTable<T>::insert(T key, T value)
 {
-	if ((key == 0) | (value == 0)) {
-		throw std::invalid_argument("Received int of 0");
-	}
 	auto iter = table.find(key);
 	if (uniqueKey) {
 		// only add if key is not in table
 		if (iter == table.end()) {
-			std::vector<int> newV;
+			std::vector<T> newV;
 			newV.push_back(value);
 			table.emplace(key, newV);
 			return true;
@@ -31,7 +31,7 @@ bool RelationTable::insert(int key, int value)
 	else {
 		// only add if key-value pair is unique
 		if (iter == table.end()) {
-			std::vector<int> newV;
+			std::vector<T> newV;
 			newV.push_back(value);
 			table.emplace(key, newV);
 			return true;
@@ -50,19 +50,21 @@ bool RelationTable::insert(int key, int value)
 	}
 }
 
-std::vector<int> RelationTable::getValues(int key) {
+template <class T>
+std::vector<T> RelationTable<T>::getValues(T key) {
 	auto iter = table.find(key);
 	if (iter != table.end()) {
 		return iter->second;
 	}
 	else {
-		return std::vector<int> {};
+		return std::vector<T> {};
 	}
 }
 
-std::vector<int> RelationTable::getKeys()
+template <class T>
+std::vector<T> RelationTable<T>::getKeys()
 {
-	std::vector<int> keys;
+	std::vector<T> keys;
 	keys.reserve(table.size());
 
 	for (auto kv : table) {
@@ -71,25 +73,29 @@ std::vector<int> RelationTable::getKeys()
 	return keys;
 }
 
-bool RelationTable::containsKey(int key)
+template <class T>
+bool RelationTable <T>::containsKey(T key)
 {
 	auto iter = table.find(key);
 	return iter != table.end();
 }
 
-bool RelationTable::containsPair(int key, int value)
+template <class T>
+bool RelationTable<T>::containsPair(T key, T value)
 {
 	auto iter = table.find(key);
 	auto v = getValues(key);
 	return containsKey(key) && std::find(v.begin(), v.end(), value) != v.end();
 }
 
-RelationTable RelationTable::findTransitiveClosure()
+template <class T>
+RelationTable<T> RelationTable<T>::findTransitiveClosure()
 {
 	return RelationTable();
 }
 
-RelationTable RelationTable::findReverse()
+template <class T>
+RelationTable<T> RelationTable<T>::findReverse()
 {
 	RelationTable reversed;
 	for (auto const& pair : table) {
@@ -99,10 +105,12 @@ RelationTable RelationTable::findReverse()
 	return reversed;
 }
 
-bool RelationTable::operator==(const RelationTable& other_table) const {
+template <class T>
+bool RelationTable<T>::operator==(const RelationTable& other_table) const {
 	return table == other_table.table;
 }
 
-bool RelationTable::operator!= (const RelationTable& other_table) const {
+template <class T>
+bool RelationTable<T>::operator!= (const RelationTable& other_table) const {
 	return table != other_table.table;
 }
