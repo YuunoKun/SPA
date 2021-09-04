@@ -1,9 +1,5 @@
 #include "RelationTable.h"
 
-RelationTable::RelationTable()
-{
-}
-
 std::unordered_map<int, std::vector<int>> RelationTable::getTable()
 {
 	return table;
@@ -95,7 +91,7 @@ RelationTable RelationTable::findTransitiveClosure()
 
 RelationTable RelationTable::findReverse()
 {
-	RelationTable reversed = RelationTable(uniqueKey);
+	RelationTable reversed;
 	for (auto const& pair : table) {
 		for (auto const& value : pair.second)
 			reversed.insert(value, pair.first);

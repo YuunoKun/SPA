@@ -5,36 +5,32 @@
 
 namespace UnitTesting {
 	TEST(RelationTable, isUniqueKey) {
-		RelationTable table1 = RelationTable(true);
+		UniqueRelationTable table1;
 		EXPECT_EQ(table1.isUniqueKey(), true);
 
-		RelationTable table2 = RelationTable(false);
+		RelationTable table2;
 		EXPECT_EQ(table2.isUniqueKey(), false);
 	}
 
-	TEST(RelationTable, insertUniqueKey) {
-		RelationTable table1 = RelationTable(true);
+	TEST(RelationTable, insert) {
+		UniqueRelationTable table1;
+		RelationTable table2;
 		std::vector<std::pair<int, int>> testInput{ {1, 2}, {1, 3}, {2, 2}, {2, 2} };
 
 		EXPECT_EQ(table1.insert(testInput[0].first, testInput[0].second), true);
 		EXPECT_EQ(table1.insert(testInput[1].first, testInput[1].second), false);
 		EXPECT_EQ(table1.insert(testInput[2].first, testInput[2].second), true);
 		EXPECT_EQ(table1.insert(testInput[3].first, testInput[3].second), false);
-	}
 
-	TEST(RelationTable, insertNonUniqueKey) {
-		RelationTable table1 = RelationTable(false);
-		std::vector<std::pair<int, int>> testInput{ {1, 2}, {1, 3}, {2, 2}, {2, 2} };
-
-		EXPECT_EQ(table1.insert(testInput[0].first, testInput[0].second), true);
-		EXPECT_EQ(table1.insert(testInput[1].first, testInput[1].second), true);
-		EXPECT_EQ(table1.insert(testInput[2].first, testInput[2].second), true);
-		EXPECT_EQ(table1.insert(testInput[3].first, testInput[3].second), false);
+		EXPECT_EQ(table2.insert(testInput[0].first, testInput[0].second), true);
+		EXPECT_EQ(table2.insert(testInput[1].first, testInput[1].second), true);
+		EXPECT_EQ(table2.insert(testInput[2].first, testInput[2].second), true);
+		EXPECT_EQ(table2.insert(testInput[3].first, testInput[3].second), false);
 	}
 
 	TEST(RelationTable, insertInvalidArg) {
-		RelationTable table1 = RelationTable(true);
-		RelationTable table2 = RelationTable(false);
+		RelationTable table1 = UniqueRelationTable();
+		RelationTable table2 = RelationTable();
 		std::vector<std::pair<int, int>> testInput{ {0,0}, {1, 0}, {0, 1} };
 
 		EXPECT_THROW(table1.insert(testInput[0].first, testInput[0].second), std::invalid_argument);
@@ -48,9 +44,8 @@ namespace UnitTesting {
 	}
 
 	TEST(RelationTable, getKeys) {
-		RelationTable table1 = RelationTable(true);
-		RelationTable table2 = RelationTable(false);
-		RelationTable table3 = RelationTable(true);
+		UniqueRelationTable table1, table3;
+		RelationTable table2;
 		std::vector<std::pair<int, int>> testInput{ {1, 2}, {1, 3}, {2, 2}, {2, 2} };
 		std::vector<int> expectedKeys{ 1, 2 };
 		std::vector<int> blankKeys{ };
@@ -71,9 +66,8 @@ namespace UnitTesting {
 	}
 
 	TEST(RelationTable, getValues) {
-		RelationTable table1 = RelationTable(true);
-		RelationTable table2 = RelationTable(false);
-		RelationTable table3 = RelationTable(true);
+		UniqueRelationTable table1;
+		RelationTable table2;
 		std::vector<std::pair<int, int>> testInput{ {1, 2}, {1, 3}, {2, 2}, {2, 2}, {2, 3} };
 		std::vector<int> expectedValuesOne{ 2 };
 		std::vector<int> expectedValuesTwo{ 2, 3 };
@@ -99,7 +93,7 @@ namespace UnitTesting {
 	}
 
 	TEST(RelationTable, containsKey) {
-		RelationTable table1 = RelationTable(true);
+		UniqueRelationTable table1;
 		std::vector<std::pair<int, int>> testInput{ {1, 2} };
 
 		table1.insert(testInput[0].first, testInput[0].second);
@@ -109,8 +103,8 @@ namespace UnitTesting {
 	}
 
 	TEST(RelationTable, containsPair) {
-		RelationTable table1 = RelationTable(true);
-		RelationTable table2 = RelationTable(false);
+		UniqueRelationTable table1;
+		RelationTable table2;
 		std::vector<std::pair<int, int>> testInput{ {1, 2}, {1, 3}, {2, 2}, {2, 2}, {2, 3} };
 		std::vector<int> expectedValuesOne{ 2 };
 		std::vector<int> expectedValuesTwo{ 2, 3 };
@@ -143,10 +137,8 @@ namespace UnitTesting {
 	}
 
 	TEST(RelationTable, reverse) {
-		RelationTable table1 = RelationTable(false);
-		RelationTable reversed_table1 = RelationTable(false);
-		RelationTable table2 = RelationTable(false);
-		RelationTable table3 = RelationTable(true);
+		RelationTable table1, table2, reversed_table1, reversed_table3;
+		UniqueRelationTable table3;
 		std::vector<std::pair<int, int>> testInput{ {1, 2}, {1, 3}, {2, 2}, {2, 2}, {2, 4} };
 
 		table1.insert(testInput[0].first, testInput[0].second);
@@ -155,14 +147,24 @@ namespace UnitTesting {
 		table1.insert(testInput[3].first, testInput[3].second);
 		table1.insert(testInput[4].first, testInput[4].second);
 
+		table3.insert(testInput[0].first, testInput[0].second);
+		table3.insert(testInput[1].first, testInput[1].second);
+		table3.insert(testInput[2].first, testInput[2].second);
+		table3.insert(testInput[3].first, testInput[3].second);
+		table3.insert(testInput[4].first, testInput[4].second);
+
 		reversed_table1.insert(testInput[0].second, testInput[0].first);
 		reversed_table1.insert(testInput[1].second, testInput[1].first);
 		reversed_table1.insert(testInput[2].second, testInput[2].first);
 		reversed_table1.insert(testInput[3].second, testInput[3].first);
 		reversed_table1.insert(testInput[4].second, testInput[4].first);
 
+		reversed_table3.insert(testInput[0].second, testInput[0].first);
+		reversed_table3.insert(testInput[2].second, testInput[2].first);
+
 		EXPECT_EQ(table1.findReverse(), reversed_table1);
 		EXPECT_NE(table1.findReverse(), table1);
 		EXPECT_NE(table1.findReverse(), table2);
+		EXPECT_EQ(table3.findReverse(), reversed_table3);
 	}
 }

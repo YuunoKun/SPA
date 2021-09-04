@@ -10,8 +10,8 @@
 
 class RelationTable {
 public:
-	RelationTable(bool uniqueKey) {
-		this->uniqueKey = uniqueKey;
+	RelationTable() {
+		uniqueKey = false;
 	};
 	bool isUniqueKey();
 	bool insert(int key, int value);
@@ -25,10 +25,16 @@ public:
 	bool operator==(const RelationTable&) const;
 	bool operator!=(const RelationTable&) const;
 
-private:
+protected:
 	std::unordered_map<int, std::vector<int>> table;
-	bool uniqueKey = true;
+	bool uniqueKey;
 
-	RelationTable();
 	std::unordered_map<int, std::vector<int>> getTable();
+};
+
+class UniqueRelationTable : public RelationTable {
+public:
+	UniqueRelationTable() {
+		uniqueKey = true;
+	};
 };
