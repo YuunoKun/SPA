@@ -33,7 +33,7 @@
 	</ItemGroup>
 	<ItemGroup>
 		<ClInclude Include="..\source\PKB.h" />
-		<ClCompile Include="..\source\Parser.h" />
+		<ClInclude Include="..\source\Parser.h" />
 		<ClInclude Include="..\source\RelationTable.h" />
 		<ClInclude Include="..\source\TNode.h" />
 		<ClInclude Include="..\source\Common.h" />

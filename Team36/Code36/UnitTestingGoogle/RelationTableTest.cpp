@@ -127,6 +127,19 @@ namespace UnitTesting {
 		EXPECT_EQ(table2.getValues(3), blankValues);
 	}
 
+	TEST(RelationTable, getPairs) {
+		RelationTable<int> table1;
+		std::vector<std::pair<int, int>> testInput{ {1, 2}, {1, 3}, {2, 2}, {2, 2} };
+		std::vector<std::pair<int, int>> expectedPairs{ std::make_pair(1, 2), std::make_pair(1, 3), std::make_pair(2, 2) };
+
+		table1.insert(testInput[0].first, testInput[0].second);
+		table1.insert(testInput[1].first, testInput[1].second);
+		table1.insert(testInput[2].first, testInput[2].second);
+		table1.insert(testInput[3].first, testInput[3].second);
+
+		EXPECT_EQ(table1.getPairs(), expectedPairs);
+	}
+
 	TEST(RelationTable, containsKey) {
 		UniqueRelationTable<int> table1;
 		std::vector<std::pair<int, int>> testInput{ {1, 2} };

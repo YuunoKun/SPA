@@ -18,6 +18,7 @@ public:
 	bool insert(T key, T value);
 	std::vector<T> getValues(T);
 	std::vector<T> getKeys();
+	std::vector<std::pair<T, T>> getPairs();
 	bool containsKey(T);
 	bool containsPair(T, T);
 	RelationTable findTransitiveClosure();

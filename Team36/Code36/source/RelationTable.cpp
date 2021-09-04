@@ -73,6 +73,18 @@ std::vector<T> RelationTable<T>::getKeys()
 	return keys;
 }
 
+template<class T>
+std::vector<std::pair<T, T>> RelationTable<T>::getPairs()
+{
+	std::vector<std::pair<T, T>> result;
+	for (auto const& pair : table) {
+		T key = pair.first;
+		for (auto const& value : pair.second)
+			result.push_back(std::make_pair(key, value));
+	};
+	return result;
+}
+
 template <class T>
 bool RelationTable <T>::containsKey(T key)
 {
