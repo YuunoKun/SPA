@@ -51,7 +51,6 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="PKBTest.cpp" />
-    <ClCompile Include="QueryPreprocessorTest.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SPA\SPA.vcxproj">
