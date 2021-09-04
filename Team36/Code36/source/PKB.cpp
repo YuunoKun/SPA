@@ -44,24 +44,22 @@ void PKB::addConstant(constant constant)
 
 void PKB::addProcedures(proc_name proc_name)
 {
-	for (auto const& pair : proc_table) {
-		if (pair.second == proc_name) {
+	for (auto const& element : proc_table) {
+		if (element == proc_name) {
 			return;
 		}
 	};
-	proc_index proc_index = proc_table.size() + 1;
-	proc_table.emplace(proc_index, proc_name);
+	proc_table.push_back(proc_name);
 }
 
 void PKB::addVariable(var_name var_name)
 {
-	for (auto const& pair : var_table) {
-		if (pair.second == var_name) {
+	for (auto const& element : var_table) {
+		if (element == var_name) {
 			return;
 		}
 	};
-	var_index var_index = var_table.size() + 1;
-	var_table.emplace(var_index, var_name);
+	proc_table.push_back(var_name);
 }
 
 void PKB::addStmt(StmtType stmt_type)
@@ -136,9 +134,9 @@ void PKB::resetCache()
 	usesS_table.clear();
 	modifiesS_table.clear();
 	follows_reverse_table.clear();
-	parents_reverse_table.clear();
+	parent_reverse_table.clear();
 	followsT_reverse_table.clear();
-	parentsT_reverse_table.clear();
+	parentT_reverse_table.clear();
 	usesS_reverse_table.clear();
 	modifiesS_reverse_table.clear();
 
@@ -176,6 +174,96 @@ std::vector<var_name> PKB::getVariables() {
 std::vector<Stmt> PKB::getStmts() {
 	//return std::vector<Stmt>(stmt_table.begin(), stmt_table.end());    --- To add hash function for Stmt
 	return std::vector<Stmt>();
+}
+
+const std::vector<proc_name>& PKB::get_procedures()
+{
+	return proc_table;
+}
+
+const std::vector<var_name>& PKB::get_variables()
+{
+	return var_table;
+}
+
+const std::vector<StmtInfo>& PKB::get_stmts()
+{
+	return stmt_table;
+}
+
+const std::unordered_set<constant>& PKB::get_consts()
+{
+	return const_table;
+}
+
+const std::unordered_map<stmt_index, var_index> PKB::get_assignment_table()
+{
+	return assignment_table;
+}
+
+const std::unordered_map<var_index, std::string> PKB::get_expr_table()
+{
+	return expr_table;
+}
+
+const UniqueRelationTable<StmtInfo, StmtInfo>& PKB::get_follows_table()
+{
+	return follows_table;
+}
+
+const RelationTable<StmtInfo, StmtInfo>& PKB::get_parent_table()
+{
+	return parent_table;
+}
+
+const RelationTable<StmtInfo, StmtInfo>& PKB::get_followsT_table()
+{
+	return followsT_table;
+}
+
+const RelationTable<StmtInfo, StmtInfo>& PKB::get_parentT_table()
+{
+	return parentT_table;
+}
+
+const RelationTable<StmtInfo, StmtInfo>& PKB::get_usesS_table()
+{
+	return usesS_table;
+}
+
+const RelationTable<StmtInfo, StmtInfo>& PKB::get_modifiesS_table()
+{
+	return modifiesS_table;
+}
+
+const RelationTable<StmtInfo, StmtInfo>& PKB::get_follows_reverse_table()
+{
+	return followsT_reverse_table;
+}
+
+const RelationTable<StmtInfo, StmtInfo>& PKB::get_parent_reverse_table()
+{
+	return parent_reverse_table;
+}
+
+const RelationTable<StmtInfo, StmtInfo>& PKB::get_followsT_reverse_table()
+{
+	return followsT_reverse_table;
+}
+
+const RelationTable<StmtInfo, StmtInfo>& PKB::get_parentT_reverse_table()
+{
+	return parentT_reverse_table;
+}
+
+const RelationTable<StmtInfo, StmtInfo>& PKB::get_usesS_reverse_table()
+{
+	return usesS_reverse_table;
+}
+
+const RelationTable<StmtInfo, StmtInfo>& PKB::get_modifiesS_reverse_table()
+{
+	return modifiesS_reverse_table;
 }
 
 std::vector<constant> PKB::getConstants() {

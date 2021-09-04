@@ -43,8 +43,8 @@ public:
 	std::vector<var_name> getVariables();
 	std::vector<Stmt> getStmts();
 
-	const std::unordered_map<proc_index, proc_name>& get_procedures();
-	const std::unordered_map<var_index, var_name>& get_variables();
+	const std::vector<proc_name>& get_procedures();
+	const std::vector<var_name>& get_variables();
 	const std::vector<StmtInfo>& get_stmts();
 	const std::unordered_set<constant>& get_consts();
 	const std::unordered_map<stmt_index, var_index> get_assignment_table();
@@ -66,8 +66,8 @@ public:
 	void resetEntities();
 
 private:
-	std::unordered_map<proc_index, proc_name> proc_table;
-	std::unordered_map<var_index, var_name> var_table;
+	std::vector<proc_name> proc_table;
+	std::vector<var_name> var_table;
 	std::vector<StmtInfo> stmt_table;
 	std::unordered_set<constant> const_table;
 	std::unordered_map<stmt_index, var_index> assignment_table;
@@ -79,9 +79,9 @@ private:
 	RelationTable<StmtInfo, StmtInfo> usesS_table;
 	RelationTable<StmtInfo, StmtInfo> modifiesS_table;
 	RelationTable<StmtInfo, StmtInfo> follows_reverse_table;
-	RelationTable<StmtInfo, StmtInfo> parents_reverse_table;
+	RelationTable<StmtInfo, StmtInfo> parent_reverse_table;
 	RelationTable<StmtInfo, StmtInfo> followsT_reverse_table;
-	RelationTable<StmtInfo, StmtInfo> parentsT_reverse_table;
+	RelationTable<StmtInfo, StmtInfo> parentT_reverse_table;
 	RelationTable<StmtInfo, StmtInfo> usesS_reverse_table;
 	RelationTable<StmtInfo, StmtInfo> modifiesS_reverse_table;
 
