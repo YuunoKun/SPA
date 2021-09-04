@@ -63,8 +63,8 @@ private:
 	std::unordered_multimap<stmt_index, stmt_index> parents_table;
 	std::unordered_multimap<stmt_index, stmt_index> followsT_table;
 	std::unordered_multimap<stmt_index, stmt_index> parentsT_table;
-	std::unordered_multimap<stmt_index, stmt_index> usesS_table;
-	std::unordered_map<stmt_index, stmt_index> modifiesS_table;
+	std::unordered_multimap<stmt_index, var_index> usesS_table;
+	std::unordered_multimap<stmt_index, var_index> modifiesS_table;
 
 	PKB() {};
 };

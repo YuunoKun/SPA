@@ -22,9 +22,13 @@ public:
 	RelationTable findTransitiveClosure();
 	RelationTable findReverse();
 
+	bool operator==(const RelationTable&) const;
+	bool operator!=(const RelationTable&) const;
+
 private:
-	std::unordered_map<stmt_index, std::vector<stmt_index>> forward;
-	std::unordered_map<stmt_index, std::vector<stmt_index>> backward;
+	std::unordered_map<stmt_index, std::vector<stmt_index>> table;
 	bool uniqueKey = true;
+
 	RelationTable();
+	std::unordered_map<stmt_index, std::vector<stmt_index>> getTable();
 };
