@@ -13,6 +13,26 @@ namespace UnitTesting {
 		EXPECT_EQ(table2.isUniqueKey(), false);
 	}
 
+	TEST(RelationTable, equal) {
+		UniqueRelationTable<int> table1, table2;
+		RelationTable<int> table3, table4;
+		std::vector<std::pair<int, int>> testInput{ {1, 2}, {1, 3}, {2, 2}, {2, 2} };
+
+		table1.insert(testInput[0].first, testInput[0].second);
+		table3.insert(testInput[0].first, testInput[0].second);
+
+		EXPECT_EQ(table1, table1);
+		EXPECT_EQ(table2, table2);
+		EXPECT_EQ(table3, table3);
+		EXPECT_EQ(table4, table4);
+
+		EXPECT_NE(table1, table2);
+		EXPECT_NE(table1, table3);
+		EXPECT_NE(table1, table4);
+		EXPECT_NE(table2, table3);
+		EXPECT_NE(table2, table4);
+		EXPECT_NE(table3, table4);
+	}
 	TEST(RelationTable, insert) {
 		UniqueRelationTable<int> table1;
 		RelationTable<int> table2;
@@ -214,5 +234,15 @@ namespace UnitTesting {
 		EXPECT_NE(table1.findReverse(), table1);
 		EXPECT_NE(table1.findReverse(), table2);
 		EXPECT_EQ(table3.findReverse(), reversed_table3);
+	}
+
+	TEST(RelationTable, clear) {
+		RelationTable<int> table1, table2;
+		std::vector<std::pair<int, int>> testInput{ {1, 2}, {1, 3}, {2, 2}, {2, 2}, {2, 4} };
+
+		table1.insert(testInput[0].first, testInput[0].second);
+		EXPECT_NE(table1, table2);
+		table1.clear();
+		EXPECT_EQ(table1, table2);
 	}
 }

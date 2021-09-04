@@ -1,9 +1,18 @@
+#pragma once
+
 #include "RelationTable.h"
 
 template <class T>
 std::unordered_map<T, std::vector<T>> RelationTable<T>::getTable()
 {
 	return table;
+}
+
+template <class T>
+void RelationTable<T>::clear()
+{
+	table.clear();
+	return;
 }
 
 template <class T>
@@ -104,12 +113,12 @@ RelationTable<T> RelationTable<T>::findReverse()
 
 template <class T>
 bool RelationTable<T>::operator==(const RelationTable& other_table) const {
-	return table == other_table.table;
+	return (uniqueKey == other_table.uniqueKey) && (table == other_table.table);
 }
 
 template <class T>
 bool RelationTable<T>::operator!= (const RelationTable& other_table) const {
-	return table != other_table.table;
+	return (uniqueKey != other_table.uniqueKey) || (table != other_table.table);
 }
 
 template <class T>

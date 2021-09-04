@@ -23,6 +23,7 @@ public:
 	bool containsPair(T, T);
 	RelationTable findTransitiveClosure();
 	RelationTable findReverse();
+	void clear();
 
 	bool operator==(const RelationTable&) const;
 	bool operator!=(const RelationTable&) const;
