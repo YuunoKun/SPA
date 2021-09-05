@@ -1,17 +1,16 @@
 #include "Entity.h"
 
-
 Entity::Entity() {
 }
 
-Entity::Entity(EntityType entity_type, std::string name) {
+Entity::Entity(EntityType entity_type, std::string synonym) {
 	this->entity_type = entity_type;
-	this->name = name;
+	this->synonym = synonym;
 }
 
-Entity::Entity(EntityType entity_type, std::string name, std::string value) {
+Entity::Entity(EntityType entity_type, std::string synonym, std::string value) {
 	this->entity_type = entity_type;
-	this->name = name;
+	this->synonym = synonym;
 	this->value = value;
 }
 
@@ -19,21 +18,20 @@ EntityType Entity::getType() {
 	return entity_type;
 }
 
-std::string Entity::getName() {
-	return name;
+std::string Entity::getSynonym() {
+	return synonym;
 }
 
 std::string Entity::getValue() {
 	return value;
 }
 
-bool Entity::isDeclaration() {
-	return name != "";
+bool Entity::isSynonym() {
+	return synonym != "";
 }
-
 
 bool Entity::operator==(const Entity& entity) const {
 	return entity_type == entity.entity_type
-		&& name == entity.name
+		&& synonym == entity.synonym
 		&& value == entity.value;
 }
