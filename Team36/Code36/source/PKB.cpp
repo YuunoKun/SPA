@@ -77,8 +77,8 @@ void PKB::addExprTree(var_index var_index, std::string expr)
 void PKB::addParent(stmt_index parent, stmt_index child)
 {
 	try {
-		StmtInfo parent_stmt_info{ parent, stmt_table.at(parent).stmt_type };
-		StmtInfo child_stmt_info{ child, stmt_table.at(child).stmt_type };
+		StmtInfo parent_stmt_info{ parent, stmt_table.at(parent - 1).stmt_type };
+		StmtInfo child_stmt_info{ child, stmt_table.at(child - 1).stmt_type };
 		parent_table.insert(parent_stmt_info, child_stmt_info);
 	}
 	catch (std::out_of_range& e) {
@@ -90,9 +90,9 @@ void PKB::addParent(stmt_index parent, stmt_index child)
 void PKB::addFollows(stmt_index first, stmt_index second)
 {
 	try {
-		StmtInfo first_stmt_info{ first, stmt_table.at(first).stmt_type };
-		StmtInfo second_stmt_info{ second, stmt_table.at(second).stmt_type };
-		parent_table.insert(second_stmt_info, second_stmt_info);
+		StmtInfo first_stmt_info{ first, stmt_table.at(first - 1).stmt_type };
+		StmtInfo second_stmt_info{ second, stmt_table.at(second - 1).stmt_type };
+		follows_table.insert(first_stmt_info, second_stmt_info);
 	}
 	catch (std::out_of_range& e) {
 		throw std::invalid_argument("addFollows: Invalid stmt indexes: [" + std::to_string(first)
@@ -102,10 +102,36 @@ void PKB::addFollows(stmt_index first, stmt_index second)
 
 void PKB::addUsesS(stmt_index user, var_name used)
 {
+	try {
+		StmtInfo user_stmt_info{ user, stmt_table.at(user - 1).stmt_type };
+		std::vector<var_name>::iterator it = std::find(var_table.begin(), var_table.end(), used);
+		if (it != var_table.end()) {
+			usesS_table.insert(user_stmt_info, used);
+		}
+		else {
+			throw std::invalid_argument("addUsesS: Invalid var name: " + used);
+		}
+	}
+	catch (std::out_of_range& e) {
+		throw std::invalid_argument("addUsesS: Invalid stmt index:" + std::to_string(user));
+	}
 }
 
 void PKB::addModifiesS(stmt_index modifier, var_name modified)
 {
+	try {
+		StmtInfo modifier_stmt_info{ modifier, stmt_table.at(modifier - 1).stmt_type };
+		std::vector<var_name>::iterator it = std::find(var_table.begin(), var_table.end(), modified);
+		if (it != var_table.end()) {
+			modifiesS_table.insert(modifier_stmt_info, modified);
+		}
+		else {
+			throw std::invalid_argument("addModifiesS: Invalid var name: " + modified);
+		}
+	}
+	catch (std::out_of_range& e) {
+		throw std::invalid_argument("addModifiesS: Invalid stmt index:" + std::to_string(modifier));
+	}
 }
 
 void PKB::generateParentT()
@@ -226,12 +252,12 @@ const RelationTable<StmtInfo, StmtInfo>& PKB::get_parentT_table()
 	return parentT_table;
 }
 
-const RelationTable<StmtInfo, StmtInfo>& PKB::get_usesS_table()
+const RelationTable<StmtInfo, var_name>& PKB::get_usesS_table()
 {
 	return usesS_table;
 }
 
-const RelationTable<StmtInfo, StmtInfo>& PKB::get_modifiesS_table()
+const RelationTable<StmtInfo, var_name>& PKB::get_modifiesS_table()
 {
 	return modifiesS_table;
 }
@@ -256,12 +282,12 @@ const RelationTable<StmtInfo, StmtInfo>& PKB::get_parentT_reverse_table()
 	return parentT_reverse_table;
 }
 
-const RelationTable<StmtInfo, StmtInfo>& PKB::get_usesS_reverse_table()
+const RelationTable<var_name, StmtInfo>& PKB::get_usesS_reverse_table()
 {
 	return usesS_reverse_table;
 }
 
-const RelationTable<StmtInfo, StmtInfo>& PKB::get_modifiesS_reverse_table()
+const RelationTable<var_name, StmtInfo>& PKB::get_modifiesS_reverse_table()
 {
 	return modifiesS_reverse_table;
 }

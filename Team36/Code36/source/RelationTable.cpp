@@ -27,7 +27,7 @@ bool RelationTable<T, S>::insert(T key, S value)
 	auto iter = table.find(key);
 	// only add if key-value pair is unique
 	if (iter == table.end()) {
-		std::vector<T> newV;
+		std::vector<S> newV;
 		newV.push_back(value);
 		table.emplace(key, newV);
 		return true;
@@ -127,7 +127,7 @@ bool UniqueRelationTable<T, S>::insert(T key, S value)
 	auto iter = table.find(key);
 	// only add if key is not in table
 	if (iter == table.end()) {
-		std::vector<T> newV;
+		std::vector<S> newV;
 		newV.push_back(value);
 		table.emplace(key, newV);
 		return true;

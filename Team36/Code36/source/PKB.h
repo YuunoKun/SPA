@@ -18,9 +18,6 @@ public:
 	PKB(PKB const&) = delete;
 	void operator=(PKB const&) = delete;
 
-	/*	proc_index addProcedure(Procedure& procedure);
-		var_index addVariable(Variable& variable);
-		stmt_index addStmt(Stmt& statement);*/
 	void addConstant(constant constant);
 	void addProcedures(proc_name proc_name);
 	void addVariable(var_name var_name);
@@ -44,14 +41,14 @@ public:
 	const RelationTable<StmtInfo, StmtInfo>& get_parent_table();
 	const RelationTable<StmtInfo, StmtInfo>& get_followsT_table();
 	const RelationTable<StmtInfo, StmtInfo>& get_parentT_table();
-	const RelationTable<StmtInfo, StmtInfo>& get_usesS_table();
-	const RelationTable<StmtInfo, StmtInfo>& get_modifiesS_table();
+	const RelationTable<StmtInfo, var_name>& get_usesS_table();
+	const RelationTable<StmtInfo, var_name>& get_modifiesS_table();
 	const RelationTable<StmtInfo, StmtInfo>& get_follows_reverse_table();
 	const RelationTable<StmtInfo, StmtInfo>& get_parent_reverse_table();
 	const RelationTable<StmtInfo, StmtInfo>& get_followsT_reverse_table();
 	const RelationTable<StmtInfo, StmtInfo>& get_parentT_reverse_table();
-	const RelationTable<StmtInfo, StmtInfo>& get_usesS_reverse_table();
-	const RelationTable<StmtInfo, StmtInfo>& get_modifiesS_reverse_table();
+	const RelationTable<var_name, StmtInfo>& get_usesS_reverse_table();
+	const RelationTable<var_name, StmtInfo>& get_modifiesS_reverse_table();
 
 	void resetCache();
 	void resetEntities();
@@ -77,14 +74,14 @@ private:
 	RelationTable<StmtInfo, StmtInfo> parent_table;
 	RelationTable<StmtInfo, StmtInfo> followsT_table;
 	RelationTable<StmtInfo, StmtInfo> parentT_table;
-	RelationTable<StmtInfo, StmtInfo> usesS_table;
-	RelationTable<StmtInfo, StmtInfo> modifiesS_table;
+	RelationTable<StmtInfo, var_name> usesS_table;
+	RelationTable<StmtInfo, var_name> modifiesS_table;
 	RelationTable<StmtInfo, StmtInfo> follows_reverse_table;
 	RelationTable<StmtInfo, StmtInfo> parent_reverse_table;
 	RelationTable<StmtInfo, StmtInfo> followsT_reverse_table;
 	RelationTable<StmtInfo, StmtInfo> parentT_reverse_table;
-	RelationTable<StmtInfo, StmtInfo> usesS_reverse_table;
-	RelationTable<StmtInfo, StmtInfo> modifiesS_reverse_table;
+	RelationTable<var_name, StmtInfo> usesS_reverse_table;
+	RelationTable<var_name, StmtInfo> modifiesS_reverse_table;
 
 	// Old tables, to be deleted
 	std::unordered_set<proc_name> old_proc_table;

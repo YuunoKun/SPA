@@ -81,6 +81,116 @@ namespace UnitTesting {
 		EXPECT_NE(s, PKB::getInstance().get_stmts());
 	}
 
+	TEST(PKB, get_expr_table) {
+		PKB::getInstance().resetCache();
+
+		std::unordered_map<var_index, std::string> s{
+			{ 1, "x" }, { 2, "x+ y" }, { 3, " y " } };
+		PKB::getInstance().addExprTree(1, s[1]);
+		PKB::getInstance().addExprTree(2, s[2]);
+		PKB::getInstance().addExprTree(3, s[3]);
+		EXPECT_EQ(s, PKB::getInstance().get_expr_table());
+		PKB::getInstance().resetCache();
+		EXPECT_NE(s, PKB::getInstance().get_expr_table());
+	}
+
+	TEST(PKB, get_parent_table) {
+		PKB::getInstance().resetCache();
+
+		StmtInfo p1{ 1, STMT_READ };
+		StmtInfo p2{ 2, STMT_PRINT };
+		StmtInfo p3{ 3, STMT_READ };
+		RelationTable<StmtInfo, StmtInfo> table;
+		table.insert(p1, p2);
+		table.insert(p1, p3);
+		table.insert(p2, p3);
+
+		PKB::getInstance().addStmt(STMT_READ);
+		PKB::getInstance().addStmt(STMT_PRINT);
+		PKB::getInstance().addStmt(STMT_READ);
+		PKB::getInstance().addParent(1, 2);
+		PKB::getInstance().addParent(1, 3);
+		PKB::getInstance().addParent(2, 3);
+		EXPECT_EQ(table, PKB::getInstance().get_parent_table());
+		PKB::getInstance().resetCache();
+		EXPECT_NE(table, PKB::getInstance().get_parent_table());
+	}
+
+	TEST(PKB, get_follows_table) {
+		PKB::getInstance().resetCache();
+
+		StmtInfo p1{ 1, STMT_READ };
+		StmtInfo p2{ 2, STMT_PRINT };
+		StmtInfo p3{ 3, STMT_READ };
+		UniqueRelationTable<StmtInfo, StmtInfo> table;
+		table.insert(p1, p2);
+		table.insert(p2, p3);
+
+		PKB::getInstance().addStmt(STMT_READ);
+		PKB::getInstance().addStmt(STMT_PRINT);
+		PKB::getInstance().addStmt(STMT_READ);
+		PKB::getInstance().addFollows(1, 2);
+		PKB::getInstance().addFollows(1, 3);
+		PKB::getInstance().addFollows(2, 3);
+		EXPECT_EQ(table, PKB::getInstance().get_follows_table());
+		PKB::getInstance().resetCache();
+		EXPECT_NE(table, PKB::getInstance().get_follows_table());
+	}
+
+	TEST(PKB, get_usesS_table) {
+		PKB::getInstance().resetCache();
+
+		StmtInfo p1{ 1, STMT_READ };
+		StmtInfo p2{ 2, STMT_PRINT };
+		StmtInfo p3{ 3, STMT_READ };
+		StmtInfo p4{ 4, STMT_PRINT };
+		var_name x = "x";
+		var_name y = "y";
+		RelationTable<StmtInfo, var_name> table;
+		table.insert(p2, x);
+		table.insert(p4, y);
+
+		PKB::getInstance().addStmt(STMT_READ);
+		PKB::getInstance().addStmt(STMT_PRINT);
+		PKB::getInstance().addStmt(STMT_READ);
+		PKB::getInstance().addStmt(STMT_PRINT);
+		PKB::getInstance().addVariable(x);
+		PKB::getInstance().addUsesS(2, x);
+		EXPECT_THROW(PKB::getInstance().addUsesS(4, y), std::invalid_argument);
+		PKB::getInstance().addVariable(y);
+		PKB::getInstance().addUsesS(4, y);
+		EXPECT_EQ(table, PKB::getInstance().get_usesS_table());
+		PKB::getInstance().resetCache();
+		EXPECT_NE(table, PKB::getInstance().get_usesS_table());
+	}
+
+	TEST(PKB, get_modifiesS_table) {
+		PKB::getInstance().resetCache();
+
+		StmtInfo p1{ 1, STMT_READ };
+		StmtInfo p2{ 2, STMT_PRINT };
+		StmtInfo p3{ 3, STMT_READ };
+		StmtInfo p4{ 4, STMT_PRINT };
+		var_name x = "x";
+		var_name y = "y";
+		RelationTable<StmtInfo, var_name> table;
+		table.insert(p1, x);
+		table.insert(p3, y);
+
+		PKB::getInstance().addStmt(STMT_READ);
+		PKB::getInstance().addStmt(STMT_PRINT);
+		PKB::getInstance().addStmt(STMT_READ);
+		PKB::getInstance().addStmt(STMT_PRINT);
+		PKB::getInstance().addVariable(x);
+		PKB::getInstance().addModifiesS(1, x);
+		EXPECT_THROW(PKB::getInstance().addModifiesS(3, y), std::invalid_argument);
+		PKB::getInstance().addVariable(y);
+		PKB::getInstance().addModifiesS(3, y);
+		EXPECT_EQ(table, PKB::getInstance().get_modifiesS_table());
+		PKB::getInstance().resetCache();
+		EXPECT_NE(table, PKB::getInstance().get_modifiesS_table());
+	}
+
 	TEST(PKB, resetCache) {
 		PKB::getInstance().resetCache();
 
