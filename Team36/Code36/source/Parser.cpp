@@ -81,7 +81,4 @@ void Parser::parse() {
 		}
 		tk = token;
 	}
-
-	PKB::getInstance().setProcedures(p_n);
-	PKB::getInstance().setConstants(std::vector<constant>(con.begin(), con.end()));
 }

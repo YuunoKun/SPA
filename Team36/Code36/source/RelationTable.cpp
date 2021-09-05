@@ -95,6 +95,12 @@ bool RelationTable<T, S>::containsPair(T key, S value)
 }
 
 template <class T, class S>
+bool RelationTable<T, S>::isEmpty()
+{
+	return table.empty();
+}
+
+template <class T, class S>
 RelationTable<T, S> RelationTable<T, S>::findTransitiveClosure()
 {
 	return RelationTable();
@@ -103,7 +109,7 @@ RelationTable<T, S> RelationTable<T, S>::findTransitiveClosure()
 template <class T, class S>
 RelationTable<S, T> RelationTable<T, S>::findReverse()
 {
-	RelationTable reversed;
+	RelationTable<S, T> reversed;
 	for (auto const& pair : table) {
 		for (auto const& value : pair.second)
 			reversed.insert(value, pair.first);
