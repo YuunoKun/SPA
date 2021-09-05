@@ -13,8 +13,4 @@ public:
 	QueryPreprocessor();
 
 	Query parse(std::string);
-
-private:
-
-	std::vector<QueryToken> modify_token_types(std::vector<QueryToken> input);
 };

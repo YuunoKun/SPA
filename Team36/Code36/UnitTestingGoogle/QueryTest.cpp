@@ -51,28 +51,28 @@ namespace UnitTesting {
 
 		EXPECT_EQ(q.getRelations(), o);
 
-		RelRef e({ MODIFIES_P, {} });
+		RelRef e({ MODIFIES_P, {ASSIGN,"test4"}, {ASSIGN,"test4"} });
 		q.addRelation(e);
 		EXPECT_NE(q.getRelations(), o);
 		o.push_back(e);
 		EXPECT_EQ(q.getRelations(), o);
 
-		e = RelRef({ FOLLOWS, {{STMT,"test1"}} });
+		e = RelRef({ FOLLOWS, {STMT,"test1"}, {STMT,"test1"} });
 		q.addRelation(e);
 		EXPECT_NE(q.getRelations(), o);
 		o.push_back(e);
 		EXPECT_EQ(q.getRelations(), o);
 
-		e = RelRef({ FOLLOWS, {{STMT,"test1"},{READ, "test2"}} });
+		e = RelRef({ FOLLOWS, {STMT,"test1"},{READ, "test2"} });
 		q.addRelation(e);
 		EXPECT_NE(q.getRelations(), o);
 		o.push_back(e);
 		EXPECT_EQ(q.getRelations(), o);
 
-		e = RelRef({ FOLLOWS, {{STMT,"test1"},{READ, "test2"}} });
+		e = RelRef({ FOLLOWS, {STMT,"test1"},{READ, "test2"} });
 		q.addRelation(e);
 		EXPECT_NE(q.getRelations(), o);
-		e = RelRef({ FOLLOWS_T, {{STMT,"test1"},{READ, "test2"}} });
+		e = RelRef({ FOLLOWS_T, {STMT,"test1"},{READ, "test2"} });
 		o.push_back(e);
 		EXPECT_NE(q.getRelations(), o);
 	}
@@ -92,30 +92,32 @@ namespace UnitTesting {
 
 	TEST(Query, selected) {
 		Query q;
+		std::vector<Entity> v;
 
 		Entity e(STMT, "test1");
-		q.setSelected(e);
-		EXPECT_EQ(q.getSelected(), e);
+		v.push_back(e);
+		q.addSelected(e);
+		EXPECT_EQ(q.getSelected(), v);
 
 		e = Entity(WHILE, "test1231");
-		q.setSelected(e);
-		EXPECT_EQ(q.getSelected(), e);
+
+		v.push_back(e);
+		q.addSelected(e);
+		EXPECT_EQ(q.getSelected(), v);
 
 		e = Entity(IF, "test14151");
-		q.setSelected(e);
-		EXPECT_EQ(q.getSelected(), e);
+		v.push_back(e);
+		q.addSelected(e);
+		EXPECT_EQ(q.getSelected(), v);
 
 		e = Entity(WILD, "test123");
-		q.setSelected(e);
-		EXPECT_EQ(q.getSelected(), e);
+		v.push_back(e);
+		q.addSelected(e);
+		EXPECT_EQ(q.getSelected(), v);
 
 		e = Entity(READ, "test123");
-		q.setSelected(e);
-		EXPECT_EQ(q.getSelected(), e);
-
-		e = Entity({ READ,"test141511" });
-		Entity e1(IF, "test141511");
-		q.setSelected(e);
-		EXPECT_TRUE(!(q.getSelected() == e1));
+		v.push_back(e);
+		q.addSelected(e);
+		EXPECT_EQ(q.getSelected(), v);
 	}
 }

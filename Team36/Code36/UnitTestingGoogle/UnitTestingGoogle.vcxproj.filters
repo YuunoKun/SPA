@@ -1,7 +1,16 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
+    <Filter Include="PQL">
+      <UniqueIdentifier>{44fb22e0-696f-4295-8574-6cd39d942b50}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PKB">
+      <UniqueIdentifier>{0c892737-035d-4044-b2b3-1acbb580b746}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
     <ClCompile Include="pch.cpp" />
+    <ClCompile Include="QueryPreprocessorTest.cpp" />
     <ClCompile Include="EntityTest.cpp">
       <Filter>PQL</Filter>
     </ClCompile>
@@ -14,21 +23,61 @@
     <ClCompile Include="QueryTest.cpp">
       <Filter>PQL</Filter>
     </ClCompile>
-    <ClCompile Include="EvaluateQueryTest.cpp">
+    <ClCompile Include="QueryEvaluatorTest.cpp">
+      <Filter>PQL</Filter>
+    </ClCompile>
+    <ClCompile Include="UtilityTest.cpp">
+      <Filter>PQL</Filter>
+    </ClCompile>
+    <ClCompile Include="ResultTableTest.cpp">
+      <Filter>PQL</Filter>
+    </ClCompile>
+    <ClCompile Include="QueryResultTest.cpp">
+      <Filter>PQL</Filter>
+    </ClCompile>
+    <ClCompile Include="RelationsEvaluatorTest.cpp">
+      <Filter>PQL</Filter>
+    </ClCompile>
+    <ClCompile Include="FollowsEvaluatorTest.cpp">
+      <Filter>PQL</Filter>
+    </ClCompile>
+    <ClCompile Include="FollowsTEvaluatorTest.cpp">
+      <Filter>PQL</Filter>
+    </ClCompile>
+    <ClCompile Include="ParentEvaluatorTest.cpp">
       <Filter>PQL</Filter>
     </ClCompile>
     <ClCompile Include="PKBTest.cpp" />
     <ClCompile Include="QueryTokenizerTest.cpp" />
+    <ClCompile Include="ParentTEvaluatorTest.cpp">
+      <Filter>PQL</Filter>
+    </ClCompile>
+    <ClCompile Include="ModifiesSEvaluatorTest.cpp">
+      <Filter>PQL</Filter>
+    </ClCompile>
+    <ClCompile Include="ModifiesPEvaluatorTest.cpp">
+      <Filter>PQL</Filter>
+    </ClCompile>
+    <ClCompile Include="UsesSEvaluatorTest.cpp">
+      <Filter>PQL</Filter>
+    </ClCompile>
+    <ClCompile Include="UsesPEvaluatorTest.cpp">
+      <Filter>PQL</Filter>
+    </ClCompile>
+    <ClCompile Include="PKBAdapterTest.cpp">
+      <Filter>PQL</Filter>
+    </ClCompile>
+    <ClCompile Include="RelationTableTest.cpp">
+      <Filter>PKB</Filter>
+    </ClCompile>
+    <ClCompile Include="PKBTest.cpp">
+      <Filter>PKB</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Filter Include="PQL">
-      <UniqueIdentifier>{44fb22e0-696f-4295-8574-6cd39d942b50}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
 </Project>

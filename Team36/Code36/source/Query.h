@@ -2,6 +2,7 @@
 
 #include <string>
 #include <unordered_map>
+#include <vector>
 
 #include "Entity.h"
 #include "RelRef.h"
@@ -14,8 +15,8 @@ public:
 	std::unordered_map<std::string, Entity> getEntities();
 	std::vector<RelRef> getRelations();
 	std::vector<Pattern> getPatterns();
-	Entity& getSelected();
-	void setSelected(Entity&);
+	std::vector<Entity> getSelected();
+	void addSelected(Entity&);
 	void addEntity(Entity&);
 	void addRelation(RelRef&);
 	void addPattern(Pattern&);
@@ -25,5 +26,5 @@ private:
 	std::unordered_map<std::string, Entity> entities;
 	std::vector<RelRef> relations;
 	std::vector<Pattern> patterns;
-	Entity selected;
+	std::vector<Entity> selected;
 };
