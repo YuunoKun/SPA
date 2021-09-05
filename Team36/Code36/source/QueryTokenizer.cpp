@@ -34,6 +34,7 @@ void QueryTokenizer::parse_into_query_tokens(std::string input) {
 			break;
 		case '"':
 			if (!quotation_validation) {
+				//No opening quotation marks
 				add_query_token(curr_query_token);
 				curr_query_token.type = QueryToken::QUOTATION_OPEN;
 				add_query_token(curr_query_token);
@@ -67,13 +68,15 @@ void QueryTokenizer::parse_into_query_tokens(std::string input) {
 			break;
 		case '*':
 			// if got whitespace infront wont work????
-			if (curr_query_token.type == QueryToken::CONSTANT) {
-				//check before if CONSTANT
-				//part of term/expr
-				add_query_token(curr_query_token);
-				curr_query_token.type = QueryToken::MUL;
-				add_query_token(curr_query_token);
-			} else if (curr_query_token.type == QueryToken::IDENTIFIER) {
+			//if (curr_query_token.type == QueryToken::CONSTANT) {
+			//	//check before if CONSTANT
+			//	//part of term/expr
+			//	add_query_token(curr_query_token);
+			//	curr_query_token.type = QueryToken::MUL;
+			//	add_query_token(curr_query_token);
+			//} else 
+				
+			if (curr_query_token.type == QueryToken::IDENTIFIER) {
 				// if in front is IDENT, can be for expr/term or for or MUL
 				add_query_token(curr_query_token);
 				curr_query_token.type = QueryToken::ASTERISK;
@@ -124,7 +127,14 @@ void QueryTokenizer::parse_into_query_tokens(std::string input) {
 		}
 	}
 	add_query_token(curr_query_token);
-	// check for open brackets or quotation marks?
+
+	// Check for open brackets or open quotation marks
+	if (!separator_validation_stk.empty()) {
+		std::runtime_error("expected \')\'");
+	}else if (quotation_validation) {
+		std::runtime_error("missing terminating \" character");
+	}
+	
 }
 
 std::vector<QueryToken> QueryTokenizer::get_query_token_chain() {
@@ -136,36 +146,6 @@ void QueryTokenizer::add_query_token(QueryToken& query_token) {
 		//discard whitespace
 		return;
 	}
-
-	// send it as WORD/identifier to query_token_chain
-
-	/*if (token.m_type == TokenType::IDENTIFIER) {
-		if (token.m_token_value == "procedure") {
-			token.m_type = TokenType::PROCEDURE;
-		}
-		else if (token.m_token_value == "read") {
-			token.m_type = TokenType::READ;
-		}
-		else if (token.m_token_value == "print") {
-			token.m_type = TokenType::PRINT;
-		}
-		else if (token.m_token_value == "call") {
-			token.m_type = TokenType::CALL;
-		}
-		else if (token.m_token_value == "if") {
-			token.m_type = TokenType::IF;
-		}
-		else if (token.m_token_value == "while") {
-			token.m_type = TokenType::WHILE;
-		}
-		else if (token.m_token_value == "then") {
-			token.m_type = TokenType::THEN;
-		}
-		else if (token.m_token_value == "else") {
-			token.m_type = TokenType::ELSE;
-		}
-	}
-	*/
 
 	query_token_cache.push_back(query_token);
 	query_token.type = QueryToken::QueryTokenType::WHITESPACE;
