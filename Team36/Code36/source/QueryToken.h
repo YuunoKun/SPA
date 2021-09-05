@@ -40,25 +40,24 @@ public:
 
 		PLUS,
 		MINUS,
-		//remove mul for a more general asterisk?
-		MUL,
+
 		DIV,
 		MOD,
 
-			//  PQL Conditional Operators
-		/*	BOOL_AND,
-			BOOL_OR,
-			BOOL_NEGATE,
-			BIT_AND,
-			BIT_OR,*/
+		//  PQL Conditional Operators
+	/*	BOOL_AND,
+		BOOL_OR,
+		BOOL_NEGATE,
+		BIT_AND,
+		BIT_OR,*/
 
-			// PQL Relational Operators
-		/*	BOOL_EQUIV,
-			BOOL_NEQUIV,
-			BOOL_LT,
-			BOOL_LTEQ,
-			BOOL_GT,
-			BOOL_GTEQ,*/
+		// PQL Relational Operators
+	/*	BOOL_EQUIV,
+		BOOL_NEQUIV,
+		BOOL_LT,
+		BOOL_LTEQ,
+		BOOL_GT,
+		BOOL_GTEQ,*/
 
 		// PQL Separators
 		PARENTHESIS_OPEN,
