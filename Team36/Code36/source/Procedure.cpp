@@ -4,18 +4,18 @@
 using namespace SourceProcessor;
 
 
-Procedure::Procedure(procedure_name name, procedure_index id) {
+Procedure::Procedure(proc_name name, proc_index id) {
 	m_name = name;
 	m_index = id;
 }
 
 
-procedure_name Procedure::get_name() {
+proc_name Procedure::get_name() {
 	return m_name;
 }
 
 
-procedure_index Procedure::get_index() {
+proc_index Procedure::get_index() {
 	return m_index;
 }
 
@@ -30,7 +30,7 @@ std::vector<stmt_index> Procedure::get_caller() {
 }
 
 
-void Procedure::add_uses_variable(variable_name name) {
+void Procedure::add_uses_variable(var_name name) {
 	m_uses.insert(name);
 }
 
@@ -40,7 +40,7 @@ std::vector<stmt_index> Procedure::get_used_variable() {
 }
 
 
-void Procedure::add_modifies_variable(variable_name name) {
+void Procedure::add_modifies_variable(var_name name) {
 	m_modifies.insert(name);
 }
 

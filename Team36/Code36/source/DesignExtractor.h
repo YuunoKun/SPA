@@ -18,13 +18,13 @@ namespace SourceProcessor {
 
 		void end_nesting();
 
-		void add_procedure(procedure_name);
+		void add_procedure(proc_name);
 
 		void add_statement(StmtType);
 
-		void add_statement_uses(variable_name);
+		void add_statement_uses(var_name);
 
-		void add_statement_modifies(variable_name);
+		void add_statement_modifies(var_name);
 
 		void start_expr();
 
@@ -39,7 +39,7 @@ namespace SourceProcessor {
 		std::vector<variable_name> m_variables;
 		std::vector<constant> m_constants;
 
-		procedure_index m_curr_proc_id;
+		proc_index m_curr_proc_id;
 		stmt_index m_curr_stmt_id;
 		std::stack<stmt_index> m_curr_nesting_stk;
 		std::stringstream m_expr_builder;

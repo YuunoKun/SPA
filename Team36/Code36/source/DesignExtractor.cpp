@@ -27,7 +27,7 @@ void DesignExtractor::end_nesting() {
 }
 
 
-void DesignExtractor::add_procedure(procedure_name name) {
+void DesignExtractor::add_procedure(proc_name name) {
 	Procedure proc(name, m_curr_proc_id + 1);
 	m_curr_proc_id++;
 	m_procedures.push_back(proc);
@@ -39,9 +39,9 @@ void DesignExtractor::add_statement(StmtType type) {
 }
 
 
-void DesignExtractor::add_statement_uses(variable_name name);
+void DesignExtractor::add_statement_uses(var_name name);
 
-void DesignExtractor::add_statement_modifies(variable_name name);
+void DesignExtractor::add_statement_modifies(var_name name);
 
 void DesignExtractor::start_expr() {
 

@@ -4,7 +4,7 @@
 using namespace SourceProcessor;
 
 
-Statement::Statement(stmt_index id, StmtType type, procedure_name parent_proc_name) {
+Statement::Statement(stmt_index id, StmtType type, proc_name parent_proc_name) {
 	m_index = id;
 	m_type = type;
 	m_under_procedure = parent_proc_name;
@@ -27,7 +27,7 @@ void Statement::add_direct_parent(stmt_index parent) {
 }
 
 
-procedure_name Statement::get_direct_parent() {
+proc_name Statement::get_direct_parent() {
 	return m_direct_parent;
 }
 
@@ -42,22 +42,22 @@ std::vector<stmt_index>& Statement::get_direct_child() {
 }
 
 
-void Statement::add_uses_variable(variable_name var) {
+void Statement::add_uses_variable(var_name var) {
 	m_uses.insert(var);
 }
 
 
-std::vector<variable_name> Statement::get_used_variable() {
+std::vector<var_name> Statement::get_used_variable() {
 	return std::vector<stmt_index>(m_uses.begin(), m_uses.end());
 }
 
 
-void Statement::add_modifies_variable(variable_name var) {
+void Statement::add_modifies_variable(var_name var) {
 	m_modifies.insert(var);
 }
 
 
-std::vector<variable_name> Statement::get_modified_variable() {
+std::vector<var_name> Statement::get_modified_variable() {
 	return std::vector<stmt_index>(m_modifies.begin(), m_modifies.end());
 }
 
@@ -72,7 +72,7 @@ std::string Statement::get_expr_str() {
 }
 
 
-void Statement::set_callee(procedure_name name) {
+void Statement::set_callee(proc_name name) {
 	m_callee = name;
 }
 
