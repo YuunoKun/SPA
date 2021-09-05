@@ -19,7 +19,7 @@ Query QueryPreprocessor::parse(std::string str) {
 
 	const std::vector<QueryToken> v = query_tokenizer.get_query_token_chain();
 
-	std::vector<QueryToken> v;
+	//std::vector<QueryToken> v;
 	//QueryToken q1(QueryToken::QueryTokenType::IDENTIFIER, "stmt");
 	//v.push_back(q1);
 	//v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "s" });
@@ -90,7 +90,7 @@ Query QueryPreprocessor::parse(std::string str) {
 			token.type != QueryToken::QueryTokenType::IDENTIFIER) {
 			throw std::runtime_error("During declaration, only identifier is accepted after comma.");
 		}
-		if (token.type == QueryToken::QueryTokenType::TERMINATOR && token.token_value == ";") {
+		if (token.type == QueryToken::QueryTokenType::TERMINATOR) {
 			temp = token;
 		}
 
@@ -167,13 +167,11 @@ Query QueryPreprocessor::parse(std::string str) {
 						else if (each.type == QueryToken::QueryTokenType::VARIABLE) {
 							ent = { EntityType::VARIABLE, token.token_value };
 						}
-						// TODO: Add selected to setSelected
 					}
 				}
 				query.addSelected(ent);
 			}
 		}
-
 		prevToken = temp;
 	}
 
