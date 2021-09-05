@@ -34,9 +34,9 @@ std::list<std::string> QueryEvaluator::constantsToString(std::vector<constant> f
 	return to;
 }
 
-std::list<std::string> QueryEvaluator::proceduresToString(std::vector<procedure_name> from) {
+std::list<std::string> QueryEvaluator::proceduresToString(std::vector<proc_name> from) {
 	std::list<std::string> to;
-	for each (procedure_name name in from) {
+	for each (proc_name name in from) {
 		to.push_back(name.c_str());
 	}
 	return to;
@@ -50,9 +50,9 @@ std::list<std::string> QueryEvaluator::stmtsToString(std::vector<Stmt> from) {
 	return to;
 }
 
-std::list<std::string> QueryEvaluator::variablesToString(std::vector<variable_name> from) {
+std::list<std::string> QueryEvaluator::variablesToString(std::vector<var_name> from) {
 	std::list<std::string> to;
-	for each (variable_name name in from) {
+	for each (var_name name in from) {
 		to.push_back(name.c_str());
 	}
 	return to;
@@ -60,7 +60,6 @@ std::list<std::string> QueryEvaluator::variablesToString(std::vector<variable_na
 
 std::list<std::string> QueryEvaluator::getResult(Query& query, QueryResult& result) {
 	if (result.isInTable(query.getSelected())) {
-
 	}
 	else {
 		//if selected type is not in table, return all.

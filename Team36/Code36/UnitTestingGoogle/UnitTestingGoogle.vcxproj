@@ -52,6 +52,7 @@
     </ClCompile>
     <ClCompile Include="PKBTest.cpp" />
     <ClCompile Include="QueryPreprocessorTest.cpp" />
+    <ClCompile Include="RelationTableTest.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SPA\SPA.vcxproj">

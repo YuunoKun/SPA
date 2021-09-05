@@ -7,11 +7,9 @@
 
 using namespace SourceProcessor;
 
-
 Parser::Parser(void) {
 	m_tokenizer = Tokenizer();
 }
-
 
 void Parser::load_file(std::string file) {
 	/*
@@ -50,11 +48,9 @@ void Parser::load_file(std::string file) {
 	input_file.close();
 };
 
-
 std::string Parser::get_source_program() {
 	return m_source_program;
 }
-
 
 void Parser::parse() {
 	// Actual parsing workflow
