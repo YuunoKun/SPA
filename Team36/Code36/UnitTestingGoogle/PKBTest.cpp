@@ -97,13 +97,6 @@ namespace UnitTesting {
 	TEST(PKB, get_parent_table) {
 		PKB::getInstance().resetCache();
 
-<<<<<<< HEAD
-		proc_name first_procedure = "main";
-		proc_name second_procedure = "printY";
-		std::vector<proc_name> v{ first_procedure, second_procedure };
-		PKB::getInstance().setProcedures(v);
-		EXPECT_EQ(v, PKB::getInstance().getProcedures());
-=======
 		StmtInfo p1{ 1, STMT_READ };
 		StmtInfo p2{ 2, STMT_PRINT };
 		StmtInfo p3{ 3, STMT_READ };
@@ -121,7 +114,6 @@ namespace UnitTesting {
 		EXPECT_EQ(table, PKB::getInstance().get_parent_table());
 		PKB::getInstance().resetCache();
 		EXPECT_NE(table, PKB::getInstance().get_parent_table());
->>>>>>> br-develop
 	}
 
 	TEST(PKB, get_follows_table) {

@@ -7,25 +7,30 @@
 
 //Handle both wild : e.g Relation(_, _)
 bool UsesSEvaluator::haveRelation() {
-	throw std::invalid_argument("haveRelation(): Wild is not allowed for first argument of Uses_S");
+	return !pkb.getUsesS().empty();
+	//Todo: throw exception for iteration 2
+	//throw std::invalid_argument("haveRelation(): Wild is not allowed for first argument of Uses_S");
 }
 
 //Handle both constant : e.g Relation(1, 2)
 bool UsesSEvaluator::isRelation(Entity e1, Entity e2) {
 	stmt_index s = stoi(e1.getName());
 	var_name v = e2.getName();
-	return pkb.isUses(s, v);
+	return pkb.isUsesS(s, v);
 }
 
 //Handle left constant, right wild: e.g Relation(1, _)
 bool UsesSEvaluator::haveRelationAtRight(Entity e) {
 	stmt_index s = stoi(e.getValue());
-	return pkb.isUses(s);
+	return pkb.isUsesS(s);
 }
 
-//Handle right wild, left constant: e.g Relation(_, 1)
+//Handle right wild, left constant: e.g Relation(_, "x")
 bool UsesSEvaluator::haveRelationAtLeft(Entity e) {
-	throw std::invalid_argument("haveRelationAtLeft(): Wild is not allowed for first argument of Uses_S");
+	var_name v = e.getName();
+	return pkb.isUsesS(v);
+	//Todo: throw exception for iteration 2
+	//throw std::invalid_argument("haveRelationAtLeft(): Wild is not allowed for first argument of Uses_S");
 }
 
 //If both side is declartion: e.g Relation(a, b)
@@ -40,7 +45,9 @@ ResultTable UsesSEvaluator::getRelations(Entity left, Entity right) {
 
 //If left side is WILD and right side is declartion: e.g Relation(_, a)
 ResultTable UsesSEvaluator::getRightRelations(Entity header) {
-	throw std::invalid_argument("getRightRelations(): Wild is not allowed for first argument of Uses_S");
+	return ResultTable(header, pkb.getUsedS());
+	//Todo: throw exception for iteration 2
+	//throw std::invalid_argument("getRightRelations(): Wild is not allowed for first argument of Uses_S");
 }
 
 //Handle right declartion, left constant: e.g Relation(a, _)

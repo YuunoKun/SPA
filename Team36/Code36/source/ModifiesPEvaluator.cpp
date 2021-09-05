@@ -15,13 +15,13 @@ bool ModifiesPEvaluator::haveRelation() {
 bool ModifiesPEvaluator::isRelation(Entity e1, Entity e2) {
 	proc_name p = e1.getName();
 	var_name v = e2.getName();
-	return pkb.isModifies(p, v);
+	return pkb.isModifiesP(p, v);
 }
 
 //Handle left constant, right wild: e.g Relation(1, _)
 bool ModifiesPEvaluator::haveRelationAtRight(Entity e) {
 	proc_name p = e.getName();
-	return pkb.isModifies(p);
+	return pkb.isModifiesP(p);
 }
 
 //Handle right wild, left constant: e.g Relation(_, 1)

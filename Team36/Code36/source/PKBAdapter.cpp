@@ -211,12 +211,12 @@ std::vector<std::vector<StmtInfo>> PKBAdapter::getAllParentTRelation() {
 	return std::vector<std::vector<StmtInfo>>();
 }
 
-bool PKBAdapter::isModifies(proc_name, var_name) {
+bool PKBAdapter::isModifiesP(proc_name, var_name) {
 	//TODO
 	return false;
 }
 
-bool PKBAdapter::isModifies(proc_name) {
+bool PKBAdapter::isModifiesP(proc_name) {
 	//TODO
 	return false;
 }
@@ -241,12 +241,17 @@ std::vector<std::string> PKBAdapter::getModifiedP(proc_name) {
 	return std::vector<std::string>();
 }
 
-bool PKBAdapter::isModifies(stmt_index, var_name) {
+bool PKBAdapter::isModifiesS(stmt_index, var_name) {
 	//TODO
 	return false;
 }
 
-bool PKBAdapter::isModifies(stmt_index) {
+bool PKBAdapter::isModifiesS(stmt_index) {
+	//TODO
+	return false;
+}
+
+bool PKBAdapter::isModifiesS(var_name) {
 	//TODO
 	return false;
 }
@@ -266,17 +271,22 @@ std::vector<StmtInfo> PKBAdapter::getModifiesS(var_name) {
 	return std::vector<StmtInfo>();
 }
 
+std::vector<std::string> PKBAdapter::getModifiedS() {
+	//TODO
+	return std::vector<std::string>();
+}
+
 std::vector<std::string> PKBAdapter::getModifiedS(stmt_index) {
 	//TODO
 	return std::vector<std::string>();
 }
 
-bool PKBAdapter::isUses(proc_name, var_name) {
+bool PKBAdapter::isUsesP(proc_name, var_name) {
 	//TODO
 	return false;
 }
 
-bool PKBAdapter::isUses(proc_name) {
+bool PKBAdapter::isUsesP(proc_name) {
 	//TODO
 	return false;
 }
@@ -301,12 +311,17 @@ std::vector<std::string> PKBAdapter::getUsedP(proc_name) {
 	return std::vector<std::string>();
 }
 
-bool PKBAdapter::isUses(stmt_index, var_name) {
+bool PKBAdapter::isUsesS(stmt_index, var_name) {
 	//TODO
 	return false;
 }
 
-bool PKBAdapter::isUses(stmt_index) {
+bool PKBAdapter::isUsesS(stmt_index) {
+	//TODO
+	return false;
+}
+
+bool PKBAdapter::isUsesS(var_name) {
 	//TODO
 	return false;
 }
@@ -325,6 +340,12 @@ std::vector<StmtInfo> PKBAdapter::getUsesS(var_name) {
 	//TODO
 	return std::vector<StmtInfo>();
 }
+
+std::vector<std::string> PKBAdapter::getUsedS() {
+	//TODO
+	return std::vector<std::string>();
+}
+
 
 std::vector<std::string> PKBAdapter::getUsedS(stmt_index) {
 	//TODO

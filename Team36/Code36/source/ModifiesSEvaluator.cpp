@@ -8,25 +8,30 @@
 
 //Handle both wild : e.g Relation(_, _)
 bool ModifiesSEvaluator::haveRelation() {
-	throw std::invalid_argument("haveRelation(): Wild is not allowed for first argument of Modifies_S");
+	return !pkb.getModifiesS().empty();
+	//Todo: throw exception for iteration 2
+	//throw std::invalid_argument("haveRelation(): Wild is not allowed for first argument of Modifies_S");
 }
 
 //Handle both constant : e.g Relation(1, 2)
 bool ModifiesSEvaluator::isRelation(Entity e1, Entity e2) {
 	stmt_index s = stoi(e1.getName());
 	var_name v = e2.getName();
-	return pkb.isModifies(s, v);
+	return pkb.isModifiesS(s, v);
 }
 
 //Handle left constant, right wild: e.g Relation(1, _)
 bool ModifiesSEvaluator::haveRelationAtRight(Entity e) {
 	stmt_index s = stoi(e.getValue());
-	return pkb.isModifies(s);
+	return pkb.isModifiesS(s);
 }
 
 //Handle right wild, left constant: e.g Relation(_, 1)
 bool ModifiesSEvaluator::haveRelationAtLeft(Entity e) {
-	throw std::invalid_argument("haveRelationAtLeft(): Wild is not allowed for first argument of Modifies_S");
+	var_name v = e.getName();
+	return pkb.isModifiesS(v);
+	//Todo: throw exception for iteration 2
+	//throw std::invalid_argument("haveRelationAtLeft(): Wild is not allowed for first argument of Modifies_S");
 }
 
 //If both side is declartion: e.g Relation(a, b)
@@ -41,7 +46,9 @@ ResultTable ModifiesSEvaluator::getRelations(Entity left, Entity right) {
 
 //If left side is WILD and right side is declartion: e.g Relation(_, a)
 ResultTable ModifiesSEvaluator::getRightRelations(Entity header) {
-	throw std::invalid_argument("getRightRelations(): Wild is not allowed for first argument of Modifies_S");
+	return ResultTable(header, pkb.getModifiedS());
+	//Todo: throw exception for iteration 2
+	//throw std::invalid_argument("getRightRelations(): Wild is not allowed for first argument of Modifies_S");
 }
 
 //Handle right declartion, left constant: e.g Relation(a, _)

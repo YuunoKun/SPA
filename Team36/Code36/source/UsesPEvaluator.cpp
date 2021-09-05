@@ -14,13 +14,13 @@ bool UsesPEvaluator::haveRelation() {
 bool UsesPEvaluator::isRelation(Entity e1, Entity e2) {
 	proc_name p = e1.getName();
 	var_name v = e2.getName();
-	return pkb.isUses(p, v);
+	return pkb.isUsesP(p, v);
 }
 
 //Handle left constant, right wild: e.g Relation(1, _)
 bool UsesPEvaluator::haveRelationAtRight(Entity e) {
 	proc_name p = e.getName();
-	return pkb.isUses(p);
+	return pkb.isUsesP(p);
 }
 
 //Handle right wild, left constant: e.g Relation(_, 1)

@@ -34,20 +34,20 @@ namespace UnitTesting {
 		EXPECT_EQ(Utility::proceduresToStringList(d), e);
 	}
 
-	TEST(Utility, stmtsToStringList) {
-		std::vector<Stmt> a{ {STMT_ASSIGN,1}, {STMT_CALL,2} ,
-			{STMT_IF,3} ,{STMT_WHILE,4} ,{STMT_PRINT,5} };
+	TEST(Utility, stmtInfoToStringList) {
+		std::vector<StmtInfo> a{ {1, STMT_ASSIGN}, {2, STMT_CALL} ,
+			{3, STMT_IF} ,{4, STMT_WHILE} ,{5, STMT_PRINT} };
 		std::list<std::string> b{ "1", "2", "3", "4", "5" };
 
-		EXPECT_EQ(Utility::stmtsToStringList(a), b);
+		EXPECT_EQ(Utility::stmtInfoToStringList(a), b);
 
 		std::list<std::string> c{ "1", "2", "3", "4" };
-		EXPECT_NE(Utility::stmtsToStringList(a), c);
+		EXPECT_NE(Utility::stmtInfoToStringList(a), c);
 
-		std::vector<Stmt> d{ {STMT_ASSIGN,1}, {STMT_CALL,2} };
+		std::vector<StmtInfo> d{ {1, STMT_ASSIGN}, {2, STMT_CALL} };
 		std::list<std::string> e{ "1", "2" };
 
-		EXPECT_EQ(Utility::stmtsToStringList(d), e);
+		EXPECT_EQ(Utility::stmtInfoToStringList(d), e);
 	}
 
 	TEST(Utility, variablesToStringList) {

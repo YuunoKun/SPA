@@ -63,34 +63,38 @@ public:
 	std::vector<std::vector<StmtInfo>> getAllParentTRelation();
 
 	//ModifiesP relation Function
-	bool isModifies(proc_name, var_name);
-	bool isModifies(proc_name);
+	bool isModifiesP(proc_name, var_name);
+	bool isModifiesP(proc_name);
 	std::vector<std::pair<std::string, std::string>> getModifiesPRelation();
 	std::vector<std::string> getModifiesP();
 	std::vector<std::string> getModifiesP(var_name);
 	std::vector<std::string> getModifiedP(proc_name);
 
 	//ModifiesS relation Function
-	bool isModifies(stmt_index, var_name);
-	bool isModifies(stmt_index);
+	bool isModifiesS(stmt_index, var_name);
+	bool isModifiesS(stmt_index);
+	bool isModifiesS(var_name);
 	std::vector<std::pair<StmtInfo, var_name>> getModifiesSRelation();
 	std::vector<StmtInfo> getModifiesS();
 	std::vector<StmtInfo> getModifiesS(var_name);
+	std::vector<std::string> getModifiedS();
 	std::vector<std::string> getModifiedS(stmt_index);
 
 	//UsesP relation Function
-	bool isUses(proc_name, var_name);
-	bool isUses(proc_name);
+	bool isUsesP(proc_name, var_name);
+	bool isUsesP(proc_name);
 	std::vector<std::pair<std::string, std::string>> getUsesPRelation();
 	std::vector<std::string> getUsesP();
 	std::vector<std::string> getUsesP(var_name);
 	std::vector<std::string> getUsedP(proc_name);
 
 	//UsesS relation Function
-	bool isUses(stmt_index, var_name);
-	bool isUses(stmt_index);
+	bool isUsesS(stmt_index, var_name);
+	bool isUsesS(stmt_index);
+	bool isUsesS(var_name);
 	std::vector<std::pair<StmtInfo, var_name>> getUsesSRelation();
 	std::vector<StmtInfo> getUsesS();
 	std::vector<StmtInfo> getUsesS(var_name);
+	std::vector<std::string> getUsedS();
 	std::vector<std::string> getUsedS(stmt_index);
 };
