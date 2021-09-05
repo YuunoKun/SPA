@@ -92,7 +92,7 @@ Query QueryPreprocessor::parse(std::string str) {
 			temp = token;
 		}
 
-		if (prevToken.type != QueryToken::QueryTokenType::WHITESPACE && 
+		if (prevToken.type != QueryToken::QueryTokenType::WHITESPACE &&
 			prevToken.type != QueryToken::QueryTokenType::TERMINATOR &&
 			token.type == QueryToken::QueryTokenType::IDENTIFIER) {
 			output.push_back({ prevToken.type, token.token_value });
