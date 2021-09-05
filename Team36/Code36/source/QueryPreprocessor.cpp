@@ -94,30 +94,88 @@ Query QueryPreprocessor::parse(std::string str) {
 			temp = token;
 		}
 
+		Entity ent;
 		if (prevToken.type != QueryToken::QueryTokenType::WHITESPACE &&
 			prevToken.type != QueryToken::QueryTokenType::TERMINATOR &&
 			token.type == QueryToken::QueryTokenType::IDENTIFIER) {
 			// Declaring goes into output
 			if (prevToken.type != QueryToken::QueryTokenType::SELECT) {
 				output.push_back({ prevToken.type, token.token_value });
+
 				// TODO: Add into entity
+				if (prevToken.type == QueryToken::QueryTokenType::STMT) {
+					ent = { EntityType::STMT, token.token_value };
+				}
+				else if (prevToken.type == QueryToken::QueryTokenType::PROCEDURE) {
+					ent = { EntityType::PROCEDURE, token.token_value };
+				}
+				else if (prevToken.type == QueryToken::QueryTokenType::READ) {
+					ent = { EntityType::READ, token.token_value };
+				}
+				else if (prevToken.type == QueryToken::QueryTokenType::PRINT) {
+					ent = { EntityType::PRINT, token.token_value };
+				}
+				else if (prevToken.type == QueryToken::QueryTokenType::CALL) {
+					ent = { EntityType::CALL, token.token_value };
+				}
+				else if (prevToken.type == QueryToken::QueryTokenType::IF) {
+					ent = { EntityType::IF, token.token_value };
+				}
+				else if (prevToken.type == QueryToken::QueryTokenType::WHILE) {
+					ent = { EntityType::WHILE, token.token_value };
+				}
+				else if (prevToken.type == QueryToken::QueryTokenType::ASSIGN) {
+					ent = { EntityType::ASSIGN, token.token_value };
+				}
+				else if (prevToken.type == QueryToken::QueryTokenType::VARIABLE) {
+					ent = { EntityType::VARIABLE, token.token_value };
+				}
+				else if (prevToken.type == QueryToken::QueryTokenType::CONSTANT) {
+					ent = { EntityType::CONSTANT, "", token.token_value };
+				}
+				query.addEntity(ent);
 			}
 			// Select goes into selected, with prevToken type when it exists in output
 			else {
 				for (QueryToken each : output) {
 					if (token.token_value == each.token_value) {
 						selected.push_back({ each.type, token.token_value });
-						break;
+						if (each.type == QueryToken::QueryTokenType::STMT) {
+							ent = { EntityType::STMT, token.token_value };
+						}
+						else if (each.type == QueryToken::QueryTokenType::PROCEDURE) {
+							ent = { EntityType::PROCEDURE, token.token_value };
+						}
+						else if (each.type == QueryToken::QueryTokenType::READ) {
+							ent = { EntityType::READ, token.token_value };
+						}
+						else if (each.type == QueryToken::QueryTokenType::PRINT) {
+							ent = { EntityType::PRINT, token.token_value };
+						}
+						else if (each.type == QueryToken::QueryTokenType::CALL) {
+							ent = { EntityType::CALL, token.token_value };
+						}
+						else if (each.type == QueryToken::QueryTokenType::IF) {
+							ent = { EntityType::IF, token.token_value };
+						}
+						else if (each.type == QueryToken::QueryTokenType::WHILE) {
+							ent = { EntityType::WHILE, token.token_value };
+						}
+						else if (each.type == QueryToken::QueryTokenType::ASSIGN) {
+							ent = { EntityType::ASSIGN, token.token_value };
+						}
+						else if (each.type == QueryToken::QueryTokenType::VARIABLE) {
+							ent = { EntityType::VARIABLE, token.token_value };
+						}
 						// TODO: Add selected to setSelected
 					}
 				}
+				query.addSelected(ent);
 			}
-			
 		}
 
 		prevToken = temp;
 	}
-  
 
 	return query;
 }
