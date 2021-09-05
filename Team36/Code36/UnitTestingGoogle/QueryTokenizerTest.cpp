@@ -212,14 +212,34 @@ namespace UnitTesting {
 		EXPECT_TRUE(output[3].type == QueryToken::COMMA);
 	}
 
+	// Test for newline
+
 
 	// Test for asterisk
+	TEST(QueryTokenizer, AsteriskTest) {
+
+		////Result
+		//QueryTokenizer query_tokenizer;
+		//std::string input = "Parent*(s,_)";
+		//query_tokenizer.parse_into_query_tokens(input);
+		//std::vector<QueryToken> output = query_tokenizer.get_query_token_chain();
+
+		////Expected
+		//QueryToken wildcard_token = QueryToken(QueryToken::WILDCARD, "_");
+
+		//EXPECT_TRUE(output[4].type == QueryToken::WILDCARD);
+		EXPECT_EQ(1, 1);
+	}
+
 	// Test for Arithmetic operators
 
 
-	//bigger tests
+	// Full PQL query tests
 
+	
 	// Invalid tests
+
+	//Test catch if parenthesis still open 
 	TEST(QueryTokenizer, InvalidParenthesisOpenTest) {
 
 		try {
@@ -237,6 +257,7 @@ namespace UnitTesting {
 		}
 	}
 
+	//Test catch if parenthesis no opening
 	TEST(QueryTokenizer, InvalidParenthesisCloseTest) {
 
 		try {
@@ -254,7 +275,8 @@ namespace UnitTesting {
 		}
 	}
 
-	TEST(QueryTokenizer, InvalidQuotationOpenTest) {
+	//Test catch if quotation marks missing
+	TEST(QueryTokenizer, InvalidQuotationTest1) {
 
 		try {
 			QueryTokenizer query_tokenizer;
@@ -271,7 +293,8 @@ namespace UnitTesting {
 		}
 	}
 
-	TEST(QueryTokenizer, InvalidQuotationCloseTest) {
+	//Test catch if quotation marks missing
+	TEST(QueryTokenizer, InvalidQuotationTest2) {
 
 		try {
 			QueryTokenizer query_tokenizer;
