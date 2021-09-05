@@ -33,6 +33,15 @@ namespace SourceProcessor {
 
 		std::vector<variable_name> get_modified_variable();
 
+		void set_expr_str(std::string);
+
+		std::string get_expr_str();
+
+		void set_callee(procedure_name);
+
+		procedure_name get_callee();
+
+
 	private:
 		stmt_index m_index;
 		StmtType m_type;
@@ -41,6 +50,8 @@ namespace SourceProcessor {
 		std::vector<stmt_index> m_direct_child;
 		std::unordered_set<variable_name> m_uses;
 		std::unordered_set<variable_name> m_modifies;
+		std::string m_expr;
+		procedure_name m_callee;
 	};
 
 } // SourceProcessor

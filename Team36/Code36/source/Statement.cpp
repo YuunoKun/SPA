@@ -60,3 +60,23 @@ void Statement::add_modifies_variable(variable_name var) {
 std::vector<variable_name> Statement::get_modified_variable() {
 	return std::vector<stmt_index>(m_modifies.begin(), m_modifies.end());
 }
+
+
+void Statement::set_expr_str(std::string expr) {
+	m_expr = expr;
+}
+
+
+std::string Statement::get_expr_str() {
+	return m_expr;
+}
+
+
+void Statement::set_callee(procedure_name name) {
+	m_callee = name;
+}
+
+
+procedure_name Statement::get_callee() {
+	return m_callee;
+}
