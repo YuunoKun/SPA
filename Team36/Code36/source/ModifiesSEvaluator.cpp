@@ -15,8 +15,8 @@ bool ModifiesSEvaluator::haveRelation() {
 
 //Handle both constant : e.g Relation(1, 2)
 bool ModifiesSEvaluator::isRelation(Entity e1, Entity e2) {
-	stmt_index s = stoi(e1.getName());
-	var_name v = e2.getName();
+	stmt_index s = stoi(e1.getValue());
+	var_name v = e2.getValue();
 	return pkb.isModifiesS(s, v);
 }
 
@@ -28,7 +28,7 @@ bool ModifiesSEvaluator::haveRelationAtRight(Entity e) {
 
 //Handle right wild, left constant: e.g Relation(_, 1)
 bool ModifiesSEvaluator::haveRelationAtLeft(Entity e) {
-	var_name v = e.getName();
+	var_name v = e.getValue();
 	return pkb.isModifiesS(v);
 	//Todo: throw exception for iteration 2
 	//throw std::invalid_argument("haveRelationAtLeft(): Wild is not allowed for first argument of Modifies_S");
@@ -64,6 +64,6 @@ ResultTable ModifiesSEvaluator::getRelationMatchLeft(Entity constant, Entity hea
 
 //Handle right declartion, left constant: e.g Relation(a, 1)
 ResultTable ModifiesSEvaluator::getRelationMatchRight(Entity header, Entity constant) {
-	var_name v = constant.getName();
+	var_name v = constant.getSynonym();
 	return ResultTable(header, pkb.getModifiesS(v));
 }

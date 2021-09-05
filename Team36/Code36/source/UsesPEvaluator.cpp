@@ -12,14 +12,14 @@ bool UsesPEvaluator::haveRelation() {
 
 //Handle both constant : e.g Relation(1, 2)
 bool UsesPEvaluator::isRelation(Entity e1, Entity e2) {
-	proc_name p = e1.getName();
-	var_name v = e2.getName();
+	proc_name p = e1.getValue();
+	var_name v = e2.getValue();
 	return pkb.isUsesP(p, v);
 }
 
 //Handle left constant, right wild: e.g Relation(1, _)
 bool UsesPEvaluator::haveRelationAtRight(Entity e) {
-	proc_name p = e.getName();
+	proc_name p = e.getValue();
 	return pkb.isUsesP(p);
 }
 
@@ -50,12 +50,12 @@ ResultTable UsesPEvaluator::getLeftRelations(Entity header) {
 
 //Handle left constant, right declartion: e.g Relation(1, a)
 ResultTable UsesPEvaluator::getRelationMatchLeft(Entity constant, Entity header) {
-	proc_name p = constant.getName();
+	proc_name p = constant.getValue();
 	return ResultTable(header, pkb.getUsedP(p));
 }
 
 //Handle right declartion, left constant: e.g Relation(a, 1)
 ResultTable UsesPEvaluator::getRelationMatchRight(Entity header, Entity constant) {
-	var_name v = constant.getName();
+	var_name v = constant.getValue();
 	return ResultTable(header, pkb.getUsesP(v));
 }

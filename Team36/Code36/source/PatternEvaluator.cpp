@@ -10,7 +10,7 @@ void PatternEvaluator::evaluatePattern(QueryResult& queryResult, Pattern& patter
 	ResultTable* resultTable;
 
 	//if lhs side is at least one side is declaration
-	if (lhsEntity.isDeclaration()) {
+	if (lhsEntity.isSynonym()) {
 		 if ( pattern.isWild()) {
 			//If left side is declaration and right side is WILD: e.g a(x, _""_)
 			//Todo

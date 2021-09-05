@@ -36,13 +36,13 @@ namespace UnitTesting {
 
 		// test if constant s is same
 		Entity constantS = query.getEntities()["s"];
-		std::string constantNameS = constantS.getName();
+		std::string constantNameS = constantS.getSynonym();
 		EXPECT_EQ(constantNameS, "s");
 
 		EntityType constantTypeS = constantS.getType();
 		EXPECT_TRUE(constantTypeS == EntityType::CONSTANT);
 
-		std::string out = query.getSelected().getName();
+		std::string out = query.getSelected().getSynonym();
 		EXPECT_EQ(out, "s");
 	}
 
@@ -53,13 +53,13 @@ namespace UnitTesting {
 		Query query = preprocessor.process("procedure p; Select p");
 
 		Entity procedureP = query.getEntities()["p"];
-		std::string procedureNameP = procedureP.getName();
+		std::string procedureNameP = procedureP.getSynonym();
 		EXPECT_EQ(procedureNameP, "p") << "Wrong name for declaration procedure";
 
 		EntityType procedureTypeP = procedureP.getType();
 		EXPECT_TRUE(procedureTypeP == EntityType::PROCEDURE) << "Wrong procedure type";
 
-		std::string out = query.getSelected().getName();
+		std::string out = query.getSelected().getSynonym();
 		EXPECT_EQ(out, "p") << "Wrong name for selected procedure";
 	}
 
@@ -71,7 +71,7 @@ namespace UnitTesting {
 
 		// test if constant s is correct
 		Entity constantS = query.getEntities()["s"];
-		std::string constantNameS = constantS.getName();
+		std::string constantNameS = constantS.getSynonym();
 		EXPECT_EQ(constantNameS, "s");
 
 		EntityType constantTypeS = constantS.getType();
@@ -79,14 +79,14 @@ namespace UnitTesting {
 
 		//test if procedure p is correct
 		Entity procedureP = query.getEntities()["p"];
-		std::string procedureNameP = procedureP.getName();
+		std::string procedureNameP = procedureP.getSynonym();
 		EXPECT_EQ(procedureNameP, "p") << "Wrong name for declaration procedure";
 
 		EntityType procedureTypeP = procedureP.getType();
 		EXPECT_TRUE(procedureTypeP == EntityType::PROCEDURE) << "Wrong procedure type";
 
 		// test if selected is correct
-		std::string out = query.getSelected().getName();
+		std::string out = query.getSelected().getSynonym();
 		EXPECT_EQ(out, "s");
 	}
 
@@ -96,13 +96,13 @@ namespace UnitTesting {
 		Query query = preprocessor.process("procedure p; Select p");
 
 		Entity procedureP = query.getEntities()["p"];
-		std::string procedureNameP = procedureP.getName();
+		std::string procedureNameP = procedureP.getSynonym();
 		EXPECT_FALSE(procedureNameP == "s");
 
 		EntityType procedureTypeP = procedureP.getType();
 		EXPECT_FALSE(procedureTypeP == EntityType::CONSTANT) << "Wrong procedure type";
 
-		std::string out = query.getSelected().getName();
+		std::string out = query.getSelected().getSynonym();
 		EXPECT_FALSE(out == "s") << "Wrong name for selected procedure";
 	}
 

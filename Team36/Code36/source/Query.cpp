@@ -24,7 +24,7 @@ void Query::setSelected(Entity& selected) {
 }
 
 void Query::addEntity(Entity& entity) {
-	entities.insert({ entity.getName(), entity });
+	entities.insert({ entity.getSynonym(), entity });
 }
 
 void Query::addRelation(RelRef& relation) {

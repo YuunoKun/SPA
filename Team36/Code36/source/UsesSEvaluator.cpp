@@ -14,8 +14,8 @@ bool UsesSEvaluator::haveRelation() {
 
 //Handle both constant : e.g Relation(1, 2)
 bool UsesSEvaluator::isRelation(Entity e1, Entity e2) {
-	stmt_index s = stoi(e1.getName());
-	var_name v = e2.getName();
+	stmt_index s = stoi(e1.getValue());
+	var_name v = e2.getValue();
 	return pkb.isUsesS(s, v);
 }
 
@@ -27,7 +27,7 @@ bool UsesSEvaluator::haveRelationAtRight(Entity e) {
 
 //Handle right wild, left constant: e.g Relation(_, "x")
 bool UsesSEvaluator::haveRelationAtLeft(Entity e) {
-	var_name v = e.getName();
+	var_name v = e.getValue();
 	return pkb.isUsesS(v);
 	//Todo: throw exception for iteration 2
 	//throw std::invalid_argument("haveRelationAtLeft(): Wild is not allowed for first argument of Uses_S");
@@ -63,7 +63,7 @@ ResultTable UsesSEvaluator::getRelationMatchLeft(Entity constant, Entity header)
 
 //Handle right declartion, left constant: e.g Relation(a, 1)
 ResultTable UsesSEvaluator::getRelationMatchRight(Entity header, Entity constant) {
-	var_name v = constant.getName();
+	var_name v = constant.getSynonym();
 	return ResultTable(header, pkb.getUsesS(v));
 }
 

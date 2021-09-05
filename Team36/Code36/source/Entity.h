@@ -24,9 +24,9 @@ public:
 	Entity(EntityType, std::string, std::string);
 
 	EntityType getType();
-	std::string getName();
+	std::string getSynonym();
 	std::string getValue();
-	bool isDeclaration();
+	bool isSynonym();
 
 	bool operator==(const Entity&) const;
 
@@ -34,6 +34,6 @@ private:
 
 	//Member Variable
 	EntityType entity_type;
-	std::string name;
+	std::string synonym;
 	std::string value;
 };
