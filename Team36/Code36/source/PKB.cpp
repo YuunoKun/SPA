@@ -216,7 +216,7 @@ const RelationTable<StmtInfo, var_name>& PKB::getModifiesS()
 
 const RelationTable<StmtInfo, StmtInfo>& PKB::getFollowsReverse()
 {
-	if (follows_reverse_table.empty()) {
+	if (follows_reverse_table.isEmpty()) {
 		follows_reverse_table = follows_table.findReverse();
 	}
 	return follows_reverse_table;
@@ -224,7 +224,7 @@ const RelationTable<StmtInfo, StmtInfo>& PKB::getFollowsReverse()
 
 const RelationTable<StmtInfo, StmtInfo>& PKB::getParentReverse()
 {
-	if (parent_reverse_table.empty()) {
+	if (parent_reverse_table.isEmpty()) {
 		parent_reverse_table = parent_table.findReverse();
 	}
 	return parent_reverse_table;
@@ -232,7 +232,7 @@ const RelationTable<StmtInfo, StmtInfo>& PKB::getParentReverse()
 
 const RelationTable<StmtInfo, StmtInfo>& PKB::getFollowsTReverse()
 {
-	if (followsT_reverse_table.empty()) {
+	if (followsT_reverse_table.isEmpty()) {
 		followsT_reverse_table = followsT_table.findReverse();
 	}
 	return followsT_reverse_table;
@@ -240,7 +240,7 @@ const RelationTable<StmtInfo, StmtInfo>& PKB::getFollowsTReverse()
 
 const RelationTable<StmtInfo, StmtInfo>& PKB::getParentTReverse()
 {
-	if (parentT_reverse_table.empty()) {
+	if (parentT_reverse_table.isEmpty()) {
 		parentT_reverse_table = parentT_table.findReverse();
 	}
 	return parentT_reverse_table;
@@ -248,7 +248,7 @@ const RelationTable<StmtInfo, StmtInfo>& PKB::getParentTReverse()
 
 const RelationTable<var_name, StmtInfo>& PKB::getUsesSReverse()
 {
-	if (usesS_reverse_table.empty()) {
+	if (usesS_reverse_table.isEmpty()) {
 		usesS_reverse_table = usesS_table.findReverse();
 	}
 	return usesS_reverse_table;
@@ -256,7 +256,7 @@ const RelationTable<var_name, StmtInfo>& PKB::getUsesSReverse()
 
 const RelationTable<var_name, StmtInfo>& PKB::getModifiesSReverse()
 {
-	if (modifiesS_reverse_table.empty()) {
+	if (modifiesS_reverse_table.isEmpty()) {
 		modifiesS_reverse_table = modifiesS_table.findReverse();
 	}
 	return modifiesS_reverse_table;

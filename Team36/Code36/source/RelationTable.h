@@ -24,7 +24,7 @@ public:
 	RelationTable<T, S> findTransitiveClosure();
 	RelationTable<S, T> findReverse();
 	void clear();
-	bool empty();
+	bool isEmpty();
 
 	bool operator==(const RelationTable&) const;
 	bool operator!=(const RelationTable&) const;

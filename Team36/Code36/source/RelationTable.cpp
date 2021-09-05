@@ -95,7 +95,7 @@ bool RelationTable<T, S>::containsPair(T key, S value)
 }
 
 template <class T, class S>
-bool RelationTable<T, S>::empty()
+bool RelationTable<T, S>::isEmpty()
 {
 	return table.empty();
 }
