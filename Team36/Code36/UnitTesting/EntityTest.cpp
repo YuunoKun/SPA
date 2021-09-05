@@ -27,8 +27,8 @@ public:
 		Assert::IsTrue(a == b);
 	}
 	TEST_METHOD(procedureName) {
-		procedure_name a = "55";
-		procedure_name b = "55";
+		proc_name a = "55";
+		proc_name b = "55";
 		Assert::IsTrue(a == b);
 	}
 	};
