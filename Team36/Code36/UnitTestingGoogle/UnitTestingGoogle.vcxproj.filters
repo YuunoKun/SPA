@@ -47,6 +47,8 @@
     <ClCompile Include="ParentEvaluatorTest.cpp">
       <Filter>PQL</Filter>
     </ClCompile>
+    <ClCompile Include="PKBTest.cpp" />
+    <ClCompile Include="QueryTokenizerTest.cpp" />
     <ClCompile Include="ParentTEvaluatorTest.cpp">
       <Filter>PQL</Filter>
     </ClCompile>

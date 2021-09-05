@@ -28,37 +28,41 @@ public:
 		VARIABLE,
 		CONSTANT,
 		PROCEDURE,
+		AND,
 		PATTERN,
 		SUCHTHAT,
 
 		// PQL Variable Operators
 		WILDCARD,
+		QUOTATION_OPEN,
+		QUOTATION_CLOSE,
+		ASTERISK,
 
-		/*	PLUS,
-			MINUS,
-			MUL,
-			DIV,
-			MOD,*/
+		PLUS,
+		MINUS,
 
-			//  PQL Conditional Operators
-		/*	BOOL_AND,
-			BOOL_OR,
-			BOOL_NEGATE,
-			BIT_AND,
-			BIT_OR,*/
+		DIV,
+		MOD,
 
-			// PQL Relational Operators
-		/*	BOOL_EQUIV,
-			BOOL_NEQUIV,
-			BOOL_LT,
-			BOOL_LTEQ,
-			BOOL_GT,
-			BOOL_GTEQ,*/
+		//  PQL Conditional Operators
+	/*	BOOL_AND,
+		BOOL_OR,
+		BOOL_NEGATE,
+		BIT_AND,
+		BIT_OR,*/
 
-			// PQL Separators
-			PARENTHESIS_OPEN,
-			PARENTHESIS_CLOSE,
-			TERMINATOR
+		// PQL Relational Operators
+	/*	BOOL_EQUIV,
+		BOOL_NEQUIV,
+		BOOL_LT,
+		BOOL_LTEQ,
+		BOOL_GT,
+		BOOL_GTEQ,*/
+
+		// PQL Separators
+		PARENTHESIS_OPEN,
+		PARENTHESIS_CLOSE,
+		TERMINATOR
 	};
 
 	//Constructors

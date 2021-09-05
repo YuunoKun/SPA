@@ -65,6 +65,7 @@
     <ClCompile Include="ResultTableTest.cpp" />
     <ClCompile Include="UtilityTest.cpp" />
     <ClCompile Include="RelationTableTest.cpp" />
+    <ClCompile Include="QueryTokenizerTest.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SPA\SPA.vcxproj">
