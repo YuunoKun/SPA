@@ -27,33 +27,60 @@ namespace UnitTesting {
 		// Class members declared here can be used by all tests in the test suite
 		// for Foo.
 	};
-	TEST(PKB, getConstants) {
+	TEST(PKB, get_consts) {
 		PKB::getInstance().resetCache();
 
 		constant three = 3;
 		constant four = 4;
-		std::vector<constant> v{ three, four };
-		PKB::getInstance().setConstants(v);
-		EXPECT_EQ(v, PKB::getInstance().getConstants());
-	}
-
-	TEST(PKB, getConstants_second) {
+		std::unordered_set<constant> s{ three, four };
+		PKB::getInstance().addConstant(three);
+		PKB::getInstance().addConstant(four);
+		EXPECT_EQ(s, PKB::getInstance().get_consts());
 		PKB::getInstance().resetCache();
-
-		constant two = 2;
-		std::vector<constant> v{ two };
-		PKB::getInstance().setConstants(v);
-		EXPECT_EQ(v, PKB::getInstance().getConstants());
+		EXPECT_NE(s, PKB::getInstance().get_consts());
 	}
-	TEST(PKB, getProcedures) {
+
+	TEST(PKB, get_procedures) {
 		PKB::getInstance().resetCache();
 
 		proc_name first_procedure = "main";
 		proc_name second_procedure = "printY";
 		std::vector<proc_name> v{ first_procedure, second_procedure };
-		PKB::getInstance().setProcedures(v);
-		EXPECT_EQ(v, PKB::getInstance().getProcedures());
+		PKB::getInstance().addProcedures(first_procedure);
+		PKB::getInstance().addProcedures(second_procedure);
+		EXPECT_EQ(v, PKB::getInstance().get_procedures());
+		PKB::getInstance().resetCache();
+		EXPECT_NE(v, PKB::getInstance().get_procedures());
 	}
+
+	TEST(PKB, get_variables) {
+		PKB::getInstance().resetCache();
+
+		var_name x = "x";
+		var_name y = "y";
+		std::vector<var_name> s{ x, y };
+		PKB::getInstance().addVariable(x);
+		PKB::getInstance().addVariable(y);
+		EXPECT_EQ(s, PKB::getInstance().get_variables());
+		PKB::getInstance().resetCache();
+		EXPECT_NE(s, PKB::getInstance().get_variables());
+	}
+
+	TEST(PKB, get_stmts) {
+		PKB::getInstance().resetCache();
+
+		StmtInfo p1{ 1, STMT_READ };
+		StmtInfo p2{ 2, STMT_PRINT };
+		StmtInfo p3{ 3, STMT_READ };
+		std::vector<StmtInfo> s{ p1, p2, p3 };
+		PKB::getInstance().addStmt(STMT_READ);
+		PKB::getInstance().addStmt(STMT_PRINT);
+		PKB::getInstance().addStmt(STMT_READ);
+		EXPECT_EQ(s, PKB::getInstance().get_stmts());
+		PKB::getInstance().resetCache();
+		EXPECT_NE(s, PKB::getInstance().get_stmts());
+	}
+
 	TEST(PKB, resetCache) {
 		PKB::getInstance().resetCache();
 

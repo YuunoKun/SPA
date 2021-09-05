@@ -34,15 +34,6 @@ public:
 	void generateParentT();
 	void generateFollowT();
 
-	void setProcedures(std::vector<proc_name> proc_set);
-	void setConstants(std::vector<constant> const_set);
-	void setVariables(std::vector<var_name> var_set);
-
-	std::vector<proc_name> getProcedures();
-	std::vector<constant> getConstants();
-	std::vector<var_name> getVariables();
-	std::vector<Stmt> getStmts();
-
 	const std::vector<proc_name>& get_procedures();
 	const std::vector<var_name>& get_variables();
 	const std::vector<StmtInfo>& get_stmts();
@@ -65,6 +56,16 @@ public:
 	void resetCache();
 	void resetEntities();
 
+	// Old methods, to be deleted
+	void setProcedures(std::vector<proc_name> proc_set);
+	void setConstants(std::vector<constant> const_set);
+	void setVariables(std::vector<var_name> var_set);
+
+	std::vector<proc_name> getProcedures();
+	std::vector<constant> getConstants();
+	std::vector<var_name> getVariables();
+	std::vector<Stmt> getStmts();
+
 private:
 	std::vector<proc_name> proc_table;
 	std::vector<var_name> var_table;
@@ -85,6 +86,7 @@ private:
 	RelationTable<StmtInfo, StmtInfo> usesS_reverse_table;
 	RelationTable<StmtInfo, StmtInfo> modifiesS_reverse_table;
 
+	// Old tables, to be deleted
 	std::unordered_set<proc_name> old_proc_table;
 	std::unordered_set<var_name> old_var_table;
 

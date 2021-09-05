@@ -59,7 +59,7 @@ void PKB::addVariable(var_name var_name)
 			return;
 		}
 	};
-	proc_table.push_back(var_name);
+	var_table.push_back(var_name);
 }
 
 void PKB::addStmt(StmtType stmt_type)
