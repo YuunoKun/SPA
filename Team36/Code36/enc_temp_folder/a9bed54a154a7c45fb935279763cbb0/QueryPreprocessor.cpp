@@ -104,8 +104,45 @@ Query QueryPreprocessor::parse(std::string str) {
 
 		if (prevToken.type != QueryToken::QueryTokenType::WHITESPACE && temp.type == QueryToken::QueryTokenType::IDENTIFIER) {
 			output.push_back({ prevToken.type, token.token_value });
-			//TODO: Add to entity in query
 		}
+
+		//// No change if previous token is declared types
+		//if (prevToken.type == QueryToken::QueryTokenType::STMT ||
+		//	prevToken.type == QueryToken::QueryTokenType::READ ||
+		//	prevToken.type == QueryToken::QueryTokenType::PRINT ||
+		//	prevToken.type == QueryToken::QueryTokenType::CALL ||
+		//	prevToken.type == QueryToken::QueryTokenType::IF ||
+		//	prevToken.type == QueryToken::QueryTokenType::WHILE ||
+		//	prevToken.type == QueryToken::QueryTokenType::ASSIGN ||
+		//	prevToken.type == QueryToken::QueryTokenType::VARIABLE ||
+		//	prevToken.type == QueryToken::QueryTokenType::CONSTANT ||
+		//	prevToken.type == QueryToken::QueryTokenType::PROCEDURE ||
+		//	prevToken.type == QueryToken::QueryTokenType::COMMA) {
+		//	temp = token;
+		//	output.push_back(temp);
+		//	// TODO: Add entity instead of output here
+		//}
+		//else if (token.type == QueryToken::QueryTokenType::COMMA && token.token_value == "," ||
+		//	token.type == QueryToken::QueryTokenType::COMMA && token.token_value == "," ||
+		//	token.type == QueryToken::QueryTokenType::TERMINATOR && token.token_value == ";") {
+		//	temp = token;
+		//}
+		//
+		//// No more declaration, Select statement as isDeclare is false
+		//else {
+		//	if (prevToken.type == QueryToken::QueryTokenType::SELECT &&
+		//		token.type != QueryToken::QueryTokenType::TERMINATOR) {
+		//		throw std::runtime_error("Select must come after terminator.");
+		//	}
+		//	if (prevToken.type == QueryToken::QueryTokenType::SELECT) {
+		//		temp = token;
+		//		output.push_back(temp);
+		//	}
+		//	if (token.token_value == "Select") {
+		//		temp = { QueryToken::QueryTokenType::SELECT, "Select" };
+		//		output.push_back(temp);
+		//	}
+		//}
 
 		prevToken = temp;
 	}
