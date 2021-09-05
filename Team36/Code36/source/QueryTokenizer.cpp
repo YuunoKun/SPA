@@ -67,7 +67,8 @@ void QueryTokenizer::parse_into_query_tokens(std::string input) {
 			curr_query_token.type = QueryToken::WHITESPACE;
 			break;
 		case '*':
-			// if got whitespace infront wont work????
+			// if got whitespace infront -> then is MUL
+			// IF got IDENT infront then is -> asterisk. then parser check if is fully asterisk(parrent/uses infront) or else is MUL  
 			//if (curr_query_token.type == QueryToken::CONSTANT) {
 			//	//check before if CONSTANT
 			//	//part of term/expr
