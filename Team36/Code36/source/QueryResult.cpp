@@ -13,6 +13,11 @@ void QueryResult::setNoResult() {
 	have_result = false;
 }
 
+bool QueryResult::isInTables(std::vector<Entity> e) {
+	//for advance requirement
+	return isInTables(e[0]);
+}
+
 bool QueryResult::isInTables(Entity e) {
 	for (auto& table : results) {
 		if (table.isInTable(e)) {
@@ -43,5 +48,10 @@ std::list<std::string> QueryResult::getResult(Entity e) {
 			return table.getEntityResult(e);
 		}
 	}
+	throw std::domain_error("Invalid Entity, Source: QueryResult.getResult");
+}
+
+std::list<std::string> QueryResult::getResult(std::vector<Entity> e) {
+	return getResult(e[0]);
 	throw std::domain_error("Invalid Entity, Source: QueryResult.getResult");
 }
