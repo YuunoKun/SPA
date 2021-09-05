@@ -5,9 +5,9 @@
 
 class ResultTable {
 public:
-	ResultTable(Entity&, std::vector<Stmt>&);
+	ResultTable(Entity&, std::vector<StmtInfo>&);
 	ResultTable(Entity&, std::vector<std::string>&);
-	ResultTable(std::vector<Entity>&, std::vector<std::vector<Stmt>>&);
+	ResultTable(std::vector<Entity>&, std::vector<std::vector<StmtInfo>>&);
 	ResultTable(std::vector<Entity>&, std::vector<std::vector<std::string>>&);
 
 	bool merge(ResultTable);

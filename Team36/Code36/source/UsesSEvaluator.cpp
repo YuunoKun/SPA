@@ -30,7 +30,7 @@ bool UsesSEvaluator::haveRelationAtLeft(Entity e) {
 
 //If both side is declartion: e.g Relation(a, b)
 ResultTable UsesSEvaluator::getRelations(Entity left, Entity right) {
-	std::vector<std::pair<Stmt, std::string>> results = pkb.getUsesSRelation();
+	std::vector<std::pair<StmtInfo, std::string>> results = pkb.getUsesSRelation();
 	std::vector<Entity> header{ left, right };
 	//TODO
 	//ResultTable result = ResultTable(header, results);

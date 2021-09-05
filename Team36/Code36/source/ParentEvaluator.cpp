@@ -32,7 +32,7 @@ bool ParentEvaluator::haveRelationAtLeft(Entity e) {
 
 //If both side is declartion: e.g Relation(a, b)
 ResultTable ParentEvaluator::getRelations(Entity left, Entity right) {
-	std::vector<std::vector<Stmt>> results = pkb.getAllParentRelation();
+	std::vector<std::vector<StmtInfo>> results = pkb.getAllParentRelation();
 	std::vector<Entity> header{ left, right };
 	ResultTable result = ResultTable(header, results);
 	return result;

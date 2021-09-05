@@ -33,7 +33,7 @@ namespace UnitTesting {
 	TEST(QueryPreprocessor, processConstant) {
 		QueryPreprocessor preprocessor;
 		Query query = preprocessor.process("constant s; Select s");
-		
+
 		// test if constant s is same
 		Entity constantS = query.getEntities()["s"];
 		std::string constantNameS = constantS.getName();
@@ -41,9 +41,9 @@ namespace UnitTesting {
 
 		EntityType constantTypeS = constantS.getType();
 		EXPECT_TRUE(constantTypeS == EntityType::CONSTANT);
-		
+
 		std::string out = query.getSelected().getName();
-		EXPECT_EQ(out, "s");	
+		EXPECT_EQ(out, "s");
 	}
 
 	// Single declaration of procedure p
@@ -90,7 +90,6 @@ namespace UnitTesting {
 		EXPECT_EQ(out, "s");
 	}
 
-
 	// Negative test cases for declaration and selected
 	TEST(QueryPreprocessor, processFail) {
 		QueryPreprocessor preprocessor;
@@ -107,14 +106,7 @@ namespace UnitTesting {
 		EXPECT_FALSE(out == "s") << "Wrong name for selected procedure";
 	}
 
-
-
 	// test to see if selected variable comes from entity's map
-
-
-
-
-
 
 	//TEST(PKB, getConstants_second) {
 	//	PKB::getInstance().resetCache();

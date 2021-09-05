@@ -1,5 +1,6 @@
 #include "PKBAdapter.h"
 #include "PKB.h"
+#include "Utility.h"
 
 PKBAdapter::PKBAdapter() {
 }
@@ -8,8 +9,8 @@ std::vector<var_name> PKBAdapter::getVariables() {
 	return PKB::getInstance().PKB::getVariables();
 }
 
-std::vector<Stmt> PKBAdapter::getStmts() {
-	return PKB::getInstance().PKB::getStmts();
+std::vector<StmtInfo> PKBAdapter::getStmts() {
+	return Utility::stmtToStmtInfoVector(PKB::getInstance().PKB::getStmts());
 }
 
 std::vector<constant> PKBAdapter::getConstants() {
@@ -20,34 +21,34 @@ std::vector<proc_name> PKBAdapter::getProcedures() {
 	return PKB::getInstance().PKB::getProcedures();
 }
 
-std::vector<Stmt> PKBAdapter::getAssigns() {
+std::vector<StmtInfo> PKBAdapter::getAssigns() {
 	//TODO
-	return std::vector<Stmt>();
+	return std::vector<StmtInfo>();
 }
 
-std::vector<Stmt> PKBAdapter::getPrints() {
+std::vector<StmtInfo> PKBAdapter::getPrints() {
 	//TODO
-	return std::vector<Stmt>();
+	return std::vector<StmtInfo>();
 }
 
-std::vector<Stmt> PKBAdapter::getCalls() {
+std::vector<StmtInfo> PKBAdapter::getCalls() {
 	//TODO
-	return std::vector<Stmt>();
+	return std::vector<StmtInfo>();
 }
 
-std::vector<Stmt> PKBAdapter::getReads() {
+std::vector<StmtInfo> PKBAdapter::getReads() {
 	//TODO
-	return std::vector<Stmt>();
+	return std::vector<StmtInfo>();
 }
 
-std::vector<Stmt> PKBAdapter::getWhiles() {
+std::vector<StmtInfo> PKBAdapter::getWhiles() {
 	//TODO
-	return std::vector<Stmt>();
+	return std::vector<StmtInfo>();
 }
 
-std::vector<Stmt> PKBAdapter::getIfs() {
+std::vector<StmtInfo> PKBAdapter::getIfs() {
 	//TODO
-	return std::vector<Stmt>();
+	return std::vector<StmtInfo>();
 }
 
 bool PKBAdapter::isFollow(stmt_index, stmt_index) {
@@ -65,29 +66,29 @@ bool PKBAdapter::isFollowing(stmt_index) {
 	return false;
 }
 
-std::vector<Stmt> PKBAdapter::getFollowed() {
+std::vector<StmtInfo> PKBAdapter::getFollowed() {
 	//TODO
-	return std::vector<Stmt>();
+	return std::vector<StmtInfo>();
 }
 
-std::vector<Stmt> PKBAdapter::getFollowing() {
+std::vector<StmtInfo> PKBAdapter::getFollowing() {
 	//TODO
-	return std::vector<Stmt>();
+	return std::vector<StmtInfo>();
 }
 
-std::vector<Stmt> PKBAdapter::getFollowed(stmt_index) {
+std::vector<StmtInfo> PKBAdapter::getFollowed(stmt_index) {
 	//Todo
-	return std::vector<Stmt>();
+	return std::vector<StmtInfo>();
 }
 
-std::vector<Stmt> PKBAdapter::getFollowing(stmt_index) {
+std::vector<StmtInfo> PKBAdapter::getFollowing(stmt_index) {
 	//Todo
-	return std::vector<Stmt>();
+	return std::vector<StmtInfo>();
 }
 
-std::vector<std::vector<Stmt>> PKBAdapter::getFollows() {
+std::vector<std::vector<StmtInfo>> PKBAdapter::getFollows() {
 	//Todo
-	return std::vector<std::vector<Stmt>>();
+	return std::vector<std::vector<StmtInfo>>();
 }
 
 bool PKBAdapter::isFollowT(stmt_index, stmt_index) {
@@ -105,29 +106,29 @@ bool PKBAdapter::isFollowingT(stmt_index) {
 	return false;
 }
 
-std::vector<Stmt> PKBAdapter::getFollowedT() {
+std::vector<StmtInfo> PKBAdapter::getFollowedT() {
 	//Todo
-	return std::vector<Stmt>();
+	return std::vector<StmtInfo>();
 }
 
-std::vector<Stmt> PKBAdapter::getFollowingT() {
+std::vector<StmtInfo> PKBAdapter::getFollowingT() {
 	//Todo
-	return std::vector<Stmt>();
+	return std::vector<StmtInfo>();
 }
 
-std::vector<Stmt> PKBAdapter::getFollowedT(stmt_index) {
+std::vector<StmtInfo> PKBAdapter::getFollowedT(stmt_index) {
 	//Todo
-	return std::vector<Stmt>();
+	return std::vector<StmtInfo>();
 }
 
-std::vector<Stmt> PKBAdapter::getFollowingT(stmt_index) {
+std::vector<StmtInfo> PKBAdapter::getFollowingT(stmt_index) {
 	//Todo
-	return std::vector<Stmt>();
+	return std::vector<StmtInfo>();
 }
 
-std::vector<std::vector<Stmt>> PKBAdapter::getFollowsT() {
+std::vector<std::vector<StmtInfo>> PKBAdapter::getFollowsT() {
 	//Todo
-	return std::vector<std::vector<Stmt>>();
+	return std::vector<std::vector<StmtInfo>>();
 }
 
 bool PKBAdapter::isParent(stmt_index, stmt_index) {
@@ -145,29 +146,29 @@ bool PKBAdapter::isParent(stmt_index) {
 	return false;
 }
 
-std::vector<Stmt> PKBAdapter::getChild() {
+std::vector<StmtInfo> PKBAdapter::getChild() {
 	//Todo
-	return std::vector<Stmt>();
+	return std::vector<StmtInfo>();
 }
 
-std::vector<Stmt> PKBAdapter::getParent() {
+std::vector<StmtInfo> PKBAdapter::getParent() {
 	//Todo
-	return std::vector<Stmt>();
+	return std::vector<StmtInfo>();
 }
 
-std::vector<Stmt> PKBAdapter::getChild(stmt_index) {
+std::vector<StmtInfo> PKBAdapter::getChild(stmt_index) {
 	//Todo
-	return std::vector<Stmt>();
+	return std::vector<StmtInfo>();
 }
 
-std::vector<Stmt> PKBAdapter::getParent(stmt_index) {
+std::vector<StmtInfo> PKBAdapter::getParent(stmt_index) {
 	//Todo
-	return std::vector<Stmt>();
+	return std::vector<StmtInfo>();
 }
 
-std::vector<std::vector<Stmt>> PKBAdapter::getAllParentRelation() {
+std::vector<std::vector<StmtInfo>> PKBAdapter::getAllParentRelation() {
 	//Todo
-	return std::vector<std::vector<Stmt>>();
+	return std::vector<std::vector<StmtInfo>>();
 }
 
 bool PKBAdapter::isParentT(stmt_index, stmt_index) {
@@ -185,29 +186,29 @@ bool PKBAdapter::isParentT(stmt_index) {
 	return false;
 }
 
-std::vector<Stmt> PKBAdapter::getChildT() {
+std::vector<StmtInfo> PKBAdapter::getChildT() {
 	//Todo
-	return std::vector<Stmt>();
+	return std::vector<StmtInfo>();
 }
 
-std::vector<Stmt> PKBAdapter::getParentT() {
+std::vector<StmtInfo> PKBAdapter::getParentT() {
 	//Todo
-	return std::vector<Stmt>();
+	return std::vector<StmtInfo>();
 }
 
-std::vector<Stmt> PKBAdapter::getChildT(stmt_index) {
+std::vector<StmtInfo> PKBAdapter::getChildT(stmt_index) {
 	//Todo
-	return std::vector<Stmt>();
+	return std::vector<StmtInfo>();
 }
 
-std::vector<Stmt> PKBAdapter::getParentT(stmt_index) {
+std::vector<StmtInfo> PKBAdapter::getParentT(stmt_index) {
 	//Todo
-	return std::vector<Stmt>();
+	return std::vector<StmtInfo>();
 }
 
-std::vector<std::vector<Stmt>> PKBAdapter::getAllParentTRelation() {
+std::vector<std::vector<StmtInfo>> PKBAdapter::getAllParentTRelation() {
 	//Todo
-	return std::vector<std::vector<Stmt>>();
+	return std::vector<std::vector<StmtInfo>>();
 }
 
 bool PKBAdapter::isModifies(proc_name, var_name) {
@@ -250,19 +251,19 @@ bool PKBAdapter::isModifies(stmt_index) {
 	return false;
 }
 
-std::vector<std::pair<Stmt, var_name>> PKBAdapter::getModifiesSRelation() {
+std::vector<std::pair<StmtInfo, var_name>> PKBAdapter::getModifiesSRelation() {
 	//TODO
-	return std::vector<std::pair<Stmt, var_name>>();
+	return std::vector<std::pair<StmtInfo, var_name>>();
 }
 
-std::vector<Stmt> PKBAdapter::getModifiesS() {
+std::vector<StmtInfo> PKBAdapter::getModifiesS() {
 	//TODO
-	return std::vector<Stmt>();
+	return std::vector<StmtInfo>();
 }
 
-std::vector<Stmt> PKBAdapter::getModifiesS(var_name) {
+std::vector<StmtInfo> PKBAdapter::getModifiesS(var_name) {
 	//TODO
-	return std::vector<Stmt>();
+	return std::vector<StmtInfo>();
 }
 
 std::vector<std::string> PKBAdapter::getModifiedS(stmt_index) {
@@ -310,19 +311,19 @@ bool PKBAdapter::isUses(stmt_index) {
 	return false;
 }
 
-std::vector<std::pair<Stmt, var_name>> PKBAdapter::getUsesSRelation() {
+std::vector<std::pair<StmtInfo, var_name>> PKBAdapter::getUsesSRelation() {
 	//TODO
-	return std::vector<std::pair<Stmt, var_name>>();
+	return std::vector<std::pair<StmtInfo, var_name>>();
 }
 
-std::vector<Stmt> PKBAdapter::getUsesS() {
+std::vector<StmtInfo> PKBAdapter::getUsesS() {
 	//TODO
-	return std::vector<Stmt>();
+	return std::vector<StmtInfo>();
 }
 
-std::vector<Stmt> PKBAdapter::getUsesS(var_name) {
+std::vector<StmtInfo> PKBAdapter::getUsesS(var_name) {
 	//TODO
-	return std::vector<Stmt>();
+	return std::vector<StmtInfo>();
 }
 
 std::vector<std::string> PKBAdapter::getUsedS(stmt_index) {

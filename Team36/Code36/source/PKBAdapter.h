@@ -10,58 +10,57 @@ class PKBAdapter {
 public:
 	PKBAdapter();
 
-	//Retrieve Design Entities Functions
 	std::vector<var_name> getVariables();
-	std::vector<Stmt> getStmts();
+	std::vector<StmtInfo> getStmts();
 	std::vector<constant> getConstants();
 	std::vector<proc_name> getProcedures();
-	std::vector<Stmt> getAssigns();
-	std::vector<Stmt> getPrints();
-	std::vector<Stmt> getCalls();
-	std::vector<Stmt> getReads();
-	std::vector<Stmt> getWhiles();
-	std::vector<Stmt> getIfs();
+	std::vector<StmtInfo> getAssigns();
+	std::vector<StmtInfo> getPrints();
+	std::vector<StmtInfo> getCalls();
+	std::vector<StmtInfo> getReads();
+	std::vector<StmtInfo> getWhiles();
+	std::vector<StmtInfo> getIfs();
 
 	//Follow relation function
 	bool isFollow(stmt_index, stmt_index);
 	bool isFollowed(stmt_index);
 	bool isFollowing(stmt_index);
-	std::vector<Stmt> getFollowed();
-	std::vector<Stmt> getFollowing();
-	std::vector<Stmt> getFollowed(stmt_index);
-	std::vector<Stmt> getFollowing(stmt_index);
-	std::vector<std::vector<Stmt>> getFollows();
+	std::vector<StmtInfo> getFollowed();
+	std::vector<StmtInfo> getFollowing();
+	std::vector<StmtInfo> getFollowed(stmt_index);
+	std::vector<StmtInfo> getFollowing(stmt_index);
+	std::vector<std::vector<StmtInfo>> getFollows();
 
 	//FollowT relation function
 	bool isFollowT(stmt_index, stmt_index);
 	bool isFollowedT(stmt_index);
 	bool isFollowingT(stmt_index);
-	std::vector<Stmt> getFollowedT();
-	std::vector<Stmt> getFollowingT();
-	std::vector<Stmt> getFollowedT(stmt_index);
-	std::vector<Stmt> getFollowingT(stmt_index);
-	std::vector<std::vector<Stmt>> getFollowsT();
+	std::vector<StmtInfo> getFollowedT();
+	std::vector<StmtInfo> getFollowingT();
+	std::vector<StmtInfo> getFollowedT(stmt_index);
+	std::vector<StmtInfo> getFollowingT(stmt_index);
+	std::vector<std::vector<StmtInfo>> getFollowsT();
 
 
 	//Parent relation function
 	bool isParent(stmt_index, stmt_index);
 	bool isChild(stmt_index);
 	bool isParent(stmt_index);
-	std::vector<Stmt> getChild();
-	std::vector<Stmt> getParent();
-	std::vector<Stmt> getChild(stmt_index);
-	std::vector<Stmt> getParent(stmt_index);
-	std::vector<std::vector<Stmt>> getAllParentRelation();
+	std::vector<StmtInfo> getChild();
+	std::vector<StmtInfo> getParent();
+	std::vector<StmtInfo> getChild(stmt_index);
+	std::vector<StmtInfo> getParent(stmt_index);
+	std::vector<std::vector<StmtInfo>> getAllParentRelation();
 
 	//ParentT relation function
 	bool isParentT(stmt_index, stmt_index);
 	bool isChildT(stmt_index);
 	bool isParentT(stmt_index);
-	std::vector<Stmt> getChildT();
-	std::vector<Stmt> getParentT();
-	std::vector<Stmt> getChildT(stmt_index);
-	std::vector<Stmt> getParentT(stmt_index);
-	std::vector<std::vector<Stmt>> getAllParentTRelation();
+	std::vector<StmtInfo> getChildT();
+	std::vector<StmtInfo> getParentT();
+	std::vector<StmtInfo> getChildT(stmt_index);
+	std::vector<StmtInfo> getParentT(stmt_index);
+	std::vector<std::vector<StmtInfo>> getAllParentTRelation();
 
 	//ModifiesP relation Function
 	bool isModifies(proc_name, var_name);
@@ -74,9 +73,9 @@ public:
 	//ModifiesS relation Function
 	bool isModifies(stmt_index, var_name);
 	bool isModifies(stmt_index);
-	std::vector<std::pair<Stmt, var_name>> getModifiesSRelation();
-	std::vector<Stmt> getModifiesS();
-	std::vector<Stmt> getModifiesS(var_name);
+	std::vector<std::pair<StmtInfo, var_name>> getModifiesSRelation();
+	std::vector<StmtInfo> getModifiesS();
+	std::vector<StmtInfo> getModifiesS(var_name);
 	std::vector<std::string> getModifiedS(stmt_index);
 
 	//UsesP relation Function
@@ -90,9 +89,8 @@ public:
 	//UsesS relation Function
 	bool isUses(stmt_index, var_name);
 	bool isUses(stmt_index);
-	std::vector<std::pair<Stmt, var_name>> getUsesSRelation();
-	std::vector<Stmt> getUsesS();
-	std::vector<Stmt> getUsesS(var_name);
+	std::vector<std::pair<StmtInfo, var_name>> getUsesSRelation();
+	std::vector<StmtInfo> getUsesS();
+	std::vector<StmtInfo> getUsesS(var_name);
 	std::vector<std::string> getUsedS(stmt_index);
-
 };

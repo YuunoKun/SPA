@@ -2,19 +2,19 @@
 #include "Utility.h"
 
 
-ResultTable::ResultTable(Entity& header, std::vector<Stmt>& table) {
+ResultTable::ResultTable(Entity& header, std::vector<StmtInfo>& table) {
 	table = Utility::filterResult(header.getType(), table);
-	init(header, Utility::stmtsToStringVector(table));
+	init(header, Utility::stmtInfoToStringVector(table));
 }
 
 ResultTable::ResultTable(Entity& header, std::vector<std::string>& table) {
 	init(header, table);
 }
 
-ResultTable::ResultTable(std::vector<Entity>& header, std::vector<std::vector<Stmt>>& table) {
+ResultTable::ResultTable(std::vector<Entity>& header, std::vector<std::vector<StmtInfo>>& table) {
 	std::vector<EntityType> types = Utility::entityToEntityTypeVector(header);
 	table = Utility::filterResults(types, table);
-	init(header, Utility::stmtsTableToStringTable(table));
+	init(header, Utility::stmtInfoTableToStringTable(table));
 }
 
 ResultTable::ResultTable(std::vector<Entity>& header, std::vector<std::vector<std::string>>& table) {
@@ -41,7 +41,7 @@ bool ResultTable::isEmpty() {
 std::list<std::string> ResultTable::getEntityResult(Entity e) {
 	int columnIndex = Utility::getIndex(header, e);
 	std::unordered_set<std::string> result;
-	for (int i = 0; i < table.size(); i++) {
+	for (unsigned int i = 0; i < table.size(); i++) {
 		result.insert(table[i][columnIndex]);
 	}
 	return Utility::unorderedSetToStringList(result);

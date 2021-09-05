@@ -16,26 +16,34 @@ std::list<std::string> Utility::proceduresToStringList(std::vector<proc_name>& f
 	return to;
 }
 
-std::list<std::string> Utility::stmtsToStringList(std::vector<Stmt>& from) {
+std::list<std::string> Utility::stmtInfoToStringList(std::vector<StmtInfo>& from) {
 	std::list<std::string> to;
 	for (auto& it : from) {
-		to.push_back(std::to_string(it.getNum()));
+		to.push_back(std::to_string(it.stmt_index));
 	}
 	return to;
 }
 
-std::vector<std::string> Utility::stmtsToStringVector(std::vector<Stmt>& from) {
+std::vector<StmtInfo> Utility::stmtToStmtInfoVector(std::vector<Stmt>& from) {
+	std::vector<StmtInfo> to;
+	for (auto& it : from) {
+		to.push_back({ it.getNum(), it.getType() });
+	}
+	return to;
+}
+
+std::vector<std::string> Utility::stmtInfoToStringVector(std::vector<StmtInfo>& from) {
 	std::vector<std::string> to;
 	for (auto& it : from) {
-		to.push_back(std::to_string(it.getNum()));
+		to.push_back(std::to_string(it.stmt_index));
 	}
 	return to;
 }
 
-std::vector<std::vector<std::string>> Utility::stmtsTableToStringTable(std::vector<std::vector<Stmt>>& from) {
+std::vector<std::vector<std::string>> Utility::stmtInfoTableToStringTable(std::vector<std::vector<StmtInfo>>& from) {
 	std::vector< std::vector<std::string>> to;
 	for (auto& it : from) {
-		to.push_back(stmtsToStringVector(it));
+		to.push_back(stmtInfoToStringVector(it));
 	}
 	return to;
 }
@@ -95,23 +103,23 @@ StmtType Utility::convertType(EntityType e) {
 	return StmtType();
 }
 
-std::vector<Stmt> Utility::filterResult(EntityType e, std::vector<Stmt>& v) {
+std::vector<StmtInfo> Utility::filterResult(EntityType e, std::vector<StmtInfo>& v) {
 	if (e == STMT) {
 		return v;
 	}
 
 	StmtType type = convertType(e);;
-	std::vector<Stmt> result;
+	std::vector<StmtInfo> result;
 	for (auto& it : v) {
-		if (it.getType() == type) {
+		if (it.stmt_type == type) {
 			result.push_back(it);
 		}
 	}
 	return result;
 }
 
-std::vector<std::vector<Stmt>> Utility::filterResults(std::vector<EntityType> et, std::vector<std::vector<Stmt>>& table) {
-	std::vector<std::vector<Stmt>> results;
+std::vector<std::vector<StmtInfo>> Utility::filterResults(std::vector<EntityType> et, std::vector<std::vector<StmtInfo>>& table) {
+	std::vector<std::vector<StmtInfo>> results;
 
 	if (isAllStmt(et)) {
 		return table;
@@ -124,7 +132,7 @@ std::vector<std::vector<Stmt>> Utility::filterResults(std::vector<EntityType> et
 				continue;
 			}
 			StmtType type = convertType(et[i]);;
-			if (row[i].getType() != type) {
+			if (row[i].stmt_type != type) {
 				match = false;
 				break;
 			}

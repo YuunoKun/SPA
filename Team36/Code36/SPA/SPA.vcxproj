@@ -13,6 +13,7 @@
   <ItemGroup>
     <ClCompile Include="..\source\DesignExtractor.cpp" />
     <ClCompile Include="..\source\Parser.cpp" />
+	<ClCompile Include="..\source\RelationTable.cpp" />
     <ClCompile Include="..\source\PKB.cpp" />
     <ClCompile Include="..\source\TNode.cpp" />
     <ClCompile Include="..\source\Entity.cpp" />
@@ -43,6 +44,7 @@
   <ItemGroup>
     <ClInclude Include="..\source\PKB.h" />
     <ClInclude Include="..\source\Parser.h" />
+	<ClInclude Include="..\source\RelationTable.h" />
     <ClInclude Include="..\source\TNode.h" />
     <ClInclude Include="..\source\Common.h" />
     <ClInclude Include="..\source\QueryResult.h" />

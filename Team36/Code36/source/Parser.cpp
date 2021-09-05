@@ -9,11 +9,9 @@
 
 using namespace SourceProcessor;
 
-
 Parser::Parser(void) {
 	m_tokenizer = Tokenizer();
 }
-
 
 void Parser::load_file(std::string file) {
 	/*
@@ -52,11 +50,9 @@ void Parser::load_file(std::string file) {
 	input_file.close();
 };
 
-
 std::string Parser::get_source_program() {
 	return m_source_program;
 }
-
 
 void Parser::parse() {
 	// Actual parsing workflow
@@ -79,7 +75,7 @@ void Parser::parse() {
 			p_n.push_back(token.m_token_value);
 		}
 
-		if(token.m_type == TokenType::CONSTANT) {
+		if (token.m_type == TokenType::CONSTANT) {
 			//std::cout << "CONSTANT : " << token.m_token_value << std::endl;
 			con.insert(atoi(token.m_token_value.c_str()));
 		}
@@ -88,5 +84,4 @@ void Parser::parse() {
 
 	PKB::getInstance().setProcedures(p_n);
 	PKB::getInstance().setConstants(std::vector<constant>(con.begin(), con.end()));
-
 }
