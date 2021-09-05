@@ -100,7 +100,6 @@ Query QueryPreprocessor::parse(std::string str) {
 			// Declaring goes into output
 			if (prevToken.type != QueryToken::QueryTokenType::SELECT) {
 				output.push_back({ prevToken.type, token.token_value });
-				// TODO: Add into entity
 			}
 			// Select goes into selected, with prevToken type when it exists in output
 			else {
@@ -108,7 +107,6 @@ Query QueryPreprocessor::parse(std::string str) {
 					if (token.token_value == each.token_value) {
 						selected.push_back({ each.type, token.token_value });
 						break;
-						// TODO: Add selected to setSelected
 					}
 				}
 			}
