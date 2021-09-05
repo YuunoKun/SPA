@@ -30,6 +30,8 @@ Query QueryPreprocessor::parse(std::string str) {
 	v.push_back({ QueryToken::QueryTokenType::TERMINATOR, ";" });
 	v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "Select" });
 	v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "s" });
+	v.push_back({ QueryToken::QueryTokenType::COMMA, "," });
+	v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "p" });
 
 	QueryToken prevToken = QueryToken();
 	std::vector<QueryToken> output;
@@ -75,9 +77,6 @@ Query QueryPreprocessor::parse(std::string str) {
 				temp = { QueryToken::QueryTokenType::SELECT, "Select" };
 			}
 		}
-		else {
-			temp = token;
-		}
 
 		// Guard clauses to catch semantically wrong input, all usage of token should be temp
 		if (prevToken.type == QueryToken::QueryTokenType::IDENTIFIER &&
@@ -89,11 +88,13 @@ Query QueryPreprocessor::parse(std::string str) {
 			token.type != QueryToken::QueryTokenType::IDENTIFIER) {
 			throw std::runtime_error("During declaration, only identifier is accepted after comma.");
 		}
-		if (temp.type == QueryToken::QueryTokenType::TERMINATOR && temp.token_value == ";") {
+		if (token.type == QueryToken::QueryTokenType::TERMINATOR && token.token_value == ";") {
 			temp = token;
 		}
 
-		if (prevToken.type != QueryToken::QueryTokenType::WHITESPACE && temp.type == QueryToken::QueryTokenType::IDENTIFIER) {
+		if (prevToken.type != QueryToken::QueryTokenType::WHITESPACE && 
+			prevToken.type != QueryToken::QueryTokenType::TERMINATOR &&
+			token.type == QueryToken::QueryTokenType::IDENTIFIER) {
 			output.push_back({ prevToken.type, token.token_value });
 			//TODO: Add to entity in query
 		}
