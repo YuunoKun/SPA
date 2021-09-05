@@ -22,8 +22,8 @@ Query QueryPreprocessor::parse(std::string str) {
 	QueryToken q1(QueryToken::QueryTokenType::IDENTIFIER, "stmt");
 	v.push_back(q1);
 	v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "s" });
-	//v.push_back({ QueryToken::QueryTokenType::COMMA, "," });
-	//v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "ss" });
+	v.push_back({ QueryToken::QueryTokenType::COMMA, "," });
+	v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "ss" });
 	v.push_back({ QueryToken::QueryTokenType::TERMINATOR, ";" });
 	v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "procedure" });
 	v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "p" });
@@ -42,44 +42,35 @@ Query QueryPreprocessor::parse(std::string str) {
 			prevToken.type == QueryToken::QueryTokenType::TERMINATOR) {
 			if (token.token_value == "stmt") {
 				temp = { QueryToken::QueryTokenType::STMT, "stmt" };
-				//output.push_back(temp);
 			}
 			else if (token.token_value == "procedure") {
 				temp = { QueryToken::QueryTokenType::PROCEDURE, "procedure" };
-				//output.push_back(temp);
 			}
 			else if (token.token_value == "read") {
 				temp = { QueryToken::QueryTokenType::READ, "read" };
-				//output.push_back(temp);
 			}
 			else if (token.token_value == "print") {
 				temp = { QueryToken::QueryTokenType::PRINT, "print" };
-				//output.push_back(temp);
 			}
 			else if (token.token_value == "call") {
 				temp = { QueryToken::QueryTokenType::CALL, "call" };
-				//output.push_back(temp);
 			}
 			else if (token.token_value == "if") {
 				temp = { QueryToken::QueryTokenType::IF, "if" };
-				//output.push_back(temp);
 			}
 			else if (token.token_value == "while") {
 				temp = { QueryToken::QueryTokenType::WHILE, "while" };
-				//output.push_back(temp);
 			}
 			else if (token.token_value == "assign") {
 				temp = { QueryToken::QueryTokenType::ASSIGN, "assign" };
-				//output.push_back(temp);
 			}
 			else if (token.token_value == "variable") {
 				temp = { QueryToken::QueryTokenType::VARIABLE, "variable" };
-				//output.push_back(temp);
 			}
 			else if (token.token_value == "constant") {
 				temp = { QueryToken::QueryTokenType::CONSTANT, "constant" };
-				//output.push_back(temp);
 			}
+			// Need to enforce that Select must only come after a terminator
 			else if (prevToken.type == QueryToken::QueryTokenType::TERMINATOR && token.token_value == "Select") {
 				temp = { QueryToken::QueryTokenType::SELECT, "Select" };
 			}
@@ -88,7 +79,7 @@ Query QueryPreprocessor::parse(std::string str) {
 			temp = token;
 		}
 
-		// Guard clauses to catch semantically wrong input
+		// Guard clauses to catch semantically wrong input, all usage of token should be temp
 		if (prevToken.type == QueryToken::QueryTokenType::IDENTIFIER &&
 			(token.type != QueryToken::QueryTokenType::COMMA &&
 				token.type != QueryToken::QueryTokenType::TERMINATOR)) {
