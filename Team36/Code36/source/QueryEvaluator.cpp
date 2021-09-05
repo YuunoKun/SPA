@@ -1,70 +1,71 @@
 #include "QueryEvaluator.h"
 
+#include "Utility.h"
+#include "ResultTable.h"
+#include "RelationsEvaluator.h"
+#include "PatternEvaluator.h"
+
 QueryEvaluator::QueryEvaluator() {
 }
 
 std::list<std::string> QueryEvaluator::evaluateQuery(Query query) {
 	QueryResult result;
+
+	evaluateRelations(query, result);
+	evaluatePatterns(query, result);
+
 	return getResult(query, result);;
+}
+
+void QueryEvaluator::evaluateRelations(Query& query, QueryResult& queryResult) {
+	RelationsEvaluator evaluator;
+	for (auto& it : query.getRelations()) {
+		if (!queryResult.haveResult()) {
+			break;
+		}
+		evaluator.evaluateRelation(queryResult, it);
+	}
+}
+
+void QueryEvaluator::evaluatePatterns(Query& query, QueryResult& queryResult) {
+	PatternEvaluator evaluator;
+	for (auto& it : query.getPatterns()) {
+		if (!queryResult.haveResult()) {
+			break;
+		}
+		evaluator.evaluatePattern(queryResult, it);
+	}
 }
 
 std::list<std::string> QueryEvaluator::getRawResult(Entity selected) {
 	std::list<std::string> result;
 	switch (selected.getType()) {
-	case STMT: result = stmtsToString(pkb.getStmts()); break;
-	case READ: break;
-	case PRINT: break;
-	case CALL: break;
-	case WHILE: break;
-	case IF: break;
-	case ASSIGN: break;
-	case VARIABLE: result = variablesToString(pkb.getVariables());  break;
-	case CONSTANT: result = constantsToString(pkb.getConstants());  break;
-	case PROCEDURE: result = proceduresToString(pkb.getProcedures());  break;
+	case STMT: result = Utility::stmtInfoToStringList(pkb.getStmts()); break;
+	case READ: result = Utility::stmtInfoToStringList(pkb.getReads());  break;
+	case PRINT: result = Utility::stmtInfoToStringList(pkb.getPrints()); break;
+	case CALL: result = Utility::stmtInfoToStringList(pkb.getCalls()); break;
+	case WHILE: result = Utility::stmtInfoToStringList(pkb.getWhiles()); break;
+	case IF: result = Utility::stmtInfoToStringList(pkb.getIfs()); break;
+	case ASSIGN: result = Utility::stmtInfoToStringList(pkb.getAssigns()); break;
+	case VARIABLE: result = Utility::variablesToStringList(pkb.getVariables());  break;
+	case CONSTANT: result = Utility::constantsToStringList(pkb.getConstants());  break;
+	case PROCEDURE: result = Utility::proceduresToStringList(pkb.getProcedures());  break;
 	}
 
 	return result;
 }
 
-std::list<std::string> QueryEvaluator::constantsToString(std::vector<constant> from) {
-	std::list<std::string> to;
-	for each (constant c in from) {
-		to.push_back(std::to_string(c));
-	}
-	return to;
-}
-
-std::list<std::string> QueryEvaluator::proceduresToString(std::vector<proc_name> from) {
-	std::list<std::string> to;
-	for each (proc_name name in from) {
-		to.push_back(name.c_str());
-	}
-	return to;
-}
-
-std::list<std::string> QueryEvaluator::stmtsToString(std::vector<Stmt> from) {
-	std::list<std::string> to;
-	for each (Stmt stmt in from) {
-		to.push_back(std::to_string(stmt.getNum()));
-	}
-	return to;
-}
-
-std::list<std::string> QueryEvaluator::variablesToString(std::vector<var_name> from) {
-	std::list<std::string> to;
-	for each (var_name name in from) {
-		to.push_back(name.c_str());
-	}
-	return to;
-}
-
 std::list<std::string> QueryEvaluator::getResult(Query& query, QueryResult& result) {
-	if (result.isInTable(query.getSelected())) {
+	//If some of the relation/pattern return empty list / false
+	if (!result.haveResult()) {
+		return {};
 	}
-	else {
-		//if selected type is not in table, return all.
+
+	//If the variable is not found in one of the result table, return all of selected entity type
+	if (!result.isInTables(query.getSelected())) {
 		return getRawResult(query.getSelected());
 	}
-	//TODO: remove
-	return getRawResult(query.getSelected());
+
+	//If the variable is found in one of the result table
+	return result.getResult(query.getSelected());
 }

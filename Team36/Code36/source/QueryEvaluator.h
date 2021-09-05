@@ -11,14 +11,11 @@ public:
 	std::list<std::string> evaluateQuery(Query);
 
 private:
+	void evaluateRelations(Query&, QueryResult&);
+	void evaluatePatterns(Query&, QueryResult&);
 
 	std::list<std::string> getResult(Query&, QueryResult&);
 	std::list<std::string> getRawResult(Entity);
-
-	std::list<std::string> constantsToString(std::vector<constant>);
-	std::list<std::string> proceduresToString(std::vector<proc_name>);
-	std::list<std::string> stmtsToString(std::vector<Stmt>);
-	std::list<std::string> variablesToString(std::vector<var_name>);
 
 	PKBAdapter pkb;
 };

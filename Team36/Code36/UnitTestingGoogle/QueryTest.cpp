@@ -51,28 +51,28 @@ namespace UnitTesting {
 
 		EXPECT_EQ(q.getRelations(), o);
 
-		RelRef e({ MODIFIES_P, {} });
+		RelRef e({ MODIFIES_P, {ASSIGN,"test4"}, {ASSIGN,"test4"} });
 		q.addRelation(e);
 		EXPECT_NE(q.getRelations(), o);
 		o.push_back(e);
 		EXPECT_EQ(q.getRelations(), o);
 
-		e = RelRef({ FOLLOWS, {{STMT,"test1"}} });
+		e = RelRef({ FOLLOWS, {STMT,"test1"}, {STMT,"test1"} });
 		q.addRelation(e);
 		EXPECT_NE(q.getRelations(), o);
 		o.push_back(e);
 		EXPECT_EQ(q.getRelations(), o);
 
-		e = RelRef({ FOLLOWS, {{STMT,"test1"},{READ, "test2"}} });
+		e = RelRef({ FOLLOWS, {STMT,"test1"},{READ, "test2"} });
 		q.addRelation(e);
 		EXPECT_NE(q.getRelations(), o);
 		o.push_back(e);
 		EXPECT_EQ(q.getRelations(), o);
 
-		e = RelRef({ FOLLOWS, {{STMT,"test1"},{READ, "test2"}} });
+		e = RelRef({ FOLLOWS, {STMT,"test1"},{READ, "test2"} });
 		q.addRelation(e);
 		EXPECT_NE(q.getRelations(), o);
-		e = RelRef({ FOLLOWS_T, {{STMT,"test1"},{READ, "test2"}} });
+		e = RelRef({ FOLLOWS_T, {STMT,"test1"},{READ, "test2"} });
 		o.push_back(e);
 		EXPECT_NE(q.getRelations(), o);
 	}
