@@ -19,7 +19,7 @@ public:
 	void operator=(PKB const&) = delete;
 
 	void addConstant(constant constant);
-	void addProcedures(proc_name proc_name);
+	void addProcedure(proc_name proc_name);
 	void addVariable(var_name var_name);
 	void addStmt(StmtType stmt_type);
 	void addExprTree(var_index var_index, std::string expr);
@@ -31,37 +31,27 @@ public:
 	void generateParentT();
 	void generateFollowT();
 
-	const std::vector<proc_name>& get_procedures();
-	const std::vector<var_name>& get_variables();
-	const std::vector<StmtInfo>& get_stmts();
-	const std::unordered_set<constant>& get_consts();
-	const std::unordered_map<stmt_index, var_index> get_assignment_table();
-	const std::unordered_map<var_index, std::string> get_expr_table();
-	const UniqueRelationTable<StmtInfo, StmtInfo>& get_follows_table();
-	const RelationTable<StmtInfo, StmtInfo>& get_parent_table();
-	const RelationTable<StmtInfo, StmtInfo>& get_followsT_table();
-	const RelationTable<StmtInfo, StmtInfo>& get_parentT_table();
-	const RelationTable<StmtInfo, var_name>& get_usesS_table();
-	const RelationTable<StmtInfo, var_name>& get_modifiesS_table();
-	const RelationTable<StmtInfo, StmtInfo>& get_follows_reverse_table();
-	const RelationTable<StmtInfo, StmtInfo>& get_parent_reverse_table();
-	const RelationTable<StmtInfo, StmtInfo>& get_followsT_reverse_table();
-	const RelationTable<StmtInfo, StmtInfo>& get_parentT_reverse_table();
-	const RelationTable<var_name, StmtInfo>& get_usesS_reverse_table();
-	const RelationTable<var_name, StmtInfo>& get_modifiesS_reverse_table();
+	const std::vector<proc_name>& getProcedures();
+	const std::vector<var_name>& getVariables();
+	const std::vector<StmtInfo>& getStmts();
+	const std::vector<constant> getConstants();
+	const std::unordered_map<stmt_index, var_index>& getAssigns();
+	const std::unordered_map<var_index, std::string>& getExpr();
+	const UniqueRelationTable<StmtInfo, StmtInfo>& getFollows();
+	const RelationTable<StmtInfo, StmtInfo>& getParent();
+	const RelationTable<StmtInfo, StmtInfo>& getFollowsT();
+	const RelationTable<StmtInfo, StmtInfo>& getParentT();
+	const RelationTable<StmtInfo, var_name>& getUsesS();
+	const RelationTable<StmtInfo, var_name>& getModifiesS();
+	const RelationTable<StmtInfo, StmtInfo>& getFollowsReverse();
+	const RelationTable<StmtInfo, StmtInfo>& getParentReverse();
+	const RelationTable<StmtInfo, StmtInfo>& getFollowsTReverse();
+	const RelationTable<StmtInfo, StmtInfo>& getParentTReverse();
+	const RelationTable<var_name, StmtInfo>& getUsesSReverse();
+	const RelationTable<var_name, StmtInfo>& getModifiesSReverse();
 
 	void resetCache();
 	void resetEntities();
-
-	// Old methods, to be deleted
-	void setProcedures(std::vector<proc_name> proc_set);
-	void setConstants(std::vector<constant> const_set);
-	void setVariables(std::vector<var_name> var_set);
-
-	std::vector<proc_name> getProcedures();
-	std::vector<constant> getConstants();
-	std::vector<var_name> getVariables();
-	std::vector<Stmt> getStmts();
 
 private:
 	std::vector<proc_name> proc_table;
@@ -82,10 +72,6 @@ private:
 	RelationTable<StmtInfo, StmtInfo> parentT_reverse_table;
 	RelationTable<var_name, StmtInfo> usesS_reverse_table;
 	RelationTable<var_name, StmtInfo> modifiesS_reverse_table;
-
-	// Old tables, to be deleted
-	std::unordered_set<proc_name> old_proc_table;
-	std::unordered_set<var_name> old_var_table;
 
 	PKB() {};
 };

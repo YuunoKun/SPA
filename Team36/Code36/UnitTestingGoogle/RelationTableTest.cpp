@@ -238,11 +238,22 @@ namespace UnitTesting {
 
 	TEST(RelationTable, clear) {
 		RelationTable<int, int> table1, table2;
-		std::vector<std::pair<int, int>> testInput{ {1, 2}, {1, 3}, {2, 2}, {2, 2}, {2, 4} };
+		std::vector<std::pair<int, int>> testInput{ {1, 2} };
 
 		table1.insert(testInput[0].first, testInput[0].second);
 		EXPECT_NE(table1, table2);
 		table1.clear();
 		EXPECT_EQ(table1, table2);
+	}
+
+	TEST(RelationTable, empty) {
+		RelationTable<int, int> table1, table2;
+		std::vector<std::pair<int, int>> testInput{ {1, 2} };
+
+		table1.insert(testInput[0].first, testInput[0].second);
+		EXPECT_FALSE(table1.empty());
+		EXPECT_TRUE(table2.empty());
+		table1.clear();
+		EXPECT_TRUE(table1.empty());
 	}
 }

@@ -27,33 +27,33 @@ namespace UnitTesting {
 		// Class members declared here can be used by all tests in the test suite
 		// for Foo.
 	};
-	TEST(PKB, get_consts) {
+	TEST(PKB, getConstants) {
 		PKB::getInstance().resetCache();
 
 		constant three = 3;
 		constant four = 4;
-		std::unordered_set<constant> s{ three, four };
+		std::vector<constant> s{ three, four };
 		PKB::getInstance().addConstant(three);
 		PKB::getInstance().addConstant(four);
-		EXPECT_EQ(s, PKB::getInstance().get_consts());
+		EXPECT_EQ(s, PKB::getInstance().getConstants());
 		PKB::getInstance().resetCache();
-		EXPECT_NE(s, PKB::getInstance().get_consts());
+		EXPECT_NE(s, PKB::getInstance().getConstants());
 	}
 
-	TEST(PKB, get_procedures) {
+	TEST(PKB, getProcedures) {
 		PKB::getInstance().resetCache();
 
 		proc_name first_procedure = "main";
 		proc_name second_procedure = "printY";
 		std::vector<proc_name> v{ first_procedure, second_procedure };
-		PKB::getInstance().addProcedures(first_procedure);
-		PKB::getInstance().addProcedures(second_procedure);
-		EXPECT_EQ(v, PKB::getInstance().get_procedures());
+		PKB::getInstance().addProcedure(first_procedure);
+		PKB::getInstance().addProcedure(second_procedure);
+		EXPECT_EQ(v, PKB::getInstance().getProcedures());
 		PKB::getInstance().resetCache();
-		EXPECT_NE(v, PKB::getInstance().get_procedures());
+		EXPECT_NE(v, PKB::getInstance().getProcedures());
 	}
 
-	TEST(PKB, get_variables) {
+	TEST(PKB, getVariables) {
 		PKB::getInstance().resetCache();
 
 		var_name x = "x";
@@ -61,12 +61,12 @@ namespace UnitTesting {
 		std::vector<var_name> s{ x, y };
 		PKB::getInstance().addVariable(x);
 		PKB::getInstance().addVariable(y);
-		EXPECT_EQ(s, PKB::getInstance().get_variables());
+		EXPECT_EQ(s, PKB::getInstance().getVariables());
 		PKB::getInstance().resetCache();
-		EXPECT_NE(s, PKB::getInstance().get_variables());
+		EXPECT_NE(s, PKB::getInstance().getVariables());
 	}
 
-	TEST(PKB, get_stmts) {
+	TEST(PKB, getStmts) {
 		PKB::getInstance().resetCache();
 
 		StmtInfo p1{ 1, STMT_READ };
@@ -76,12 +76,12 @@ namespace UnitTesting {
 		PKB::getInstance().addStmt(STMT_READ);
 		PKB::getInstance().addStmt(STMT_PRINT);
 		PKB::getInstance().addStmt(STMT_READ);
-		EXPECT_EQ(s, PKB::getInstance().get_stmts());
+		EXPECT_EQ(s, PKB::getInstance().getStmts());
 		PKB::getInstance().resetCache();
-		EXPECT_NE(s, PKB::getInstance().get_stmts());
+		EXPECT_NE(s, PKB::getInstance().getStmts());
 	}
 
-	TEST(PKB, get_expr_table) {
+	TEST(PKB, getExpr) {
 		PKB::getInstance().resetCache();
 
 		std::unordered_map<var_index, std::string> s{
@@ -89,12 +89,12 @@ namespace UnitTesting {
 		PKB::getInstance().addExprTree(1, s[1]);
 		PKB::getInstance().addExprTree(2, s[2]);
 		PKB::getInstance().addExprTree(3, s[3]);
-		EXPECT_EQ(s, PKB::getInstance().get_expr_table());
+		EXPECT_EQ(s, PKB::getInstance().getExpr());
 		PKB::getInstance().resetCache();
-		EXPECT_NE(s, PKB::getInstance().get_expr_table());
+		EXPECT_NE(s, PKB::getInstance().getExpr());
 	}
 
-	TEST(PKB, get_parent_table) {
+	TEST(PKB, getParent) {
 		PKB::getInstance().resetCache();
 
 		StmtInfo p1{ 1, STMT_READ };
@@ -111,12 +111,12 @@ namespace UnitTesting {
 		PKB::getInstance().addParent(1, 2);
 		PKB::getInstance().addParent(1, 3);
 		PKB::getInstance().addParent(2, 3);
-		EXPECT_EQ(table, PKB::getInstance().get_parent_table());
+		EXPECT_EQ(table, PKB::getInstance().getParent());
 		PKB::getInstance().resetCache();
-		EXPECT_NE(table, PKB::getInstance().get_parent_table());
+		EXPECT_NE(table, PKB::getInstance().getParent());
 	}
 
-	TEST(PKB, get_follows_table) {
+	TEST(PKB, getFollows) {
 		PKB::getInstance().resetCache();
 
 		StmtInfo p1{ 1, STMT_READ };
@@ -132,12 +132,12 @@ namespace UnitTesting {
 		PKB::getInstance().addFollows(1, 2);
 		PKB::getInstance().addFollows(1, 3);
 		PKB::getInstance().addFollows(2, 3);
-		EXPECT_EQ(table, PKB::getInstance().get_follows_table());
+		EXPECT_EQ(table, PKB::getInstance().getFollows());
 		PKB::getInstance().resetCache();
-		EXPECT_NE(table, PKB::getInstance().get_follows_table());
+		EXPECT_NE(table, PKB::getInstance().getFollows());
 	}
 
-	TEST(PKB, get_usesS_table) {
+	TEST(PKB, getUsesS) {
 		PKB::getInstance().resetCache();
 
 		StmtInfo p1{ 1, STMT_READ };
@@ -159,12 +159,12 @@ namespace UnitTesting {
 		EXPECT_THROW(PKB::getInstance().addUsesS(4, y), std::invalid_argument);
 		PKB::getInstance().addVariable(y);
 		PKB::getInstance().addUsesS(4, y);
-		EXPECT_EQ(table, PKB::getInstance().get_usesS_table());
+		EXPECT_EQ(table, PKB::getInstance().getUsesS());
 		PKB::getInstance().resetCache();
-		EXPECT_NE(table, PKB::getInstance().get_usesS_table());
+		EXPECT_NE(table, PKB::getInstance().getUsesS());
 	}
 
-	TEST(PKB, get_modifiesS_table) {
+	TEST(PKB, getModifiesS) {
 		PKB::getInstance().resetCache();
 
 		StmtInfo p1{ 1, STMT_READ };
@@ -186,20 +186,22 @@ namespace UnitTesting {
 		EXPECT_THROW(PKB::getInstance().addModifiesS(3, y), std::invalid_argument);
 		PKB::getInstance().addVariable(y);
 		PKB::getInstance().addModifiesS(3, y);
-		EXPECT_EQ(table, PKB::getInstance().get_modifiesS_table());
+		EXPECT_EQ(table, PKB::getInstance().getModifiesS());
 		PKB::getInstance().resetCache();
-		EXPECT_NE(table, PKB::getInstance().get_modifiesS_table());
+		EXPECT_NE(table, PKB::getInstance().getModifiesS());
 	}
 
 	TEST(PKB, resetCache) {
 		PKB::getInstance().resetCache();
 
-		std::vector<constant> vc{ 3 };
-		std::vector<proc_name> vp{ "main" };
-		PKB::getInstance().setConstants(vc);
-		PKB::getInstance().setProcedures(vp);
+		PKB::getInstance().addConstant(3);
+		PKB::getInstance().addProcedure("main");
+		PKB::getInstance().addStmt(STMT_READ);
+		PKB::getInstance().addVariable("x");
 		PKB::getInstance().resetCache();
 		EXPECT_EQ(PKB::getInstance().getConstants().size(), 0);
 		EXPECT_EQ(PKB::getInstance().getProcedures().size(), 0);
+		EXPECT_EQ(PKB::getInstance().getVariables().size(), 0);
+		EXPECT_EQ(PKB::getInstance().getStmts().size(), 0);
 	}
 }
