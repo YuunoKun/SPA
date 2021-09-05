@@ -1,4 +1,6 @@
+#include <iostream>
 #include "Query.h"
+#include <vector>
 
 Query::Query() {
 }
@@ -15,12 +17,12 @@ std::vector<Pattern> Query::getPatterns() {
 	return patterns;
 }
 
-Entity& Query::getSelected() {
+std::vector<Entity> Query::getSelected() {
 	return selected;
 }
 
-void Query::setSelected(Entity& selected) {
-	this->selected = selected;
+void Query::addSelected(Entity& addSelect) {
+	selected.push_back(addSelect);
 }
 
 void Query::addEntity(Entity& entity) {

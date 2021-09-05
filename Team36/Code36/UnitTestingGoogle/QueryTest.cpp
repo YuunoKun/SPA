@@ -92,30 +92,32 @@ namespace UnitTesting {
 
 	TEST(Query, selected) {
 		Query q;
+		std::vector<Entity> v;
 
 		Entity e(STMT, "test1");
-		q.setSelected(e);
-		EXPECT_EQ(q.getSelected(), e);
+		v.push_back(e);
+		q.addSelected(e);
+		EXPECT_EQ(q.getSelected(), v);
 
 		e = Entity(WHILE, "test1231");
-		q.setSelected(e);
-		EXPECT_EQ(q.getSelected(), e);
+
+		v.push_back(e);
+		q.addSelected(e);
+		EXPECT_EQ(q.getSelected(), v);
 
 		e = Entity(IF, "test14151");
-		q.setSelected(e);
-		EXPECT_EQ(q.getSelected(), e);
+		v.push_back(e);
+		q.addSelected(e);
+		EXPECT_EQ(q.getSelected(), v);
 
 		e = Entity(WILD, "test123");
-		q.setSelected(e);
-		EXPECT_EQ(q.getSelected(), e);
+		v.push_back(e);
+		q.addSelected(e);
+		EXPECT_EQ(q.getSelected(), v);
 
 		e = Entity(READ, "test123");
-		q.setSelected(e);
-		EXPECT_EQ(q.getSelected(), e);
-
-		e = Entity({ READ,"test141511" });
-		Entity e1(IF, "test141511");
-		q.setSelected(e);
-		EXPECT_TRUE(!(q.getSelected() == e1));
+		v.push_back(e);
+		q.addSelected(e);
+		EXPECT_EQ(q.getSelected(), v);
 	}
 }

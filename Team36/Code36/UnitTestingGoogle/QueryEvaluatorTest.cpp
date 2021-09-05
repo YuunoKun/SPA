@@ -17,7 +17,7 @@ namespace UnitTesting {
 
 		Query q;
 		Entity e = { VARIABLE, "1" };
-		q.setSelected(e);
+		q.addSelected(e);
 
 		QueryEvaluator qe;
 		EXPECT_EQ(result, qe.evaluateQuery(q));
@@ -33,7 +33,7 @@ namespace UnitTesting {
 
 		Query q;
 		Entity e = { CONSTANT, "1" };
-		q.setSelected(e);
+		q.addSelected(e);
 
 		QueryEvaluator qe;
 		EXPECT_EQ(result, qe.evaluateQuery(q));
@@ -49,7 +49,7 @@ namespace UnitTesting {
 
 		Query q;
 		Entity e = { PROCEDURE, "1" };
-		q.setSelected(e);
+		q.addSelected(e);
 
 		QueryEvaluator qe;
 		EXPECT_EQ(result, qe.evaluateQuery(q));

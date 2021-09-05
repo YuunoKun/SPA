@@ -93,6 +93,26 @@
     <ClCompile Include="..\source\FollowsTEvaluator.cpp">
       <Filter>Source Files\PQL</Filter>
     </ClCompile>
+    <ClCompile Include="..\source\QueryTokenizer.cpp">
+      <Filter>Source Files\PQL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\QueryToken.cpp">
+      <Filter>Source Files\PQL</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+	<ClInclude Include="..\source\QueryResult.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+	<ClInclude Include="..\source\RelationEvaluator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+	<ClInclude Include="..\source\PatternEvaluator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+	  <ClInclude Include="..\source\Parser.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClCompile Include="..\source\ParentEvaluator.cpp">
       <Filter>Source Files\PQL</Filter>
     </ClCompile>
@@ -161,6 +181,10 @@
     <ClInclude Include="..\source\Tokenizer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+	<ClInclude Include="..\source\QueryToken.h">
+		<Filter>Header Files\PQL</Filter>
+	</ClInclude>
+	<ClInclude Include="..\source\QueryTokenizer.h">
     <ClInclude Include="..\source\Parser.h">
       <Filter>Header Files</Filter>
     </ClInclude>

@@ -9,8 +9,10 @@ public:
 
 	bool haveResult();
 	void setNoResult();
+	bool isInTables(std::vector<Entity>);
 	bool isInTables(Entity);
 	void addResult(ResultTable);
+	std::list<std::string> getResult(std::vector<Entity>);
 	std::list<std::string> getResult(Entity);
 
 private:
