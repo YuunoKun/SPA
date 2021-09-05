@@ -10,7 +10,7 @@ std::vector<var_name> PKBAdapter::getVariables() {
 }
 
 std::vector<StmtInfo> PKBAdapter::getStmts() {
-	return PKB::getInstance().PKB::get_stmts();
+	return PKB::getInstance().PKB::getStmts();
 }
 
 std::vector<constant> PKBAdapter::getConstants() {
@@ -345,7 +345,6 @@ std::vector<std::string> PKBAdapter::getUsedS() {
 	//TODO
 	return std::vector<std::string>();
 }
-
 
 std::vector<std::string> PKBAdapter::getUsedS(stmt_index) {
 	//TODO

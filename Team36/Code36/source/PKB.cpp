@@ -14,35 +14,13 @@ PKB& PKB::getInstance() {
 	return pkb;
 }
 
-//proc_index PKB::addProcedure(Procedure& procedure)
-//{
-//	int proc_index = proc_table.size() + 1;
-//	proc_table.emplace(proc_index, procedure);
-//	return proc_index;
-//}
-//
-//var_index PKB::addVariable(Variable& variable)
-//{
-//	int var_index = var_table.size() + 1;
-//	proc_table.emplace(var_index, variable);
-//	return var_index;
-//}
-
-//stmt_index PKB::addStmt(Stmt& statement)
-//{
-//	int stmt_index = stmt_table.size() + 1;
-//	stmt_table.emplace(stmt_index, statement);
-//	addStmtType(statement.getNum(), statement.getType());
-//	return stmt_index;
-//}
-
 void PKB::addConstant(constant constant)
 {
 	const_table.emplace(constant);
 	return;
 }
 
-void PKB::addProcedures(proc_name proc_name)
+void PKB::addProcedure(proc_name proc_name)
 {
 	for (auto const& element : proc_table) {
 		if (element == proc_name) {
@@ -81,7 +59,7 @@ void PKB::addParent(stmt_index parent, stmt_index child)
 		StmtInfo child_stmt_info{ child, stmt_table.at(child - 1).stmt_type };
 		parent_table.insert(parent_stmt_info, child_stmt_info);
 	}
-	catch (std::out_of_range& e) {
+	catch (std::out_of_range&) {
 		throw std::invalid_argument("addParent: Invalid stmt indexes: [" + std::to_string(parent)
 			+ "," + std::to_string(child) + "]");
 	}
@@ -94,7 +72,7 @@ void PKB::addFollows(stmt_index first, stmt_index second)
 		StmtInfo second_stmt_info{ second, stmt_table.at(second - 1).stmt_type };
 		follows_table.insert(first_stmt_info, second_stmt_info);
 	}
-	catch (std::out_of_range& e) {
+	catch (std::out_of_range&) {
 		throw std::invalid_argument("addFollows: Invalid stmt indexes: [" + std::to_string(first)
 			+ "," + std::to_string(second) + "]");
 	}
@@ -112,7 +90,7 @@ void PKB::addUsesS(stmt_index user, var_name used)
 			throw std::invalid_argument("addUsesS: Invalid var name: " + used);
 		}
 	}
-	catch (std::out_of_range& e) {
+	catch (std::out_of_range&) {
 		throw std::invalid_argument("addUsesS: Invalid stmt index:" + std::to_string(user));
 	}
 }
@@ -129,7 +107,7 @@ void PKB::addModifiesS(stmt_index modifier, var_name modified)
 			throw std::invalid_argument("addModifiesS: Invalid var name: " + modified);
 		}
 	}
-	catch (std::out_of_range& e) {
+	catch (std::out_of_range&) {
 		throw std::invalid_argument("addModifiesS: Invalid stmt index:" + std::to_string(modifier));
 	}
 }
@@ -165,9 +143,6 @@ void PKB::resetCache()
 	parentT_reverse_table.clear();
 	usesS_reverse_table.clear();
 	modifiesS_reverse_table.clear();
-
-	old_proc_table.clear();
-	old_var_table.clear();
 }
 
 void PKB::resetEntities()
@@ -176,126 +151,113 @@ void PKB::resetEntities()
 	proc_table.clear();
 	stmt_table.clear();
 	const_table.clear();
-
-	old_proc_table.clear();
-	old_var_table.clear();
 }
 
-void PKB::setProcedures(std::vector<proc_name> proc_set) {
-	std::copy(proc_set.begin(), proc_set.end(), std::inserter(old_proc_table, old_proc_table.end()));
-}
-
-void PKB::setConstants(std::vector<constant> const_set) {
-	std::copy(const_set.begin(), const_set.end(), std::inserter(const_table, const_table.end()));
-}
-
-void PKB::setVariables(std::vector<var_name> var_set) {
-	std::copy(var_set.begin(), var_set.end(), std::inserter(old_var_table, old_var_table.end()));
-}
-
-std::vector<var_name> PKB::getVariables() {
-	return std::vector<var_name>(old_var_table.begin(), old_var_table.end());
-}
-
-std::vector<Stmt> PKB::getStmts() {
-	//return std::vector<Stmt>(stmt_table.begin(), stmt_table.end());    --- To add hash function for Stmt
-	return std::vector<Stmt>();
-}
-
-const std::vector<proc_name>& PKB::get_procedures()
+const std::vector<proc_name>& PKB::getProcedures()
 {
 	return proc_table;
 }
 
-const std::vector<var_name>& PKB::get_variables()
+const std::vector<var_name>& PKB::getVariables()
 {
 	return var_table;
 }
 
-const std::vector<StmtInfo>& PKB::get_stmts()
+const std::vector<StmtInfo>& PKB::getStmts()
 {
 	return stmt_table;
 }
 
-const std::unordered_set<constant>& PKB::get_consts()
+const std::vector<constant> PKB::getConstants()
 {
-	return const_table;
+	std::vector<constant> v(const_table.begin(), const_table.end());
+	return v;
 }
 
-const std::unordered_map<stmt_index, var_index> PKB::get_assignment_table()
+const std::unordered_map<stmt_index, var_index>& PKB::getAssigns()
 {
 	return assignment_table;
 }
 
-const std::unordered_map<var_index, std::string> PKB::get_expr_table()
+const std::unordered_map<var_index, std::string>& PKB::getExpr()
 {
 	return expr_table;
 }
 
-const UniqueRelationTable<StmtInfo, StmtInfo>& PKB::get_follows_table()
+const UniqueRelationTable<StmtInfo, StmtInfo>& PKB::getFollows()
 {
 	return follows_table;
 }
 
-const RelationTable<StmtInfo, StmtInfo>& PKB::get_parent_table()
+const RelationTable<StmtInfo, StmtInfo>& PKB::getParent()
 {
 	return parent_table;
 }
 
-const RelationTable<StmtInfo, StmtInfo>& PKB::get_followsT_table()
+const RelationTable<StmtInfo, StmtInfo>& PKB::getFollowsT()
 {
 	return followsT_table;
 }
 
-const RelationTable<StmtInfo, StmtInfo>& PKB::get_parentT_table()
+const RelationTable<StmtInfo, StmtInfo>& PKB::getParentT()
 {
 	return parentT_table;
 }
 
-const RelationTable<StmtInfo, var_name>& PKB::get_usesS_table()
+const RelationTable<StmtInfo, var_name>& PKB::getUsesS()
 {
 	return usesS_table;
 }
 
-const RelationTable<StmtInfo, var_name>& PKB::get_modifiesS_table()
+const RelationTable<StmtInfo, var_name>& PKB::getModifiesS()
 {
 	return modifiesS_table;
 }
 
-const RelationTable<StmtInfo, StmtInfo>& PKB::get_follows_reverse_table()
+const RelationTable<StmtInfo, StmtInfo>& PKB::getFollowsReverse()
 {
-	return followsT_reverse_table;
+	if (follows_reverse_table.isEmpty()) {
+		follows_reverse_table = follows_table.findReverse();
+	}
+	return follows_reverse_table;
 }
 
-const RelationTable<StmtInfo, StmtInfo>& PKB::get_parent_reverse_table()
+const RelationTable<StmtInfo, StmtInfo>& PKB::getParentReverse()
 {
+	if (parent_reverse_table.isEmpty()) {
+		parent_reverse_table = parent_table.findReverse();
+	}
 	return parent_reverse_table;
 }
 
-const RelationTable<StmtInfo, StmtInfo>& PKB::get_followsT_reverse_table()
+const RelationTable<StmtInfo, StmtInfo>& PKB::getFollowsTReverse()
 {
+	if (followsT_reverse_table.isEmpty()) {
+		followsT_reverse_table = followsT_table.findReverse();
+	}
 	return followsT_reverse_table;
 }
 
-const RelationTable<StmtInfo, StmtInfo>& PKB::get_parentT_reverse_table()
+const RelationTable<StmtInfo, StmtInfo>& PKB::getParentTReverse()
 {
+	if (parentT_reverse_table.isEmpty()) {
+		parentT_reverse_table = parentT_table.findReverse();
+	}
 	return parentT_reverse_table;
 }
 
-const RelationTable<var_name, StmtInfo>& PKB::get_usesS_reverse_table()
+const RelationTable<var_name, StmtInfo>& PKB::getUsesSReverse()
 {
+	if (usesS_reverse_table.isEmpty()) {
+		usesS_reverse_table = usesS_table.findReverse();
+	}
 	return usesS_reverse_table;
 }
 
-const RelationTable<var_name, StmtInfo>& PKB::get_modifiesS_reverse_table()
+const RelationTable<var_name, StmtInfo>& PKB::getModifiesSReverse()
 {
+	if (modifiesS_reverse_table.isEmpty()) {
+		modifiesS_reverse_table = modifiesS_table.findReverse();
+	}
 	return modifiesS_reverse_table;
-}
-
-std::vector<constant> PKB::getConstants() {
-	return std::vector<constant>(const_table.begin(), const_table.end());
-}
-
-std::vector<proc_name> PKB::getProcedures() {
-	return std::vector<proc_name>(old_proc_table.begin(), old_proc_table.end());
 }
