@@ -20,9 +20,6 @@ public:
 	static  std::vector<std::vector<std::string>> pairToStringTable(std::vector<std::pair<StmtInfo, std::string>>&);
 	static  std::vector<std::vector<std::string>> pairToStringTable(std::vector<std::pair<StmtInfo, StmtInfo>>&);
 
-
-	static std::vector<EntityType> entityToEntityTypeVector(std::vector<Entity>&);
-
 	static int getIndex(std::vector<std::string>, std::string);
 	static int getIndex(std::vector<Entity>, Entity);
 

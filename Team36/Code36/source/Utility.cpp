@@ -78,14 +78,6 @@ std::list<std::string> Utility::unorderedSetToStringList(std::unordered_set<std:
 	return std::list<std::string>(from.begin(), from.end());
 }
 
-std::vector<EntityType> Utility::entityToEntityTypeVector(std::vector<Entity>& entities) {
-	std::vector<EntityType> type;
-	for (auto& it : entities) {
-		type.push_back(it.getType());
-	}
-	return type;
-}
-
 int Utility::getIndex(std::vector<std::string> v, std::string s) {
 	auto it = std::find(v.begin(), v.end(), s);
 	if (it != v.end()) {

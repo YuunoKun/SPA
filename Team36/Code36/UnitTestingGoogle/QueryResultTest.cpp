@@ -4,7 +4,7 @@
 
 namespace UnitTesting {
 	
-	std::vector<Entity> queryTableHeader1{ {WHILE, "test" }, { READ,"hello" }, {STMT, "test1" }, { IF,"hello3" } };
+	std::pair<Entity, Entity> queryTableHeader1{ {WHILE, "test" }, { READ,"hello" } };
 	std::vector<std::pair<std::string, std::string>> queryTableTable1{
 		{ "1", "2" }, { "3", "4" },
 		{ "5", "6" }, { "7", "8" },
@@ -12,7 +12,8 @@ namespace UnitTesting {
 		{ "13", "14" }, { "15", "16" },
 		{ "17", "18" }, { "19", "20" } };
 
-	std::vector<Entity> queryTableHeader2{ {WHILE, "t1" }, { READ,"t2" } };
+
+	std::pair<Entity, Entity> queryTableHeader2{ {WHILE, "t1" }, { READ,"t2" } };
 	std::vector<std::pair<std::string,std::string>> queryTableTable2{
 		{ "1", "11", },
 		{ "2", "12", },
@@ -20,7 +21,7 @@ namespace UnitTesting {
 		{ "4", "14",},
 		{ "5", "15", } };
 
-	std::vector<Entity> queryTableHeader3{ {VARIABLE, "t3" }, { IF,"t4" } };
+	std::pair<Entity, Entity> queryTableHeader3{ {VARIABLE, "t3" }, { IF,"t4" } };
 	std::vector<std::pair<std::string, std::string>> queryTableTable3{
 		{ "6", "16", },
 		{ "7", "17", },
@@ -39,14 +40,12 @@ namespace UnitTesting {
 		queryResult.addResult(resultTable2);
 		queryResult.addResult(resultTable3);
 
-		EXPECT_TRUE(queryResult.isInTables(queryTableHeader1[0]));
-		EXPECT_TRUE(queryResult.isInTables(queryTableHeader1[1]));
-		EXPECT_TRUE(queryResult.isInTables(queryTableHeader1[2]));
-		EXPECT_TRUE(queryResult.isInTables(queryTableHeader1[3]));
-		EXPECT_TRUE(queryResult.isInTables(queryTableHeader2[0]));
-		EXPECT_TRUE(queryResult.isInTables(queryTableHeader2[1]));
-		EXPECT_TRUE(queryResult.isInTables(queryTableHeader3[0]));
-		EXPECT_TRUE(queryResult.isInTables(queryTableHeader3[1]));
+		EXPECT_TRUE(queryResult.isInTables(queryTableHeader1.first));
+		EXPECT_TRUE(queryResult.isInTables(queryTableHeader1.second));
+		EXPECT_TRUE(queryResult.isInTables(queryTableHeader2.first));
+		EXPECT_TRUE(queryResult.isInTables(queryTableHeader2.second));
+		EXPECT_TRUE(queryResult.isInTables(queryTableHeader3.first));
+		EXPECT_TRUE(queryResult.isInTables(queryTableHeader3.second));
 		EXPECT_TRUE(queryResult.isInTables({ WHILE, "test" }));
 		EXPECT_FALSE(queryResult.isInTables({ PRINT, "test" }));
 	}
@@ -84,38 +83,38 @@ namespace UnitTesting {
 		queryResult.addResult(resultTable3);
 
 		std::list<std::string> result{ "1", "5", "9", "13", "17", "3", "7", "11", "15", "19" };
-		std::list<std::string> tableResult = queryResult.getResult(queryTableHeader1[0]);
+		std::list<std::string> tableResult = queryResult.getResult(queryTableHeader1.first);
 		result.sort();
 		tableResult.sort();
 		EXPECT_EQ(tableResult, result);
 
 		result = { "2", "6", "10", "14", "18", "4", "8", "12", "16", "20" };
-		tableResult = queryResult.getResult(queryTableHeader1[1]);
+		tableResult = queryResult.getResult(queryTableHeader1.second);
 		result.sort();
 		tableResult.sort();
 		EXPECT_EQ(tableResult, result);
 
 		result = { "1", "2", "3", "4", "5" };
-		tableResult = queryResult.getResult(queryTableHeader2[0]);
+		tableResult = queryResult.getResult(queryTableHeader2.first);
 		result.sort();
 		tableResult.sort();
 		EXPECT_EQ(tableResult, result);
 
 		result = { "11", "12", "13", "14", "15" };
-		tableResult = queryResult.getResult(queryTableHeader2[1]);
+		tableResult = queryResult.getResult(queryTableHeader2.second);
 		result.sort();
 		tableResult.sort();
 		EXPECT_EQ(tableResult, result);
 
 
 		result = { "6", "7", "8", "9", "10" };
-		tableResult = queryResult.getResult(queryTableHeader3[0]);
+		tableResult = queryResult.getResult(queryTableHeader3.first);
 		result.sort();
 		tableResult.sort();
 		EXPECT_EQ(tableResult, result);
 
 		result = { "16", "17", "18", "19", "20" };
-		tableResult = queryResult.getResult(queryTableHeader3[1]);
+		tableResult = queryResult.getResult(queryTableHeader3.second);
 		result.sort();
 		tableResult.sort();
 		EXPECT_EQ(tableResult, result);

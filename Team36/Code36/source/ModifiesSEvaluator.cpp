@@ -37,7 +37,7 @@ bool ModifiesSEvaluator::haveRelationAtLeft(Entity e) {
 //If both side is declartion: e.g Relation(a, b)
 ResultTable ModifiesSEvaluator::getRelations(Entity left, Entity right) {
 	std::vector<std::pair<StmtInfo, std::string>> results = pkb.getModifiesSRelation();
-	std::vector<Entity> header{ left, right };
+	std::pair<Entity, Entity> header{ left, right };
 	ResultTable result = ResultTable(header, results);
 	return result;
 }
