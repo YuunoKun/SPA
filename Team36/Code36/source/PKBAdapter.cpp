@@ -1,6 +1,9 @@
 #include "PKBAdapter.h"
 #include "PKB.h"
 #include "Utility.h"
+#include "Common.h"
+#include "Stmt.h"
+#include "RelationTable.h"
 
 PKBAdapter::PKBAdapter() {
 }
@@ -57,44 +60,51 @@ bool PKBAdapter::isFollowEmpty() {
 	return false;
 }
 
-bool PKBAdapter::isFollow(stmt_index, stmt_index) {
-	//TODO
-	return false;
+bool PKBAdapter::isFollow(stmt_index index1, stmt_index index2) {
+	auto a = PKB::getInstance().PKB::getFollows();
+	//// Need better method to find stmt_info
+	StmtInfo s1 = PKB::getInstance().PKB::getStmts().at(index1 - 1);
+	StmtInfo s2 = PKB::getInstance().PKB::getStmts().at(index2 - 1);
+	return a.containsPair(s1, s2);
 }
 
-bool PKBAdapter::isFollowed(stmt_index) {
-	//TODO
-	return false;
+bool PKBAdapter::isFollowed(stmt_index index) {
+	auto a = PKB::getInstance().PKB::getFollows();
+	StmtInfo s1 = PKB::getInstance().PKB::getStmts().at(index - 1);
+	return a.containsKey(s1);
 }
 
-bool PKBAdapter::isFollowing(stmt_index) {
-	//TODO
-	return false;
+bool PKBAdapter::isFollowing(stmt_index index) {
+	auto a = PKB::getInstance().PKB::getFollowsReverse();
+	StmtInfo s1 = PKB::getInstance().PKB::getStmts().at(index - 1);
+	return a.containsKey(s1);
 }
 
 std::vector<StmtInfo> PKBAdapter::getFollowed() {
-	//TODO
-	return std::vector<StmtInfo>();
+	auto a = PKB::getInstance().PKB::getFollows();
+	return a.getKeys();
 }
 
 std::vector<StmtInfo> PKBAdapter::getFollowing() {
-	//TODO
-	return std::vector<StmtInfo>();
+	auto a = PKB::getInstance().PKB::getFollowsReverse();
+	return a.getKeys();
 }
 
-std::vector<StmtInfo> PKBAdapter::getFollowed(stmt_index) {
-	//Todo
-	return std::vector<StmtInfo>();
+std::vector<StmtInfo> PKBAdapter::getFollowed(stmt_index index) {
+	auto a = PKB::getInstance().PKB::getFollowsReverse();
+	StmtInfo s1 = PKB::getInstance().PKB::getStmts().at(index - 1);
+	return a.getValues(s1);
 }
 
-std::vector<StmtInfo> PKBAdapter::getFollowing(stmt_index) {
-	//Todo
-	return std::vector<StmtInfo>();
+std::vector<StmtInfo> PKBAdapter::getFollowing(stmt_index index) {
+	auto a = PKB::getInstance().PKB::getFollows();
+	StmtInfo s1 = PKB::getInstance().PKB::getStmts().at(index - 1);
+	return a.getValues(s1);
 }
 
 std::vector<std::pair<StmtInfo, StmtInfo>> PKBAdapter::getFollows() {
-	//Todo
-	return std::vector<std::pair<StmtInfo, StmtInfo>>();
+	auto a = PKB::getInstance().PKB::getFollows();
+	return a.getPairs();
 }
 
 bool PKBAdapter::isFollowTEmpty() {
@@ -102,45 +112,53 @@ bool PKBAdapter::isFollowTEmpty() {
 	return false;
 }
 
-bool PKBAdapter::isFollowT(stmt_index, stmt_index) {
-	//Todo
-	return false;
+bool PKBAdapter::isFollowT(stmt_index index1, stmt_index index2) {
+	auto a = PKB::getInstance().PKB::getFollowsT();
+	//// Need better method to find stmt_info
+	StmtInfo s1 = PKB::getInstance().PKB::getStmts().at(index1 - 1);
+	StmtInfo s2 = PKB::getInstance().PKB::getStmts().at(index2 - 1);
+	return a.containsPair(s1, s2);
 }
 
-bool PKBAdapter::isFollowedT(stmt_index) {
-	//Todo
-	return false;
+bool PKBAdapter::isFollowedT(stmt_index index) {
+	auto a = PKB::getInstance().PKB::getFollowsT();
+	StmtInfo s1 = PKB::getInstance().PKB::getStmts().at(index - 1);
+	return a.containsKey(s1);
 }
 
-bool PKBAdapter::isFollowingT(stmt_index) {
-	//Todo
-	return false;
+bool PKBAdapter::isFollowingT(stmt_index index) {
+	auto a = PKB::getInstance().PKB::getFollowsTReverse();
+	StmtInfo s1 = PKB::getInstance().PKB::getStmts().at(index - 1);
+	return a.containsKey(s1);
 }
 
 std::vector<StmtInfo> PKBAdapter::getFollowedT() {
-	//Todo
-	return std::vector<StmtInfo>();
+	auto a = PKB::getInstance().PKB::getFollowsT();
+	return a.getKeys();
 }
 
 std::vector<StmtInfo> PKBAdapter::getFollowingT() {
-	//Todo
-	return std::vector<StmtInfo>();
+	auto a = PKB::getInstance().PKB::getFollowsTReverse();
+	return a.getKeys();
 }
 
-std::vector<StmtInfo> PKBAdapter::getFollowedT(stmt_index) {
-	//Todo
-	return std::vector<StmtInfo>();
+std::vector<StmtInfo> PKBAdapter::getFollowedT(stmt_index index) {
+	auto a = PKB::getInstance().PKB::getFollowsTReverse();
+	StmtInfo s1 = PKB::getInstance().PKB::getStmts().at(index - 1);
+	return a.getValues(s1);
 }
 
-std::vector<StmtInfo> PKBAdapter::getFollowingT(stmt_index) {
-	//Todo
-	return std::vector<StmtInfo>();
+std::vector<StmtInfo> PKBAdapter::getFollowingT(stmt_index index) {
+	auto a = PKB::getInstance().PKB::getFollowsT();
+	StmtInfo s1 = PKB::getInstance().PKB::getStmts().at(index - 1);
+	return a.getValues(s1);
 }
 
 std::vector<std::pair<StmtInfo, StmtInfo>> PKBAdapter::getFollowsT() {
-	//Todo
-	return std::vector<std::pair<StmtInfo, StmtInfo>>();
+	auto a = PKB::getInstance().PKB::getFollowsT();
+	return a.getPairs();
 }
+
 
 bool PKBAdapter::isParentEmpty() {
 	//Todo

@@ -1,5 +1,5 @@
 #pragma once
-
+/*
 #include "RelationTable.h"
 
 template <class T, class S>
@@ -142,3 +142,4 @@ bool UniqueRelationTable<T, S>::insert(T key, S value)
 		return false;
 	}
 }
+*/

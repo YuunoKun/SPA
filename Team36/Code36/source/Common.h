@@ -25,6 +25,10 @@ struct StmtInfo {
 	{
 		return stmt_index == another_stmt_info.stmt_index && stmt_type == another_stmt_info.stmt_type;
 	}
+
+	bool operator < (const StmtInfo& st) const {
+		return (stmt_index < st.stmt_index);
+	}
 };
 
 namespace std
