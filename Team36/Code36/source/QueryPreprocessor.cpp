@@ -15,15 +15,15 @@ Query QueryPreprocessor::parse(std::string str) {
 	Query query = Query();
 	QueryTokenizer query_tokenizer;
 
-	query_tokenizer.parse_into_query_tokens(str);
+	//query_tokenizer.parse_into_query_tokens(str);
 
-	const std::vector<QueryToken> v = query_tokenizer.get_query_token_chain();
+	//const std::vector<QueryToken> v = query_tokenizer.get_query_token_chain();
 
-	//std::vector<QueryToken> v;
+	std::vector<QueryToken> v;
 	//QueryToken q1(QueryToken::QueryTokenType::IDENTIFIER, "stmt");
 	//v.push_back(q1);
 	//v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "s" });
-	//v.push_back({ QueryToken::QueryTokenType::COMMA, "," });
+	//v.push_back({ QueryToken::QueryTokenType::COMMA, "" });
 	//v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "ss" });
 	//v.push_back({ QueryToken::QueryTokenType::TERMINATOR, ";" });
 	//v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "procedure" });
@@ -31,13 +31,24 @@ Query QueryPreprocessor::parse(std::string str) {
 	//v.push_back({ QueryToken::QueryTokenType::TERMINATOR, ";" });
 	//v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "Select" });
 	//v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "s" });
-	//v.push_back({ QueryToken::QueryTokenType::COMMA, "," });
+	//v.push_back({ QueryToken::QueryTokenType::COMMA, "" });
 	//v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "p" });
+	v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "such" });
+	v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "that" });
+	v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "Parent" });
+	v.push_back({ QueryToken::QueryTokenType::PARENTHESIS_OPEN, "" });
+	v.push_back({ QueryToken::QueryTokenType::CONSTANT, "7" });
+	v.push_back({ QueryToken::QueryTokenType::COMMA, "" });
+	v.push_back({ QueryToken::QueryTokenType::WILDCARD, "" });
+	v.push_back({ QueryToken::QueryTokenType::PARENTHESIS_CLOSE, "" });
 
 	QueryToken prevToken = QueryToken();
 	std::vector<QueryToken> output;
 	std::vector<QueryToken> selected;
 	QueryToken temp;
+	QueryToken prevTokenSelect;
+	bool isSelect = true;
+	bool isSuchThat = false;
 
 	for (QueryToken token : v) {
 		// First iteration, set identifier to correct type
@@ -169,9 +180,35 @@ Query QueryPreprocessor::parse(std::string str) {
 						}
 					}
 				}
+				isSelect = true;
 				query.addSelected(ent);
 			}
 		}
+
+		if (isSelect) {
+			if (prevTokenSelect.token_value == "such" && token.token_value == "that") {
+				output.push_back({ QueryToken::QueryTokenType::SUCHTHAT, "such that" });
+				isSuchThat = true;
+			}
+			// TODO: pattern condition
+
+			if (isSuchThat) {
+				if (prevTokenSelect.token_value == "Parent") {
+					if (token.type == QueryToken::QueryTokenType::ASTERISK) {
+						output.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "Parent*" });
+					}
+					else if (token.type == QueryToken::QueryTokenType::PARENTHESIS_OPEN) {
+						output.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "Parent" });
+					}
+					else {
+						throw std::runtime_error("Only '*' or '(' is accepted after the command 'Parent'.");
+					}
+				}
+				// TODO: Modifies, Uses, Follow
+			}
+			prevTokenSelect = token;
+		}
+
 		prevToken = temp;
 	}
 
