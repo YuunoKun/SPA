@@ -8,7 +8,7 @@
 
 //Handle both wild : e.g Relation(_, _)
 bool FollowsEvaluator::haveRelation() {
-	return !pkb.getFollowing().empty();
+	return !pkb.isFollowEmpty();
 }
 
 //Handle both constant : e.g Relation(1, 2)

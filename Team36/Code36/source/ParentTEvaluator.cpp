@@ -9,7 +9,7 @@
 
 //Handle both wild : e.g Relation(_, _)
 bool ParentTEvaluator::haveRelation() {
-	return !pkb.getParentT().empty();
+	return !pkb.isParentTEmpty();
 }
 
 //Handle both constant : e.g Relation(1, 2)

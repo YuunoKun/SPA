@@ -22,35 +22,40 @@ std::vector<proc_name> PKBAdapter::getProcedures() {
 }
 
 std::vector<StmtInfo> PKBAdapter::getAssigns() {
-	//TODO
-	return Utility::filterResult(ASSIGN, std::vector<StmtInfo>());
+	std::vector<StmtInfo> v = PKB::getInstance().PKB::getStmts();
+	return Utility::filterResult(ASSIGN, v);
 }
 
 std::vector<StmtInfo> PKBAdapter::getPrints() {
-	//TODO
-	return std::vector<StmtInfo>();
+	std::vector<StmtInfo> v = PKB::getInstance().PKB::getStmts();
+	return Utility::filterResult(PRINT, v);
 }
 
 std::vector<StmtInfo> PKBAdapter::getCalls() {
-	//TODO
-	return std::vector<StmtInfo>();
+	std::vector<StmtInfo> v = PKB::getInstance().PKB::getStmts();
+	return Utility::filterResult(CALL, v);
 }
 
 std::vector<StmtInfo> PKBAdapter::getReads() {
-	//TODO
-	return std::vector<StmtInfo>();
+	std::vector<StmtInfo> v = PKB::getInstance().PKB::getStmts();
+	return Utility::filterResult(READ, v);
 }
 
 std::vector<StmtInfo> PKBAdapter::getWhiles() {
-	//TODO
-	return std::vector<StmtInfo>();
+	std::vector<StmtInfo> v = PKB::getInstance().PKB::getStmts();
+	return Utility::filterResult(WHILE, v);
 }
 
 std::vector<StmtInfo> PKBAdapter::getIfs() {
-	//TODO
-	return std::vector<StmtInfo>();
+	std::vector<StmtInfo> v = PKB::getInstance().PKB::getStmts();
+	return Utility::filterResult(IF, v);
 }
 
+
+bool PKBAdapter::isFollowEmpty() {
+	//TODO
+	return false;
+}
 
 bool PKBAdapter::isFollow(stmt_index, stmt_index) {
 	//TODO
@@ -90,6 +95,11 @@ std::vector<StmtInfo> PKBAdapter::getFollowing(stmt_index) {
 std::vector<std::pair<StmtInfo, StmtInfo>> PKBAdapter::getFollows() {
 	//Todo
 	return std::vector<std::pair<StmtInfo, StmtInfo>>();
+}
+
+bool PKBAdapter::isFollowTEmpty() {
+	//Todo
+	return false;
 }
 
 bool PKBAdapter::isFollowT(stmt_index, stmt_index) {
@@ -132,6 +142,11 @@ std::vector<std::pair<StmtInfo, StmtInfo>> PKBAdapter::getFollowsT() {
 	return std::vector<std::pair<StmtInfo, StmtInfo>>();
 }
 
+bool PKBAdapter::isParentEmpty() {
+	//Todo
+	return false;
+}
+
 bool PKBAdapter::isParent(stmt_index, stmt_index) {
 	//Todo
 	return false;
@@ -170,6 +185,10 @@ std::vector<StmtInfo> PKBAdapter::getParent(stmt_index) {
 std::vector<std::pair<StmtInfo, StmtInfo>> PKBAdapter::getAllParentRelation() {
 	//Todo
 	return std::vector<std::pair<StmtInfo, StmtInfo>>();
+}
+
+bool PKBAdapter::isParentTEmpty() {
+	return false;
 }
 
 bool PKBAdapter::isParentT(stmt_index, stmt_index) {
@@ -242,6 +261,11 @@ std::vector<std::string> PKBAdapter::getModifiedP(proc_name) {
 	return std::vector<std::string>();
 }
 
+bool PKBAdapter::isModifiesSEmpty() {
+	//TODO
+	return false;
+}
+
 bool PKBAdapter::isModifiesS(stmt_index, var_name) {
 	//TODO
 	return false;
@@ -310,6 +334,10 @@ std::vector<std::string> PKBAdapter::getUsesP(var_name) {
 std::vector<std::string> PKBAdapter::getUsedP(proc_name) {
 	//TODO
 	return std::vector<std::string>();
+}
+
+bool PKBAdapter::isUsesSEmpty() {
+	return false;
 }
 
 bool PKBAdapter::isUsesS(stmt_index, var_name) {

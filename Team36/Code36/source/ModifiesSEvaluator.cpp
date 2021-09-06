@@ -8,7 +8,7 @@
 
 //Handle both wild : e.g Relation(_, _)
 bool ModifiesSEvaluator::haveRelation() {
-	return !pkb.getModifiesS().empty();
+	return !pkb.isModifiesSEmpty();
 	//Todo: throw exception for iteration 2
 	//throw std::invalid_argument("haveRelation(): Wild is not allowed for first argument of Modifies_S");
 }

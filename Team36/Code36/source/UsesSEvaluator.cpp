@@ -7,7 +7,7 @@
 
 //Handle both wild : e.g Relation(_, _)
 bool UsesSEvaluator::haveRelation() {
-	return !pkb.getUsesS().empty();
+	return !pkb.isUsesSEmpty();
 	//Todo: throw exception for iteration 2
 	//throw std::invalid_argument("haveRelation(): Wild is not allowed for first argument of Uses_S");
 }

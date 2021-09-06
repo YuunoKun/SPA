@@ -22,6 +22,7 @@ public:
 	std::vector<StmtInfo> getIfs();
 
 	//Follow relation function
+	bool isFollowEmpty();
 	bool isFollow(stmt_index, stmt_index);
 	bool isFollowed(stmt_index);
 	bool isFollowing(stmt_index);
@@ -32,6 +33,7 @@ public:
 	std::vector<std::pair<StmtInfo, StmtInfo>> getFollows();
 
 	//FollowT relation function
+	bool isFollowTEmpty();
 	bool isFollowT(stmt_index, stmt_index);
 	bool isFollowedT(stmt_index);
 	bool isFollowingT(stmt_index);
@@ -43,6 +45,7 @@ public:
 
 
 	//Parent relation function
+	bool isParentEmpty();
 	bool isParent(stmt_index, stmt_index);
 	bool isChild(stmt_index);
 	bool isParent(stmt_index);
@@ -53,6 +56,7 @@ public:
 	std::vector<std::pair<StmtInfo, StmtInfo>> getAllParentRelation();
 
 	//ParentT relation function
+	bool isParentTEmpty();
 	bool isParentT(stmt_index, stmt_index);
 	bool isChildT(stmt_index);
 	bool isParentT(stmt_index);
@@ -71,6 +75,7 @@ public:
 	std::vector<std::string> getModifiedP(proc_name);
 
 	//ModifiesS relation Function
+	bool isModifiesSEmpty();
 	bool isModifiesS(stmt_index, var_name);
 	bool isModifiesS(stmt_index);
 	bool isModifiesS(var_name);
@@ -89,6 +94,7 @@ public:
 	std::vector<std::string> getUsedP(proc_name);
 
 	//UsesS relation Function
+	bool isUsesSEmpty();
 	bool isUsesS(stmt_index, var_name);
 	bool isUsesS(stmt_index);
 	bool isUsesS(var_name);

@@ -8,7 +8,7 @@
 
 //Handle both wild : e.g Relation(_, _)
 bool ParentEvaluator::haveRelation() {
-	return !pkb.getParent().empty();
+	return !pkb.isParentEmpty();
 }
 
 //Handle both constant : e.g Relation(1, 2)
