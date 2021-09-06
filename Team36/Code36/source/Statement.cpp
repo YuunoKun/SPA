@@ -27,18 +27,18 @@ void Statement::add_direct_parent(stmt_index parent) {
 }
 
 
-proc_name Statement::get_direct_parent() {
+stmt_index Statement::get_direct_parent() {
 	return m_direct_parent;
 }
 
 
 void Statement::add_direct_child(stmt_index child) {
-	m_direct_child.insert(child);
+	m_direct_child.push_back(child);
 }
 
 
 std::vector<stmt_index>& Statement::get_direct_child() {
-	return *m_direct_child;
+	return m_direct_child;
 }
 
 
@@ -48,7 +48,7 @@ void Statement::add_uses_variable(var_name var) {
 
 
 std::vector<var_name> Statement::get_used_variable() {
-	return std::vector<stmt_index>(m_uses.begin(), m_uses.end());
+	return std::vector<var_name>(m_uses.begin(), m_uses.end());
 }
 
 
@@ -58,7 +58,7 @@ void Statement::add_modifies_variable(var_name var) {
 
 
 std::vector<var_name> Statement::get_modified_variable() {
-	return std::vector<stmt_index>(m_modifies.begin(), m_modifies.end());
+	return std::vector<var_name>(m_modifies.begin(), m_modifies.end());
 }
 
 
@@ -77,6 +77,6 @@ void Statement::set_callee(proc_name name) {
 }
 
 
-procedure_name Statement::get_callee() {
+proc_name Statement::get_callee() {
 	return m_callee;
 }

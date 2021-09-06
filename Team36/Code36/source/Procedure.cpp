@@ -35,8 +35,8 @@ void Procedure::add_uses_variable(var_name name) {
 }
 
 
-std::vector<stmt_index> Procedure::get_used_variable() {
-	return std::vector<stmt_index>(m_uses.begin(), m_uses.end());
+std::vector<var_name> Procedure::get_used_variable() {
+	return std::vector<var_name>(m_uses.begin(), m_uses.end());
 }
 
 
@@ -45,6 +45,6 @@ void Procedure::add_modifies_variable(var_name name) {
 }
 
 
-std::vector<stmt_index> Procedure::get_modified_variable() {
-	return std::vector<stmt_index>(m_modifies.begin(), m_modifies.end());
+std::vector<var_name> Procedure::get_modified_variable() {
+	return std::vector<var_name>(m_modifies.begin(), m_modifies.end());
 }

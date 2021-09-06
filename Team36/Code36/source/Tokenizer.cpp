@@ -161,7 +161,7 @@ void Tokenizer::parse_into_tokens(const char* input) {
 
 
 const std::vector<Token> &Tokenizer::get_token_chain() const {
-	return *m_token_cache;
+	return m_token_cache;
 }
 
 
@@ -172,7 +172,7 @@ void Tokenizer::add_token(Token& token) {
 		return;
 	}
 
-	if (token.m_type == TokenType::IDENTIFIER) {
+	if (token.get_token_type() == TokenType::IDENTIFIER) {
 		if (token.get_token_value() == "procedure") {
 			token.set_token_type(TokenType::PROCEDURE);
 		}
@@ -200,8 +200,8 @@ void Tokenizer::add_token(Token& token) {
 	}
 
 	m_token_cache.push_back(token);
-	token.m_type = TokenType::WHITESPACE;
-	token.m_token_value = "";
+	token.set_token_type(TokenType::WHITESPACE);
+	token.set_token_value("");
 }
 
 
@@ -220,7 +220,7 @@ Token &Tokenizer::peek_token() {
 		return Token(TokenType::INVAL, "");
 	}
 	else {
-		return *m_token_cache[m_pos];
+		return m_token_cache[m_pos];
 	}
 }
 
@@ -230,6 +230,6 @@ Token &Tokenizer::pop_token() {
 		return Token(TokenType::INVAL, "");
 	}
 	else {
-		return *m_token_cache[m_pos++];
+		return m_token_cache[m_pos++];
 	}
 }

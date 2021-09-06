@@ -19,7 +19,7 @@ namespace SourceProcessor {
 
 		void add_direct_parent(stmt_index);
 
-		proc_name get_direct_parent();
+		stmt_index get_direct_parent();
 
 		void add_direct_child(stmt_index);
 

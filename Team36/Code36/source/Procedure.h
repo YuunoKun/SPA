@@ -24,11 +24,11 @@ namespace SourceProcessor {
 
 		void add_uses_variable(var_name);
 
-		std::vector<stmt_index> get_used_variable();
+		std::vector<var_name> get_used_variable();
 
 		void add_modifies_variable(var_name);
 
-		std::vector<stmt_index> get_modified_variable();
+		std::vector<var_name> get_modified_variable();
 
 	private:
 		proc_name m_name;

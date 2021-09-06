@@ -5,6 +5,7 @@
 #include "PKB.h"
 #include "Tokenizer.h"
 #include "Common.h"
+#include "DesignExtractor.h"
 
 
 namespace SourceProcessor {
@@ -18,6 +19,7 @@ namespace SourceProcessor {
 
 	private:
 		Tokenizer m_tokenizer;
+		DesignExtractor m_design_extractor;
 
 		// Expects a procedure.
 		// procedure: ¡®procedure¡¯ proc_name ¡®{¡® stmtLst ¡®}¡¯

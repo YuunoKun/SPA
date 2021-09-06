@@ -1,15 +1,19 @@
+#pragma once
+
 #include <vector>
 #include <stack>
+#include <sstream>
+#include <unordered_set>
 #include "Common.h"
 #include "Procedure.h"
 #include "Statement.h"
+#include "Token.h"
 
 
 
 namespace SourceProcessor {
 
 	class DesignExtractor {
-
 	public:
 
 		DesignExtractor();
@@ -20,7 +24,11 @@ namespace SourceProcessor {
 
 		void add_procedure(proc_name);
 
-		void add_statement(StmtType);
+		void add_statement(TokenType);
+
+		void add_variable(var_name);
+
+		void add_constant(constant);
 
 		void add_statement_uses(var_name);
 
@@ -30,14 +38,16 @@ namespace SourceProcessor {
 
 		void end_expr();
 
+		void populateEntities();
+
 		void populateRelations();
 
 
 	private:
 		std::vector<Procedure> m_procedures;
 		std::vector<Statement> m_statements;
-		std::vector<variable_name> m_variables;
-		std::vector<constant> m_constants;
+		std::unordered_set<var_name> m_variables;
+		std::unordered_set<constant> m_constants;
 
 		proc_index m_curr_proc_id;
 		stmt_index m_curr_stmt_id;

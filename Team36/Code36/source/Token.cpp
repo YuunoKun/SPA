@@ -24,7 +24,7 @@ void Token::set_token_type(TokenType type) {
 }
 
 std::string &Token::get_token_value() {
-	return *m_token_value;
+	return m_token_value;
 }
 
 void Token::set_token_value(std::string value) {
