@@ -102,7 +102,8 @@ namespace UnitTesting {
 		std::vector<std::vector<std::string>> d = { {"1", "b"},{"2", "d"} };
 		EXPECT_EQ(Utility::pairToStringTable(c), d);
 
-		std::vector<std::pair<StmtInfo, StmtInfo>> e = { {{ 1, STMT_ASSIGN }, { 3, STMT_WHILE }},{{ 2, STMT_ASSIGN }, { 4, STMT_WHILE }} };
+		std::vector<std::pair<StmtInfo, StmtInfo>> e = { {{ 1, STMT_ASSIGN }, { 3, STMT_WHILE }},
+			{{ 2, STMT_ASSIGN }, { 4, STMT_WHILE }} };
 		std::vector<std::vector<std::string>> f = { {"1", "3"},{"2", "4"} };
 		EXPECT_EQ(Utility::pairToStringTable(e), f);
 	}
@@ -145,7 +146,8 @@ namespace UnitTesting {
 	}
 
 	TEST(Utility, filterResult) {
-		std::vector<StmtInfo> a = { { 1, STMT_WHILE }, { 2, STMT_IF} , { 3, STMT_READ }, { 4, STMT_PRINT}, { 5, STMT_CALL }, { 6, STMT_ASSIGN}, { 7, STMT_ASSIGN} };
+		std::vector<StmtInfo> a = { { 1, STMT_WHILE }, { 2, STMT_IF} , { 3, STMT_READ }, 
+			{ 4, STMT_PRINT}, { 5, STMT_CALL }, { 6, STMT_ASSIGN}, { 7, STMT_ASSIGN} };
 		std::vector<StmtInfo> b = { { 6, STMT_ASSIGN } , { 7, STMT_ASSIGN } };
 		EXPECT_EQ(Utility::filterResult(ASSIGN, a), b);
 
@@ -165,7 +167,7 @@ namespace UnitTesting {
 		EXPECT_EQ(Utility::filterResult(CALL, a), b);
 	}
 
-	TEST(Utility, filterResults) {
+	TEST(Utility, filterResultsPairStmtInfoAndString) {
 		std::vector<std::pair<StmtInfo, std::string>> a = {
 			{{ 1, STMT_WHILE }, "a"},{{ 2, STMT_IF }, "b"} ,
 			{{ 3, STMT_READ }, "c"},{{ 4, STMT_PRINT }, "d"} ,
@@ -189,67 +191,69 @@ namespace UnitTesting {
 
 		b = { {"5", "e"} };
 		EXPECT_EQ(Utility::filterResults(CALL, a), b);
+	}
 
-		std::vector<std::pair<StmtInfo, StmtInfo>> c = {
+	TEST(Utility, filterResultsPairStmtInfoAndStmtInfo) {
+		std::vector<std::pair<StmtInfo, StmtInfo>> a = {
 			{{ 1, STMT_WHILE }, { 11, STMT_READ }},{{ 2, STMT_IF }, { 12, STMT_IF }} ,
 			{{ 3, STMT_READ }, { 13, STMT_CALL }},{{ 4, STMT_PRINT }, { 14, STMT_IF }} ,
 			{{ 5, STMT_CALL }, { 15, STMT_ASSIGN }},{{ 6, STMT_ASSIGN }, { 16, STMT_IF }} ,
 			{{ 7, STMT_ASSIGN }, { 17, STMT_IF }},{{ 8, STMT_ASSIGN }, { 18, STMT_IF }} };
 
-		std::vector<std::vector<std::string>> d = { {"6", "16"}, {"7", "17"}, { "8", "18"} };
-		EXPECT_EQ(Utility::filterResults({ ASSIGN, IF }, c), d);
+		std::vector<std::vector<std::string>> b = { {"6", "16"}, {"7", "17"}, { "8", "18"} };
+		EXPECT_EQ(Utility::filterResults({ ASSIGN, IF }, a), b);
 
-		d = { {"1", "11"} };
-		EXPECT_EQ(Utility::filterResults({ WHILE, READ }, c), d);
+		b = { {"1", "11"} };
+		EXPECT_EQ(Utility::filterResults({ WHILE, READ }, a), b);
 
-		d = { {"2", "12"} };
-		EXPECT_EQ(Utility::filterResults({ IF, IF }, c), d);
+		b = { {"2", "12"} };
+		EXPECT_EQ(Utility::filterResults({ IF, IF }, a), b);
 
-		d = { {"3", "13"} };
-		EXPECT_EQ(Utility::filterResults({ READ, CALL }, c), d);
+		b = { {"3", "13"} };
+		EXPECT_EQ(Utility::filterResults({ READ, CALL }, a), b);
 
-		d = { {"4", "14"} };
-		EXPECT_EQ(Utility::filterResults({ PRINT, IF }, c), d);
+		b = { {"4", "14"} };
+		EXPECT_EQ(Utility::filterResults({ PRINT, IF }, a), b);
 
-		d = { {"5", "15"} };
-		EXPECT_EQ(Utility::filterResults({ CALL, ASSIGN }, c), d);
+		b = { {"5", "15"} };
+		EXPECT_EQ(Utility::filterResults({ CALL, ASSIGN }, a), b);
 
-		d = { };
+		b = { };
 
-		EXPECT_EQ(Utility::filterResults({ WHILE, WHILE }, c), d);
-		EXPECT_EQ(Utility::filterResults({ WHILE, CALL }, c), d);
-		EXPECT_EQ(Utility::filterResults({ WHILE, IF }, c), d);
-		EXPECT_EQ(Utility::filterResults({ WHILE, PRINT }, c), d);
-		EXPECT_EQ(Utility::filterResults({ WHILE, ASSIGN }, c), d);
+		EXPECT_EQ(Utility::filterResults({ WHILE, WHILE }, a), b);
+		EXPECT_EQ(Utility::filterResults({ WHILE, CALL }, a), b);
+		EXPECT_EQ(Utility::filterResults({ WHILE, IF }, a), b);
+		EXPECT_EQ(Utility::filterResults({ WHILE, PRINT }, a), b);
+		EXPECT_EQ(Utility::filterResults({ WHILE, ASSIGN }, a), b);
 
-		EXPECT_EQ(Utility::filterResults({ READ, WHILE }, c), d);
-		EXPECT_EQ(Utility::filterResults({ READ, READ }, c), d);
-		EXPECT_EQ(Utility::filterResults({ READ, IF }, c), d);
-		EXPECT_EQ(Utility::filterResults({ READ, PRINT }, c), d);
-		EXPECT_EQ(Utility::filterResults({ READ, ASSIGN }, c), d);
+		EXPECT_EQ(Utility::filterResults({ READ, WHILE }, a), b);
+		EXPECT_EQ(Utility::filterResults({ READ, READ }, a), b);
+		EXPECT_EQ(Utility::filterResults({ READ, IF }, a), b);
+		EXPECT_EQ(Utility::filterResults({ READ, PRINT }, a), b);
+		EXPECT_EQ(Utility::filterResults({ READ, ASSIGN }, a), b);
 
-		EXPECT_EQ(Utility::filterResults({ CALL, WHILE }, c), d);
-		EXPECT_EQ(Utility::filterResults({ CALL, READ }, c), d);
-		EXPECT_EQ(Utility::filterResults({ CALL, CALL }, c), d);
-		EXPECT_EQ(Utility::filterResults({ CALL, IF }, c), d);
-		EXPECT_EQ(Utility::filterResults({ CALL, PRINT }, c), d);
+		EXPECT_EQ(Utility::filterResults({ CALL, WHILE }, a), b);
+		EXPECT_EQ(Utility::filterResults({ CALL, READ }, a), b);
+		EXPECT_EQ(Utility::filterResults({ CALL, CALL }, a), b);
+		EXPECT_EQ(Utility::filterResults({ CALL, IF }, a), b);
+		EXPECT_EQ(Utility::filterResults({ CALL, PRINT }, a), b);
 
-		EXPECT_EQ(Utility::filterResults({ IF, WHILE }, c), d);
-		EXPECT_EQ(Utility::filterResults({ IF, READ }, c), d);
-		EXPECT_EQ(Utility::filterResults({ IF, CALL }, c), d);
-		EXPECT_EQ(Utility::filterResults({ IF, PRINT }, c), d);
-		EXPECT_EQ(Utility::filterResults({ IF, ASSIGN }, c), d);
+		EXPECT_EQ(Utility::filterResults({ IF, WHILE }, a), b);
+		EXPECT_EQ(Utility::filterResults({ IF, READ }, a), b);
+		EXPECT_EQ(Utility::filterResults({ IF, CALL }, a), b);
+		EXPECT_EQ(Utility::filterResults({ IF, PRINT }, a), b);
+		EXPECT_EQ(Utility::filterResults({ IF, ASSIGN }, a), b);
 
-		EXPECT_EQ(Utility::filterResults({ PRINT, WHILE }, c), d);
-		EXPECT_EQ(Utility::filterResults({ PRINT, READ }, c), d);
-		EXPECT_EQ(Utility::filterResults({ PRINT, CALL }, c), d);
-		EXPECT_EQ(Utility::filterResults({ PRINT, PRINT }, c), d);
-		EXPECT_EQ(Utility::filterResults({ PRINT, ASSIGN }, c), d);
+		EXPECT_EQ(Utility::filterResults({ PRINT, WHILE }, a), b);
+		EXPECT_EQ(Utility::filterResults({ PRINT, READ }, a), b);
+		EXPECT_EQ(Utility::filterResults({ PRINT, CALL }, a), b);
+		EXPECT_EQ(Utility::filterResults({ PRINT, PRINT }, a), b);
+		EXPECT_EQ(Utility::filterResults({ PRINT, ASSIGN }, a), b);
 
-		EXPECT_EQ(Utility::filterResults({ ASSIGN, WHILE }, c), d);
-		EXPECT_EQ(Utility::filterResults({ ASSIGN, READ }, c), d);
-		EXPECT_EQ(Utility::filterResults({ ASSIGN, CALL }, c), d);
-		EXPECT_EQ(Utility::filterResults({ ASSIGN, PRINT }, c), d);
-		EXPECT_EQ(Utility::filterResults({ ASSIGN, ASSIGN }, c), d);
+		EXPECT_EQ(Utility::filterResults({ ASSIGN, WHILE }, a), b);
+		EXPECT_EQ(Utility::filterResults({ ASSIGN, READ }, a), b);
+		EXPECT_EQ(Utility::filterResults({ ASSIGN, CALL }, a), b);
+		EXPECT_EQ(Utility::filterResults({ ASSIGN, PRINT }, a), b);
+		EXPECT_EQ(Utility::filterResults({ ASSIGN, ASSIGN }, a), b);
 	}
 }
