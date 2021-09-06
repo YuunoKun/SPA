@@ -1,0 +1,15 @@
+1 – select procedure
+procedure p;
+Select p
+main
+5000
+2 – select statement
+stmt s;
+Select s
+1, 2, 3, 4
+5000
+3 – select variable
+variable v;
+Select v
+x, y, z
+5000

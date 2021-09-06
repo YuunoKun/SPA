@@ -1,0 +1,6 @@
+Procedure main {
+	read x;                 //1
+	read y;                 //2
+	z = x + y;              //3
+	print z;                 //4
+}

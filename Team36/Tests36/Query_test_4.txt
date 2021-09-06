@@ -1,0 +1,40 @@
+1 – select procedure
+procedure p;
+Select p
+abc
+5000
+2 – select statement
+stmt s;
+Select s
+1, 2, 3, 4, 5
+5000
+3 – select variable;
+variable v;
+Select v
+x
+5000
+4 – select assignment
+assign a;
+Select a;
+3, 5
+5000
+5 – follows, 1 such that and 1 unknown synonym
+stmt s;
+Select s such that Follows(1, s)
+2, 4
+5000
+6 – parent, 1 such that and 1 unknown synonym
+stmt s;
+Select s such that Parent(1, s)
+3, 5
+5000
+7 – modifies, 1 such that and 1 unknown synonym
+variable v;
+Select v such that Modifies(3, v)
+X
+5000
+8 – uses, 1 such that and 1 unknown synonym
+variable v;
+Select v such that Uses(5, v)
+V
+5000
