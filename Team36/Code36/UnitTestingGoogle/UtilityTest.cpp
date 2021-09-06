@@ -84,7 +84,7 @@ namespace UnitTesting {
 		//Todo
 	}
 
-	TEST(Utility, stmtsTableToStringTable) {
+	TEST(Utility, pairToStringTable) {
 		//Todo
 	}
 	TEST(Utility, entityToEntityTypeVector) {

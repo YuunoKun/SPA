@@ -40,13 +40,31 @@ std::vector<std::string> Utility::stmtInfoToStringVector(std::vector<StmtInfo>& 
 	return to;
 }
 
-std::vector<std::vector<std::string>> Utility::stmtInfoTableToStringTable(std::vector<std::vector<StmtInfo>>& from) {
+std::vector<std::vector<std::string>> Utility::pairToStringTable(std::vector<std::pair<std::string, std::string>>& from) {
 	std::vector< std::vector<std::string>> to;
 	for (auto& it : from) {
-		to.push_back(stmtInfoToStringVector(it));
+		to.push_back({ it.first, it.second });
 	}
 	return to;
 }
+
+std::vector<std::vector<std::string>> Utility::pairToStringTable(std::vector<std::pair<StmtInfo, std::string>>& from) {
+	std::vector< std::vector<std::string>> to;
+	for (auto& it : from) {
+		to.push_back({ std::to_string(it.first.stmt_index), it.second });
+	}
+	return to;
+}
+
+std::vector<std::vector<std::string>> Utility::pairToStringTable(std::vector<std::pair<StmtInfo, StmtInfo>>& from) {
+	std::vector< std::vector<std::string>> to;
+	for (auto& it : from) {
+		to.push_back({ std::to_string(it.first.stmt_index), std::to_string(it.second.stmt_index)});
+	}
+	return to;
+}
+
+
 
 std::list<std::string> Utility::variablesToStringList(std::vector<var_name>& from) {
 	std::list<std::string> to;
@@ -109,47 +127,48 @@ std::vector<StmtInfo> Utility::filterResult(EntityType e, std::vector<StmtInfo>&
 	}
 
 	StmtType type = convertType(e);;
+
 	std::vector<StmtInfo> result;
 	for (auto& it : v) {
 		if (it.stmt_type == type) {
 			result.push_back(it);
 		}
 	}
-	return result;
+
+	return  result;
 }
 
-std::vector<std::vector<StmtInfo>> Utility::filterResults(std::vector<EntityType> et, std::vector<std::vector<StmtInfo>>& table) {
-	std::vector<std::vector<StmtInfo>> results;
-
-	if (isAllStmt(et)) {
-		return table;
+std::vector<std::vector<std::string>> Utility::filterResults(EntityType e, std::vector<std::pair<StmtInfo, std::string>>& v) {
+	if (e == STMT) {
+		return pairToStringTable(v);
 	}
 
-	for (auto& row : table) {
-		bool match = true;
-		for (int i = 0; i < et.size(); i++) {
-			if (et[i] == STMT) {
-				continue;
-			}
-			StmtType type = convertType(et[i]);;
-			if (row[i].stmt_type != type) {
-				match = false;
-				break;
-			}
+	StmtType type = convertType(e);;
+	std::vector<std::pair<StmtInfo, std::string>> result;
+	for (auto& it : v) {
+		if (it.first.stmt_type == type) {
+			result.push_back(it);
 		}
-		if (match) {
+	}
+	return pairToStringTable(result);
+}
+
+std::vector<std::vector<std::string>> Utility::filterResults(std::pair<EntityType, EntityType> type, std::vector<std::pair<StmtInfo, StmtInfo>>& table) {
+	if (type.first == STMT && type.second == STMT) {
+		return pairToStringTable(table);
+	}
+
+	std::vector < std::pair<StmtInfo, StmtInfo>> results;
+	StmtType type1 = convertType(type.first);
+	StmtType type2 = convertType(type.second);
+	for (auto& row : table) {
+		if((type.first == STMT || type1 == row.first.stmt_type) &&
+			(type.second == STMT || type2 == row.second.stmt_type)){
+
 			results.push_back(row);
 		}
 	}
 
-	return results;
+	return pairToStringTable(results);
 }
 
-bool Utility::isAllStmt(std::vector<EntityType> v) {
-	for (auto& it : v) {
-		if (it != STMT) {
-			return false;
-		}
-	}
-	return true;
-}

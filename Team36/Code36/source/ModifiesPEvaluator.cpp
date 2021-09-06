@@ -33,10 +33,8 @@ bool ModifiesPEvaluator::haveRelationAtLeft(Entity e) {
 ResultTable ModifiesPEvaluator::getRelations(Entity left, Entity right) {
 	std::vector<std::pair<std::string, std::string>> results = pkb.getModifiesPRelation();
 	std::vector<Entity> header{ left, right };
-	//TODO
-	//ResultTable result = ResultTable(header, results);
-	//return result;
-	throw std::invalid_argument("TODO");
+	ResultTable result = ResultTable(header, results);
+	return result;
 }
 
 //If left side is WILD and right side is declartion: e.g Relation(_, a)

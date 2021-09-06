@@ -16,7 +16,9 @@ public:
 
 	static std::vector<StmtInfo> stmtToStmtInfoVector(std::vector<Stmt>&);
 	static std::vector<std::string> stmtInfoToStringVector(std::vector<StmtInfo>&);
-	static  std::vector<std::vector<std::string>> stmtInfoTableToStringTable(std::vector<std::vector<StmtInfo>>&);
+	static  std::vector<std::vector<std::string>> pairToStringTable(std::vector<std::pair<std::string, std::string>>&);
+	static  std::vector<std::vector<std::string>> pairToStringTable(std::vector<std::pair<StmtInfo, std::string>>&);
+	static  std::vector<std::vector<std::string>> pairToStringTable(std::vector<std::pair<StmtInfo, StmtInfo>>&);
 
 
 	static std::vector<EntityType> entityToEntityTypeVector(std::vector<Entity>&);
@@ -26,8 +28,7 @@ public:
 
 	static StmtType convertType(EntityType);
 	static std::vector<StmtInfo> filterResult(EntityType, std::vector<StmtInfo>&);
-	static std::vector<std::vector<StmtInfo>> filterResults(std::vector<EntityType>, std::vector<std::vector<StmtInfo>>&);
+	static std::vector<std::vector<std::string>> filterResults(EntityType, std::vector<std::pair<StmtInfo, std::string>>&);
+	static std::vector<std::vector<std::string>> filterResults(std::pair<EntityType, EntityType>, std::vector<std::pair<StmtInfo, StmtInfo>>&);
 
-private:
-	static bool isAllStmt(std::vector<EntityType>);
 };

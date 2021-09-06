@@ -29,7 +29,7 @@ public:
 	std::vector<StmtInfo> getFollowing();
 	std::vector<StmtInfo> getFollowed(stmt_index);
 	std::vector<StmtInfo> getFollowing(stmt_index);
-	std::vector<std::vector<StmtInfo>> getFollows();
+	std::vector<std::pair<StmtInfo, StmtInfo>> getFollows();
 
 	//FollowT relation function
 	bool isFollowT(stmt_index, stmt_index);
@@ -39,7 +39,7 @@ public:
 	std::vector<StmtInfo> getFollowingT();
 	std::vector<StmtInfo> getFollowedT(stmt_index);
 	std::vector<StmtInfo> getFollowingT(stmt_index);
-	std::vector<std::vector<StmtInfo>> getFollowsT();
+	std::vector<std::pair<StmtInfo, StmtInfo>> getFollowsT();
 
 
 	//Parent relation function
@@ -50,7 +50,7 @@ public:
 	std::vector<StmtInfo> getParent();
 	std::vector<StmtInfo> getChild(stmt_index);
 	std::vector<StmtInfo> getParent(stmt_index);
-	std::vector<std::vector<StmtInfo>> getAllParentRelation();
+	std::vector<std::pair<StmtInfo, StmtInfo>> getAllParentRelation();
 
 	//ParentT relation function
 	bool isParentT(stmt_index, stmt_index);
@@ -60,7 +60,7 @@ public:
 	std::vector<StmtInfo> getParentT();
 	std::vector<StmtInfo> getChildT(stmt_index);
 	std::vector<StmtInfo> getParentT(stmt_index);
-	std::vector<std::vector<StmtInfo>> getAllParentTRelation();
+	std::vector<std::pair<StmtInfo, StmtInfo>> getAllParentTRelation();
 
 	//ModifiesP relation Function
 	bool isModifiesP(proc_name, var_name);

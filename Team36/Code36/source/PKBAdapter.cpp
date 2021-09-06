@@ -23,7 +23,7 @@ std::vector<proc_name> PKBAdapter::getProcedures() {
 
 std::vector<StmtInfo> PKBAdapter::getAssigns() {
 	//TODO
-	return std::vector<StmtInfo>();
+	return Utility::filterResult(ASSIGN, std::vector<StmtInfo>());
 }
 
 std::vector<StmtInfo> PKBAdapter::getPrints() {
@@ -50,6 +50,7 @@ std::vector<StmtInfo> PKBAdapter::getIfs() {
 	//TODO
 	return std::vector<StmtInfo>();
 }
+
 
 bool PKBAdapter::isFollow(stmt_index, stmt_index) {
 	//TODO
@@ -86,9 +87,9 @@ std::vector<StmtInfo> PKBAdapter::getFollowing(stmt_index) {
 	return std::vector<StmtInfo>();
 }
 
-std::vector<std::vector<StmtInfo>> PKBAdapter::getFollows() {
+std::vector<std::pair<StmtInfo, StmtInfo>> PKBAdapter::getFollows() {
 	//Todo
-	return std::vector<std::vector<StmtInfo>>();
+	return std::vector<std::pair<StmtInfo, StmtInfo>>();
 }
 
 bool PKBAdapter::isFollowT(stmt_index, stmt_index) {
@@ -126,9 +127,9 @@ std::vector<StmtInfo> PKBAdapter::getFollowingT(stmt_index) {
 	return std::vector<StmtInfo>();
 }
 
-std::vector<std::vector<StmtInfo>> PKBAdapter::getFollowsT() {
+std::vector<std::pair<StmtInfo, StmtInfo>> PKBAdapter::getFollowsT() {
 	//Todo
-	return std::vector<std::vector<StmtInfo>>();
+	return std::vector<std::pair<StmtInfo, StmtInfo>>();
 }
 
 bool PKBAdapter::isParent(stmt_index, stmt_index) {
@@ -166,9 +167,9 @@ std::vector<StmtInfo> PKBAdapter::getParent(stmt_index) {
 	return std::vector<StmtInfo>();
 }
 
-std::vector<std::vector<StmtInfo>> PKBAdapter::getAllParentRelation() {
+std::vector<std::pair<StmtInfo, StmtInfo>> PKBAdapter::getAllParentRelation() {
 	//Todo
-	return std::vector<std::vector<StmtInfo>>();
+	return std::vector<std::pair<StmtInfo, StmtInfo>>();
 }
 
 bool PKBAdapter::isParentT(stmt_index, stmt_index) {
@@ -206,9 +207,9 @@ std::vector<StmtInfo> PKBAdapter::getParentT(stmt_index) {
 	return std::vector<StmtInfo>();
 }
 
-std::vector<std::vector<StmtInfo>> PKBAdapter::getAllParentTRelation() {
+std::vector<std::pair<StmtInfo, StmtInfo>> PKBAdapter::getAllParentTRelation() {
 	//Todo
-	return std::vector<std::vector<StmtInfo>>();
+	return std::vector<std::pair<StmtInfo, StmtInfo>>();
 }
 
 bool PKBAdapter::isModifiesP(proc_name, var_name) {

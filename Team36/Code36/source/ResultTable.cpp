@@ -11,16 +11,19 @@ ResultTable::ResultTable(Entity& header, std::vector<std::string>& table) {
 	init(header, table);
 }
 
-ResultTable::ResultTable(std::vector<Entity>& header, std::vector<std::vector<StmtInfo>>& table) {
+ResultTable::ResultTable(std::vector<Entity>& header, std::vector<std::pair<std::string, std::string>>& table) {
+	init(header, Utility::pairToStringTable(table));
+}
+
+ResultTable::ResultTable(std::vector<Entity>& header, std::vector<std::pair<StmtInfo, std::string>>& table) {
 	std::vector<EntityType> types = Utility::entityToEntityTypeVector(header);
-	table = Utility::filterResults(types, table);
-	init(header, Utility::stmtInfoTableToStringTable(table));
+	init(header, Utility::filterResults(types[0], table));
 }
 
-ResultTable::ResultTable(std::vector<Entity>& header, std::vector<std::vector<std::string>>& table) {
-	init(header, table);
+ResultTable::ResultTable(std::vector<Entity>& header, std::vector<std::pair<StmtInfo, StmtInfo>>& table) {
+	std::vector<EntityType> types = Utility::entityToEntityTypeVector(header);
+	init(header, Utility::filterResults(std::make_pair(types[0], types[1]), table));
 }
-
 
 //Return true if merge is successful
 bool ResultTable::merge(ResultTable t) {

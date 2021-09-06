@@ -5,15 +5,15 @@
 namespace UnitTesting {
 	
 	std::vector<Entity> queryTableHeader1{ {WHILE, "test" }, { READ,"hello" }, {STMT, "test1" }, { IF,"hello3" } };
-	std::vector<std::vector<std::string>> queryTableTable1{
-		{ "1", "2", "3", "4" },
-		{ "5", "6", "7", "8" },
-		{ "9", "10", "11", "12" },
-		{ "13", "14", "15", "16" },
-		{ "17", "18", "19", "20" } };
+	std::vector<std::pair<std::string, std::string>> queryTableTable1{
+		{ "1", "2" }, { "3", "4" },
+		{ "5", "6" }, { "7", "8" },
+		{ "9", "10" }, { "11", "12" },
+		{ "13", "14" }, { "15", "16" },
+		{ "17", "18" }, { "19", "20" } };
 
 	std::vector<Entity> queryTableHeader2{ {WHILE, "t1" }, { READ,"t2" } };
-	std::vector<std::vector<std::string>> queryTableTable2{
+	std::vector<std::pair<std::string,std::string>> queryTableTable2{
 		{ "1", "11", },
 		{ "2", "12", },
 		{ "3", "13",},
@@ -21,7 +21,7 @@ namespace UnitTesting {
 		{ "5", "15", } };
 
 	std::vector<Entity> queryTableHeader3{ {VARIABLE, "t3" }, { IF,"t4" } };
-	std::vector<std::vector<std::string>> queryTableTable3{
+	std::vector<std::pair<std::string, std::string>> queryTableTable3{
 		{ "6", "16", },
 		{ "7", "17", },
 		{ "8", "18",},
@@ -83,26 +83,14 @@ namespace UnitTesting {
 		queryResult.addResult(resultTable2);
 		queryResult.addResult(resultTable3);
 
-		std::list<std::string> result{ "1", "5", "9", "13", "17" };
+		std::list<std::string> result{ "1", "5", "9", "13", "17", "3", "7", "11", "15", "19" };
 		std::list<std::string> tableResult = queryResult.getResult(queryTableHeader1[0]);
 		result.sort();
 		tableResult.sort();
 		EXPECT_EQ(tableResult, result);
 
-		result = { "2", "6", "10", "14", "18" };
+		result = { "2", "6", "10", "14", "18", "4", "8", "12", "16", "20" };
 		tableResult = queryResult.getResult(queryTableHeader1[1]);
-		result.sort();
-		tableResult.sort();
-		EXPECT_EQ(tableResult, result);
-
-		result = { "3", "7", "11", "15", "19" };
-		tableResult = queryResult.getResult(queryTableHeader1[2]);
-		result.sort();
-		tableResult.sort();
-		EXPECT_EQ(tableResult, result);
-
-		result = { "4", "8", "12", "16", "20" };
-		tableResult = queryResult.getResult(queryTableHeader1[3]);
 		result.sort();
 		tableResult.sort();
 		EXPECT_EQ(tableResult, result);
