@@ -8,7 +8,7 @@
 
 //Handle both wild : e.g Relation(_, _)
 bool ModifiesSEvaluator::haveRelation() {
-	return !pkb.getModifiesS().empty();
+	return !pkb.isModifiesSEmpty();
 	//Todo: throw exception for iteration 2
 	//throw std::invalid_argument("haveRelation(): Wild is not allowed for first argument of Modifies_S");
 }
@@ -37,11 +37,9 @@ bool ModifiesSEvaluator::haveRelationAtLeft(Entity e) {
 //If both side is declartion: e.g Relation(a, b)
 ResultTable ModifiesSEvaluator::getRelations(Entity left, Entity right) {
 	std::vector<std::pair<StmtInfo, std::string>> results = pkb.getModifiesSRelation();
-	std::vector<Entity> header{ left, right };
-	//TODO
-	//ResultTable result = ResultTable(header, results);
-	//return result;
-	throw std::invalid_argument("TODO");
+	std::pair<Entity, Entity> header{ left, right };
+	ResultTable result = ResultTable(header, results);
+	return result;
 }
 
 //If left side is WILD and right side is declartion: e.g Relation(_, a)

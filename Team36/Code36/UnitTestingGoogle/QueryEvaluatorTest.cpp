@@ -16,7 +16,7 @@ namespace UnitTesting {
 		std::list<std::string> result = { "a", "b", "c" };
 
 		Query q;
-		Entity e = { VARIABLE, "1" };
+		Entity e = { VARIABLE, Synonym{"1"} };
 		q.addSelected(e);
 
 		QueryEvaluator qe;
@@ -32,7 +32,7 @@ namespace UnitTesting {
 		std::list<std::string> result = { "1", "2", "3" };
 
 		Query q;
-		Entity e = { CONSTANT, "1" };
+		Entity e = { CONSTANT, Synonym{"1"} };
 		q.addSelected(e);
 
 		QueryEvaluator qe;
@@ -48,7 +48,7 @@ namespace UnitTesting {
 		std::list<std::string> result = { "x", "y", "z" };
 
 		Query q;
-		Entity e = { PROCEDURE, "1" };
+		Entity e = { PROCEDURE, Synonym{"1"} };
 		q.addSelected(e);
 
 		QueryEvaluator qe;
