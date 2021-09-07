@@ -1,41 +1,56 @@
 #include "pch.h"
 
 #include "ModifiesSEvaluator.h"
+#include "PKB.h"
 
 namespace UnitTesting {
-	TEST(ModifiesSEvaluator, haveRelation) {
-		//Todo
+
+	class ModifiesSEvaluatorTest : public testing::Test {
+	protected:
+		ModifiesSEvaluatorTest() {
+		}
+
+
+		virtual void SetUp() override {
+			PKB::getInstance().resetCache();
+		}
+
+		PKBAdapter pkb;
+		ModifiesSEvaluator evaluator;
+	};
+	TEST_F(ModifiesSEvaluatorTest, haveRelation) {
+		//TODO
 	}
 
-	TEST(ModifiesSEvaluator, isRelation) {
-		//Todo
+	TEST_F(ModifiesSEvaluatorTest, isRelation) {
+		//TODO
 	}
 
-	TEST(ModifiesSEvaluator, haveRelationAtRight) {
-		//Todo
+	TEST_F(ModifiesSEvaluatorTest, haveRelationAtRight) {
+		//TODO
 	}
 
-	TEST(ModifiesSEvaluator, haveRelationAtLeft) {
-		//Todo
+	TEST_F(ModifiesSEvaluatorTest, haveRelationAtLeft) {
+		//TODO
 	}
 
-	TEST(ModifiesSEvaluator, getRelations) {
-		//Todo
+	TEST_F(ModifiesSEvaluatorTest, getRelations) {
+		//TODO
 	}
 
-	TEST(ModifiesSEvaluator, getRightRelations) {
-		//Todo
+	TEST_F(ModifiesSEvaluatorTest, getRightRelations) {
+		//TODO
 	}
 
-	TEST(ModifiesSEvaluator, getLeftRelations) {
-		//Todo
+	TEST_F(ModifiesSEvaluatorTest, getLeftRelations) {
+		//TODO
 	}
 
-	TEST(ModifiesSEvaluator, getRelationMatchLeft) {
-		//Todo
+	TEST_F(ModifiesSEvaluatorTest, getRelationMatchLeft) {
+		//TODO
 	}
 
-	TEST(ModifiesSEvaluator, getRelationMatchRight) {
-		//Todo
+	TEST_F(ModifiesSEvaluatorTest, getRelationMatchRight) {
+		//TODO
 	}
 }

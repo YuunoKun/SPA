@@ -1,41 +1,56 @@
 #include "pch.h"
 
 #include "ModifiesPEvaluator.h"
+#include "PKB.h"
 
 namespace UnitTesting {
-	TEST(ModifiesPEvaluator, haveRelation) {
+
+	class ModifiesPEvaluatorTest : public testing::Test {
+	protected:
+		ModifiesPEvaluatorTest() {
+		}
+
+
+		virtual void SetUp() override {
+			PKB::getInstance().resetCache();
+		}
+
+		PKBAdapter pkb;
+		ModifiesPEvaluator evaluator;
+	};
+	TEST_F(ModifiesPEvaluatorTest, haveRelation) {
 		//TODO: Iteration 2
 	}
 
-	TEST(ModifiesPEvaluator, isRelation) {
+	TEST_F(ModifiesPEvaluatorTest, isRelation) {
 		//TODO: Iteration 2
 	}
 
-	TEST(ModifiesPEvaluator, haveRelationAtRight) {
+	TEST_F(ModifiesPEvaluatorTest, haveRelationAtRight) {
 		//TODO: Iteration 2
 	}
 
-	TEST(ModifiesPEvaluator, haveRelationAtLeft) {
+	TEST_F(ModifiesPEvaluatorTest, haveRelationAtLeft) {
 		//TODO: Iteration 2
 	}
 
-	TEST(ModifiesPEvaluator, getRelations) {
+	TEST_F(ModifiesPEvaluatorTest, getRelations) {
 		//TODO: Iteration 2
 	}
 
-	TEST(ModifiesPEvaluator, getRightRelations) {
+	TEST_F(ModifiesPEvaluatorTest, getRightRelations) {
 		//TODO: Iteration 2
 	}
 
-	TEST(ModifiesPEvaluator, getLeftRelations) {
+	TEST_F(ModifiesPEvaluatorTest, getLeftRelations) {
 		//TODO: Iteration 2
 	}
 
-	TEST(ModifiesPEvaluator, getRelationMatchLeft) {
+	TEST_F(ModifiesPEvaluatorTest, getRelationMatchLeft) {
 		//TODO: Iteration 2
 	}
 
-	TEST(ModifiesPEvaluator, getRelationMatchRight) {
+	TEST_F(ModifiesPEvaluatorTest, getRelationMatchRight) {
 		//TODO: Iteration 2
 	}
 }

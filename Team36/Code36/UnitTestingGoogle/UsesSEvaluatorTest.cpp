@@ -1,41 +1,57 @@
 #include "pch.h"
 
 #include "UsesSEvaluator.h"
+#include "PKB.h"
 
 namespace UnitTesting {
-	TEST(UsesSEvaluator, haveRelation) {
+
+	class UsesSEvaluatorTest : public testing::Test {
+	protected:
+		UsesSEvaluatorTest() {
+		}
+
+
+		virtual void SetUp() override {
+			PKB::getInstance().resetCache();
+		}
+
+		PKBAdapter pkb;
+		UsesSEvaluator evaluator;
+	};
+
+	TEST_F(UsesSEvaluatorTest, haveRelation) {
 		//Todo
 	}
 
-	TEST(UsesSEvaluator, isRelation) {
+	TEST_F(UsesSEvaluatorTest, isRelation) {
 		//Todo
 	}
 
-	TEST(UsesSEvaluator, haveRelationAtRight) {
+	TEST_F(UsesSEvaluatorTest, haveRelationAtRight) {
 		//Todo
 	}
 
-	TEST(UsesSEvaluator, haveRelationAtLeft) {
+	TEST_F(UsesSEvaluatorTest, haveRelationAtLeft) {
 		//Todo
 	}
 
-	TEST(UsesSEvaluator, getRelations) {
+	TEST_F(UsesSEvaluatorTest, getRelations) {
 		//Todo
 	}
 
-	TEST(UsesSEvaluator, getRightRelations) {
+	TEST_F(UsesSEvaluatorTest, getRightRelations) {
 		//Todo
 	}
 
-	TEST(UsesSEvaluator, getLeftRelations) {
+	TEST_F(UsesSEvaluatorTest, getLeftRelations) {
 		//Todo
 	}
 
-	TEST(UsesSEvaluator, getRelationMatchLeft) {
+	TEST_F(UsesSEvaluatorTest, getRelationMatchLeft) {
 		//Todo
 	}
 
-	TEST(UsesSEvaluator, getRelationMatchRight) {
+	TEST_F(UsesSEvaluatorTest, getRelationMatchRight) {
 		//Todo
 	}
 }

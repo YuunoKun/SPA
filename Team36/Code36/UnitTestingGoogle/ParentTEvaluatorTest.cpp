@@ -1,41 +1,57 @@
 #include "pch.h"
 
 #include "ParentTEvaluator.h"
+#include "PKB.h"
 
 namespace UnitTesting {
-	TEST(ParentTEvaluator, haveRelation) {
+
+	class ParentTEvaluatorTest : public testing::Test {
+	protected:
+		ParentTEvaluatorTest() {
+		}
+
+
+		virtual void SetUp() override {
+			PKB::getInstance().resetCache();
+		}
+
+		PKBAdapter pkb;
+		ParentTEvaluator evaluator;
+	};
+
+	TEST_F(ParentTEvaluatorTest, haveRelation) {
 		//Todo
 	}
 
-	TEST(ParentTEvaluator, isRelation) {
+	TEST_F(ParentTEvaluatorTest, isRelation) {
 		//Todo
 	}
 
-	TEST(ParentTEvaluator, haveRelationAtRight) {
+	TEST_F(ParentTEvaluatorTest, haveRelationAtRight) {
 		//Todo
 	}
 
-	TEST(ParentTEvaluator, haveRelationAtLeft) {
+	TEST_F(ParentTEvaluatorTest, haveRelationAtLeft) {
 		//Todo
 	}
 
-	TEST(ParentTEvaluator, getRelations) {
+	TEST_F(ParentTEvaluatorTest, getRelations) {
 		//Todo
 	}
 
-	TEST(ParentTEvaluator, getRightRelations) {
+	TEST_F(ParentTEvaluatorTest, getRightRelations) {
 		//Todo
 	}
 
-	TEST(ParentTEvaluator, getLeftRelations) {
+	TEST_F(ParentTEvaluatorTest, getLeftRelations) {
 		//Todo
 	}
 
-	TEST(ParentTEvaluator, getRelationMatchLeft) {
+	TEST_F(ParentTEvaluatorTest, getRelationMatchLeft) {
 		//Todo
 	}
 
-	TEST(ParentTEvaluator, getRelationMatchRight) {
+	TEST_F(ParentTEvaluatorTest, getRelationMatchRight) {
 		//Todo
 	}
 }
