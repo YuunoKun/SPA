@@ -17,7 +17,7 @@ namespace UnitTesting {
 
 		for each (std::string name in v) {
 			Entity testEntity(STMT, name);
-			EXPECT_EQ(testEntity.getName(), name);
+			EXPECT_EQ(testEntity.getSynonym(), name);
 		}
 	}
 
@@ -36,10 +36,10 @@ namespace UnitTesting {
 
 	TEST(Entity, isDeclartion) {
 		Entity testEntity(STMT, "test");
-		EXPECT_TRUE(testEntity.isDeclaration());
+		EXPECT_TRUE(testEntity.isSynonym());
 
 		Entity testEntity2(STMT, "", "test");
-		EXPECT_FALSE(testEntity2.isDeclaration());
+		EXPECT_FALSE(testEntity2.isSynonym());
 	}
 	TEST(Entity, equal) {
 		Entity e1(STMT, "test");
