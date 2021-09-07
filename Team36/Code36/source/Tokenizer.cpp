@@ -28,7 +28,7 @@ void Tokenizer::parse_into_tokens(const char* input) {
 				separator_validation_stk.pop();
 			}
 			else {
-				throw std::runtime_error("Unexpected symbol : \'" + c + '\'');
+				//throw std::runtime_error("Unexpected symbol : \'" + c + '\'');
 			}
 			add_token(current_token);
 			current_token.set_token_type(TokenType::STATEMENT_LIST_CLOSE);
@@ -45,7 +45,7 @@ void Tokenizer::parse_into_tokens(const char* input) {
 				separator_validation_stk.pop();
 			}
 			else {
-				throw std::runtime_error("Unexpected symbol : \'" + c + '\'');
+				//throw std::runtime_error("Unexpected symbol : \'" + c + '\'');
 			}
 			add_token(current_token);
 			current_token.set_token_type(TokenType::PARENTHESIS_CLOSE);

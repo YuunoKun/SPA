@@ -104,7 +104,7 @@ void DesignExtractor::end_expr() {
 void DesignExtractor::populateEntities() {
 
 	for (Procedure p : m_procedures) {
-		PKB::getInstance().addProcedures(p.get_name());
+		PKB::getInstance().addProcedure(p.get_name());
 	}
 
 	for (Statement s : m_statements) {

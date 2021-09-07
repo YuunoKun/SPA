@@ -295,17 +295,17 @@ namespace UnitTesting {
 		Tokenizer tokenizer;
 		DummyDesignExtractor dde;
 
-		tokenizer.parse_into_tokens("x=1;");
+		tokenizer.parse_into_tokens("x=1;}");
 		tokenizer.init_token_stack();
 		FSM fsm_1(tokenizer, &dde);
 		ASSERT_NO_THROW(fsm_1.expect_statement_list());
 
-		tokenizer.parse_into_tokens("read x;print x;call myProcedure;");
+		tokenizer.parse_into_tokens("read x;print x;call myProcedure;}");
 		tokenizer.init_token_stack();
 		FSM fsm_2(tokenizer, &dde);
 		ASSERT_NO_THROW(fsm_2.expect_statement_list());
 
-		tokenizer.parse_into_tokens("x=1;if(x>1)then{x=2;}else{x=3;}x=4;while(x==5){x=6;}x=7;");
+		tokenizer.parse_into_tokens("x=1;if(x>1)then{x=2;}else{x=3;}x=4;while(x==5){x=6;}x=7;}");
 		tokenizer.init_token_stack();
 		FSM fsm_3(tokenizer, &dde);
 		ASSERT_NO_THROW(fsm_3.expect_statement_list());
