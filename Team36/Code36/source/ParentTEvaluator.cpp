@@ -9,7 +9,7 @@
 
 //Handle both wild : e.g Relation(_, _)
 bool ParentTEvaluator::haveRelation() {
-	return !pkb.getParentT().empty();
+	return !pkb.isParentTEmpty();
 }
 
 //Handle both constant : e.g Relation(1, 2)
@@ -33,8 +33,8 @@ bool ParentTEvaluator::haveRelationAtLeft(Entity e) {
 
 //If both side is declartion: e.g Relation(a, b)
 ResultTable ParentTEvaluator::getRelations(Entity left, Entity right) {
-	std::vector<std::vector<StmtInfo>> results = pkb.getAllParentRelation();
-	std::vector<Entity> header{ left, right };
+	std::vector<std::pair<StmtInfo, StmtInfo>> results = pkb.getAllParentRelation();
+	std::pair<Entity, Entity> header{ left, right };
 	ResultTable result = ResultTable(header, results);
 	return result;
 }

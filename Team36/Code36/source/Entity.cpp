@@ -3,15 +3,21 @@
 Entity::Entity() {
 }
 
-Entity::Entity(EntityType entity_type, std::string synonym) {
+Entity::Entity(EntityType) {
 	this->entity_type = entity_type;
-	this->synonym = synonym;
+	this->is_synonym = false;
 }
 
-Entity::Entity(EntityType entity_type, std::string synonym, std::string value) {
+Entity::Entity(EntityType entity_type, Synonym synonym) {
 	this->entity_type = entity_type;
 	this->synonym = synonym;
+	this->is_synonym = true;
+}
+
+Entity::Entity(EntityType entity_type, std::string value) {
+	this->entity_type = entity_type;
 	this->value = value;
+	this->is_synonym = false;
 }
 
 EntityType Entity::getType() {
@@ -19,7 +25,7 @@ EntityType Entity::getType() {
 }
 
 std::string Entity::getSynonym() {
-	return synonym;
+	return synonym.name;
 }
 
 std::string Entity::getValue() {
@@ -27,7 +33,7 @@ std::string Entity::getValue() {
 }
 
 bool Entity::isSynonym() {
-	return synonym != "";
+	return is_synonym;
 }
 
 bool Entity::operator==(const Entity& entity) const {
