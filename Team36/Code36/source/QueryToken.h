@@ -44,6 +44,23 @@ public:
 		DIV,
 		MOD,
 
+		//Relationships 
+		// need parent type? cause will pass straight to relref class
+		MODIFIESP,
+		MODIFIESS,
+		USESP,
+		USESS,
+		CALLS,
+		CALLST,
+		PARENT,
+		PARENTT,
+		FOLLOWS,
+		FOLLOWST,
+		NEXT,
+		NEXTT,
+		AFFECTS,
+		AFFECTST,
+
 		//  PQL Conditional Operators
 	/*	BOOL_AND,
 		BOOL_OR,
