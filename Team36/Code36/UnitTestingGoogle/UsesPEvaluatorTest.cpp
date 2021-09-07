@@ -4,12 +4,10 @@
 #include "PKB.h"
 
 namespace UnitTesting {
-
 	class UsesPEvaluatorTest : public testing::Test {
 	protected:
 		UsesPEvaluatorTest() {
 		}
-
 
 		virtual void SetUp() override {
 			PKB::getInstance().resetCache();

@@ -4,12 +4,10 @@
 #include "PKB.h"
 
 namespace UnitTesting {
-
 	class ParentEvaluatorTest : public testing::Test {
 	protected:
 		ParentEvaluatorTest() {
 		}
-
 
 		virtual void SetUp() override {
 			PKB::getInstance().resetCache();
@@ -144,14 +142,12 @@ namespace UnitTesting {
 		t = ResultTable(header, v);
 		EXPECT_EQ(parentEvaluator.getRelations(left, right), t);
 
-
 		v = { {p2, p3} };
 		left = { PRINT, Synonym{"a"} };
 		right = { READ, Synonym{"b"} };
 		header = { left, right };
 		t = ResultTable(header, v);
 		EXPECT_EQ(parentEvaluator.getRelations(left, right), t);
-
 
 		v = { };
 		left = { READ, Synonym{"a"} };

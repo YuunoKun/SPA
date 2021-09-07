@@ -64,4 +64,3 @@ ResultTable UsesSEvaluator::getRelationMatchRight(Entity header, Entity constant
 	var_name v = constant.getValue();
 	return ResultTable(header, pkb.getUsesS(v));
 }
-

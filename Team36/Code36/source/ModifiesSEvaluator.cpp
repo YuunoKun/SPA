@@ -5,7 +5,6 @@
 #include "PKBAdapter.h"
 #include "ModifiesSEvaluator.h"
 
-
 //Handle both wild : e.g Relation(_, _)
 bool ModifiesSEvaluator::haveRelation() {
 	return !pkb.isModifiesSEmpty();

@@ -4,7 +4,6 @@
 #include "PKB.h"
 
 namespace UnitTesting {
-
 	class FollowsTEvaluatorTest : public testing::Test {
 	protected:
 		FollowsTEvaluatorTest() {

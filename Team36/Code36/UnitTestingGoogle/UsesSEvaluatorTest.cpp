@@ -4,12 +4,10 @@
 #include "PKB.h"
 
 namespace UnitTesting {
-
 	class UsesSEvaluatorTest : public testing::Test {
 	protected:
 		UsesSEvaluatorTest() {
 		}
-
 
 		virtual void SetUp() override {
 			PKB::getInstance().resetCache();
@@ -156,14 +154,12 @@ namespace UnitTesting {
 		t = ResultTable(header, v);
 		EXPECT_EQ(evaluator.getRelations(left, right), t);
 
-
 		v = { {p3, y} };
 		left = { IF, Synonym{"a"} };
 		right = { VARIABLE, Synonym{"b"} };
 		header = { left, right };
 		t = ResultTable(header, v);
 		EXPECT_EQ(evaluator.getRelations(left, right), t);
-
 
 		v = { };
 		left = { WHILE, Synonym{"a"} };
@@ -208,7 +204,6 @@ namespace UnitTesting {
 	}
 
 	TEST_F(UsesSEvaluatorTest, getLeftRelations) {
-
 		StmtInfo p1{ 1, STMT_READ };
 		StmtInfo p2{ 2, STMT_PRINT };
 		StmtInfo p3{ 3, STMT_IF };
@@ -309,7 +304,6 @@ namespace UnitTesting {
 		match = { STMT, "2" };
 		t = ResultTable(header, v);
 		EXPECT_EQ(evaluator.getRelationMatchLeft(match, header), t);
-
 	}
 
 	TEST_F(UsesSEvaluatorTest, getRelationMatchRight) {

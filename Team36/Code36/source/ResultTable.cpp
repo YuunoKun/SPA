@@ -1,7 +1,6 @@
 #include "ResultTable.h"
 #include "Utility.h"
 
-
 ResultTable::ResultTable(Entity& header, std::vector<StmtInfo>& table) {
 	table = Utility::filterResult(header.getType(), table);
 	init(header, Utility::stmtInfoToStringVector(table));
