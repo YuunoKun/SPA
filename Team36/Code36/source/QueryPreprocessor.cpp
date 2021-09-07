@@ -55,8 +55,8 @@ Query QueryPreprocessor::parse(std::string str) {
 	for (QueryToken token : v) {
 		// First iteration, set identifier to correct type
 		// Check what is my previous token
-		if (prevToken.type == QueryToken::QueryTokenType::WHITESPACE ||
-			prevToken.type == QueryToken::QueryTokenType::TERMINATOR) {
+		if (!isSelect && (prevToken.type == QueryToken::QueryTokenType::WHITESPACE ||
+			prevToken.type == QueryToken::QueryTokenType::TERMINATOR)) {
 			if (token.token_value == "stmt") {
 				temp = { QueryToken::QueryTokenType::STMT, "stmt" };
 			}
@@ -224,34 +224,50 @@ Query QueryPreprocessor::parse(std::string str) {
 
 			if (!isParameter && patternOrSuchThat.type == QueryToken::QueryTokenType::SUCHTHAT) {
 				if (token.type == QueryToken::QueryTokenType::PARENT_T) {
-					output.push_back({ QueryToken::QueryTokenType::PARENT_T, "Parent_T" });
+					output.push_back({ QueryToken::QueryTokenType::PARENT_T, "" });
 				}
 				else if (token.type == QueryToken::QueryTokenType::FOLLOWS_T) {
-					output.push_back({ QueryToken::QueryTokenType::FOLLOWS_T, "Follows_T" });
+					output.push_back({ QueryToken::QueryTokenType::FOLLOWS_T, "" });
 				}
 				else if (token.type == QueryToken::QueryTokenType::PARENTHESIS_OPEN) {
 					if (prevTokenSelect.token_value == "Uses" && prevTokenSelect.type == QueryToken::QueryTokenType::IDENTIFIER) {
-						queryParameter.token_value = "Uses";
+						queryParameter = { QueryToken::QueryTokenType::IDENTIFIER, "Uses" };
 					}
 					else if (prevTokenSelect.token_value == "Modifies" && prevTokenSelect.type == QueryToken::QueryTokenType::IDENTIFIER) {
-						queryParameter.token_value = "Modifies";
+						queryParameter = { QueryToken::QueryTokenType::IDENTIFIER, "Modifies" };
 					}
 					else if (prevTokenSelect.token_value == "Parent" && prevTokenSelect.type == QueryToken::QueryTokenType::IDENTIFIER) {
-						queryParameter.token_value = "Parent";
+						queryParameter = { QueryToken::QueryTokenType::IDENTIFIER, "Parent" };
 					}
 					else if (prevTokenSelect.token_value == "Follows" && prevTokenSelect.type == QueryToken::QueryTokenType::IDENTIFIER) {
-						queryParameter.token_value = "Follows";
+						queryParameter = { QueryToken::QueryTokenType::IDENTIFIER, "Follows" };
+					}
+					else if (prevTokenSelect.token_value == "" && prevTokenSelect.type == QueryToken::QueryTokenType::PARENT_T) {
+						queryParameter = { QueryToken::QueryTokenType::PARENT_T, "" };
+					}
+					else if (prevTokenSelect.token_value == "" && prevTokenSelect.type == QueryToken::QueryTokenType::FOLLOWS_T) {
+						queryParameter = { QueryToken::QueryTokenType::FOLLOWS_T, "" };
 					}
 					isParameter == true;
 				}
 				else if (token.type == QueryToken::QueryTokenType::PARENTHESIS_CLOSE) {
-					if (queryParameter.token_value == "Uses") {
+					if (queryParameter.token_value == "Uses" && queryParameter.type == QueryToken::QueryTokenType::IDENTIFIER) {
+
 					}
-					else if (queryParameter.token_value == "Modifies") {
+					else if (queryParameter.token_value == "Modifies" && queryParameter.type == QueryToken::QueryTokenType::IDENTIFIER) {
+
 					}
-					else if (queryParameter.token_value == "Parent") {
+					else if (queryParameter.token_value == "Parent" && queryParameter.type == QueryToken::QueryTokenType::IDENTIFIER) {
+
 					}
-					else if (queryParameter.token_value == "Follows") {
+					else if (queryParameter.token_value == "Follows" && queryParameter.type == QueryToken::QueryTokenType::IDENTIFIER) {
+
+					}
+					else if (queryParameter.token_value == "" && queryParameter.type == QueryToken::QueryTokenType::PARENT_T) {
+
+					}
+					else if (queryParameter.token_value == "" && queryParameter.type == QueryToken::QueryTokenType::FOLLOWS_T) {
+
 					}
 					isParameter == false;
 				}
