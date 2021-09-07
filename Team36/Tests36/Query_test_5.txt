@@ -19,7 +19,7 @@ Select s such that Parent(s1, s2)
 5000
 5 – modifies, 1 such that and 1 unknown synonym
 variable v;
-Select v such that modifies(3, v)
+Select v such that Modifies(3, v)
 X
 5000
 6 – uses, 1 such that and 1 unknown synonym
