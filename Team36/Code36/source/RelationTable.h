@@ -96,7 +96,7 @@ std::vector<S> RelationTable<T, S>::getValues(T key) {
 		return iter->second;
 	}
 	else {
-		return std::vector<T> {};
+		return std::vector<S> {};
 	}
 }
 
@@ -115,7 +115,7 @@ std::vector<T> RelationTable<T, S>::getKeys() {
 template <class T, class S>
 inline
 std::vector<std::pair<T, S>> RelationTable<T, S>::getPairs() {
-	std::vector<std::pair<T, T>> result;
+	std::vector<std::pair<T, S>> result;
 	for (auto const& pair : table) {
 		T key = pair.first;
 		for (auto const& value : pair.second)

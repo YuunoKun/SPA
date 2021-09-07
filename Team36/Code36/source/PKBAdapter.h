@@ -69,10 +69,10 @@ public:
 	//ModifiesP relation Function
 	bool isModifiesP(proc_name, var_name);
 	bool isModifiesP(proc_name);
-	std::vector<std::pair<std::string, std::string>> getModifiesPRelation();
-	std::vector<std::string> getModifiesP();
-	std::vector<std::string> getModifiesP(var_name);
-	std::vector<std::string> getModifiedP(proc_name);
+	std::vector<std::pair<proc_name, var_name>> getModifiesPRelation();
+	std::vector<proc_name> getModifiesP();
+	std::vector<proc_name> getModifiesP(var_name);
+	std::vector<var_name> getModifiedP(proc_name);
 
 	//ModifiesS relation Function
 	bool isModifiesSEmpty();
@@ -82,16 +82,16 @@ public:
 	std::vector<std::pair<StmtInfo, var_name>> getModifiesSRelation();
 	std::vector<StmtInfo> getModifiesS();
 	std::vector<StmtInfo> getModifiesS(var_name);
-	std::vector<std::string> getModifiedS();
-	std::vector<std::string> getModifiedS(stmt_index);
+	std::vector<var_name> getModifiedS();
+	std::vector<var_name> getModifiedS(stmt_index);
 
 	//UsesP relation Function
 	bool isUsesP(proc_name, var_name);
 	bool isUsesP(proc_name);
-	std::vector<std::pair<std::string, std::string>> getUsesPRelation();
-	std::vector<std::string> getUsesP();
-	std::vector<std::string> getUsesP(var_name);
-	std::vector<std::string> getUsedP(proc_name);
+	std::vector<std::pair<proc_name, var_name>> getUsesPRelation();
+	std::vector<proc_name> getUsesP();
+	std::vector<proc_name> getUsesP(var_name);
+	std::vector<var_name> getUsedP(proc_name);
 
 	//UsesS relation Function
 	bool isUsesSEmpty();
@@ -101,6 +101,6 @@ public:
 	std::vector<std::pair<StmtInfo, var_name>> getUsesSRelation();
 	std::vector<StmtInfo> getUsesS();
 	std::vector<StmtInfo> getUsesS(var_name);
-	std::vector<std::string> getUsedS();
-	std::vector<std::string> getUsedS(stmt_index);
+	std::vector<var_name> getUsedS();
+	std::vector<var_name> getUsedS(stmt_index);
 };

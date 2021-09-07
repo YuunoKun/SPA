@@ -56,8 +56,8 @@ std::vector<StmtInfo> PKBAdapter::getIfs() {
 
 
 bool PKBAdapter::isFollowEmpty() {
-	//TODO
-	return false;
+	auto a = PKB::getInstance().PKB::getFollows();
+	return a.isEmpty();
 }
 
 bool PKBAdapter::isFollow(stmt_index index1, stmt_index index2) {
@@ -108,8 +108,8 @@ std::vector<std::pair<StmtInfo, StmtInfo>> PKBAdapter::getFollows() {
 }
 
 bool PKBAdapter::isFollowTEmpty() {
-	//Todo
-	return false;
+	auto a = PKB::getInstance().PKB::getFollowsT();
+	return a.isEmpty();
 }
 
 bool PKBAdapter::isFollowT(stmt_index index1, stmt_index index2) {
@@ -161,239 +161,261 @@ std::vector<std::pair<StmtInfo, StmtInfo>> PKBAdapter::getFollowsT() {
 
 
 bool PKBAdapter::isParentEmpty() {
-	//Todo
-	return false;
+	auto a = PKB::getInstance().PKB::getParent();
+	return a.isEmpty();
 }
 
-bool PKBAdapter::isParent(stmt_index, stmt_index) {
-	//Todo
-	return false;
+bool PKBAdapter::isParent(stmt_index index1, stmt_index index2) {
+	auto a = PKB::getInstance().PKB::getParent();
+	//// Need better method to find stmt_info
+	StmtInfo s1 = PKB::getInstance().PKB::getStmts().at(index1 - 1);
+	StmtInfo s2 = PKB::getInstance().PKB::getStmts().at(index2 - 1);
+	return a.containsPair(s1, s2);
 }
 
-bool PKBAdapter::isChild(stmt_index) {
-	//Todo
-	return false;
+bool PKBAdapter::isChild(stmt_index index) {
+	auto a = PKB::getInstance().PKB::getParentReverse();
+	StmtInfo s1 = PKB::getInstance().PKB::getStmts().at(index - 1);
+	return a.containsKey(s1);
 }
 
-bool PKBAdapter::isParent(stmt_index) {
-	//Todo
-	return false;
+bool PKBAdapter::isParent(stmt_index index) {
+	auto a = PKB::getInstance().PKB::getParent();
+	StmtInfo s1 = PKB::getInstance().PKB::getStmts().at(index - 1);
+	return a.containsKey(s1);
 }
 
 std::vector<StmtInfo> PKBAdapter::getChild() {
-	//Todo
-	return std::vector<StmtInfo>();
+	auto a = PKB::getInstance().PKB::getParentReverse();
+	return a.getKeys();
 }
 
 std::vector<StmtInfo> PKBAdapter::getParent() {
-	//Todo
-	return std::vector<StmtInfo>();
+	auto a = PKB::getInstance().PKB::getParent();
+	return a.getKeys();
 }
 
-std::vector<StmtInfo> PKBAdapter::getChild(stmt_index) {
-	//Todo
-	return std::vector<StmtInfo>();
+std::vector<StmtInfo> PKBAdapter::getChild(stmt_index index) {
+	auto a = PKB::getInstance().PKB::getParent();
+	StmtInfo s1 = PKB::getInstance().PKB::getStmts().at(index - 1);
+	return a.getValues(s1);
 }
 
-std::vector<StmtInfo> PKBAdapter::getParent(stmt_index) {
-	//Todo
-	return std::vector<StmtInfo>();
+std::vector<StmtInfo> PKBAdapter::getParent(stmt_index index) {
+	auto a = PKB::getInstance().PKB::getParentReverse();
+	StmtInfo s1 = PKB::getInstance().PKB::getStmts().at(index - 1);
+	return a.getValues(s1);
 }
 
 std::vector<std::pair<StmtInfo, StmtInfo>> PKBAdapter::getAllParentRelation() {
-	//Todo
-	return std::vector<std::pair<StmtInfo, StmtInfo>>();
+	auto a = PKB::getInstance().PKB::getParent();
+	return a.getPairs();
 }
 
 bool PKBAdapter::isParentTEmpty() {
-	return false;
+	auto a = PKB::getInstance().PKB::getParentT();
+	return a.isEmpty();
 }
 
-bool PKBAdapter::isParentT(stmt_index, stmt_index) {
-	//Todo
-	return false;
+bool PKBAdapter::isParentT(stmt_index index1, stmt_index index2) {
+	auto a = PKB::getInstance().PKB::getParentT();
+	//// Need better method to find stmt_info
+	StmtInfo s1 = PKB::getInstance().PKB::getStmts().at(index1 - 1);
+	StmtInfo s2 = PKB::getInstance().PKB::getStmts().at(index2 - 1);
+	return a.containsPair(s1, s2);
 }
 
-bool PKBAdapter::isChildT(stmt_index) {
-	//Todo
-	return false;
+bool PKBAdapter::isChildT(stmt_index index) {
+	auto a = PKB::getInstance().PKB::getParentTReverse();
+	StmtInfo s1 = PKB::getInstance().PKB::getStmts().at(index - 1);
+	return a.containsKey(s1);
 }
 
-bool PKBAdapter::isParentT(stmt_index) {
-	//Todo
-	return false;
+bool PKBAdapter::isParentT(stmt_index index) {
+	auto a = PKB::getInstance().PKB::getParentT();
+	StmtInfo s1 = PKB::getInstance().PKB::getStmts().at(index - 1);
+	return a.containsKey(s1);
 }
 
 std::vector<StmtInfo> PKBAdapter::getChildT() {
-	//Todo
-	return std::vector<StmtInfo>();
+	auto a = PKB::getInstance().PKB::getParentTReverse();
+	return a.getKeys();
 }
 
 std::vector<StmtInfo> PKBAdapter::getParentT() {
-	//Todo
-	return std::vector<StmtInfo>();
+	auto a = PKB::getInstance().PKB::getParentT();
+	return a.getKeys();
 }
 
-std::vector<StmtInfo> PKBAdapter::getChildT(stmt_index) {
-	//Todo
-	return std::vector<StmtInfo>();
+std::vector<StmtInfo> PKBAdapter::getChildT(stmt_index index) {
+	auto a = PKB::getInstance().PKB::getParentT();
+	StmtInfo s1 = PKB::getInstance().PKB::getStmts().at(index - 1);
+	return a.getValues(s1);
 }
 
-std::vector<StmtInfo> PKBAdapter::getParentT(stmt_index) {
-	//Todo
-	return std::vector<StmtInfo>();
+std::vector<StmtInfo> PKBAdapter::getParentT(stmt_index index) {
+	auto a = PKB::getInstance().PKB::getParentTReverse();
+	StmtInfo s1 = PKB::getInstance().PKB::getStmts().at(index - 1);
+	return a.getValues(s1);
 }
 
 std::vector<std::pair<StmtInfo, StmtInfo>> PKBAdapter::getAllParentTRelation() {
-	//Todo
-	return std::vector<std::pair<StmtInfo, StmtInfo>>();
+	auto a = PKB::getInstance().PKB::getParentT();
+	return a.getPairs();
 }
 
 bool PKBAdapter::isModifiesP(proc_name, var_name) {
-	//TODO
+	//TODO: Iteration 2
 	return false;
 }
 
 bool PKBAdapter::isModifiesP(proc_name) {
-	//TODO
+	//TODO: Iteration 2
 	return false;
 }
 
-std::vector<std::pair<std::string, std::string>> PKBAdapter::getModifiesPRelation() {
-	//TODO
-	return std::vector<std::pair<std::string, std::string>>();
+std::vector<std::pair<proc_name, var_name>> PKBAdapter::getModifiesPRelation() {
+	//TODO: Iteration 2
+	return std::vector<std::pair<proc_name, var_name>>();
 }
 
-std::vector<std::string> PKBAdapter::getModifiesP() {
-	//TODO
-	return std::vector<std::string>();
+std::vector<proc_name> PKBAdapter::getModifiesP() {
+	//TODO: Iteration 2
+	return std::vector<proc_name>();
 }
 
-std::vector<std::string> PKBAdapter::getModifiesP(var_name) {
-	//TODO
-	return std::vector<std::string>();
+std::vector<proc_name> PKBAdapter::getModifiesP(var_name var) {
+	//TODO: Iteration 2
+	return std::vector<proc_name>();
 }
 
-std::vector<std::string> PKBAdapter::getModifiedP(proc_name) {
-	//TODO
-	return std::vector<std::string>();
+std::vector<var_name> PKBAdapter::getModifiedP(proc_name proc) {
+	//TODO: Iteration 2
+	return std::vector<var_name>();
 }
 
 bool PKBAdapter::isModifiesSEmpty() {
-	//TODO
-	return false;
+	auto a = PKB::getInstance().PKB::getModifiesS();
+	return a.isEmpty();
 }
 
-bool PKBAdapter::isModifiesS(stmt_index, var_name) {
-	//TODO
-	return false;
+bool PKBAdapter::isModifiesS(stmt_index index, var_name var) {
+	auto a = PKB::getInstance().PKB::getModifiesS();
+	StmtInfo s1 = PKB::getInstance().PKB::getStmts().at(index - 1);
+	return a.containsPair(s1, var);
 }
 
-bool PKBAdapter::isModifiesS(stmt_index) {
-	//TODO
-	return false;
+bool PKBAdapter::isModifiesS(stmt_index index) {
+	auto a = PKB::getInstance().PKB::getModifiesS();
+	StmtInfo s1 = PKB::getInstance().PKB::getStmts().at(index - 1);
+	return a.containsKey(s1);
 }
 
-bool PKBAdapter::isModifiesS(var_name) {
-	//TODO
-	return false;
+bool PKBAdapter::isModifiesS(var_name var) {
+	auto a = PKB::getInstance().PKB::getModifiesSReverse();
+	return a.containsKey(var);
 }
 
 std::vector<std::pair<StmtInfo, var_name>> PKBAdapter::getModifiesSRelation() {
-	//TODO
-	return std::vector<std::pair<StmtInfo, var_name>>();
+	auto a = PKB::getInstance().PKB::getModifiesS();
+	return a.getPairs();
 }
 
 std::vector<StmtInfo> PKBAdapter::getModifiesS() {
-	//TODO
-	return std::vector<StmtInfo>();
+	auto a = PKB::getInstance().PKB::getModifiesS();
+	return a.getKeys();
 }
 
-std::vector<StmtInfo> PKBAdapter::getModifiesS(var_name) {
-	//TODO
-	return std::vector<StmtInfo>();
+std::vector<StmtInfo> PKBAdapter::getModifiesS(var_name var) {
+	auto a = PKB::getInstance().PKB::getModifiesSReverse();
+	return a.getValues(var);
 }
 
-std::vector<std::string> PKBAdapter::getModifiedS() {
-	//TODO
-	return std::vector<std::string>();
+std::vector<var_name> PKBAdapter::getModifiedS() {
+	auto a = PKB::getInstance().PKB::getModifiesSReverse();
+	return a.getKeys();
 }
 
-std::vector<std::string> PKBAdapter::getModifiedS(stmt_index) {
-	//TODO
-	return std::vector<std::string>();
+std::vector<var_name> PKBAdapter::getModifiedS(stmt_index index) {
+	auto a = PKB::getInstance().PKB::getModifiesS();
+	StmtInfo s1 = PKB::getInstance().PKB::getStmts().at(index - 1);
+	return a.getValues(s1);
 }
 
-bool PKBAdapter::isUsesP(proc_name, var_name) {
-	//TODO
+bool PKBAdapter::isUsesP(proc_name proc, var_name var) {
+	//TODO: Iteration 2
 	return false;
 }
 
-bool PKBAdapter::isUsesP(proc_name) {
-	//TODO
+bool PKBAdapter::isUsesP(proc_name proc) {
+	//TODO: Iteration 2
 	return false;
 }
 
-std::vector<std::pair<std::string, std::string>> PKBAdapter::getUsesPRelation() {
-	//TODO
-	return std::vector<std::pair<std::string, std::string>>();
+std::vector<std::pair<proc_name, var_name>> PKBAdapter::getUsesPRelation() {
+	//TODO: Iteration 2
+	return std::vector<std::pair<proc_name, var_name>>();
 }
 
-std::vector<std::string> PKBAdapter::getUsesP() {
-	//TODO
-	return std::vector<std::string>();
+std::vector<proc_name> PKBAdapter::getUsesP() {
+	//TODO: Iteration 2
+	return std::vector<proc_name>();
 }
 
-std::vector<std::string> PKBAdapter::getUsesP(var_name) {
-	//TODO
-	return std::vector<std::string>();
+std::vector<proc_name> PKBAdapter::getUsesP(var_name var) {
+	//TODO: Iteration 2
+	return std::vector<proc_name>();
 }
 
-std::vector<std::string> PKBAdapter::getUsedP(proc_name) {
-	//TODO
-	return std::vector<std::string>();
+std::vector<var_name> PKBAdapter::getUsedP(proc_name proc) {
+	//TODO: Iteration 2
+	return std::vector<var_name>();
 }
 
 bool PKBAdapter::isUsesSEmpty() {
-	return false;
+	auto a = PKB::getInstance().PKB::getUsesS();
+	return a.isEmpty();
 }
 
-bool PKBAdapter::isUsesS(stmt_index, var_name) {
-	//TODO
-	return false;
+bool PKBAdapter::isUsesS(stmt_index index, var_name var) {
+	auto a = PKB::getInstance().PKB::getUsesS();
+	StmtInfo s1 = PKB::getInstance().PKB::getStmts().at(index - 1);
+	return a.containsPair(s1, var);
 }
 
-bool PKBAdapter::isUsesS(stmt_index) {
-	//TODO
-	return false;
+bool PKBAdapter::isUsesS(stmt_index index) {
+	auto a = PKB::getInstance().PKB::getUsesS();
+	StmtInfo s1 = PKB::getInstance().PKB::getStmts().at(index - 1);
+	return a.containsKey(s1);
 }
 
-bool PKBAdapter::isUsesS(var_name) {
-	//TODO
-	return false;
+bool PKBAdapter::isUsesS(var_name var) {
+	auto a = PKB::getInstance().PKB::getUsesSReverse();
+	return a.containsKey(var);
 }
 
 std::vector<std::pair<StmtInfo, var_name>> PKBAdapter::getUsesSRelation() {
-	//TODO
-	return std::vector<std::pair<StmtInfo, var_name>>();
+	auto a = PKB::getInstance().PKB::getUsesS();
+	return a.getPairs();
 }
 
 std::vector<StmtInfo> PKBAdapter::getUsesS() {
-	//TODO
-	return std::vector<StmtInfo>();
+	auto a = PKB::getInstance().PKB::getUsesS();
+	return a.getKeys();
 }
 
-std::vector<StmtInfo> PKBAdapter::getUsesS(var_name) {
-	//TODO
-	return std::vector<StmtInfo>();
+std::vector<StmtInfo> PKBAdapter::getUsesS(var_name var) {
+	auto a = PKB::getInstance().PKB::getUsesSReverse();
+	return a.getValues(var);
 }
 
-std::vector<std::string> PKBAdapter::getUsedS() {
-	//TODO
-	return std::vector<std::string>();
+std::vector<var_name> PKBAdapter::getUsedS() {
+	auto a = PKB::getInstance().PKB::getUsesSReverse();
+	return a.getKeys();
 }
 
-std::vector<std::string> PKBAdapter::getUsedS(stmt_index) {
-	//TODO
-	return std::vector<std::string>();
+std::vector<var_name> PKBAdapter::getUsedS(stmt_index index) {
+	auto a = PKB::getInstance().PKB::getUsesS();
+	StmtInfo s1 = PKB::getInstance().PKB::getStmts().at(index - 1);
+	return a.getValues(s1);
 }
