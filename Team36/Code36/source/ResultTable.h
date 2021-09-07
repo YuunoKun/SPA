@@ -16,6 +16,8 @@ public:
 	bool isEmpty();
 	std::list<std::string> getEntityResult(Entity);
 
+	bool operator==(const ResultTable&) const;
+
 private:
 	void init(Entity, std::vector<std::string>);
 	void init(std::pair<Entity, Entity>, std::vector<std::vector<std::string>>);

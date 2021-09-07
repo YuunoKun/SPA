@@ -48,6 +48,10 @@ std::list<std::string> ResultTable::getEntityResult(Entity e) {
 	return Utility::unorderedSetToStringList(result);
 }
 
+bool ResultTable::operator==(const ResultTable& other) const {
+	return header == other.header && table == other.table;
+}
+
 void ResultTable::init(Entity header, std::vector<std::string> table) {
 	this->header = { header };
 	for (auto& it : table) {
