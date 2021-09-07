@@ -833,16 +833,9 @@ namespace UnitTesting {
 	}
 	TEST_F(PKBAdapterTest, isModifiesSEmpty) {
 		StmtInfo p1{ 1, STMT_READ };
-		StmtInfo p2{ 2, STMT_PRINT };
-		StmtInfo p3{ 3, STMT_READ };
-		StmtInfo p4{ 4, STMT_PRINT };
 		var_name x = "x";
-		var_name y = "y";
 
 		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_PRINT);
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_PRINT);
 		PKB::getInstance().addVariable(x);
 
 		EXPECT_TRUE(pkb.isModifiesSEmpty());
@@ -999,16 +992,9 @@ namespace UnitTesting {
 	}
 	TEST_F(PKBAdapterTest, isUsesSEmpty) {
 		StmtInfo p1{ 1, STMT_READ };
-		StmtInfo p2{ 2, STMT_PRINT };
-		StmtInfo p3{ 3, STMT_READ };
-		StmtInfo p4{ 4, STMT_PRINT };
 		var_name x = "x";
-		var_name y = "y";
 
 		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_PRINT);
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_PRINT);
 		PKB::getInstance().addVariable(x);
 
 		EXPECT_TRUE(pkb.isUsesSEmpty());

@@ -62,6 +62,6 @@ ResultTable ModifiesSEvaluator::getRelationMatchLeft(Entity constant, Entity hea
 
 //Handle right declartion, left constant: e.g Relation(a, 1)
 ResultTable ModifiesSEvaluator::getRelationMatchRight(Entity header, Entity constant) {
-	var_name v = constant.getSynonym();
+	var_name v = constant.getValue();
 	return ResultTable(header, pkb.getModifiesS(v));
 }
