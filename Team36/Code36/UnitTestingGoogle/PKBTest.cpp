@@ -86,7 +86,7 @@ namespace UnitTesting {
 
 		auto one = std::make_pair(1, "x");
 		auto two = std::make_pair(2, "x+y");
-		auto three = std::make_pair(3, "");
+		auto three = std::make_pair(3, "x");
 		auto four = std::make_pair(4, "");
 		auto zero = std::make_pair(0, "");
 

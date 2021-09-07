@@ -18,6 +18,7 @@ template <class T, class S>
 void RelationTable<T, S>::clear()
 {
 	forward_table.clear();
+	backward_table.clear();
 	return;
 }
 
@@ -163,12 +164,12 @@ RelationTable<S, T> RelationTable<T, S>::findReverse()
 
 template <class T, class S>
 bool RelationTable<T, S>::operator==(const RelationTable& other_table) const {
-	return (uniqueKey == other_table.uniqueKey) && (forward_table == other_table.forward_table);
+	return (uniqueKey == other_table.uniqueKey) && (forward_table == other_table.forward_table) && (backward_table == other_table.backward_table);
 }
 
 template <class T, class S>
 bool RelationTable<T, S>::operator!=(const RelationTable& other_table) const {
-	return (uniqueKey != other_table.uniqueKey) || (forward_table != other_table.forward_table);
+	return (uniqueKey != other_table.uniqueKey) || (forward_table != other_table.forward_table) || (backward_table != other_table.backward_table);
 }
 
 template <class T, class S>
