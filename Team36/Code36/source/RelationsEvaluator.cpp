@@ -66,7 +66,7 @@ void RelationsEvaluator::evaluateRelation(QueryResult& queryResult, RelRef& rela
 		//Handle both side NOT declartion
 		bool haveResult = false;
 
-		if (clauses2.getType() == WILD && clauses2.getType() == WILD) {
+		if (clauses1.getType() == WILD && clauses2.getType() == WILD) {
 			//If both side is WILD: e.g Follows(_, _)
 			haveResult = evaluator.haveRelation();
 		}
