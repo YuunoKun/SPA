@@ -12,7 +12,7 @@ void QueryTokenizer::parse_into_query_tokens(std::string input) {
 	QueryToken curr_query_token;
 	QueryToken temp_query_token;
 	std::stack<char> separator_validation_stk;
-	
+
 	bool quotation_validation = false;
 	bool is_such = false;
 
@@ -25,7 +25,6 @@ void QueryTokenizer::parse_into_query_tokens(std::string input) {
 			else {
 				is_such = false;
 				add_query_token(curr_query_token);
-
 			}
 			break;
 		}
@@ -79,7 +78,7 @@ void QueryTokenizer::parse_into_query_tokens(std::string input) {
 			break;
 		case ' ':
 			// check for "such" in such that
-			if (curr_query_token.type == QueryToken::IDENTIFIER 
+			if (curr_query_token.type == QueryToken::IDENTIFIER
 				&& curr_query_token.token_value == "such") {
 				is_such = true;
 				break;
@@ -93,19 +92,19 @@ void QueryTokenizer::parse_into_query_tokens(std::string input) {
 			break;
 		case '*':
 			// if got whitespace infront -> then is MUL
-			// IF got IDENT infront then is -> asterisk. then parser check if is fully asterisk(parrent/uses infront) or else is MUL  
+			// IF got IDENT infront then is -> asterisk. then parser check if is fully asterisk(parrent/uses infront) or else is MUL
 			//if (curr_query_token.type == QueryToken::CONSTANT) {
 			//	//check before if CONSTANT
 			//	//part of term/expr
 			//	add_query_token(curr_query_token);
 			//	curr_query_token.type = QueryToken::MUL;
 			//	add_query_token(curr_query_token);
-			//} else 
-				
+			//} else
+
 			if (curr_query_token.type == QueryToken::IDENTIFIER) {
 				// if in front is IDENT, can be for expr/term or for or MUL
 				add_query_token(curr_query_token);
-				curr_query_token.type = QueryToken::ASTERISK;
+				//curr_query_token.type = QueryToken::ASTERISK;
 				add_query_token(curr_query_token);
 			}
 			else {
@@ -157,10 +156,10 @@ void QueryTokenizer::parse_into_query_tokens(std::string input) {
 	// Check for open brackets or open quotation marks
 	if (!separator_validation_stk.empty()) {
 		std::runtime_error("expected \')\'");
-	}else if (quotation_validation) {
+	}
+	else if (quotation_validation) {
 		std::runtime_error("missing terminating \" character");
 	}
-	
 }
 
 std::vector<QueryToken> QueryTokenizer::get_query_token_chain() {
@@ -172,7 +171,6 @@ void QueryTokenizer::add_query_token(QueryToken& query_token) {
 		//discard whitespace
 		return;
 	}
-	
 
 	query_token_cache.push_back(query_token);
 	query_token.type = QueryToken::QueryTokenType::WHITESPACE;
