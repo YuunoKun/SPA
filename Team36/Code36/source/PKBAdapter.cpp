@@ -54,7 +54,6 @@ std::vector<StmtInfo> PKBAdapter::getIfs() {
 	return Utility::filterResult(IF, v);
 }
 
-
 bool PKBAdapter::isFollowEmpty() {
 	auto a = PKB::getInstance().PKB::getFollows();
 	return a.isEmpty();
@@ -158,7 +157,6 @@ std::vector<std::pair<StmtInfo, StmtInfo>> PKBAdapter::getFollowsT() {
 	auto a = PKB::getInstance().PKB::getFollowsT();
 	return a.getPairs();
 }
-
 
 bool PKBAdapter::isParentEmpty() {
 	auto a = PKB::getInstance().PKB::getParent();

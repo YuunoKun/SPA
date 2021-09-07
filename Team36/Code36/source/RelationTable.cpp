@@ -1,7 +1,7 @@
 #pragma once
-/*
-#include "RelationTable.h"
 
+#include "RelationTable.h"
+/*
 template <class T, class S>
 std::unordered_map<T, std::vector<S>> RelationTable<T, S>::getTable()
 {

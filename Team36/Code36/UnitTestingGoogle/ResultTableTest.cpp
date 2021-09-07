@@ -3,7 +3,7 @@
 #include "ResultTable.h"
 
 namespace UnitTesting {
-	std::pair<Entity, Entity> resultTableHeader1{ {WHILE, "test" } , { READ,"hello" } };
+	std::pair<Entity, Entity> resultTableHeader1{ {WHILE, Synonym{"test"} } , { READ,Synonym{"hello"} } };
 	std::vector<std::pair<std::string, std::string>> resultTableTable1{
 		{ "1", "2" }, { "3", "4" },
 		{ "5", "6" }, { "7", "8" },
@@ -11,7 +11,7 @@ namespace UnitTesting {
 		{ "13", "14" }, { "15", "16" },
 		{ "17", "18" }, { "19", "20" } };
 
-	std::pair<Entity, Entity> resultTableHeader2{ {WHILE, "t1" }, { READ,"t2" } };
+	std::pair<Entity, Entity> resultTableHeader2{ {WHILE, Synonym{"t1"} }, { READ,Synonym{"t2"} } };
 	std::vector<std::pair<std::string, std::string>> resultTableTable2{
 		{ "1", "11", },
 		{ "2", "12", },
@@ -19,7 +19,7 @@ namespace UnitTesting {
 		{ "4", "14",},
 		{ "5", "15", } };
 
-	std::pair<Entity, Entity> resultTableHeader3{ {VARIABLE, "t3" }, { IF,"t4" } };
+	std::pair<Entity, Entity> resultTableHeader3{ {VARIABLE, Synonym{"t3"} }, { IF,Synonym{"t4"} } };
 	std::vector<std::pair<std::string, std::string>> resultTableTable3{
 		{ "6", "16", },
 		{ "7", "17", },
@@ -28,7 +28,7 @@ namespace UnitTesting {
 		{ "10", "20", } };
 
 	TEST(ResultTable, initWithString) {
-		Entity e(ASSIGN, "x");
+		Entity e(ASSIGN, Synonym{ "x" });
 		std::vector<std::string> a = { "a", "b", "c", "d", "e" };
 		std::list<std::string> b = { "a", "b", "c", "d", "e" };
 		ResultTable t(e, a);
@@ -49,7 +49,7 @@ namespace UnitTesting {
 		EXPECT_EQ(tableResult, result);
 	}
 	TEST(ResultTable, initWithStmtInfo) {
-		Entity e(ASSIGN, "x");
+		Entity e(ASSIGN, Synonym{ "x" });
 		std::vector<StmtInfo> a = { { 1, STMT_WHILE }, { 2, STMT_IF} , { 3, STMT_READ },
 			{ 4, STMT_PRINT}, { 5, STMT_CALL }, { 6, STMT_ASSIGN}, { 7, STMT_ASSIGN} };
 		ResultTable t(e, a);
@@ -58,43 +58,42 @@ namespace UnitTesting {
 
 		a = { { 1, STMT_WHILE }, { 2, STMT_IF} , { 3, STMT_READ },
 			{ 4, STMT_PRINT}, { 5, STMT_CALL }, { 6, STMT_ASSIGN}, { 7, STMT_ASSIGN} };
-		e = Entity(WHILE, "x");
+		e = Entity(WHILE, Synonym{ "x" });
 		t = ResultTable(e, a);
 		b = { "1" };
 		EXPECT_EQ(t.getEntityResult(e), b);
 
 		a = { { 1, STMT_WHILE }, { 2, STMT_IF} , { 3, STMT_READ },
 			{ 4, STMT_PRINT}, { 5, STMT_CALL }, { 6, STMT_ASSIGN}, { 7, STMT_ASSIGN} };
-		e = Entity(IF, "x");
+		e = Entity(IF, Synonym{ "x" });
 		t = ResultTable(e, a);
 		b = { "2" };
 		EXPECT_EQ(t.getEntityResult(e), b);
 
 		a = { { 1, STMT_WHILE }, { 2, STMT_IF} , { 3, STMT_READ },
 			{ 4, STMT_PRINT}, { 5, STMT_CALL }, { 6, STMT_ASSIGN}, { 7, STMT_ASSIGN} };
-		e = Entity(READ, "x");
+		e = Entity(READ, Synonym{ "x" });
 		t = ResultTable(e, a);
 		b = { "3" };
 		EXPECT_EQ(t.getEntityResult(e), b);
 
 		a = { { 1, STMT_WHILE }, { 2, STMT_IF} , { 3, STMT_READ },
 			{ 4, STMT_PRINT}, { 5, STMT_CALL }, { 6, STMT_ASSIGN}, { 7, STMT_ASSIGN} };
-		e = Entity(PRINT, "x");
+		e = Entity(PRINT, Synonym{ "x" });
 		t = ResultTable(e, a);
 		b = { "4" };
 		EXPECT_EQ(t.getEntityResult(e), b);
 
 		a = { { 1, STMT_WHILE }, { 2, STMT_IF} , { 3, STMT_READ },
 			{ 4, STMT_PRINT}, { 5, STMT_CALL }, { 6, STMT_ASSIGN}, { 7, STMT_ASSIGN} };
-		e = Entity(CALL, "x");
+		e = Entity(CALL, Synonym{ "x" });
 		t = ResultTable(e, a);
 		b = { "5" };
 		EXPECT_EQ(t.getEntityResult(e), b);
 	}
 
 	TEST(ResultTable, initWithStmtInfoPairStmtInfoAndString) {
-
-		std::pair<Entity, Entity> e = { {ASSIGN, "x"}, {VARIABLE, "y"} };
+		std::pair<Entity, Entity> e = { {ASSIGN, Synonym{"x"}}, {VARIABLE,Synonym{ "y"}} };
 		std::vector<std::pair<StmtInfo, std::string>> a = {
 			{{ 1, STMT_WHILE }, "a"},{{ 2, STMT_IF }, "b"} ,
 			{{ 3, STMT_READ }, "c"},{{ 4, STMT_PRINT }, "d"} ,
@@ -102,16 +101,16 @@ namespace UnitTesting {
 			{{ 7, STMT_ASSIGN }, "g"},{{ 8, STMT_ASSIGN }, "h"} };
 
 		ResultTable t(e, a);
-		std::list<std::string> b = { "6", "7", "8"};
+		std::list<std::string> b = { "6", "7", "8" };
 		EXPECT_EQ(t.getEntityResult(e.first), b);
-		b = { "f", "g", "h"};
+		b = { "f", "g", "h" };
 		EXPECT_EQ(t.getEntityResult(e.second), b);
 
-		a = {{{ 1, STMT_WHILE }, "a"},{{ 2, STMT_IF }, "b"} ,
+		a = { {{ 1, STMT_WHILE }, "a"},{{ 2, STMT_IF }, "b"} ,
 			{{ 3, STMT_READ }, "c"},{{ 4, STMT_PRINT }, "d"} ,
 			{{ 5, STMT_CALL }, "e"},{{ 6, STMT_ASSIGN }, "f"} ,
 			{{ 7, STMT_ASSIGN }, "g"},{{ 8, STMT_ASSIGN }, "h"} };
-		e = { {WHILE, "x"}, {VARIABLE, "y"} };
+		e = { {WHILE,Synonym{ "x"}}, {VARIABLE, Synonym{"y"}} };
 		t = ResultTable(e, a);
 		b = { "1" };
 		EXPECT_EQ(t.getEntityResult(e.first), b);
@@ -122,7 +121,7 @@ namespace UnitTesting {
 			{{ 3, STMT_READ }, "c"},{{ 4, STMT_PRINT }, "d"} ,
 			{{ 5, STMT_CALL }, "e"},{{ 6, STMT_ASSIGN }, "f"} ,
 			{{ 7, STMT_ASSIGN }, "g"},{{ 8, STMT_ASSIGN }, "h"} };
-		e = { {IF, "x"}, {VARIABLE, "y"} };
+		e = { {IF,Synonym {"x"}}, {VARIABLE, Synonym{"y"}} };
 		t = ResultTable(e, a);
 		b = { "2" };
 		EXPECT_EQ(t.getEntityResult(e.first), b);
@@ -133,7 +132,7 @@ namespace UnitTesting {
 			{{ 3, STMT_READ }, "c"},{{ 4, STMT_PRINT }, "d"} ,
 			{{ 5, STMT_CALL }, "e"},{{ 6, STMT_ASSIGN }, "f"} ,
 			{{ 7, STMT_ASSIGN }, "g"},{{ 8, STMT_ASSIGN }, "h"} };
-		e = { {READ, "x"}, {VARIABLE, "y"} };
+		e = { {READ,Synonym{ "x"}}, {VARIABLE,Synonym{ "y"}} };
 		t = ResultTable(e, a);
 		b = { "3" };
 		EXPECT_EQ(t.getEntityResult(e.first), b);
@@ -144,7 +143,7 @@ namespace UnitTesting {
 			{{ 3, STMT_READ }, "c"},{{ 4, STMT_PRINT }, "d"} ,
 			{{ 5, STMT_CALL }, "e"},{{ 6, STMT_ASSIGN }, "f"} ,
 			{{ 7, STMT_ASSIGN }, "g"},{{ 8, STMT_ASSIGN }, "h"} };
-		e = { {PRINT, "x"}, {VARIABLE, "y"} };
+		e = { {PRINT, Synonym{"x"}}, {VARIABLE,Synonym{ "y"}} };
 		t = ResultTable(e, a);
 		b = { "4" };
 		EXPECT_EQ(t.getEntityResult(e.first), b);
@@ -155,7 +154,7 @@ namespace UnitTesting {
 			{{ 3, STMT_READ }, "c"},{{ 4, STMT_PRINT }, "d"} ,
 			{{ 5, STMT_CALL }, "e"},{{ 6, STMT_ASSIGN }, "f"} ,
 			{{ 7, STMT_ASSIGN }, "g"},{{ 8, STMT_ASSIGN }, "h"} };
-		e = { {CALL, "x"}, {VARIABLE, "y"} };
+		e = { {CALL, Synonym{"x"}}, {VARIABLE, Synonym{"y"}} };
 		t = ResultTable(e, a);
 		b = { "5" };
 		EXPECT_EQ(t.getEntityResult(e.first), b);
@@ -163,10 +162,8 @@ namespace UnitTesting {
 		EXPECT_EQ(t.getEntityResult(e.second), b);
 	}
 
-
 	TEST(ResultTable, initWithStmtInfoPairStmtInfoAndStmtInfo) {
-
-		std::pair<Entity, Entity> e = { {ASSIGN, "x"}, {IF, "y"} };
+		std::pair<Entity, Entity> e = { {ASSIGN, Synonym{"x"}}, {IF, Synonym{"y"}} };
 		std::vector<std::pair<StmtInfo, StmtInfo>> a = {
 			{{ 1, STMT_WHILE }, { 11, STMT_READ }},{{ 2, STMT_IF }, { 12, STMT_IF }} ,
 			{{ 3, STMT_READ }, { 13, STMT_CALL }},{{ 4, STMT_PRINT }, { 14, STMT_IF }} ,
@@ -179,11 +176,11 @@ namespace UnitTesting {
 		b = { "16", "17", "18" };
 		EXPECT_EQ(t.getEntityResult(e.second), b);
 
-		a = {{{ 1, STMT_WHILE }, { 11, STMT_READ }},{{ 2, STMT_IF }, { 12, STMT_IF }} ,
+		a = { {{ 1, STMT_WHILE }, { 11, STMT_READ }},{{ 2, STMT_IF }, { 12, STMT_IF }} ,
 			{{ 3, STMT_READ }, { 13, STMT_CALL }},{{ 4, STMT_PRINT }, { 14, STMT_IF }} ,
 			{{ 5, STMT_CALL }, { 15, STMT_ASSIGN }},{{ 6, STMT_ASSIGN }, { 16, STMT_IF }} ,
 			{{ 7, STMT_ASSIGN }, { 17, STMT_IF }},{{ 8, STMT_ASSIGN }, { 18, STMT_IF }} };
-		e = { {WHILE, "x"}, {READ, "y"} };
+		e = { {WHILE, Synonym{"x"}}, {READ,Synonym{"y"}} };
 		t = ResultTable(e, a);
 		b = { "1" };
 		EXPECT_EQ(t.getEntityResult(e.first), b);
@@ -194,7 +191,7 @@ namespace UnitTesting {
 			{{ 3, STMT_READ }, { 13, STMT_CALL }},{{ 4, STMT_PRINT }, { 14, STMT_IF }} ,
 			{{ 5, STMT_CALL }, { 15, STMT_ASSIGN }},{{ 6, STMT_ASSIGN }, { 16, STMT_IF }} ,
 			{{ 7, STMT_ASSIGN }, { 17, STMT_IF }},{{ 8, STMT_ASSIGN }, { 18, STMT_IF }} };
-		e = { {IF, "x"}, {IF, "y"} };
+		e = { {IF, Synonym{"x"}}, {IF, Synonym{"y"}} };
 		t = ResultTable(e, a);
 		b = { "2" };
 		EXPECT_EQ(t.getEntityResult(e.first), b);
@@ -205,7 +202,7 @@ namespace UnitTesting {
 			{{ 3, STMT_READ }, { 13, STMT_CALL }},{{ 4, STMT_PRINT }, { 14, STMT_IF }} ,
 			{{ 5, STMT_CALL }, { 15, STMT_ASSIGN }},{{ 6, STMT_ASSIGN }, { 16, STMT_IF }} ,
 			{{ 7, STMT_ASSIGN }, { 17, STMT_IF }},{{ 8, STMT_ASSIGN }, { 18, STMT_IF }} };
-		e = { {READ, "x"}, {CALL, "y"} };
+		e = { {READ, Synonym{"x"}}, {CALL, Synonym{"y"}} };
 		t = ResultTable(e, a);
 		b = { "3" };
 		EXPECT_EQ(t.getEntityResult(e.first), b);
@@ -216,7 +213,7 @@ namespace UnitTesting {
 			{{ 3, STMT_READ }, { 13, STMT_CALL }},{{ 4, STMT_PRINT }, { 14, STMT_IF }} ,
 			{{ 5, STMT_CALL }, { 15, STMT_ASSIGN }},{{ 6, STMT_ASSIGN }, { 16, STMT_IF }} ,
 			{{ 7, STMT_ASSIGN }, { 17, STMT_IF }},{{ 8, STMT_ASSIGN }, { 18, STMT_IF }} };
-		e = { {PRINT, "x"}, {IF, "y"} };
+		e = { {PRINT,Synonym{ "x"}}, {IF, Synonym{"y"}} };
 		t = ResultTable(e, a);
 		b = { "4" };
 		EXPECT_EQ(t.getEntityResult(e.first), b);
@@ -227,7 +224,7 @@ namespace UnitTesting {
 			{{ 3, STMT_READ }, { 13, STMT_CALL }},{{ 4, STMT_PRINT }, { 14, STMT_IF }} ,
 			{{ 5, STMT_CALL }, { 15, STMT_ASSIGN }},{{ 6, STMT_ASSIGN }, { 16, STMT_IF }} ,
 			{{ 7, STMT_ASSIGN }, { 17, STMT_IF }},{{ 8, STMT_ASSIGN }, { 18, STMT_IF }} };
-		e = { {CALL, "x"}, {ASSIGN, "y"} };
+		e = { {CALL, Synonym{"x"}}, {ASSIGN, Synonym{"y"}} };
 		t = ResultTable(e, a);
 		b = { "5" };
 		EXPECT_EQ(t.getEntityResult(e.first), b);
@@ -238,7 +235,7 @@ namespace UnitTesting {
 			{{ 3, STMT_READ }, { 13, STMT_CALL }},{{ 4, STMT_PRINT }, { 14, STMT_IF }} ,
 			{{ 5, STMT_CALL }, { 15, STMT_ASSIGN }},{{ 6, STMT_ASSIGN }, { 16, STMT_IF }} ,
 			{{ 7, STMT_ASSIGN }, { 17, STMT_IF }},{{ 8, STMT_ASSIGN }, { 18, STMT_IF }} };
-		e = { {WHILE, "x"}, {WHILE, "y"} };
+		e = { {WHILE, Synonym{"x"}}, {WHILE, Synonym{"y"}} };
 		t = ResultTable(e, a);
 		b = { };
 		EXPECT_EQ(t.getEntityResult(e.first), b);
@@ -254,14 +251,14 @@ namespace UnitTesting {
 
 		EXPECT_TRUE(table.isInTable(resultTableHeader1.first));
 		EXPECT_TRUE(table.isInTable(resultTableHeader1.second));
-		EXPECT_TRUE(table.isInTable({ WHILE, "test" }));
-		EXPECT_FALSE(table.isInTable({ PRINT, "test" }));
+		EXPECT_TRUE(table.isInTable({ WHILE, Synonym{"test"} }));
+		EXPECT_FALSE(table.isInTable({ PRINT, Synonym{"test"} }));
 	}
 
 	TEST(ResultTable, isEmpty) {
 		ResultTable table(resultTableHeader1, resultTableTable1);
 		EXPECT_FALSE(table.isEmpty());
-			
+
 		std::vector<std::pair<std::string, std::string>> tables;
 		ResultTable table1(resultTableHeader1, tables);
 		EXPECT_TRUE(table1.isEmpty());

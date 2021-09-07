@@ -26,7 +26,6 @@ public:
 	Entity(EntityType, Synonym);
 	Entity(EntityType, std::string);
 
-
 	EntityType getType();
 	std::string getSynonym();
 	std::string getValue();
@@ -40,5 +39,5 @@ private:
 	EntityType entity_type;
 	Synonym synonym;
 	std::string value;
-	bool is_synonyms;
+	bool is_synonym;
 };

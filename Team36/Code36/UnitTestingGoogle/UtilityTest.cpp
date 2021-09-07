@@ -117,7 +117,7 @@ namespace UnitTesting {
 	}
 
 	TEST(Utility, getIndexEntity) {
-		std::vector<Entity> e{ {WHILE, "test" }, { READ,"hello" }, { PRINT,"test1" }, { STMT,"test3" } };
+		std::vector<Entity> e{ {WHILE, Synonym{"test"} }, { READ,Synonym{"hello"} }, { PRINT,Synonym{"test1"} }, { STMT,Synonym{"test3"} } };
 
 		EXPECT_EQ(Utility::getIndex(e, e[0]), 0);
 		EXPECT_EQ(Utility::getIndex(e, e[1]), 1);
@@ -146,7 +146,7 @@ namespace UnitTesting {
 	}
 
 	TEST(Utility, filterResult) {
-		std::vector<StmtInfo> a = { { 1, STMT_WHILE }, { 2, STMT_IF} , { 3, STMT_READ }, 
+		std::vector<StmtInfo> a = { { 1, STMT_WHILE }, { 2, STMT_IF} , { 3, STMT_READ },
 			{ 4, STMT_PRINT}, { 5, STMT_CALL }, { 6, STMT_ASSIGN}, { 7, STMT_ASSIGN} };
 		std::vector<StmtInfo> b = { { 6, STMT_ASSIGN } , { 7, STMT_ASSIGN } };
 		EXPECT_EQ(Utility::filterResult(ASSIGN, a), b);

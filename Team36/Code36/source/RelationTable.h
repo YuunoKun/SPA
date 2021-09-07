@@ -45,7 +45,6 @@ public:
 	bool insert(T key, S value);
 };
 
-
 template <class T, class S>
 inline
 std::unordered_map<T, std::vector<S>> RelationTable<T, S>::getTable() {

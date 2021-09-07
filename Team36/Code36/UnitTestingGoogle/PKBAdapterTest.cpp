@@ -2,9 +2,9 @@
 
 #include "PKBAdapter.h"
 #include "PKB.h"
+#include "RelationTable.cpp"
 
 namespace UnitTesting {
-
 	class PKBAdapterTest : public testing::Test {
 	protected:
 		PKBAdapterTest() {
@@ -27,13 +27,12 @@ namespace UnitTesting {
 	};
 
 	TEST_F(PKBAdapterTest, getVariables) {
-
 		var_name a = "a";
 		var_name b = "b";
 		var_name c = "c";
 		var_name d = "d";
 		var_name e = "e";
-		std::vector<var_name> v{a};
+		std::vector<var_name> v{ a };
 		PKB::getInstance().addVariable(a);
 		EXPECT_EQ(pkb.getVariables(), v);
 
@@ -162,7 +161,7 @@ namespace UnitTesting {
 	}
 
 	TEST_F(PKBAdapterTest, getIfs) {
-		std::vector<StmtInfo> v = {{ 2, STMT_IF}};
+		std::vector<StmtInfo> v = { { 2, STMT_IF} };
 
 		PKB::getInstance().addStmt(STMT_WHILE);
 		PKB::getInstance().addStmt(STMT_IF);
@@ -174,7 +173,6 @@ namespace UnitTesting {
 
 		EXPECT_EQ(pkb.getIfs(), v);
 	}
-
 
 	TEST_F(PKBAdapterTest, isFollowEmpty) {
 		PKB::getInstance().addStmt(STMT_READ);
@@ -322,10 +320,9 @@ namespace UnitTesting {
 		PKB::getInstance().addStmt(STMT_IF);
 		PKB::getInstance().addFollows(1, 2);
 		PKB::getInstance().addFollows(2, 3);
-		std::vector<std::pair<StmtInfo, StmtInfo>> v = {{p1, p2}, {p2, p3} };
+		std::vector<std::pair<StmtInfo, StmtInfo>> v = { {p1, p2}, {p2, p3} };
 		EXPECT_EQ(pkb.getFollows(), v);
 	}
-
 
 	TEST_F(PKBAdapterTest, isFollowTEmpty) {
 		PKB::getInstance().addStmt(STMT_READ);
@@ -564,7 +561,6 @@ namespace UnitTesting {
 		PKB::getInstance().addParent(2, 3);
 		PKB::getInstance().addParent(3, 4);
 
-
 		std::vector<StmtInfo> v1 = { p2, p3, p4 };
 		std::vector<StmtInfo> v2 = pkb.getChild();
 		std::sort(v1.begin(), v1.end());
@@ -593,7 +589,6 @@ namespace UnitTesting {
 	}
 
 	TEST_F(PKBAdapterTest, getParent) {
-
 		StmtInfo p1{ 1, STMT_READ };
 		StmtInfo p2{ 2, STMT_PRINT };
 		StmtInfo p3{ 3, STMT_READ };
@@ -609,7 +604,6 @@ namespace UnitTesting {
 		PKB::getInstance().addParent(1, 3);
 		PKB::getInstance().addParent(2, 3);
 		PKB::getInstance().addParent(3, 4);
-
 
 		std::vector<StmtInfo> v1 = { p1, p2, p3 };
 		std::vector<StmtInfo> v2 = pkb.getParent();
@@ -654,7 +648,6 @@ namespace UnitTesting {
 		PKB::getInstance().addParent(1, 3);
 		PKB::getInstance().addParent(2, 3);
 		PKB::getInstance().addParent(3, 4);
-
 
 		std::vector<std::pair<StmtInfo, StmtInfo>> v = { {p1, p2}, {p1, p3}, {p2, p3}, {p3, p4} };
 		EXPECT_EQ(pkb.getAllParentRelation(), v);
@@ -826,7 +819,6 @@ namespace UnitTesting {
 		PKB::getInstance().addParent(2, 3);
 		PKB::getInstance().addParent(3, 4);
 
-
 		std::vector<std::pair<StmtInfo, StmtInfo>> v = { {p1, p2}, {p1, p3}, {p1, p4}, {p2, p3}, {p2, p4}, {p3, p4} };
 		EXPECT_EQ(pkb.getAllParentTRelation(), v);
 	}
@@ -939,7 +931,7 @@ namespace UnitTesting {
 		std::sort(v2.begin(), v2.end());
 		EXPECT_EQ(v1, v2);
 
-		v1 = { p1};
+		v1 = { p1 };
 		v2 = pkb.getModifiesS(x);
 		std::sort(v2.begin(), v2.end());
 		EXPECT_EQ(v1, v2);
@@ -950,14 +942,11 @@ namespace UnitTesting {
 		std::sort(v2.begin(), v2.end());
 		EXPECT_EQ(v1, v2);
 
-
 		v1 = { };
 		v2 = pkb.getModifiesS(z);
 		EXPECT_EQ(v1, v2);
-
 	}
 	TEST_F(PKBAdapterTest, getModifiedS) {
-
 		StmtInfo p1{ 1, STMT_READ };
 		StmtInfo p2{ 2, STMT_PRINT };
 		StmtInfo p3{ 3, STMT_READ };
@@ -992,7 +981,6 @@ namespace UnitTesting {
 		std::sort(v1.begin(), v1.end());
 		std::sort(v2.begin(), v2.end());
 		EXPECT_EQ(v1, v2);
-
 
 		v1 = { };
 		v2 = pkb.getModifiedS(3);
@@ -1123,12 +1111,11 @@ namespace UnitTesting {
 		std::sort(v2.begin(), v2.end());
 		EXPECT_EQ(v1, v2);
 
-
 		v1 = { };
 		v2 = pkb.getUsesS(z);
 		EXPECT_EQ(v1, v2);
 	}
-	
+
 	TEST_F(PKBAdapterTest, getUsedS) {
 		StmtInfo p1{ 1, STMT_READ };
 		StmtInfo p2{ 2, STMT_PRINT };
@@ -1164,7 +1151,6 @@ namespace UnitTesting {
 		std::sort(v1.begin(), v1.end());
 		std::sort(v2.begin(), v2.end());
 		EXPECT_EQ(v1, v2);
-
 
 		v1 = { };
 		v2 = pkb.getUsedS(3);
