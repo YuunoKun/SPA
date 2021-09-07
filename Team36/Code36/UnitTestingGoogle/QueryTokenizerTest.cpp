@@ -228,6 +228,28 @@ namespace UnitTesting {
 	// Test for newline
 
 	// Test for SUCH_THAT
+	TEST(QueryTokenizer, SuchThatTest) {
+
+		//Result
+		QueryTokenizer query_tokenizer;
+		std::string input = "(procName)";
+		query_tokenizer.parse_into_query_tokens(input);
+		std::vector<QueryToken> output = query_tokenizer.get_query_token_chain();
+
+		//Expected
+		QueryToken parenthesis_open_token = QueryToken(QueryToken::PARENTHESIS_OPEN, "(");
+		QueryToken proc_name_token = QueryToken(QueryToken::IDENTIFIER, "procName");
+		QueryToken parenthesis_close_token = QueryToken(QueryToken::PARENTHESIS_OPEN, ")");
+
+
+		EXPECT_TRUE(output[0].type == QueryToken::PARENTHESIS_OPEN);
+
+		EXPECT_TRUE(output[1].token_value == proc_name_token.token_value);
+		EXPECT_TRUE(output[1].type == QueryToken::IDENTIFIER);
+
+		EXPECT_TRUE(output[2].type == QueryToken::PARENTHESIS_CLOSE);
+	}
+
 
 	// Test for FOLLOW_T, PARENT_T
 	//TODO
