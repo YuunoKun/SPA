@@ -31,6 +31,14 @@ struct StmtInfo {
 	}
 };
 
+struct Synonym {
+	std::string name;
+
+	bool operator==(const Synonym& synonyms) const {
+		return name == synonyms.name;
+	}
+};
+
 namespace std
 {
 	template <>
