@@ -1,7 +1,7 @@
 #include "pch.h"
 
 #include "FollowsEvaluator.h"
-#include <PKB.h>
+#include "PKB.h"
 
 namespace UnitTesting {
 
@@ -10,19 +10,11 @@ namespace UnitTesting {
 		FollowsEvaluatorTest() {
 		}
 
-		// If the constructor and destructor are not enough for setting up
-		// and cleaning up each test, you can define the following methods:
 
 		virtual void SetUp() override {
-			// Code here will be called immediately after the constructor (right
-			// before each test).
 			PKB::getInstance().resetCache();
 		}
 
-		void TearDown() override {
-			// Code here will be called immediately after each test (right
-			// before the destructor).
-		}
 		PKBAdapter pkb;
 		FollowsEvaluator followEvaluator;
 	};
@@ -114,16 +106,16 @@ namespace UnitTesting {
 		PKB::getInstance().addFollows(1, 2);
 		PKB::getInstance().addFollows(2, 3);
 
-		std::vector<std::pair<StmtInfo, StmtInfo>> v = { {p1, p2}, {p2, p3} };
+		std::vector<std::pair<StmtInfo, StmtInfo>> v = pkb.getFollows();
 		Entity left = { STMT, Synonym{"a"} };
-		Entity right = { STMT, Synonym{"a"} };
+		Entity right = { STMT, Synonym{"b"} };
 		std::pair<Entity, Entity> header = { left, right };
 		ResultTable t(header, v);
 		EXPECT_EQ(followEvaluator.getRelations(left, right), t);
 
 		v = { {p1, p2} };
 		left = { READ, Synonym{"a"} };
-		right = { PRINT, Synonym{"a"} };
+		right = { PRINT, Synonym{"b"} };
 		header = { left, right };
 		t = ResultTable(header, v);
 		EXPECT_EQ(followEvaluator.getRelations(left, right), t);
@@ -131,7 +123,7 @@ namespace UnitTesting {
 
 		v = { {p2, p3} };
 		left = { PRINT, Synonym{"a"} };
-		right = { READ, Synonym{"a"} };
+		right = { READ, Synonym{"b"} };
 		header = { left, right };
 		t = ResultTable(header, v);
 		EXPECT_EQ(followEvaluator.getRelations(left, right), t);
@@ -139,13 +131,13 @@ namespace UnitTesting {
 
 		v = { };
 		left = { READ, Synonym{"a"} };
-		right = { READ, Synonym{"a"} };
+		right = { READ, Synonym{"b"} };
 		header = { left, right };
 		t = ResultTable(header, v);
 		EXPECT_EQ(followEvaluator.getRelations(left, right), t);
 
 		left = { IF, Synonym{"a"} };
-		right = { IF, Synonym{"a"} };
+		right = { IF, Synonym{"b"} };
 		header = { left, right };
 		t = ResultTable(header, v);
 		EXPECT_EQ(followEvaluator.getRelations(left, right), t);
