@@ -11,6 +11,7 @@ QueryTokenizer::QueryTokenizer() {
 void QueryTokenizer::parse_into_query_tokens(std::string input) {
 	QueryToken curr_query_token;
 	QueryToken temp_query_token;
+
 	std::stack<char> separator_validation_stk;
 	
 	bool quotation_validation = false;
@@ -19,16 +20,31 @@ void QueryTokenizer::parse_into_query_tokens(std::string input) {
 	for (char c : input) {
 		if (is_such) {
 			if (isalpha(c)) {
-				curr_query_token.type = QueryToken::QueryTokenType::IDENTIFIER;
-				curr_query_token.token_value.push_back(c);
+				temp_query_token.type = QueryToken::IDENTIFIER;
+				temp_query_token.token_value.push_back(c);
+			}
+			else if (c == ' ' && temp_query_token.type == QueryToken::IDENTIFIER
+				&& temp_query_token.token_value == "that") {
+				
+				curr_query_token.type = QueryToken::SUCH_THAT;
+				curr_query_token.token_value = "";
+				add_query_token(curr_query_token);
+				
+				//reset temp_query_token
+				temp_query_token.type = QueryToken::WHITESPACE;
+				temp_query_token.token_value = "";
+				
+				is_such = false;
+			
 			}
 			else {
 				is_such = false;
 				add_query_token(curr_query_token);
-
+				add_query_token(temp_query_token);
 			}
 			break;
 		}
+
 		switch (c) {
 		case '(':
 			add_query_token(curr_query_token);

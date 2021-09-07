@@ -227,8 +227,10 @@ namespace UnitTesting {
 
 	// Test for newline
 
+	// Test for SUCH_THAT
 
-	// Test for asterisk
+	// Test for FOLLOW_T, PARENT_T
+	//TODO
 	TEST(QueryTokenizer, AsteriskTest) {
 
 		////Result
