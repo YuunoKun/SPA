@@ -34,6 +34,7 @@ public:
 	const std::vector<proc_name>& getProcedures();
 	const std::vector<var_name>& getVariables();
 	const std::vector<StmtInfo>& getStmts();
+	const StmtInfo getStmt(stmt_index stmt_index);
 	const std::vector<constant> getConstants();
 	const std::unordered_map<stmt_index, var_index>& getAssigns();
 	const std::unordered_map<var_index, std::string>& getExpr();
@@ -43,12 +44,6 @@ public:
 	const RelationTable<StmtInfo, StmtInfo>& getParentT();
 	const RelationTable<StmtInfo, var_name>& getUsesS();
 	const RelationTable<StmtInfo, var_name>& getModifiesS();
-	const RelationTable<StmtInfo, StmtInfo>& getFollowsReverse();
-	const RelationTable<StmtInfo, StmtInfo>& getParentReverse();
-	const RelationTable<StmtInfo, StmtInfo>& getFollowsTReverse();
-	const RelationTable<StmtInfo, StmtInfo>& getParentTReverse();
-	const RelationTable<var_name, StmtInfo>& getUsesSReverse();
-	const RelationTable<var_name, StmtInfo>& getModifiesSReverse();
 
 	void resetCache();
 	void resetEntities();
