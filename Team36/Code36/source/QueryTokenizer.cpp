@@ -22,6 +22,7 @@ void QueryTokenizer::parse_into_query_tokens(std::string input) {
 			if (isalpha(c)) {
 				temp_query_token.type = QueryToken::IDENTIFIER;
 				temp_query_token.token_value.push_back(c);
+				break;
 			}
 			else if (c == ' ' && temp_query_token.type == QueryToken::IDENTIFIER
 				&& temp_query_token.token_value == "that") {
@@ -35,14 +36,19 @@ void QueryTokenizer::parse_into_query_tokens(std::string input) {
 				temp_query_token.token_value = "";
 				
 				is_such = false;
-			
+				break;
 			}
 			else {
 				is_such = false;
 				add_query_token(curr_query_token);
-				add_query_token(temp_query_token);
+				curr_query_token.type = temp_query_token.type;
+				curr_query_token.token_value = temp_query_token.token_value;
+
+				//reset temp_query_token
+				temp_query_token.type = QueryToken::WHITESPACE;
+				temp_query_token.token_value = "";
 			}
-			break;
+			
 		}
 
 		switch (c) {
@@ -118,15 +124,16 @@ void QueryTokenizer::parse_into_query_tokens(std::string input) {
 			//	add_query_token(curr_query_token);
 			//} else 
 				
-			if (curr_query_token.type == QueryToken::IDENTIFIER) {
-				// if in front is IDENT, can be for expr/term or for or MUL
-				add_query_token(curr_query_token);
-				curr_query_token.type = QueryToken::ASTERISK;
-				add_query_token(curr_query_token);
-			}
-			else {
-				std::runtime_error("Unexpected symbol : \'" + c + '\'');
-			}
+			//if (curr_query_token.type == QueryToken::IDENTIFIER) {
+			//	// if in front is IDENT, can be for expr/term or for or MUL
+			//	add_query_token(curr_query_token);
+			//	curr_query_token.type = QueryToken::MUL;
+			//	add_query_token(curr_query_token);
+			//}
+			//else {
+			//	std::runtime_error("Unexpected symbol : \'" + c + '\'');
+			//}
+
 			break;
 		case '+':
 			add_query_token(curr_query_token);
