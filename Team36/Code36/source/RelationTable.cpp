@@ -1,7 +1,7 @@
 #pragma once
 
 #include "RelationTable.h"
-/*
+
 template <class T, class S>
 std::unordered_map<T, std::vector<S>> RelationTable<T, S>::getTable()
 {
@@ -51,7 +51,7 @@ std::vector<S> RelationTable<T, S>::getValues(T key) {
 		return iter->second;
 	}
 	else {
-		return std::vector<T> {};
+		return std::vector<S> {};
 	}
 }
 
@@ -70,7 +70,7 @@ std::vector<T> RelationTable<T, S>::getKeys()
 template <class T, class S>
 std::vector<std::pair<T, S>> RelationTable<T, S>::getPairs()
 {
-	std::vector<std::pair<T, T>> result;
+	std::vector<std::pair<T, S>> result;
 	for (auto const& pair : table) {
 		T key = pair.first;
 		for (auto const& value : pair.second)
@@ -142,4 +142,3 @@ bool UniqueRelationTable<T, S>::insert(T key, S value)
 		return false;
 	}
 }
-*/
