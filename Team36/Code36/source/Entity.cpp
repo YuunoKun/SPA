@@ -3,7 +3,7 @@
 Entity::Entity() {
 }
 
-Entity::Entity(EntityType) {
+Entity::Entity(EntityType entity_type) {
 	this->entity_type = entity_type;
 	this->is_synonym = false;
 }

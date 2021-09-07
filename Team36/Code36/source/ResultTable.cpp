@@ -35,7 +35,7 @@ bool ResultTable::isInTable(Entity e) {
 
 //if table contain no value
 bool ResultTable::isEmpty() {
-	return table.size() == 0;
+	return table.empty();
 }
 
 std::list<std::string> ResultTable::getEntityResult(Entity e) {
