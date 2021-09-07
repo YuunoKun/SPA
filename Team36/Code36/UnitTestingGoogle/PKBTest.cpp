@@ -84,33 +84,46 @@ namespace UnitTesting {
 	TEST(PKB, getExpr) {
 		PKB::getInstance().resetCache();
 
-		std::unordered_map<var_index, std::string> s{
-			{ 1, "x" }, { 2, "x+ y" }, { 3, " y " } };
-		PKB::getInstance().addExprTree(1, s[1]);
-		PKB::getInstance().addExprTree(2, s[2]);
-		PKB::getInstance().addExprTree(3, s[3]);
-		EXPECT_EQ(s, PKB::getInstance().getExpr());
-		PKB::getInstance().resetCache();
-		EXPECT_NE(s, PKB::getInstance().getExpr());
-	}
+		auto one = std::make_pair(1, "x");
+		auto two = std::make_pair(2, "x+y");
+		auto three = std::make_pair(3, "");
+		auto four = std::make_pair(4, "");
+		auto zero = std::make_pair(0, "");
 
+		PKB::getInstance().addStmt(STMT_ASSIGN);
+		PKB::getInstance().addStmt(STMT_ASSIGN);
+		PKB::getInstance().addStmt(STMT_READ);
+
+		UniqueRelationTable<stmt_index, expr> expr_table;
+		expr_table.insert(one.first, one.second);
+		expr_table.insert(two.first, two.second);
+
+		PKB::getInstance().addExprTree(one.first, one.second);
+		PKB::getInstance().addExprTree(two.first, two.second);
+		EXPECT_THROW(PKB::getInstance().addExprTree(three.first, three.second), std::invalid_argument);
+		EXPECT_THROW(PKB::getInstance().addExprTree(four.first, four.second), std::invalid_argument);
+		EXPECT_THROW(PKB::getInstance().addExprTree(zero.first, zero.second), std::invalid_argument);
+
+		EXPECT_EQ(expr_table, PKB::getInstance().getExpr());
+		PKB::getInstance().resetCache();
+		EXPECT_NE(expr_table, PKB::getInstance().getExpr());
+	}
 	TEST(PKB, getParent) {
 		PKB::getInstance().resetCache();
 
-		StmtInfo p1{ 1, STMT_READ };
-		StmtInfo p2{ 2, STMT_PRINT };
+		StmtInfo p1{ 1, STMT_WHILE };
+		StmtInfo p2{ 2, STMT_IF };
 		StmtInfo p3{ 3, STMT_READ };
 		RelationTable<StmtInfo, StmtInfo> forward_table;
 		forward_table.insert(p1, p2);
-		forward_table.insert(p1, p3);
 		forward_table.insert(p2, p3);
 
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_PRINT);
+		PKB::getInstance().addStmt(STMT_WHILE);
+		PKB::getInstance().addStmt(STMT_IF);
 		PKB::getInstance().addStmt(STMT_READ);
 		PKB::getInstance().addParent(1, 2);
-		PKB::getInstance().addParent(1, 3);
 		PKB::getInstance().addParent(2, 3);
+		EXPECT_THROW(PKB::getInstance().addParent(3, 2), std::invalid_argument);
 		EXPECT_EQ(forward_table, PKB::getInstance().getParent());
 		PKB::getInstance().resetCache();
 		EXPECT_NE(forward_table, PKB::getInstance().getParent());
@@ -189,6 +202,25 @@ namespace UnitTesting {
 		EXPECT_EQ(forward_table, PKB::getInstance().getModifiesS());
 		PKB::getInstance().resetCache();
 		EXPECT_NE(forward_table, PKB::getInstance().getModifiesS());
+	}
+
+	TEST(PKB, getAssignment) {
+		PKB::getInstance().resetCache();
+
+		var_name x = "x";
+		var_name y = "y";
+		UniqueRelationTable<stmt_index, var_name> forward_table;
+		forward_table.insert(1, x);
+
+		PKB::getInstance().addStmt(STMT_ASSIGN);
+		PKB::getInstance().addStmt(STMT_READ);
+		PKB::getInstance().addVariable(x);
+		PKB::getInstance().addModifiesS(1, x);
+		PKB::getInstance().addVariable(y);
+		PKB::getInstance().addModifiesS(2, y);
+		EXPECT_EQ(forward_table, PKB::getInstance().getAssigns());
+		PKB::getInstance().resetCache();
+		EXPECT_NE(forward_table, PKB::getInstance().getAssigns());
 	}
 
 	TEST(PKB, resetCache) {
