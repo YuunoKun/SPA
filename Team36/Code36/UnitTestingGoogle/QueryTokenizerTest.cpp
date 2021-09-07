@@ -232,7 +232,7 @@ namespace UnitTesting {
 
 		//Result
 		QueryTokenizer query_tokenizer;
-		std::string input = "such that";
+		std::string input = "such that ";
 		query_tokenizer.parse_into_query_tokens(input);
 		std::vector<QueryToken> output = query_tokenizer.get_query_token_chain();
 
@@ -240,8 +240,41 @@ namespace UnitTesting {
 		QueryToken such_that_token = QueryToken(QueryToken::SUCH_THAT, "");
 
 		EXPECT_TRUE(output[0].type == such_that_token.type);
+
 	}
 
+	TEST(QueryTokenizer, SuchThatTest2) {
+
+		//Result
+		QueryTokenizer query_tokenizer;
+		std::string input = "Select s such that Follows";
+		query_tokenizer.parse_into_query_tokens(input);
+		std::vector<QueryToken> output = query_tokenizer.get_query_token_chain();
+
+		//Expected
+		QueryToken such_that_token = QueryToken(QueryToken::SUCH_THAT, "");
+
+		EXPECT_TRUE(output[2].type == such_that_token.type);
+	}
+
+	TEST(QueryTokenizer, SuchThatDoubleSpacingTest) {
+
+		//Result
+		QueryTokenizer query_tokenizer;
+		std::string input = "Select s such  that Follows";
+		query_tokenizer.parse_into_query_tokens(input);
+		std::vector<QueryToken> output = query_tokenizer.get_query_token_chain();
+
+		//Expected
+		QueryToken such_token = QueryToken(QueryToken::IDENTIFIER, "such");
+		QueryToken that_token = QueryToken(QueryToken::IDENTIFIER, "that");
+
+		EXPECT_TRUE(output[2].token_value == such_token.token_value);
+		EXPECT_TRUE(output[2].type == such_token.type);
+
+		EXPECT_TRUE(output[3].token_value == that_token.token_value);
+		EXPECT_TRUE(output[3].type == that_token.type);
+	}
 
 	// Test for FOLLOW_T, PARENT_T
 	//TODO
@@ -268,7 +301,7 @@ namespace UnitTesting {
 	
 	// Invalid tests
 
-	//Test catch if parenthesis still open 
+	// Test catch if parenthesis still open 
 	TEST(QueryTokenizer, InvalidParenthesisOpenTest) {
 
 		try {
@@ -286,7 +319,7 @@ namespace UnitTesting {
 		}
 	}
 
-	//Test catch if parenthesis no opening
+	// Test catch if parenthesis no opening
 	TEST(QueryTokenizer, InvalidParenthesisCloseTest) {
 
 		try {
@@ -304,7 +337,7 @@ namespace UnitTesting {
 		}
 	}
 
-	//Test catch if quotation marks missing
+	// Test catch if quotation marks missing
 	TEST(QueryTokenizer, InvalidQuotationTest1) {
 
 		try {
@@ -322,7 +355,7 @@ namespace UnitTesting {
 		}
 	}
 
-	//Test catch if quotation marks missing
+	// Test catch if quotation marks missing
 	TEST(QueryTokenizer, InvalidQuotationTest2) {
 
 		try {
