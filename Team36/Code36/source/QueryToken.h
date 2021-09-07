@@ -36,30 +36,29 @@ public:
 		WILDCARD,
 		QUOTATION_OPEN,
 		QUOTATION_CLOSE,
-		ASTERISK,
 
 		PLUS,
 		MINUS,
-
+		MUL,
 		DIV,
 		MOD,
 
 		//Relationships 
 		// need parent type? cause will pass straight to relref class
-		MODIFIESP,
-		MODIFIESS,
-		USESP,
-		USESS,
+		MODIFIES_P,
+		MODIFIES_S,
+		USES_P,
+		USES_S,
 		CALLS,
-		CALLST,
+		CALLS_T,
 		PARENT,
-		PARENTT,
+		PARENT_T,
 		FOLLOWS,
-		FOLLOWST,
+		FOLLOWS_T,
 		NEXT,
-		NEXTT,
+		NEXT_T,
 		AFFECTS,
-		AFFECTST,
+		AFFECTS_T,
 
 		//  PQL Conditional Operators
 	/*	BOOL_AND,

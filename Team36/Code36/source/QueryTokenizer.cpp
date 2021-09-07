@@ -10,10 +10,25 @@ QueryTokenizer::QueryTokenizer() {
 
 void QueryTokenizer::parse_into_query_tokens(std::string input) {
 	QueryToken curr_query_token;
+	QueryToken temp_query_token;
 	std::stack<char> separator_validation_stk;
+	
 	bool quotation_validation = false;
+	bool is_such = false;
 
 	for (char c : input) {
+		if (is_such) {
+			if (isalpha(c)) {
+				curr_query_token.type = QueryToken::QueryTokenType::IDENTIFIER;
+				curr_query_token.token_value.push_back(c);
+			}
+			else {
+				is_such = false;
+				add_query_token(curr_query_token);
+
+			}
+			break;
+		}
 		switch (c) {
 		case '(':
 			add_query_token(curr_query_token);
@@ -63,6 +78,12 @@ void QueryTokenizer::parse_into_query_tokens(std::string input) {
 			add_query_token(curr_query_token);
 			break;
 		case ' ':
+			// check for "such" in such that
+			if (curr_query_token.type == QueryToken::IDENTIFIER 
+				&& curr_query_token.token_value == "such") {
+				is_such = true;
+				break;
+			}
 			add_query_token(curr_query_token);
 			curr_query_token.type = QueryToken::WHITESPACE;
 			break;
@@ -151,6 +172,7 @@ void QueryTokenizer::add_query_token(QueryToken& query_token) {
 		//discard whitespace
 		return;
 	}
+	
 
 	query_token_cache.push_back(query_token);
 	query_token.type = QueryToken::QueryTokenType::WHITESPACE;

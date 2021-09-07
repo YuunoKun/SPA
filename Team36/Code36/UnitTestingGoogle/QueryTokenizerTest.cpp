@@ -68,6 +68,19 @@ namespace UnitTesting {
 		EXPECT_TRUE(whitespace.type == QueryToken::QueryTokenType::WHITESPACE);
 	}
 
+	// Test for newline
+	//TODO
+	TEST(QueryTokenizer, NewlineTest) {
+		QueryTokenizer query_tokenizer;
+
+
+		//Expected
+		QueryToken whitespace = QueryToken();
+
+		EXPECT_TRUE(whitespace.token_value == "");
+		EXPECT_TRUE(whitespace.type == QueryToken::QueryTokenType::WHITESPACE);
+	}
+
 	// Test for constants
 	TEST(QueryTokenizer, ConstantTest) {
 
@@ -310,19 +323,5 @@ namespace UnitTesting {
 			FAIL();
 		}
 	}
-
-	//TEST(QueryTokenizer, NewlineTest) {
-
-	//	//Result
-	//	QueryTokenizer query_tokenizer;
-	//	std::string input = "Uses \n (^)";
-	//	query_tokenizer.parse_into_query_tokens(input);
-	//	std::vector<QueryToken> output = query_tokenizer.get_query_token_chain();
-
-	//	//Expected
-	//	QueryToken wildcard_token = QueryToken(QueryToken::COMMA, ",");
-
-	//	EXPECT_TRUE(output[4].type == QueryToken::COMMA);
-	//}
 
 }
