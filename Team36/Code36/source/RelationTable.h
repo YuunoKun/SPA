@@ -37,7 +37,8 @@ protected:
 	std::unordered_map<S, std::vector<T>> backward_table;
 	bool uniqueKey;
 
-	std::unordered_map<T, std::vector<S>> getTable();
+	std::unordered_map<T, std::vector<S>> getTableForward();
+	std::unordered_map<S, std::vector<T>> getTableBackward();
 };
 
 template <class T, class S>

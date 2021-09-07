@@ -3,9 +3,15 @@
 #include "RelationTable.h"
 
 template <class T, class S>
-std::unordered_map<T, std::vector<S>> RelationTable<T, S>::getTable()
+std::unordered_map<T, std::vector<S>> RelationTable<T, S>::getTableForward()
 {
 	return forward_table;
+}
+
+template <class T, class S>
+std::unordered_map<S, std::vector<T>> RelationTable<T, S>::getTableBackward()
+{
+	return backward_table;
 }
 
 template <class T, class S>

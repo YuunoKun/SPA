@@ -52,15 +52,15 @@ namespace UnitTesting {
 	}
 
 	TEST(RelationTable, insert_StmtInfo) {
-		UniqueRelationTable<StmtInfo, StmtInfo> table1;
-		RelationTable<StmtInfo, StmtInfo> table2;
+		UniqueRelationTable<int, StmtInfo> table1;
+		RelationTable<int, StmtInfo> table2;
 		StmtInfo p1{ 1, STMT_READ };
 		StmtInfo p2{ 2, STMT_READ };
 		StmtInfo p3{ 3, STMT_READ };
 
-		std::vector<std::pair<StmtInfo, StmtInfo>> testInput{ {p1, p2}, {p1, p3}, {p2, p2}, {p2, p2}, {p2, p3} };
+		std::vector<std::pair<int, StmtInfo>> testInput{ {1, p2}, {1, p3}, {2, p2}, {2, p2}, {2, p3} };
 
-		StmtInfo key = testInput[0].first;
+		int key = testInput[0].first;
 		StmtInfo value = testInput[0].second;
 
 		EXPECT_EQ(table1.insert(testInput[0].first, testInput[0].second), true);
@@ -234,6 +234,24 @@ namespace UnitTesting {
 
 		EXPECT_EQ(table1.containsKey(1), true);
 		EXPECT_EQ(table1.containsKey(2), false);
+	}
+
+	TEST(RelationTable, containsValue) {
+		UniqueRelationTable<int, int> table1;
+		std::vector<std::pair<int, int>> testInput{ {1, 2} };
+
+		table1.insert(testInput[0].first, testInput[0].second);
+
+		EXPECT_EQ(table1.containsValue(2), true);
+		EXPECT_EQ(table1.containsValue(1), false);
+
+		UniqueRelationTable<int, var_name> table2;
+		std::vector<std::pair<int, var_name>> testInput2{ {1, "x"} };
+
+		table2.insert(testInput2[0].first, testInput2[0].second);
+
+		EXPECT_EQ(table2.containsValue("x"), true);
+		EXPECT_EQ(table2.containsValue("y"), false);
 	}
 
 	TEST(RelationTable, containsPair) {
