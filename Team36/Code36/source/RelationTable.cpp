@@ -137,9 +137,9 @@ bool RelationTable <T, S>::containsKey(T key)
 }
 
 template<class T, class S>
-bool RelationTable<T, S>::containsValue(S)
+bool RelationTable<T, S>::containsValue(S value)
 {
-	auto iter = backward_table.find(key);
+	auto iter = backward_table.find(value);
 	return iter != backward_table.end();
 }
 

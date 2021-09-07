@@ -204,7 +204,7 @@ namespace UnitTesting {
 		EXPECT_NE(forward_table, PKB::getInstance().getModifiesS());
 	}
 
-	TEST(PKB, getAssignment) {
+	TEST(PKB, getAssigns) {
 		PKB::getInstance().resetCache();
 
 		var_name x = "x";
@@ -221,6 +221,43 @@ namespace UnitTesting {
 		EXPECT_EQ(forward_table, PKB::getInstance().getAssigns());
 		PKB::getInstance().resetCache();
 		EXPECT_NE(forward_table, PKB::getInstance().getAssigns());
+	}
+
+	TEST(PKB, getStmt) {
+		PKB::getInstance().resetCache();
+
+		StmtInfo p1{ 1, STMT_READ };
+		StmtInfo p2{ 2, STMT_PRINT };
+
+		PKB::getInstance().addStmt(STMT_READ);
+		PKB::getInstance().addStmt(STMT_PRINT);
+		EXPECT_EQ(p1, PKB::getInstance().getStmt(1));
+		EXPECT_EQ(p2, PKB::getInstance().getStmt(2));
+		EXPECT_THROW(PKB::getInstance().getStmt(0), std::invalid_argument);
+		EXPECT_THROW(PKB::getInstance().getStmt(3), std::invalid_argument);
+		PKB::getInstance().resetCache();
+
+		EXPECT_THROW(PKB::getInstance().getStmt(1), std::invalid_argument);
+	}
+
+	TEST(PKB, getAssignment) {
+		PKB::getInstance().resetCache();
+
+		var_name x = "x";
+		var_name y = "y";
+		UniqueRelationTable<stmt_index, var_name> forward_table;
+		forward_table.insert(1, x);
+
+		PKB::getInstance().addStmt(STMT_ASSIGN);
+		PKB::getInstance().addStmt(STMT_READ);
+		PKB::getInstance().addVariable(x);
+		PKB::getInstance().addModifiesS(1, x);
+		PKB::getInstance().addVariable(y);
+		PKB::getInstance().addModifiesS(2, y);
+		EXPECT_EQ(x, PKB::getInstance().getAssignment(1));
+		EXPECT_THROW(PKB::getInstance().getAssignment(2), std::invalid_argument);
+
+		PKB::getInstance().resetCache();
 	}
 
 	TEST(PKB, resetCache) {
