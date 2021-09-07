@@ -20,6 +20,18 @@
     <ClCompile Include="PKBTest.cpp" />
     <ClCompile Include="QueryPreprocessorTest.cpp" />
     <ClCompile Include="RelationTableTest.cpp" />
+    <ClCompile Include="ParserTest.cpp">
+      <Filter>SP</Filter>
+    </ClCompile>
+    <ClCompile Include="FSMTest.cpp">
+      <Filter>SP</Filter>
+    </ClCompile>
+    <ClCompile Include="TokenizerTest.cpp">
+      <Filter>SP</Filter>
+    </ClCompile>
+    <ClCompile Include="DesignExtractorTest.cpp">
+      <Filter>SP</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -30,6 +42,9 @@
   <ItemGroup>
     <Filter Include="PQL">
       <UniqueIdentifier>{44fb22e0-696f-4295-8574-6cd39d942b50}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SP">
+      <UniqueIdentifier>{03318b9a-8b1c-42df-b887-f0ac2607e38e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

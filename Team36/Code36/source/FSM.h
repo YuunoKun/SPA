@@ -14,12 +14,12 @@ namespace SourceProcessor {
 	public:
 		FSM(Tokenizer&);
 
+		FSM(Tokenizer&, Extractor*);
+
+		Tokenizer &get_tokenizer();
+
 		// Build data structure with the given tokenizer
 		void build();
-
-	private:
-		Tokenizer m_tokenizer;
-		DesignExtractor m_design_extractor;
 
 		// Expects a procedure.
 		// procedure: ¡®procedure¡¯ proc_name ¡®{¡® stmtLst ¡®}¡¯
@@ -81,14 +81,20 @@ namespace SourceProcessor {
 		// factor: var_name | const_value | ¡®(¡¯ expr ¡®)¡¯
 		void expect_factor();
 
+
+	private:
+		Tokenizer m_tokenizer;
+		Extractor *m_design_extractor;
+
+		// Throws exception
+		void unexpected_token(std::string);
+
 		// Expects a compulsory token with given token type, or else the build fails.
 		Token& expect_token_and_pop(TokenType);
 
-		// Throws exception
-		void unexpected_token();
-
 		// This token can be optional, will return a boolean value indicating if that token exists
 		bool optional_token(TokenType);
+
 	};
 
 

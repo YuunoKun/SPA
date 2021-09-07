@@ -39,8 +39,11 @@
     <ClInclude Include="pch.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="DesignExtractorTest.cpp" />
     <ClCompile Include="EntityTest.cpp" />
     <ClCompile Include="EvaluateQueryTest.cpp" />
+    <ClCompile Include="FSMTest.cpp" />
+    <ClCompile Include="ParserTest.cpp" />
     <ClCompile Include="PatternTest.cpp" />
     <ClCompile Include="QueryTest.cpp" />
     <ClCompile Include="RelRefTest.cpp" />
@@ -53,6 +56,7 @@
     <ClCompile Include="PKBTest.cpp" />
     <ClCompile Include="QueryPreprocessorTest.cpp" />
     <ClCompile Include="RelationTableTest.cpp" />
+    <ClCompile Include="TokenizerTest.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SPA\SPA.vcxproj">

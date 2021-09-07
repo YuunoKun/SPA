@@ -90,13 +90,13 @@ void DesignExtractor::add_statement_modifies(var_name name) {
 
 
 void DesignExtractor::start_expr() {
-	m_expr_builder.str("");
+	m_expr_builder = "";
 }
 
 
 void DesignExtractor::end_expr() {
-	std::string expr_str = m_expr_builder.str();
-	m_statements[m_curr_stmt_id - 1].set_expr_str(expr_str);
+	m_statements[m_curr_stmt_id - 1].set_expr_str(m_expr_builder);
+	m_expr_builder.erase();
 }
 
 

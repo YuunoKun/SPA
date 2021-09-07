@@ -10,6 +10,7 @@ Tokenizer::Tokenizer(void) {
 }
 
 void Tokenizer::parse_into_tokens(const char* input) {
+	m_token_cache = {};
 	Token current_token;
 	std::stack<char> separator_validation_stk;
 	std::string source = std::string(input);
@@ -27,7 +28,7 @@ void Tokenizer::parse_into_tokens(const char* input) {
 				separator_validation_stk.pop();
 			}
 			else {
-				std::runtime_error("Unexpected symbol : \'" + c + '\'');
+				throw std::runtime_error("Unexpected symbol : \'" + c + '\'');
 			}
 			add_token(current_token);
 			current_token.set_token_type(TokenType::STATEMENT_LIST_CLOSE);
@@ -44,7 +45,7 @@ void Tokenizer::parse_into_tokens(const char* input) {
 				separator_validation_stk.pop();
 			}
 			else {
-				std::runtime_error("Unexpected symbol : \'" + c + '\'');
+				throw std::runtime_error("Unexpected symbol : \'" + c + '\'');
 			}
 			add_token(current_token);
 			current_token.set_token_type(TokenType::PARENTHESIS_CLOSE);
@@ -109,6 +110,7 @@ void Tokenizer::parse_into_tokens(const char* input) {
 			else {
 				add_token(current_token);
 				current_token.set_token_type(TokenType::ASSIGN);
+				break;
 			}
 			add_token(current_token);
 			break;
@@ -138,6 +140,10 @@ void Tokenizer::parse_into_tokens(const char* input) {
 			add_token(current_token);
 			break;
 		default:
+			if (current_token.get_token_type() == TokenType::ASSIGN) {
+				add_token(current_token);
+			}
+
 			if (isdigit(c)) {
 				if (current_token.get_token_type() == TokenType::IDENTIFIER) {
 					current_token.get_token_value().push_back(c);
@@ -146,17 +152,30 @@ void Tokenizer::parse_into_tokens(const char* input) {
 					current_token.set_token_type(TokenType::CONSTANT);
 					current_token.get_token_value().push_back(c);
 				}
+				else {
+					add_token(current_token);
+					current_token.set_token_type(TokenType::CONSTANT);
+					current_token.get_token_value().push_back(c);
+				}
 			}
 			else if (isalpha(c)) {
-				current_token.set_token_type(TokenType::IDENTIFIER);
-				current_token.get_token_value().push_back(c);
+				if (current_token.get_token_type() == TokenType::IDENTIFIER) {
+					current_token.get_token_value().push_back(c);
+				}
+				else {
+					add_token(current_token);
+					current_token.set_token_type(TokenType::IDENTIFIER);
+					current_token.get_token_value().push_back(c);
+				}
 			}
 			else {
-				std::runtime_error("Unknown symbol : \'" + c + '\'');
+				throw std::runtime_error("Unknown symbol : \'" + c + '\'');
 			}
 			break;
 		}
 	}
+
+	add_token(current_token);
 }
 
 

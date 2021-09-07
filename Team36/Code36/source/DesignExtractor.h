@@ -2,45 +2,43 @@
 
 #include <vector>
 #include <stack>
-#include <sstream>
+#include "Extractor.h"
 #include <unordered_set>
-#include "Common.h"
 #include "Procedure.h"
 #include "Statement.h"
-#include "Token.h"
 
 
 
 namespace SourceProcessor {
 
-	class DesignExtractor {
+	class DesignExtractor : public Extractor {
 	public:
 
 		DesignExtractor();
 
-		void start_nesting();
+		void start_nesting() override;
 
-		void end_nesting();
+		void end_nesting() override;
 
-		void add_procedure(proc_name);
+		void add_procedure(proc_name) override;
 
-		void add_statement(TokenType);
+		void add_statement(TokenType) override;
 
-		void add_variable(var_name);
+		void add_variable(var_name) override;
 
-		void add_constant(constant);
+		void add_constant(constant) override;
 
-		void add_statement_uses(var_name);
+		void add_statement_uses(var_name) override;
 
-		void add_statement_modifies(var_name);
+		void add_statement_modifies(var_name) override;
 
-		void start_expr();
+		void start_expr() override;
 
-		void end_expr();
+		void end_expr() override;
 
-		void populateEntities();
+		void populateEntities() override;
 
-		void populateRelations();
+		void populateRelations() override;
 
 
 	private:
@@ -52,7 +50,7 @@ namespace SourceProcessor {
 		proc_index m_curr_proc_id;
 		stmt_index m_curr_stmt_id;
 		std::stack<stmt_index> m_curr_nesting_stk;
-		std::stringstream m_expr_builder;
+		std::string m_expr_builder;
 
 
 		void populateFollows();
