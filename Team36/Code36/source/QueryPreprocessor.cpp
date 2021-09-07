@@ -230,6 +230,7 @@ Query QueryPreprocessor::parse(std::string str) {
 					output.push_back({ QueryToken::QueryTokenType::FOLLOWS_T, "" });
 				}
 				else if (token.type == QueryToken::QueryTokenType::PARENTHESIS_OPEN) {
+					isParameter = true;
 					if (prevTokenSelect.token_value == "Uses" && prevTokenSelect.type == QueryToken::QueryTokenType::IDENTIFIER) {
 						queryParameter = { QueryToken::QueryTokenType::IDENTIFIER, "Uses" };
 					}
@@ -248,28 +249,21 @@ Query QueryPreprocessor::parse(std::string str) {
 					else if (prevTokenSelect.token_value == "" && prevTokenSelect.type == QueryToken::QueryTokenType::FOLLOWS_T) {
 						queryParameter = { QueryToken::QueryTokenType::FOLLOWS_T, "" };
 					}
-					isParameter == true;
 				}
 				else if (token.type == QueryToken::QueryTokenType::PARENTHESIS_CLOSE) {
+					isParameter = false;
 					if (queryParameter.token_value == "Uses" && queryParameter.type == QueryToken::QueryTokenType::IDENTIFIER) {
-
 					}
 					else if (queryParameter.token_value == "Modifies" && queryParameter.type == QueryToken::QueryTokenType::IDENTIFIER) {
-
 					}
 					else if (queryParameter.token_value == "Parent" && queryParameter.type == QueryToken::QueryTokenType::IDENTIFIER) {
-
 					}
 					else if (queryParameter.token_value == "Follows" && queryParameter.type == QueryToken::QueryTokenType::IDENTIFIER) {
-
 					}
 					else if (queryParameter.token_value == "" && queryParameter.type == QueryToken::QueryTokenType::PARENT_T) {
-
 					}
 					else if (queryParameter.token_value == "" && queryParameter.type == QueryToken::QueryTokenType::FOLLOWS_T) {
-
 					}
-					isParameter == false;
 				}
 			}
 			else if (!isParameter && patternOrSuchThat.type == QueryToken::QueryTokenType::PATTERN) {
