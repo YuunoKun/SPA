@@ -31,16 +31,16 @@ namespace UnitTesting {
 			PKB::getInstance().addStmt(STMT_ASSIGN);
 			PKB::getInstance().addStmt(STMT_CALL);
 			PKB::getInstance().addStmt(STMT_CALL);
-			PKB::getInstance().addFollows(1, 2);
-			PKB::getInstance().addFollows(2, 3);
-			PKB::getInstance().addParent(1, 2);
-			PKB::getInstance().addParent(1, 3);
-			PKB::getInstance().addParent(2, 3);
-			PKB::getInstance().addParent(3, 4);
-			PKB::getInstance().addModifiesS(1, MODIFIESRIGHT1);
-			PKB::getInstance().addModifiesS(3, MODIFIESRIGHT2);
-			PKB::getInstance().addUsesS(1, USESRIGHT1);
-			PKB::getInstance().addUsesS(3, USESRIGHT2);
+			PKB::getInstance().addFollows(std::stoi(FOLLOWLEFT1), std::stoi(FOLLOWRIGHT1));
+			PKB::getInstance().addFollows(std::stoi(FOLLOWLEFT2), std::stoi(FOLLOWRIGHT2));
+			PKB::getInstance().addParent(std::stoi(PARENTLEFT1), std::stoi(PARENTRIGHT1));
+			PKB::getInstance().addParent(std::stoi(PARENTLEFT1), std::stoi(PARENTRIGHT2));
+			PKB::getInstance().addParent(std::stoi(PARENTLEFT2), std::stoi(PARENTRIGHT2));
+			PKB::getInstance().addParent(std::stoi(PARENTLEFT3), std::stoi(PARENTRIGHT3));
+			PKB::getInstance().addModifiesS(std::stoi(MODIFIESLEFT1), MODIFIESRIGHT1);
+			PKB::getInstance().addModifiesS(std::stoi(MODIFIESLEFT2), MODIFIESRIGHT2);
+			PKB::getInstance().addUsesS(std::stoi(USESLEFT1), USESRIGHT1);
+			PKB::getInstance().addUsesS(std::stoi(USESLEFT2), USESRIGHT2);
 		}
 
 		~QueryEvaluatorTest() override {
@@ -1570,7 +1570,6 @@ namespace UnitTesting {
 
 
 	//Modifies_S Relation Test ----------------------------------------------------------------------------------------------------
-	//Evaluator Select statement for Modifies Relation
 	TEST_F(QueryEvaluatorTest, evaluateQueryModifiesBooleanTrue) {
 		RelType type = MODIFIES_S;
 
@@ -1687,7 +1686,6 @@ namespace UnitTesting {
 
 	TEST_F(QueryEvaluatorTest, evaluateQueryModifiesFilterNoCommonSynonymFalse) {
 		RelType type = MODIFIES_S;
-		std::vector<RelRef> relations;
 		//Empty result for non-matching header for double column
 		std::vector<Entity> synonyms;
 		synonyms.push_back({ PRINT, commonSynonym1 });
@@ -1722,7 +1720,7 @@ namespace UnitTesting {
 		//Test case for Select a such that Modifies_S(selected, a)
 		std::list<std::string> result1 = { MODIFIESLEFT1, MODIFIESLEFT2 };
 		std::list<std::string> result2 = { MODIFIESLEFT1 };
-		std::list<std::string> result3 = { MODIFIESLEFT2};
+		std::list<std::string> result3 = { MODIFIESLEFT2 };
 		std::list<std::string> result4 = { };
 		std::list<std::string> result5 = { };
 		std::list<std::string> result6 = { };
@@ -1773,13 +1771,13 @@ namespace UnitTesting {
 
 		//Test case for remaining Select a such that Modifies_S(selected, anyEmpty)
 		for (unsigned int i = 0; i < selectedList.size(); i++) {
-			RelRef relation(type, selectedList[i], {VARIABLE, z});
+			RelRef relation(type, selectedList[i], { VARIABLE, z });
 			Query q;
 			q.addRelation(relation);
 			q.addSelected(selectedList[i]);
 			EXPECT_EQ(evaluator.evaluateQuery(q), emptyResult) << "Error at results : " << i + 1;
 		}
-		
+
 
 		//Test case for Select a such that Modifies_S(a, selected)
 		resultList[0] = { MODIFIESRIGHT1, MODIFIESRIGHT2 };
@@ -1802,7 +1800,7 @@ namespace UnitTesting {
 		q.addRelation(relation);
 		q.addSelected(selected);
 		EXPECT_EQ(evaluator.evaluateQuery(q), resultList[0]);
-		
+
 
 		//Test case for Select a such that Modifies_S("1", selected)
 		resultList[0] = { MODIFIESRIGHT1 };
@@ -1813,7 +1811,7 @@ namespace UnitTesting {
 		q.addRelation(relation);
 		q.addSelected(selected);
 		EXPECT_EQ(evaluator.evaluateQuery(q), resultList[0]);
-		
+
 
 		//Test case for Select a such that Modifies_S("3", selected)
 		resultList[0] = { MODIFIESRIGHT2 };
@@ -1822,7 +1820,7 @@ namespace UnitTesting {
 		q.addRelation(relation);
 		q.addSelected(selected);
 		EXPECT_EQ(evaluator.evaluateQuery(q), resultList[0]);
-		
+
 
 		//Test case for remaining Select a such that Modifies_S(anyEmpty, selected)
 		std::vector<Entity> emptyList = {
@@ -1840,4 +1838,273 @@ namespace UnitTesting {
 
 	}
 
+	//Uses_S Relation Test ----------------------------------------------------------------------------------------------------
+	TEST_F(QueryEvaluatorTest, evaluateQueryUsessBooleanTrue) {
+		RelType type = USES_S;
+
+		std::vector<RelRef> relations;
+		//Test true boolean equation
+		relations.push_back(RelRef(type, { WILD }, { WILD }));
+		relations.push_back(RelRef(type, { STMT, USESLEFT1 }, { VARIABLE, USESRIGHT1 }));
+		relations.push_back(RelRef(type, { STMT, USESLEFT2 }, { VARIABLE, USESRIGHT2 }));
+		relations.push_back(RelRef(type, { STMT, USESLEFT1 }, { WILD }));
+		relations.push_back(RelRef(type, { STMT, USESLEFT2 }, { WILD }));
+		relations.push_back(RelRef(type, { WILD }, { VARIABLE, USESRIGHT1 }));
+		relations.push_back(RelRef(type, { WILD }, { VARIABLE, USESRIGHT2 }));
+
+		for (unsigned int i = 0; i < relations.size(); i++) {
+			for (unsigned int j = 0; j < allSelect.size(); j++) {
+				Query q;
+				q.addRelation(relations[i]);
+				q.addSelected(allSelect[j]);
+				EXPECT_EQ(evaluator.evaluateQuery(q), allResult[j]) << "Error at results : " << i + 1;
+			}
+		}
+	}
+
+	TEST_F(QueryEvaluatorTest, evaluateQueryUsesBooleanFalse) {
+		RelType type = USES_S;
+		//Test false boolean equation
+		std::vector<Entity> invalidLefts;
+		invalidLefts.push_back({ STMT, "2" });
+		invalidLefts.push_back({ STMT, "4" });
+		invalidLefts.push_back({ STMT, "5" });
+		invalidLefts.push_back({ STMT, "6" });
+		invalidLefts.push_back({ STMT, "7" });
+		invalidLefts.push_back({ STMT, "8" });
+		invalidLefts.push_back({ STMT, "9" });
+		invalidLefts.push_back({ STMT, "10" });
+		invalidLefts.push_back({ STMT, "11" });
+		invalidLefts.push_back({ STMT, "12" });
+		for (unsigned int k = 0; k < invalidLefts.size(); k++) {
+			for (unsigned int i = 0; i < allVariables.size(); i++) {
+				for (unsigned int j = 0; j < allSelect.size(); j++) {
+					Query q;
+					q.addRelation(RelRef(type, invalidLefts[k], allVariables[i]));
+					q.addSelected(allSelect[j]);
+					EXPECT_EQ(evaluator.evaluateQuery(q), emptyResult) << "Error at results : " << i + 1 << " : " << j + 1;
+				}
+			}
+		}
+
+		std::vector<Entity> invalidRight;
+		invalidRight.push_back({ VARIABLE, z });
+
+		for (unsigned int k = 0; k < invalidRight.size(); k++) {
+			for (unsigned int i = 0; i < validConstantEntity.size(); i++) {
+				for (unsigned int j = 0; j < allSelect.size(); j++) {
+					Query q;
+					q.addRelation(RelRef(type, validConstantEntity[i], invalidRight[k]));
+					q.addSelected(allSelect[j]);
+					EXPECT_EQ(evaluator.evaluateQuery(q), emptyResult) << "Error at results : " << i + 1 << " : " << j + 1;
+				}
+			}
+		}
+	}
+	TEST_F(QueryEvaluatorTest, evaluateQueryUsesFilterEmpty) {
+		RelType type = USES_S;
+		std::vector<RelRef> relations;
+		relations.push_back(RelRef(type, { STMT, "2" }, { VARIABLE, Synonym{"a"} }));
+		relations.push_back(RelRef(type, { STMT, "4" }, { VARIABLE, Synonym{"a"} }));
+		relations.push_back(RelRef(type, { STMT, "5" }, { VARIABLE, Synonym{"a"} }));
+		relations.push_back(RelRef(type, { STMT, "6" }, { VARIABLE, Synonym{"a"} }));
+		relations.push_back(RelRef(type, { STMT, "7" }, { VARIABLE, Synonym{"a"} }));
+		relations.push_back(RelRef(type, { STMT, "8" }, { VARIABLE, Synonym{"a"} }));
+		relations.push_back(RelRef(type, { STMT, "9" }, { VARIABLE, Synonym{"a"} }));
+		relations.push_back(RelRef(type, { STMT, "10" }, { VARIABLE, Synonym{"a"} }));
+		relations.push_back(RelRef(type, { STMT, "11" }, { VARIABLE, Synonym{"a"} }));
+		relations.push_back(RelRef(type, { STMT, "12" }, { VARIABLE, Synonym{"a"} }));
+		relations.push_back(RelRef(type, { STMT, Synonym{"a"} }, { VARIABLE, z }));
+
+		for (unsigned int i = 0; i < relations.size(); i++) {
+			for (unsigned int j = 0; j < allSelect.size(); j++) {
+				Query q;
+				q.addRelation(relations[i]);
+				q.addSelected(allSelect[j]);
+				EXPECT_EQ(evaluator.evaluateQuery(q), emptyResult) << "Error at results : " << i + 1 << " : " << j + 1;
+			}
+		}
+	}
+	TEST_F(QueryEvaluatorTest, evaluateQueryUsesFilterNoCommonSynonymTrue) {
+		RelType type = USES_S;
+		std::vector<RelRef> relations;
+		//Have Result for matching header
+		relations.push_back(RelRef(type, { STMT, Synonym{"a"} }, { VARIABLE, Synonym{"a"} }));
+		relations.push_back(RelRef(type, { IF, Synonym{"a"} }, { VARIABLE, Synonym{"a"} }));
+		relations.push_back(RelRef(type, { WHILE, Synonym{"a"} }, { VARIABLE, Synonym{"a"} }));
+		relations.push_back(RelRef(type, { WILD }, { VARIABLE, Synonym{"a"} }));
+		relations.push_back(RelRef(type, { STMT, Synonym{"a"} }, { WILD }));
+		relations.push_back(RelRef(type, { IF, Synonym{"a"} }, { WILD }));
+		relations.push_back(RelRef(type, { WHILE, Synonym{"a"} }, { WILD }));
+		relations.push_back(RelRef(type, { STMT, USESLEFT1 }, { VARIABLE, Synonym{"a"} }));
+		relations.push_back(RelRef(type, { STMT, USESLEFT2 }, { VARIABLE, Synonym{"a"} }));
+		relations.push_back(RelRef(type, { STMT, Synonym{"a"} }, { VARIABLE, USESRIGHT1 }));
+		relations.push_back(RelRef(type, { IF, Synonym{"a"} }, { VARIABLE, USESRIGHT1 }));
+		relations.push_back(RelRef(type, { STMT, Synonym{"a"} }, { VARIABLE, USESRIGHT2 }));
+		relations.push_back(RelRef(type, { WHILE, Synonym{"a"} }, { VARIABLE, USESRIGHT2 }));
+
+		for (unsigned int i = 0; i < relations.size(); i++) {
+			for (unsigned int j = 0; j < allSelect.size(); j++) {
+				Query q;
+				q.addRelation(relations[i]);
+				q.addSelected(allSelect[j]);
+				EXPECT_EQ(evaluator.evaluateQuery(q), allResult[j]) << "Error at results : " << i + 1 << " : " << j + 1;
+			}
+		}
+	}
+
+	TEST_F(QueryEvaluatorTest, evaluateQueryUsesFilterNoCommonSynonymFalse) {
+		RelType type = USES_S;
+		std::vector<RelRef> relations;
+		//Empty result for non-matching header for double column
+		std::vector<Entity> synonyms;
+		synonyms.push_back({ PRINT, commonSynonym1 });
+		synonyms.push_back({ READ, commonSynonym1 });
+		synonyms.push_back({ ASSIGN, commonSynonym1 });
+		synonyms.push_back({ CALL, commonSynonym1 });
+
+		for (unsigned int k = 0; k < synonyms.size(); k++) {
+			for (unsigned int j = 0; j < allVariables.size(); j++) {
+				RelRef relation(type, synonyms[k], allVariables[j]);
+				for (unsigned int i = 0; i < allSelect.size(); i++) {
+					Query q;
+					q.addRelation(relation);
+					q.addSelected(allSelect[i]);
+					EXPECT_EQ(evaluator.evaluateQuery(q), emptyResult) << "Error at results : " << i + 1 << " : " << j + 1;
+				}
+			}
+		}
+	}
+	TEST_F(QueryEvaluatorTest, evaluateQueryUsesFilterCommonSynonym) {
+		RelType type = USES_S;
+
+		std::vector<Entity> selectedList;
+		selectedList.push_back({ STMT, commonSynonym1 });
+		selectedList.push_back({ IF, commonSynonym1 });
+		selectedList.push_back({ WHILE, commonSynonym1 });
+		selectedList.push_back({ PRINT, commonSynonym1 });
+		selectedList.push_back({ READ, commonSynonym1 });
+		selectedList.push_back({ ASSIGN, commonSynonym1 });
+		selectedList.push_back({ CALL, commonSynonym1 });
+
+		//Test case for Select a such that USES_S(selected, a)
+		std::list<std::string> result1 = { USESLEFT1, USESLEFT2 };
+		std::list<std::string> result2 = { USESLEFT1 };
+		std::list<std::string> result3 = { USESLEFT2 };
+		std::list<std::string> result4 = { };
+		std::list<std::string> result5 = { };
+		std::list<std::string> result6 = { };
+		std::list<std::string> result7 = { };
+
+		std::vector<std::list<std::string>> resultList = { result1, result2, result3,
+			result4, result5, result6, result7 };
+		for (unsigned int i = 0; i < selectedList.size(); i++) {
+			RelRef relation(type, selectedList[i], { VARIABLE, Synonym{"a"} });
+			Query q;
+			q.addRelation(relation);
+			q.addSelected(selectedList[i]);
+			EXPECT_EQ(evaluator.evaluateQuery(q), resultList[i]) << "Error at results : " << i + 1;
+		}
+
+		//Test case for Select a such that USES_S(selected, _)
+		for (unsigned int i = 0; i < selectedList.size(); i++) {
+			RelRef relation(type, selectedList[i], { WILD });
+			Query q;
+			q.addRelation(relation);
+			q.addSelected(selectedList[i]);
+			EXPECT_EQ(evaluator.evaluateQuery(q), resultList[i]) << "Error at results : " << i + 1;
+		}
+
+		//Test case for Select a such that USES_S(selected, "x")
+		resultList[0] = { USESLEFT1 };
+		resultList[1] = { USESLEFT1 };
+		resultList[2] = { };
+		for (unsigned int i = 0; i < selectedList.size(); i++) {
+			RelRef relation(type, selectedList[i], { VARIABLE, USESRIGHT1 });
+			Query q;
+			q.addRelation(relation);
+			q.addSelected(selectedList[i]);
+			EXPECT_EQ(evaluator.evaluateQuery(q), resultList[i]) << "Error at results : " << i + 1;
+		}
+
+		//Test case for Select a such that USES_S(VARIABLE, "y")
+		resultList[0] = { USESLEFT2 };
+		resultList[1] = { };
+		resultList[2] = { USESLEFT2 };
+		for (unsigned int i = 0; i < selectedList.size(); i++) {
+			RelRef relation(type, selectedList[i], { VARIABLE, USESRIGHT2 });
+			Query q;
+			q.addRelation(relation);
+			q.addSelected(selectedList[i]);
+			EXPECT_EQ(evaluator.evaluateQuery(q), resultList[i]) << "Error at results : " << i + 1;
+		}
+
+		//Test case for remaining Select a such that USES_S(selected, anyEmpty)
+		for (unsigned int i = 0; i < selectedList.size(); i++) {
+			RelRef relation(type, selectedList[i], { VARIABLE, z });
+			Query q;
+			q.addRelation(relation);
+			q.addSelected(selectedList[i]);
+			EXPECT_EQ(evaluator.evaluateQuery(q), emptyResult) << "Error at results : " << i + 1;
+		}
+
+
+		//Test case for Select a such that USES_S(a, selected)
+		resultList[0] = { USESRIGHT1, USESRIGHT2 };
+		resultList[1] = { USESRIGHT1 };
+		resultList[2] = { USESRIGHT2 };
+
+		Entity selected(VARIABLE, commonSynonym1);
+		for (unsigned int i = 0; i < selectedList.size(); i++) {
+			RelRef relation(type, selectedList[i], selected);
+			Query q;
+			q.addRelation(relation);
+			q.addSelected(selected);
+			EXPECT_EQ(evaluator.evaluateQuery(q), resultList[i]);
+		}
+
+		resultList[0] = { USESRIGHT1, USESRIGHT2 };
+		//Test case for Select a such that USES_S(_, selected)
+		RelRef relation(type, { WILD }, selected);
+		Query q;
+		q.addRelation(relation);
+		q.addSelected(selected);
+		EXPECT_EQ(evaluator.evaluateQuery(q), resultList[0]);
+
+
+		//Test case for Select a such that USES_S("1", selected)
+		resultList[0] = { USESRIGHT1 };
+		resultList[1] = { };
+		resultList[2] = { };
+		relation = RelRef(type, { STMT, USESLEFT1 }, selected);
+		q = Query();
+		q.addRelation(relation);
+		q.addSelected(selected);
+		EXPECT_EQ(evaluator.evaluateQuery(q), resultList[0]);
+
+
+		//Test case for Select a such that USES_S("3", selected)
+		resultList[0] = { USESRIGHT2 };
+		relation = RelRef(type, { STMT, USESLEFT2 }, selected);
+		q = Query();
+		q.addRelation(relation);
+		q.addSelected(selected);
+		EXPECT_EQ(evaluator.evaluateQuery(q), resultList[0]);
+
+
+		//Test case for remaining Select a such that USES_S(anyEmpty, selected)
+		std::vector<Entity> emptyList = {
+			{ STMT, "2" },{ STMT, "4" },{ STMT, "5" },{ STMT, "6" },{ STMT, "7" },
+			{ STMT, "8" },{ STMT, "9" },{ STMT, "10" },{ STMT, "11" },{ STMT, "12" }
+		};
+
+		for (unsigned int j = 0; j < emptyList.size(); j++) {
+			relation = RelRef(type, emptyList[j], selected);
+			q = Query();
+			q.addRelation(relation);
+			q.addSelected(selected);
+			EXPECT_EQ(evaluator.evaluateQuery(q), emptyResult) << "Error at results : " << j + 1;
+		}
+
+	}
 }
