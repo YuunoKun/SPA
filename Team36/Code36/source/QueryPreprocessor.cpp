@@ -34,7 +34,7 @@ Query QueryPreprocessor::parse(std::string str) {
 	//v.push_back({ QueryToken::QueryTokenType::COMMA, "" });
 	//v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "p" });
 	v.push_back({ QueryToken::QueryTokenType::SUCHTHAT, "" });
-	v.push_back({ QueryToken::QueryTokenType::PARENT_T, "" });
+	v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "Modifies" });
 	v.push_back({ QueryToken::QueryTokenType::PARENTHESIS_OPEN, "" });
 	v.push_back({ QueryToken::QueryTokenType::CONSTANT, "7" });
 	v.push_back({ QueryToken::QueryTokenType::COMMA, "" });
@@ -55,160 +55,163 @@ Query QueryPreprocessor::parse(std::string str) {
 	for (QueryToken token : v) {
 		// First iteration, set identifier to correct type
 		// Check what is my previous token
-		if (!isSelect && (prevToken.type == QueryToken::QueryTokenType::WHITESPACE ||
-			prevToken.type == QueryToken::QueryTokenType::TERMINATOR)) {
-			if (token.token_value == "stmt") {
-				temp = { QueryToken::QueryTokenType::STMT, "stmt" };
+		if (!isSelect) {
+			if (prevToken.type == QueryToken::QueryTokenType::WHITESPACE ||
+				prevToken.type == QueryToken::QueryTokenType::TERMINATOR) {
+				if (token.token_value == "stmt") {
+					temp = { QueryToken::QueryTokenType::STMT, "stmt" };
+				}
+				else if (token.token_value == "procedure") {
+					temp = { QueryToken::QueryTokenType::PROCEDURE, "procedure" };
+				}
+				else if (token.token_value == "read") {
+					temp = { QueryToken::QueryTokenType::READ, "read" };
+				}
+				else if (token.token_value == "print") {
+					temp = { QueryToken::QueryTokenType::PRINT, "print" };
+				}
+				else if (token.token_value == "call") {
+					temp = { QueryToken::QueryTokenType::CALL, "call" };
+				}
+				else if (token.token_value == "if") {
+					temp = { QueryToken::QueryTokenType::IF, "if" };
+				}
+				else if (token.token_value == "while") {
+					temp = { QueryToken::QueryTokenType::WHILE, "while" };
+				}
+				else if (token.token_value == "assign") {
+					temp = { QueryToken::QueryTokenType::ASSIGN, "assign" };
+				}
+				else if (token.token_value == "variable") {
+					temp = { QueryToken::QueryTokenType::VARIABLE, "variable" };
+				}
+				else if (token.token_value == "constant") {
+					temp = { QueryToken::QueryTokenType::CONSTANT, "constant" };
+				}
+				// Need to enforce that Select must only come after a terminator
+				else if (prevToken.type == QueryToken::QueryTokenType::TERMINATOR && token.token_value == "Select") {
+					temp = { QueryToken::QueryTokenType::SELECT, "Select" };
+				}
 			}
-			else if (token.token_value == "procedure") {
-				temp = { QueryToken::QueryTokenType::PROCEDURE, "procedure" };
-			}
-			else if (token.token_value == "read") {
-				temp = { QueryToken::QueryTokenType::READ, "read" };
-			}
-			else if (token.token_value == "print") {
-				temp = { QueryToken::QueryTokenType::PRINT, "print" };
-			}
-			else if (token.token_value == "call") {
-				temp = { QueryToken::QueryTokenType::CALL, "call" };
-			}
-			else if (token.token_value == "if") {
-				temp = { QueryToken::QueryTokenType::IF, "if" };
-			}
-			else if (token.token_value == "while") {
-				temp = { QueryToken::QueryTokenType::WHILE, "while" };
-			}
-			else if (token.token_value == "assign") {
-				temp = { QueryToken::QueryTokenType::ASSIGN, "assign" };
-			}
-			else if (token.token_value == "variable") {
-				temp = { QueryToken::QueryTokenType::VARIABLE, "variable" };
-			}
-			else if (token.token_value == "constant") {
-				temp = { QueryToken::QueryTokenType::CONSTANT, "constant" };
-			}
-			// Need to enforce that Select must only come after a terminator
-			else if (prevToken.type == QueryToken::QueryTokenType::TERMINATOR && token.token_value == "Select") {
-				temp = { QueryToken::QueryTokenType::SELECT, "Select" };
-			}
-		}
 
-		// Guard clauses to catch semantically wrong input, all usage of token should be temp
-		if (prevToken.type == QueryToken::QueryTokenType::IDENTIFIER &&
-			(token.type != QueryToken::QueryTokenType::COMMA &&
-				token.type != QueryToken::QueryTokenType::TERMINATOR)) {
-			throw std::runtime_error("During declaration, only comma and terminator is accepted after identifier.");
-		}
-		if (prevToken.type == QueryToken::QueryTokenType::COMMA &&
-			token.type != QueryToken::QueryTokenType::IDENTIFIER) {
-			throw std::runtime_error("During declaration, only identifier is accepted after comma.");
-		}
-		if (token.type == QueryToken::QueryTokenType::TERMINATOR) {
-			temp = token;
-		}
-
-		Entity ent;
-		if (prevToken.type != QueryToken::QueryTokenType::WHITESPACE &&
-			prevToken.type != QueryToken::QueryTokenType::TERMINATOR &&
-			token.type == QueryToken::QueryTokenType::IDENTIFIER) {
-			// Declaring goes into output
-			if (prevToken.type != QueryToken::QueryTokenType::SELECT) {
-				output.push_back({ prevToken.type, { token.token_value } });
-
-				// TODO: Add into entity
-				Synonym synonym;
-				if (prevToken.type == QueryToken::QueryTokenType::STMT) {
-					synonym.name = token.token_value;
-					ent = { EntityType::STMT, synonym };
-				}
-				else if (prevToken.type == QueryToken::QueryTokenType::PROCEDURE) {
-					synonym.name = token.token_value;
-					ent = { EntityType::PROCEDURE, synonym };
-				}
-				else if (prevToken.type == QueryToken::QueryTokenType::READ) {
-					synonym.name = token.token_value;
-					ent = { EntityType::READ, synonym };
-				}
-				else if (prevToken.type == QueryToken::QueryTokenType::PRINT) {
-					synonym.name = token.token_value;
-					ent = { EntityType::PRINT, synonym };
-				}
-				else if (prevToken.type == QueryToken::QueryTokenType::CALL) {
-					synonym.name = token.token_value;
-					ent = { EntityType::CALL, synonym };
-				}
-				else if (prevToken.type == QueryToken::QueryTokenType::IF) {
-					synonym.name = token.token_value;
-					ent = { EntityType::IF, synonym };
-				}
-				else if (prevToken.type == QueryToken::QueryTokenType::WHILE) {
-					synonym.name = token.token_value;
-					ent = { EntityType::WHILE, synonym };
-				}
-				else if (prevToken.type == QueryToken::QueryTokenType::ASSIGN) {
-					synonym.name = token.token_value;
-					ent = { EntityType::ASSIGN, synonym };
-				}
-				else if (prevToken.type == QueryToken::QueryTokenType::VARIABLE) {
-					synonym.name = token.token_value;
-					ent = { EntityType::VARIABLE, synonym };
-				}
-				else if (prevToken.type == QueryToken::QueryTokenType::CONSTANT) {
-					synonym.name = token.token_value;
-					ent = { EntityType::CONSTANT, synonym };
-				}
-				query.addEntity(ent);
+			// Guard clauses to catch semantically wrong input, all usage of token should be temp
+			if (prevToken.type == QueryToken::QueryTokenType::IDENTIFIER &&
+				(token.type != QueryToken::QueryTokenType::COMMA &&
+					token.type != QueryToken::QueryTokenType::TERMINATOR)) {
+				throw std::runtime_error("During declaration, only comma and terminator is accepted after identifier.");
 			}
-			// Select goes into selected, with prevToken type when it exists in output
-			else {
-				for (QueryToken each : output) {
-					if (token.token_value == each.token_value) {
-						selected.push_back({ each.type, token.token_value });
-						Synonym synonym;
-						if (each.type == QueryToken::QueryTokenType::STMT) {
-							synonym.name = token.token_value;
-							ent = { EntityType::STMT, synonym };
-						}
-						else if (each.type == QueryToken::QueryTokenType::PROCEDURE) {
-							synonym.name = token.token_value;
-							ent = { EntityType::PROCEDURE, synonym };
-						}
-						else if (each.type == QueryToken::QueryTokenType::READ) {
-							synonym.name = token.token_value;
-							ent = { EntityType::READ, synonym };
-						}
-						else if (each.type == QueryToken::QueryTokenType::PRINT) {
-							synonym.name = token.token_value;
-							ent = { EntityType::PRINT, synonym };
-						}
-						else if (each.type == QueryToken::QueryTokenType::CALL) {
-							synonym.name = token.token_value;
-							ent = { EntityType::CALL, synonym };
-						}
-						else if (each.type == QueryToken::QueryTokenType::IF) {
-							synonym.name = token.token_value;
-							ent = { EntityType::IF, synonym };
-						}
-						else if (each.type == QueryToken::QueryTokenType::WHILE) {
-							synonym.name = token.token_value;
-							ent = { EntityType::WHILE, synonym };
-						}
-						else if (each.type == QueryToken::QueryTokenType::ASSIGN) {
-							synonym.name = token.token_value;
-							ent = { EntityType::ASSIGN, synonym };
-						}
-						else if (each.type == QueryToken::QueryTokenType::VARIABLE) {
-							synonym.name = token.token_value;
-							ent = { EntityType::VARIABLE, synonym };
+			if (prevToken.type == QueryToken::QueryTokenType::COMMA &&
+				token.type != QueryToken::QueryTokenType::IDENTIFIER) {
+				throw std::runtime_error("During declaration, only identifier is accepted after comma.");
+			}
+			if (token.type == QueryToken::QueryTokenType::TERMINATOR) {
+				temp = token;
+			}
+
+			Entity ent;
+			if (prevToken.type != QueryToken::QueryTokenType::WHITESPACE &&
+				prevToken.type != QueryToken::QueryTokenType::TERMINATOR &&
+				token.type == QueryToken::QueryTokenType::IDENTIFIER) {
+				// Declaring goes into output
+				if (prevToken.type != QueryToken::QueryTokenType::SELECT) {
+					output.push_back({ prevToken.type, { token.token_value } });
+
+					// TODO: Add into entity
+					Synonym synonym;
+					if (prevToken.type == QueryToken::QueryTokenType::STMT) {
+						synonym.name = token.token_value;
+						ent = { EntityType::STMT, synonym };
+					}
+					else if (prevToken.type == QueryToken::QueryTokenType::PROCEDURE) {
+						synonym.name = token.token_value;
+						ent = { EntityType::PROCEDURE, synonym };
+					}
+					else if (prevToken.type == QueryToken::QueryTokenType::READ) {
+						synonym.name = token.token_value;
+						ent = { EntityType::READ, synonym };
+					}
+					else if (prevToken.type == QueryToken::QueryTokenType::PRINT) {
+						synonym.name = token.token_value;
+						ent = { EntityType::PRINT, synonym };
+					}
+					else if (prevToken.type == QueryToken::QueryTokenType::CALL) {
+						synonym.name = token.token_value;
+						ent = { EntityType::CALL, synonym };
+					}
+					else if (prevToken.type == QueryToken::QueryTokenType::IF) {
+						synonym.name = token.token_value;
+						ent = { EntityType::IF, synonym };
+					}
+					else if (prevToken.type == QueryToken::QueryTokenType::WHILE) {
+						synonym.name = token.token_value;
+						ent = { EntityType::WHILE, synonym };
+					}
+					else if (prevToken.type == QueryToken::QueryTokenType::ASSIGN) {
+						synonym.name = token.token_value;
+						ent = { EntityType::ASSIGN, synonym };
+					}
+					else if (prevToken.type == QueryToken::QueryTokenType::VARIABLE) {
+						synonym.name = token.token_value;
+						ent = { EntityType::VARIABLE, synonym };
+					}
+					else if (prevToken.type == QueryToken::QueryTokenType::CONSTANT) {
+						synonym.name = token.token_value;
+						ent = { EntityType::CONSTANT, synonym };
+					}
+					query.addEntity(ent);
+				}
+				// Select goes into selected, with prevToken type when it exists in output
+				else {
+					for (QueryToken each : output) {
+						if (token.token_value == each.token_value) {
+							selected.push_back({ each.type, token.token_value });
+							Synonym synonym;
+							if (each.type == QueryToken::QueryTokenType::STMT) {
+								synonym.name = token.token_value;
+								ent = { EntityType::STMT, synonym };
+							}
+							else if (each.type == QueryToken::QueryTokenType::PROCEDURE) {
+								synonym.name = token.token_value;
+								ent = { EntityType::PROCEDURE, synonym };
+							}
+							else if (each.type == QueryToken::QueryTokenType::READ) {
+								synonym.name = token.token_value;
+								ent = { EntityType::READ, synonym };
+							}
+							else if (each.type == QueryToken::QueryTokenType::PRINT) {
+								synonym.name = token.token_value;
+								ent = { EntityType::PRINT, synonym };
+							}
+							else if (each.type == QueryToken::QueryTokenType::CALL) {
+								synonym.name = token.token_value;
+								ent = { EntityType::CALL, synonym };
+							}
+							else if (each.type == QueryToken::QueryTokenType::IF) {
+								synonym.name = token.token_value;
+								ent = { EntityType::IF, synonym };
+							}
+							else if (each.type == QueryToken::QueryTokenType::WHILE) {
+								synonym.name = token.token_value;
+								ent = { EntityType::WHILE, synonym };
+							}
+							else if (each.type == QueryToken::QueryTokenType::ASSIGN) {
+								synonym.name = token.token_value;
+								ent = { EntityType::ASSIGN, synonym };
+							}
+							else if (each.type == QueryToken::QueryTokenType::VARIABLE) {
+								synonym.name = token.token_value;
+								ent = { EntityType::VARIABLE, synonym };
+							}
 						}
 					}
+					isSelect = true;
+					query.addSelected(ent);
 				}
-				isSelect = true;
-				query.addSelected(ent);
 			}
+			prevToken = temp;
 		}
 
-		if (isSelect) {
+		else if (isSelect) {
 			if (token.type == QueryToken::QueryTokenType::SUCHTHAT) {
 				output.push_back({ QueryToken::QueryTokenType::SUCHTHAT, "such that" });
 				patternOrSuchThat = { QueryToken::QueryTokenType::SUCHTHAT, "such that" };
@@ -218,7 +221,7 @@ Query QueryPreprocessor::parse(std::string str) {
 				patternOrSuchThat = { QueryToken::QueryTokenType::PATTERN, "pattern" };
 			}
 
-			if (isParameter) {
+			if (isParameter && !token.type == QueryToken::QueryTokenType::PARENTHESIS_CLOSE) {
 				parameterClause.push_back(token);
 			}
 
@@ -253,26 +256,84 @@ Query QueryPreprocessor::parse(std::string str) {
 				else if (token.type == QueryToken::QueryTokenType::PARENTHESIS_CLOSE) {
 					isParameter = false;
 					if (queryParameter.token_value == "Uses" && queryParameter.type == QueryToken::QueryTokenType::IDENTIFIER) {
+						//query.addRelation()
 					}
 					else if (queryParameter.token_value == "Modifies" && queryParameter.type == QueryToken::QueryTokenType::IDENTIFIER) {
+						//query.addRelation()
 					}
 					else if (queryParameter.token_value == "Parent" && queryParameter.type == QueryToken::QueryTokenType::IDENTIFIER) {
+						//query.addRelation()
 					}
 					else if (queryParameter.token_value == "Follows" && queryParameter.type == QueryToken::QueryTokenType::IDENTIFIER) {
+						//query.addRelation()
 					}
 					else if (queryParameter.token_value == "" && queryParameter.type == QueryToken::QueryTokenType::PARENT_T) {
+						//query.addRelation()
 					}
 					else if (queryParameter.token_value == "" && queryParameter.type == QueryToken::QueryTokenType::FOLLOWS_T) {
+						//query.addRelation()
 					}
 				}
 			}
 			else if (!isParameter && patternOrSuchThat.type == QueryToken::QueryTokenType::PATTERN) {
+				Entity patternTypeEntity;
+				if (prevTokenSelect.type == QueryToken::QueryTokenType::PATTERN && token.type == QueryToken::QueryTokenType::IDENTIFIER) {
+					for (QueryToken each : output) {
+						if (token.token_value == each.token_value) {
+							selected.push_back({ each.type, token.token_value });
+							Synonym synonym;
+							if (each.type == QueryToken::QueryTokenType::STMT) {
+								synonym.name = token.token_value;
+								patternTypeEntity = { EntityType::STMT, synonym };
+							}
+							else if (each.type == QueryToken::QueryTokenType::PROCEDURE) {
+								synonym.name = token.token_value;
+								patternTypeEntity = { EntityType::PROCEDURE, synonym };
+							}
+							else if (each.type == QueryToken::QueryTokenType::READ) {
+								synonym.name = token.token_value;
+								patternTypeEntity = { EntityType::READ, synonym };
+							}
+							else if (each.type == QueryToken::QueryTokenType::PRINT) {
+								synonym.name = token.token_value;
+								patternTypeEntity = { EntityType::PRINT, synonym };
+							}
+							else if (each.type == QueryToken::QueryTokenType::CALL) {
+								synonym.name = token.token_value;
+								patternTypeEntity = { EntityType::CALL, synonym };
+							}
+							else if (each.type == QueryToken::QueryTokenType::IF) {
+								synonym.name = token.token_value;
+								patternTypeEntity = { EntityType::IF, synonym };
+							}
+							else if (each.type == QueryToken::QueryTokenType::WHILE) {
+								synonym.name = token.token_value;
+								patternTypeEntity = { EntityType::WHILE, synonym };
+							}
+							else if (each.type == QueryToken::QueryTokenType::ASSIGN) {
+								synonym.name = token.token_value;
+								patternTypeEntity = { EntityType::ASSIGN, synonym };
+							}
+							else if (each.type == QueryToken::QueryTokenType::VARIABLE) {
+								synonym.name = token.token_value;
+								patternTypeEntity = { EntityType::VARIABLE, synonym };
+							}
+						}
+					}
+				}
+				else if (token.type == QueryToken::QueryTokenType::PARENTHESIS_OPEN) {
+					isParameter = true;
+				}
+				else if (token.type == QueryToken::QueryTokenType::PARENTHESIS_CLOSE) {
+					isParameter = false;
+					if (patternTypeEntity.getType() == EntityType::ASSIGN) {
+						// send to jiyu and receive back pattern
+						// query.addPattern()
+					}
+				}
 			}
 			prevTokenSelect = token;
 		}
-
-		prevToken = temp;
 	}
-
 	return query;
 }
