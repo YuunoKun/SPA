@@ -13,12 +13,22 @@ variable v;
 Select v
 x
 5000
-4 – invalid query: capitalization
+4 – select read
+read r;
+Select r
+1
+5000
+5 – select print
+print pn;
+Select pn;
+2
+5000
+6 – invalid query: capitalization
 Procedure p;
 Select p
 readAndprint;
 5000
-5 – invalid query: wrong result
+7 – invalid query: wrong result
 stmt s;
 Select s;
 2

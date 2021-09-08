@@ -13,3 +13,13 @@ variable v;
 Select v
 x, y, z
 5000
+4 – select read
+read r;
+Select r
+1, 2
+5000
+5 – select print
+print pn
+Select pn
+4
+5000
