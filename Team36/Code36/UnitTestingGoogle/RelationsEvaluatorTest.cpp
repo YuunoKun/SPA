@@ -6,8 +6,8 @@
 namespace UnitTesting {
 	TEST(RelationsEvaluatorTest, evaluateRelationType1) {
 		PKB::getInstance().resetCache();
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_PRINT);
+		PKB::getInstance().addStmt(STMT_IF);
+		PKB::getInstance().addStmt(STMT_WHILE);
 
 		RelationsEvaluator evaluator;
 		QueryResult result;
