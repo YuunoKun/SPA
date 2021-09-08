@@ -10,7 +10,7 @@ Defining SIMPLE tokens for parsing.
 
 namespace SourceProcessor {
 
-	enum TokenType {
+	typedef enum TOKEN_TYPE {
 		INVAL,
 
 		IDENTIFIER,
@@ -58,7 +58,7 @@ namespace SourceProcessor {
 		TERMINATOR,
 		STATEMENT_LIST_OPEN,
 		STATEMENT_LIST_CLOSE
-	};
+	} TokenType;
 
 
 	static const char* tokenTypeStrings[] = {
@@ -109,14 +109,25 @@ namespace SourceProcessor {
 	class Token {
 	public : 
 
-		//Constructor
+		// Constructor
 		Token();
 
-		Token(TokenType type, std::string token_value);
+		// Constructor with arguments
+		Token(TokenType, std::string);
 
+		TokenType get_token_type();
+
+		void set_token_type(TokenType);
+
+		std::string &get_token_value();
+
+		void set_token_value(std::string);
+
+		std::string to_string();
+
+	private:
 		TokenType m_type;
 		std::string m_token_value;
-		std::string to_string();
 	};
 } // namespace SourceProcessor
 
