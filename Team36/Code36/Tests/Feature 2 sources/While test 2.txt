@@ -1,6 +1,0 @@
-Procedure main {
-	a = 5;
-	while () {
-		a = a – 1;
-	}
-}
