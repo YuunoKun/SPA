@@ -15,6 +15,7 @@ x, y, var1, var2
 5000
 4 – select constant
 constant c;
+Select c
 2, 5
 5000
 5 – select read
