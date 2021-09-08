@@ -11,8 +11,8 @@ namespace UnitTesting {
 
 		RelationsEvaluator evaluator;
 		QueryResult result;
-		
-		std::vector<RelType> types = { FOLLOWS, PARENT /*FOLLOWS_T, PARENT_T*/};
+
+		std::vector<RelType> types = { FOLLOWS, PARENT /*FOLLOWS_T, PARENT_T*/ };
 
 		//Negative Test Case
 		for (auto type : types) {
