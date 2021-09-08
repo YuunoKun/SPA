@@ -71,41 +71,49 @@ namespace UnitTesting {
 		std::string CALL1 = "11";
 		std::string CALL2 = "12";
 
+		std::string FOLLOWLEFT1 = "1";
+		std::string FOLLOWLEFT2 = "2";
+		std::string FOLLOWRIGHT1 = "2";
+		std::string FOLLOWRIGHT2 = "3";
+
 		std::list<std::string> stmts = { IF1, IF2, WHILE1, WHILE2, READ1, READ2,
 			PRINT1, PRINT2, ASSIGN1, ASSIGN2, CALL1, CALL2 };
 		PKBAdapter pkb;
 		QueryEvaluator evaluator;
 
+		Synonym commonSynonym1 = { "cs1" };
+		Synonym commonSynonym2 = { "cs2" };
+
 		// select v
 		std::list<std::string> allVariables = { x, y, z };
-		Entity selectVariable = { VARIABLE, Synonym{"v"} };
+		Entity selectVariable = { VARIABLE, commonSynonym1 };
 		// select c
 		std::list<std::string> allConstant = { c1s, c2s, c3s };
-		Entity selectConstant = { CONSTANT, Synonym{"c"} };
+		Entity selectConstant = { CONSTANT, commonSynonym1 };
 		// select p
 		std::list<std::string> allProcedure = { p1, p2, p3 };
-		Entity selectProcedure = { PROCEDURE, Synonym{"p"} };
+		Entity selectProcedure = { PROCEDURE, commonSynonym1 };
 		// select s
 		std::list<std::string> allStmt = stmts;
-		Entity selectStmt = { STMT, Synonym{"s"} };
+		Entity selectStmt = { STMT, commonSynonym1 };
 		// select ifs
 		std::list<std::string> allIfs = { IF1, IF2 };
-		Entity selectIfs = { IF, Synonym{"f"} };
+		Entity selectIfs = { IF, commonSynonym1 };
 		// select w
 		std::list<std::string> allWhile = { WHILE1, WHILE2 };
-		Entity selectWhile = { WHILE, Synonym{"w"} };
+		Entity selectWhile = { WHILE, commonSynonym1 };
 		// select read
 		std::list<std::string> allRead = { READ1, READ2 };
-		Entity selectRead = { READ, Synonym{"r"} };
+		Entity selectRead = { READ, commonSynonym1 };
 		// select print
 		std::list<std::string> allPrint = { PRINT1, PRINT2 };
-		Entity selectPrint = { PRINT, Synonym{"print"} };
+		Entity selectPrint = { PRINT, commonSynonym1 };
 		// select assign
 		std::list<std::string> allAssign = { ASSIGN1, ASSIGN2 };
-		Entity selectAssign = { ASSIGN, Synonym{"a"} };
+		Entity selectAssign = { ASSIGN, commonSynonym1 };
 		// select call
 		std::list<std::string> allCall = { CALL1, CALL2 };
-		Entity selectCall = { CALL, Synonym{"call"} };
+		Entity selectCall = { CALL, commonSynonym1 };
 
 		std::vector<std::list<std::string>> allResult = {
 			allVariables , allConstant , allProcedure, allStmt, allIfs,
@@ -120,42 +128,6 @@ namespace UnitTesting {
 
 	//Evaluator Select statement without any relation/Pattern
 	TEST_F(QueryEvaluatorTest, evaluateQueryRaw) {
-		// select v
-		std::list<std::string> result1 = { x, y, z };
-		Entity selected1 = { VARIABLE, Synonym{"v"} };
-		// select c
-		std::list<std::string> result2 = { c1s, c2s, c3s };
-		Entity selected2 = { CONSTANT, Synonym{"c"} };
-		// select p
-		std::list<std::string> result3 = { p1, p2, p3 };
-		Entity selected3 = { PROCEDURE, Synonym{"p"} };
-		// select s
-		std::list<std::string> result4 = stmts;
-		Entity selected4 = { STMT, Synonym{"s"} };
-		// select ifs
-		std::list<std::string> result5 = { IF1, IF2 };
-		Entity selected5 = { IF, Synonym{"f"} };
-		// select w
-		std::list<std::string> result6 = { WHILE1, WHILE2 };
-		Entity selected6 = { WHILE, Synonym{"w"} };
-		// select read
-		std::list<std::string> result7 = { READ1, READ2 };
-		Entity selected7 = { READ, Synonym{"r"} };
-		// select print
-		std::list<std::string> result8 = { PRINT1, PRINT2 };
-		Entity selected8 = { PRINT, Synonym{"print"} };
-		// select assign
-		std::list<std::string> result9 = { ASSIGN1, ASSIGN2 };
-		Entity selected9 = { ASSIGN, Synonym{"a"} };
-		// select call
-		std::list<std::string> result10 = { CALL1, CALL2 };
-		Entity selected10 = { CALL, Synonym{"call"} };
-
-		std::vector<std::pair<std::list<std::string>, Entity>> v = { {result1, selected1},
-			{result2, selected2}, {result3, selected3}, {result4, selected4},
-			{result5, selected5}, {result6, selected6}, {result7, selected7},
-			{result8, selected8}, {result9, selected9}, {result10, selected10} };
-
 		for (int i = 0; i < allSelect.size(); i++) {
 			Query q;
 			q.addSelected(allSelect[i]);
@@ -247,24 +219,221 @@ namespace UnitTesting {
 		}
 	}
 
-	/*
-	TEST_F(QueryEvaluatorTest, evaluateQueryFollowFilterSuccess) {
-		RelRef relation1(FOLLOWS, { STMT, Synonym{"a"} }, { STMT, Synonym{"a"} });
-		RelRef relation2(FOLLOWS, { WILD }, { STMT, Synonym{"a"} });
-		RelRef relation3(FOLLOWS, { STMT, Synonym{"a"} }, { WILD });
-		RelRef relation4(FOLLOWS, { STMT, "1" }, { STMT, Synonym{"a"} });
-		RelRef relation5(FOLLOWS, { STMT, Synonym{"a"} }, { STMT, "2" });
 
-		std::vector<RelRef> relations = { relation1, relation2, relation3,
-			relation4, relation5 };
+	TEST_F(QueryEvaluatorTest, evaluateQueryFollowFilterNoCommonSynonym) {
+		RelRef relation1(FOLLOWS, { STMT, Synonym{"a"} }, { STMT, Synonym{"a"} });
+		RelRef relation2(FOLLOWS, { IF, Synonym{"a"} }, { STMT, Synonym{"a"} });
+		RelRef relation3(FOLLOWS, { STMT, Synonym{"a"} }, { IF, Synonym{"a"} });
+		RelRef relation4(FOLLOWS, { IF, Synonym{"a"} }, { IF, Synonym{"a"} });
+		RelRef relation5(FOLLOWS, { IF, Synonym{"a"} }, { WHILE, Synonym{"a"} });
+		RelRef relation6(FOLLOWS, { WILD }, { STMT, Synonym{"a"} });
+		RelRef relation7(FOLLOWS, { WILD }, { IF, Synonym{"a"} });
+		RelRef relation8(FOLLOWS, { WILD }, { WHILE, Synonym{"a"} });
+		RelRef relation9(FOLLOWS, { STMT, Synonym{"a"} }, { WILD });
+		RelRef relation10(FOLLOWS, { IF, Synonym{"a"} }, { WILD });
+		RelRef relation11(FOLLOWS, { STMT, "1" }, { STMT, Synonym{"a"} });
+		RelRef relation12(FOLLOWS, { STMT, "1" }, { IF, Synonym{"a"} });
+		RelRef relation13(FOLLOWS, { STMT, "2" }, { STMT, Synonym{"a"} });
+		RelRef relation14(FOLLOWS, { STMT, "2" }, { WHILE, Synonym{"a"} });
+		RelRef relation15(FOLLOWS, { STMT, Synonym{"a"} }, { STMT, "2" });
+		RelRef relation16(FOLLOWS, { IF, Synonym{"a"} }, { STMT, "2" });
+		RelRef relation17(FOLLOWS, { STMT, Synonym{"a"} }, { STMT, "3" });
+		RelRef relation18(FOLLOWS, { IF, Synonym{"a"} }, { STMT, "3" });
+
+		std::vector<RelRef> relations = {
+			relation1, relation2, relation3, relation4, relation5,
+			relation6, relation7, relation8, relation9, relation10,
+			relation11, relation12, relation13, relation14, relation15,
+			relation16, relation17, relation18 };
+
 		for (int i = 0; i < relations.size(); i++) {
 			for (int j = 0; j < allSelect.size(); j++) {
 				Query q;
 				q.addRelation(relations[i]);
-				q.addSelected(allSelect[i]);
-				EXPECT_EQ(evaluator.evaluateQuery(q), emptyResult) << "Error at results : " << i + 1 << " : " << j + 1;
+				q.addSelected(allSelect[j]);
+				EXPECT_EQ(evaluator.evaluateQuery(q), allResult[j]) << "Error at results : " << i + 1 << " : " << j + 1;
+			}
+		}
+
+		//Empty result for non-matching header for double column
+		Entity synonym1 = { PRINT, commonSynonym1 };
+		Entity synonym2 = { READ, commonSynonym1 };
+		Entity synonym3 = { ASSIGN, commonSynonym1 };
+		Entity synonym4 = { CALL, commonSynonym1 };
+
+		std::vector<Entity> synonyms = { synonym1, synonym2, synonym3, synonym4 };
+		for (int k = 0; k < synonyms.size(); k++) {
+			for (int j = 0; j < synonyms.size(); j++) {
+				RelRef relation(FOLLOWS, synonyms[k], synonyms[j]);
+				for (int i = 0; i < allSelect.size(); i++) {
+					Query q;
+					q.addRelation(relation);
+					q.addSelected(allSelect[i]);
+					EXPECT_EQ(evaluator.evaluateQuery(q), emptyResult) << "Error at results : " << i + 1 << " : " << j + 1;
+				}
+			}
+		}
+
+		//Empty result for non-matching header for single column
+		for (int k = 0; k < synonyms.size(); k++) {
+			std::vector<RelRef> v;
+			v.push_back(RelRef(FOLLOWS, { WILD }, synonyms[k]));
+			v.push_back(RelRef(FOLLOWS, { synonyms[k] }, { WILD }));
+			v.push_back(RelRef(FOLLOWS, { synonyms[k] }, { WILD }));
+			v.push_back(RelRef(FOLLOWS, { STMT, "1" }, { synonyms[k] }));
+			v.push_back(RelRef(FOLLOWS, { STMT, "2" }, { synonyms[k] }));
+			v.push_back(RelRef(FOLLOWS, { synonyms[k] }, { STMT, "2" }));
+			v.push_back(RelRef(FOLLOWS, { synonyms[k] }, { STMT, "3" }));
+			for (int j = 0; j < v.size(); j++) {
+				for (int i = 0; i < allSelect.size(); i++) {
+					Query q;
+					q.addRelation(v[j]);
+					q.addSelected(allSelect[i]);
+					EXPECT_EQ(evaluator.evaluateQuery(q), emptyResult) << "Error at results : " << i + 1 << " : " << j + 1;
+				}
 			}
 		}
 	}
-	*/
+
+
+
+	TEST_F(QueryEvaluatorTest, evaluateQueryFollowFilterCommonSynonym) {
+		Entity selected1 = { STMT, commonSynonym1 };
+		Entity selected2 = { IF, commonSynonym1 };
+		Entity selected3 = { WHILE, commonSynonym1 };
+		Entity selected4 = { PRINT, commonSynonym1 };
+		Entity selected5 = { READ, commonSynonym1 };
+		Entity selected6 = { ASSIGN, commonSynonym1 };
+		Entity selected7 = { CALL, commonSynonym1 };
+		std::vector<Entity> selectedList = { selected1, selected2, selected3,
+			selected4, selected5, selected6, selected7 };
+
+		//Test case for Select a such that Follow(selected, a)
+		std::list<std::string> result1 = { FOLLOWLEFT1, FOLLOWLEFT2 };
+		std::list<std::string> result2 = { FOLLOWLEFT1, FOLLOWLEFT2 };
+		std::list<std::string> result3 = { };
+		std::list<std::string> result4 = { };
+		std::list<std::string> result5 = { };
+		std::list<std::string> result6 = { };
+		std::list<std::string> result7 = { };
+
+		std::vector<std::list<std::string>> resultList = { result1, result2, result3,
+			result4, result5, result6, result7 };
+		for (int i = 0; i < selectedList.size(); i++) {
+			RelRef relation(FOLLOWS, selectedList[i], { STMT, Synonym{"a"} });
+			Query q;
+			q.addRelation(relation);
+			q.addSelected(selectedList[i]);
+			EXPECT_EQ(evaluator.evaluateQuery(q), resultList[i]) << "Error at results : " << i + 1;
+		}
+
+		//Test case for Select a such that Follow(selected, _)
+		for (int i = 0; i < selectedList.size(); i++) {
+			RelRef relation(FOLLOWS, selectedList[i], { WILD });
+			Query q;
+			q.addRelation(relation);
+			q.addSelected(selectedList[i]);
+			EXPECT_EQ(evaluator.evaluateQuery(q), resultList[i]) << "Error at results : " << i + 1;
+		}
+
+		//Test case for Select a such that Follow(a, selected)
+		resultList[0] = { FOLLOWRIGHT1, FOLLOWRIGHT2 };
+		resultList[1] = { FOLLOWRIGHT1 };
+		resultList[2] = { FOLLOWRIGHT2 };
+		for (int i = 0; i < selectedList.size(); i++) {
+			RelRef relation(FOLLOWS, { STMT, Synonym{"a"} }, selectedList[i]);
+			Query q;
+			q.addRelation(relation);
+			q.addSelected(selectedList[i]);
+			EXPECT_EQ(evaluator.evaluateQuery(q), resultList[i]) << "Error at results : " << i + 1;
+		}
+
+		//Test case for Select a such that Follow(a, selected)
+		for (int i = 0; i < selectedList.size(); i++) {
+			RelRef relation(FOLLOWS, { STMT, Synonym{"a"} }, selectedList[i]);
+			Query q;
+			q.addRelation(relation);
+			q.addSelected(selectedList[i]);
+			EXPECT_EQ(evaluator.evaluateQuery(q), resultList[i]) << "Error at results : " << i + 1;
+		}
+
+
+		//Test case for Select a such that Follow("1", selected)
+		resultList[0] = { FOLLOWRIGHT1 };
+		resultList[1] = { FOLLOWRIGHT1 };
+		resultList[2] = { };
+		for (int i = 0; i < selectedList.size(); i++) {
+			RelRef relation(FOLLOWS, { STMT, "1" }, selectedList[i]);
+			Query q;
+			q.addRelation(relation);
+			q.addSelected(selectedList[i]);
+			EXPECT_EQ(evaluator.evaluateQuery(q), resultList[i]) << "Error at results : " << i + 1;
+		}
+
+		//Test case for Select a such that Follow("2", selected)
+		resultList[0] = { FOLLOWRIGHT2 };
+		resultList[1] = { };
+		resultList[2] = { FOLLOWRIGHT2 };
+		for (int i = 0; i < selectedList.size(); i++) {
+			RelRef relation(FOLLOWS, { STMT, "2" }, selectedList[i]);
+			Query q;
+			q.addRelation(relation);
+			q.addSelected(selectedList[i]);
+			EXPECT_EQ(evaluator.evaluateQuery(q), resultList[i]) << "Error at results : " << i + 1;
+		}
+
+
+		//Test case for remaining Select a such that Follow(anyEmpty, selected)
+		std::vector<Entity> emptyList = {
+			{ STMT, "3" },{ STMT, "4" },{ STMT, "5" },{ STMT, "6" },{ STMT, "7" },
+			{ STMT, "8" },{ STMT, "9" },{ STMT, "10" },{ STMT, "11" },{ STMT, "12" }
+		};
+		for (int j = 0; j < emptyList.size(); j++) {
+			for (int i = 0; i < selectedList.size(); i++) {
+				RelRef relation(FOLLOWS, emptyList[j], selectedList[i]);
+				Query q;
+				q.addRelation(relation);
+				q.addSelected(selectedList[i]);
+				EXPECT_EQ(evaluator.evaluateQuery(q), emptyResult) << "Error at results : " << i + 1;
+			}
+		}
+
+		//Test case for Select a such that Follow(selected, "2")
+		resultList[0] = { FOLLOWLEFT1 };
+		resultList[1] = { FOLLOWLEFT1 };
+		resultList[2] = { };
+		for (int i = 0; i < selectedList.size(); i++) {
+			RelRef relation(FOLLOWS, selectedList[i], { STMT, "2" });
+			Query q;
+			q.addRelation(relation);
+			q.addSelected(selectedList[i]);
+			EXPECT_EQ(evaluator.evaluateQuery(q), resultList[i]) << "Error at results : " << i + 1;
+		}
+
+		//Test case for Select a such that Follow(selected, "3")
+		resultList[0] = { FOLLOWLEFT2 };
+		resultList[1] = { FOLLOWLEFT2 };
+		resultList[2] = { };
+		for (int i = 0; i < selectedList.size(); i++) {
+			RelRef relation(FOLLOWS, selectedList[i], { STMT, "3" });
+			Query q;
+			q.addRelation(relation);
+			q.addSelected(selectedList[i]);
+			EXPECT_EQ(evaluator.evaluateQuery(q), resultList[i]) << "Error at results : " << i + 1;
+		}
+
+		//Test case for remaining Select a such that Follow(selected, anyEmpty)
+		emptyList = { { STMT, "1" },{ STMT, "4" },{ STMT, "5" },{ STMT, "6" },{ STMT, "7" },
+			{ STMT, "8" },{ STMT, "9" },{ STMT, "10" },{ STMT, "11" },{ STMT, "12" }
+		};
+		for (int j = 0; j < emptyList.size(); j++) {
+			for (int i = 0; i < selectedList.size(); i++) {
+				RelRef relation(FOLLOWS, selectedList[i], emptyList[j]);
+				Query q;
+				q.addRelation(relation);
+				q.addSelected(selectedList[i]);
+				EXPECT_EQ(evaluator.evaluateQuery(q), emptyResult) << "Error at results : " << i + 1;
+			}
+		}
+	}
 }
