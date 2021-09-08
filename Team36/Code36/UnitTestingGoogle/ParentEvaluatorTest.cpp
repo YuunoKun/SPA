@@ -17,9 +17,8 @@ namespace UnitTesting {
 		ParentEvaluator parentEvaluator;
 	};
 	TEST_F(ParentEvaluatorTest, haveRelation) {
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_PRINT);
-		PKB::getInstance().addStmt(STMT_READ);
+		PKB::getInstance().addStmt(STMT_IF);
+		PKB::getInstance().addStmt(STMT_WHILE);
 		PKB::getInstance().addStmt(STMT_IF);
 		EXPECT_FALSE(parentEvaluator.haveRelation());
 		PKB::getInstance().addParent(1, 2);
@@ -33,9 +32,9 @@ namespace UnitTesting {
 		Entity e4 = { STMT, "4" };
 		Entity e5 = { STMT, "5" };
 
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_PRINT);
-		PKB::getInstance().addStmt(STMT_READ);
+		PKB::getInstance().addStmt(STMT_IF);
+		PKB::getInstance().addStmt(STMT_WHILE);
+		PKB::getInstance().addStmt(STMT_IF);
 		PKB::getInstance().addStmt(STMT_IF);
 		PKB::getInstance().addStmt(STMT_WHILE);
 		PKB::getInstance().addParent(1, 2);
@@ -76,9 +75,9 @@ namespace UnitTesting {
 		Entity e4 = { STMT, "4" };
 		Entity e5 = { STMT, "5" };
 
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_PRINT);
-		PKB::getInstance().addStmt(STMT_READ);
+		PKB::getInstance().addStmt(STMT_IF);
+		PKB::getInstance().addStmt(STMT_WHILE);
+		PKB::getInstance().addStmt(STMT_IF);
 		PKB::getInstance().addStmt(STMT_IF);
 		PKB::getInstance().addStmt(STMT_WHILE);
 		PKB::getInstance().addParent(1, 2);
@@ -99,9 +98,9 @@ namespace UnitTesting {
 		Entity e4 = { STMT, "4" };
 		Entity e5 = { STMT, "5" };
 
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_PRINT);
-		PKB::getInstance().addStmt(STMT_READ);
+		PKB::getInstance().addStmt(STMT_IF);
+		PKB::getInstance().addStmt(STMT_WHILE);
+		PKB::getInstance().addStmt(STMT_IF);
 		PKB::getInstance().addStmt(STMT_IF);
 		PKB::getInstance().addStmt(STMT_WHILE);
 		PKB::getInstance().addParent(1, 2);
@@ -116,14 +115,14 @@ namespace UnitTesting {
 	}
 
 	TEST_F(ParentEvaluatorTest, getRelations) {
-		StmtInfo p1{ 1, STMT_READ };
-		StmtInfo p2{ 2, STMT_PRINT };
-		StmtInfo p3{ 3, STMT_READ };
+		StmtInfo p1{ 1, STMT_IF };
+		StmtInfo p2{ 2, STMT_WHILE };
+		StmtInfo p3{ 3, STMT_IF };
 		StmtInfo p4{ 4, STMT_IF };
 
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_PRINT);
-		PKB::getInstance().addStmt(STMT_READ);
+		PKB::getInstance().addStmt(STMT_IF);
+		PKB::getInstance().addStmt(STMT_WHILE);
+		PKB::getInstance().addStmt(STMT_IF);
 		PKB::getInstance().addStmt(STMT_IF);
 		PKB::getInstance().addParent(1, 2);
 		PKB::getInstance().addParent(2, 3);
@@ -136,15 +135,15 @@ namespace UnitTesting {
 		EXPECT_EQ(parentEvaluator.getRelations(left, right), t);
 
 		v = { {p1, p2} };
-		left = { READ, Synonym{"a"} };
-		right = { PRINT, Synonym{"b"} };
+		left = { IF, Synonym{"a"} };
+		right = { WHILE, Synonym{"b"} };
 		header = { left, right };
 		t = ResultTable(header, v);
 		EXPECT_EQ(parentEvaluator.getRelations(left, right), t);
 
 		v = { {p2, p3} };
-		left = { PRINT, Synonym{"a"} };
-		right = { READ, Synonym{"b"} };
+		left = { WHILE, Synonym{"a"} };
+		right = { IF, Synonym{"b"} };
 		header = { left, right };
 		t = ResultTable(header, v);
 		EXPECT_EQ(parentEvaluator.getRelations(left, right), t);
@@ -164,14 +163,14 @@ namespace UnitTesting {
 	}
 
 	TEST_F(ParentEvaluatorTest, getRightRelations) {
-		StmtInfo p1{ 1, STMT_READ };
-		StmtInfo p2{ 2, STMT_PRINT };
-		StmtInfo p3{ 3, STMT_READ };
+		StmtInfo p1{ 1, STMT_IF };
+		StmtInfo p2{ 2, STMT_WHILE };
+		StmtInfo p3{ 3, STMT_IF };
 		StmtInfo p4{ 4, STMT_IF };
 
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_PRINT);
-		PKB::getInstance().addStmt(STMT_READ);
+		PKB::getInstance().addStmt(STMT_IF);
+		PKB::getInstance().addStmt(STMT_WHILE);
+		PKB::getInstance().addStmt(STMT_IF);
 		PKB::getInstance().addStmt(STMT_IF);
 		PKB::getInstance().addParent(1, 2);
 		PKB::getInstance().addParent(2, 3);
@@ -182,20 +181,20 @@ namespace UnitTesting {
 		EXPECT_EQ(parentEvaluator.getRightRelations(header), t);
 
 		v = { p2 };
-		header = { PRINT, Synonym{"a"} };
+		header = { WHILE, Synonym{"a"} };
 		t = ResultTable(header, v);
 		EXPECT_EQ(parentEvaluator.getRightRelations(header), t);
 
 		v = { p3 };
-		header = { READ, Synonym{"a"} };
+		header = { IF, Synonym{"a"} };
 		t = ResultTable(header, v);
 		EXPECT_EQ(parentEvaluator.getRightRelations(header), t);
 
 		v = { };
-		header = { WHILE, Synonym{"a"} };
+		header = { READ, Synonym{"a"} };
 		t = ResultTable(header, v);
 		EXPECT_EQ(parentEvaluator.getRightRelations(header), t);
-		header = { IF, Synonym{"a"} };
+		header = { PRINT, Synonym{"a"} };
 		t = ResultTable(header, v);
 		EXPECT_EQ(parentEvaluator.getRightRelations(header), t);
 		header = { CALL, Synonym{"a"} };
@@ -207,14 +206,14 @@ namespace UnitTesting {
 	}
 
 	TEST_F(ParentEvaluatorTest, getLeftRelations) {
-		StmtInfo p1{ 1, STMT_READ };
-		StmtInfo p2{ 2, STMT_PRINT };
-		StmtInfo p3{ 3, STMT_READ };
+		StmtInfo p1{ 1, STMT_IF };
+		StmtInfo p2{ 2, STMT_WHILE };
+		StmtInfo p3{ 3, STMT_IF };
 		StmtInfo p4{ 4, STMT_IF };
 
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_PRINT);
-		PKB::getInstance().addStmt(STMT_READ);
+		PKB::getInstance().addStmt(STMT_IF);
+		PKB::getInstance().addStmt(STMT_WHILE);
+		PKB::getInstance().addStmt(STMT_IF);
 		PKB::getInstance().addStmt(STMT_IF);
 		PKB::getInstance().addParent(1, 2);
 		PKB::getInstance().addParent(2, 3);
@@ -225,20 +224,20 @@ namespace UnitTesting {
 		EXPECT_EQ(parentEvaluator.getLeftRelations(header), t);
 
 		v = { p2 };
-		header = { PRINT, Synonym{"a"} };
+		header = { WHILE, Synonym{"a"} };
 		t = ResultTable(header, v);
 		EXPECT_EQ(parentEvaluator.getLeftRelations(header), t);
 
 		v = { p1 };
-		header = { READ, Synonym{"a"} };
+		header = { IF, Synonym{"a"} };
 		t = ResultTable(header, v);
 		EXPECT_EQ(parentEvaluator.getLeftRelations(header), t);
 
 		v = { };
-		header = { WHILE, Synonym{"a"} };
+		header = { READ, Synonym{"a"} };
 		t = ResultTable(header, v);
 		EXPECT_EQ(parentEvaluator.getLeftRelations(header), t);
-		header = { IF, Synonym{"a"} };
+		header = { PRINT, Synonym{"a"} };
 		t = ResultTable(header, v);
 		EXPECT_EQ(parentEvaluator.getLeftRelations(header), t);
 		header = { CALL, Synonym{"a"} };
@@ -250,14 +249,14 @@ namespace UnitTesting {
 	}
 
 	TEST_F(ParentEvaluatorTest, getRelationMatchLeft) {
-		StmtInfo p1{ 1, STMT_READ };
-		StmtInfo p2{ 2, STMT_PRINT };
-		StmtInfo p3{ 3, STMT_READ };
+		StmtInfo p1{ 1, STMT_IF };
+		StmtInfo p2{ 2, STMT_WHILE };
+		StmtInfo p3{ 3, STMT_IF };
 		StmtInfo p4{ 4, STMT_IF };
 
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_PRINT);
-		PKB::getInstance().addStmt(STMT_READ);
+		PKB::getInstance().addStmt(STMT_IF);
+		PKB::getInstance().addStmt(STMT_WHILE);
+		PKB::getInstance().addStmt(STMT_IF);
 		PKB::getInstance().addStmt(STMT_IF);
 		PKB::getInstance().addParent(1, 2);
 		PKB::getInstance().addParent(2, 3);
@@ -273,20 +272,23 @@ namespace UnitTesting {
 		match = { STMT, "2" };
 		t = ResultTable(header, v);
 		EXPECT_EQ(parentEvaluator.getRelationMatchLeft(match, header), t);
+		header = { IF, Synonym{"a"} };
+		t = ResultTable(header, v);
+		EXPECT_EQ(parentEvaluator.getRelationMatchLeft(match, header), t);
 
 		v = { };
 		header = { WHILE, Synonym{"a"} };
 		match = { IF, "2" };
 		t = ResultTable(header, v);
 		EXPECT_EQ(parentEvaluator.getRelationMatchLeft(match, header), t);
-		header = { IF, Synonym{"a"} };
+		header = { PRINT, Synonym{"a"} };
 		match = { WHILE, "2" };
 		t = ResultTable(header, v);
 		EXPECT_EQ(parentEvaluator.getRelationMatchLeft(match, header), t);
 		header = { WHILE, Synonym{"a"} };
 		t = ResultTable(header, v);
 		EXPECT_EQ(parentEvaluator.getRelationMatchLeft(match, header), t);
-		header = { IF, Synonym{"a"} };
+		header = { WHILE, Synonym{"a"} };
 		t = ResultTable(header, v);
 		EXPECT_EQ(parentEvaluator.getRelationMatchLeft(match, header), t);
 		header = { CALL, Synonym{"a"} };
@@ -298,14 +300,14 @@ namespace UnitTesting {
 	}
 
 	TEST_F(ParentEvaluatorTest, getRelationMatchRight) {
-		StmtInfo p1{ 1, STMT_READ };
-		StmtInfo p2{ 2, STMT_PRINT };
-		StmtInfo p3{ 3, STMT_READ };
+		StmtInfo p1{ 1, STMT_IF };
+		StmtInfo p2{ 2, STMT_WHILE };
+		StmtInfo p3{ 3, STMT_IF };
 		StmtInfo p4{ 4, STMT_IF };
 
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_PRINT);
-		PKB::getInstance().addStmt(STMT_READ);
+		PKB::getInstance().addStmt(STMT_IF);
+		PKB::getInstance().addStmt(STMT_WHILE);
+		PKB::getInstance().addStmt(STMT_IF);
 		PKB::getInstance().addStmt(STMT_IF);
 		PKB::getInstance().addParent(1, 2);
 		PKB::getInstance().addParent(2, 3);
@@ -321,20 +323,22 @@ namespace UnitTesting {
 		match = { STMT, "2" };
 		t = ResultTable(header, v);
 		EXPECT_EQ(parentEvaluator.getRelationMatchRight(header, match), t);
+		header = { IF, Synonym{"a"} };
+		t = ResultTable(header, v);
+		EXPECT_EQ(parentEvaluator.getRelationMatchRight(header, match), t);
 
 		v = { };
 		header = { WHILE, Synonym{"a"} };
 		match = { IF, "2" };
 		t = ResultTable(header, v);
 		EXPECT_EQ(parentEvaluator.getRelationMatchRight(header, match), t);
-		header = { IF, Synonym{"a"} };
-		match = { WHILE, "2" };
+		header = { READ, Synonym{"a"} };
 		t = ResultTable(header, v);
 		EXPECT_EQ(parentEvaluator.getRelationMatchRight(header, match), t);
 		header = { WHILE, Synonym{"a"} };
 		t = ResultTable(header, v);
 		EXPECT_EQ(parentEvaluator.getRelationMatchRight(header, match), t);
-		header = { IF, Synonym{"a"} };
+		header = { PRINT, Synonym{"a"} };
 		t = ResultTable(header, v);
 		EXPECT_EQ(parentEvaluator.getRelationMatchRight(header, match), t);
 		header = { CALL, Synonym{"a"} };

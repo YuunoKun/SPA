@@ -474,8 +474,8 @@ namespace UnitTesting {
 	}
 
 	TEST_F(PKBAdapterTest, isParentEmpty) {
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_PRINT);
+		PKB::getInstance().addStmt(STMT_IF);
+		PKB::getInstance().addStmt(STMT_WHILE);
 		PKB::getInstance().addStmt(STMT_READ);
 		PKB::getInstance().addStmt(STMT_IF);
 		EXPECT_TRUE(pkb.isParentEmpty());
@@ -485,9 +485,9 @@ namespace UnitTesting {
 		EXPECT_FALSE(pkb.isParentEmpty());
 	}
 	TEST_F(PKBAdapterTest, isParent) {
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_PRINT);
-		PKB::getInstance().addStmt(STMT_READ);
+		PKB::getInstance().addStmt(STMT_IF);
+		PKB::getInstance().addStmt(STMT_WHILE);
+		PKB::getInstance().addStmt(STMT_IF);
 		PKB::getInstance().addStmt(STMT_IF);
 		PKB::getInstance().addStmt(STMT_WHILE);
 		PKB::getInstance().addParent(1, 2);
@@ -528,9 +528,9 @@ namespace UnitTesting {
 	}
 
 	TEST_F(PKBAdapterTest, isChild) {
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_PRINT);
-		PKB::getInstance().addStmt(STMT_READ);
+		PKB::getInstance().addStmt(STMT_IF);
+		PKB::getInstance().addStmt(STMT_WHILE);
+		PKB::getInstance().addStmt(STMT_IF);
 		PKB::getInstance().addStmt(STMT_IF);
 		PKB::getInstance().addStmt(STMT_WHILE);
 		PKB::getInstance().addParent(1, 2);
@@ -545,15 +545,15 @@ namespace UnitTesting {
 	}
 
 	TEST_F(PKBAdapterTest, getChild) {
-		StmtInfo p1{ 1, STMT_READ };
-		StmtInfo p2{ 2, STMT_PRINT };
-		StmtInfo p3{ 3, STMT_READ };
+		StmtInfo p1{ 1, STMT_IF };
+		StmtInfo p2{ 2, STMT_WHILE };
+		StmtInfo p3{ 3, STMT_IF };
 		StmtInfo p4{ 4, STMT_IF };
 		StmtInfo p5{ 5, STMT_WHILE };
 
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_PRINT);
-		PKB::getInstance().addStmt(STMT_READ);
+		PKB::getInstance().addStmt(STMT_IF);
+		PKB::getInstance().addStmt(STMT_WHILE);
+		PKB::getInstance().addStmt(STMT_IF);
 		PKB::getInstance().addStmt(STMT_IF);
 		PKB::getInstance().addStmt(STMT_WHILE);
 		PKB::getInstance().addParent(1, 2);
@@ -589,15 +589,15 @@ namespace UnitTesting {
 	}
 
 	TEST_F(PKBAdapterTest, getParent) {
-		StmtInfo p1{ 1, STMT_READ };
-		StmtInfo p2{ 2, STMT_PRINT };
-		StmtInfo p3{ 3, STMT_READ };
+		StmtInfo p1{ 1, STMT_IF };
+		StmtInfo p2{ 2, STMT_WHILE };
+		StmtInfo p3{ 3, STMT_IF };
 		StmtInfo p4{ 4, STMT_IF };
 		StmtInfo p5{ 5, STMT_WHILE };
 
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_PRINT);
-		PKB::getInstance().addStmt(STMT_READ);
+		PKB::getInstance().addStmt(STMT_IF);
+		PKB::getInstance().addStmt(STMT_WHILE);
+		PKB::getInstance().addStmt(STMT_IF);
 		PKB::getInstance().addStmt(STMT_IF);
 		PKB::getInstance().addStmt(STMT_WHILE);
 		PKB::getInstance().addParent(1, 2);
@@ -633,15 +633,15 @@ namespace UnitTesting {
 	}
 
 	TEST_F(PKBAdapterTest, getAllParentRelation) {
-		StmtInfo p1{ 1, STMT_READ };
-		StmtInfo p2{ 2, STMT_PRINT };
-		StmtInfo p3{ 3, STMT_READ };
+		StmtInfo p1{ 1, STMT_IF };
+		StmtInfo p2{ 2, STMT_WHILE };
+		StmtInfo p3{ 3, STMT_IF };
 		StmtInfo p4{ 4, STMT_IF };
 		StmtInfo p5{ 5, STMT_WHILE };
 
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_PRINT);
-		PKB::getInstance().addStmt(STMT_READ);
+		PKB::getInstance().addStmt(STMT_IF);
+		PKB::getInstance().addStmt(STMT_WHILE);
+		PKB::getInstance().addStmt(STMT_IF);
 		PKB::getInstance().addStmt(STMT_IF);
 		PKB::getInstance().addStmt(STMT_WHILE);
 		PKB::getInstance().addParent(1, 2);
@@ -654,9 +654,9 @@ namespace UnitTesting {
 	}
 
 	TEST_F(PKBAdapterTest, isParentT) {
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_PRINT);
-		PKB::getInstance().addStmt(STMT_READ);
+		PKB::getInstance().addStmt(STMT_IF);
+		PKB::getInstance().addStmt(STMT_WHILE);
+		PKB::getInstance().addStmt(STMT_IF);
 		PKB::getInstance().addStmt(STMT_IF);
 		PKB::getInstance().addStmt(STMT_WHILE);
 		PKB::getInstance().addParent(1, 2);
@@ -698,9 +698,9 @@ namespace UnitTesting {
 	}
 
 	TEST_F(PKBAdapterTest, isChildT) {
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_PRINT);
-		PKB::getInstance().addStmt(STMT_READ);
+		PKB::getInstance().addStmt(STMT_IF);
+		PKB::getInstance().addStmt(STMT_WHILE);
+		PKB::getInstance().addStmt(STMT_IF);
 		PKB::getInstance().addStmt(STMT_IF);
 		PKB::getInstance().addStmt(STMT_WHILE);
 		PKB::getInstance().addParent(1, 2);
@@ -715,15 +715,15 @@ namespace UnitTesting {
 	}
 
 	TEST_F(PKBAdapterTest, getChildT) {
-		StmtInfo p1{ 1, STMT_READ };
-		StmtInfo p2{ 2, STMT_PRINT };
-		StmtInfo p3{ 3, STMT_READ };
+		StmtInfo p1{ 1, STMT_IF };
+		StmtInfo p2{ 2, STMT_WHILE };
+		StmtInfo p3{ 3, STMT_IF };
 		StmtInfo p4{ 4, STMT_IF };
 		StmtInfo p5{ 5, STMT_WHILE };
 
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_PRINT);
-		PKB::getInstance().addStmt(STMT_READ);
+		PKB::getInstance().addStmt(STMT_IF);
+		PKB::getInstance().addStmt(STMT_WHILE);
+		PKB::getInstance().addStmt(STMT_IF);
 		PKB::getInstance().addStmt(STMT_IF);
 		PKB::getInstance().addStmt(STMT_WHILE);
 		PKB::getInstance().addParent(1, 2);
@@ -759,15 +759,15 @@ namespace UnitTesting {
 	}
 
 	TEST_F(PKBAdapterTest, getParentT) {
-		StmtInfo p1{ 1, STMT_READ };
-		StmtInfo p2{ 2, STMT_PRINT };
-		StmtInfo p3{ 3, STMT_READ };
+		StmtInfo p1{ 1, STMT_IF };
+		StmtInfo p2{ 2, STMT_WHILE };
+		StmtInfo p3{ 3, STMT_IF };
 		StmtInfo p4{ 4, STMT_IF };
 		StmtInfo p5{ 5, STMT_WHILE };
 
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_PRINT);
-		PKB::getInstance().addStmt(STMT_READ);
+		PKB::getInstance().addStmt(STMT_IF);
+		PKB::getInstance().addStmt(STMT_WHILE);
+		PKB::getInstance().addStmt(STMT_IF);
 		PKB::getInstance().addStmt(STMT_IF);
 		PKB::getInstance().addStmt(STMT_WHILE);
 		PKB::getInstance().addParent(1, 2);
@@ -803,15 +803,15 @@ namespace UnitTesting {
 	}
 
 	TEST_F(PKBAdapterTest, getAllParentTRelation) {
-		StmtInfo p1{ 1, STMT_READ };
-		StmtInfo p2{ 2, STMT_PRINT };
-		StmtInfo p3{ 3, STMT_READ };
+		StmtInfo p1{ 1, STMT_IF };
+		StmtInfo p2{ 2, STMT_WHILE };
+		StmtInfo p3{ 3, STMT_IF };
 		StmtInfo p4{ 4, STMT_IF };
 		StmtInfo p5{ 5, STMT_WHILE };
 
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_PRINT);
-		PKB::getInstance().addStmt(STMT_READ);
+		PKB::getInstance().addStmt(STMT_IF);
+		PKB::getInstance().addStmt(STMT_WHILE);
+		PKB::getInstance().addStmt(STMT_IF);
 		PKB::getInstance().addStmt(STMT_IF);
 		PKB::getInstance().addStmt(STMT_WHILE);
 		PKB::getInstance().addParent(1, 2);

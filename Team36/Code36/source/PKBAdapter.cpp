@@ -75,9 +75,9 @@ bool PKBAdapter::isFollowed(stmt_index index) {
 }
 
 bool PKBAdapter::isFollowing(stmt_index index) {
-	auto a = PKB::getInstance().PKB::getFollowsReverse();
+	auto a = PKB::getInstance().PKB::getFollows();
 	StmtInfo s1 = PKB::getInstance().PKB::getStmts().at(index - 1);
-	return a.containsKey(s1);
+	return a.containsValue(s1);
 }
 
 std::vector<StmtInfo> PKBAdapter::getFollowed() {
@@ -86,14 +86,14 @@ std::vector<StmtInfo> PKBAdapter::getFollowed() {
 }
 
 std::vector<StmtInfo> PKBAdapter::getFollowing() {
-	auto a = PKB::getInstance().PKB::getFollowsReverse();
-	return a.getKeys();
+	auto a = PKB::getInstance().PKB::getFollows();
+	return a.getValues();
 }
 
 std::vector<StmtInfo> PKBAdapter::getFollowed(stmt_index index) {
-	auto a = PKB::getInstance().PKB::getFollowsReverse();
+	auto a = PKB::getInstance().PKB::getFollows();
 	StmtInfo s1 = PKB::getInstance().PKB::getStmts().at(index - 1);
-	return a.getValues(s1);
+	return a.getKeys(s1);
 }
 
 std::vector<StmtInfo> PKBAdapter::getFollowing(stmt_index index) {
@@ -127,9 +127,9 @@ bool PKBAdapter::isFollowedT(stmt_index index) {
 }
 
 bool PKBAdapter::isFollowingT(stmt_index index) {
-	auto a = PKB::getInstance().PKB::getFollowsTReverse();
+	auto a = PKB::getInstance().PKB::getFollowsT();
 	StmtInfo s1 = PKB::getInstance().PKB::getStmts().at(index - 1);
-	return a.containsKey(s1);
+	return a.containsValue(s1);
 }
 
 std::vector<StmtInfo> PKBAdapter::getFollowedT() {
@@ -138,14 +138,14 @@ std::vector<StmtInfo> PKBAdapter::getFollowedT() {
 }
 
 std::vector<StmtInfo> PKBAdapter::getFollowingT() {
-	auto a = PKB::getInstance().PKB::getFollowsTReverse();
-	return a.getKeys();
+	auto a = PKB::getInstance().PKB::getFollowsT();
+	return a.getValues();
 }
 
 std::vector<StmtInfo> PKBAdapter::getFollowedT(stmt_index index) {
-	auto a = PKB::getInstance().PKB::getFollowsTReverse();
+	auto a = PKB::getInstance().PKB::getFollowsT();
 	StmtInfo s1 = PKB::getInstance().PKB::getStmts().at(index - 1);
-	return a.getValues(s1);
+	return a.getKeys(s1);
 }
 
 std::vector<StmtInfo> PKBAdapter::getFollowingT(stmt_index index) {
@@ -173,9 +173,9 @@ bool PKBAdapter::isParent(stmt_index index1, stmt_index index2) {
 }
 
 bool PKBAdapter::isChild(stmt_index index) {
-	auto a = PKB::getInstance().PKB::getParentReverse();
+	auto a = PKB::getInstance().PKB::getParent();
 	StmtInfo s1 = PKB::getInstance().PKB::getStmts().at(index - 1);
-	return a.containsKey(s1);
+	return a.containsValue(s1);
 }
 
 bool PKBAdapter::isParent(stmt_index index) {
@@ -185,8 +185,8 @@ bool PKBAdapter::isParent(stmt_index index) {
 }
 
 std::vector<StmtInfo> PKBAdapter::getChild() {
-	auto a = PKB::getInstance().PKB::getParentReverse();
-	return a.getKeys();
+	auto a = PKB::getInstance().PKB::getParent();
+	return a.getValues();
 }
 
 std::vector<StmtInfo> PKBAdapter::getParent() {
@@ -201,9 +201,9 @@ std::vector<StmtInfo> PKBAdapter::getChild(stmt_index index) {
 }
 
 std::vector<StmtInfo> PKBAdapter::getParent(stmt_index index) {
-	auto a = PKB::getInstance().PKB::getParentReverse();
+	auto a = PKB::getInstance().PKB::getParent();
 	StmtInfo s1 = PKB::getInstance().PKB::getStmts().at(index - 1);
-	return a.getValues(s1);
+	return a.getKeys(s1);
 }
 
 std::vector<std::pair<StmtInfo, StmtInfo>> PKBAdapter::getAllParentRelation() {
@@ -225,9 +225,9 @@ bool PKBAdapter::isParentT(stmt_index index1, stmt_index index2) {
 }
 
 bool PKBAdapter::isChildT(stmt_index index) {
-	auto a = PKB::getInstance().PKB::getParentTReverse();
+	auto a = PKB::getInstance().PKB::getParentT();
 	StmtInfo s1 = PKB::getInstance().PKB::getStmts().at(index - 1);
-	return a.containsKey(s1);
+	return a.containsValue(s1);
 }
 
 bool PKBAdapter::isParentT(stmt_index index) {
@@ -237,8 +237,8 @@ bool PKBAdapter::isParentT(stmt_index index) {
 }
 
 std::vector<StmtInfo> PKBAdapter::getChildT() {
-	auto a = PKB::getInstance().PKB::getParentTReverse();
-	return a.getKeys();
+	auto a = PKB::getInstance().PKB::getParentT();
+	return a.getValues();
 }
 
 std::vector<StmtInfo> PKBAdapter::getParentT() {
@@ -253,9 +253,9 @@ std::vector<StmtInfo> PKBAdapter::getChildT(stmt_index index) {
 }
 
 std::vector<StmtInfo> PKBAdapter::getParentT(stmt_index index) {
-	auto a = PKB::getInstance().PKB::getParentTReverse();
+	auto a = PKB::getInstance().PKB::getParentT();
 	StmtInfo s1 = PKB::getInstance().PKB::getStmts().at(index - 1);
-	return a.getValues(s1);
+	return a.getKeys(s1);
 }
 
 std::vector<std::pair<StmtInfo, StmtInfo>> PKBAdapter::getAllParentTRelation() {
@@ -311,8 +311,8 @@ bool PKBAdapter::isModifiesS(stmt_index index) {
 }
 
 bool PKBAdapter::isModifiesS(var_name var) {
-	auto a = PKB::getInstance().PKB::getModifiesSReverse();
-	return a.containsKey(var);
+	auto a = PKB::getInstance().PKB::getModifiesS();
+	return a.containsValue(var);
 }
 
 std::vector<std::pair<StmtInfo, var_name>> PKBAdapter::getModifiesSRelation() {
@@ -326,13 +326,13 @@ std::vector<StmtInfo> PKBAdapter::getModifiesS() {
 }
 
 std::vector<StmtInfo> PKBAdapter::getModifiesS(var_name var) {
-	auto a = PKB::getInstance().PKB::getModifiesSReverse();
-	return a.getValues(var);
+	auto a = PKB::getInstance().PKB::getModifiesS();
+	return a.getKeys(var);
 }
 
 std::vector<var_name> PKBAdapter::getModifiedS() {
-	auto a = PKB::getInstance().PKB::getModifiesSReverse();
-	return a.getKeys();
+	auto a = PKB::getInstance().PKB::getModifiesS();
+	return a.getValues();
 }
 
 std::vector<var_name> PKBAdapter::getModifiedS(stmt_index index) {
@@ -389,8 +389,8 @@ bool PKBAdapter::isUsesS(stmt_index index) {
 }
 
 bool PKBAdapter::isUsesS(var_name var) {
-	auto a = PKB::getInstance().PKB::getUsesSReverse();
-	return a.containsKey(var);
+	auto a = PKB::getInstance().PKB::getUsesS();
+	return a.containsValue(var);
 }
 
 std::vector<std::pair<StmtInfo, var_name>> PKBAdapter::getUsesSRelation() {
@@ -404,13 +404,13 @@ std::vector<StmtInfo> PKBAdapter::getUsesS() {
 }
 
 std::vector<StmtInfo> PKBAdapter::getUsesS(var_name var) {
-	auto a = PKB::getInstance().PKB::getUsesSReverse();
-	return a.getValues(var);
+	auto a = PKB::getInstance().PKB::getUsesS();
+	return a.getKeys(var);
 }
 
 std::vector<var_name> PKBAdapter::getUsedS() {
-	auto a = PKB::getInstance().PKB::getUsesSReverse();
-	return a.getKeys();
+	auto a = PKB::getInstance().PKB::getUsesS();
+	return a.getValues();
 }
 
 std::vector<var_name> PKBAdapter::getUsedS(stmt_index index) {
