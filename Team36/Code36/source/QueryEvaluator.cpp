@@ -9,12 +9,18 @@ QueryEvaluator::QueryEvaluator() {
 }
 
 std::list<std::string> QueryEvaluator::evaluateQuery(Query query) {
-	QueryResult result;
+	try {
+		QueryResult result;
 
-	evaluateRelations(query, result);
-	evaluatePatterns(query, result);
+		evaluateRelations(query, result);
+		evaluatePatterns(query, result);
 
-	return getResult(query, result);;
+		return getResult(query, result);;
+	}
+	catch (...){
+		//Some error occur, return empty list
+		return {};
+	}
 }
 
 void QueryEvaluator::evaluateRelations(Query& query, QueryResult& queryResult) {
