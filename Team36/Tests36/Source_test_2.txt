@@ -1,4 +1,4 @@
-Procedure main {
+procedure main {
 	read x;                 //1
 	read y;                 //2
 	z = x + y;              //3
