@@ -492,7 +492,6 @@ namespace UnitTesting {
 		}
 	}
 
-
 	//FollowT Relation Test ----------------------------------------------------------------------------------------------------
 	TEST_F(QueryEvaluatorTest, evaluateQueryFollowTBooleanTrue) {
 		RelType type = FOLLOWS_T;
@@ -612,7 +611,6 @@ namespace UnitTesting {
 		}
 	}
 
-
 	TEST_F(QueryEvaluatorTest, evaluateQueryFollowTFilterNoCommonSynonymTrue) {
 		RelType type = FOLLOWS_T;
 		std::vector<RelRef> relations;
@@ -636,7 +634,6 @@ namespace UnitTesting {
 		relations.push_back(RelRef(type, { IF, Synonym{"a"} }, { STMT, FOLLOWRIGHT1 }));
 		relations.push_back(RelRef(type, { STMT, Synonym{"a"} }, { STMT, FOLLOWRIGHT2 }));
 		relations.push_back(RelRef(type, { IF, Synonym{"a"} }, { STMT, FOLLOWRIGHT2 }));
-
 
 		for (unsigned int i = 0; i < relations.size(); i++) {
 			for (unsigned int j = 0; j < allSelect.size(); j++) {
@@ -830,7 +827,6 @@ namespace UnitTesting {
 		}
 	}
 
-
 	//Parent Relation Test ----------------------------------------------------------------------------------------------------
 	TEST_F(QueryEvaluatorTest, evaluateQueryParentBooleanTrue) {
 		RelType type = PARENT;
@@ -998,7 +994,6 @@ namespace UnitTesting {
 		synonyms.push_back({ READ, commonSynonym1 });
 		synonyms.push_back({ ASSIGN, commonSynonym1 });
 		synonyms.push_back({ CALL, commonSynonym1 });
-
 
 		for (unsigned int k = 0; k < synonyms.size(); k++) {
 			for (unsigned int j = 0; j < synonyms.size(); j++) {
@@ -1283,8 +1278,6 @@ namespace UnitTesting {
 				}
 			}
 		}
-
-
 	}
 	TEST_F(QueryEvaluatorTest, evaluateQueryParentTFilterEmpty) {
 		RelType type = PARENT_T;
@@ -1568,7 +1561,6 @@ namespace UnitTesting {
 		}
 	}
 
-
 	//Modifies_S Relation Test ----------------------------------------------------------------------------------------------------
 	TEST_F(QueryEvaluatorTest, evaluateQueryModifiesBooleanTrue) {
 		RelType type = MODIFIES_S;
@@ -1778,7 +1770,6 @@ namespace UnitTesting {
 			EXPECT_EQ(evaluator.evaluateQuery(q), emptyResult) << "Error at results : " << i + 1;
 		}
 
-
 		//Test case for Select a such that Modifies_S(a, selected)
 		resultList[0] = { MODIFIESRIGHT1, MODIFIESRIGHT2 };
 		resultList[1] = { MODIFIESRIGHT1 };
@@ -1801,7 +1792,6 @@ namespace UnitTesting {
 		q.addSelected(selected);
 		EXPECT_EQ(evaluator.evaluateQuery(q), resultList[0]);
 
-
 		//Test case for Select a such that Modifies_S("1", selected)
 		resultList[0] = { MODIFIESRIGHT1 };
 		resultList[1] = { };
@@ -1812,7 +1802,6 @@ namespace UnitTesting {
 		q.addSelected(selected);
 		EXPECT_EQ(evaluator.evaluateQuery(q), resultList[0]);
 
-
 		//Test case for Select a such that Modifies_S("3", selected)
 		resultList[0] = { MODIFIESRIGHT2 };
 		relation = RelRef(type, { STMT, MODIFIESLEFT2 }, selected);
@@ -1820,7 +1809,6 @@ namespace UnitTesting {
 		q.addRelation(relation);
 		q.addSelected(selected);
 		EXPECT_EQ(evaluator.evaluateQuery(q), resultList[0]);
-
 
 		//Test case for remaining Select a such that Modifies_S(anyEmpty, selected)
 		std::vector<Entity> emptyList = {
@@ -1835,7 +1823,6 @@ namespace UnitTesting {
 			q.addSelected(selected);
 			EXPECT_EQ(evaluator.evaluateQuery(q), emptyResult) << "Error at results : " << j + 1;
 		}
-
 	}
 
 	//Uses_S Relation Test ----------------------------------------------------------------------------------------------------
@@ -2048,7 +2035,6 @@ namespace UnitTesting {
 			EXPECT_EQ(evaluator.evaluateQuery(q), emptyResult) << "Error at results : " << i + 1;
 		}
 
-
 		//Test case for Select a such that USES_S(a, selected)
 		resultList[0] = { USESRIGHT1, USESRIGHT2 };
 		resultList[1] = { USESRIGHT1 };
@@ -2071,7 +2057,6 @@ namespace UnitTesting {
 		q.addSelected(selected);
 		EXPECT_EQ(evaluator.evaluateQuery(q), resultList[0]);
 
-
 		//Test case for Select a such that USES_S("1", selected)
 		resultList[0] = { USESRIGHT1 };
 		resultList[1] = { };
@@ -2082,7 +2067,6 @@ namespace UnitTesting {
 		q.addSelected(selected);
 		EXPECT_EQ(evaluator.evaluateQuery(q), resultList[0]);
 
-
 		//Test case for Select a such that USES_S("3", selected)
 		resultList[0] = { USESRIGHT2 };
 		relation = RelRef(type, { STMT, USESLEFT2 }, selected);
@@ -2090,7 +2074,6 @@ namespace UnitTesting {
 		q.addRelation(relation);
 		q.addSelected(selected);
 		EXPECT_EQ(evaluator.evaluateQuery(q), resultList[0]);
-
 
 		//Test case for remaining Select a such that USES_S(anyEmpty, selected)
 		std::vector<Entity> emptyList = {
@@ -2105,6 +2088,5 @@ namespace UnitTesting {
 			q.addSelected(selected);
 			EXPECT_EQ(evaluator.evaluateQuery(q), emptyResult) << "Error at results : " << j + 1;
 		}
-
 	}
 }
