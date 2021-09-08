@@ -69,16 +69,26 @@ namespace UnitTesting {
 	}
 
 	// Test for newline
-	//TODO
 	TEST(QueryTokenizer, NewlineTest) {
+		//Result
 		QueryTokenizer query_tokenizer;
-
+		std::string input = "stmt s;\nSelect s";
+		query_tokenizer.parse_into_query_tokens(input);
+		std::vector<QueryToken> output = query_tokenizer.get_query_token_chain();
 
 		//Expected
-		QueryToken whitespace = QueryToken();
+		std::vector<QueryToken> expected;
+		expected.push_back({ QueryToken::IDENTIFIER, "stmt" });
+		expected.push_back({ QueryToken::IDENTIFIER, "s" });
+		expected.push_back({ QueryToken::TERMINATOR, "" });
+		expected.push_back({ QueryToken::IDENTIFIER, "Select" });
+		expected.push_back({ QueryToken::IDENTIFIER, "s" });
 
-		EXPECT_TRUE(whitespace.token_value == "");
-		EXPECT_TRUE(whitespace.type == QueryToken::QueryTokenType::WHITESPACE);
+
+		for (int i = 0; i < expected.size(); i++) {
+			EXPECT_TRUE(output[i].token_value == expected[i].token_value);
+			EXPECT_TRUE(output[i].type == expected[i].type);
+		}
 	}
 
 	// Test for constants
@@ -106,7 +116,7 @@ namespace UnitTesting {
 		EXPECT_TRUE(output[2].type == eight_token.type);
 	}
 	
-	// Test for identifiers TODO	
+	// Test for identifiers
 	TEST(QueryTokenizer, IdentifierTest) {
 
 		//Result
@@ -225,8 +235,6 @@ namespace UnitTesting {
 		EXPECT_TRUE(output[3].type == QueryToken::COMMA);
 	}
 
-	// Test for newline
-
 	// Test for SUCH_THAT
 	TEST(QueryTokenizer, SuchThatTest) {
 
@@ -276,28 +284,144 @@ namespace UnitTesting {
 		EXPECT_TRUE(output[3].type == that_token.type);
 	}
 
-	// Test for FOLLOW_T, PARENT_T
-	//TODO
-	TEST(QueryTokenizer, AsteriskTest) {
+	// Test for PARENT_T
+	TEST(QueryTokenizer, ParentTTest) {
 
-		////Result
-		//QueryTokenizer query_tokenizer;
-		//std::string input = "Parent*(s,_)";
-		//query_tokenizer.parse_into_query_tokens(input);
-		//std::vector<QueryToken> output = query_tokenizer.get_query_token_chain();
+		//Result
+		QueryTokenizer query_tokenizer;
+		std::string input = "Parent*(s,_)";
+		query_tokenizer.parse_into_query_tokens(input);
+		std::vector<QueryToken> output = query_tokenizer.get_query_token_chain();
 
-		////Expected
-		//QueryToken wildcard_token = QueryToken(QueryToken::WILDCARD, "_");
+		QueryTokenizer query_tokenizer2;
+		std::string input2 = " Parent* (s,_)";
+		query_tokenizer2.parse_into_query_tokens(input2);
+		std::vector<QueryToken> output2 = query_tokenizer.get_query_token_chain();
 
-		//EXPECT_TRUE(output[4].type == QueryToken::WILDCARD);
-		EXPECT_EQ(1, 1);
+		//Expected
+		std::vector<QueryToken> expected;
+		expected.push_back({ QueryToken::PARENT_T, "" });
+		expected.push_back({ QueryToken::PARENTHESIS_OPEN, "" });
+		expected.push_back({ QueryToken::IDENTIFIER, "s" });
+		expected.push_back({ QueryToken::COMMA, "" });
+		expected.push_back({ QueryToken::WILDCARD, "" });
+		expected.push_back({ QueryToken::PARENTHESIS_CLOSE, "" });
+
+		for (int i = 0; i<expected.size(); i++) {
+			EXPECT_TRUE(output[i].token_value == expected[i].token_value);
+			EXPECT_TRUE(output[i].type == expected[i].type);
+
+			EXPECT_TRUE(output2[i].token_value == expected[i].token_value);
+			EXPECT_TRUE(output2[i].type == expected[i].type);
+		}
+	}
+
+	// Test for FOLLOW_T
+	TEST(QueryTokenizer, FollowsTTest) {
+
+		//Result
+		QueryTokenizer query_tokenizer;
+		std::string input = "Follows*(s,_)";
+		query_tokenizer.parse_into_query_tokens(input);
+		std::vector<QueryToken> output = query_tokenizer.get_query_token_chain();
+
+		QueryTokenizer query_tokenizer2;
+		std::string input2 = " Follows* (s,_)";
+		query_tokenizer2.parse_into_query_tokens(input2);
+		std::vector<QueryToken> output2 = query_tokenizer.get_query_token_chain();
+
+		//Expected
+		std::vector<QueryToken> expected;
+		expected.push_back({ QueryToken::FOLLOWS_T, "" });
+		expected.push_back({ QueryToken::PARENTHESIS_OPEN, "" });
+		expected.push_back({ QueryToken::IDENTIFIER, "s" });
+		expected.push_back({ QueryToken::COMMA, "" });
+		expected.push_back({ QueryToken::WILDCARD, "" });
+		expected.push_back({ QueryToken::PARENTHESIS_CLOSE, "" });
+
+		for (int i = 0; i < expected.size(); i++) {
+			EXPECT_TRUE(output[i].token_value == expected[i].token_value);
+			EXPECT_TRUE(output[i].type == expected[i].type);
+
+			EXPECT_TRUE(output2[i].token_value == expected[i].token_value);
+			EXPECT_TRUE(output2[i].type == expected[i].type);
+		}
+	}
+
+	TEST(QueryTokenizer, MulAsteriskTest) {
+
+		//Result
+		QueryTokenizer query_tokenizer;
+		std::string input = "Parent*(s, \"Parent*8\")";
+		query_tokenizer.parse_into_query_tokens(input);
+		std::vector<QueryToken> output = query_tokenizer.get_query_token_chain();
+
+		//Expected
+		std::vector<QueryToken> expected;
+		expected.push_back({ QueryToken::PARENT_T, "" });
+		expected.push_back({ QueryToken::PARENTHESIS_OPEN, "" });
+		expected.push_back({ QueryToken::IDENTIFIER, "s" });
+		expected.push_back({ QueryToken::COMMA, "" });
+		expected.push_back({ QueryToken::QUOTATION_OPEN, "" });
+		expected.push_back({ QueryToken::IDENTIFIER, "Parent" });
+		expected.push_back({ QueryToken::MUL, "" });
+		expected.push_back({ QueryToken::CONSTANT, "8" });
+		expected.push_back({ QueryToken::QUOTATION_CLOSE, "" });
+		expected.push_back({ QueryToken::PARENTHESIS_CLOSE, "" });
+
+		for (int i = 0; i < expected.size(); i++) {
+			EXPECT_TRUE(output[i].token_value == expected[i].token_value);
+			EXPECT_TRUE(output[i].type == expected[i].type);
+		}
 	}
 
 	// Test for Arithmetic operators
+	TEST(QueryTokenizer, ArithmeticTest) {
+
+		//Result
+		QueryTokenizer query_tokenizer;
+		std::string input = "Select a pattern a ( _ , _\"v + x - y * z / t\"_)";
+		query_tokenizer.parse_into_query_tokens(input);
+		std::vector<QueryToken> output = query_tokenizer.get_query_token_chain();
 
 
-	// Full PQL query tests
+		QueryTokenizer query_tokenizer2;
+		std::string input2 = " Select a pattern a ( _ , _\"v+x-y*z/t\"_)";
+		query_tokenizer2.parse_into_query_tokens(input2);
+		std::vector<QueryToken> output2 = query_tokenizer.get_query_token_chain();
 
+		//Expected
+		std::vector<QueryToken> expected;
+		expected.push_back({ QueryToken::IDENTIFIER, "Select" });
+		expected.push_back({ QueryToken::IDENTIFIER, "a" });
+		expected.push_back({ QueryToken::IDENTIFIER, "pattern" });
+		expected.push_back({ QueryToken::IDENTIFIER, "a" });
+		expected.push_back({ QueryToken::PARENTHESIS_OPEN, "" });
+		expected.push_back({ QueryToken::WILDCARD, "" });
+		expected.push_back({ QueryToken::COMMA, "" });
+		expected.push_back({ QueryToken::WILDCARD, "" });
+		expected.push_back({ QueryToken::QUOTATION_OPEN, "" });
+		expected.push_back({ QueryToken::IDENTIFIER, "v" });
+		expected.push_back({ QueryToken::PLUS, "" });
+		expected.push_back({ QueryToken::IDENTIFIER, "x" });
+		expected.push_back({ QueryToken::MINUS, "" });
+		expected.push_back({ QueryToken::IDENTIFIER, "y" });
+		expected.push_back({ QueryToken::MUL, "" });
+		expected.push_back({ QueryToken::IDENTIFIER, "z" });
+		expected.push_back({ QueryToken::DIV, "" });
+		expected.push_back({ QueryToken::IDENTIFIER, "t" });
+		expected.push_back({ QueryToken::QUOTATION_CLOSE, "" });
+		expected.push_back({ QueryToken::WILDCARD, "" });
+		expected.push_back({ QueryToken::PARENTHESIS_CLOSE, "" });
+
+		for (int i = 0; i < expected.size(); i++) {
+			EXPECT_TRUE(output[i].token_value == expected[i].token_value);
+			EXPECT_TRUE(output[i].type == expected[i].type);
+
+			EXPECT_TRUE(output2[i].token_value == expected[i].token_value);
+			EXPECT_TRUE(output2[i].type == expected[i].type);
+		}
+	}
 	
 	// Invalid tests
 
@@ -373,4 +497,5 @@ namespace UnitTesting {
 		}
 	}
 
+	
 }

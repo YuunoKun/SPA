@@ -155,7 +155,25 @@ void QueryTokenizer::parse_into_query_tokens(std::string input) {
 			//	std::runtime_error("Unexpected symbol : \'" + c + '\'');
 			//}
 
-			break;
+			// must not be in quotation brackets
+			if (!quotation_validation && curr_query_token.type == QueryToken::IDENTIFIER) {
+				if (curr_query_token.token_value == "Follows") {
+					curr_query_token.type = QueryToken::FOLLOWS_T;
+					curr_query_token.token_value = "";
+					add_query_token(curr_query_token);
+				} else if (curr_query_token.token_value == "Parent") {
+					curr_query_token.type = QueryToken::PARENT_T;
+					curr_query_token.token_value = "";
+					add_query_token(curr_query_token);
+				}
+				break;
+			}
+			else {
+				add_query_token(curr_query_token);
+				curr_query_token.type = QueryToken::MUL;
+				add_query_token(curr_query_token);
+				break;
+			}
 		case '+':
 			add_query_token(curr_query_token);
 			curr_query_token.type = QueryToken::PLUS;
