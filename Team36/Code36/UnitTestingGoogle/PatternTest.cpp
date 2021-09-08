@@ -4,12 +4,12 @@
 #include "Common.h"
 
 namespace UnitTesting {
-	Entity validLeftExpressionType1(VARIABLE, "variableType");
-	Entity validLeftExpressionType2(WILD, "wildType");
-	Entity validPatternType(ASSIGN, "assignType");
-	Entity invalidType1(STMT, "assignType");
-	Entity invalidType2(IF, "assignType");
-	Entity invalidType3(CALL, "assignType");
+	Entity validLeftExpressionType1(VARIABLE, Synonym{ "variableType" });
+	Entity validLeftExpressionType2(WILD, Synonym{ "wildType" });
+	Entity validPatternType(ASSIGN, Synonym{ "assignType" });
+	Entity invalidType1(STMT, Synonym{ "assignType" });
+	Entity invalidType2(IF, Synonym{ "assignType" });
+	Entity invalidType3(CALL, Synonym{ "assignType" });
 
 	TEST(Pattern, patternTypeInvalid) {
 		try {
