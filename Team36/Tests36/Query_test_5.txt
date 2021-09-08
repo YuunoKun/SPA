@@ -1,0 +1,29 @@
+1 – follows, 1 such that and 1 unknown synonym
+stmt s;
+Select s such that Follows(3, s)
+none
+5000
+2 – parent, 1 such that and 1 unknown synonym
+stmt s;
+Select s such that Parent(s, 3)
+2
+5000
+3 – follows, 1 such that and 2 unknown synonyms
+stmt s1, s2;
+Select s such that Follows(s1, s2)
+5000
+4 – parent, 1 such that and 2 unknown synonyms
+stmt s1, s2;
+Select s such that Parent(s1, s2)
+2, 3
+5000
+5 – modifies, 1 such that and 1 unknown synonym
+variable v;
+Select v such that Modifies(3, v)
+X
+5000
+6 – uses, 1 such that and 1 unknown synonym
+procedure p;
+Select p such that Uses(p, “x”)
+xyz
+5000

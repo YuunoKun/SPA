@@ -1,0 +1,9 @@
+procedure abc {
+	read x;                           //1
+	if (x > 0) then {              //2
+		x = 0;               //3
+ 	} else {                           
+		x = 5;               //4
+	}
+              print x;                           //5
+}
