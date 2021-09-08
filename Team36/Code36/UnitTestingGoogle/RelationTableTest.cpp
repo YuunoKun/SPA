@@ -36,46 +36,50 @@ namespace UnitTesting {
 	TEST(RelationTable, insert) {
 		UniqueRelationTable<int, int> table1;
 		RelationTable<int, int> table2;
-		std::vector<std::pair<int, int>> testInput{ {1, 2}, {1, 3}, {2, 2}, {2, 2} };
+		std::vector<std::pair<int, int>> testInput{ {1, 2}, {1, 3}, {2, 2}, {2, 2}, {2, 3} };
 
 		EXPECT_EQ(table1.insert(testInput[0].first, testInput[0].second), true);
 		EXPECT_EQ(table1.insert(testInput[1].first, testInput[1].second), false);
 		EXPECT_EQ(table1.insert(testInput[2].first, testInput[2].second), true);
 		EXPECT_EQ(table1.insert(testInput[3].first, testInput[3].second), false);
+		EXPECT_EQ(table1.insert(testInput[4].first, testInput[4].second), false);
 
 		EXPECT_EQ(table2.insert(testInput[0].first, testInput[0].second), true);
 		EXPECT_EQ(table2.insert(testInput[1].first, testInput[1].second), true);
 		EXPECT_EQ(table2.insert(testInput[2].first, testInput[2].second), true);
 		EXPECT_EQ(table2.insert(testInput[3].first, testInput[3].second), false);
+		EXPECT_EQ(table2.insert(testInput[4].first, testInput[4].second), true);
 	}
 
 	TEST(RelationTable, insert_StmtInfo) {
-		UniqueRelationTable<StmtInfo, StmtInfo> table1;
-		RelationTable<StmtInfo, StmtInfo> table2;
+		UniqueRelationTable<int, StmtInfo> table1;
+		RelationTable<int, StmtInfo> table2;
 		StmtInfo p1{ 1, STMT_READ };
 		StmtInfo p2{ 2, STMT_READ };
 		StmtInfo p3{ 3, STMT_READ };
 
-		std::vector<std::pair<StmtInfo, StmtInfo>> testInput{ {p1, p2}, {p1, p3}, {p2, p2}, {p2, p2} };
+		std::vector<std::pair<int, StmtInfo>> testInput{ {1, p2}, {1, p3}, {2, p2}, {2, p2}, {2, p3} };
 
-		StmtInfo key = testInput[0].first;
+		int key = testInput[0].first;
 		StmtInfo value = testInput[0].second;
 
 		EXPECT_EQ(table1.insert(testInput[0].first, testInput[0].second), true);
 		EXPECT_EQ(table1.insert(testInput[1].first, testInput[1].second), false);
 		EXPECT_EQ(table1.insert(testInput[2].first, testInput[2].second), true);
 		EXPECT_EQ(table1.insert(testInput[3].first, testInput[3].second), false);
+		EXPECT_EQ(table1.insert(testInput[4].first, testInput[4].second), false);
 
 		EXPECT_EQ(table2.insert(testInput[0].first, testInput[0].second), true);
 		EXPECT_EQ(table2.insert(testInput[1].first, testInput[1].second), true);
 		EXPECT_EQ(table2.insert(testInput[2].first, testInput[2].second), true);
 		EXPECT_EQ(table2.insert(testInput[3].first, testInput[3].second), false);
+		EXPECT_EQ(table2.insert(testInput[4].first, testInput[4].second), true);
 	}
 
-	TEST(RelationTable, getKeys) {
+	TEST(RelationTable, getKeysAll) {
 		UniqueRelationTable<int, int> table1, table3;
 		RelationTable<int, int> table2;
-		std::vector<std::pair<int, int>> testInput{ {1, 2}, {1, 3}, {2, 2}, {2, 2} };
+		std::vector<std::pair<int, int>> testInput{ {1, 2}, {1, 3}, {2, 2}, {2, 2}, {2,3} };
 		std::vector<int> expectedKeys{ 1, 2 };
 		std::vector<int> blankKeys{ };
 
@@ -83,25 +87,27 @@ namespace UnitTesting {
 		table1.insert(testInput[1].first, testInput[1].second);
 		table1.insert(testInput[2].first, testInput[2].second);
 		table1.insert(testInput[3].first, testInput[3].second);
+		table1.insert(testInput[4].first, testInput[4].second);
 
 		table2.insert(testInput[0].first, testInput[0].second);
 		table2.insert(testInput[1].first, testInput[1].second);
 		table2.insert(testInput[2].first, testInput[2].second);
 		table2.insert(testInput[3].first, testInput[3].second);
+		table2.insert(testInput[4].first, testInput[4].second);
 
 		EXPECT_EQ(table1.getKeys(), expectedKeys);
 		EXPECT_EQ(table2.getKeys(), expectedKeys);
 		EXPECT_EQ(table3.getKeys(), blankKeys);
 	}
 
-	TEST(RelationTable, getKeys_StmtInfo) {
+	TEST(RelationTable, getKeysAll_StmtInfo) {
 		UniqueRelationTable<StmtInfo, StmtInfo> table1, table3;
 		RelationTable<StmtInfo, StmtInfo> table2;
 		StmtInfo p1{ 1, STMT_READ };
 		StmtInfo p2{ 2, STMT_READ };
 		StmtInfo p3{ 3, STMT_READ };
 
-		std::vector<std::pair<StmtInfo, StmtInfo>> testInput{ {p1, p2}, {p1, p3}, {p2, p2}, {p2, p2} };
+		std::vector<std::pair<StmtInfo, StmtInfo>> testInput{ {p1, p2}, {p1, p3}, {p2, p2}, {p2, p2}, {p2, p3} };
 		std::vector<StmtInfo> expectedKeys{ p1, p2 };
 		std::vector<StmtInfo> blankKeys{ };
 
@@ -109,15 +115,73 @@ namespace UnitTesting {
 		table1.insert(testInput[1].first, testInput[1].second);
 		table1.insert(testInput[2].first, testInput[2].second);
 		table1.insert(testInput[3].first, testInput[3].second);
+		table1.insert(testInput[4].first, testInput[4].second);
 
 		table2.insert(testInput[0].first, testInput[0].second);
 		table2.insert(testInput[1].first, testInput[1].second);
 		table2.insert(testInput[2].first, testInput[2].second);
 		table2.insert(testInput[3].first, testInput[3].second);
+		table2.insert(testInput[4].first, testInput[4].second);
 
 		EXPECT_EQ(table1.getKeys(), expectedKeys);
 		EXPECT_EQ(table2.getKeys(), expectedKeys);
 		EXPECT_EQ(table3.getKeys(), blankKeys);
+	}
+
+	TEST(RelationTable, getValuesAll) {
+		UniqueRelationTable<int, int> table1;
+		RelationTable<int, int> table2, table3;
+		std::vector<std::pair<int, int>> testInput{ {1, 2}, {1, 3}, {2, 2}, {2, 2}, {2, 3} };
+		std::vector<int> expectedValuesOne{ 2 };
+		std::vector<int> expectedValuesTwo{ 2, 3 };
+
+		std::vector<int> blankValues{ };
+
+		table1.insert(testInput[0].first, testInput[0].second);
+		table1.insert(testInput[1].first, testInput[1].second);
+		table1.insert(testInput[2].first, testInput[2].second);
+		table1.insert(testInput[3].first, testInput[3].second);
+		table1.insert(testInput[4].first, testInput[4].second);
+
+		table2.insert(testInput[0].first, testInput[0].second);
+		table2.insert(testInput[1].first, testInput[1].second);
+		table2.insert(testInput[2].first, testInput[2].second);
+		table2.insert(testInput[3].first, testInput[3].second);
+		table2.insert(testInput[4].first, testInput[4].second);
+
+		EXPECT_EQ(table1.getValues(), expectedValuesOne);
+		EXPECT_EQ(table2.getValues(), expectedValuesTwo);
+		EXPECT_EQ(table3.getValues(), blankValues);
+	}
+
+	TEST(RelationTable, getKeys) {
+		UniqueRelationTable<int, int> table1;
+		RelationTable<int, int> table2;
+		std::vector<std::pair<int, int>> testInput{ {1, 2}, {1, 3}, {2, 2}, {2, 2}, {2, 3} };
+		std::vector<int> expectedValuesOne{ 1 };
+		std::vector<int> expectedValuesTwo{ 2 };
+		std::vector<int> expectedValuesThree{ 1, 2 };
+
+		std::vector<int> blankValues{ };
+
+		table1.insert(testInput[0].first, testInput[0].second);
+		table1.insert(testInput[1].first, testInput[1].second);
+		table1.insert(testInput[2].first, testInput[2].second);
+		table1.insert(testInput[3].first, testInput[3].second);
+		table1.insert(testInput[4].first, testInput[4].second);
+
+		table2.insert(testInput[0].first, testInput[0].second);
+		table2.insert(testInput[1].first, testInput[1].second);
+		table2.insert(testInput[2].first, testInput[2].second);
+		table2.insert(testInput[3].first, testInput[3].second);
+		table2.insert(testInput[4].first, testInput[4].second);
+
+		EXPECT_EQ(table1.getKeys(1), blankValues);
+		EXPECT_EQ(table1.getKeys(2), expectedValuesThree);
+		EXPECT_EQ(table1.getKeys(3), blankValues);
+		EXPECT_EQ(table2.getKeys(1), blankValues);
+		EXPECT_EQ(table2.getKeys(2), expectedValuesThree);
+		EXPECT_EQ(table2.getKeys(3), expectedValuesThree);
 	}
 
 	TEST(RelationTable, getValues) {
@@ -126,6 +190,8 @@ namespace UnitTesting {
 		std::vector<std::pair<int, int>> testInput{ {1, 2}, {1, 3}, {2, 2}, {2, 2}, {2, 3} };
 		std::vector<int> expectedValuesOne{ 2 };
 		std::vector<int> expectedValuesTwo{ 2, 3 };
+		std::vector<int> expectedValuesThree{ 3 };
+
 		std::vector<int> blankValues{ };
 
 		table1.insert(testInput[0].first, testInput[0].second);
@@ -170,6 +236,24 @@ namespace UnitTesting {
 		EXPECT_EQ(table1.containsKey(2), false);
 	}
 
+	TEST(RelationTable, containsValue) {
+		UniqueRelationTable<int, int> table1;
+		std::vector<std::pair<int, int>> testInput{ {1, 2} };
+
+		table1.insert(testInput[0].first, testInput[0].second);
+
+		EXPECT_EQ(table1.containsValue(2), true);
+		EXPECT_EQ(table1.containsValue(1), false);
+
+		UniqueRelationTable<int, var_name> table2;
+		std::vector<std::pair<int, var_name>> testInput2{ {1, "x"} };
+
+		table2.insert(testInput2[0].first, testInput2[0].second);
+
+		EXPECT_EQ(table2.containsValue("x"), true);
+		EXPECT_EQ(table2.containsValue("y"), false);
+	}
+
 	TEST(RelationTable, containsPair) {
 		UniqueRelationTable<int, int> table1;
 		RelationTable<int, int> table2;
@@ -191,50 +275,52 @@ namespace UnitTesting {
 		table2.insert(testInput[4].first, testInput[4].second);
 
 		EXPECT_EQ(table1.containsPair(1, 2), true);
+		EXPECT_EQ(table1.containsPair(2, 3), false);
 		EXPECT_EQ(table1.containsPair(2, 2), true);
 		EXPECT_EQ(table1.containsPair(1, 3), false);
 		EXPECT_EQ(table1.containsPair(2, 1), false);
 		EXPECT_EQ(table1.containsPair(3, 1), false);
 		EXPECT_EQ(table1.containsPair(0, 1), false);
 
-		EXPECT_EQ(table1.containsPair(1, 2), true);
-		EXPECT_EQ(table1.containsPair(2, 2), true);
-		EXPECT_EQ(table1.containsPair(2, 1), false);
-		EXPECT_EQ(table1.containsPair(3, 1), false);
-		EXPECT_EQ(table1.containsPair(0, 1), false);
+		EXPECT_EQ(table2.containsPair(1, 2), true);
+		EXPECT_EQ(table2.containsPair(2, 3), true);
+		EXPECT_EQ(table2.containsPair(2, 2), true);
+		EXPECT_EQ(table2.containsPair(2, 1), false);
+		EXPECT_EQ(table2.containsPair(3, 1), false);
+		EXPECT_EQ(table2.containsPair(0, 1), false);
 	}
 
-	TEST(RelationTable, reverse) {
-		RelationTable<int, int> table1, table2, reversed_table1, reversed_table3;
-		UniqueRelationTable<int, int> table3;
-		std::vector<std::pair<int, int>> testInput{ {1, 2}, {1, 3}, {2, 2}, {2, 2}, {2, 4} };
+	//TEST(RelationTable, reverse) {
+	//	RelationTable<int, int> table1, table2, reversed_table1, reversed_table3;
+	//	UniqueRelationTable<int, int> table3;
+	//	std::vector<std::pair<int, int>> testInput{ {1, 2}, {1, 3}, {2, 2}, {2, 2}, {2, 4} };
 
-		table1.insert(testInput[0].first, testInput[0].second);
-		table1.insert(testInput[1].first, testInput[1].second);
-		table1.insert(testInput[2].first, testInput[2].second);
-		table1.insert(testInput[3].first, testInput[3].second);
-		table1.insert(testInput[4].first, testInput[4].second);
+	//	table1.insert(testInput[0].first, testInput[0].second);
+	//	table1.insert(testInput[1].first, testInput[1].second);
+	//	table1.insert(testInput[2].first, testInput[2].second);
+	//	table1.insert(testInput[3].first, testInput[3].second);
+	//	table1.insert(testInput[4].first, testInput[4].second);
 
-		table3.insert(testInput[0].first, testInput[0].second);
-		table3.insert(testInput[1].first, testInput[1].second);
-		table3.insert(testInput[2].first, testInput[2].second);
-		table3.insert(testInput[3].first, testInput[3].second);
-		table3.insert(testInput[4].first, testInput[4].second);
+	//	table3.insert(testInput[0].first, testInput[0].second);
+	//	table3.insert(testInput[1].first, testInput[1].second);
+	//	table3.insert(testInput[2].first, testInput[2].second);
+	//	table3.insert(testInput[3].first, testInput[3].second);
+	//	table3.insert(testInput[4].first, testInput[4].second);
 
-		reversed_table1.insert(testInput[0].second, testInput[0].first);
-		reversed_table1.insert(testInput[1].second, testInput[1].first);
-		reversed_table1.insert(testInput[2].second, testInput[2].first);
-		reversed_table1.insert(testInput[3].second, testInput[3].first);
-		reversed_table1.insert(testInput[4].second, testInput[4].first);
+	//	reversed_table1.insert(testInput[0].second, testInput[0].first);
+	//	reversed_table1.insert(testInput[1].second, testInput[1].first);
+	//	reversed_table1.insert(testInput[2].second, testInput[2].first);
+	//	reversed_table1.insert(testInput[3].second, testInput[3].first);
+	//	reversed_table1.insert(testInput[4].second, testInput[4].first);
 
-		reversed_table3.insert(testInput[0].second, testInput[0].first);
-		reversed_table3.insert(testInput[2].second, testInput[2].first);
+	//	reversed_table3.insert(testInput[0].second, testInput[0].first);
+	//	reversed_table3.insert(testInput[2].second, testInput[2].first);
 
-		EXPECT_EQ(table1.findReverse(), reversed_table1);
-		EXPECT_NE(table1.findReverse(), table1);
-		EXPECT_NE(table1.findReverse(), table2);
-		EXPECT_EQ(table3.findReverse(), reversed_table3);
-	}
+	//	EXPECT_EQ(table1.findReverse(), reversed_table1);
+	//	EXPECT_NE(table1.findReverse(), table1);
+	//	EXPECT_NE(table1.findReverse(), table2);
+	//	EXPECT_EQ(table3.findReverse(), reversed_table3);
+	//}
 
 	TEST(RelationTable, clear) {
 		RelationTable<int, int> table1, table2;
