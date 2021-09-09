@@ -231,6 +231,9 @@ namespace UnitTesting {
 		EXPECT_EQ(pkb.getAssignInfo(" z", false), result);
 		EXPECT_EQ(pkb.getAssignInfo("  z  ", false), result);
 		EXPECT_EQ(pkb.getAssignInfo("c", true), result);
+		EXPECT_EQ(pkb.getAssignInfo("c ", false), result);
+		EXPECT_EQ(pkb.getAssignInfo(" c", false), result);
+		EXPECT_EQ(pkb.getAssignInfo("  c  ", false), result);
 	}
 	TEST_F(PKBAdapterTest, isFollowEmpty) {
 		PKB::getInstance().addStmt(STMT_READ);

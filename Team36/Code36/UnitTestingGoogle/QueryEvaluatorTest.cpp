@@ -31,16 +31,16 @@ namespace UnitTesting {
 			PKB::getInstance().addStmt(STMT_ASSIGN);
 			PKB::getInstance().addStmt(STMT_CALL);
 			PKB::getInstance().addStmt(STMT_CALL);
-			PKB::getInstance().addFollows(std::stoi(FOLLOWLEFT1), std::stoi(FOLLOWRIGHT1));
-			PKB::getInstance().addFollows(std::stoi(FOLLOWLEFT2), std::stoi(FOLLOWRIGHT2));
-			PKB::getInstance().addParent(std::stoi(PARENTLEFT1), std::stoi(PARENTRIGHT1));
-			PKB::getInstance().addParent(std::stoi(PARENTLEFT1), std::stoi(PARENTRIGHT2));
-			PKB::getInstance().addParent(std::stoi(PARENTLEFT2), std::stoi(PARENTRIGHT2));
-			PKB::getInstance().addParent(std::stoi(PARENTLEFT3), std::stoi(PARENTRIGHT3));
-			PKB::getInstance().addModifiesS(std::stoi(MODIFIESLEFT1), MODIFIESRIGHT1);
-			PKB::getInstance().addModifiesS(std::stoi(MODIFIESLEFT2), MODIFIESRIGHT2);
-			PKB::getInstance().addUsesS(std::stoi(USESLEFT1), USESRIGHT1);
-			PKB::getInstance().addUsesS(std::stoi(USESLEFT2), USESRIGHT2);
+			PKB::getInstance().addFollows(std::stoi(FOLLOW_LEFT1), std::stoi(FOLLOW_RIGHT1));
+			PKB::getInstance().addFollows(std::stoi(FOLLOW_LEFT2), std::stoi(FOLLOW_RIGHT2));
+			PKB::getInstance().addParent(std::stoi(PARENT_LEFT1), std::stoi(PARENT_RIGHT1));
+			PKB::getInstance().addParent(std::stoi(PARENT_LEFT1), std::stoi(PARENT_RIGHT2));
+			PKB::getInstance().addParent(std::stoi(PARENT_LEFT2), std::stoi(PARENT_RIGHT2));
+			PKB::getInstance().addParent(std::stoi(PARENT_LEFT3), std::stoi(PARENT_RIGHT3));
+			PKB::getInstance().addModifiesS(std::stoi(MODIFIES_LEFT1), MODIFIES_RIGHT1);
+			PKB::getInstance().addModifiesS(std::stoi(MODIFIES_LEFT2), MODIFIES_RIGHT2);
+			PKB::getInstance().addUsesS(std::stoi(USES_LEFT1), USES_RIGHT1);
+			PKB::getInstance().addUsesS(std::stoi(USES_LEFT2), USES_RIGHT2);
 		}
 
 		~QueryEvaluatorTest() override {
@@ -49,7 +49,7 @@ namespace UnitTesting {
 
 		std::vector<Entity> getInvalidConstant(std::vector<std::string> validStmt) {
 			std::vector<Entity> invalid;
-			for (Entity it : validConstantStmtEntity) {
+			for (Entity it : VALID_CONSTANT_STMT_ENTITY) {
 				if (it.getType() == WILD) {
 					continue;
 				}
@@ -74,18 +74,18 @@ namespace UnitTesting {
 
 		void validateRelations(std::vector<RelRef> relations) {
 			for (unsigned int i = 0; i < relations.size(); i++) {
-				for (unsigned int j = 0; j < allSelect.size(); j++) {
-					Query q = initQuery(relations[i], allSelect[j]);
-					EXPECT_EQ(evaluator.evaluateQuery(q), allResult[j]) << "Error at results : " << i + 1 << " : " << j + 1;
+				for (unsigned int j = 0; j < ALL_SELECT.size(); j++) {
+					Query q = initQuery(relations[i], ALL_SELECT[j]);
+					EXPECT_EQ(evaluator.evaluateQuery(q), ALL_RESULT[j]) << "Error at results : " << i + 1 << " : " << j + 1;
 				}
 			}
 		}
 
 		void validateEmptyRelations(std::vector<RelRef> relations) {
 			for (unsigned int i = 0; i < relations.size(); i++) {
-				for (unsigned int j = 0; j < allSelect.size(); j++) {
-					Query q = initQuery(relations[i], allSelect[j]);
-					EXPECT_EQ(evaluator.evaluateQuery(q), emptyResult) << "Error at results : " << i + 1 << " : " << j + 1;
+				for (unsigned int j = 0; j < ALL_SELECT.size(); j++) {
+					Query q = initQuery(relations[i], ALL_SELECT[j]);
+					EXPECT_EQ(evaluator.evaluateQuery(q), EMPTY_RESULT) << "Error at results : " << i + 1 << " : " << j + 1;
 				}
 			}
 		}
@@ -93,7 +93,7 @@ namespace UnitTesting {
 		void validateRelations(std::vector<RelRef> relations, std::vector<Entity> selected, std::vector<std::list<std::string>> results) {
 			for (unsigned int i = 0; i < relations.size(); i++) {
 				for (unsigned int j = 0; j < selected.size(); j++) {
-					Query q = initQuery(relations[i], allSelect[j]);
+					Query q = initQuery(relations[i], ALL_SELECT[j]);
 					EXPECT_EQ(evaluator.evaluateQuery(q), results[j]) << "Error at results : " << i + 1 << " : " << j + 1;
 				}
 			}
@@ -125,134 +125,137 @@ namespace UnitTesting {
 		std::string CALL1 = "11";
 		std::string CALL2 = "12";
 
-		std::string FOLLOWLEFT1 = "1";
-		std::string FOLLOWLEFT2 = "2";
-		std::string FOLLOWRIGHT1 = "2";
-		std::string FOLLOWRIGHT2 = "3";
+		std::string FOLLOW_LEFT1 = "1";
+		std::string FOLLOW_LEFT2 = "2";
+		std::string FOLLOW_RIGHT1 = "2";
+		std::string FOLLOW_RIGHT2 = "3";
 
-		std::vector<std::string> FOLLOWLEFTS = { FOLLOWLEFT1, FOLLOWLEFT2 };
-		std::vector<std::string> FOLLOWRIGHTS = { FOLLOWRIGHT1, FOLLOWRIGHT2 };
+		std::vector<std::string> FOLLOW_LEFTS = { FOLLOW_LEFT1, FOLLOW_LEFT2 };
+		std::vector<std::string> FOLLOW_RIGHTS = { FOLLOW_RIGHT1, FOLLOW_RIGHT2 };
 
-		std::string PARENTLEFT1 = "1";
-		std::string PARENTLEFT2 = "2";
-		std::string PARENTLEFT3 = "3";
-		std::string PARENTRIGHT1 = "2";
-		std::string PARENTRIGHT2 = "3";
-		std::string PARENTRIGHT3 = "4";
+		std::string PARENT_LEFT1 = "1";
+		std::string PARENT_LEFT2 = "2";
+		std::string PARENT_LEFT3 = "3";
+		std::string PARENT_RIGHT1 = "2";
+		std::string PARENT_RIGHT2 = "3";
+		std::string PARENT_RIGHT3 = "4";
 
-		std::vector<std::string> PARENTLEFTS = { PARENTLEFT1, PARENTLEFT2, PARENTLEFT3 };
-		std::vector<std::string> PARENTRIGHTS = { PARENTRIGHT1, PARENTRIGHT2, PARENTRIGHT3 };
+		std::vector<std::string> PARENT_LEFTS = { PARENT_LEFT1, PARENT_LEFT2, PARENT_LEFT3 };
+		std::vector<std::string> PARENT_RIGHTS = { PARENT_RIGHT1, PARENT_RIGHT2, PARENT_RIGHT3 };
 
-		std::string MODIFIESLEFT1 = "1";
-		std::string MODIFIESLEFT2 = "3";
-		std::string MODIFIESRIGHT1 = "x";
-		std::string MODIFIESRIGHT2 = "y";
+		std::string MODIFIES_LEFT1 = "1";
+		std::string MODIFIES_LEFT2 = "3";
+		std::string MODIFIES_RIGHT1 = x;
+		std::string MODIFIES_RIGHT2 = y;
 
-		std::vector<std::string> MODIFIESLEFTS = { MODIFIESLEFT1, MODIFIESLEFT2 };
-		std::vector<std::string> MODIFIESRIGHTS = { MODIFIESRIGHT1, MODIFIESRIGHT2 };
+		std::vector<std::string> MODIFIES_LEFTS = { MODIFIES_LEFT1, MODIFIES_LEFT2 };
+		std::vector<std::string> MODIFIES_RIGHTS = { MODIFIES_RIGHT1, MODIFIES_RIGHT2 };
 
-		std::string USESLEFT1 = "1";
-		std::string USESLEFT2 = "3";
-		std::string USESRIGHT1 = "y";
-		std::string USESRIGHT2 = "x";
+		std::string USES_LEFT1 = "1";
+		std::string USES_LEFT2 = "3";
+		std::string USES_RIGHT1 = y;
+		std::string USES_RIGHT2 = x;
 
-		std::vector<std::string> USESLEFTS = { USESLEFT1, USESLEFT2 };
-		std::vector<std::string> USESRIGHTS = { USESRIGHT1, USESRIGHT2 };
+		std::vector<std::string> USES_LEFTS = { USES_LEFT1, USES_LEFT2 };
+		std::vector<std::string> USES_RIGHTS = { USES_RIGHT1, USES_RIGHT2 };
 
 		std::list<std::string> stmts = { IF1, IF2, WHILE1, WHILE2, READ1, READ2,
 			PRINT1, PRINT2, ASSIGN1, ASSIGN2, CALL1, CALL2 };
 		PKBAdapter pkb;
 		QueryEvaluator evaluator;
 
-		Synonym commonSynonym1 = { "cs1" };
-		Synonym commonSynonym2 = { "cs2" };
+		Synonym COMMON_SYNONYM1 = { "cs1" };
+		Synonym COMMON_SYNONYM2 = { "cs2" };
 
 		// select v
-		std::list<std::string> allVariable = { x, y, z };
-		Entity selectVariable = { VARIABLE, commonSynonym1 };
+		std::list<std::string> ALL_VARIABLE = { x, y, z };
+		Entity selectVariable = { VARIABLE, COMMON_SYNONYM1 };
 		// select c
-		std::list<std::string> allConstant = { c1s, c2s, c3s };
-		Entity selectConstant = { CONSTANT, commonSynonym1 };
+		std::list<std::string> ALL_CONSTANT = { c1s, c2s, c3s };
+		Entity selectConstant = { CONSTANT, COMMON_SYNONYM1 };
 		// select p
-		std::list<std::string> allProcedure = { p1, p2, p3 };
-		Entity selectProcedure = { PROCEDURE, commonSynonym1 };
+		std::list<std::string> ALL_PROCEDURE = { p1, p2, p3 };
+		Entity selectProcedure = { PROCEDURE, COMMON_SYNONYM1 };
 		// select s
-		std::list<std::string> allStmt = stmts;
-		Entity selectStmt = { STMT, commonSynonym1 };
+		std::list<std::string> ALL_STMT = stmts;
+		Entity selectStmt = { STMT, COMMON_SYNONYM1 };
 		// select ifs
-		std::list<std::string> allIfs = { IF1, IF2 };
-		Entity selectIfs = { IF, commonSynonym1 };
+		std::list<std::string> ALL_IF = { IF1, IF2 };
+		Entity selectIfs = { IF, COMMON_SYNONYM1 };
 		// select w
-		std::list<std::string> allWhile = { WHILE1, WHILE2 };
-		Entity selectWhile = { WHILE, commonSynonym1 };
+		std::list<std::string> ALL_WHILE = { WHILE1, WHILE2 };
+		Entity selectWhile = { WHILE, COMMON_SYNONYM1 };
 		// select read
-		std::list<std::string> allRead = { READ1, READ2 };
-		Entity selectRead = { READ, commonSynonym1 };
+		std::list<std::string> ALL_READ = { READ1, READ2 };
+		Entity selectRead = { READ, COMMON_SYNONYM1 };
 		// select print
-		std::list<std::string> allPrint = { PRINT1, PRINT2 };
-		Entity selectPrint = { PRINT, commonSynonym1 };
+		std::list<std::string> ALL_PRINT = { PRINT1, PRINT2 };
+		Entity selectPrint = { PRINT, COMMON_SYNONYM1 };
 		// select assign
-		std::list<std::string> allAssign = { ASSIGN1, ASSIGN2 };
-		Entity selectAssign = { ASSIGN, commonSynonym1 };
+		std::list<std::string> ALL_ASSIGN = { ASSIGN1, ASSIGN2 };
+		Entity selectAssign = { ASSIGN, COMMON_SYNONYM1 };
 		// select call
-		std::list<std::string> allCall = { CALL1, CALL2 };
-		Entity selectCall = { CALL, commonSynonym1 };
+		std::list<std::string> ALL_CALL = { CALL1, CALL2 };
+		Entity selectCall = { CALL, COMMON_SYNONYM1 };
 
-		std::vector<std::list<std::string>> allResult = {
-			allVariable , allConstant , allProcedure, allStmt, allIfs,
-			allWhile, allRead, allPrint, allAssign, allCall };
+		std::vector<std::list<std::string>> ALL_RESULT = {
+			ALL_VARIABLE , ALL_CONSTANT , ALL_PROCEDURE, ALL_STMT, ALL_IF,
+			ALL_WHILE, ALL_READ, ALL_PRINT, ALL_ASSIGN, ALL_CALL };
 
-		std::vector<Entity> allSelect = {
+		std::vector<Entity> ALL_SELECT = {
 			selectVariable , selectConstant , selectProcedure, selectStmt, selectIfs,
 			selectWhile, selectRead, selectPrint, selectAssign, selectCall };
 
-		std::list<std::string> emptyResult = {};
+		std::list<std::string> EMPTY_RESULT = {};
 
-		std::vector<Entity> validConstantStmtEntity = { { WILD },
+		Entity WILD_CARD = { WILD };
+
+		std::vector<Entity> VALID_CONSTANT_STMT_ENTITY = { WILD_CARD,
 			{STMT, "1"}, {STMT, "2"}, {STMT, "3"}, {STMT, "4"}, {STMT, "5"}, {STMT, "6"},
 			{STMT, "7"}, {STMT, "8"}, {STMT, "9"}, {STMT, "10"}, {STMT, "11"}, {STMT, "12"}
 		};
 
-		std::vector<Entity> allVariables = { { VARIABLE, x }, { VARIABLE, y }, { VARIABLE, z } };
+
+		std::vector<Entity> ALL_VARIABLES = { { VARIABLE, x }, { VARIABLE, y }, { VARIABLE, z } };
 	};
 
 	//Evaluator Select statement without any relation/Pattern
 	TEST_F(QueryEvaluatorTest, evaluateQueryRaw) {
-		for (unsigned int i = 0; i < allSelect.size(); i++) {
+		for (unsigned int i = 0; i < ALL_SELECT.size(); i++) {
 			Query q;
-			q.addSelected(allSelect[i]);
-			EXPECT_EQ(evaluator.evaluateQuery(q), allResult[i]) << "Error at results : " << i + 1;
+			q.addSelected(ALL_SELECT[i]);
+			EXPECT_EQ(evaluator.evaluateQuery(q), ALL_RESULT[i]) << "Error at results : " << i + 1;
 		}
 	}
 
 	//Follow Relation Test ----------------------------------------------------------------------------------------------------
 	TEST_F(QueryEvaluatorTest, evaluateQueryFollowBooleanTrue) {
 		RelType type = FOLLOWS;
-		std::string left1 = FOLLOWLEFT1;
-		std::string left2 = FOLLOWLEFT2;
-		std::string right1 = FOLLOWRIGHT1;
-		std::string right2 = FOLLOWRIGHT2;
+		std::string left1 = FOLLOW_LEFT1;
+		std::string left2 = FOLLOW_LEFT2;
+		std::string right1 = FOLLOW_RIGHT1;
+		std::string right2 = FOLLOW_RIGHT2;
 
 		std::vector<RelRef> relations;
 		//Test true boolean equation
-		relations.push_back(RelRef(type, { WILD }, { WILD }));
+		relations.push_back(RelRef(type, WILD_CARD, WILD_CARD));
 		relations.push_back(RelRef(type, { STMT, left1 }, { STMT, right1 }));
 		relations.push_back(RelRef(type, { STMT, left2 }, { STMT, right2 }));
-		relations.push_back(RelRef(type, { STMT, left1 }, { WILD }));
-		relations.push_back(RelRef(type, { STMT, left2 }, { WILD }));
-		relations.push_back(RelRef(type, { WILD }, { STMT, right1 }));
-		relations.push_back(RelRef(type, { WILD }, { STMT, right2 }));
+		relations.push_back(RelRef(type, { STMT, left1 }, WILD_CARD));
+		relations.push_back(RelRef(type, { STMT, left2 }, WILD_CARD));
+		relations.push_back(RelRef(type, WILD_CARD, { STMT, right1 }));
+		relations.push_back(RelRef(type, WILD_CARD, { STMT, right2 }));
 
 		validateRelations(relations);
 	}
 	TEST_F(QueryEvaluatorTest, evaluateQueryFollowBooleanFalse) {
 		RelType type = FOLLOWS;
-		std::vector<std::string> lefts = FOLLOWLEFTS;
-		std::vector<std::string> rights = FOLLOWRIGHTS;
-		std::string left1 = FOLLOWLEFT1;
-		std::string left2 = FOLLOWLEFT2;
-		std::string right1 = FOLLOWRIGHT1;
-		std::string right2 = FOLLOWRIGHT2;
+		std::vector<std::string> lefts = FOLLOW_LEFTS;
+		std::vector<std::string> rights = FOLLOW_RIGHTS;
+		std::string left1 = FOLLOW_LEFT1;
+		std::string left2 = FOLLOW_LEFT2;
+		std::string right1 = FOLLOW_RIGHT1;
+		std::string right2 = FOLLOW_RIGHT2;
 
 		std::vector<RelRef> relations;
 		//Test false boolean equation
@@ -261,15 +264,15 @@ namespace UnitTesting {
 
 		std::vector<Entity> invalidLefts = getInvalidConstant(lefts);
 		for (unsigned int k = 0; k < invalidLefts.size(); k++) {
-			for (unsigned int i = 0; i < validConstantStmtEntity.size(); i++) {
-				relations.push_back(RelRef(type, invalidLefts[k], validConstantStmtEntity[i]));
+			for (unsigned int i = 0; i < VALID_CONSTANT_STMT_ENTITY.size(); i++) {
+				relations.push_back(RelRef(type, invalidLefts[k], VALID_CONSTANT_STMT_ENTITY[i]));
 			}
 		}
 
 		std::vector<Entity> invalidRight = getInvalidConstant(rights);
 		for (unsigned int k = 0; k < invalidRight.size(); k++) {
-			for (unsigned int i = 0; i < validConstantStmtEntity.size(); i++) {
-				relations.push_back(RelRef(type, validConstantStmtEntity[i], invalidRight[k]));
+			for (unsigned int i = 0; i < VALID_CONSTANT_STMT_ENTITY.size(); i++) {
+				relations.push_back(RelRef(type, VALID_CONSTANT_STMT_ENTITY[i], invalidRight[k]));
 			}
 		}
 
@@ -278,8 +281,8 @@ namespace UnitTesting {
 	TEST_F(QueryEvaluatorTest, evaluateQueryFollowFilterEmpty) {
 		RelType type = FOLLOWS;
 		std::vector<RelRef> relations;
-		std::vector<std::string> lefts = FOLLOWLEFTS;
-		std::vector<std::string> rights = FOLLOWRIGHTS;
+		std::vector<std::string> lefts = FOLLOW_LEFTS;
+		std::vector<std::string> rights = FOLLOW_RIGHTS;
 
 		std::vector<Entity> invalidLefts = getInvalidConstant(lefts);
 		for (Entity it : invalidLefts) {
@@ -296,10 +299,10 @@ namespace UnitTesting {
 	TEST_F(QueryEvaluatorTest, evaluateQueryFollowFilterNoCommonSynonymTrue) {
 		RelType type = FOLLOWS;
 		std::vector<RelRef> relations;
-		std::string left1 = FOLLOWLEFT1;
-		std::string left2 = FOLLOWLEFT2;
-		std::string right1 = FOLLOWRIGHT1;
-		std::string right2 = FOLLOWRIGHT2;
+		std::string left1 = FOLLOW_LEFT1;
+		std::string left2 = FOLLOW_LEFT2;
+		std::string right1 = FOLLOW_RIGHT1;
+		std::string right2 = FOLLOW_RIGHT2;
 		//Have Result for matching header
 		relations.push_back(RelRef(type, { STMT, Synonym{"a"} }, { STMT, Synonym{"a"} }));
 		relations.push_back(RelRef(type, { IF, Synonym{"a"} }, { STMT, Synonym{"a"} }));
@@ -307,11 +310,11 @@ namespace UnitTesting {
 		relations.push_back(RelRef(type, { STMT, Synonym{"a"} }, { WHILE, Synonym{"a"} }));
 		relations.push_back(RelRef(type, { IF, Synonym{"a"} }, { IF, Synonym{"a"} }));
 		relations.push_back(RelRef(type, { IF, Synonym{"a"} }, { WHILE, Synonym{"a"} }));
-		relations.push_back(RelRef(type, { WILD }, { STMT, Synonym{"a"} }));
-		relations.push_back(RelRef(type, { WILD }, { IF, Synonym{"a"} }));
-		relations.push_back(RelRef(type, { WILD }, { WHILE, Synonym{"a"} }));
-		relations.push_back(RelRef(type, { STMT, Synonym{"a"} }, { WILD }));
-		relations.push_back(RelRef(type, { IF, Synonym{"a"} }, { WILD }));
+		relations.push_back(RelRef(type, WILD_CARD, { STMT, Synonym{"a"} }));
+		relations.push_back(RelRef(type, WILD_CARD, { IF, Synonym{"a"} }));
+		relations.push_back(RelRef(type, WILD_CARD, { WHILE, Synonym{"a"} }));
+		relations.push_back(RelRef(type, { STMT, Synonym{"a"} }, WILD_CARD));
+		relations.push_back(RelRef(type, { IF, Synonym{"a"} }, WILD_CARD));
 		relations.push_back(RelRef(type, { STMT, left1 }, { STMT, Synonym{"a"} }));
 		relations.push_back(RelRef(type, { STMT, left1 }, { IF, Synonym{"a"} }));
 		relations.push_back(RelRef(type, { STMT, left2 }, { STMT, Synonym{"a"} }));
@@ -327,16 +330,16 @@ namespace UnitTesting {
 	TEST_F(QueryEvaluatorTest, evaluateQueryFollowFilterNoCommonSynonymFalse) {
 		RelType type = FOLLOWS;
 
-		std::vector<std::string> lefts = FOLLOWLEFTS;
-		std::vector<std::string> rights = FOLLOWRIGHTS;
+		std::vector<std::string> lefts = FOLLOW_LEFTS;
+		std::vector<std::string> rights = FOLLOW_RIGHTS;
 
 		std::vector<RelRef> relations;
 		//Empty result for non-matching header for double column
 		std::vector<Entity> synonyms;
-		synonyms.push_back({ PRINT, commonSynonym1 });
-		synonyms.push_back({ READ, commonSynonym1 });
-		synonyms.push_back({ ASSIGN, commonSynonym1 });
-		synonyms.push_back({ CALL, commonSynonym1 });
+		synonyms.push_back({ PRINT, COMMON_SYNONYM1 });
+		synonyms.push_back({ READ, COMMON_SYNONYM1 });
+		synonyms.push_back({ ASSIGN, COMMON_SYNONYM1 });
+		synonyms.push_back({ CALL, COMMON_SYNONYM1 });
 
 		for (unsigned int k = 0; k < synonyms.size(); k++) {
 			for (unsigned int j = 0; j < synonyms.size(); j++) {
@@ -346,9 +349,9 @@ namespace UnitTesting {
 
 		//Empty result for non-matching header for single column
 		for (unsigned int k = 0; k < synonyms.size(); k++) {
-			relations.push_back(RelRef(type, { WILD }, synonyms[k]));
-			relations.push_back(RelRef(type, { synonyms[k] }, { WILD }));
-			relations.push_back(RelRef(type, { synonyms[k] }, { WILD }));
+			relations.push_back(RelRef(type, WILD_CARD, synonyms[k]));
+			relations.push_back(RelRef(type, { synonyms[k] }, WILD_CARD));
+			relations.push_back(RelRef(type, { synonyms[k] }, WILD_CARD));
 
 			for (auto valid : lefts) {
 				relations.push_back(RelRef(type, { STMT, valid }, { synonyms[k] }));
@@ -363,21 +366,21 @@ namespace UnitTesting {
 	}
 	TEST_F(QueryEvaluatorTest, evaluateQueryFollowFilterCommonSynonym) {
 		RelType type = FOLLOWS;
-		std::vector<std::string> lefts = FOLLOWLEFTS;
-		std::vector<std::string> rights = FOLLOWRIGHTS;
-		std::string left1 = FOLLOWLEFT1;
-		std::string left2 = FOLLOWLEFT2;
-		std::string right1 = FOLLOWRIGHT1;
-		std::string right2 = FOLLOWRIGHT2;
+		std::vector<std::string> lefts = FOLLOW_LEFTS;
+		std::vector<std::string> rights = FOLLOW_RIGHTS;
+		std::string left1 = FOLLOW_LEFT1;
+		std::string left2 = FOLLOW_LEFT2;
+		std::string right1 = FOLLOW_RIGHT1;
+		std::string right2 = FOLLOW_RIGHT2;
 
 		std::vector<Entity> selectedList;
-		selectedList.push_back({ STMT, commonSynonym1 });
-		selectedList.push_back({ IF, commonSynonym1 });
-		selectedList.push_back({ WHILE, commonSynonym1 });
-		selectedList.push_back({ PRINT, commonSynonym1 });
-		selectedList.push_back({ READ, commonSynonym1 });
-		selectedList.push_back({ ASSIGN, commonSynonym1 });
-		selectedList.push_back({ CALL, commonSynonym1 });
+		selectedList.push_back({ STMT, COMMON_SYNONYM1 });
+		selectedList.push_back({ IF, COMMON_SYNONYM1 });
+		selectedList.push_back({ WHILE, COMMON_SYNONYM1 });
+		selectedList.push_back({ PRINT, COMMON_SYNONYM1 });
+		selectedList.push_back({ READ, COMMON_SYNONYM1 });
+		selectedList.push_back({ ASSIGN, COMMON_SYNONYM1 });
+		selectedList.push_back({ CALL, COMMON_SYNONYM1 });
 
 		//Test case for Select a such that Follow(selected, a)
 		std::list<std::string> result1 = { left1, left2 };
@@ -398,7 +401,7 @@ namespace UnitTesting {
 
 		//Test case for Select a such that Follow(selected, _)
 		for (unsigned int i = 0; i < selectedList.size(); i++) {
-			RelRef relation(type, selectedList[i], { WILD });
+			RelRef relation(type, selectedList[i], WILD_CARD);
 			Query q = initQuery(relation, selectedList[i]);
 			EXPECT_EQ(evaluator.evaluateQuery(q), resultList[i]) << "Error at results : " << i + 1;
 		}
@@ -415,7 +418,7 @@ namespace UnitTesting {
 
 		//Test case for Select a such that Follow(_, selected)
 		for (unsigned int i = 0; i < selectedList.size(); i++) {
-			RelRef relation(type, { WILD }, selectedList[i]);
+			RelRef relation(type, WILD_CARD, selectedList[i]);
 			Query q = initQuery(relation, selectedList[i]);
 			EXPECT_EQ(evaluator.evaluateQuery(q), resultList[i]) << "Error at results : " << i + 1;
 		}
@@ -446,7 +449,7 @@ namespace UnitTesting {
 			for (unsigned int i = 0; i < selectedList.size(); i++) {
 				RelRef relation(type, emptyList[j], selectedList[i]);
 				Query q = initQuery(relation, selectedList[i]);
-				EXPECT_EQ(evaluator.evaluateQuery(q), emptyResult) << "Error at results : " << i + 1;
+				EXPECT_EQ(evaluator.evaluateQuery(q), EMPTY_RESULT) << "Error at results : " << i + 1;
 			}
 		}
 
@@ -476,7 +479,7 @@ namespace UnitTesting {
 			for (unsigned int i = 0; i < selectedList.size(); i++) {
 				RelRef relation(type, selectedList[i], emptyList[j]);
 				Query q = initQuery(relation, selectedList[i]);
-				EXPECT_EQ(evaluator.evaluateQuery(q), emptyResult) << "Error at results : " << i + 1;
+				EXPECT_EQ(evaluator.evaluateQuery(q), EMPTY_RESULT) << "Error at results : " << i + 1;
 			}
 		}
 	}
@@ -484,33 +487,33 @@ namespace UnitTesting {
 	//FollowT Relation Test ----------------------------------------------------------------------------------------------------
 	TEST_F(QueryEvaluatorTest, evaluateQueryFollowTBooleanTrue) {
 		RelType type = FOLLOWS_T;
-		std::string left1 = FOLLOWLEFT1;
-		std::string left2 = FOLLOWLEFT2;
-		std::string right1 = FOLLOWRIGHT1;
-		std::string right2 = FOLLOWRIGHT2;
+		std::string left1 = FOLLOW_LEFT1;
+		std::string left2 = FOLLOW_LEFT2;
+		std::string right1 = FOLLOW_RIGHT1;
+		std::string right2 = FOLLOW_RIGHT2;
 
 		std::vector<RelRef> relations;
 		//Test true boolean equation
-		relations.push_back(RelRef(type, { WILD }, { WILD }));
+		relations.push_back(RelRef(type, WILD_CARD, WILD_CARD));
 		relations.push_back(RelRef(type, { STMT, left1 }, { STMT, right1 }));
 		relations.push_back(RelRef(type, { STMT, left1 }, { STMT, right2 }));
 		relations.push_back(RelRef(type, { STMT, left2 }, { STMT, right2 }));
-		relations.push_back(RelRef(type, { STMT, left1 }, { WILD }));
-		relations.push_back(RelRef(type, { STMT, left2 }, { WILD }));
-		relations.push_back(RelRef(type, { WILD }, { STMT, right1 }));
-		relations.push_back(RelRef(type, { WILD }, { STMT, right2 }));
+		relations.push_back(RelRef(type, { STMT, left1 }, WILD_CARD));
+		relations.push_back(RelRef(type, { STMT, left2 }, WILD_CARD));
+		relations.push_back(RelRef(type, WILD_CARD, { STMT, right1 }));
+		relations.push_back(RelRef(type, WILD_CARD, { STMT, right2 }));
 
 		validateRelations(relations);
 	}
 
 	TEST_F(QueryEvaluatorTest, evaluateQueryFollowTBooleanFalse) {
 		RelType type = FOLLOWS_T;
-		std::vector<std::string> lefts = FOLLOWLEFTS;
-		std::vector<std::string> rights = FOLLOWRIGHTS;
-		std::string left1 = FOLLOWLEFT1;
-		std::string left2 = FOLLOWLEFT2;
-		std::string right1 = FOLLOWRIGHT1;
-		std::string right2 = FOLLOWRIGHT2;
+		std::vector<std::string> lefts = FOLLOW_LEFTS;
+		std::vector<std::string> rights = FOLLOW_RIGHTS;
+		std::string left1 = FOLLOW_LEFT1;
+		std::string left2 = FOLLOW_LEFT2;
+		std::string right1 = FOLLOW_RIGHT1;
+		std::string right2 = FOLLOW_RIGHT2;
 
 		std::vector<RelRef> relations;
 		//Test false boolean equation
@@ -518,15 +521,15 @@ namespace UnitTesting {
 
 		std::vector<Entity> invalidLefts = getInvalidConstant(lefts);
 		for (unsigned int k = 0; k < invalidLefts.size(); k++) {
-			for (unsigned int i = 0; i < validConstantStmtEntity.size(); i++) {
-				relations.push_back(RelRef(type, invalidLefts[k], validConstantStmtEntity[i]));
+			for (unsigned int i = 0; i < VALID_CONSTANT_STMT_ENTITY.size(); i++) {
+				relations.push_back(RelRef(type, invalidLefts[k], VALID_CONSTANT_STMT_ENTITY[i]));
 			}
 		}
 
 		std::vector<Entity> invalidRight = getInvalidConstant(rights);
 		for (unsigned int k = 0; k < invalidRight.size(); k++) {
-			for (unsigned int i = 0; i < validConstantStmtEntity.size(); i++) {
-				relations.push_back(RelRef(type, validConstantStmtEntity[i], invalidRight[k]));
+			for (unsigned int i = 0; i < VALID_CONSTANT_STMT_ENTITY.size(); i++) {
+				relations.push_back(RelRef(type, VALID_CONSTANT_STMT_ENTITY[i], invalidRight[k]));
 			}
 		}
 
@@ -536,8 +539,8 @@ namespace UnitTesting {
 	TEST_F(QueryEvaluatorTest, evaluateQueryFollowTFilterEmpty) {
 		RelType type = FOLLOWS_T;
 		std::vector<RelRef> relations;
-		std::vector<std::string> lefts = FOLLOWLEFTS;
-		std::vector<std::string> rights = FOLLOWRIGHTS;
+		std::vector<std::string> lefts = FOLLOW_LEFTS;
+		std::vector<std::string> rights = FOLLOW_RIGHTS;
 
 		std::vector<Entity> invalidLefts = getInvalidConstant(lefts);
 		for (Entity it : invalidLefts) {
@@ -554,10 +557,10 @@ namespace UnitTesting {
 
 	TEST_F(QueryEvaluatorTest, evaluateQueryFollowTFilterNoCommonSynonymTrue) {
 		RelType type = FOLLOWS_T;
-		std::string left1 = FOLLOWLEFT1;
-		std::string left2 = FOLLOWLEFT2;
-		std::string right1 = FOLLOWRIGHT1;
-		std::string right2 = FOLLOWRIGHT2;
+		std::string left1 = FOLLOW_LEFT1;
+		std::string left2 = FOLLOW_LEFT2;
+		std::string right1 = FOLLOW_RIGHT1;
+		std::string right2 = FOLLOW_RIGHT2;
 
 		std::vector<RelRef> relations;
 		//Have Result for matching header
@@ -566,11 +569,11 @@ namespace UnitTesting {
 		relations.push_back(RelRef(type, { STMT, Synonym{"a"} }, { IF, Synonym{"a"} }));
 		relations.push_back(RelRef(type, { IF, Synonym{"a"} }, { IF, Synonym{"a"} }));
 		relations.push_back(RelRef(type, { IF, Synonym{"a"} }, { WHILE, Synonym{"a"} }));
-		relations.push_back(RelRef(type, { WILD }, { STMT, Synonym{"a"} }));
-		relations.push_back(RelRef(type, { WILD }, { IF, Synonym{"a"} }));
-		relations.push_back(RelRef(type, { WILD }, { WHILE, Synonym{"a"} }));
-		relations.push_back(RelRef(type, { STMT, Synonym{"a"} }, { WILD }));
-		relations.push_back(RelRef(type, { IF, Synonym{"a"} }, { WILD }));
+		relations.push_back(RelRef(type, WILD_CARD, { STMT, Synonym{"a"} }));
+		relations.push_back(RelRef(type, WILD_CARD, { IF, Synonym{"a"} }));
+		relations.push_back(RelRef(type, WILD_CARD, { WHILE, Synonym{"a"} }));
+		relations.push_back(RelRef(type, { STMT, Synonym{"a"} }, WILD_CARD));
+		relations.push_back(RelRef(type, { IF, Synonym{"a"} }, WILD_CARD));
 		relations.push_back(RelRef(type, { STMT, left1 }, { STMT, Synonym{"a"} }));
 		relations.push_back(RelRef(type, { STMT, left1 }, { IF, Synonym{"a"} }));
 		relations.push_back(RelRef(type, { STMT, left1 }, { WHILE, Synonym{"a"} }));
@@ -586,16 +589,16 @@ namespace UnitTesting {
 
 	TEST_F(QueryEvaluatorTest, evaluateQueryFollowTFilterNoCommonSynonymFalse) {
 		RelType type = FOLLOWS_T;
-		std::vector<std::string> lefts = FOLLOWLEFTS;
-		std::vector<std::string> rights = FOLLOWRIGHTS;
+		std::vector<std::string> lefts = FOLLOW_LEFTS;
+		std::vector<std::string> rights = FOLLOW_RIGHTS;
 
 		std::vector<RelRef> relations;
 		//Empty result for non-matching header for double column
 		std::vector<Entity> synonyms;
-		synonyms.push_back({ PRINT, commonSynonym1 });
-		synonyms.push_back({ READ, commonSynonym1 });
-		synonyms.push_back({ ASSIGN, commonSynonym1 });
-		synonyms.push_back({ CALL, commonSynonym1 });
+		synonyms.push_back({ PRINT, COMMON_SYNONYM1 });
+		synonyms.push_back({ READ, COMMON_SYNONYM1 });
+		synonyms.push_back({ ASSIGN, COMMON_SYNONYM1 });
+		synonyms.push_back({ CALL, COMMON_SYNONYM1 });
 
 		for (unsigned int k = 0; k < synonyms.size(); k++) {
 			for (unsigned int j = 0; j < synonyms.size(); j++) {
@@ -605,9 +608,9 @@ namespace UnitTesting {
 
 		//Empty result for non-matching header for single column
 		for (unsigned int k = 0; k < synonyms.size(); k++) {
-			relations.push_back(RelRef(type, { WILD }, synonyms[k]));
-			relations.push_back(RelRef(type, { synonyms[k] }, { WILD }));
-			relations.push_back(RelRef(type, { synonyms[k] }, { WILD }));
+			relations.push_back(RelRef(type, WILD_CARD, synonyms[k]));
+			relations.push_back(RelRef(type, { synonyms[k] }, WILD_CARD));
+			relations.push_back(RelRef(type, { synonyms[k] }, WILD_CARD));
 
 			for (auto valid : lefts) {
 				relations.push_back(RelRef(type, { STMT, valid }, { synonyms[k] }));
@@ -623,25 +626,25 @@ namespace UnitTesting {
 
 	TEST_F(QueryEvaluatorTest, evaluateQueryFollowTFilterCommonSynonym) {
 		RelType type = FOLLOWS_T;
-		std::vector<std::string> lefts = FOLLOWLEFTS;
-		std::vector<std::string> rights = FOLLOWRIGHTS;
-		std::string left1 = FOLLOWLEFT1;
-		std::string left2 = FOLLOWLEFT2;
-		std::string right1 = FOLLOWRIGHT1;
-		std::string right2 = FOLLOWRIGHT2;
+		std::vector<std::string> lefts = FOLLOW_LEFTS;
+		std::vector<std::string> rights = FOLLOW_RIGHTS;
+		std::string left1 = FOLLOW_LEFT1;
+		std::string left2 = FOLLOW_LEFT2;
+		std::string right1 = FOLLOW_RIGHT1;
+		std::string right2 = FOLLOW_RIGHT2;
 
 		std::vector<Entity> selectedList;
-		selectedList.push_back({ STMT, commonSynonym1 });
-		selectedList.push_back({ IF, commonSynonym1 });
-		selectedList.push_back({ WHILE, commonSynonym1 });
-		selectedList.push_back({ PRINT, commonSynonym1 });
-		selectedList.push_back({ READ, commonSynonym1 });
-		selectedList.push_back({ ASSIGN, commonSynonym1 });
-		selectedList.push_back({ CALL, commonSynonym1 });
+		selectedList.push_back({ STMT, COMMON_SYNONYM1 });
+		selectedList.push_back({ IF, COMMON_SYNONYM1 });
+		selectedList.push_back({ WHILE, COMMON_SYNONYM1 });
+		selectedList.push_back({ PRINT, COMMON_SYNONYM1 });
+		selectedList.push_back({ READ, COMMON_SYNONYM1 });
+		selectedList.push_back({ ASSIGN, COMMON_SYNONYM1 });
+		selectedList.push_back({ CALL, COMMON_SYNONYM1 });
 
 		//Test case for Select a such that FollowT(selected, a)
-		std::list<std::string> result1 = { FOLLOWLEFT1, FOLLOWLEFT2 };
-		std::list<std::string> result2 = { FOLLOWLEFT1, FOLLOWLEFT2 };
+		std::list<std::string> result1 = { FOLLOW_LEFT1, FOLLOW_LEFT2 };
+		std::list<std::string> result2 = { FOLLOW_LEFT1, FOLLOW_LEFT2 };
 		std::list<std::string> result3 = { };
 		std::list<std::string> result4 = { };
 		std::list<std::string> result5 = { };
@@ -658,7 +661,7 @@ namespace UnitTesting {
 
 		//Test case for Select a such that FollowT(selected, _)
 		for (unsigned int i = 0; i < selectedList.size(); i++) {
-			RelRef relation(type, selectedList[i], { WILD });
+			RelRef relation(type, selectedList[i], WILD_CARD);
 			Query q;
 			q.addRelation(relation);
 			q.addSelected(selectedList[i]);
@@ -677,7 +680,7 @@ namespace UnitTesting {
 
 		//Test case for Select a such that FollowT(_, selected)
 		for (unsigned int i = 0; i < selectedList.size(); i++) {
-			RelRef relation(type, { WILD }, selectedList[i]);
+			RelRef relation(type, WILD_CARD, selectedList[i]);
 			Query q = initQuery(relation, selectedList[i]);
 			EXPECT_EQ(evaluator.evaluateQuery(q), resultList[i]) << "Error at results : " << i + 1;
 		}
@@ -708,7 +711,7 @@ namespace UnitTesting {
 			for (unsigned int i = 0; i < selectedList.size(); i++) {
 				RelRef relation(type, emptyList[j], selectedList[i]);
 				Query q = initQuery(relation, selectedList[i]);
-				EXPECT_EQ(evaluator.evaluateQuery(q), emptyResult) << "Error at results : " << i + 1;
+				EXPECT_EQ(evaluator.evaluateQuery(q), EMPTY_RESULT) << "Error at results : " << i + 1;
 			}
 		}
 
@@ -738,7 +741,7 @@ namespace UnitTesting {
 			for (unsigned int i = 0; i < selectedList.size(); i++) {
 				RelRef relation(type, selectedList[i], emptyList[j]);
 				Query q = initQuery(relation, selectedList[i]);
-				EXPECT_EQ(evaluator.evaluateQuery(q), emptyResult) << "Error at results : " << i + 1;
+				EXPECT_EQ(evaluator.evaluateQuery(q), EMPTY_RESULT) << "Error at results : " << i + 1;
 			}
 		}
 	}
@@ -746,40 +749,40 @@ namespace UnitTesting {
 	//Parent Relation Test ----------------------------------------------------------------------------------------------------
 	TEST_F(QueryEvaluatorTest, evaluateQueryParentBooleanTrue) {
 		RelType type = PARENT;
-		std::string left1 = PARENTLEFT1;
-		std::string left2 = PARENTLEFT2;
-		std::string left3 = PARENTLEFT3;
-		std::string right1 = PARENTRIGHT1;
-		std::string right2 = PARENTRIGHT2;
-		std::string right3 = PARENTRIGHT3;
+		std::string left1 = PARENT_LEFT1;
+		std::string left2 = PARENT_LEFT2;
+		std::string left3 = PARENT_LEFT3;
+		std::string right1 = PARENT_RIGHT1;
+		std::string right2 = PARENT_RIGHT2;
+		std::string right3 = PARENT_RIGHT3;
 
 		std::vector<RelRef> relations;
 		//Test true boolean equation
-		relations.push_back(RelRef(type, { WILD }, { WILD }));
+		relations.push_back(RelRef(type, WILD_CARD, WILD_CARD));
 		relations.push_back(RelRef(type, { STMT, left1 }, { STMT, right1 }));
 		relations.push_back(RelRef(type, { STMT, left1 }, { STMT, right2 }));
 		relations.push_back(RelRef(type, { STMT, left2 }, { STMT, right2 }));
 		relations.push_back(RelRef(type, { STMT, left3 }, { STMT, right3 }));
-		relations.push_back(RelRef(type, { STMT, left1 }, { WILD }));
-		relations.push_back(RelRef(type, { STMT, left2 }, { WILD }));
-		relations.push_back(RelRef(type, { STMT, left3 }, { WILD }));
-		relations.push_back(RelRef(type, { WILD }, { STMT, right1 }));
-		relations.push_back(RelRef(type, { WILD }, { STMT, right2 }));
-		relations.push_back(RelRef(type, { WILD }, { STMT, right3 }));
+		relations.push_back(RelRef(type, { STMT, left1 }, WILD_CARD));
+		relations.push_back(RelRef(type, { STMT, left2 }, WILD_CARD));
+		relations.push_back(RelRef(type, { STMT, left3 }, WILD_CARD));
+		relations.push_back(RelRef(type, WILD_CARD, { STMT, right1 }));
+		relations.push_back(RelRef(type, WILD_CARD, { STMT, right2 }));
+		relations.push_back(RelRef(type, WILD_CARD, { STMT, right3 }));
 
 		validateRelations(relations);
 	}
 	TEST_F(QueryEvaluatorTest, evaluateQueryParentBooleanFalse) {
 		RelType type = PARENT;
 		std::vector<RelRef> relations;
-		std::vector<std::string> lefts = PARENTLEFTS;
-		std::vector<std::string> rights = PARENTRIGHTS;
-		std::string left1 = PARENTLEFT1;
-		std::string left2 = PARENTLEFT2;
-		std::string left3 = PARENTLEFT3;
-		std::string right1 = PARENTRIGHT1;
-		std::string right2 = PARENTRIGHT2;
-		std::string right3 = PARENTRIGHT3;
+		std::vector<std::string> lefts = PARENT_LEFTS;
+		std::vector<std::string> rights = PARENT_RIGHTS;
+		std::string left1 = PARENT_LEFT1;
+		std::string left2 = PARENT_LEFT2;
+		std::string left3 = PARENT_LEFT3;
+		std::string right1 = PARENT_RIGHT1;
+		std::string right2 = PARENT_RIGHT2;
+		std::string right3 = PARENT_RIGHT3;
 
 		//Test false boolean equation
 		relations.push_back(RelRef(type, { STMT, left1 }, { STMT, right3 }));
@@ -790,16 +793,16 @@ namespace UnitTesting {
 		std::vector<Entity> invalidLefts = getInvalidConstant(lefts);
 
 		for (unsigned int k = 0; k < invalidLefts.size(); k++) {
-			for (unsigned int i = 0; i < validConstantStmtEntity.size(); i++) {
-				relations.push_back(RelRef(type, invalidLefts[k], validConstantStmtEntity[i]));
+			for (unsigned int i = 0; i < VALID_CONSTANT_STMT_ENTITY.size(); i++) {
+				relations.push_back(RelRef(type, invalidLefts[k], VALID_CONSTANT_STMT_ENTITY[i]));
 			}
 		}
 
 		std::vector<Entity> invalidRight = getInvalidConstant(rights);
 
 		for (unsigned int k = 0; k < invalidRight.size(); k++) {
-			for (unsigned int i = 0; i < validConstantStmtEntity.size(); i++) {
-				relations.push_back(RelRef(type, validConstantStmtEntity[i], invalidRight[k]));
+			for (unsigned int i = 0; i < VALID_CONSTANT_STMT_ENTITY.size(); i++) {
+				relations.push_back(RelRef(type, VALID_CONSTANT_STMT_ENTITY[i], invalidRight[k]));
 			}
 		}
 		validateEmptyRelations(relations);
@@ -807,8 +810,8 @@ namespace UnitTesting {
 	TEST_F(QueryEvaluatorTest, evaluateQueryParentFilterEmpty) {
 		RelType type = PARENT;
 		std::vector<RelRef> relations;
-		std::vector<std::string> lefts = PARENTLEFTS;
-		std::vector<std::string> rights = PARENTRIGHTS;
+		std::vector<std::string> lefts = PARENT_LEFTS;
+		std::vector<std::string> rights = PARENT_RIGHTS;
 
 		std::vector<Entity> invalidLefts = getInvalidConstant(lefts);
 		for (Entity it : invalidLefts) {
@@ -826,12 +829,12 @@ namespace UnitTesting {
 		RelType type = PARENT;
 		std::vector<RelRef> relations;
 
-		std::string left1 = PARENTLEFT1;
-		std::string left2 = PARENTLEFT2;
-		std::string left3 = PARENTLEFT3;
-		std::string right1 = PARENTRIGHT1;
-		std::string right2 = PARENTRIGHT2;
-		std::string right3 = PARENTRIGHT3;
+		std::string left1 = PARENT_LEFT1;
+		std::string left2 = PARENT_LEFT2;
+		std::string left3 = PARENT_LEFT3;
+		std::string right1 = PARENT_RIGHT1;
+		std::string right2 = PARENT_RIGHT2;
+		std::string right3 = PARENT_RIGHT3;
 
 		//Have Result for matching header
 		relations.push_back(RelRef(type, { STMT, Synonym{"a"} }, { STMT, Synonym{"a"} }));
@@ -842,12 +845,12 @@ namespace UnitTesting {
 		relations.push_back(RelRef(type, { IF, Synonym{"a"} }, { IF, Synonym{"a"} }));
 		relations.push_back(RelRef(type, { IF, Synonym{"a"} }, { WHILE, Synonym{"a"} }));
 		relations.push_back(RelRef(type, { WHILE, Synonym{"a"} }, { WHILE, Synonym{"a"} }));
-		relations.push_back(RelRef(type, { WILD }, { STMT, Synonym{"a"} }));
-		relations.push_back(RelRef(type, { WILD }, { IF, Synonym{"a"} }));
-		relations.push_back(RelRef(type, { WILD }, { WHILE, Synonym{"a"} }));
-		relations.push_back(RelRef(type, { STMT, Synonym{"a"} }, { WILD }));
-		relations.push_back(RelRef(type, { IF, Synonym{"a"} }, { WILD }));
-		relations.push_back(RelRef(type, { WHILE, Synonym{"a"} }, { WILD }));
+		relations.push_back(RelRef(type, WILD_CARD, { STMT, Synonym{"a"} }));
+		relations.push_back(RelRef(type, WILD_CARD, { IF, Synonym{"a"} }));
+		relations.push_back(RelRef(type, WILD_CARD, { WHILE, Synonym{"a"} }));
+		relations.push_back(RelRef(type, { STMT, Synonym{"a"} }, WILD_CARD));
+		relations.push_back(RelRef(type, { IF, Synonym{"a"} }, WILD_CARD));
+		relations.push_back(RelRef(type, { WHILE, Synonym{"a"} }, WILD_CARD));
 		relations.push_back(RelRef(type, { STMT, left1 }, { STMT, Synonym{"a"} }));
 		relations.push_back(RelRef(type, { STMT, left1 }, { IF, Synonym{"a"} }));
 		relations.push_back(RelRef(type, { STMT, left1 }, { WHILE, Synonym{"a"} }));
@@ -867,16 +870,16 @@ namespace UnitTesting {
 
 	TEST_F(QueryEvaluatorTest, evaluateQueryParentFilterNoCommonSynonymFalse) {
 		RelType type = PARENT;
-		std::vector<std::string> lefts = PARENTLEFTS;
-		std::vector<std::string> rights = PARENTRIGHTS;
+		std::vector<std::string> lefts = PARENT_LEFTS;
+		std::vector<std::string> rights = PARENT_RIGHTS;
 
 		std::vector<RelRef> relations;
 		//Empty result for non-matching header for double column
 		std::vector<Entity> synonyms;
-		synonyms.push_back({ PRINT, commonSynonym1 });
-		synonyms.push_back({ READ, commonSynonym1 });
-		synonyms.push_back({ ASSIGN, commonSynonym1 });
-		synonyms.push_back({ CALL, commonSynonym1 });
+		synonyms.push_back({ PRINT, COMMON_SYNONYM1 });
+		synonyms.push_back({ READ, COMMON_SYNONYM1 });
+		synonyms.push_back({ ASSIGN, COMMON_SYNONYM1 });
+		synonyms.push_back({ CALL, COMMON_SYNONYM1 });
 
 		for (unsigned int k = 0; k < synonyms.size(); k++) {
 			for (unsigned int j = 0; j < synonyms.size(); j++) {
@@ -886,9 +889,9 @@ namespace UnitTesting {
 
 		//Empty result for non-matching header for single column
 		for (unsigned int k = 0; k < synonyms.size(); k++) {
-			relations.push_back(RelRef(type, { WILD }, synonyms[k]));
-			relations.push_back(RelRef(type, { synonyms[k] }, { WILD }));
-			relations.push_back(RelRef(type, { synonyms[k] }, { WILD }));
+			relations.push_back(RelRef(type, WILD_CARD, synonyms[k]));
+			relations.push_back(RelRef(type, { synonyms[k] }, WILD_CARD));
+			relations.push_back(RelRef(type, { synonyms[k] }, WILD_CARD));
 
 			for (auto valid : lefts) {
 				relations.push_back(RelRef(type, { STMT, valid }, { synonyms[k] }));
@@ -904,23 +907,23 @@ namespace UnitTesting {
 	TEST_F(QueryEvaluatorTest, evaluateQueryParentFilterCommonSynonym) {
 		RelType type = PARENT;
 
-		std::vector<std::string> lefts = PARENTLEFTS;
-		std::vector<std::string> rights = PARENTRIGHTS;
-		std::string left1 = PARENTLEFT1;
-		std::string left2 = PARENTLEFT2;
-		std::string left3 = PARENTLEFT3;
-		std::string right1 = PARENTRIGHT1;
-		std::string right2 = PARENTRIGHT2;
-		std::string right3 = PARENTRIGHT3;
+		std::vector<std::string> lefts = PARENT_LEFTS;
+		std::vector<std::string> rights = PARENT_RIGHTS;
+		std::string left1 = PARENT_LEFT1;
+		std::string left2 = PARENT_LEFT2;
+		std::string left3 = PARENT_LEFT3;
+		std::string right1 = PARENT_RIGHT1;
+		std::string right2 = PARENT_RIGHT2;
+		std::string right3 = PARENT_RIGHT3;
 
 		std::vector<Entity> selectedList;
-		selectedList.push_back({ STMT, commonSynonym1 });
-		selectedList.push_back({ IF, commonSynonym1 });
-		selectedList.push_back({ WHILE, commonSynonym1 });
-		selectedList.push_back({ PRINT, commonSynonym1 });
-		selectedList.push_back({ READ, commonSynonym1 });
-		selectedList.push_back({ ASSIGN, commonSynonym1 });
-		selectedList.push_back({ CALL, commonSynonym1 });
+		selectedList.push_back({ STMT, COMMON_SYNONYM1 });
+		selectedList.push_back({ IF, COMMON_SYNONYM1 });
+		selectedList.push_back({ WHILE, COMMON_SYNONYM1 });
+		selectedList.push_back({ PRINT, COMMON_SYNONYM1 });
+		selectedList.push_back({ READ, COMMON_SYNONYM1 });
+		selectedList.push_back({ ASSIGN, COMMON_SYNONYM1 });
+		selectedList.push_back({ CALL, COMMON_SYNONYM1 });
 
 		//Test case for Select a such that Parent(selected, a)
 		std::list<std::string> result1 = { left1, left2, left3 };
@@ -941,7 +944,7 @@ namespace UnitTesting {
 
 		//Test case for Select a such that Parent(selected, _)
 		for (unsigned int i = 0; i < selectedList.size(); i++) {
-			RelRef relation(type, selectedList[i], { WILD });
+			RelRef relation(type, selectedList[i], WILD_CARD);
 			Query q = initQuery(relation, selectedList[i]);
 			EXPECT_EQ(evaluator.evaluateQuery(q), resultList[i]) << "Error at results : " << i + 1;
 		}
@@ -958,7 +961,7 @@ namespace UnitTesting {
 
 		//Test case for Select a such that Parent(_, selected)
 		for (unsigned int i = 0; i < selectedList.size(); i++) {
-			RelRef relation(type, { WILD }, selectedList[i]);
+			RelRef relation(type, WILD_CARD, selectedList[i]);
 			Query q = initQuery(relation, selectedList[i]);
 			EXPECT_EQ(evaluator.evaluateQuery(q), resultList[i]) << "Error at results : " << i + 1;
 		}
@@ -1000,7 +1003,7 @@ namespace UnitTesting {
 			for (unsigned int i = 0; i < selectedList.size(); i++) {
 				RelRef relation(type, emptyList[j], selectedList[i]);
 				Query q = initQuery(relation, selectedList[i]);
-				EXPECT_EQ(evaluator.evaluateQuery(q), emptyResult) << "Error at results : " << i + 1;
+				EXPECT_EQ(evaluator.evaluateQuery(q), EMPTY_RESULT) << "Error at results : " << i + 1;
 			}
 		}
 
@@ -1041,7 +1044,7 @@ namespace UnitTesting {
 			for (unsigned int i = 0; i < selectedList.size(); i++) {
 				RelRef relation(type, selectedList[i], emptyList[j]);
 				Query q = initQuery(relation, selectedList[i]);
-				EXPECT_EQ(evaluator.evaluateQuery(q), emptyResult) << "Error at results : " << i + 1;
+				EXPECT_EQ(evaluator.evaluateQuery(q), EMPTY_RESULT) << "Error at results : " << i + 1;
 			}
 		}
 	}
@@ -1049,36 +1052,36 @@ namespace UnitTesting {
 	//ParentT Relation Test ----------------------------------------------------------------------------------------------------
 	TEST_F(QueryEvaluatorTest, evaluateQueryParentTBooleanTrue) {
 		RelType type = PARENT_T;
-		std::string left1 = PARENTLEFT1;
-		std::string left2 = PARENTLEFT2;
-		std::string left3 = PARENTLEFT3;
-		std::string right1 = PARENTRIGHT1;
-		std::string right2 = PARENTRIGHT2;
-		std::string right3 = PARENTRIGHT3;
+		std::string left1 = PARENT_LEFT1;
+		std::string left2 = PARENT_LEFT2;
+		std::string left3 = PARENT_LEFT3;
+		std::string right1 = PARENT_RIGHT1;
+		std::string right2 = PARENT_RIGHT2;
+		std::string right3 = PARENT_RIGHT3;
 
 		std::vector<RelRef> relations;
 		//Test true boolean equation
-		relations.push_back(RelRef(type, { WILD }, { WILD }));
+		relations.push_back(RelRef(type, WILD_CARD, WILD_CARD));
 		relations.push_back(RelRef(type, { STMT, left1 }, { STMT, right1 }));
 		relations.push_back(RelRef(type, { STMT, left1 }, { STMT, right2 }));
 		relations.push_back(RelRef(type, { STMT, left1 }, { STMT, right3 }));
 		relations.push_back(RelRef(type, { STMT, left2 }, { STMT, right2 }));
 		relations.push_back(RelRef(type, { STMT, left2 }, { STMT, right3 }));
 		relations.push_back(RelRef(type, { STMT, left3 }, { STMT, right3 }));
-		relations.push_back(RelRef(type, { STMT, left1 }, { WILD }));
-		relations.push_back(RelRef(type, { STMT, left2 }, { WILD }));
-		relations.push_back(RelRef(type, { STMT, left3 }, { WILD }));
-		relations.push_back(RelRef(type, { WILD }, { STMT, right1 }));
-		relations.push_back(RelRef(type, { WILD }, { STMT, right2 }));
-		relations.push_back(RelRef(type, { WILD }, { STMT, right3 }));
+		relations.push_back(RelRef(type, { STMT, left1 }, WILD_CARD));
+		relations.push_back(RelRef(type, { STMT, left2 }, WILD_CARD));
+		relations.push_back(RelRef(type, { STMT, left3 }, WILD_CARD));
+		relations.push_back(RelRef(type, WILD_CARD, { STMT, right1 }));
+		relations.push_back(RelRef(type, WILD_CARD, { STMT, right2 }));
+		relations.push_back(RelRef(type, WILD_CARD, { STMT, right3 }));
 
 		validateRelations(relations);
 	}
 	TEST_F(QueryEvaluatorTest, evaluateQueryParentTBooleanFalse) {
 		RelType type = PARENT_T;
 		std::vector<RelRef> relations;
-		std::vector<std::string> lefts = PARENTLEFTS;
-		std::vector<std::string> rights = PARENTRIGHTS;
+		std::vector<std::string> lefts = PARENT_LEFTS;
+		std::vector<std::string> rights = PARENT_RIGHTS;
 		//Test false boolean equation
 
 		relations.push_back(RelRef(type, { STMT, "2" }, { STMT, "2" }));
@@ -1087,16 +1090,16 @@ namespace UnitTesting {
 		std::vector<Entity> invalidLefts = getInvalidConstant(lefts);
 
 		for (unsigned int k = 0; k < invalidLefts.size(); k++) {
-			for (unsigned int i = 0; i < validConstantStmtEntity.size(); i++) {
-				relations.push_back((RelRef(type, invalidLefts[k], validConstantStmtEntity[i])));
+			for (unsigned int i = 0; i < VALID_CONSTANT_STMT_ENTITY.size(); i++) {
+				relations.push_back((RelRef(type, invalidLefts[k], VALID_CONSTANT_STMT_ENTITY[i])));
 			}
 		}
 
 		std::vector<Entity> invalidRight = getInvalidConstant(rights);
 
 		for (unsigned int k = 0; k < invalidRight.size(); k++) {
-			for (unsigned int i = 0; i < validConstantStmtEntity.size(); i++) {
-				relations.push_back((RelRef(type, validConstantStmtEntity[i], invalidRight[k])));
+			for (unsigned int i = 0; i < VALID_CONSTANT_STMT_ENTITY.size(); i++) {
+				relations.push_back((RelRef(type, VALID_CONSTANT_STMT_ENTITY[i], invalidRight[k])));
 			}
 		}
 
@@ -1105,8 +1108,8 @@ namespace UnitTesting {
 	TEST_F(QueryEvaluatorTest, evaluateQueryParentTFilterEmpty) {
 		RelType type = PARENT_T;
 		std::vector<RelRef> relations;
-		std::vector<std::string> lefts = PARENTLEFTS;
-		std::vector<std::string> rights = PARENTRIGHTS;
+		std::vector<std::string> lefts = PARENT_LEFTS;
+		std::vector<std::string> rights = PARENT_RIGHTS;
 
 		std::vector<Entity> invalidLefts = getInvalidConstant(lefts);
 		for (Entity it : invalidLefts) {
@@ -1123,12 +1126,12 @@ namespace UnitTesting {
 
 	TEST_F(QueryEvaluatorTest, evaluateQueryParentTFilterNoCommonSynonymTrue) {
 		RelType type = PARENT_T;
-		std::string left1 = PARENTLEFT1;
-		std::string left2 = PARENTLEFT2;
-		std::string left3 = PARENTLEFT3;
-		std::string right1 = PARENTRIGHT1;
-		std::string right2 = PARENTRIGHT2;
-		std::string right3 = PARENTRIGHT3;
+		std::string left1 = PARENT_LEFT1;
+		std::string left2 = PARENT_LEFT2;
+		std::string left3 = PARENT_LEFT3;
+		std::string right1 = PARENT_RIGHT1;
+		std::string right2 = PARENT_RIGHT2;
+		std::string right3 = PARENT_RIGHT3;
 
 		std::vector<RelRef> relations;
 		//Have Result for matching header
@@ -1140,12 +1143,12 @@ namespace UnitTesting {
 		relations.push_back(RelRef(type, { IF, Synonym{"a"} }, { IF, Synonym{"a"} }));
 		relations.push_back(RelRef(type, { IF, Synonym{"a"} }, { WHILE, Synonym{"a"} }));
 		relations.push_back(RelRef(type, { WHILE, Synonym{"a"} }, { WHILE, Synonym{"a"} }));
-		relations.push_back(RelRef(type, { WILD }, { STMT, Synonym{"a"} }));
-		relations.push_back(RelRef(type, { WILD }, { IF, Synonym{"a"} }));
-		relations.push_back(RelRef(type, { WILD }, { WHILE, Synonym{"a"} }));
-		relations.push_back(RelRef(type, { STMT, Synonym{"a"} }, { WILD }));
-		relations.push_back(RelRef(type, { IF, Synonym{"a"} }, { WILD }));
-		relations.push_back(RelRef(type, { WHILE, Synonym{"a"} }, { WILD }));
+		relations.push_back(RelRef(type, WILD_CARD, { STMT, Synonym{"a"} }));
+		relations.push_back(RelRef(type, WILD_CARD, { IF, Synonym{"a"} }));
+		relations.push_back(RelRef(type, WILD_CARD, { WHILE, Synonym{"a"} }));
+		relations.push_back(RelRef(type, { STMT, Synonym{"a"} }, WILD_CARD));
+		relations.push_back(RelRef(type, { IF, Synonym{"a"} }, WILD_CARD));
+		relations.push_back(RelRef(type, { WHILE, Synonym{"a"} }, WILD_CARD));
 		relations.push_back(RelRef(type, { STMT, left1 }, { STMT, Synonym{"a"} }));
 		relations.push_back(RelRef(type, { STMT, left1 }, { IF, Synonym{"a"} }));
 		relations.push_back(RelRef(type, { STMT, left1 }, { WHILE, Synonym{"a"} }));
@@ -1166,16 +1169,16 @@ namespace UnitTesting {
 
 	TEST_F(QueryEvaluatorTest, evaluateQueryParentTFilterNoCommonSynonymFalse) {
 		RelType type = PARENT_T;
-		std::vector<std::string> lefts = PARENTLEFTS;
-		std::vector<std::string> rights = PARENTRIGHTS;
+		std::vector<std::string> lefts = PARENT_LEFTS;
+		std::vector<std::string> rights = PARENT_RIGHTS;
 
 		std::vector<RelRef> relations;
 		//Empty result for non-matching header for double column
 		std::vector<Entity> synonyms;
-		synonyms.push_back({ PRINT, commonSynonym1 });
-		synonyms.push_back({ READ, commonSynonym1 });
-		synonyms.push_back({ ASSIGN, commonSynonym1 });
-		synonyms.push_back({ CALL, commonSynonym1 });
+		synonyms.push_back({ PRINT, COMMON_SYNONYM1 });
+		synonyms.push_back({ READ, COMMON_SYNONYM1 });
+		synonyms.push_back({ ASSIGN, COMMON_SYNONYM1 });
+		synonyms.push_back({ CALL, COMMON_SYNONYM1 });
 
 		for (unsigned int k = 0; k < synonyms.size(); k++) {
 			for (unsigned int j = 0; j < synonyms.size(); j++) {
@@ -1185,9 +1188,9 @@ namespace UnitTesting {
 
 		//Empty result for non-matching header for single column
 		for (unsigned int k = 0; k < synonyms.size(); k++) {
-			relations.push_back(RelRef(type, { WILD }, synonyms[k]));
-			relations.push_back(RelRef(type, { synonyms[k] }, { WILD }));
-			relations.push_back(RelRef(type, { synonyms[k] }, { WILD }));
+			relations.push_back(RelRef(type, WILD_CARD, synonyms[k]));
+			relations.push_back(RelRef(type, { synonyms[k] }, WILD_CARD));
+			relations.push_back(RelRef(type, { synonyms[k] }, WILD_CARD));
 
 			for (auto valid : lefts) {
 				relations.push_back(RelRef(type, { STMT, valid }, { synonyms[k] }));
@@ -1202,23 +1205,23 @@ namespace UnitTesting {
 	}
 	TEST_F(QueryEvaluatorTest, evaluateQueryParentTFilterCommonSynonym) {
 		RelType type = PARENT_T;
-		std::vector<std::string> lefts = PARENTLEFTS;
-		std::vector<std::string> rights = PARENTRIGHTS;
-		std::string left1 = PARENTLEFT1;
-		std::string left2 = PARENTLEFT2;
-		std::string left3 = PARENTLEFT3;
-		std::string right1 = PARENTRIGHT1;
-		std::string right2 = PARENTRIGHT2;
-		std::string right3 = PARENTRIGHT3;
+		std::vector<std::string> lefts = PARENT_LEFTS;
+		std::vector<std::string> rights = PARENT_RIGHTS;
+		std::string left1 = PARENT_LEFT1;
+		std::string left2 = PARENT_LEFT2;
+		std::string left3 = PARENT_LEFT3;
+		std::string right1 = PARENT_RIGHT1;
+		std::string right2 = PARENT_RIGHT2;
+		std::string right3 = PARENT_RIGHT3;
 
 		std::vector<Entity> selectedList;
-		selectedList.push_back({ STMT, commonSynonym1 });
-		selectedList.push_back({ IF, commonSynonym1 });
-		selectedList.push_back({ WHILE, commonSynonym1 });
-		selectedList.push_back({ PRINT, commonSynonym1 });
-		selectedList.push_back({ READ, commonSynonym1 });
-		selectedList.push_back({ ASSIGN, commonSynonym1 });
-		selectedList.push_back({ CALL, commonSynonym1 });
+		selectedList.push_back({ STMT, COMMON_SYNONYM1 });
+		selectedList.push_back({ IF, COMMON_SYNONYM1 });
+		selectedList.push_back({ WHILE, COMMON_SYNONYM1 });
+		selectedList.push_back({ PRINT, COMMON_SYNONYM1 });
+		selectedList.push_back({ READ, COMMON_SYNONYM1 });
+		selectedList.push_back({ ASSIGN, COMMON_SYNONYM1 });
+		selectedList.push_back({ CALL, COMMON_SYNONYM1 });
 
 		//Test case for Select a such that ParentT(selected, a)
 		std::list<std::string> result1 = { left1, left2, left3 };
@@ -1239,7 +1242,7 @@ namespace UnitTesting {
 
 		//Test case for Select a such that ParentT(selected, _)
 		for (unsigned int i = 0; i < selectedList.size(); i++) {
-			RelRef relation(type, selectedList[i], { WILD });
+			RelRef relation(type, selectedList[i], WILD_CARD);
 			Query q = initQuery(relation, selectedList[i]);
 			EXPECT_EQ(evaluator.evaluateQuery(q), resultList[i]) << "Error at results : " << i + 1;
 		}
@@ -1256,7 +1259,7 @@ namespace UnitTesting {
 
 		//Test case for Select a such that ParentT(_, selected)
 		for (unsigned int i = 0; i < selectedList.size(); i++) {
-			RelRef relation(type, { WILD }, selectedList[i]);
+			RelRef relation(type, WILD_CARD, selectedList[i]);
 			Query q = initQuery(relation, selectedList[i]);
 			EXPECT_EQ(evaluator.evaluateQuery(q), resultList[i]) << "Error at results : " << i + 1;
 		}
@@ -1297,7 +1300,7 @@ namespace UnitTesting {
 			for (unsigned int i = 0; i < selectedList.size(); i++) {
 				RelRef relation(type, emptyList[j], selectedList[i]);
 				Query q = initQuery(relation, selectedList[i]);
-				EXPECT_EQ(evaluator.evaluateQuery(q), emptyResult) << "Error at results : " << i + 1;
+				EXPECT_EQ(evaluator.evaluateQuery(q), EMPTY_RESULT) << "Error at results : " << i + 1;
 			}
 		}
 
@@ -1337,7 +1340,7 @@ namespace UnitTesting {
 			for (unsigned int i = 0; i < selectedList.size(); i++) {
 				RelRef relation(type, selectedList[i], emptyList[j]);
 				Query q = initQuery(relation, selectedList[i]);
-				EXPECT_EQ(evaluator.evaluateQuery(q), emptyResult) << "Error at results : " << i + 1;
+				EXPECT_EQ(evaluator.evaluateQuery(q), EMPTY_RESULT) << "Error at results : " << i + 1;
 			}
 		}
 	}
@@ -1346,22 +1349,22 @@ namespace UnitTesting {
 	TEST_F(QueryEvaluatorTest, evaluateQueryModifiesBooleanTrue) {
 		RelType type = MODIFIES_S;
 
-		std::vector<std::string> lefts = MODIFIESLEFTS;
-		std::vector<std::string> rights = MODIFIESRIGHTS;
-		std::string left1 = MODIFIESLEFT1;
-		std::string left2 = MODIFIESLEFT2;
-		std::string right1 = MODIFIESRIGHT1;
-		std::string right2 = MODIFIESRIGHT2;
+		std::vector<std::string> lefts = MODIFIES_LEFTS;
+		std::vector<std::string> rights = MODIFIES_RIGHTS;
+		std::string left1 = MODIFIES_LEFT1;
+		std::string left2 = MODIFIES_LEFT2;
+		std::string right1 = MODIFIES_RIGHT1;
+		std::string right2 = MODIFIES_RIGHT2;
 
 		std::vector<RelRef> relations;
 		//Test true boolean equation
-		relations.push_back(RelRef(type, { WILD }, { WILD }));
+		relations.push_back(RelRef(type, WILD_CARD, WILD_CARD));
 		relations.push_back(RelRef(type, { STMT, left1 }, { VARIABLE, right1 }));
 		relations.push_back(RelRef(type, { STMT, left2 }, { VARIABLE, right2 }));
-		relations.push_back(RelRef(type, { STMT, left1 }, { WILD }));
-		relations.push_back(RelRef(type, { STMT, left2 }, { WILD }));
-		relations.push_back(RelRef(type, { WILD }, { VARIABLE, right1 }));
-		relations.push_back(RelRef(type, { WILD }, { VARIABLE, right2 }));
+		relations.push_back(RelRef(type, { STMT, left1 }, WILD_CARD));
+		relations.push_back(RelRef(type, { STMT, left2 }, WILD_CARD));
+		relations.push_back(RelRef(type, WILD_CARD, { VARIABLE, right1 }));
+		relations.push_back(RelRef(type, WILD_CARD, { VARIABLE, right2 }));
 
 		validateRelations(relations);
 	}
@@ -1369,15 +1372,15 @@ namespace UnitTesting {
 		RelType type = MODIFIES_S;
 		std::vector<Entity> variables;
 		//Test false boolean equation
-		std::vector<std::string> lefts = MODIFIESLEFTS;
+		std::vector<std::string> lefts = MODIFIES_LEFTS;
 
 		std::vector<RelRef> relations;
 
 		std::vector<Entity> invalidLefts = getInvalidConstant(lefts);
 
 		for (unsigned int k = 0; k < invalidLefts.size(); k++) {
-			for (unsigned int i = 0; i < allVariables.size(); i++) {
-				relations.push_back((RelRef(type, invalidLefts[k], allVariables[i])));
+			for (unsigned int i = 0; i < ALL_VARIABLES.size(); i++) {
+				relations.push_back((RelRef(type, invalidLefts[k], ALL_VARIABLES[i])));
 			}
 		}
 
@@ -1385,8 +1388,8 @@ namespace UnitTesting {
 		invalidRight.push_back({ VARIABLE, z });
 
 		for (unsigned int k = 0; k < invalidRight.size(); k++) {
-			for (unsigned int i = 0; i < validConstantStmtEntity.size(); i++) {
-				relations.push_back(RelRef(type, validConstantStmtEntity[i], invalidRight[k]));
+			for (unsigned int i = 0; i < VALID_CONSTANT_STMT_ENTITY.size(); i++) {
+				relations.push_back(RelRef(type, VALID_CONSTANT_STMT_ENTITY[i], invalidRight[k]));
 			}
 		}
 
@@ -1395,7 +1398,7 @@ namespace UnitTesting {
 	TEST_F(QueryEvaluatorTest, evaluateQueryModifiesFilterEmpty) {
 		RelType type = MODIFIES_S;
 
-		std::vector<std::string> lefts = MODIFIESLEFTS;
+		std::vector<std::string> lefts = MODIFIES_LEFTS;
 
 		std::vector<RelRef> relations;
 		std::vector<Entity> invalidLefts = getInvalidConstant(lefts);
@@ -1409,20 +1412,20 @@ namespace UnitTesting {
 	TEST_F(QueryEvaluatorTest, evaluateQueryModifiesFilterNoCommonSynonymTrue) {
 		RelType type = MODIFIES_S;
 
-		std::string left1 = MODIFIESLEFT1;
-		std::string left2 = MODIFIESLEFT2;
-		std::string right1 = MODIFIESRIGHT1;
-		std::string right2 = MODIFIESRIGHT2;
+		std::string left1 = MODIFIES_LEFT1;
+		std::string left2 = MODIFIES_LEFT2;
+		std::string right1 = MODIFIES_RIGHT1;
+		std::string right2 = MODIFIES_RIGHT2;
 
 		std::vector<RelRef> relations;
 		//Have Result for matching header
 		relations.push_back(RelRef(type, { STMT, Synonym{"a"} }, { VARIABLE, Synonym{"a"} }));
 		relations.push_back(RelRef(type, { IF, Synonym{"a"} }, { VARIABLE, Synonym{"a"} }));
 		relations.push_back(RelRef(type, { WHILE, Synonym{"a"} }, { VARIABLE, Synonym{"a"} }));
-		relations.push_back(RelRef(type, { WILD }, { VARIABLE, Synonym{"a"} }));
-		relations.push_back(RelRef(type, { STMT, Synonym{"a"} }, { WILD }));
-		relations.push_back(RelRef(type, { IF, Synonym{"a"} }, { WILD }));
-		relations.push_back(RelRef(type, { WHILE, Synonym{"a"} }, { WILD }));
+		relations.push_back(RelRef(type, WILD_CARD, { VARIABLE, Synonym{"a"} }));
+		relations.push_back(RelRef(type, { STMT, Synonym{"a"} }, WILD_CARD));
+		relations.push_back(RelRef(type, { IF, Synonym{"a"} }, WILD_CARD));
+		relations.push_back(RelRef(type, { WHILE, Synonym{"a"} }, WILD_CARD));
 		relations.push_back(RelRef(type, { STMT, left1 }, { VARIABLE, Synonym{"a"} }));
 		relations.push_back(RelRef(type, { STMT, left2 }, { VARIABLE, Synonym{"a"} }));
 		relations.push_back(RelRef(type, { STMT, Synonym{"a"} }, { VARIABLE, right1 }));
@@ -1439,14 +1442,14 @@ namespace UnitTesting {
 		std::vector<RelRef> relations;
 		//Empty result for non-matching header for double column
 		std::vector<Entity> synonyms;
-		synonyms.push_back({ PRINT, commonSynonym1 });
-		synonyms.push_back({ READ, commonSynonym1 });
-		synonyms.push_back({ ASSIGN, commonSynonym1 });
-		synonyms.push_back({ CALL, commonSynonym1 });
+		synonyms.push_back({ PRINT, COMMON_SYNONYM1 });
+		synonyms.push_back({ READ, COMMON_SYNONYM1 });
+		synonyms.push_back({ ASSIGN, COMMON_SYNONYM1 });
+		synonyms.push_back({ CALL, COMMON_SYNONYM1 });
 
 		for (unsigned int k = 0; k < synonyms.size(); k++) {
-			for (unsigned int j = 0; j < allVariables.size(); j++) {
-				relations.push_back(RelRef(type, synonyms[k], allVariables[j]));
+			for (unsigned int j = 0; j < ALL_VARIABLES.size(); j++) {
+				relations.push_back(RelRef(type, synonyms[k], ALL_VARIABLES[j]));
 			}
 		}
 		validateEmptyRelations(relations);
@@ -1454,20 +1457,20 @@ namespace UnitTesting {
 	TEST_F(QueryEvaluatorTest, evaluateQueryModifiesFilterCommonSynonym) {
 		RelType type = MODIFIES_S;
 
-		std::vector<std::string> lefts = MODIFIESLEFTS;
-		std::string left1 = MODIFIESLEFT1;
-		std::string left2 = MODIFIESLEFT2;
-		std::string right1 = MODIFIESRIGHT1;
-		std::string right2 = MODIFIESRIGHT2;
+		std::vector<std::string> lefts = MODIFIES_LEFTS;
+		std::string left1 = MODIFIES_LEFT1;
+		std::string left2 = MODIFIES_LEFT2;
+		std::string right1 = MODIFIES_RIGHT1;
+		std::string right2 = MODIFIES_RIGHT2;
 
 		std::vector<Entity> selectedList;
-		selectedList.push_back({ STMT, commonSynonym1 });
-		selectedList.push_back({ IF, commonSynonym1 });
-		selectedList.push_back({ WHILE, commonSynonym1 });
-		selectedList.push_back({ PRINT, commonSynonym1 });
-		selectedList.push_back({ READ, commonSynonym1 });
-		selectedList.push_back({ ASSIGN, commonSynonym1 });
-		selectedList.push_back({ CALL, commonSynonym1 });
+		selectedList.push_back({ STMT, COMMON_SYNONYM1 });
+		selectedList.push_back({ IF, COMMON_SYNONYM1 });
+		selectedList.push_back({ WHILE, COMMON_SYNONYM1 });
+		selectedList.push_back({ PRINT, COMMON_SYNONYM1 });
+		selectedList.push_back({ READ, COMMON_SYNONYM1 });
+		selectedList.push_back({ ASSIGN, COMMON_SYNONYM1 });
+		selectedList.push_back({ CALL, COMMON_SYNONYM1 });
 
 		//Test case for Select a such that Modifies_S(selected, a)
 		std::list<std::string> result1 = { left1, left2 };
@@ -1488,7 +1491,7 @@ namespace UnitTesting {
 
 		//Test case for Select a such that Modifies_S(selected, _)
 		for (unsigned int i = 0; i < selectedList.size(); i++) {
-			RelRef relation(type, selectedList[i], { WILD });
+			RelRef relation(type, selectedList[i], WILD_CARD);
 			Query q = initQuery(relation, selectedList[i]);
 			EXPECT_EQ(evaluator.evaluateQuery(q), resultList[i]) << "Error at results : " << i + 1;
 		}
@@ -1517,7 +1520,7 @@ namespace UnitTesting {
 		for (unsigned int i = 0; i < selectedList.size(); i++) {
 			RelRef relation(type, selectedList[i], { VARIABLE, z });
 			Query q = initQuery(relation, selectedList[i]);
-			EXPECT_EQ(evaluator.evaluateQuery(q), emptyResult) << "Error at results : " << i + 1;
+			EXPECT_EQ(evaluator.evaluateQuery(q), EMPTY_RESULT) << "Error at results : " << i + 1;
 		}
 
 		//Test case for Select a such that Modifies_S(a, selected)
@@ -1525,7 +1528,7 @@ namespace UnitTesting {
 		resultList[1] = { right1 };
 		resultList[2] = { right2 };
 
-		Entity selected(VARIABLE, commonSynonym1);
+		Entity selected(VARIABLE, COMMON_SYNONYM1);
 		for (unsigned int i = 0; i < selectedList.size(); i++) {
 			RelRef relation(type, selectedList[i], selected);
 			Query q = initQuery(relation, selected);
@@ -1534,7 +1537,7 @@ namespace UnitTesting {
 
 		resultList[0] = { right1, right2 };
 		//Test case for Select a such that Modifies_S(_, selected)
-		RelRef relation(type, { WILD }, selected);
+		RelRef relation(type, WILD_CARD, selected);
 		Query q = initQuery(relation, selected);
 		EXPECT_EQ(evaluator.evaluateQuery(q), resultList[0]);
 
@@ -1558,27 +1561,27 @@ namespace UnitTesting {
 		for (unsigned int j = 0; j < emptyList.size(); j++) {
 			relation = RelRef(type, emptyList[j], selected);
 			q = initQuery(relation, selected);
-			EXPECT_EQ(evaluator.evaluateQuery(q), emptyResult) << "Error at results : " << j + 1;
+			EXPECT_EQ(evaluator.evaluateQuery(q), EMPTY_RESULT) << "Error at results : " << j + 1;
 		}
 	}
 
 	//Uses_S Relation Test ----------------------------------------------------------------------------------------------------
 	TEST_F(QueryEvaluatorTest, evaluateQueryUsessBooleanTrue) {
 		RelType type = USES_S;
-		std::string left1 = USESLEFT1;
-		std::string left2 = USESLEFT2;
-		std::string right1 = USESRIGHT1;
-		std::string right2 = USESRIGHT2;
+		std::string left1 = USES_LEFT1;
+		std::string left2 = USES_LEFT2;
+		std::string right1 = USES_RIGHT1;
+		std::string right2 = USES_RIGHT2;
 
 		std::vector<RelRef> relations;
 		//Test true boolean equation
-		relations.push_back(RelRef(type, { WILD }, { WILD }));
+		relations.push_back(RelRef(type, WILD_CARD, WILD_CARD));
 		relations.push_back(RelRef(type, { STMT, left1 }, { VARIABLE, right1 }));
 		relations.push_back(RelRef(type, { STMT, left2 }, { VARIABLE, right2 }));
-		relations.push_back(RelRef(type, { STMT, left1 }, { WILD }));
-		relations.push_back(RelRef(type, { STMT, left2 }, { WILD }));
-		relations.push_back(RelRef(type, { WILD }, { VARIABLE, right1 }));
-		relations.push_back(RelRef(type, { WILD }, { VARIABLE, right2 }));
+		relations.push_back(RelRef(type, { STMT, left1 }, WILD_CARD));
+		relations.push_back(RelRef(type, { STMT, left2 }, WILD_CARD));
+		relations.push_back(RelRef(type, WILD_CARD, { VARIABLE, right1 }));
+		relations.push_back(RelRef(type, WILD_CARD, { VARIABLE, right2 }));
 
 		validateRelations(relations);
 	}
@@ -1586,15 +1589,15 @@ namespace UnitTesting {
 	TEST_F(QueryEvaluatorTest, evaluateQueryUsesBooleanFalse) {
 		RelType type = USES_S;
 		//Test false boolean equation
-		std::vector<std::string> lefts = USESLEFTS;
+		std::vector<std::string> lefts = USES_LEFTS;
 
 		std::vector<RelRef> relations;
 
 		std::vector<Entity> invalidLefts = getInvalidConstant(lefts);
 
 		for (unsigned int k = 0; k < invalidLefts.size(); k++) {
-			for (unsigned int i = 0; i < allVariables.size(); i++) {
-				relations.push_back((RelRef(type, invalidLefts[k], allVariables[i])));
+			for (unsigned int i = 0; i < ALL_VARIABLES.size(); i++) {
+				relations.push_back((RelRef(type, invalidLefts[k], ALL_VARIABLES[i])));
 			}
 		}
 
@@ -1602,8 +1605,8 @@ namespace UnitTesting {
 		invalidRight.push_back({ VARIABLE, z });
 
 		for (unsigned int k = 0; k < invalidRight.size(); k++) {
-			for (unsigned int i = 0; i < validConstantStmtEntity.size(); i++) {
-				relations.push_back(RelRef(type, validConstantStmtEntity[i], invalidRight[k]));
+			for (unsigned int i = 0; i < VALID_CONSTANT_STMT_ENTITY.size(); i++) {
+				relations.push_back(RelRef(type, VALID_CONSTANT_STMT_ENTITY[i], invalidRight[k]));
 			}
 		}
 
@@ -1611,7 +1614,7 @@ namespace UnitTesting {
 	}
 	TEST_F(QueryEvaluatorTest, evaluateQueryUsesFilterEmpty) {
 		RelType type = USES_S;
-		std::vector<std::string> lefts = USESLEFTS;
+		std::vector<std::string> lefts = USES_LEFTS;
 
 		std::vector<RelRef> relations;
 		std::vector<Entity> invalidLefts = getInvalidConstant(lefts);
@@ -1625,20 +1628,20 @@ namespace UnitTesting {
 	}
 	TEST_F(QueryEvaluatorTest, evaluateQueryUsesFilterNoCommonSynonymTrue) {
 		RelType type = USES_S;
-		std::string left1 = USESLEFT1;
-		std::string left2 = USESLEFT2;
-		std::string right1 = USESRIGHT1;
-		std::string right2 = USESRIGHT2;
+		std::string left1 = USES_LEFT1;
+		std::string left2 = USES_LEFT2;
+		std::string right1 = USES_RIGHT1;
+		std::string right2 = USES_RIGHT2;
 
 		std::vector<RelRef> relations;
 		//Have Result for matching header
 		relations.push_back(RelRef(type, { STMT, Synonym{"a"} }, { VARIABLE, Synonym{"a"} }));
 		relations.push_back(RelRef(type, { IF, Synonym{"a"} }, { VARIABLE, Synonym{"a"} }));
 		relations.push_back(RelRef(type, { WHILE, Synonym{"a"} }, { VARIABLE, Synonym{"a"} }));
-		relations.push_back(RelRef(type, { WILD }, { VARIABLE, Synonym{"a"} }));
-		relations.push_back(RelRef(type, { STMT, Synonym{"a"} }, { WILD }));
-		relations.push_back(RelRef(type, { IF, Synonym{"a"} }, { WILD }));
-		relations.push_back(RelRef(type, { WHILE, Synonym{"a"} }, { WILD }));
+		relations.push_back(RelRef(type, WILD_CARD, { VARIABLE, Synonym{"a"} }));
+		relations.push_back(RelRef(type, { STMT, Synonym{"a"} }, WILD_CARD));
+		relations.push_back(RelRef(type, { IF, Synonym{"a"} }, WILD_CARD));
+		relations.push_back(RelRef(type, { WHILE, Synonym{"a"} }, WILD_CARD));
 		relations.push_back(RelRef(type, { STMT, left1 }, { VARIABLE, Synonym{"a"} }));
 		relations.push_back(RelRef(type, { STMT, left2 }, { VARIABLE, Synonym{"a"} }));
 		relations.push_back(RelRef(type, { STMT, Synonym{"a"} }, { VARIABLE, right1 }));
@@ -1654,14 +1657,14 @@ namespace UnitTesting {
 		std::vector<RelRef> relations;
 		//Empty result for non-matching header for double column
 		std::vector<Entity> synonyms;
-		synonyms.push_back({ PRINT, commonSynonym1 });
-		synonyms.push_back({ READ, commonSynonym1 });
-		synonyms.push_back({ ASSIGN, commonSynonym1 });
-		synonyms.push_back({ CALL, commonSynonym1 });
+		synonyms.push_back({ PRINT, COMMON_SYNONYM1 });
+		synonyms.push_back({ READ, COMMON_SYNONYM1 });
+		synonyms.push_back({ ASSIGN, COMMON_SYNONYM1 });
+		synonyms.push_back({ CALL, COMMON_SYNONYM1 });
 
 		for (unsigned int k = 0; k < synonyms.size(); k++) {
-			for (unsigned int j = 0; j < allVariables.size(); j++) {
-				relations.push_back(RelRef(type, synonyms[k], allVariables[j]));
+			for (unsigned int j = 0; j < ALL_VARIABLES.size(); j++) {
+				relations.push_back(RelRef(type, synonyms[k], ALL_VARIABLES[j]));
 			}
 		}
 
@@ -1670,20 +1673,20 @@ namespace UnitTesting {
 	TEST_F(QueryEvaluatorTest, evaluateQueryUsesFilterCommonSynonym) {
 		RelType type = USES_S;
 
-		std::vector<std::string> lefts = USESLEFTS;
-		std::string left1 = USESLEFT1;
-		std::string left2 = USESLEFT2;
-		std::string right1 = USESRIGHT1;
-		std::string right2 = USESRIGHT2;
+		std::vector<std::string> lefts = USES_LEFTS;
+		std::string left1 = USES_LEFT1;
+		std::string left2 = USES_LEFT2;
+		std::string right1 = USES_RIGHT1;
+		std::string right2 = USES_RIGHT2;
 
 		std::vector<Entity> selectedList;
-		selectedList.push_back({ STMT, commonSynonym1 });
-		selectedList.push_back({ IF, commonSynonym1 });
-		selectedList.push_back({ WHILE, commonSynonym1 });
-		selectedList.push_back({ PRINT, commonSynonym1 });
-		selectedList.push_back({ READ, commonSynonym1 });
-		selectedList.push_back({ ASSIGN, commonSynonym1 });
-		selectedList.push_back({ CALL, commonSynonym1 });
+		selectedList.push_back({ STMT, COMMON_SYNONYM1 });
+		selectedList.push_back({ IF, COMMON_SYNONYM1 });
+		selectedList.push_back({ WHILE, COMMON_SYNONYM1 });
+		selectedList.push_back({ PRINT, COMMON_SYNONYM1 });
+		selectedList.push_back({ READ, COMMON_SYNONYM1 });
+		selectedList.push_back({ ASSIGN, COMMON_SYNONYM1 });
+		selectedList.push_back({ CALL, COMMON_SYNONYM1 });
 
 		//Test case for Select a such that USES_S(selected, a)
 		std::list<std::string> result1 = { left1, left2 };
@@ -1704,7 +1707,7 @@ namespace UnitTesting {
 
 		//Test case for Select a such that USES_S(selected, _)
 		for (unsigned int i = 0; i < selectedList.size(); i++) {
-			RelRef relation(type, selectedList[i], { WILD });
+			RelRef relation(type, selectedList[i], WILD_CARD);
 			Query q = initQuery(relation, selectedList[i]);
 			EXPECT_EQ(evaluator.evaluateQuery(q), resultList[i]) << "Error at results : " << i + 1;
 		}
@@ -1733,7 +1736,7 @@ namespace UnitTesting {
 		for (unsigned int i = 0; i < selectedList.size(); i++) {
 			RelRef relation(type, selectedList[i], { VARIABLE, z });
 			Query q = initQuery(relation, selectedList[i]);
-			EXPECT_EQ(evaluator.evaluateQuery(q), emptyResult) << "Error at results : " << i + 1;
+			EXPECT_EQ(evaluator.evaluateQuery(q), EMPTY_RESULT) << "Error at results : " << i + 1;
 		}
 
 		//Test case for Select a such that USES_S(a, selected)
@@ -1741,7 +1744,7 @@ namespace UnitTesting {
 		resultList[1] = { right1 };
 		resultList[2] = { right2 };
 
-		Entity selected(VARIABLE, commonSynonym1);
+		Entity selected(VARIABLE, COMMON_SYNONYM1);
 		for (unsigned int i = 0; i < selectedList.size(); i++) {
 			RelRef relation(type, selectedList[i], selected);
 			Query q = initQuery(relation, selected);
@@ -1750,7 +1753,7 @@ namespace UnitTesting {
 
 		resultList[0] = { right1, right2 };
 		//Test case for Select a such that USES_S(_, selected)
-		RelRef relation(type, { WILD }, selected);
+		RelRef relation(type, WILD_CARD, selected);
 		Query q = initQuery(relation, selected);
 		EXPECT_EQ(evaluator.evaluateQuery(q), resultList[0]);
 
@@ -1774,7 +1777,7 @@ namespace UnitTesting {
 		for (unsigned int j = 0; j < emptyList.size(); j++) {
 			relation = RelRef(type, emptyList[j], selected);
 			q = initQuery(relation, selected);
-			EXPECT_EQ(evaluator.evaluateQuery(q), emptyResult) << "Error at results : " << j + 1;
+			EXPECT_EQ(evaluator.evaluateQuery(q), EMPTY_RESULT) << "Error at results : " << j + 1;
 		}
 	}
 }

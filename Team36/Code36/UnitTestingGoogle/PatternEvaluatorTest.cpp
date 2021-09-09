@@ -5,8 +5,6 @@
 
 namespace UnitTesting {
 	TEST(PatternEvaluatorTest, evaluateRelationType1) {
-		/*
-		* 
 		std::vector<var_name> v = { "x", "y", "z", "y", "z", "z" };
 		std::vector<expr> e = { "x", "y*x", "x+y", "z%x", "x-x", "x+y-z" };
 		std::vector<stmt_index> s = { 1, 2, 3, 4, 5, 6};
@@ -24,6 +22,7 @@ namespace UnitTesting {
 		PKB::getInstance().resetCache();
 		PKB::getInstance().addStmt(STMT_IF);
 		PKB::getInstance().addStmt(STMT_WHILE);
+
 
 		RelationsEvaluator evaluator;
 		QueryResult result;
@@ -89,7 +88,6 @@ namespace UnitTesting {
 				EXPECT_FALSE(result.haveResult()) << "ERROR AT RELATION : " << i + 1;
 			}
 		}
-		*/
 	}
 
 }
