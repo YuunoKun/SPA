@@ -110,7 +110,6 @@ void FSM::expect_statement_type_print() {
 
 void FSM::expect_statement_type_call() {
 	expect_token_and_pop(TokenType::CALL);
-	m_design_extractor->add_statement(TokenType::CALL);
 	Token proc_name_token = expect_token_and_pop(TokenType::IDENTIFIER);
 
 	expect_token_and_pop(TokenType::TERMINATOR);
