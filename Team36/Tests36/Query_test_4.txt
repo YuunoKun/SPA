@@ -47,3 +47,4 @@ Select ifs
 call c;
 Select c
 5, 7
+5000
