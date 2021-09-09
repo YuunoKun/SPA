@@ -177,7 +177,7 @@ namespace UnitTesting {
 	TEST_F(PKBAdapterTest, getAssignInfo) {
 		std::vector<var_name> v = { "x", "y", "z", "y", "z", "z" };
 		std::vector<expr> e = { "x", "y*x", "x+y", "z%x", "x-x", "x+y-z" };
-		std::vector<stmt_index> s = { 1, 2, 3, 4, 5, 6};
+		std::vector<stmt_index> s = { 1, 2, 3, 4, 5, 6 };
 
 		std::vector<AssignInfo> a;
 

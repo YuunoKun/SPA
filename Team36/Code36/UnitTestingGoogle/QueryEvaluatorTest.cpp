@@ -396,7 +396,6 @@ namespace UnitTesting {
 			EXPECT_EQ(evaluator.evaluateQuery(q), resultList[i]) << "Error at results : " << i + 1;
 		}
 
-
 		//Test case for Select a such that Follow(selected, _)
 		for (unsigned int i = 0; i < selectedList.size(); i++) {
 			RelRef relation(type, selectedList[i], { WILD });
@@ -734,7 +733,7 @@ namespace UnitTesting {
 		}
 
 		//Test case for remaining Select a such that FollowT(selected, anyEmpty)
-		emptyList = getInvalidConstant(rights); 
+		emptyList = getInvalidConstant(rights);
 		for (unsigned int j = 0; j < emptyList.size(); j++) {
 			for (unsigned int i = 0; i < selectedList.size(); i++) {
 				RelRef relation(type, selectedList[i], emptyList[j]);
@@ -792,7 +791,7 @@ namespace UnitTesting {
 
 		for (unsigned int k = 0; k < invalidLefts.size(); k++) {
 			for (unsigned int i = 0; i < validConstantStmtEntity.size(); i++) {
-				relations.push_back(RelRef(type, invalidLefts[k], validConstantStmtEntity[i]));	
+				relations.push_back(RelRef(type, invalidLefts[k], validConstantStmtEntity[i]));
 			}
 		}
 
@@ -1554,7 +1553,7 @@ namespace UnitTesting {
 		EXPECT_EQ(evaluator.evaluateQuery(q), resultList[0]);
 
 		//Test case for remaining Select a such that Modifies_S(anyEmpty, selected)
-		std::vector<Entity> emptyList =  getInvalidConstant(lefts);
+		std::vector<Entity> emptyList = getInvalidConstant(lefts);
 
 		for (unsigned int j = 0; j < emptyList.size(); j++) {
 			relation = RelRef(type, emptyList[j], selected);

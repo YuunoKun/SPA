@@ -45,7 +45,6 @@ public:
 	std::vector<StmtInfo> getFollowingT(stmt_index);
 	std::vector<std::pair<StmtInfo, StmtInfo>> getFollowsT();
 
-
 	//Parent relation function
 	bool isParentEmpty();
 	bool isParent(stmt_index, stmt_index);

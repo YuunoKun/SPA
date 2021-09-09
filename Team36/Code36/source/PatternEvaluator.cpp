@@ -15,14 +15,15 @@ void PatternEvaluator::evaluatePattern(QueryResult& queryResult, Pattern& patter
 
 	//if lhs side is at least is declaration, return 2 column table
 	if (lhsEntity.isSynonym()) {
-
-	} else {
+	}
+	else {
 		//if lhs side is not declaration
-		if (lhsEntity.getType() == WILD){
+		if (lhsEntity.getType() == WILD) {
 			//If left side is wild and right side is WILD: e.g a(_, _"x"_)
 			//return all assign statment that match expression
 			//Todo
-		} else {
+		}
+		else {
 			//If left side is constant and right side is normal: e.g a("x", "x")
 			//return all assign statment that match expression and lhs
 		}

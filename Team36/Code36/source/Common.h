@@ -44,7 +44,7 @@ struct AssignInfo {
 	var_name lhs;
 
 	bool operator==(const AssignInfo& assignInfo) const {
-		return stmt_index == assignInfo.stmt_index  && lhs == assignInfo.lhs;
+		return stmt_index == assignInfo.stmt_index && lhs == assignInfo.lhs;
 	}
 
 	bool operator < (const StmtInfo& st) const {
