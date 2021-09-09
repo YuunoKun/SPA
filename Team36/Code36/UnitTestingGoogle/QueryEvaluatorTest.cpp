@@ -65,13 +65,17 @@ namespace UnitTesting {
 			}
 			return invalid;
 		}
+		Query initQuery(RelRef relation, Entity selected) {
+			Query q;
+			q.addRelation(relation);
+			q.addSelected(selected);
+			return q;
+		}
 
 		void validateRelations(std::vector<RelRef> relations) {
 			for (unsigned int i = 0; i < relations.size(); i++) {
 				for (unsigned int j = 0; j < allSelect.size(); j++) {
-					Query q;
-					q.addRelation(relations[i]);
-					q.addSelected(allSelect[j]);
+					Query q = initQuery(relations[i], allSelect[j]);
 					EXPECT_EQ(evaluator.evaluateQuery(q), allResult[j]) << "Error at results : " << i + 1 << " : " << j + 1;
 				}
 			}
@@ -80,9 +84,7 @@ namespace UnitTesting {
 		void validateEmptyRelations(std::vector<RelRef> relations) {
 			for (unsigned int i = 0; i < relations.size(); i++) {
 				for (unsigned int j = 0; j < allSelect.size(); j++) {
-					Query q;
-					q.addRelation(relations[i]);
-					q.addSelected(allSelect[j]);
+					Query q = initQuery(relations[i], allSelect[j]);
 					EXPECT_EQ(evaluator.evaluateQuery(q), emptyResult) << "Error at results : " << i + 1 << " : " << j + 1;
 				}
 			}
@@ -91,9 +93,7 @@ namespace UnitTesting {
 		void validateRelations(std::vector<RelRef> relations, std::vector<Entity> selected, std::vector<std::list<std::string>> results) {
 			for (unsigned int i = 0; i < relations.size(); i++) {
 				for (unsigned int j = 0; j < selected.size(); j++) {
-					Query q;
-					q.addRelation(relations[i]);
-					q.addSelected(selected[j]);
+					Query q = initQuery(relations[i], allSelect[j]);
 					EXPECT_EQ(evaluator.evaluateQuery(q), results[j]) << "Error at results : " << i + 1 << " : " << j + 1;
 				}
 			}
@@ -392,9 +392,7 @@ namespace UnitTesting {
 			result4, result5, result6, result7 };
 		for (unsigned int i = 0; i < selectedList.size(); i++) {
 			RelRef relation(type, selectedList[i], { STMT, Synonym{"a"} });
-			Query q;
-			q.addRelation(relation);
-			q.addSelected(selectedList[i]);
+			Query q = initQuery(relation, selectedList[i]);
 			EXPECT_EQ(evaluator.evaluateQuery(q), resultList[i]) << "Error at results : " << i + 1;
 		}
 
@@ -402,9 +400,7 @@ namespace UnitTesting {
 		//Test case for Select a such that Follow(selected, _)
 		for (unsigned int i = 0; i < selectedList.size(); i++) {
 			RelRef relation(type, selectedList[i], { WILD });
-			Query q;
-			q.addRelation(relation);
-			q.addSelected(selectedList[i]);
+			Query q = initQuery(relation, selectedList[i]);
 			EXPECT_EQ(evaluator.evaluateQuery(q), resultList[i]) << "Error at results : " << i + 1;
 		}
 
@@ -414,18 +410,14 @@ namespace UnitTesting {
 		resultList[2] = { right2 };
 		for (unsigned int i = 0; i < selectedList.size(); i++) {
 			RelRef relation(type, { STMT, Synonym{"a"} }, selectedList[i]);
-			Query q;
-			q.addRelation(relation);
-			q.addSelected(selectedList[i]);
+			Query q = initQuery(relation, selectedList[i]);
 			EXPECT_EQ(evaluator.evaluateQuery(q), resultList[i]) << "Error at results : " << i + 1;
 		}
 
 		//Test case for Select a such that Follow(_, selected)
 		for (unsigned int i = 0; i < selectedList.size(); i++) {
 			RelRef relation(type, { WILD }, selectedList[i]);
-			Query q;
-			q.addRelation(relation);
-			q.addSelected(selectedList[i]);
+			Query q = initQuery(relation, selectedList[i]);
 			EXPECT_EQ(evaluator.evaluateQuery(q), resultList[i]) << "Error at results : " << i + 1;
 		}
 
@@ -435,9 +427,7 @@ namespace UnitTesting {
 		resultList[2] = { };
 		for (unsigned int i = 0; i < selectedList.size(); i++) {
 			RelRef relation(type, { STMT, left1 }, selectedList[i]);
-			Query q;
-			q.addRelation(relation);
-			q.addSelected(selectedList[i]);
+			Query q = initQuery(relation, selectedList[i]);
 			EXPECT_EQ(evaluator.evaluateQuery(q), resultList[i]) << "Error at results : " << i + 1;
 		}
 
@@ -447,9 +437,7 @@ namespace UnitTesting {
 		resultList[2] = { right2 };
 		for (unsigned int i = 0; i < selectedList.size(); i++) {
 			RelRef relation(type, { STMT, left2 }, selectedList[i]);
-			Query q;
-			q.addRelation(relation);
-			q.addSelected(selectedList[i]);
+			Query q = initQuery(relation, selectedList[i]);
 			EXPECT_EQ(evaluator.evaluateQuery(q), resultList[i]) << "Error at results : " << i + 1;
 		}
 
@@ -458,9 +446,7 @@ namespace UnitTesting {
 		for (unsigned int j = 0; j < emptyList.size(); j++) {
 			for (unsigned int i = 0; i < selectedList.size(); i++) {
 				RelRef relation(type, emptyList[j], selectedList[i]);
-				Query q;
-				q.addRelation(relation);
-				q.addSelected(selectedList[i]);
+				Query q = initQuery(relation, selectedList[i]);
 				EXPECT_EQ(evaluator.evaluateQuery(q), emptyResult) << "Error at results : " << i + 1;
 			}
 		}
@@ -471,9 +457,7 @@ namespace UnitTesting {
 		resultList[2] = { };
 		for (unsigned int i = 0; i < selectedList.size(); i++) {
 			RelRef relation(type, selectedList[i], { STMT, right1 });
-			Query q;
-			q.addRelation(relation);
-			q.addSelected(selectedList[i]);
+			Query q = initQuery(relation, selectedList[i]);
 			EXPECT_EQ(evaluator.evaluateQuery(q), resultList[i]) << "Error at results : " << i + 1;
 		}
 
@@ -483,9 +467,7 @@ namespace UnitTesting {
 		resultList[2] = { };
 		for (unsigned int i = 0; i < selectedList.size(); i++) {
 			RelRef relation(type, selectedList[i], { STMT, right2 });
-			Query q;
-			q.addRelation(relation);
-			q.addSelected(selectedList[i]);
+			Query q = initQuery(relation, selectedList[i]);
 			EXPECT_EQ(evaluator.evaluateQuery(q), resultList[i]) << "Error at results : " << i + 1;
 		}
 
@@ -494,9 +476,7 @@ namespace UnitTesting {
 		for (unsigned int j = 0; j < emptyList.size(); j++) {
 			for (unsigned int i = 0; i < selectedList.size(); i++) {
 				RelRef relation(type, selectedList[i], emptyList[j]);
-				Query q;
-				q.addRelation(relation);
-				q.addSelected(selectedList[i]);
+				Query q = initQuery(relation, selectedList[i]);
 				EXPECT_EQ(evaluator.evaluateQuery(q), emptyResult) << "Error at results : " << i + 1;
 			}
 		}
@@ -673,9 +653,7 @@ namespace UnitTesting {
 			result4, result5, result6, result7 };
 		for (unsigned int i = 0; i < selectedList.size(); i++) {
 			RelRef relation(type, selectedList[i], { STMT, Synonym{"a"} });
-			Query q;
-			q.addRelation(relation);
-			q.addSelected(selectedList[i]);
+			Query q = initQuery(relation, selectedList[i]);
 			EXPECT_EQ(evaluator.evaluateQuery(q), resultList[i]) << "Error at results : " << i + 1;
 		}
 
@@ -694,18 +672,14 @@ namespace UnitTesting {
 		resultList[2] = { right2 };
 		for (unsigned int i = 0; i < selectedList.size(); i++) {
 			RelRef relation(type, { STMT, Synonym{"a"} }, selectedList[i]);
-			Query q;
-			q.addRelation(relation);
-			q.addSelected(selectedList[i]);
+			Query q = initQuery(relation, selectedList[i]);
 			EXPECT_EQ(evaluator.evaluateQuery(q), resultList[i]) << "Error at results : " << i + 1;
 		}
 
 		//Test case for Select a such that FollowT(_, selected)
 		for (unsigned int i = 0; i < selectedList.size(); i++) {
 			RelRef relation(type, { WILD }, selectedList[i]);
-			Query q;
-			q.addRelation(relation);
-			q.addSelected(selectedList[i]);
+			Query q = initQuery(relation, selectedList[i]);
 			EXPECT_EQ(evaluator.evaluateQuery(q), resultList[i]) << "Error at results : " << i + 1;
 		}
 
@@ -715,9 +689,7 @@ namespace UnitTesting {
 		resultList[2] = { right2 };
 		for (unsigned int i = 0; i < selectedList.size(); i++) {
 			RelRef relation(type, { STMT, left1 }, selectedList[i]);
-			Query q;
-			q.addRelation(relation);
-			q.addSelected(selectedList[i]);
+			Query q = initQuery(relation, selectedList[i]);
 			EXPECT_EQ(evaluator.evaluateQuery(q), resultList[i]) << "Error at results : " << i + 1;
 		}
 
@@ -727,9 +699,7 @@ namespace UnitTesting {
 		resultList[2] = { right2 };
 		for (unsigned int i = 0; i < selectedList.size(); i++) {
 			RelRef relation(type, { STMT, left2 }, selectedList[i]);
-			Query q;
-			q.addRelation(relation);
-			q.addSelected(selectedList[i]);
+			Query q = initQuery(relation, selectedList[i]);
 			EXPECT_EQ(evaluator.evaluateQuery(q), resultList[i]) << "Error at results : " << i + 1;
 		}
 
@@ -738,9 +708,7 @@ namespace UnitTesting {
 		for (unsigned int j = 0; j < emptyList.size(); j++) {
 			for (unsigned int i = 0; i < selectedList.size(); i++) {
 				RelRef relation(type, emptyList[j], selectedList[i]);
-				Query q;
-				q.addRelation(relation);
-				q.addSelected(selectedList[i]);
+				Query q = initQuery(relation, selectedList[i]);
 				EXPECT_EQ(evaluator.evaluateQuery(q), emptyResult) << "Error at results : " << i + 1;
 			}
 		}
@@ -750,10 +718,8 @@ namespace UnitTesting {
 		resultList[1] = { left1 };
 		resultList[2] = { };
 		for (unsigned int i = 0; i < selectedList.size(); i++) {
-			RelRef relation(type, selectedList[i], { STMT, FOLLOWRIGHT1 });
-			Query q;
-			q.addRelation(relation);
-			q.addSelected(selectedList[i]);
+			RelRef relation(type, selectedList[i], { STMT, right1 });
+			Query q = initQuery(relation, selectedList[i]);
 			EXPECT_EQ(evaluator.evaluateQuery(q), resultList[i]) << "Error at results : " << i + 1;
 		}
 
@@ -762,10 +728,8 @@ namespace UnitTesting {
 		resultList[1] = { left1, left2 };
 		resultList[2] = { };
 		for (unsigned int i = 0; i < selectedList.size(); i++) {
-			RelRef relation(type, selectedList[i], { STMT, FOLLOWRIGHT2 });
-			Query q;
-			q.addRelation(relation);
-			q.addSelected(selectedList[i]);
+			RelRef relation(type, selectedList[i], { STMT, right2 });
+			Query q = initQuery(relation, selectedList[i]);
 			EXPECT_EQ(evaluator.evaluateQuery(q), resultList[i]) << "Error at results : " << i + 1;
 		}
 
@@ -774,9 +738,7 @@ namespace UnitTesting {
 		for (unsigned int j = 0; j < emptyList.size(); j++) {
 			for (unsigned int i = 0; i < selectedList.size(); i++) {
 				RelRef relation(type, selectedList[i], emptyList[j]);
-				Query q;
-				q.addRelation(relation);
-				q.addSelected(selectedList[i]);
+				Query q = initQuery(relation, selectedList[i]);
 				EXPECT_EQ(evaluator.evaluateQuery(q), emptyResult) << "Error at results : " << i + 1;
 			}
 		}
@@ -974,18 +936,14 @@ namespace UnitTesting {
 			result4, result5, result6, result7 };
 		for (unsigned int i = 0; i < selectedList.size(); i++) {
 			RelRef relation(type, selectedList[i], { STMT, Synonym{"a"} });
-			Query q;
-			q.addRelation(relation);
-			q.addSelected(selectedList[i]);
+			Query q = initQuery(relation, selectedList[i]);
 			EXPECT_EQ(evaluator.evaluateQuery(q), resultList[i]) << "Error at results : " << i + 1;
 		}
 
 		//Test case for Select a such that Parent(selected, _)
 		for (unsigned int i = 0; i < selectedList.size(); i++) {
 			RelRef relation(type, selectedList[i], { WILD });
-			Query q;
-			q.addRelation(relation);
-			q.addSelected(selectedList[i]);
+			Query q = initQuery(relation, selectedList[i]);
 			EXPECT_EQ(evaluator.evaluateQuery(q), resultList[i]) << "Error at results : " << i + 1;
 		}
 
@@ -995,18 +953,14 @@ namespace UnitTesting {
 		resultList[2] = { right2, right3 };
 		for (unsigned int i = 0; i < selectedList.size(); i++) {
 			RelRef relation(type, { STMT, Synonym{"a"} }, selectedList[i]);
-			Query q;
-			q.addRelation(relation);
-			q.addSelected(selectedList[i]);
+			Query q = initQuery(relation, selectedList[i]);
 			EXPECT_EQ(evaluator.evaluateQuery(q), resultList[i]) << "Error at results : " << i + 1;
 		}
 
 		//Test case for Select a such that Parent(_, selected)
 		for (unsigned int i = 0; i < selectedList.size(); i++) {
 			RelRef relation(type, { WILD }, selectedList[i]);
-			Query q;
-			q.addRelation(relation);
-			q.addSelected(selectedList[i]);
+			Query q = initQuery(relation, selectedList[i]);
 			EXPECT_EQ(evaluator.evaluateQuery(q), resultList[i]) << "Error at results : " << i + 1;
 		}
 
@@ -1016,9 +970,7 @@ namespace UnitTesting {
 		resultList[2] = { right2 };
 		for (unsigned int i = 0; i < selectedList.size(); i++) {
 			RelRef relation(type, { STMT, left1 }, selectedList[i]);
-			Query q;
-			q.addRelation(relation);
-			q.addSelected(selectedList[i]);
+			Query q = initQuery(relation, selectedList[i]);
 			EXPECT_EQ(evaluator.evaluateQuery(q), resultList[i]) << "Error at results : " << i + 1;
 		}
 
@@ -1028,9 +980,7 @@ namespace UnitTesting {
 		resultList[2] = { right2 };
 		for (unsigned int i = 0; i < selectedList.size(); i++) {
 			RelRef relation(type, { STMT, left2 }, selectedList[i]);
-			Query q;
-			q.addRelation(relation);
-			q.addSelected(selectedList[i]);
+			Query q = initQuery(relation, selectedList[i]);
 			EXPECT_EQ(evaluator.evaluateQuery(q), resultList[i]) << "Error at results : " << i + 1;
 		}
 
@@ -1040,9 +990,7 @@ namespace UnitTesting {
 		resultList[2] = { right3 };
 		for (unsigned int i = 0; i < selectedList.size(); i++) {
 			RelRef relation(type, { STMT, left3 }, selectedList[i]);
-			Query q;
-			q.addRelation(relation);
-			q.addSelected(selectedList[i]);
+			Query q = initQuery(relation, selectedList[i]);
 			EXPECT_EQ(evaluator.evaluateQuery(q), resultList[i]) << "Error at results : " << i + 1;
 		}
 
@@ -1052,9 +1000,7 @@ namespace UnitTesting {
 		for (unsigned int j = 0; j < emptyList.size(); j++) {
 			for (unsigned int i = 0; i < selectedList.size(); i++) {
 				RelRef relation(type, emptyList[j], selectedList[i]);
-				Query q;
-				q.addRelation(relation);
-				q.addSelected(selectedList[i]);
+				Query q = initQuery(relation, selectedList[i]);
 				EXPECT_EQ(evaluator.evaluateQuery(q), emptyResult) << "Error at results : " << i + 1;
 			}
 		}
@@ -1065,9 +1011,7 @@ namespace UnitTesting {
 		resultList[2] = { };
 		for (unsigned int i = 0; i < selectedList.size(); i++) {
 			RelRef relation(type, selectedList[i], { STMT, right1 });
-			Query q;
-			q.addRelation(relation);
-			q.addSelected(selectedList[i]);
+			Query q = initQuery(relation, selectedList[i]);
 			EXPECT_EQ(evaluator.evaluateQuery(q), resultList[i]) << "Error at results : " << i + 1;
 		}
 
@@ -1077,9 +1021,7 @@ namespace UnitTesting {
 		resultList[2] = { };
 		for (unsigned int i = 0; i < selectedList.size(); i++) {
 			RelRef relation(type, selectedList[i], { STMT, right2 });
-			Query q;
-			q.addRelation(relation);
-			q.addSelected(selectedList[i]);
+			Query q = initQuery(relation, selectedList[i]);
 			EXPECT_EQ(evaluator.evaluateQuery(q), resultList[i]) << "Error at results : " << i + 1;
 		}
 
@@ -1089,9 +1031,7 @@ namespace UnitTesting {
 		resultList[2] = { left3 };
 		for (unsigned int i = 0; i < selectedList.size(); i++) {
 			RelRef relation(type, selectedList[i], { STMT, right3 });
-			Query q;
-			q.addRelation(relation);
-			q.addSelected(selectedList[i]);
+			Query q = initQuery(relation, selectedList[i]);
 			EXPECT_EQ(evaluator.evaluateQuery(q), resultList[i]) << "Error at results : " << i + 1;
 		}
 
@@ -1101,9 +1041,7 @@ namespace UnitTesting {
 		for (unsigned int j = 0; j < emptyList.size(); j++) {
 			for (unsigned int i = 0; i < selectedList.size(); i++) {
 				RelRef relation(type, selectedList[i], emptyList[j]);
-				Query q;
-				q.addRelation(relation);
-				q.addSelected(selectedList[i]);
+				Query q = initQuery(relation, selectedList[i]);
 				EXPECT_EQ(evaluator.evaluateQuery(q), emptyResult) << "Error at results : " << i + 1;
 			}
 		}
@@ -1296,18 +1234,14 @@ namespace UnitTesting {
 			result4, result5, result6, result7 };
 		for (unsigned int i = 0; i < selectedList.size(); i++) {
 			RelRef relation(type, selectedList[i], { STMT, Synonym{"a"} });
-			Query q;
-			q.addRelation(relation);
-			q.addSelected(selectedList[i]);
+			Query q = initQuery(relation, selectedList[i]);
 			EXPECT_EQ(evaluator.evaluateQuery(q), resultList[i]) << "Error at results : " << i + 1;
 		}
 
 		//Test case for Select a such that ParentT(selected, _)
 		for (unsigned int i = 0; i < selectedList.size(); i++) {
 			RelRef relation(type, selectedList[i], { WILD });
-			Query q;
-			q.addRelation(relation);
-			q.addSelected(selectedList[i]);
+			Query q = initQuery(relation, selectedList[i]);
 			EXPECT_EQ(evaluator.evaluateQuery(q), resultList[i]) << "Error at results : " << i + 1;
 		}
 
@@ -1317,18 +1251,14 @@ namespace UnitTesting {
 		resultList[2] = { right2, right3 };
 		for (unsigned int i = 0; i < selectedList.size(); i++) {
 			RelRef relation(type, { STMT, Synonym{"a"} }, selectedList[i]);
-			Query q;
-			q.addRelation(relation);
-			q.addSelected(selectedList[i]);
+			Query q = initQuery(relation, selectedList[i]);
 			EXPECT_EQ(evaluator.evaluateQuery(q), resultList[i]) << "Error at results : " << i + 1;
 		}
 
 		//Test case for Select a such that ParentT(_, selected)
 		for (unsigned int i = 0; i < selectedList.size(); i++) {
 			RelRef relation(type, { WILD }, selectedList[i]);
-			Query q;
-			q.addRelation(relation);
-			q.addSelected(selectedList[i]);
+			Query q = initQuery(relation, selectedList[i]);
 			EXPECT_EQ(evaluator.evaluateQuery(q), resultList[i]) << "Error at results : " << i + 1;
 		}
 
@@ -1338,9 +1268,7 @@ namespace UnitTesting {
 		resultList[2] = { right2 };
 		for (unsigned int i = 0; i < selectedList.size(); i++) {
 			RelRef relation(type, { STMT, left1 }, selectedList[i]);
-			Query q;
-			q.addRelation(relation);
-			q.addSelected(selectedList[i]);
+			Query q = initQuery(relation, selectedList[i]);
 			EXPECT_EQ(evaluator.evaluateQuery(q), resultList[i]) << "Error at results : " << i + 1;
 		}
 
@@ -1350,9 +1278,7 @@ namespace UnitTesting {
 		resultList[2] = { right2 };
 		for (unsigned int i = 0; i < selectedList.size(); i++) {
 			RelRef relation(type, { STMT, left2 }, selectedList[i]);
-			Query q;
-			q.addRelation(relation);
-			q.addSelected(selectedList[i]);
+			Query q = initQuery(relation, selectedList[i]);
 			EXPECT_EQ(evaluator.evaluateQuery(q), resultList[i]) << "Error at results : " << i + 1;
 		}
 
@@ -1362,9 +1288,7 @@ namespace UnitTesting {
 		resultList[2] = { right3 };
 		for (unsigned int i = 0; i < selectedList.size(); i++) {
 			RelRef relation(type, { STMT, left3 }, selectedList[i]);
-			Query q;
-			q.addRelation(relation);
-			q.addSelected(selectedList[i]);
+			Query q = initQuery(relation, selectedList[i]);
 			EXPECT_EQ(evaluator.evaluateQuery(q), resultList[i]) << "Error at results : " << i + 1;
 		}
 
@@ -1373,9 +1297,7 @@ namespace UnitTesting {
 		for (unsigned int j = 0; j < emptyList.size(); j++) {
 			for (unsigned int i = 0; i < selectedList.size(); i++) {
 				RelRef relation(type, emptyList[j], selectedList[i]);
-				Query q;
-				q.addRelation(relation);
-				q.addSelected(selectedList[i]);
+				Query q = initQuery(relation, selectedList[i]);
 				EXPECT_EQ(evaluator.evaluateQuery(q), emptyResult) << "Error at results : " << i + 1;
 			}
 		}
@@ -1386,9 +1308,7 @@ namespace UnitTesting {
 		resultList[2] = { };
 		for (unsigned int i = 0; i < selectedList.size(); i++) {
 			RelRef relation(type, selectedList[i], { STMT, right1 });
-			Query q;
-			q.addRelation(relation);
-			q.addSelected(selectedList[i]);
+			Query q = initQuery(relation, selectedList[i]);
 			EXPECT_EQ(evaluator.evaluateQuery(q), resultList[i]) << "Error at results : " << i + 1;
 		}
 
@@ -1398,9 +1318,7 @@ namespace UnitTesting {
 		resultList[2] = { };
 		for (unsigned int i = 0; i < selectedList.size(); i++) {
 			RelRef relation(type, selectedList[i], { STMT, right2 });
-			Query q;
-			q.addRelation(relation);
-			q.addSelected(selectedList[i]);
+			Query q = initQuery(relation, selectedList[i]);
 			EXPECT_EQ(evaluator.evaluateQuery(q), resultList[i]) << "Error at results : " << i + 1;
 		}
 
@@ -1410,9 +1328,7 @@ namespace UnitTesting {
 		resultList[2] = { left3 };
 		for (unsigned int i = 0; i < selectedList.size(); i++) {
 			RelRef relation(type, selectedList[i], { STMT, right3 });
-			Query q;
-			q.addRelation(relation);
-			q.addSelected(selectedList[i]);
+			Query q = initQuery(relation, selectedList[i]);
 			EXPECT_EQ(evaluator.evaluateQuery(q), resultList[i]) << "Error at results : " << i + 1;
 		}
 
@@ -1421,9 +1337,7 @@ namespace UnitTesting {
 		for (unsigned int j = 0; j < emptyList.size(); j++) {
 			for (unsigned int i = 0; i < selectedList.size(); i++) {
 				RelRef relation(type, selectedList[i], emptyList[j]);
-				Query q;
-				q.addRelation(relation);
-				q.addSelected(selectedList[i]);
+				Query q = initQuery(relation, selectedList[i]);
 				EXPECT_EQ(evaluator.evaluateQuery(q), emptyResult) << "Error at results : " << i + 1;
 			}
 		}
@@ -1569,18 +1483,14 @@ namespace UnitTesting {
 			result4, result5, result6, result7 };
 		for (unsigned int i = 0; i < selectedList.size(); i++) {
 			RelRef relation(type, selectedList[i], { VARIABLE, Synonym{"a"} });
-			Query q;
-			q.addRelation(relation);
-			q.addSelected(selectedList[i]);
+			Query q = initQuery(relation, selectedList[i]);
 			EXPECT_EQ(evaluator.evaluateQuery(q), resultList[i]) << "Error at results : " << i + 1;
 		}
 
 		//Test case for Select a such that Modifies_S(selected, _)
 		for (unsigned int i = 0; i < selectedList.size(); i++) {
 			RelRef relation(type, selectedList[i], { WILD });
-			Query q;
-			q.addRelation(relation);
-			q.addSelected(selectedList[i]);
+			Query q = initQuery(relation, selectedList[i]);
 			EXPECT_EQ(evaluator.evaluateQuery(q), resultList[i]) << "Error at results : " << i + 1;
 		}
 
@@ -1590,9 +1500,7 @@ namespace UnitTesting {
 		resultList[2] = { };
 		for (unsigned int i = 0; i < selectedList.size(); i++) {
 			RelRef relation(type, selectedList[i], { VARIABLE, right1 });
-			Query q;
-			q.addRelation(relation);
-			q.addSelected(selectedList[i]);
+			Query q = initQuery(relation, selectedList[i]);
 			EXPECT_EQ(evaluator.evaluateQuery(q), resultList[i]) << "Error at results : " << i + 1;
 		}
 
@@ -1602,18 +1510,14 @@ namespace UnitTesting {
 		resultList[2] = { left2 };
 		for (unsigned int i = 0; i < selectedList.size(); i++) {
 			RelRef relation(type, selectedList[i], { VARIABLE, right2 });
-			Query q;
-			q.addRelation(relation);
-			q.addSelected(selectedList[i]);
+			Query q = initQuery(relation, selectedList[i]);
 			EXPECT_EQ(evaluator.evaluateQuery(q), resultList[i]) << "Error at results : " << i + 1;
 		}
 
 		//Test case for remaining Select a such that Modifies_S(selected, anyEmpty)
 		for (unsigned int i = 0; i < selectedList.size(); i++) {
 			RelRef relation(type, selectedList[i], { VARIABLE, z });
-			Query q;
-			q.addRelation(relation);
-			q.addSelected(selectedList[i]);
+			Query q = initQuery(relation, selectedList[i]);
 			EXPECT_EQ(evaluator.evaluateQuery(q), emptyResult) << "Error at results : " << i + 1;
 		}
 
@@ -1625,18 +1529,14 @@ namespace UnitTesting {
 		Entity selected(VARIABLE, commonSynonym1);
 		for (unsigned int i = 0; i < selectedList.size(); i++) {
 			RelRef relation(type, selectedList[i], selected);
-			Query q;
-			q.addRelation(relation);
-			q.addSelected(selected);
+			Query q = initQuery(relation, selected);
 			EXPECT_EQ(evaluator.evaluateQuery(q), resultList[i]);
 		}
 
 		resultList[0] = { right1, right2 };
 		//Test case for Select a such that Modifies_S(_, selected)
 		RelRef relation(type, { WILD }, selected);
-		Query q;
-		q.addRelation(relation);
-		q.addSelected(selected);
+		Query q = initQuery(relation, selected);
 		EXPECT_EQ(evaluator.evaluateQuery(q), resultList[0]);
 
 		//Test case for Select a such that Modifies_S("1", selected)
@@ -1644,17 +1544,13 @@ namespace UnitTesting {
 		resultList[1] = { };
 		resultList[2] = { };
 		relation = RelRef(type, { STMT, left1 }, selected);
-		q = Query();
-		q.addRelation(relation);
-		q.addSelected(selected);
+		q = initQuery(relation, selected);
 		EXPECT_EQ(evaluator.evaluateQuery(q), resultList[0]);
 
 		//Test case for Select a such that Modifies_S("3", selected)
 		resultList[0] = { right2 };
 		relation = RelRef(type, { STMT, left2 }, selected);
-		q = Query();
-		q.addRelation(relation);
-		q.addSelected(selected);
+		q = initQuery(relation, selected);
 		EXPECT_EQ(evaluator.evaluateQuery(q), resultList[0]);
 
 		//Test case for remaining Select a such that Modifies_S(anyEmpty, selected)
@@ -1662,9 +1558,7 @@ namespace UnitTesting {
 
 		for (unsigned int j = 0; j < emptyList.size(); j++) {
 			relation = RelRef(type, emptyList[j], selected);
-			q = Query();
-			q.addRelation(relation);
-			q.addSelected(selected);
+			q = initQuery(relation, selected);
 			EXPECT_EQ(evaluator.evaluateQuery(q), emptyResult) << "Error at results : " << j + 1;
 		}
 	}
@@ -1805,18 +1699,14 @@ namespace UnitTesting {
 			result4, result5, result6, result7 };
 		for (unsigned int i = 0; i < selectedList.size(); i++) {
 			RelRef relation(type, selectedList[i], { VARIABLE, Synonym{"a"} });
-			Query q;
-			q.addRelation(relation);
-			q.addSelected(selectedList[i]);
+			Query q = initQuery(relation, selectedList[i]);
 			EXPECT_EQ(evaluator.evaluateQuery(q), resultList[i]) << "Error at results : " << i + 1;
 		}
 
 		//Test case for Select a such that USES_S(selected, _)
 		for (unsigned int i = 0; i < selectedList.size(); i++) {
 			RelRef relation(type, selectedList[i], { WILD });
-			Query q;
-			q.addRelation(relation);
-			q.addSelected(selectedList[i]);
+			Query q = initQuery(relation, selectedList[i]);
 			EXPECT_EQ(evaluator.evaluateQuery(q), resultList[i]) << "Error at results : " << i + 1;
 		}
 
@@ -1826,9 +1716,7 @@ namespace UnitTesting {
 		resultList[2] = { };
 		for (unsigned int i = 0; i < selectedList.size(); i++) {
 			RelRef relation(type, selectedList[i], { VARIABLE, right1 });
-			Query q;
-			q.addRelation(relation);
-			q.addSelected(selectedList[i]);
+			Query q = initQuery(relation, selectedList[i]);
 			EXPECT_EQ(evaluator.evaluateQuery(q), resultList[i]) << "Error at results : " << i + 1;
 		}
 
@@ -1838,18 +1726,14 @@ namespace UnitTesting {
 		resultList[2] = { left2 };
 		for (unsigned int i = 0; i < selectedList.size(); i++) {
 			RelRef relation(type, selectedList[i], { VARIABLE, right2 });
-			Query q;
-			q.addRelation(relation);
-			q.addSelected(selectedList[i]);
+			Query q = initQuery(relation, selectedList[i]);
 			EXPECT_EQ(evaluator.evaluateQuery(q), resultList[i]) << "Error at results : " << i + 1;
 		}
 
 		//Test case for remaining Select a such that USES_S(selected, anyEmpty)
 		for (unsigned int i = 0; i < selectedList.size(); i++) {
 			RelRef relation(type, selectedList[i], { VARIABLE, z });
-			Query q;
-			q.addRelation(relation);
-			q.addSelected(selectedList[i]);
+			Query q = initQuery(relation, selectedList[i]);
 			EXPECT_EQ(evaluator.evaluateQuery(q), emptyResult) << "Error at results : " << i + 1;
 		}
 
@@ -1861,18 +1745,14 @@ namespace UnitTesting {
 		Entity selected(VARIABLE, commonSynonym1);
 		for (unsigned int i = 0; i < selectedList.size(); i++) {
 			RelRef relation(type, selectedList[i], selected);
-			Query q;
-			q.addRelation(relation);
-			q.addSelected(selected);
+			Query q = initQuery(relation, selected);
 			EXPECT_EQ(evaluator.evaluateQuery(q), resultList[i]);
 		}
 
 		resultList[0] = { right1, right2 };
 		//Test case for Select a such that USES_S(_, selected)
 		RelRef relation(type, { WILD }, selected);
-		Query q;
-		q.addRelation(relation);
-		q.addSelected(selected);
+		Query q = initQuery(relation, selected);
 		EXPECT_EQ(evaluator.evaluateQuery(q), resultList[0]);
 
 		//Test case for Select a such that USES_S("1", selected)
@@ -1880,17 +1760,13 @@ namespace UnitTesting {
 		resultList[1] = { };
 		resultList[2] = { };
 		relation = RelRef(type, { STMT, left1 }, selected);
-		q = Query();
-		q.addRelation(relation);
-		q.addSelected(selected);
+		q = initQuery(relation, selected);
 		EXPECT_EQ(evaluator.evaluateQuery(q), resultList[0]);
 
 		//Test case for Select a such that USES_S("3", selected)
 		resultList[0] = { right2 };
 		relation = RelRef(type, { STMT, left2 }, selected);
-		q = Query();
-		q.addRelation(relation);
-		q.addSelected(selected);
+		q = initQuery(relation, selected);
 		EXPECT_EQ(evaluator.evaluateQuery(q), resultList[0]);
 
 		//Test case for remaining Select a such that USES_S(anyEmpty, selected)
@@ -1898,9 +1774,7 @@ namespace UnitTesting {
 
 		for (unsigned int j = 0; j < emptyList.size(); j++) {
 			relation = RelRef(type, emptyList[j], selected);
-			q = Query();
-			q.addRelation(relation);
-			q.addSelected(selected);
+			q = initQuery(relation, selected);
 			EXPECT_EQ(evaluator.evaluateQuery(q), emptyResult) << "Error at results : " << j + 1;
 		}
 	}
