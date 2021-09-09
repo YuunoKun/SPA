@@ -1,31 +1,6 @@
-procedure a {
-	x = 2;                      //1
-	y = 10;                   //2
-	read z;                      //3
-	while ( y > 0) {                     //4 
-		call b;                      //5
-		if ( y > z) then {         //6             
-			call c;                 //7     
-		} else {                      
-			y = y -x;                   //8   
-		}
-	}
-	print x;                      //9
-	print y;                      //10
-	print z; 	                       //11
-}
-procedure b {
-	var1 = 0;                      //12
-	while (x < y ) {                  //13    
-		va1 = (y / x) + z;        //14              
-		x = x + 1;                      //15
-	}
-	print var1;                      //16
-}
-procedure c {
-	if (z > 0) then {                      //17
-		y = x * y - z;                     //18 
-	} else {
-		y = y - z;                      //19
-	}
-}
+procedure xyz {
+ x = 10;
+ while (x > 0) {
+  x = x – 1;
+ }
+ }
