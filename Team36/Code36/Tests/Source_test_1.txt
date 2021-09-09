@@ -1,4 +1,4 @@
-Procedure readAndprint {
-	read x;                      //1
-	print x;                     //2
+procedure readAndprint {
+ read x;
+ print x;
 }

@@ -1,25 +1,25 @@
-1 – select procedure
+1 - select procedure
 procedure p;
 Select p
 readAndprint
 5000
-2 – select statement
+2 - select statement
 stmt s;
 Select s
 1, 2
 5000
-3 – select variable
+3 - select variable
 variable v;
 Select v
 x
 5000
-4 – invalid query: capitalization
-Procedure p;
-Select p
-readAndprint;
+4 - select read
+read r;
+Select r
+1
 5000
-5 – invalid query: wrong result
-stmt s;
-Select s;
+5 - select print
+print pn;
+Select pn
 2
 5000
