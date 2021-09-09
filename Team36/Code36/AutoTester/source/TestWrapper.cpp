@@ -27,7 +27,6 @@ void TestWrapper::parse(std::string filename) {
 	SourceProcessor::Parser parser;
 	parser.load_file(filename);
 	parser.parse();
-	std::cout << "parsed " << filename << std::endl;
 }
 
 // method to evaluating a query
@@ -37,4 +36,9 @@ void TestWrapper::evaluate(std::string query, std::list<std::string>& results) {
 
 	  // store the answers to the query in the results list (it is initially empty)
 	  // each result must be a string.
+	QuerySystem querySystem;
+	std::list<std::string> queryResult = querySystem.processQuery(query);
+	for each (std::string s in queryResult) {
+		results.push_back(s);
+	}
 }

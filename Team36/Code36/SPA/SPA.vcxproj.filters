@@ -1,138 +1,258 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <ItemGroup>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
-    </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
-    <Filter Include="Source Files\PQL">
-      <UniqueIdentifier>{37070778-2b1c-4155-8b73-677a8fb86f0c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\PQL">
-      <UniqueIdentifier>{e447ebf1-a739-4a70-a6a3-67e0b55ff202}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Common">
-      <UniqueIdentifier>{2d0e0325-edf1-47cf-bb37-0472e2021428}</UniqueIdentifier>
-    </Filter>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="..\source\DesignExtractor.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\PKB.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\TNode.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\Entity.cpp">
-      <Filter>Source Files\PQL</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\Pattern.cpp">
-      <Filter>Source Files\PQL</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\PKBAdapter.cpp">
-      <Filter>Source Files\PQL</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\Query.cpp">
-      <Filter>Source Files\PQL</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\QueryEvaluator.cpp">
-      <Filter>Source Files\PQL</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\QueryPreprocessor.cpp">
-      <Filter>Source Files\PQL</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\QuerySystem.cpp">
-      <Filter>Source Files\PQL</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\RelRef.cpp">
-      <Filter>Source Files\PQL</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\Parser.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\Stmt.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\Token.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\Tokenizer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>    
-    <ClCompile Include="..\source\QueryResult.cpp">
-      <Filter>Source Files\PQL</Filter>
-    </ClCompile>
-	<ClCompile Include="..\source\PatternEvaluator.cpp">
-      <Filter>Source Files\PQL</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\RelationEvaluator.cpp">
-      <Filter>Source Files\PQL</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="..\source\Parser.h">
-      <Filter>Header Files</Filter>
-    </ClCompile>
-    <ClInclude Include="..\source\PKB.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\TNode.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\Entity.h">
-      <Filter>Header Files\PQL</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\Pattern.h">
-      <Filter>Header Files\PQL</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\PKBAdapter.h">
-      <Filter>Header Files\PQL</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\Query.h">
-      <Filter>Header Files\PQL</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\QueryEvaluator.h">
-      <Filter>Header Files\PQL</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\QueryPreprocessor.h">
-      <Filter>Header Files\PQL</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\QuerySystem.h">
-      <Filter>Header Files\PQL</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\RelRef.h">
-      <Filter>Header Files\PQL</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\Common.h">
-      <Filter>Header Files\Common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\Stmt.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\Token.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\Tokenizer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\QueryResult.h">
-      <Filter>Header Files\PQL</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\PatternEvaluator.h">
-      <Filter>Header Files\PQL</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\RelationEvaluator.h">
-      <Filter>Header Files\PQL</Filter>
-    </ClInclude>
-  </ItemGroup>
+	<ItemGroup>
+		<Filter Include="Source Files">
+			<UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+			<Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+		</Filter>
+		<Filter Include="Header Files">
+			<UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+			<Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+		</Filter>
+		<Filter Include="Resource Files">
+			<UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+			<Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+		</Filter>
+		<Filter Include="Source Files\PQL">
+			<UniqueIdentifier>{37070778-2b1c-4155-8b73-677a8fb86f0c}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="Header Files\PQL">
+			<UniqueIdentifier>{e447ebf1-a739-4a70-a6a3-67e0b55ff202}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="Header Files\Common">
+			<UniqueIdentifier>{2d0e0325-edf1-47cf-bb37-0472e2021428}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="Source Files\SP">
+			<UniqueIdentifier>{1c975f8d-99a4-4291-aa2e-40c6a55be7f6}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="Header Files\SP">
+			<UniqueIdentifier>{c378a91f-c549-401e-ada0-5f6f8160d2a6}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="Source Files\PKB">
+			<UniqueIdentifier>{3d599b16-4269-49f5-a655-f4fcf01aa7a5}</UniqueIdentifier>
+		</Filter>
+		<Filter Include="Header Files\PKB">
+			<UniqueIdentifier>{93d5b8fd-c47f-4c67-af92-aa1bef18c9ef}</UniqueIdentifier>
+		</Filter>
+	</ItemGroup>
+	<ItemGroup>
+		<ClCompile Include="..\source\TNode.cpp">
+			<Filter>Source Files</Filter>
+		</ClCompile>
+		<ClCompile Include="..\source\Entity.cpp">
+			<Filter>Source Files\PQL</Filter>
+		</ClCompile>
+		<ClCompile Include="..\source\Pattern.cpp">
+			<Filter>Source Files\PQL</Filter>
+		</ClCompile>
+		<ClCompile Include="..\source\PKBAdapter.cpp">
+			<Filter>Source Files\PQL</Filter>
+		</ClCompile>
+		<ClCompile Include="..\source\Query.cpp">
+			<Filter>Source Files\PQL</Filter>
+		</ClCompile>
+		<ClCompile Include="..\source\QueryEvaluator.cpp">
+			<Filter>Source Files\PQL</Filter>
+		</ClCompile>
+		<ClCompile Include="..\source\QueryPreprocessor.cpp">
+			<Filter>Source Files\PQL</Filter>
+		</ClCompile>
+		<ClCompile Include="..\source\QuerySystem.cpp">
+			<Filter>Source Files\PQL</Filter>
+		</ClCompile>
+		<ClCompile Include="..\source\RelRef.cpp">
+			<Filter>Source Files\PQL</Filter>
+		</ClCompile>
+		<ClCompile Include="..\source\Stmt.cpp">
+			<Filter>Source Files</Filter>
+		</ClCompile>
+		<ClCompile Include="..\source\QueryResult.cpp">
+			<Filter>Source Files\PQL</Filter>
+		</ClCompile>
+		<ClCompile Include="..\source\PatternEvaluator.cpp">
+			<Filter>Source Files\PQL</Filter>
+		</ClCompile>
+		<ClCompile Include="..\source\RelationsEvaluator.cpp">
+			<Filter>Source Files\PQL</Filter>
+		</ClCompile>
+		<ClCompile Include="..\source\Utility.cpp">
+			<Filter>Source Files\PQL</Filter>
+		</ClCompile>
+		<ClCompile Include="..\source\ResultTable.cpp">
+			<Filter>Source Files\PQL</Filter>
+		</ClCompile>
+		<ClCompile Include="..\source\FollowsEvaluator.cpp">
+			<Filter>Source Files\PQL</Filter>
+		</ClCompile>
+		<ClCompile Include="..\source\FollowsTEvaluator.cpp">
+			<Filter>Source Files\PQL</Filter>
+		</ClCompile>
+		<ClCompile Include="..\source\QueryTokenizer.cpp">
+			<Filter>Source Files\PQL</Filter>
+		</ClCompile>
+		<ClCompile Include="..\source\QueryToken.cpp">
+			<Filter>Source Files\PQL</Filter>
+		</ClCompile>
+		<ClCompile Include="..\source\ParentEvaluator.cpp">
+			<Filter>Source Files\PQL</Filter>
+		</ClCompile>
+		<ClCompile Include="..\source\ParentTEvaluator.cpp">
+			<Filter>Source Files\PQL</Filter>
+		</ClCompile>
+		<ClCompile Include="..\source\ModifiesSEvaluator.cpp">
+			<Filter>Source Files\PQL</Filter>
+		</ClCompile>
+		<ClCompile Include="..\source\ModifiesPEvaluator.cpp">
+			<Filter>Source Files\PQL</Filter>
+		</ClCompile>
+		<ClCompile Include="..\source\UsesSEvaluator.cpp">
+			<Filter>Source Files\PQL</Filter>
+		</ClCompile>
+		<ClCompile Include="..\source\UsesPEvaluator.cpp">
+			<Filter>Source Files\PQL</Filter>
+		</ClCompile>
+		<ClCompile Include="..\source\RelationTable.cpp">
+			<Filter>Source Files\PKB</Filter>
+		</ClCompile>
+		<ClCompile Include="..\source\PKB.cpp">
+			<Filter>Source Files\PKB</Filter>
+		</ClCompile>
+		<ClCompile Include="..\source\Tokenizer.cpp">
+			<Filter>Source Files\SP</Filter>
+		</ClCompile>
+		<ClCompile Include="..\source\Parser.cpp">
+			<Filter>Source Files\SP</Filter>
+		</ClCompile>
+		<ClCompile Include="..\source\DesignExtractor.cpp">
+			<Filter>Source Files\SP</Filter>
+		</ClCompile>
+		<ClCompile Include="..\source\Token.cpp">
+			<Filter>Source Files\SP</Filter>
+		</ClCompile>
+		<ClCompile Include="..\source\FSM.cpp">
+			<Filter>Source Files\SP</Filter>
+		</ClCompile>
+		<ClCompile Include="..\source\Procedure.cpp">
+			<Filter>Source Files\SP</Filter>
+		</ClCompile>
+		<ClCompile Include="..\source\Statement.cpp">
+			<Filter>Source Files\SP</Filter>
+		</ClCompile>
+	</ItemGroup>
+	<ItemGroup>
+		<ClInclude Include="..\source\Parser.h">
+			<Filter>Header Files\SP</Filter>
+		</ClInclude>
+		<ClInclude Include="..\source\Tokenizer.h">
+			<Filter>Header Files\SP</Filter>
+		</ClInclude>
+		<ClInclude Include="..\source\Token.h">
+			<Filter>Header Files\SP</Filter>
+		</ClInclude>
+		<ClInclude Include="..\source\DesignExtractor.h">
+			<Filter>Header Files\SP</Filter>
+		</ClInclude>
+		<ClInclude Include="..\source\Extractor.h">
+			<Filter>Header Files\SP</Filter>
+		</ClInclude>
+		<ClInclude Include="..\source\FSM.h">
+			<Filter>Header Files\SP</Filter>
+		</ClInclude>
+		<ClInclude Include="..\source\Procedure.h">
+			<Filter>Header Files\SP</Filter>
+		</ClInclude>
+		<ClInclude Include="..\source\Statement.h">
+			<Filter>Header Files\SP</Filter>
+		</ClInclude>
+		<ClInclude Include="..\source\PatternEvaluator.h">
+			<Filter>Header Files</Filter>
+		</ClInclude>
+		<ClInclude Include="..\source\TNode.h">
+			<Filter>Header Files</Filter>
+		</ClInclude>
+		<ClInclude Include="..\source\Entity.h">
+			<Filter>Header Files\PQL</Filter>
+		</ClInclude>
+		<ClInclude Include="..\source\Pattern.h">
+			<Filter>Header Files\PQL</Filter>
+		</ClInclude>
+		<ClInclude Include="..\source\PKBAdapter.h">
+			<Filter>Header Files\PQL</Filter>
+		</ClInclude>
+		<ClInclude Include="..\source\Query.h">
+			<Filter>Header Files\PQL</Filter>
+		</ClInclude>
+		<ClInclude Include="..\source\QueryEvaluator.h">
+			<Filter>Header Files\PQL</Filter>
+		</ClInclude>
+		<ClInclude Include="..\source\QueryPreprocessor.h">
+			<Filter>Header Files\PQL</Filter>
+		</ClInclude>
+		<ClInclude Include="..\source\QuerySystem.h">
+			<Filter>Header Files\PQL</Filter>
+		</ClInclude>
+		<ClInclude Include="..\source\RelRef.h">
+			<Filter>Header Files\PQL</Filter>
+		</ClInclude>
+		<ClInclude Include="..\source\Common.h">
+			<Filter>Header Files\Common</Filter>
+		</ClInclude>
+		<ClInclude Include="..\source\Stmt.h">
+			<Filter>Header Files</Filter>
+		</ClInclude>
+		<ClInclude Include="..\source\QueryToken.h">
+			<Filter>Header Files\PQL</Filter>
+		</ClInclude>
+		<ClInclude Include="..\source\QueryTokenizer.h">
+			<Filter>Header Files\PQL</Filter>
+		</ClInclude>
+		<ClInclude Include="..\source\RelationEvaluatorInterface.h">
+			<Filter>Header Files\PQL</Filter>
+		</ClInclude>
+		<ClInclude Include="..\source\RelationsEvaluator.h">
+			<Filter>Header Files\PQL</Filter>
+		</ClInclude>
+		<ClInclude Include="..\source\FollowsEvaluator.h">
+			<Filter>Header Files\PQL</Filter>
+		</ClInclude>
+		<ClInclude Include="..\source\FollowsTEvaluator.h">
+			<Filter>Header Files\PQL</Filter>
+		</ClInclude>
+		<ClInclude Include="..\source\ResultTable.h">
+			<Filter>Header Files\PQL</Filter>
+		</ClInclude>
+		<ClInclude Include="..\source\Utility.h">
+			<Filter>Header Files\PQL</Filter>
+		</ClInclude>
+		<ClInclude Include="..\source\ParentTEvaluator.h">
+			<Filter>Header Files\PQL</Filter>
+		</ClInclude>
+		<ClInclude Include="..\source\ParentEvaluator.h">
+			<Filter>Header Files\PQL</Filter>
+		</ClInclude>
+		<ClInclude Include="..\source\PatternEvaluator.h">
+			<Filter>Header Files\PQL</Filter>
+		</ClInclude>
+		<ClInclude Include="..\source\ModifiesSEvaluator.h">
+			<Filter>Header Files\PQL</Filter>
+		</ClInclude>
+		<ClInclude Include="..\source\ModifiesPEvaluator.h">
+			<Filter>Header Files\PQL</Filter>
+		</ClInclude>
+		<ClInclude Include="..\source\UsesSEvaluator.h">
+			<Filter>Header Files\PQL</Filter>
+		</ClInclude>
+		<ClInclude Include="..\source\UsesPEvaluator.h">
+			<Filter>Header Files\PQL</Filter>
+		</ClInclude>
+		<ClInclude Include="..\source\PKB.h">
+			<Filter>Header Files\PKB</Filter>
+		</ClInclude>
+		<ClInclude Include="..\source\RelationTable.h">
+			<Filter>Header Files\PKB</Filter>
+		</ClInclude>
+		<ClInclude Include="..\source\QueryResult.h">
+			<Filter>Header Files\PQL</Filter>
+		</ClInclude>
+	</ItemGroup>
 </Project>

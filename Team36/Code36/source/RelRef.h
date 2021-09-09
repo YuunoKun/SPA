@@ -9,7 +9,7 @@ enum RelType {
 	MODIFIES_S,
 	MODIFIES_P,
 	USES_S,
-	USE_P,
+	USES_P,
 	PARENT,
 	PARENT_T,
 	FOLLOWS,
@@ -18,10 +18,11 @@ enum RelType {
 
 class RelRef {
 public:
-	RelRef(RelType, std::vector<Entity>);
+	RelRef(RelType, Entity, Entity);
 
 	RelType getType();
-	std::vector<Entity> getClauses();
+	Entity getFirstClause();
+	Entity getSecondClause();
 
 	bool operator==(const RelRef&) const;
 
@@ -29,5 +30,6 @@ private:
 
 	//Member Variable
 	RelType rel_type;
-	std::vector<Entity> clauses;
+	Entity first_clause;
+	Entity second_clause;
 };

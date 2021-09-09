@@ -2,6 +2,7 @@
 
 #include <string>
 #include <unordered_set>
+#include "Common.h"
 
 enum EntityType {
 	STMT,
@@ -20,20 +21,23 @@ enum EntityType {
 class Entity {
 public:
 	Entity();
+
+	Entity(EntityType);
+	Entity(EntityType, Synonym);
 	Entity(EntityType, std::string);
-	Entity(EntityType, std::string, std::string);
 
 	EntityType getType();
-	std::string getName();
+	std::string getSynonym();
 	std::string getValue();
-	bool isDeclaration();
-	
+	bool isSynonym();
+
 	bool operator==(const Entity&) const;
 
 private:
 
 	//Member Variable
 	EntityType entity_type;
-	std::string name;
+	Synonym synonym;
 	std::string value;
+	bool is_synonym;
 };

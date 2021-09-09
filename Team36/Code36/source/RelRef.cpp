@@ -1,19 +1,61 @@
 #include "RelRef.h"
+#include <iostream>
 
-RelRef::RelRef(RelType rel_type, std::vector<Entity> clauses) {
+RelRef::RelRef(RelType rel_type, Entity first_clause, Entity second_clause) {
+	// Checks that pattern types are valid
+	std::vector<Entity> clauses { first_clause, second_clause };
+	// TODO: Add follows, followsT, parent, parentT after discussion for new type
+	if (rel_type == USES_P) {
+		
+		for (int i = 0; i < clauses.size(); ++i) {
+			if (clauses[i].getType() != static_cast<EntityType>(ASSIGN) &&
+				clauses[i].getType() != static_cast<EntityType>(VARIABLE) &&
+				clauses[i].getType() != static_cast<EntityType>(PRINT) &&
+				clauses[i].getType() != static_cast<EntityType>(IF) &&
+				clauses[i].getType() != static_cast<EntityType>(WHILE) &&
+				clauses[i].getType() != static_cast<EntityType>(PROCEDURE) &&
+				clauses[i].getType() != static_cast<EntityType>(CALL) &&
+				clauses[i].getType() != static_cast<EntityType>(CONSTANT)) {
+				throw std::invalid_argument("Clause Type is invalid for USES_P type");
+			}
+		}
+	}
+
+	if (rel_type == MODIFIES_P) {
+		for (int i = 0; i < clauses.size(); ++i) {
+			if (clauses[i].getType() != static_cast<EntityType>(ASSIGN) &&
+				clauses[i].getType() != static_cast<EntityType>(VARIABLE) &&
+				clauses[i].getType() != static_cast<EntityType>(READ) &&
+				clauses[i].getType() != static_cast<EntityType>(IF) &&
+				clauses[i].getType() != static_cast<EntityType>(WHILE) &&
+				clauses[i].getType() != static_cast<EntityType>(PROCEDURE) &&
+				clauses[i].getType() != static_cast<EntityType>(CALL) &&
+				clauses[i].getType() != static_cast<EntityType>(CONSTANT)) {
+				throw std::invalid_argument("Clause Type is invalid for MODIFIES_P type");
+			}
+		}
+	}
+
 	this->rel_type = rel_type;
-	this->clauses = clauses;
+	this->first_clause = first_clause;
+	this->second_clause = second_clause;
 }
 
 RelType RelRef::getType() {
 	return rel_type;
 }
 
-std::vector<Entity> RelRef::getClauses() {
-	return clauses;
+Entity RelRef::getFirstClause() {
+	return first_clause;
 }
+
+Entity RelRef::getSecondClause() {
+	return second_clause;
+}
+
 
 bool RelRef::operator==(const RelRef& entity) const {
 	return rel_type == entity.rel_type
-		&& clauses == entity.clauses;
+		&& first_clause == entity.first_clause
+		&& second_clause == entity.second_clause;
 }
