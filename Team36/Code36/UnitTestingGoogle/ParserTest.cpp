@@ -1,7 +1,7 @@
 #include "pch.h"
 #include <iostream>
-#include "../source/Parser.h"
-#include "../source/PKB.h"
+#include "../../source/Parser.h"
+#include "../../source/PKB.h"
 
 namespace UnitTesting {
 	// The fixture for testing class Foo.

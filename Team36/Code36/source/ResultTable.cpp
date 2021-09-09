@@ -1,7 +1,6 @@
 #include "ResultTable.h"
 #include "Utility.h"
 
-
 ResultTable::ResultTable(Entity& header, std::vector<StmtInfo>& table) {
 	table = Utility::filterResult(header.getType(), table);
 	init(header, Utility::stmtInfoToStringVector(table));
@@ -36,7 +35,7 @@ bool ResultTable::isInTable(Entity e) {
 
 //if table contain no value
 bool ResultTable::isEmpty() {
-	return table.size() == 0;
+	return table.empty();
 }
 
 std::list<std::string> ResultTable::getEntityResult(Entity e) {
