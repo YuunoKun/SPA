@@ -116,10 +116,49 @@ Query QueryPreprocessor::parse(std::string str) {
 				// Declaring goes into output
 				if (prevToken.type != QueryToken::QueryTokenType::SELECT) {
 					output.push_back({ prevToken.type, { token.token_value } });
+
+					// TODO: Add into entity
 					Synonym synonym;
-					synonym.name = token.token_value;
-					EntityType entityType = Utility::queryTokenTypeToEntityType(prevToken.type);
-					ent = { entityType, synonym };
+					if (prevToken.type == QueryToken::QueryTokenType::STMT) {
+						synonym.name = token.token_value;
+						ent = { EntityType::STMT, synonym };
+					}
+					else if (prevToken.type == QueryToken::QueryTokenType::PROCEDURE) {
+						synonym.name = token.token_value;
+						ent = { EntityType::PROCEDURE, synonym };
+					}
+					else if (prevToken.type == QueryToken::QueryTokenType::READ) {
+						synonym.name = token.token_value;
+						ent = { EntityType::READ, synonym };
+					}
+					else if (prevToken.type == QueryToken::QueryTokenType::PRINT) {
+						synonym.name = token.token_value;
+						ent = { EntityType::PRINT, synonym };
+					}
+					else if (prevToken.type == QueryToken::QueryTokenType::CALL) {
+						synonym.name = token.token_value;
+						ent = { EntityType::CALL, synonym };
+					}
+					else if (prevToken.type == QueryToken::QueryTokenType::IF) {
+						synonym.name = token.token_value;
+						ent = { EntityType::IF, synonym };
+					}
+					else if (prevToken.type == QueryToken::QueryTokenType::WHILE) {
+						synonym.name = token.token_value;
+						ent = { EntityType::WHILE, synonym };
+					}
+					else if (prevToken.type == QueryToken::QueryTokenType::ASSIGN) {
+						synonym.name = token.token_value;
+						ent = { EntityType::ASSIGN, synonym };
+					}
+					else if (prevToken.type == QueryToken::QueryTokenType::VARIABLE) {
+						synonym.name = token.token_value;
+						ent = { EntityType::VARIABLE, synonym };
+					}
+					else if (prevToken.type == QueryToken::QueryTokenType::CONSTANT) {
+						synonym.name = token.token_value;
+						ent = { EntityType::CONSTANT, synonym };
+					}
 					query.addEntity(ent);
 				}
 				// Select goes into selected, with prevToken type when it exists in output
@@ -131,6 +170,42 @@ Query QueryPreprocessor::parse(std::string str) {
 							synonym.name = token.token_value;
 							EntityType entityType = Utility::queryTokenTypeToEntityType(each.type);
 							ent = { entityType, synonym };
+							//if (each.type == QueryToken::QueryTokenType::STMT) {
+							//	synonym.name = token.token_value;
+							//	ent = { EntityType::STMT, synonym };
+							//}
+							//else if (each.type == QueryToken::QueryTokenType::PROCEDURE) {
+							//	synonym.name = token.token_value;
+							//	ent = { EntityType::PROCEDURE, synonym };
+							//}
+							//else if (each.type == QueryToken::QueryTokenType::READ) {
+							//	synonym.name = token.token_value;
+							//	ent = { EntityType::READ, synonym };
+							//}
+							//else if (each.type == QueryToken::QueryTokenType::PRINT) {
+							//	synonym.name = token.token_value;
+							//	ent = { EntityType::PRINT, synonym };
+							//}
+							//else if (each.type == QueryToken::QueryTokenType::CALL) {
+							//	synonym.name = token.token_value;
+							//	ent = { EntityType::CALL, synonym };
+							//}
+							//else if (each.type == QueryToken::QueryTokenType::IF) {
+							//	synonym.name = token.token_value;
+							//	ent = { EntityType::IF, synonym };
+							//}
+							//else if (each.type == QueryToken::QueryTokenType::WHILE) {
+							//	synonym.name = token.token_value;
+							//	ent = { EntityType::WHILE, synonym };
+							//}
+							//else if (each.type == QueryToken::QueryTokenType::ASSIGN) {
+							//	synonym.name = token.token_value;
+							//	ent = { EntityType::ASSIGN, synonym };
+							//}
+							//else if (each.type == QueryToken::QueryTokenType::VARIABLE) {
+							//	synonym.name = token.token_value;
+							//	ent = { EntityType::VARIABLE, synonym };
+							//}
 						}
 					}
 					isSelect = true;
@@ -211,9 +286,42 @@ Query QueryPreprocessor::parse(std::string str) {
 						if (token.token_value == each.token_value) {
 							selected.push_back({ each.type, token.token_value });
 							Synonym synonym;
-							synonym.name = token.token_value;
-							EntityType entityType = Utility::queryTokenTypeToEntityType(each.type);
-							patternTypeEntity = { entityType, synonym };
+							if (each.type == QueryToken::QueryTokenType::STMT) {
+								synonym.name = token.token_value;
+								patternTypeEntity = { EntityType::STMT, synonym };
+							}
+							else if (each.type == QueryToken::QueryTokenType::PROCEDURE) {
+								synonym.name = token.token_value;
+								patternTypeEntity = { EntityType::PROCEDURE, synonym };
+							}
+							else if (each.type == QueryToken::QueryTokenType::READ) {
+								synonym.name = token.token_value;
+								patternTypeEntity = { EntityType::READ, synonym };
+							}
+							else if (each.type == QueryToken::QueryTokenType::PRINT) {
+								synonym.name = token.token_value;
+								patternTypeEntity = { EntityType::PRINT, synonym };
+							}
+							else if (each.type == QueryToken::QueryTokenType::CALL) {
+								synonym.name = token.token_value;
+								patternTypeEntity = { EntityType::CALL, synonym };
+							}
+							else if (each.type == QueryToken::QueryTokenType::IF) {
+								synonym.name = token.token_value;
+								patternTypeEntity = { EntityType::IF, synonym };
+							}
+							else if (each.type == QueryToken::QueryTokenType::WHILE) {
+								synonym.name = token.token_value;
+								patternTypeEntity = { EntityType::WHILE, synonym };
+							}
+							else if (each.type == QueryToken::QueryTokenType::ASSIGN) {
+								synonym.name = token.token_value;
+								patternTypeEntity = { EntityType::ASSIGN, synonym };
+							}
+							else if (each.type == QueryToken::QueryTokenType::VARIABLE) {
+								synonym.name = token.token_value;
+								patternTypeEntity = { EntityType::VARIABLE, synonym };
+							}
 						}
 					}
 				}

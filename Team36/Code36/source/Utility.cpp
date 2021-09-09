@@ -59,12 +59,10 @@ std::vector<std::vector<std::string>> Utility::pairToStringTable(std::vector<std
 std::vector<std::vector<std::string>> Utility::pairToStringTable(std::vector<std::pair<StmtInfo, StmtInfo>>& from) {
 	std::vector< std::vector<std::string>> to;
 	for (auto& it : from) {
-		to.push_back({ std::to_string(it.first.stmt_index), std::to_string(it.second.stmt_index)});
+		to.push_back({ std::to_string(it.first.stmt_index), std::to_string(it.second.stmt_index) });
 	}
 	return to;
 }
-
-
 
 std::list<std::string> Utility::variablesToStringList(std::vector<var_name>& from) {
 	std::list<std::string> to;
@@ -154,9 +152,8 @@ std::vector<std::vector<std::string>> Utility::filterResults(std::pair<EntityTyp
 	StmtType type1 = convertType(type.first);
 	StmtType type2 = convertType(type.second);
 	for (auto& row : table) {
-		if((type.first == STMT || type1 == row.first.stmt_type) &&
-			(type.second == STMT || type2 == row.second.stmt_type)){
-
+		if ((type.first == STMT || type1 == row.first.stmt_type) &&
+			(type.second == STMT || type2 == row.second.stmt_type)) {
 			results.push_back(row);
 		}
 	}
@@ -164,3 +161,35 @@ std::vector<std::vector<std::string>> Utility::filterResults(std::pair<EntityTyp
 	return pairToStringTable(results);
 }
 
+EntityType Utility::queryTokenTypeToEntityType(QueryToken::QueryTokenType& queryTokenType) {
+	if (queryTokenType == QueryToken::QueryTokenType::STMT) {
+		return EntityType::STMT;
+	}
+	else if (queryTokenType == QueryToken::QueryTokenType::PROCEDURE) {
+		return EntityType::PROCEDURE;
+	}
+	else if (queryTokenType == QueryToken::QueryTokenType::READ) {
+		return EntityType::READ;
+	}
+	else if (queryTokenType == QueryToken::QueryTokenType::PRINT) {
+		return EntityType::PRINT;
+	}
+	else if (queryTokenType == QueryToken::QueryTokenType::CALL) {
+		return EntityType::CALL;
+	}
+	else if (queryTokenType == QueryToken::QueryTokenType::IF) {
+		return EntityType::IF;
+	}
+	else if (queryTokenType == QueryToken::QueryTokenType::WHILE) {
+		return EntityType::WHILE;
+	}
+	else if (queryTokenType == QueryToken::QueryTokenType::ASSIGN) {
+		return EntityType::ASSIGN;
+	}
+	else if (queryTokenType == QueryToken::QueryTokenType::VARIABLE) {
+		return EntityType::VARIABLE;
+	}
+	else if (queryTokenType == QueryToken::QueryTokenType::CONSTANT) {
+		return EntityType::CONSTANT;
+	}
+}
