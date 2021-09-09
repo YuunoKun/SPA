@@ -39,10 +39,8 @@
     <ClInclude Include="pch.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="DesignExtractorTest.cpp" />
     <ClCompile Include="EntityTest.cpp" />
-    <ClCompile Include="FSMTest.cpp" />
-    <ClCompile Include="ParserTest.cpp" />
+    <ClCompile Include="PatternEvaluatorTest.cpp" />
     <ClCompile Include="PKBAdapterTest.cpp" />
     <ClCompile Include="QueryEvaluatorTest.cpp" />
     <ClCompile Include="PatternTest.cpp" />
@@ -55,7 +53,6 @@
     <ClCompile Include="ParentTEvaluatorTest.cpp" />
     <ClCompile Include="ModifiesSEvaluatorTest.cpp" />
     <ClCompile Include="ModifiesPEvaluatorTest.cpp" />
-    <ClCompile Include="TokenizerTest.cpp" />
     <ClCompile Include="UsesSEvaluatorTest.cpp" />
     <ClCompile Include="UsesPEvaluatorTest.cpp" />
     <ClCompile Include="RelRefTest.cpp" />

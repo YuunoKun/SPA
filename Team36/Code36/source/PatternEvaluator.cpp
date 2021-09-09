@@ -1,6 +1,10 @@
 #include "PatternEvaluator.h"
+#include <stdexcept>
 
 void PatternEvaluator::evaluatePattern(QueryResult& queryResult, Pattern& pattern) {
+	if (pattern.getPatternType().getType() != ASSIGN) {
+		throw std::invalid_argument("evaluatePattern(): only ASSIGN pattern type is allowed for iteration 1");
+	}
 
 	Entity patternType = pattern.getPatternType();
 	Entity lhsEntity = pattern.getLeftExpression();
@@ -9,33 +13,18 @@ void PatternEvaluator::evaluatePattern(QueryResult& queryResult, Pattern& patter
 
 	ResultTable* resultTable;
 
-	//if lhs side is at least one side is declaration
+	//if lhs side is at least is declaration, return 2 column table
 	if (lhsEntity.isSynonym()) {
-		 if ( pattern.isWild()) {
-			//If left side is declaration and right side is WILD: e.g a(x, _""_)
-			//Todo
 
-		}else{
-			//If left side is declaration and right side is not wild: e.g a(x, "x")
-			//Todo
-
-		}
-	}
-	else {
+	} else {
 		//if lhs side is not declaration
-		if (lhsEntity.getType() == WILD && pattern.isWild()) {
+		if (lhsEntity.getType() == WILD){
 			//If left side is wild and right side is WILD: e.g a(_, _"x"_)
+			//return all assign statment that match expression
 			//Todo
-		}else if (lhsEntity.getType() == WILD) {
-			//If left side is wild and right side is normal: e.g a(_, "x")
-			//Todo
-		}else if (pattern.isWild()) {
-			//If left side is constant and right side is WILD: e.g a("x", _"x"_)
-			//Todo
-		}
-		else {
-			//If left side is constant and right side is normal: e.g a(_, "x")
-			//Todo
+		} else {
+			//If left side is constant and right side is normal: e.g a("x", "x")
+			//return all assign statment that match expression and lhs
 		}
 	}
 

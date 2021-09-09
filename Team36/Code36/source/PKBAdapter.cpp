@@ -55,6 +55,30 @@ std::vector<StmtInfo> PKBAdapter::getIfs() {
 	return Utility::filterResult(IF, v);
 }
 
+std::vector<AssignInfo> PKBAdapter::getAssignInfo() {
+	std::vector<StmtInfo> s = getAssigns();
+	std::vector<AssignInfo> a;
+	for (auto s : s) {
+		a.push_back({ s.stmt_index, PKB::getInstance().PKB::getAssignment(s.stmt_index) });
+	}
+	return a;
+}
+
+std::vector<AssignInfo> PKBAdapter::getAssignInfo(std::string matchExpression, bool isWild) {
+	std::vector<StmtInfo> s = getAssigns();
+	std::vector<AssignInfo> a;
+	for (auto s : s) {
+		std::string expression = PKB::getInstance().PKB::getExpression(s.stmt_index);
+		if (isWild && Utility::patternContain(expression, matchExpression)) {
+			a.push_back({ s.stmt_index, PKB::getInstance().PKB::getAssignment(s.stmt_index) });
+		}
+		else if (Utility::patternMatch(expression, matchExpression)) {
+			a.push_back({ s.stmt_index, PKB::getInstance().PKB::getAssignment(s.stmt_index) });
+		}
+	}
+	return a;
+}
+
 bool PKBAdapter::isFollowEmpty() {
 	auto a = PKB::getInstance().PKB::getFollows();
 	return a.isEmpty();

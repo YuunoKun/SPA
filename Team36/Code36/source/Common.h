@@ -39,6 +39,19 @@ struct Synonym {
 	}
 };
 
+struct AssignInfo {
+	stmt_index stmt_index;
+	var_name lhs;
+
+	bool operator==(const AssignInfo& assignInfo) const {
+		return stmt_index == assignInfo.stmt_index  && lhs == assignInfo.lhs;
+	}
+
+	bool operator < (const StmtInfo& st) const {
+		return (stmt_index < st.stmt_index);
+	}
+};
+
 namespace std {
 	template <>
 	struct hash<StmtInfo> {

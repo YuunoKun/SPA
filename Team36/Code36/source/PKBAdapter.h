@@ -20,6 +20,8 @@ public:
 	std::vector<StmtInfo> getReads();
 	std::vector<StmtInfo> getWhiles();
 	std::vector<StmtInfo> getIfs();
+	std::vector<AssignInfo> getAssignInfo();
+	std::vector<AssignInfo> getAssignInfo(std::string, bool);
 
 	//Follow relation function
 	bool isFollowEmpty();
