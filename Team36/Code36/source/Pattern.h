@@ -7,11 +7,11 @@
 
 class Pattern {
 public:
-	Pattern(Entity, Entity, TNode, bool);
+	Pattern(Entity, Entity, std::string, bool);
 
 	Entity getPatternType();
 	Entity getLeftExpression();
-	TNode getExpression();
+	std::string getExpression();
 	bool isWild();
 
 	bool operator==(const Pattern&) const;
@@ -21,6 +21,6 @@ private:
 	//Member Variable
 	Entity pattern_type;
 	Entity left_expression;
-	TNode expression;
+	std::string expression;
 	bool is_wild;
 };

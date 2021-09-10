@@ -1,3 +1,6 @@
+#include <algorithm>
+#include <sstream>
+
 #include "Utility.h"
 
 std::list<std::string> Utility::constantsToStringList(std::vector<constant>& from) {
@@ -59,12 +62,10 @@ std::vector<std::vector<std::string>> Utility::pairToStringTable(std::vector<std
 std::vector<std::vector<std::string>> Utility::pairToStringTable(std::vector<std::pair<StmtInfo, StmtInfo>>& from) {
 	std::vector< std::vector<std::string>> to;
 	for (auto& it : from) {
-		to.push_back({ std::to_string(it.first.stmt_index), std::to_string(it.second.stmt_index)});
+		to.push_back({ std::to_string(it.first.stmt_index), std::to_string(it.second.stmt_index) });
 	}
 	return to;
 }
-
-
 
 std::list<std::string> Utility::variablesToStringList(std::vector<var_name>& from) {
 	std::list<std::string> to;
@@ -154,9 +155,8 @@ std::vector<std::vector<std::string>> Utility::filterResults(std::pair<EntityTyp
 	StmtType type1 = convertType(type.first);
 	StmtType type2 = convertType(type.second);
 	for (auto& row : table) {
-		if((type.first == STMT || type1 == row.first.stmt_type) &&
-			(type.second == STMT || type2 == row.second.stmt_type)){
-
+		if ((type.first == STMT || type1 == row.first.stmt_type) &&
+			(type.second == STMT || type2 == row.second.stmt_type)) {
 			results.push_back(row);
 		}
 	}
@@ -164,3 +164,31 @@ std::vector<std::vector<std::string>> Utility::filterResults(std::pair<EntityTyp
 	return pairToStringTable(results);
 }
 
+bool Utility::patternMatch(std::string a, std::string b) {
+	a.erase(std::remove_if(a.begin(), a.end(), ::isspace), a.end());
+	b.erase(std::remove_if(b.begin(), b.end(), ::isspace), b.end());
+	return a == b;
+}
+
+bool Utility::patternContain(std::string original, std::string match) {
+	original.erase(std::remove_if(original.begin(), original.end(), ::isspace), original.end());
+	match.erase(std::remove_if(match.begin(), match.end(), ::isspace), match.end());
+
+	const char delim = ' ';
+	std::replace(original.begin(), original.end(), '*', delim); // replace all '*' to 'space'
+	std::replace(original.begin(), original.end(), '/', delim); // replace all '/' to 'space'
+	std::replace(original.begin(), original.end(), '+', delim); // replace all '+' to 'space'
+	std::replace(original.begin(), original.end(), '-', delim); // replace all '-' to 'space'
+	std::replace(original.begin(), original.end(), '%', delim); // replace all '-' to 'space'
+
+	std::stringstream ss(original);
+	std::vector<std::string> variables;
+
+	std::string s;
+	while (std::getline(ss, s, delim)) {
+		if (s == match) {
+			return true;
+		}
+	}
+	return false;
+}
