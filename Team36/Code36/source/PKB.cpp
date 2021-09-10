@@ -135,9 +135,9 @@ void PKB::generateParentT()
 	parentT_table = parent_table.findTransitiveClosure();
 }
 
-void PKB::generateFollowT()
+void PKB::generateFollowsT()
 {
-	followsT_table = followsT_table.findTransitiveClosure();
+	followsT_table = follows_table.findTransitiveClosure();
 }
 
 void PKB::resetCache()
