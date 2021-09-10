@@ -16,8 +16,7 @@ std::unordered_map<S, std::vector<T>> RelationTable<T, S>::getTableBackward()
 }
 
 template <class T, class S>
-bool RelationTable<T, S>::isUniqueKey()
-{
+bool RelationTable<T, S>::isUniqueKey() {
 	return uniqueKey;
 }
 
@@ -95,8 +94,7 @@ std::vector<S> RelationTable<T, S>::getValues(T key) {
 }
 
 template <class T, class S>
-std::vector<T> RelationTable<T, S>::getKeys()
-{
+std::vector<T> RelationTable<T, S>::getKeys() {
 	std::vector<T> keys;
 	keys.reserve(forward_table.size());
 
@@ -109,7 +107,7 @@ std::vector<T> RelationTable<T, S>::getKeys()
 template<class T, class S>
 std::vector<S> RelationTable<T, S>::getValues()
 {
-	std::vector<T> values;
+	std::vector<S> values;
 	values.reserve(backward_table.size());
 
 	for (auto kv : backward_table) {
@@ -178,8 +176,7 @@ RelationTable<T, S> RelationTable<T, S>::findTransitiveClosure()
 }
 
 template <class T, class S>
-RelationTable<S, T> RelationTable<T, S>::findReverse()
-{
+RelationTable<S, T> RelationTable<T, S>::findReverse() {
 	RelationTable<S, T> reversed;
 	for (auto const& pair : forward_table) {
 		for (auto const& value : pair.second)
@@ -199,8 +196,7 @@ bool RelationTable<T, S>::operator!=(const RelationTable& other_table) const {
 }
 
 template <class T, class S>
-bool UniqueRelationTable<T, S>::insert(T key, S value)
-{
+bool UniqueRelationTable<T, S>::insert(T key, S value) {
 	auto iter_forward = forward_table.find(key);
 	auto iter_backward = backward_table.find(value);
 	bool keyExistsForward = iter_forward != forward_table.end();

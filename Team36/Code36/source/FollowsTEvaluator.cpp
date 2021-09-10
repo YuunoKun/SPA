@@ -5,10 +5,9 @@
 #include "PKBAdapter.h"
 #include "FollowsTEvaluator.h"
 
-
 //Handle both wild : e.g Relation(_, _)
 bool FollowsTEvaluator::haveRelation() {
-	return !pkb.getFollowingT().empty();
+	return !pkb.isFollowTEmpty();
 }
 
 //Handle both constant : e.g Relation(1, 2)
@@ -32,8 +31,8 @@ bool FollowsTEvaluator::haveRelationAtLeft(Entity e) {
 
 //If both side is declartion: e.g Relation(a, b)
 ResultTable FollowsTEvaluator::getRelations(Entity left, Entity right) {
-	std::vector<std::vector<StmtInfo>> results = pkb.getFollowsT();
-	std::vector<Entity> header{ left, right };
+	std::vector<std::pair<StmtInfo, StmtInfo>> results = pkb.getFollowsT();
+	std::pair<Entity, Entity> header{ left, right };
 	ResultTable result = ResultTable(header, results);
 	return result;
 }

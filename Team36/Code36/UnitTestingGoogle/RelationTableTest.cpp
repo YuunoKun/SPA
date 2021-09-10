@@ -4,6 +4,7 @@
 #include "RelationTable.cpp"
 #include "Common.h"
 
+/*
 namespace UnitTesting {
 	TEST(RelationTable, isUniqueKey) {
 		UniqueRelationTable<int, int> table1;
@@ -367,3 +368,4 @@ namespace UnitTesting {
 		EXPECT_TRUE(table1.isEmpty());
 	}
 }
+*/

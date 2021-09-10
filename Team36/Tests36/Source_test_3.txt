@@ -1,0 +1,18 @@
+procedure readVariables {
+ read var1;              
+ read var2;              
+}
+procedure printVariables {
+ print x;                   
+ print y;                   
+}
+procedure changeVariables {
+ x = 2;                       
+ y = 5;                       
+ call readVariables;       
+ x = var1 + x;                   
+ y = var2 + y;                   
+}
+procedure main {
+ call printVariables;
+}
