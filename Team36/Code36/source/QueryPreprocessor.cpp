@@ -65,7 +65,7 @@ TNode isExpr(std::vector<QueryToken> token_chain) {
 	return TNode();
 }
 
-RelRef parseParameterSuchThat(Query& query, QueryToken::QueryTokenType token_type, std::vector<QueryToken> token_chain) {
+void parseParameterSuchThat(Query& query, QueryToken::QueryTokenType token_type, std::vector<QueryToken> token_chain) {
 
 
 	switch (token_type) {
@@ -73,9 +73,9 @@ RelRef parseParameterSuchThat(Query& query, QueryToken::QueryTokenType token_typ
 		if (token_chain[1].type == QueryToken::COMMA) {
 			QueryToken stmt = token_chain[0];
 			token_chain.erase(token_chain.begin(), token_chain.begin() + 2);
-			return RelRef(RelType::MODIFIES_S,
+			query.addRelation(RelRef(RelType::MODIFIES_S,
 				isStmtRef(query, token_chain[0]),
-				isEntRef(query, token_chain));
+				isEntRef(query, token_chain)));
 		}
 		std::runtime_error("Unexpected parameters for Modifies");
 
@@ -84,9 +84,9 @@ RelRef parseParameterSuchThat(Query& query, QueryToken::QueryTokenType token_typ
 		if (token_chain[1].type == QueryToken::COMMA) {
 			QueryToken stmt = token_chain[0];
 			token_chain.erase(token_chain.begin(), token_chain.begin() + 2);
-			return RelRef(RelType::USES_S,
+			query.addRelation(RelRef(RelType::USES_S,
 				isStmtRef(query, token_chain[0]),
-				isEntRef(query, token_chain));
+				isEntRef(query, token_chain)));
 		}
 		std::runtime_error("Unexpected parameters for Uses");
 
@@ -94,36 +94,36 @@ RelRef parseParameterSuchThat(Query& query, QueryToken::QueryTokenType token_typ
 
 	case QueryToken::PARENT:
 		if (token_chain[1].type == QueryToken::COMMA) {
-			return RelRef(RelType::PARENT,
+			query.addRelation(RelRef(RelType::PARENT,
 				isStmtRef(query, token_chain[0]),
-				isStmtRef(query, token_chain[2]));
+				isStmtRef(query, token_chain[2])));
 		}
 		std::runtime_error("Unexpected parameters for Parent");
 
 		break;
 	case QueryToken::PARENT_T:
 		if (token_chain[1].type == QueryToken::COMMA) {
-			return RelRef(RelType::PARENT_T,
+			query.addRelation(RelRef(RelType::PARENT_T,
 				isStmtRef(query, token_chain[0]),
-				isStmtRef(query, token_chain[2]));
+				isStmtRef(query, token_chain[2])));
 		}
 		std::runtime_error("Unexpected parameters for Parent*");
 
 		break;
 	case QueryToken::FOLLOWS:
 		if (token_chain[1].type == QueryToken::COMMA) {
-			return RelRef(RelType::FOLLOWS,
+			query.addRelation(RelRef(RelType::FOLLOWS,
 				isStmtRef(query, token_chain[0]),
-				isStmtRef(query, token_chain[2]));
+				isStmtRef(query, token_chain[2])));
 		}
 		std::runtime_error("Unexpected parameters for Follows");
 
 		break;
 	case QueryToken::FOLLOWS_T:
 		if (token_chain[1].type == QueryToken::COMMA) {
-			return RelRef(RelType::FOLLOWS_T,
+			query.addRelation(RelRef(RelType::FOLLOWS_T,
 				isStmtRef(query, token_chain[0]),
-				isStmtRef(query, token_chain[2]));
+				isStmtRef(query, token_chain[2])));
 		}
 		std::runtime_error("Unexpected parameters for Follows*");
 
@@ -135,7 +135,7 @@ RelRef parseParameterSuchThat(Query& query, QueryToken::QueryTokenType token_typ
 
 }
 
-Pattern parseParameterPattern(Query& query, Entity& synonym, std::vector<QueryToken> token_chain) {
+void parseParameterPattern(Query& query, Entity& synonym, std::vector<QueryToken> token_chain) {
 	bool wild = false;
 	switch (synonym.getType()) {
 	case ASSIGN:
@@ -188,7 +188,7 @@ Pattern parseParameterPattern(Query& query, Entity& synonym, std::vector<QueryTo
 
 		}
 
-		return Pattern(synonym, isEntRef(query, temp_token_chain), isExpr(temp_token_chain_2), wild);
+		query.addPattern(Pattern(synonym, isEntRef(query, temp_token_chain), isExpr(temp_token_chain_2), wild));
 
 	}
 }

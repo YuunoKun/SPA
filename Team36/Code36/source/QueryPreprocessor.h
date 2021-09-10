@@ -14,9 +14,9 @@ public:
 
 	Query parse(std::string);
 
-	RelRef parseParameterSuchThat(Query& query, QueryToken::QueryTokenType token_type, std::vector<QueryToken> token_chain);
+	void parseParameterSuchThat(Query& query, QueryToken::QueryTokenType token_type, std::vector<QueryToken> token_chain);
 
-	Pattern parseParameterPattern(Query& query, Entity& synonym, std::vector<QueryToken> token_chain);
+	void parseParameterPattern(Query& query, Entity& synonym, std::vector<QueryToken> token_chain);
 
 	Entity isStmtRef(Query& query, QueryToken token);
 
