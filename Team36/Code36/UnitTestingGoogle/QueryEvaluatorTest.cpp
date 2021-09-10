@@ -39,8 +39,13 @@ namespace UnitTesting {
 			PKB::getInstance().addParent(std::stoi(PARENT_LEFT3), std::stoi(PARENT_RIGHT3));
 			PKB::getInstance().addModifiesS(std::stoi(MODIFIES_LEFT1), MODIFIES_RIGHT1);
 			PKB::getInstance().addModifiesS(std::stoi(MODIFIES_LEFT2), MODIFIES_RIGHT2);
+			PKB::getInstance().addModifiesS(std::stoi(MODIFIES_LEFT3), MODIFIES_RIGHT3);
+			PKB::getInstance().addModifiesS(std::stoi(MODIFIES_LEFT4), MODIFIES_RIGHT4);
 			PKB::getInstance().addUsesS(std::stoi(USES_LEFT1), USES_RIGHT1);
 			PKB::getInstance().addUsesS(std::stoi(USES_LEFT2), USES_RIGHT2);
+			PKB::getInstance().addExprTree(std::stoi(MODIFIES_LEFT3), EXPRESSION1);
+			PKB::getInstance().addExprTree(std::stoi(MODIFIES_LEFT4), EXPRESSION2);
+
 		}
 
 		~QueryEvaluatorTest() override {
@@ -65,11 +70,37 @@ namespace UnitTesting {
 			}
 			return invalid;
 		}
+
+		Query initQuery(Pattern pattern, Entity selected) {
+			Query q;
+			q.addPattern(pattern);
+			q.addSelected(selected);
+			return q;
+		}
 		Query initQuery(RelRef relation, Entity selected) {
 			Query q;
 			q.addRelation(relation);
 			q.addSelected(selected);
 			return q;
+		}
+
+		void validatePatterns(std::vector<Pattern> patterns) {
+			for (unsigned int i = 0; i < patterns.size(); i++) {
+				for (unsigned int j = 0; j < ALL_SELECT.size(); j++) {
+					Query q = initQuery(patterns[i], ALL_SELECT[j]);
+					EXPECT_EQ(evaluator.evaluateQuery(q), ALL_RESULT[j]) << "Error at results : " << i + 1 << " : " << j + 1;
+				}
+			}
+		}
+
+
+		void validateEmptyPatterns(std::vector<Pattern> patterns) {
+			for (unsigned int i = 0; i < patterns.size(); i++) {
+				for (unsigned int j = 0; j < ALL_SELECT.size(); j++) {
+					Query q = initQuery(patterns[i], ALL_SELECT[j]);
+					EXPECT_EQ(evaluator.evaluateQuery(q), EMPTY_RESULT) << "Error at results : " << i + 1 << " : " << j + 1;
+				}
+			}
 		}
 
 		void validateRelations(std::vector<RelRef> relations) {
@@ -98,6 +129,7 @@ namespace UnitTesting {
 				}
 			}
 		}
+
 
 		var_name x = "x";
 		var_name y = "y";
@@ -148,8 +180,17 @@ namespace UnitTesting {
 		std::string MODIFIES_RIGHT1 = x;
 		std::string MODIFIES_RIGHT2 = y;
 
-		std::vector<std::string> MODIFIES_LEFTS = { MODIFIES_LEFT1, MODIFIES_LEFT2 };
-		std::vector<std::string> MODIFIES_RIGHTS = { MODIFIES_RIGHT1, MODIFIES_RIGHT2 };
+		std::string MODIFIES_LEFT3 = ASSIGN1;
+		std::string MODIFIES_LEFT4 = ASSIGN2;
+		std::string MODIFIES_RIGHT3 = x;
+		std::string MODIFIES_RIGHT4 = y;
+
+		std::string EXPRESSION1 = "x";
+		std::string EXPRESSION2= "x + y";
+
+		std::vector<std::string> MODIFIES_LEFTS = { MODIFIES_LEFT1, MODIFIES_LEFT2, MODIFIES_LEFT3, MODIFIES_LEFT4 };
+		std::vector<std::string> MODIFIES_RIGHTS = { MODIFIES_RIGHT1, MODIFIES_RIGHT2, MODIFIES_RIGHT3, MODIFIES_RIGHT4 };
+		std::vector<std::string> EXPRESSIONS = { EXPRESSION1, EXPRESSION2 };
 
 		std::string USES_LEFT1 = "1";
 		std::string USES_LEFT2 = "3";
@@ -1444,7 +1485,6 @@ namespace UnitTesting {
 		std::vector<Entity> synonyms;
 		synonyms.push_back({ PRINT, COMMON_SYNONYM1 });
 		synonyms.push_back({ READ, COMMON_SYNONYM1 });
-		synonyms.push_back({ ASSIGN, COMMON_SYNONYM1 });
 		synonyms.push_back({ CALL, COMMON_SYNONYM1 });
 
 		for (unsigned int k = 0; k < synonyms.size(); k++) {
@@ -1460,23 +1500,27 @@ namespace UnitTesting {
 		std::vector<std::string> lefts = MODIFIES_LEFTS;
 		std::string left1 = MODIFIES_LEFT1;
 		std::string left2 = MODIFIES_LEFT2;
+		std::string left3 = MODIFIES_LEFT3;
+		std::string left4 = MODIFIES_LEFT4;
 		std::string right1 = MODIFIES_RIGHT1;
 		std::string right2 = MODIFIES_RIGHT2;
+		std::string right3 = MODIFIES_RIGHT3;
+		std::string right4 = MODIFIES_RIGHT4;
 
 		std::vector<Entity> selectedList;
 		selectedList.push_back({ STMT, COMMON_SYNONYM1 });
 		selectedList.push_back({ IF, COMMON_SYNONYM1 });
 		selectedList.push_back({ WHILE, COMMON_SYNONYM1 });
+		selectedList.push_back({ ASSIGN, COMMON_SYNONYM1 });
 		selectedList.push_back({ PRINT, COMMON_SYNONYM1 });
 		selectedList.push_back({ READ, COMMON_SYNONYM1 });
-		selectedList.push_back({ ASSIGN, COMMON_SYNONYM1 });
 		selectedList.push_back({ CALL, COMMON_SYNONYM1 });
 
 		//Test case for Select a such that Modifies_S(selected, a)
-		std::list<std::string> result1 = { left1, left2 };
+		std::list<std::string> result1 = { left1, left2, left3, left4 };
 		std::list<std::string> result2 = { left1 };
 		std::list<std::string> result3 = { left2 };
-		std::list<std::string> result4 = { };
+		std::list<std::string> result4 = { left3, left4 };
 		std::list<std::string> result5 = { };
 		std::list<std::string> result6 = { };
 		std::list<std::string> result7 = { };
@@ -1486,20 +1530,27 @@ namespace UnitTesting {
 		for (unsigned int i = 0; i < selectedList.size(); i++) {
 			RelRef relation(type, selectedList[i], { VARIABLE, Synonym{"a"} });
 			Query q = initQuery(relation, selectedList[i]);
-			EXPECT_EQ(evaluator.evaluateQuery(q), resultList[i]) << "Error at results : " << i + 1;
+			std::list<std::string> result = evaluator.evaluateQuery(q);
+			result.sort();
+			resultList[i].sort();
+			EXPECT_EQ(result, resultList[i]) << "Error at results : " << i + 1;
 		}
 
 		//Test case for Select a such that Modifies_S(selected, _)
 		for (unsigned int i = 0; i < selectedList.size(); i++) {
 			RelRef relation(type, selectedList[i], WILD_CARD);
 			Query q = initQuery(relation, selectedList[i]);
-			EXPECT_EQ(evaluator.evaluateQuery(q), resultList[i]) << "Error at results : " << i + 1;
+			std::list<std::string> result = evaluator.evaluateQuery(q);
+			result.sort();
+			resultList[i].sort();
+			EXPECT_EQ(result, resultList[i]) << "Error at results : " << i + 1;
 		}
 
 		//Test case for Select a such that Modifies_S(selected, "x")
-		resultList[0] = { left1 };
+		resultList[0] = { left3, left1 };
 		resultList[1] = { left1 };
 		resultList[2] = { };
+		resultList[3] = { left3 };
 		for (unsigned int i = 0; i < selectedList.size(); i++) {
 			RelRef relation(type, selectedList[i], { VARIABLE, right1 });
 			Query q = initQuery(relation, selectedList[i]);
@@ -1507,9 +1558,10 @@ namespace UnitTesting {
 		}
 
 		//Test case for Select a such that Modifies_S(VARIABLE, "y")
-		resultList[0] = { left2 };
+		resultList[0] = { left2, left4 };
 		resultList[1] = { };
 		resultList[2] = { left2 };
+		resultList[3] = { left4 };
 		for (unsigned int i = 0; i < selectedList.size(); i++) {
 			RelRef relation(type, selectedList[i], { VARIABLE, right2 });
 			Query q = initQuery(relation, selectedList[i]);
@@ -1527,6 +1579,7 @@ namespace UnitTesting {
 		resultList[0] = { right1, right2 };
 		resultList[1] = { right1 };
 		resultList[2] = { right2 };
+		resultList[3] = { right3, right4 };
 
 		Entity selected(VARIABLE, COMMON_SYNONYM1);
 		for (unsigned int i = 0; i < selectedList.size(); i++) {
@@ -1552,6 +1605,18 @@ namespace UnitTesting {
 		//Test case for Select a such that Modifies_S("3", selected)
 		resultList[0] = { right2 };
 		relation = RelRef(type, { STMT, left2 }, selected);
+		q = initQuery(relation, selected);
+		EXPECT_EQ(evaluator.evaluateQuery(q), resultList[0]);
+
+		//Test case for Select a such that Modifies_S("9", selected)
+		resultList[0] = { right3 };
+		relation = RelRef(type, { STMT, left3 }, selected);
+		q = initQuery(relation, selected);
+		EXPECT_EQ(evaluator.evaluateQuery(q), resultList[0]);
+
+		//Test case for Select a such that Modifies_S("10", selected)
+		resultList[0] = { right4 };
+		relation = RelRef(type, { STMT, left4 }, selected);
 		q = initQuery(relation, selected);
 		EXPECT_EQ(evaluator.evaluateQuery(q), resultList[0]);
 
@@ -1778,6 +1843,163 @@ namespace UnitTesting {
 			relation = RelRef(type, emptyList[j], selected);
 			q = initQuery(relation, selected);
 			EXPECT_EQ(evaluator.evaluateQuery(q), EMPTY_RESULT) << "Error at results : " << j + 1;
+		}
+	}
+
+	//Pattern Test ----------------------------------------------------------------------------------------------------
+	TEST_F(QueryEvaluatorTest, evaluateQueryPatternFilterNoCommonSynonymTrue) {
+		Entity assign = { ASSIGN, "a" };
+		Entity lhsSynonym = { VARIABLE, Synonym{"a"} };
+		Entity lhsX = { VARIABLE, x };
+		Entity lhsY = { VARIABLE, y };
+
+		std::vector<Pattern> patterns;
+		patterns.push_back(Pattern(assign, lhsX, "x", true));
+		patterns.push_back(Pattern(assign, lhsX, "x", false));
+		patterns.push_back(Pattern(assign, lhsY, "y", true));
+		patterns.push_back(Pattern(assign, lhsY, "x", true));
+
+		patterns.push_back(Pattern(assign, lhsSynonym, "x", true));
+		patterns.push_back(Pattern(assign, lhsSynonym, "x", false));
+		patterns.push_back(Pattern(assign, lhsSynonym, "y", true));
+
+		validatePatterns(patterns);
+	}
+
+	TEST_F(QueryEvaluatorTest, evaluateQueryPatternFilterNoCommonSynonymFalse) {
+		Entity assign = { ASSIGN, "a" };
+		Entity lhsSynonym = { VARIABLE, Synonym{"a"} };
+		Entity lhsX = { VARIABLE, x };
+		Entity lhsY = { VARIABLE, y };
+		Entity lhsZ = { VARIABLE, z };
+		Entity lhsN = { VARIABLE, "n" };
+
+		std::vector<std::string> patternExpr;
+		patternExpr.push_back("x");
+		patternExpr.push_back("y");
+		patternExpr.push_back("z");
+		patternExpr.push_back("n");
+		std::vector<Pattern> patterns;
+		for (auto expr : patternExpr) {
+			patterns.push_back(Pattern(assign, lhsZ, expr, false));
+			patterns.push_back(Pattern(assign, lhsZ, expr, true));
+			patterns.push_back(Pattern(assign, lhsN, expr, false));
+			patterns.push_back(Pattern(assign, lhsN, expr, true));
+		}
+
+		patterns.push_back(Pattern(assign, lhsX, "y", true));
+		patterns.push_back(Pattern(assign, lhsX, "y", false));
+		patterns.push_back(Pattern(assign, lhsY, "y", false));
+		patterns.push_back(Pattern(assign, lhsY, "x", false));
+		patterns.push_back(Pattern(assign, lhsSynonym, "y", false));
+		patterns.push_back(Pattern(assign, lhsSynonym, "z", false));
+		patterns.push_back(Pattern(assign, lhsSynonym, "n", false));
+		patterns.push_back(Pattern(assign, lhsSynonym, "z", true));
+		patterns.push_back(Pattern(assign, lhsSynonym, "n", true));
+
+		validateEmptyPatterns(patterns);
+	}
+	TEST_F(QueryEvaluatorTest, evaluateQueryPatternFilterCommonSynonym) {
+		std::string left1 = MODIFIES_LEFT3;
+		std::string left2 = MODIFIES_LEFT4;
+		std::string right1 = MODIFIES_RIGHT3;
+		std::string right2 = MODIFIES_RIGHT4;
+
+		Entity lhsX = { VARIABLE, x };
+		Entity lhsY = { VARIABLE, y };
+
+		Entity assignCommon = { ASSIGN,  COMMON_SYNONYM1 };
+		Entity lhsCommon = { VARIABLE, COMMON_SYNONYM2 };
+
+		std::vector<Pattern> patterns;
+		std::vector<std::list<std::string>> results;
+		std::vector<Entity> selected;
+
+		//Handle result for Select a pattern a(v, _)
+		patterns.push_back(Pattern(assignCommon, lhsCommon, "", true));
+		selected.push_back(assignCommon);
+		results.push_back({ left1, left2 });
+
+		//Handle result for Select v pattern a(v, _)
+		patterns.push_back(Pattern(assignCommon, lhsCommon, "", true));
+		selected.push_back(lhsCommon);
+		results.push_back({ right1, right2 });
+
+		//Handle result for Select a pattern a(v, "x")
+		patterns.push_back(Pattern(assignCommon, lhsCommon, x, false));
+		selected.push_back(assignCommon);
+		results.push_back({ left1 });
+
+		patterns.push_back(Pattern(assignCommon, lhsCommon, x, true));
+		selected.push_back(assignCommon);
+		results.push_back({ left1, left2 });
+
+		patterns.push_back(Pattern(assignCommon, lhsCommon, y, false));
+		selected.push_back(assignCommon);
+		results.push_back({ });
+
+		patterns.push_back(Pattern(assignCommon, lhsCommon, y, true));
+		selected.push_back(assignCommon);
+		results.push_back({ left2 });
+
+		//Handle result for Select v pattern a(v, "x")
+		patterns.push_back(Pattern(assignCommon, lhsCommon, x, false));
+		selected.push_back(lhsCommon);
+		results.push_back({ right1 });
+
+		patterns.push_back(Pattern(assignCommon, lhsCommon, x, true));
+		selected.push_back(lhsCommon);
+		results.push_back({ right1, right2});
+
+		patterns.push_back(Pattern(assignCommon, lhsCommon, y, false));
+		selected.push_back(lhsCommon);
+		results.push_back({ });
+
+		patterns.push_back(Pattern(assignCommon, lhsCommon, y, true));
+		selected.push_back(lhsCommon);
+		results.push_back({ right2 });
+
+		//Handle result for Select a pattern a("x", "x")
+		patterns.push_back(Pattern(assignCommon, lhsX, x, false));
+		selected.push_back(assignCommon);
+		results.push_back({ left1 });
+
+		patterns.push_back(Pattern(assignCommon, lhsX, x, true));
+		selected.push_back(assignCommon);
+		results.push_back({ left1 });
+
+		patterns.push_back(Pattern(assignCommon, lhsX, y, false));
+		selected.push_back(assignCommon);
+		results.push_back({ });
+
+		patterns.push_back(Pattern(assignCommon, lhsX, y, true));
+		selected.push_back(assignCommon);
+		results.push_back({ });
+
+		//Handle result for Select a pattern a("y", "x")
+		patterns.push_back(Pattern(assignCommon, lhsY, x, false));
+		selected.push_back(assignCommon);
+		results.push_back({ });
+
+		patterns.push_back(Pattern(assignCommon, lhsY, x, true));
+		selected.push_back(assignCommon);
+		results.push_back({ left2 });
+
+		patterns.push_back(Pattern(assignCommon, lhsY, y, false));
+		selected.push_back(assignCommon);
+		results.push_back({ });
+
+		patterns.push_back(Pattern(assignCommon, lhsY, y, true));
+		selected.push_back(assignCommon);
+		results.push_back({ left2 });
+
+
+		for (unsigned int i = 0; i < patterns.size(); i++) {
+			Query q = initQuery(patterns[i], selected[i]);
+			std::list<std::string> result = evaluator.evaluateQuery(q);
+			result.sort();
+			results[i].sort();
+			EXPECT_EQ(result, results[i]) << "ERROR AT " << i + 1;
 		}
 	}
 }

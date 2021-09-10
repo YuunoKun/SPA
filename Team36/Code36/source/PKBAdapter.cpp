@@ -55,25 +55,28 @@ std::vector<StmtInfo> PKBAdapter::getIfs() {
 	return Utility::filterResult(IF, v);
 }
 
-std::vector<AssignInfo> PKBAdapter::getAssignInfo() {
+std::vector<assign_info> PKBAdapter::getAssignInfo() {
 	std::vector<StmtInfo> s = getAssigns();
-	std::vector<AssignInfo> a;
+	std::vector<assign_info> a;
 	for (auto s : s) {
-		a.push_back({ s.stmt_index, PKB::getInstance().PKB::getAssignment(s.stmt_index) });
+		assign_info i = std::make_pair(s, PKB::getInstance().PKB::getAssignment(s.stmt_index));
+		a.push_back(i);
 	}
 	return a;
 }
 
-std::vector<AssignInfo> PKBAdapter::getAssignInfo(std::string matchExpression, bool isWild) {
+std::vector<assign_info> PKBAdapter::getAssignInfo(std::string matchExpression, bool isWild) {
 	std::vector<StmtInfo> s = getAssigns();
-	std::vector<AssignInfo> a;
+	std::vector<assign_info> a;
 	for (auto s : s) {
 		std::string expression = PKB::getInstance().PKB::getExpression(s.stmt_index);
 		if (isWild && Utility::patternContain(expression, matchExpression)) {
-			a.push_back({ s.stmt_index, PKB::getInstance().PKB::getAssignment(s.stmt_index) });
+			assign_info i = std::make_pair(s, PKB::getInstance().PKB::getAssignment(s.stmt_index));
+			a.push_back(i);
 		}
 		else if (Utility::patternMatch(expression, matchExpression)) {
-			a.push_back({ s.stmt_index, PKB::getInstance().PKB::getAssignment(s.stmt_index) });
+			assign_info i = std::make_pair(s, PKB::getInstance().PKB::getAssignment(s.stmt_index));
+			a.push_back(i);
 		}
 	}
 	return a;
