@@ -1,17 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="SP">
-      <UniqueIdentifier>{e24fd72c-f61e-4afc-9ade-b8f79ff7c308}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="PQL">
-      <UniqueIdentifier>{44fb22e0-696f-4295-8574-6cd39d942b50}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="PKB">
-      <UniqueIdentifier>{0c892737-035d-4044-b2b3-1acbb580b746}</UniqueIdentifier>
-    </Filter>
-  </ItemGroup>
-  <ItemGroup>
     <ClCompile Include="pch.cpp" />
     <ClCompile Include="FSMTest.cpp">
       <Filter>SP</Filter>
@@ -61,7 +50,6 @@
     <ClCompile Include="ParentEvaluatorTest.cpp">
       <Filter>PQL</Filter>
     </ClCompile>
-    <ClCompile Include="PKBTest.cpp" />
     <ClCompile Include="ParentTEvaluatorTest.cpp">
       <Filter>PQL</Filter>
     </ClCompile>
@@ -92,9 +80,6 @@
     <ClCompile Include="UtilityTest.cpp">
       <Filter>PQL</Filter>
     </ClCompile>
-    <ClCompile Include="RelationTableTest.cpp">
-      <Filter>PQL</Filter>
-    </ClCompile>
     <ClCompile Include="QueryTokenizerTest.cpp">
       <Filter>PQL</Filter>
     </ClCompile>
@@ -103,8 +88,17 @@
     <ClInclude Include="pch.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config">
-      <Filter>SP</Filter>
-    </None>
+    <None Include="packages.config" />
   </ItemGroup>
+    <ItemGroup>
+	<Filter Include="SP">
+		<UniqueIdentifier>{e24fd72c-f61e-4afc-9ade-b8f79ff7c308}</UniqueIdentifier>
+	</Filter>
+	<Filter Include="PQL">
+		<UniqueIdentifier>{44fb22e0-696f-4295-8574-6cd39d942b50}</UniqueIdentifier>
+	</Filter>
+	<Filter Include="PKB">
+		<UniqueIdentifier>{0c892737-035d-4044-b2b3-1acbb580b746}</UniqueIdentifier>
+	</Filter>
+    </ItemGroup>
 </Project>
