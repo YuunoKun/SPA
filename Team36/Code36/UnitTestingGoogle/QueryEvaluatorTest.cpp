@@ -45,6 +45,8 @@ namespace UnitTesting {
 			PKB::getInstance().addUsesS(std::stoi(USES_LEFT2), USES_RIGHT2);
 			PKB::getInstance().addExprTree(std::stoi(MODIFIES_LEFT3), EXPRESSION1);
 			PKB::getInstance().addExprTree(std::stoi(MODIFIES_LEFT4), EXPRESSION2);
+			PKB::getInstance().generateFollowsT();
+			PKB::getInstance().generateParentT();
 
 		}
 
@@ -1307,9 +1309,9 @@ namespace UnitTesting {
 		}
 
 		//Test case for Select a such that ParentT("1", selected)
-		resultList[0] = { right1, right2 };
+		resultList[0] = { right1, right2, right3 };
 		resultList[1] = { right1 };
-		resultList[2] = { right2 };
+		resultList[2] = { right2, right3 };
 		for (unsigned int i = 0; i < selectedList.size(); i++) {
 			RelRef relation(type, { STMT, left1 }, selectedList[i]);
 			Query q = initQuery(relation, selectedList[i]);
@@ -1317,9 +1319,9 @@ namespace UnitTesting {
 		}
 
 		//Test case for Select a such that ParentT("2", selected)
-		resultList[0] = { right2 };
+		resultList[0] = { right2, right3 };
 		resultList[1] = { };
-		resultList[2] = { right2 };
+		resultList[2] = { right2, right3 };
 		for (unsigned int i = 0; i < selectedList.size(); i++) {
 			RelRef relation(type, { STMT, left2 }, selectedList[i]);
 			Query q = initQuery(relation, selectedList[i]);
@@ -1367,8 +1369,8 @@ namespace UnitTesting {
 		}
 
 		//Test case for Select a such that ParentT(selected, "4")
-		resultList[0] = { left3 };
-		resultList[1] = { };
+		resultList[0] = { left1, left2, left3 };
+		resultList[1] = { left1, left2 };
 		resultList[2] = { left3 };
 		for (unsigned int i = 0; i < selectedList.size(); i++) {
 			RelRef relation(type, selectedList[i], { STMT, right3 });

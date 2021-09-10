@@ -394,8 +394,10 @@ namespace UnitTesting {
 		PKB::getInstance().addStmt(STMT_IF);
 		EXPECT_TRUE(pkb.isFollowTEmpty());
 		PKB::getInstance().addFollows(1, 2);
+		PKB::getInstance().generateFollowsT();
 		EXPECT_FALSE(pkb.isFollowTEmpty());
 		PKB::getInstance().addFollows(2, 3);
+		PKB::getInstance().generateFollowsT();
 		EXPECT_FALSE(pkb.isFollowTEmpty());
 	}
 
@@ -406,6 +408,7 @@ namespace UnitTesting {
 		PKB::getInstance().addStmt(STMT_IF);
 		PKB::getInstance().addFollows(1, 2);
 		PKB::getInstance().addFollows(2, 3);
+		PKB::getInstance().generateFollowsT();
 		EXPECT_TRUE(pkb.isFollowT(1, 2));
 		EXPECT_TRUE(pkb.isFollowT(1, 3));
 		EXPECT_TRUE(pkb.isFollowT(2, 3));
@@ -431,6 +434,7 @@ namespace UnitTesting {
 		PKB::getInstance().addStmt(STMT_IF);
 		PKB::getInstance().addFollows(1, 2);
 		PKB::getInstance().addFollows(2, 3);
+		PKB::getInstance().generateFollowsT();
 		EXPECT_TRUE(pkb.isFollowedT(1));
 		EXPECT_TRUE(pkb.isFollowedT(2));
 		EXPECT_FALSE(pkb.isFollowedT(3));
@@ -443,6 +447,7 @@ namespace UnitTesting {
 		PKB::getInstance().addStmt(STMT_IF);
 		PKB::getInstance().addFollows(1, 2);
 		PKB::getInstance().addFollows(2, 3);
+		PKB::getInstance().generateFollowsT();
 		EXPECT_FALSE(pkb.isFollowingT(1));
 		EXPECT_TRUE(pkb.isFollowingT(2));
 		EXPECT_TRUE(pkb.isFollowingT(3));
@@ -461,6 +466,7 @@ namespace UnitTesting {
 		PKB::getInstance().addStmt(STMT_IF);
 		PKB::getInstance().addFollows(1, 2);
 		PKB::getInstance().addFollows(2, 3);
+		PKB::getInstance().generateFollowsT();
 
 		std::vector<StmtInfo> v1 = { p1, p2 };
 		std::vector<StmtInfo> v2 = pkb.getFollowedT();
@@ -497,6 +503,7 @@ namespace UnitTesting {
 		PKB::getInstance().addStmt(STMT_IF);
 		PKB::getInstance().addFollows(1, 2);
 		PKB::getInstance().addFollows(2, 3);
+		PKB::getInstance().generateFollowsT();
 
 		std::vector<StmtInfo> v1 = { p2, p3 };
 		std::vector<StmtInfo> v2 = pkb.getFollowingT();
@@ -532,8 +539,12 @@ namespace UnitTesting {
 		PKB::getInstance().addStmt(STMT_IF);
 		PKB::getInstance().addFollows(1, 2);
 		PKB::getInstance().addFollows(2, 3);
-		std::vector<std::pair<StmtInfo, StmtInfo>> v = { {p1, p2}, {p1, p3}, {p2, p3} };
-		EXPECT_EQ(pkb.getFollowsT(), v);
+		PKB::getInstance().generateFollowsT();
+		std::vector<std::pair<StmtInfo, StmtInfo>> v = { {p2, p3}, {p1, p2}, {p1, p3} };
+		std::vector<std::pair<StmtInfo, StmtInfo>> r = pkb.getFollowsT();
+		sort(v.begin(), v.end());
+		sort(r.begin(), r.end());
+		EXPECT_EQ(r, v);
 	}
 
 	TEST_F(PKBAdapterTest, isParentEmpty) {
@@ -726,6 +737,7 @@ namespace UnitTesting {
 		PKB::getInstance().addParent(1, 3);
 		PKB::getInstance().addParent(2, 3);
 		PKB::getInstance().addParent(3, 4);
+		PKB::getInstance().generateParentT();
 		EXPECT_TRUE(pkb.isParentT(1, 2));
 		EXPECT_TRUE(pkb.isParentT(1, 3));
 		EXPECT_TRUE(pkb.isParentT(1, 4));
@@ -736,7 +748,6 @@ namespace UnitTesting {
 		EXPECT_FALSE(pkb.isParentT(1, 5));
 		EXPECT_FALSE(pkb.isParentT(2, 1));
 		EXPECT_FALSE(pkb.isParentT(2, 2));
-		EXPECT_FALSE(pkb.isParentT(2, 4));
 		EXPECT_FALSE(pkb.isParentT(2, 5));
 		EXPECT_FALSE(pkb.isParentT(3, 1));
 		EXPECT_FALSE(pkb.isParentT(3, 2));
@@ -770,6 +781,7 @@ namespace UnitTesting {
 		PKB::getInstance().addParent(1, 3);
 		PKB::getInstance().addParent(2, 3);
 		PKB::getInstance().addParent(3, 4);
+		PKB::getInstance().generateParentT();
 		EXPECT_FALSE(pkb.isChildT(1));
 		EXPECT_TRUE(pkb.isChildT(2));
 		EXPECT_TRUE(pkb.isChildT(3));
@@ -793,6 +805,7 @@ namespace UnitTesting {
 		PKB::getInstance().addParent(1, 3);
 		PKB::getInstance().addParent(2, 3);
 		PKB::getInstance().addParent(3, 4);
+		PKB::getInstance().generateParentT();
 
 		std::vector<StmtInfo> v1 = { p2, p3, p4 };
 		std::vector<StmtInfo> v2 = pkb.getChildT();
@@ -837,6 +850,7 @@ namespace UnitTesting {
 		PKB::getInstance().addParent(1, 3);
 		PKB::getInstance().addParent(2, 3);
 		PKB::getInstance().addParent(3, 4);
+		PKB::getInstance().generateParentT();
 
 		std::vector<StmtInfo> v1 = { p1, p2, p3 };
 		std::vector<StmtInfo> v2 = pkb.getParentT();
@@ -881,6 +895,7 @@ namespace UnitTesting {
 		PKB::getInstance().addParent(1, 3);
 		PKB::getInstance().addParent(2, 3);
 		PKB::getInstance().addParent(3, 4);
+		PKB::getInstance().generateParentT();
 
 		std::vector<std::pair<StmtInfo, StmtInfo>> v = { {p1, p2}, {p1, p3}, {p1, p4}, {p2, p3}, {p2, p4}, {p3, p4} };
 		EXPECT_EQ(pkb.getAllParentTRelation(), v);
