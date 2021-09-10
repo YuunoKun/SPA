@@ -132,17 +132,7 @@ void DesignExtractor::populateFollows() {
 }
 
 
-void DesignExtractor::populateFollowsT() {
-
-}
-
-
 void DesignExtractor::populateParent() {
-
-}
-
-
-void DesignExtractor::populateParentT() {
 
 }
 

@@ -54,9 +54,7 @@ namespace SourceProcessor {
 
 
 		void populateFollows();
-		void populateFollowsT();
 		void populateParent();
-		void populateParentT();
 		void populateUses();
 		void populateModifies();
 
