@@ -10,7 +10,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pch.cpp" />
-    <ClCompile Include="QueryPreprocessorTest.cpp" />
     <ClCompile Include="EntityTest.cpp">
       <Filter>PQL</Filter>
     </ClCompile>
@@ -67,11 +66,11 @@
     <ClCompile Include="PKBAdapterTest.cpp">
       <Filter>PQL</Filter>
     </ClCompile>
-    <ClCompile Include="RelationTableTest.cpp">
-      <Filter>PKB</Filter>
-    </ClCompile>
     <ClCompile Include="PKBTest.cpp">
       <Filter>PKB</Filter>
+    </ClCompile>
+    <ClCompile Include="RelationTableTest.cpp">
+      <Filter>PQL</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

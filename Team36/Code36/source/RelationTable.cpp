@@ -1,5 +1,6 @@
 #pragma once
-
+#include <iostream>
+#include <queue>
 #include "RelationTable.h"
 
 template <class T, class S>
@@ -154,7 +155,26 @@ bool RelationTable<T, S>::containsPair(T key, S value)
 template <class T, class S>
 RelationTable<T, S> RelationTable<T, S>::findTransitiveClosure()
 {
-	return RelationTable();
+	RelationTable<T, S> transitiveTable;
+	std::queue<S> q;
+	for (auto const& pair : forward_table) {
+		T key = pair.first;
+		auto v1 = getValues(key);
+		for (auto const& value : v1) {
+			q.push(value);
+		}
+		while (!q.empty()) {
+			auto curr = q.front();
+			if (containsKey(curr)) {
+				auto v2 = getValues(curr);
+				for (auto const& value : v2) {
+					q.push(value);
+				}
+			}
+			q.pop();
+		}
+	}
+	return transitiveTable;
 }
 
 template <class T, class S>
