@@ -74,7 +74,14 @@
     <ClCompile Include="UsesSEvaluatorTest.cpp">
       <Filter>PQL</Filter>
     </ClCompile>
+    <ClCompile Include="PKBTest.cpp">
+      <Filter>PKB</Filter>
+
     <ClCompile Include="UtilityTest.cpp">
+      <Filter>PQL</Filter>
+
+    </ClCompile>
+    <ClCompile Include="RelationTableTest.cpp">
       <Filter>PQL</Filter>
     </ClCompile>
   </ItemGroup>
