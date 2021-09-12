@@ -88,22 +88,13 @@ Query QueryPreprocessor::parse(std::string str) {
 			if (prevToken.type != QueryToken::QueryTokenType::WHITESPACE &&
 				prevToken.type != QueryToken::QueryTokenType::TERMINATOR &&
 				token.type == QueryToken::QueryTokenType::IDENTIFIER) {
+				// If declaring add into entity
 				if (prevToken.type != QueryToken::QueryTokenType::SELECT) {
 					addEntityToQuery(query, ent, output, prevToken, token);
 				}
-				// Select goes into selected, with prevToken type when it exists in output
+				// If select add into selected
 				else {
-					for (QueryToken each : output) {
-						if (token.token_value == each.token_value) {
-							selected.push_back({ each.type, token.token_value });
-							Synonym synonym;
-							synonym.name = token.token_value;
-							EntityType entityType = Utility::queryTokenTypeToEntityType(each.type);
-							ent = { entityType, synonym };
-						}
-					}
-					isSelect = true;
-					query.addSelected(ent);
+					addSelectedToQuery(query, ent, output, selected, prevToken, token, isSelect);
 				}
 			}
 			prevToken = temp;
@@ -265,4 +256,18 @@ void QueryPreprocessor::addEntityToQuery(Query& query, Entity& ent, std::vector<
 	EntityType entityType = Utility::queryTokenTypeToEntityType(prevToken.type);
 	ent = { entityType, synonym };
 	query.addEntity(ent);
+}
+
+void QueryPreprocessor::addSelectedToQuery(Query& query, Entity& ent, std::vector<QueryToken>& output, std::vector<QueryToken> selected, QueryToken& prevToken, QueryToken& token, bool& isSelect) {
+	for (QueryToken each : output) {
+		if (token.token_value == each.token_value) {
+			selected.push_back({ each.type, token.token_value });
+			Synonym synonym;
+			synonym.name = token.token_value;
+			EntityType entityType = Utility::queryTokenTypeToEntityType(each.type);
+			ent = { entityType, synonym };
+		}
+	}
+	isSelect = true;
+	query.addSelected(ent);
 }
