@@ -88,14 +88,8 @@ Query QueryPreprocessor::parse(std::string str) {
 			if (prevToken.type != QueryToken::QueryTokenType::WHITESPACE &&
 				prevToken.type != QueryToken::QueryTokenType::TERMINATOR &&
 				token.type == QueryToken::QueryTokenType::IDENTIFIER) {
-				// Declaring goes into output
 				if (prevToken.type != QueryToken::QueryTokenType::SELECT) {
-					output.push_back({ prevToken.type, { token.token_value } });
-					Synonym synonym;
-					synonym.name = token.token_value;
-					EntityType entityType = Utility::queryTokenTypeToEntityType(prevToken.type);
-					ent = { entityType, synonym };
-					query.addEntity(ent);
+					addEntityToQuery(query, ent, output, prevToken, token);
 				}
 				// Select goes into selected, with prevToken type when it exists in output
 				else {
@@ -261,4 +255,14 @@ void QueryPreprocessor::validateDeclarationQuery(QueryToken& prevToken, QueryTok
 		token.type != QueryToken::QueryTokenType::IDENTIFIER) {
 		throw std::runtime_error("During declaration, only identifier is accepted after comma.");
 	}
+}
+
+void QueryPreprocessor::addEntityToQuery(Query& query, Entity& ent, std::vector<QueryToken>& output, QueryToken& prevToken, QueryToken& token) {
+	// Declaring goes into output
+	output.push_back({ prevToken.type, { token.token_value } });
+	Synonym synonym;
+	synonym.name = token.token_value;
+	EntityType entityType = Utility::queryTokenTypeToEntityType(prevToken.type);
+	ent = { entityType, synonym };
+	query.addEntity(ent);
 }

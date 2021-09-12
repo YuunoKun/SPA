@@ -19,4 +19,6 @@ private:
 	QueryToken setIdentifierToQueryTokenType(QueryToken&, QueryToken&, QueryToken&);
 
 	void validateDeclarationQuery(QueryToken&, QueryToken&);
+
+	void addEntityToQuery(Query&, Entity&, std::vector<QueryToken>&, QueryToken&, QueryToken&);
 };
