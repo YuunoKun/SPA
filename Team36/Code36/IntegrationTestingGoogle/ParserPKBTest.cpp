@@ -79,12 +79,9 @@ namespace UnitTesting {
 		parser.load_file("../UnitTestingGoogle/SPTest/TestSource/Sample5.txt");
 		parser.parse();
 
-		std::vector<StmtInfo> stmt_v = { { 1, STMT_ASSIGN }, { 2, STMT_CALL} , { 3, STMT_CALL },
-			{ 4, STMT_READ}, { 5, STMT_PRINT }, { 6, STMT_PRINT}, { 7, STMT_ASSIGN}, { 8, STMT_CALL},
-			{ 9, STMT_WHILE} , { 10, STMT_ASSIGN} , { 11, STMT_CALL} , { 12, STMT_IF},
-			{ 13, STMT_ASSIGN },  { 14, STMT_ASSIGN }, { 15, STMT_ASSIGN } };
 		std::vector<std::pair<stmt_index, var_name>> expected_assign = { {1, "flag"}, {7, "count"},
 			{10, "count"}, {13, "flag"}, {14, "cenX"}, {15, "normSq"} };
+		std::sort(expected_assign.begin(), expected_assign.end());
 
 		UniqueRelationTable<stmt_index, var_name> table = PKB::getInstance().getAssigns();
 		EXPECT_EQ(table.getPairs(), expected_assign);
@@ -97,6 +94,7 @@ namespace UnitTesting {
 
 		std::vector<std::pair<stmt_index, expr>> expected_expr = { {1, "0"}, {7, "0" }, {10, "count + 1"},
 			{13, "1"}, {14, "cenX / count"}, {15, "cenX * cenX + cenY * cenY"} };
+		std::sort(expected_expr.begin(), expected_expr.end());
 
 		UniqueRelationTable<stmt_index, expr> table = PKB::getInstance().getExpr();
 
@@ -111,14 +109,17 @@ namespace UnitTesting {
 		std::vector<std::pair<stmt_index, stmt_index>> expected_follows = {
 			{1,2}, {2,3}, {5,6}, {7,8}, {8,9}, {10,11}, {12,15}
 		};
+		std::sort(expected_follows.begin(), expected_follows.end());
+
 		std::vector<std::pair<StmtInfo, StmtInfo>> expected_follows_stmt;
 		for (auto const& pair : expected_follows) {
 			expected_follows_stmt.push_back({ ParserPKBTest::sample5_stmts[pair.first - 1], ParserPKBTest::sample5_stmts[pair.second - 1] });
 		}
 
 		UniqueRelationTable<StmtInfo, StmtInfo> table = PKB::getInstance().getFollows();
-
-		EXPECT_EQ(table.getPairs(), expected_follows_stmt);
+		auto v = table.getPairs();
+		std::sort(v.begin(), v.end());
+		EXPECT_EQ(v, expected_follows_stmt);
 	}
 
 	TEST_F(ParserPKBTest, Sample5Test_FollowsT) {
@@ -129,14 +130,17 @@ namespace UnitTesting {
 		std::vector<std::pair<stmt_index, stmt_index>> expected_followsT = {
 			{1,2}, {1,3}, {2,3}, {5,6}, {7,8}, {7,9}, {6,12}, {7,15}, {8,9}, {8,12}, {8,15}, {10,11}, {12,15}
 		};
+		std::sort(expected_followsT.begin(), expected_followsT.end());
+
 		std::vector<std::pair<StmtInfo, StmtInfo>> expected_followsT_stmt;
 		for (auto const& pair : expected_followsT) {
 			expected_followsT_stmt.push_back({ ParserPKBTest::sample5_stmts[pair.first - 1], ParserPKBTest::sample5_stmts[pair.second - 1] });
 		}
 
 		RelationTable<StmtInfo, StmtInfo> table = PKB::getInstance().getFollowsT();
-
-		EXPECT_EQ(table.getPairs(), expected_followsT_stmt);
+		auto v = table.getPairs();
+		std::sort(v.begin(), v.end());
+		EXPECT_EQ(v, expected_followsT_stmt);
 	}
 
 	TEST_F(ParserPKBTest, Sample5Test_Parent) {
@@ -147,6 +151,7 @@ namespace UnitTesting {
 		std::vector<std::pair<stmt_index, stmt_index>> expected_parent = {
 			{9,10}, {9,11}, {12,13}, {12,14}
 		};
+		std::sort(expected_parent.begin(), expected_parent.end());
 
 		std::vector<std::pair<StmtInfo, StmtInfo>> expected_parent_stmt;
 		for (auto const& pair : expected_parent) {
@@ -154,9 +159,11 @@ namespace UnitTesting {
 		}
 
 		RelationTable<StmtInfo, StmtInfo> table = PKB::getInstance().getParent();
-
-		EXPECT_EQ(table.getPairs(), expected_parent_stmt);
+		auto v = table.getPairs();
+		std::sort(v.begin(), v.end());
+		EXPECT_EQ(v, expected_parent_stmt);
 	}
+
 	TEST_F(ParserPKBTest, Sample5Test_ParentT) {
 		SourceProcessor::Parser parser;
 		parser.load_file("../UnitTestingGoogle/SPTest/TestSource/Sample5.txt");
@@ -165,6 +172,7 @@ namespace UnitTesting {
 		std::vector<std::pair<stmt_index, stmt_index>> expected_parentT = {
 			{9,10}, {9,11}, {12,13}, {12,14}
 		};
+		std::sort(expected_parentT.begin(), expected_parentT.end());
 
 		std::vector<std::pair<StmtInfo, StmtInfo>> expected_parentT_stmt;
 		for (auto const& pair : expected_parentT) {
@@ -172,7 +180,9 @@ namespace UnitTesting {
 		}
 
 		RelationTable<StmtInfo, StmtInfo> table = PKB::getInstance().getParent();
-		EXPECT_EQ(table.getPairs(), expected_parentT_stmt);
+		auto v = table.getPairs();
+		std::sort(v.begin(), v.end());
+		EXPECT_EQ(v, expected_parentT_stmt);
 	}
 
 	TEST_F(ParserPKBTest, Sample5Test_UsesS) {
@@ -185,6 +195,7 @@ namespace UnitTesting {
 			{5, "cenX"}, {6, "cenY"}, {9, "x"}, {9, "y"}, {9, "count"}, {10, "count"}, {12, "count"},
 			{12, "cenX"}, {14, "cenX"}, {14, "count"}, {15, "cenX"}, {15, "cenY"}
 		};
+		std::sort(expected_usesS.begin(), expected_usesS.end());
 
 		std::vector<std::pair<StmtInfo, var_name>> expected_usesS_stmt;
 		for (auto const& pair : expected_usesS) {
@@ -192,7 +203,9 @@ namespace UnitTesting {
 		}
 
 		RelationTable<StmtInfo, var_name> table = PKB::getInstance().getUsesS();
-		EXPECT_EQ(table.getPairs(), expected_usesS_stmt);
+		auto v = table.getPairs();
+		std::sort(v.begin(), v.end());
+		EXPECT_EQ(v, expected_usesS_stmt);
 	}
 
 	TEST_F(ParserPKBTest, Sample5Test_ModifiesS) {
@@ -205,6 +218,7 @@ namespace UnitTesting {
 			{8, "x"}, {9, "count"}, {9, "x"}, {10, "count"}, {11, "x"}, {12, "flag"}, {13, "flag"}, {14, "cenX"},
 			{15, "normSq"}
 		};
+		std::sort(expected_modifiesS.begin(), expected_modifiesS.end());
 
 		std::vector<std::pair<StmtInfo, var_name>> expected_modifiesS_stmt;
 		for (auto const& pair : expected_modifiesS) {
@@ -212,9 +226,8 @@ namespace UnitTesting {
 		}
 
 		RelationTable<StmtInfo, var_name> table = PKB::getInstance().getModifiesS();
-		EXPECT_EQ(table.getPairs(), expected_modifiesS_stmt);
+		auto v = table.getPairs();
+		std::sort(v.begin(), v.end());
+		EXPECT_EQ(v, expected_modifiesS_stmt);
 	}
-} // namespace UnitTesting
-
-UniqueRelationTable<StmtInfo, var_name> expected_usesS;
-UniqueRelationTable<StmtInfo, var_name> expected_modifiesS;
+}
