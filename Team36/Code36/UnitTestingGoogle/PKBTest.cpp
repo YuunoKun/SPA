@@ -114,9 +114,9 @@ namespace UnitTesting {
 		StmtInfo p1{ 1, STMT_WHILE };
 		StmtInfo p2{ 2, STMT_IF };
 		StmtInfo p3{ 3, STMT_READ };
-		RelationTable<StmtInfo, StmtInfo> forward_table;
-		forward_table.insert(p1, p2);
-		forward_table.insert(p2, p3);
+		RelationTable<StmtInfo, StmtInfo> expected_table;
+		expected_table.insert(p1, p2);
+		expected_table.insert(p2, p3);
 
 		PKB::getInstance().addStmt(STMT_WHILE);
 		PKB::getInstance().addStmt(STMT_IF);
@@ -124,9 +124,9 @@ namespace UnitTesting {
 		PKB::getInstance().addParent(1, 2);
 		PKB::getInstance().addParent(2, 3);
 		EXPECT_THROW(PKB::getInstance().addParent(3, 2), std::invalid_argument);
-		EXPECT_EQ(forward_table, PKB::getInstance().getParent());
+		EXPECT_EQ(expected_table, PKB::getInstance().getParent());
 		PKB::getInstance().resetCache();
-		EXPECT_NE(forward_table, PKB::getInstance().getParent());
+		EXPECT_NE(expected_table, PKB::getInstance().getParent());
 	}
 
 	TEST(PKB, getFollows) {
@@ -135,9 +135,9 @@ namespace UnitTesting {
 		StmtInfo p1{ 1, STMT_READ };
 		StmtInfo p2{ 2, STMT_PRINT };
 		StmtInfo p3{ 3, STMT_READ };
-		UniqueRelationTable<StmtInfo, StmtInfo> forward_table;
-		forward_table.insert(p1, p2);
-		forward_table.insert(p2, p3);
+		UniqueRelationTable<StmtInfo, StmtInfo> expected_table;
+		expected_table.insert(p1, p2);
+		expected_table.insert(p2, p3);
 
 		PKB::getInstance().addStmt(STMT_READ);
 		PKB::getInstance().addStmt(STMT_PRINT);
@@ -145,9 +145,9 @@ namespace UnitTesting {
 		PKB::getInstance().addFollows(1, 2);
 		PKB::getInstance().addFollows(1, 3);
 		PKB::getInstance().addFollows(2, 3);
-		EXPECT_EQ(forward_table, PKB::getInstance().getFollows());
+		EXPECT_EQ(expected_table, PKB::getInstance().getFollows());
 		PKB::getInstance().resetCache();
-		EXPECT_NE(forward_table, PKB::getInstance().getFollows());
+		EXPECT_NE(expected_table, PKB::getInstance().getFollows());
 	}
 
 	TEST(PKB, getUsesS) {
@@ -159,9 +159,9 @@ namespace UnitTesting {
 		StmtInfo p4{ 4, STMT_PRINT };
 		var_name x = "x";
 		var_name y = "y";
-		RelationTable<StmtInfo, var_name> forward_table;
-		forward_table.insert(p2, x);
-		forward_table.insert(p4, y);
+		RelationTable<StmtInfo, var_name> expected_table;
+		expected_table.insert(p2, x);
+		expected_table.insert(p4, y);
 
 		PKB::getInstance().addStmt(STMT_READ);
 		PKB::getInstance().addStmt(STMT_PRINT);
@@ -172,9 +172,9 @@ namespace UnitTesting {
 		EXPECT_THROW(PKB::getInstance().addUsesS(4, y), std::invalid_argument);
 		PKB::getInstance().addVariable(y);
 		PKB::getInstance().addUsesS(4, y);
-		EXPECT_EQ(forward_table, PKB::getInstance().getUsesS());
+		EXPECT_EQ(expected_table, PKB::getInstance().getUsesS());
 		PKB::getInstance().resetCache();
-		EXPECT_NE(forward_table, PKB::getInstance().getUsesS());
+		EXPECT_NE(expected_table, PKB::getInstance().getUsesS());
 	}
 
 	TEST(PKB, getModifiesS) {
@@ -186,9 +186,9 @@ namespace UnitTesting {
 		StmtInfo p4{ 4, STMT_PRINT };
 		var_name x = "x";
 		var_name y = "y";
-		RelationTable<StmtInfo, var_name> forward_table;
-		forward_table.insert(p1, x);
-		forward_table.insert(p3, y);
+		RelationTable<StmtInfo, var_name> expected_table;
+		expected_table.insert(p1, x);
+		expected_table.insert(p3, y);
 
 		PKB::getInstance().addStmt(STMT_READ);
 		PKB::getInstance().addStmt(STMT_PRINT);
@@ -199,9 +199,9 @@ namespace UnitTesting {
 		EXPECT_THROW(PKB::getInstance().addModifiesS(3, y), std::invalid_argument);
 		PKB::getInstance().addVariable(y);
 		PKB::getInstance().addModifiesS(3, y);
-		EXPECT_EQ(forward_table, PKB::getInstance().getModifiesS());
+		EXPECT_EQ(expected_table, PKB::getInstance().getModifiesS());
 		PKB::getInstance().resetCache();
-		EXPECT_NE(forward_table, PKB::getInstance().getModifiesS());
+		EXPECT_NE(expected_table, PKB::getInstance().getModifiesS());
 	}
 
 	TEST(PKB, getAssigns) {
@@ -209,8 +209,8 @@ namespace UnitTesting {
 
 		var_name x = "x";
 		var_name y = "y";
-		UniqueRelationTable<stmt_index, var_name> forward_table;
-		forward_table.insert(1, x);
+		UniqueRelationTable<stmt_index, var_name> expected_table;
+		expected_table.insert(1, x);
 
 		PKB::getInstance().addStmt(STMT_ASSIGN);
 		PKB::getInstance().addStmt(STMT_READ);
@@ -218,9 +218,9 @@ namespace UnitTesting {
 		PKB::getInstance().addModifiesS(1, x);
 		PKB::getInstance().addVariable(y);
 		PKB::getInstance().addModifiesS(2, y);
-		EXPECT_EQ(forward_table, PKB::getInstance().getAssigns());
+		EXPECT_EQ(expected_table, PKB::getInstance().getAssigns());
 		PKB::getInstance().resetCache();
-		EXPECT_NE(forward_table, PKB::getInstance().getAssigns());
+		EXPECT_NE(expected_table, PKB::getInstance().getAssigns());
 	}
 
 	TEST(PKB, getStmt) {
@@ -245,8 +245,8 @@ namespace UnitTesting {
 
 		var_name x = "x";
 		var_name y = "y";
-		UniqueRelationTable<stmt_index, var_name> forward_table;
-		forward_table.insert(1, x);
+		UniqueRelationTable<stmt_index, var_name> expected_table;
+		expected_table.insert(1, x);
 
 		PKB::getInstance().addStmt(STMT_ASSIGN);
 		PKB::getInstance().addStmt(STMT_READ);
@@ -258,6 +258,76 @@ namespace UnitTesting {
 		EXPECT_THROW(PKB::getInstance().getAssignment(2), std::invalid_argument);
 
 		PKB::getInstance().resetCache();
+	}
+
+	TEST(PKB, getParentT) {
+		PKB::getInstance().resetCache();
+
+		StmtInfo p1{ 1, STMT_READ };
+		StmtInfo p2{ 2, STMT_WHILE };
+		StmtInfo p3{ 3, STMT_READ };
+		StmtInfo p4{ 4, STMT_IF };
+		StmtInfo p5{ 5, STMT_IF };
+		StmtInfo p6{ 6, STMT_READ };
+
+		RelationTable<StmtInfo, StmtInfo> expected_table;
+		expected_table.insert(p2, p3);
+		expected_table.insert(p2, p4);
+		expected_table.insert(p2, p5);
+		expected_table.insert(p2, p6);
+		expected_table.insert(p4, p5);
+		expected_table.insert(p4, p6);
+		expected_table.insert(p5, p6);
+
+		PKB::getInstance().addStmt(STMT_READ);
+		PKB::getInstance().addStmt(STMT_WHILE);
+		PKB::getInstance().addStmt(STMT_READ);
+		PKB::getInstance().addStmt(STMT_IF);
+		PKB::getInstance().addStmt(STMT_IF);
+		PKB::getInstance().addStmt(STMT_READ);
+		PKB::getInstance().addParent(2, 3);
+		PKB::getInstance().addParent(2, 4);
+		PKB::getInstance().addParent(4, 5);
+		PKB::getInstance().addParent(5, 6);
+		PKB::getInstance().generateParentT();
+
+		auto output = PKB::getInstance().getParentT();
+		EXPECT_EQ(expected_table, output);
+		PKB::getInstance().resetCache();
+		EXPECT_NE(expected_table, PKB::getInstance().getParentT());
+	}
+
+	TEST(PKB, getFollowsT) {
+		PKB::getInstance().resetCache();
+
+		StmtInfo p1{ 1, STMT_READ };
+		StmtInfo p2{ 2, STMT_WHILE };
+		StmtInfo p3{ 3, STMT_READ };
+		StmtInfo p4{ 4, STMT_IF };
+		StmtInfo p5{ 5, STMT_IF };
+		StmtInfo p6{ 6, STMT_READ };
+
+		RelationTable<StmtInfo, StmtInfo> expected_table;
+		expected_table.insert(p1, p2);
+		expected_table.insert(p3, p4);
+		expected_table.insert(p3, p5);
+		expected_table.insert(p4, p5);
+
+		PKB::getInstance().addStmt(STMT_READ);
+		PKB::getInstance().addStmt(STMT_WHILE);
+		PKB::getInstance().addStmt(STMT_READ);
+		PKB::getInstance().addStmt(STMT_IF);
+		PKB::getInstance().addStmt(STMT_IF);
+		PKB::getInstance().addStmt(STMT_READ);
+		PKB::getInstance().addFollows(1, 2);
+		PKB::getInstance().addFollows(3, 4);
+		PKB::getInstance().addFollows(4, 5);
+		PKB::getInstance().generateFollowsT();
+
+		auto output = PKB::getInstance().getFollowsT();
+		EXPECT_EQ(expected_table, output);
+		PKB::getInstance().resetCache();
+		EXPECT_NE(expected_table, PKB::getInstance().getFollowsT());
 	}
 
 	TEST(PKB, resetCache) {

@@ -28,5 +28,7 @@ public:
 	static std::vector<std::vector<std::string>> filterResults(EntityType, std::vector<std::pair<StmtInfo, std::string>>&);
 	static std::vector<std::vector<std::string>> filterResults(std::pair<EntityType, EntityType>, std::vector<std::pair<StmtInfo, StmtInfo>>&);
 
+	static bool patternMatch(std::string, std::string);
+	static bool patternContain(std::string, std::string);
 	static EntityType queryTokenTypeToEntityType(QueryToken::QueryTokenType&);
 };
