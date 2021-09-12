@@ -18,9 +18,9 @@ public:
 
 	void parseParameterPattern(Query& query, Entity& synonym, std::vector<QueryToken> token_chain);
 
-	Entity isStmtRef(Query& query, QueryToken token);
+	Entity setStmtRef(Query& query, QueryToken token);
 
-	Entity isEntRef(Query& query, std::vector<QueryToken> token_chain);
+	Entity setEntRef(Query& query, std::vector<QueryToken> token_chain);
 
-	TNode isExpr(std::vector<QueryToken> token_chain);
+	TNode setExpr(std::vector<QueryToken> token_chain);
 };

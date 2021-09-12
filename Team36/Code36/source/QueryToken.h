@@ -30,7 +30,7 @@ public:
 		PROCEDURE,
 		AND,
 		PATTERN,
-		SUCHTHAT,
+		SUCH_THAT,
 
 		// PQL Variable Operators
 		WILDCARD,

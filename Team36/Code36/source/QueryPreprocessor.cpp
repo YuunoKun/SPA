@@ -12,7 +12,7 @@
 QueryPreprocessor::QueryPreprocessor() {
 }
 
-Entity isStmtRef(Query& query, QueryToken token) {
+Entity setStmtRef(Query& query, QueryToken token) {
 
 	// wild card check
 	if (token.type == QueryToken::WILDCARD) {
@@ -33,7 +33,7 @@ Entity isStmtRef(Query& query, QueryToken token) {
 	std::runtime_error("Unknown stmtRef");
 }
 
-Entity isEntRef(Query& query, std::vector<QueryToken> token_chain) {
+Entity setEntRef(Query& query, std::vector<QueryToken> token_chain) {
 	if (token_chain.size() == 1) {
 		// wild card check
 		if (token_chain[0].type == QueryToken::WILDCARD) {
@@ -60,9 +60,9 @@ Entity isEntRef(Query& query, std::vector<QueryToken> token_chain) {
 	std::runtime_error("Unknown stmtRef");
 }
 
-TNode isExpr(std::vector<QueryToken> token_chain) {
+expr setExpr(std::vector<QueryToken> token_chain) {
 	//todo
-	return TNode();
+	return "pp";
 }
 
 void parseParameterSuchThat(Query& query, QueryToken::QueryTokenType token_type, std::vector<QueryToken> token_chain) {
@@ -74,8 +74,8 @@ void parseParameterSuchThat(Query& query, QueryToken::QueryTokenType token_type,
 			QueryToken stmt = token_chain[0];
 			token_chain.erase(token_chain.begin(), token_chain.begin() + 2);
 			query.addRelation(RelRef(RelType::MODIFIES_S,
-				isStmtRef(query, token_chain[0]),
-				isEntRef(query, token_chain)));
+				setStmtRef(query, token_chain[0]),
+				setEntRef(query, token_chain)));
 		}
 		std::runtime_error("Unexpected parameters for Modifies");
 
@@ -85,8 +85,8 @@ void parseParameterSuchThat(Query& query, QueryToken::QueryTokenType token_type,
 			QueryToken stmt = token_chain[0];
 			token_chain.erase(token_chain.begin(), token_chain.begin() + 2);
 			query.addRelation(RelRef(RelType::USES_S,
-				isStmtRef(query, token_chain[0]),
-				isEntRef(query, token_chain)));
+				setStmtRef(query, token_chain[0]),
+				setEntRef(query, token_chain)));
 		}
 		std::runtime_error("Unexpected parameters for Uses");
 
@@ -95,8 +95,8 @@ void parseParameterSuchThat(Query& query, QueryToken::QueryTokenType token_type,
 	case QueryToken::PARENT:
 		if (token_chain[1].type == QueryToken::COMMA) {
 			query.addRelation(RelRef(RelType::PARENT,
-				isStmtRef(query, token_chain[0]),
-				isStmtRef(query, token_chain[2])));
+				setStmtRef(query, token_chain[0]),
+				setStmtRef(query, token_chain[2])));
 		}
 		std::runtime_error("Unexpected parameters for Parent");
 
@@ -104,8 +104,8 @@ void parseParameterSuchThat(Query& query, QueryToken::QueryTokenType token_type,
 	case QueryToken::PARENT_T:
 		if (token_chain[1].type == QueryToken::COMMA) {
 			query.addRelation(RelRef(RelType::PARENT_T,
-				isStmtRef(query, token_chain[0]),
-				isStmtRef(query, token_chain[2])));
+				setStmtRef(query, token_chain[0]),
+				setStmtRef(query, token_chain[2])));
 		}
 		std::runtime_error("Unexpected parameters for Parent*");
 
@@ -113,8 +113,8 @@ void parseParameterSuchThat(Query& query, QueryToken::QueryTokenType token_type,
 	case QueryToken::FOLLOWS:
 		if (token_chain[1].type == QueryToken::COMMA) {
 			query.addRelation(RelRef(RelType::FOLLOWS,
-				isStmtRef(query, token_chain[0]),
-				isStmtRef(query, token_chain[2])));
+				setStmtRef(query, token_chain[0]),
+				setStmtRef(query, token_chain[2])));
 		}
 		std::runtime_error("Unexpected parameters for Follows");
 
@@ -122,8 +122,8 @@ void parseParameterSuchThat(Query& query, QueryToken::QueryTokenType token_type,
 	case QueryToken::FOLLOWS_T:
 		if (token_chain[1].type == QueryToken::COMMA) {
 			query.addRelation(RelRef(RelType::FOLLOWS_T,
-				isStmtRef(query, token_chain[0]),
-				isStmtRef(query, token_chain[2])));
+				setStmtRef(query, token_chain[0]),
+				setStmtRef(query, token_chain[2])));
 		}
 		std::runtime_error("Unexpected parameters for Follows*");
 
@@ -184,11 +184,9 @@ void parseParameterPattern(Query& query, Entity& synonym, std::vector<QueryToken
 					break;
 				}
 			}
-
-
 		}
 
-		query.addPattern(Pattern(synonym, isEntRef(query, temp_token_chain), isExpr(temp_token_chain_2), wild));
+		query.addPattern(Pattern(synonym, setEntRef(query, temp_token_chain), setExpr(temp_token_chain_2), wild));
 
 	}
 }
@@ -322,9 +320,9 @@ Query QueryPreprocessor::parse(std::string str) {
 		}
 
 		else if (isSelect) {
-			if (token.type == QueryToken::QueryTokenType::SUCHTHAT) {
-				output.push_back({ QueryToken::QueryTokenType::SUCHTHAT, "such that" });
-				patternOrSuchThat = { QueryToken::QueryTokenType::SUCHTHAT, "such that" };
+			if (token.type == QueryToken::QueryTokenType::SUCH_THAT) {
+				output.push_back({ QueryToken::QueryTokenType::SUCH_THAT, "such that" });
+				patternOrSuchThat = { QueryToken::QueryTokenType::SUCH_THAT, "such that" };
 			}
 			else if (token.type == QueryToken::QueryTokenType::PATTERN) {
 				output.push_back({ QueryToken::QueryTokenType::PATTERN, "pattern" });
@@ -335,7 +333,7 @@ Query QueryPreprocessor::parse(std::string str) {
 				parameterClause.push_back(token);
 			}
 
-			if (!isParameter && patternOrSuchThat.type == QueryToken::QueryTokenType::SUCHTHAT) {
+			if (!isParameter && patternOrSuchThat.type == QueryToken::QueryTokenType::SUCH_THAT) {
 				if (token.type == QueryToken::QueryTokenType::PARENT_T) {
 					output.push_back({ QueryToken::QueryTokenType::PARENT_T, "" });
 				}
