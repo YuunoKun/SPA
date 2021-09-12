@@ -252,7 +252,7 @@ namespace UnitTesting {
 		EXPECT_TRUE(table.isInTable(resultTableHeader1.first));
 		EXPECT_TRUE(table.isInTable(resultTableHeader1.second));
 		EXPECT_TRUE(table.isInTable({ WHILE, Synonym{"test"} }));
-		EXPECT_FALSE(table.isInTable({ PRINT, Synonym{"test"} }));
+		EXPECT_FALSE(table.isInTable({ PRINT, Synonym{"test1"} }));
 	}
 
 	TEST(ResultTable, isEmpty) {
@@ -278,5 +278,31 @@ namespace UnitTesting {
 		result.sort();
 		tableResult.sort();
 		EXPECT_EQ(tableResult, result);
+	}
+
+	TEST(ResultTable, getCommonHeaders) {
+		ResultTable table(resultTableHeader1, resultTableTable1);
+
+		std::vector<Entity> v = { resultTableHeader1.first };
+		EXPECT_EQ(table.getCommonHeaders({ resultTableHeader1.first }), v);
+
+		v = { resultTableHeader1.second };
+		EXPECT_EQ(table.getCommonHeaders({ resultTableHeader1.second }), v);
+
+		v = { resultTableHeader1.first, resultTableHeader1.second };
+		EXPECT_EQ(table.getCommonHeaders({ resultTableHeader1.first, resultTableHeader1.second }), v);
+
+		v = { resultTableHeader1.first, resultTableHeader1.second };
+		EXPECT_EQ(table.getCommonHeaders({ resultTableHeader1.first, resultTableHeader1.second, resultTableHeader2.first, resultTableHeader2.second }), v);
+
+		v = { resultTableHeader1.first };
+		EXPECT_EQ(table.getCommonHeaders({ resultTableHeader1.first, resultTableHeader2.first, resultTableHeader2.second }), v);
+
+		v = { resultTableHeader1.second };
+		EXPECT_EQ(table.getCommonHeaders({ resultTableHeader1.second, resultTableHeader2.first, resultTableHeader2.second }), v);
+
+		v = { };
+		EXPECT_EQ(table.getCommonHeaders({ resultTableHeader2.first, resultTableHeader2.second }), v);
+
 	}
 }

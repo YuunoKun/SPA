@@ -26,7 +26,15 @@ public:
 	static std::vector<StmtInfo> filterResult(EntityType, std::vector<StmtInfo>&);
 	static std::vector<std::vector<std::string>> filterResults(EntityType, std::vector<std::pair<StmtInfo, std::string>>&);
 	static std::vector<std::vector<std::string>> filterResults(std::pair<EntityType, EntityType>, std::vector<std::pair<StmtInfo, StmtInfo>>&);
+	static std::vector<std::vector<std::string>> filterResults(std::vector<std::vector<std::string>>&, std::unordered_set<std::string>&, int);
+	static std::vector<std::vector<std::string>> filterResults(std::vector<std::vector<std::string>>&, std::unordered_map<std::string, std::unordered_set<std::string>>&, int, int);
 
 	static bool patternMatch(std::string, std::string);
 	static bool patternContain(std::string, std::string);
+
+	static std::vector<std::string> mergeColumnEqual(std::vector<std::vector<std::string>>&);
+
+	static std::vector<std::vector<std::string>> joinTable(std::vector<std::vector<std::string>>&, int, std::unordered_multimap<std::string, std::vector<std::string>>&, int);
+	static std::vector<std::vector<std::string>> joinTable(std::vector<std::vector<std::string>>&, int, int, std::unordered_map<std::string, std::unordered_multimap<std::string, std::vector<std::string>>>&, int, int);
+
 };

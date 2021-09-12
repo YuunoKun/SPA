@@ -15,6 +15,7 @@ public:
 	bool isInTable(Entity);
 	bool isEmpty();
 	std::list<std::string> getEntityResult(Entity);
+	std::vector<Entity> getCommonHeaders(std::vector<Entity>);
 
 	bool operator==(const ResultTable&) const;
 
@@ -22,6 +23,12 @@ private:
 	void init(Entity, std::vector<std::string>);
 	void init(std::pair<Entity, Entity>, std::vector<std::vector<std::string>>);
 
+	void addHeader(Entity);
+	void addHeader(std::vector<Entity>);
+
 	std::vector<Entity> header;
+	std::unordered_set<std::string> headerSet;
 	std::vector<std::vector<std::string>> table;
+
+	int getHeaderIndex(Entity);
 };

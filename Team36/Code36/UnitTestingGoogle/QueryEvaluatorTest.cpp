@@ -348,12 +348,12 @@ namespace UnitTesting {
 		std::string right1 = FOLLOW_RIGHT1;
 		std::string right2 = FOLLOW_RIGHT2;
 		//Have Result for matching header
-		relations.push_back(RelRef(type, { STMT, Synonym{"a"} }, { STMT, Synonym{"a"} }));
-		relations.push_back(RelRef(type, { IF, Synonym{"a"} }, { STMT, Synonym{"a"} }));
-		relations.push_back(RelRef(type, { STMT, Synonym{"a"} }, { IF, Synonym{"a"} }));
-		relations.push_back(RelRef(type, { STMT, Synonym{"a"} }, { WHILE, Synonym{"a"} }));
-		relations.push_back(RelRef(type, { IF, Synonym{"a"} }, { IF, Synonym{"a"} }));
-		relations.push_back(RelRef(type, { IF, Synonym{"a"} }, { WHILE, Synonym{"a"} }));
+		relations.push_back(RelRef(type, { STMT, Synonym{"a"} }, { STMT, Synonym{"b"} }));
+		relations.push_back(RelRef(type, { IF, Synonym{"a"} }, { STMT, Synonym{"b"} }));
+		relations.push_back(RelRef(type, { STMT, Synonym{"a"} }, { IF, Synonym{"b"} }));
+		relations.push_back(RelRef(type, { STMT, Synonym{"a"} }, { WHILE, Synonym{"b"} }));
+		relations.push_back(RelRef(type, { IF, Synonym{"a"} }, { IF, Synonym{"b"} }));
+		relations.push_back(RelRef(type, { IF, Synonym{"a"} }, { WHILE, Synonym{"b"} }));
 		relations.push_back(RelRef(type, WILD_CARD, { STMT, Synonym{"a"} }));
 		relations.push_back(RelRef(type, WILD_CARD, { IF, Synonym{"a"} }));
 		relations.push_back(RelRef(type, WILD_CARD, { WHILE, Synonym{"a"} }));
@@ -608,11 +608,11 @@ namespace UnitTesting {
 
 		std::vector<RelRef> relations;
 		//Have Result for matching header
-		relations.push_back(RelRef(type, { STMT, Synonym{"a"} }, { STMT, Synonym{"a"} }));
-		relations.push_back(RelRef(type, { IF, Synonym{"a"} }, { STMT, Synonym{"a"} }));
-		relations.push_back(RelRef(type, { STMT, Synonym{"a"} }, { IF, Synonym{"a"} }));
-		relations.push_back(RelRef(type, { IF, Synonym{"a"} }, { IF, Synonym{"a"} }));
-		relations.push_back(RelRef(type, { IF, Synonym{"a"} }, { WHILE, Synonym{"a"} }));
+		relations.push_back(RelRef(type, { STMT, Synonym{"a"} }, { STMT, Synonym{"b"} }));
+		relations.push_back(RelRef(type, { IF, Synonym{"a"} }, { STMT, Synonym{"b"} }));
+		relations.push_back(RelRef(type, { STMT, Synonym{"a"} }, { IF, Synonym{"b"} }));
+		relations.push_back(RelRef(type, { IF, Synonym{"a"} }, { IF, Synonym{"b"} }));
+		relations.push_back(RelRef(type, { IF, Synonym{"a"} }, { WHILE, Synonym{"b"} }));
 		relations.push_back(RelRef(type, WILD_CARD, { STMT, Synonym{"a"} }));
 		relations.push_back(RelRef(type, WILD_CARD, { IF, Synonym{"a"} }));
 		relations.push_back(RelRef(type, WILD_CARD, { WHILE, Synonym{"a"} }));
@@ -881,14 +881,14 @@ namespace UnitTesting {
 		std::string right3 = PARENT_RIGHT3;
 
 		//Have Result for matching header
-		relations.push_back(RelRef(type, { STMT, Synonym{"a"} }, { STMT, Synonym{"a"} }));
-		relations.push_back(RelRef(type, { IF, Synonym{"a"} }, { STMT, Synonym{"a"} }));
-		relations.push_back(RelRef(type, { WHILE, Synonym{"a"} }, { STMT, Synonym{"a"} }));
-		relations.push_back(RelRef(type, { STMT, Synonym{"a"} }, { IF, Synonym{"a"} }));
-		relations.push_back(RelRef(type, { STMT, Synonym{"a"} }, { WHILE, Synonym{"a"} }));
-		relations.push_back(RelRef(type, { IF, Synonym{"a"} }, { IF, Synonym{"a"} }));
-		relations.push_back(RelRef(type, { IF, Synonym{"a"} }, { WHILE, Synonym{"a"} }));
-		relations.push_back(RelRef(type, { WHILE, Synonym{"a"} }, { WHILE, Synonym{"a"} }));
+		relations.push_back(RelRef(type, { STMT, Synonym{"a"} }, { STMT, Synonym{"b"} }));
+		relations.push_back(RelRef(type, { IF, Synonym{"a"} }, { STMT, Synonym{"b"} }));
+		relations.push_back(RelRef(type, { WHILE, Synonym{"a"} }, { STMT, Synonym{"b"} }));
+		relations.push_back(RelRef(type, { STMT, Synonym{"a"} }, { IF, Synonym{"b"} }));
+		relations.push_back(RelRef(type, { STMT, Synonym{"a"} }, { WHILE, Synonym{"b"} }));
+		relations.push_back(RelRef(type, { IF, Synonym{"a"} }, { IF, Synonym{"b"} }));
+		relations.push_back(RelRef(type, { IF, Synonym{"a"} }, { WHILE, Synonym{"b"} }));
+		relations.push_back(RelRef(type, { WHILE, Synonym{"a"} }, { WHILE, Synonym{"b"} }));
 		relations.push_back(RelRef(type, WILD_CARD, { STMT, Synonym{"a"} }));
 		relations.push_back(RelRef(type, WILD_CARD, { IF, Synonym{"a"} }));
 		relations.push_back(RelRef(type, WILD_CARD, { WHILE, Synonym{"a"} }));
@@ -1179,14 +1179,14 @@ namespace UnitTesting {
 
 		std::vector<RelRef> relations;
 		//Have Result for matching header
-		relations.push_back(RelRef(type, { STMT, Synonym{"a"} }, { STMT, Synonym{"a"} }));
-		relations.push_back(RelRef(type, { IF, Synonym{"a"} }, { STMT, Synonym{"a"} }));
-		relations.push_back(RelRef(type, { WHILE, Synonym{"a"} }, { STMT, Synonym{"a"} }));
-		relations.push_back(RelRef(type, { STMT, Synonym{"a"} }, { IF, Synonym{"a"} }));
-		relations.push_back(RelRef(type, { STMT, Synonym{"a"} }, { WHILE, Synonym{"a"} }));
-		relations.push_back(RelRef(type, { IF, Synonym{"a"} }, { IF, Synonym{"a"} }));
-		relations.push_back(RelRef(type, { IF, Synonym{"a"} }, { WHILE, Synonym{"a"} }));
-		relations.push_back(RelRef(type, { WHILE, Synonym{"a"} }, { WHILE, Synonym{"a"} }));
+		relations.push_back(RelRef(type, { STMT, Synonym{"a"} }, { STMT, Synonym{"b"} }));
+		relations.push_back(RelRef(type, { IF, Synonym{"a"} }, { STMT, Synonym{"b"} }));
+		relations.push_back(RelRef(type, { WHILE, Synonym{"a"} }, { STMT, Synonym{"b"} }));
+		relations.push_back(RelRef(type, { STMT, Synonym{"a"} }, { IF, Synonym{"b"} }));
+		relations.push_back(RelRef(type, { STMT, Synonym{"a"} }, { WHILE, Synonym{"b"} }));
+		relations.push_back(RelRef(type, { IF, Synonym{"a"} }, { IF, Synonym{"b"} }));
+		relations.push_back(RelRef(type, { IF, Synonym{"a"} }, { WHILE, Synonym{"b"} }));
+		relations.push_back(RelRef(type, { WHILE, Synonym{"a"} }, { WHILE, Synonym{"b"} }));
 		relations.push_back(RelRef(type, WILD_CARD, { STMT, Synonym{"a"} }));
 		relations.push_back(RelRef(type, WILD_CARD, { IF, Synonym{"a"} }));
 		relations.push_back(RelRef(type, WILD_CARD, { WHILE, Synonym{"a"} }));
@@ -1584,7 +1584,7 @@ namespace UnitTesting {
 		resultList[2] = { right2 };
 		resultList[3] = { right3, right4 };
 
-		Entity selected(VARIABLE, COMMON_SYNONYM1);
+		Entity selected(VARIABLE, COMMON_SYNONYM2);
 		for (unsigned int i = 0; i < selectedList.size(); i++) {
 			RelRef relation(type, selectedList[i], selected);
 			Query q = initQuery(relation, selected);
@@ -1812,7 +1812,7 @@ namespace UnitTesting {
 		resultList[1] = { right1 };
 		resultList[2] = { right2 };
 
-		Entity selected(VARIABLE, COMMON_SYNONYM1);
+		Entity selected(VARIABLE, COMMON_SYNONYM2);
 		for (unsigned int i = 0; i < selectedList.size(); i++) {
 			RelRef relation(type, selectedList[i], selected);
 			Query q = initQuery(relation, selected);

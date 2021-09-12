@@ -257,6 +257,281 @@ namespace UnitTesting {
 		EXPECT_EQ(Utility::filterResults({ ASSIGN, ASSIGN }, a), b);
 	}
 
+	TEST(Utility, filterResultsSingleColumn) {
+		
+		std::vector<std::vector<std::string>> from = {
+			{"1", "1", "1", "1", "1"},
+			{"1", "2", "3", "4", "5"},
+			{"2", "2", "3", "4", "5"},
+			{"2", "3", "3", "4", "5"},
+			{"3", "3", "3", "4", "5"},
+			{"4", "4", "3", "4", "5"},
+			{"4", "5", "3", "4", "5"},
+			{"5", "5", "3", "4", "5"}
+		};
+
+		int index = 0;
+		std::unordered_set<std::string> filters = { "1", "3", "5" };;
+		std::vector<std::vector<std::string>> to = {
+			{"1", "1", "1", "1", "1"},
+			{"1", "2", "3", "4", "5"},
+			{"3", "3", "3", "4", "5"},
+			{"5", "5", "3", "4", "5"}
+		};
+
+		EXPECT_EQ(Utility::filterResults(from, filters, index), to);
+
+		filters = { "2", "4" };;
+		to = {
+			{"2", "2", "3", "4", "5"},
+			{"2", "3", "3", "4", "5"},
+			{"4", "4", "3", "4", "5"},
+			{"4", "5", "3", "4", "5"}
+		};
+
+		EXPECT_EQ(Utility::filterResults(from, filters, index), to);
+
+		index = 2;
+		filters = { "1", "3", "5" };;
+		to = {
+			{"1", "1", "1", "1", "1"},
+			{"1", "2", "3", "4", "5"},
+			{"2", "2", "3", "4", "5"},
+			{"2", "3", "3", "4", "5"},
+			{"3", "3", "3", "4", "5"},
+			{"4", "4", "3", "4", "5"},
+			{"4", "5", "3", "4", "5"},
+			{"5", "5", "3", "4", "5"}
+		};
+
+		EXPECT_EQ(Utility::filterResults(from, filters, index), to);
+
+		filters = { "3" };;
+		to = {
+			{"1", "2", "3", "4", "5"},
+			{"2", "2", "3", "4", "5"},
+			{"2", "3", "3", "4", "5"},
+			{"3", "3", "3", "4", "5"},
+			{"4", "4", "3", "4", "5"},
+			{"4", "5", "3", "4", "5"},
+			{"5", "5", "3", "4", "5"}
+		};
+
+		EXPECT_EQ(Utility::filterResults(from, filters, index), to);
+
+		index = 4;
+		filters = { "1", "5" };;
+		to = {
+			{"1", "1", "1", "1", "1"},
+			{"1", "2", "3", "4", "5"},
+			{"2", "2", "3", "4", "5"},
+			{"2", "3", "3", "4", "5"},
+			{"3", "3", "3", "4", "5"},
+			{"4", "4", "3", "4", "5"},
+			{"4", "5", "3", "4", "5"},
+			{"5", "5", "3", "4", "5"}
+		};
+
+		EXPECT_EQ(Utility::filterResults(from, filters, index), to);
+
+		filters = { "2", "4" };;
+		to = { };
+
+		EXPECT_EQ(Utility::filterResults(from, filters, index), to);
+		
+	}
+
+
+	TEST(Utility, filterResultsDoubleColumn) {
+
+		std::vector<std::vector<std::string>> from = {
+			{"1", "1", "1", "1", "1"},
+			{"1", "2", "3", "4", "5"},
+			{"2", "2", "3", "4", "5"},
+			{"2", "3", "3", "4", "5"},
+			{"3", "3", "3", "4", "5"},
+			{"4", "4", "3", "4", "5"},
+			{"4", "5", "3", "4", "5"},
+			{"5", "5", "3", "4", "5"}
+		};
+
+		int index1 = 0;
+		int index2 = 1;
+		std::unordered_map<std::string, std::unordered_set<std::string>> filters = {
+			{"1", {"1", "2" } },
+			{"2", {"2", "3" } },
+			{"3", {"3" } },
+			{"4", {"4", "5" } },
+			{"5", {"5" } }
+		};
+
+		std::vector<std::vector<std::string>> to = {
+			{"1", "1", "1", "1", "1"},
+			{"1", "2", "3", "4", "5"},
+			{"2", "2", "3", "4", "5"},
+			{"2", "3", "3", "4", "5"},
+			{"3", "3", "3", "4", "5"},
+			{"4", "4", "3", "4", "5"},
+			{"4", "5", "3", "4", "5"},
+			{"5", "5", "3", "4", "5"}
+		};
+
+		EXPECT_EQ(Utility::filterResults(to, filters, index1, index2), to);
+
+		filters = {
+			{"1", {"1", "2" } },
+			{"3", {"3" } },
+			{"5", {"5" } }
+		};
+
+		to = {
+			{"1", "1", "1", "1", "1"},
+			{"1", "2", "3", "4", "5"},
+			{"3", "3", "3", "4", "5"},
+			{"5", "5", "3", "4", "5"}
+		};
+
+		EXPECT_EQ(Utility::filterResults(to, filters, index1, index2), to);
+
+		filters = {
+			{"3", {"3" } },
+			{"4", {"4" } },
+			{"5", {"5" } }
+		};
+
+		to = {
+			{"3", "3", "3", "4", "5"},
+			{"4", "4", "3", "4", "5"},
+			{"5", "5", "3", "4", "5"}
+		};
+
+		EXPECT_EQ(Utility::filterResults(to, filters, index1, index2), to);
+
+
+		index1 = 1;
+		index2 = 2;
+
+		filters = {
+			{"1", {"1", "2" } },
+			{"2", {"2", "3" } },
+			{"3", {"3" } },
+			{"4", {"4", "5" } },
+			{"5", {"5" } }
+		};
+
+		to = {
+			{"1", "1", "1", "1", "1"},
+			{"1", "2", "3", "4", "5"},
+			{"2", "2", "3", "4", "5"},
+			{"2", "3", "3", "4", "5"},
+			{"3", "3", "3", "4", "5"},
+		};
+
+		EXPECT_EQ(Utility::filterResults(to, filters, index1, index2), to);
+
+		index1 = 1;
+		index2 = 3;
+		filters = {
+			{"1", {"1", "2" } },
+			{"2", {"2", "3" } },
+			{"3", {"4" } },
+			{"4", {"4", "5" } },
+			{"5", {"5" } }
+		};
+
+		to = {
+			{"1", "1", "1", "1", "1"},
+			{"2", "3", "3", "4", "5"},
+			{"3", "3", "3", "4", "5"},
+			{"4", "4", "3", "4", "5"},
+		};
+
+		EXPECT_EQ(Utility::filterResults(to, filters, index1, index2), to);
+
+		index1 = 1;
+		index2 = 4;
+		filters = {
+			{"1", {"1", "2" } },
+			{"3", {"5" } },
+			{"4", {"5" } },
+			{"5", {"5" } }
+		};
+
+		to = {
+			{"1", "1", "1", "1", "1"},
+			{"2", "3", "3", "4", "5"},
+			{"3", "3", "3", "4", "5"},
+			{"4", "4", "3", "4", "5"},
+			{"4", "5", "3", "4", "5"},
+			{"5", "5", "3", "4", "5"}
+		};
+
+		EXPECT_EQ(Utility::filterResults(to, filters, index1, index2), to);
+
+		index1 = 0;
+		index2 = 3;
+		filters = {
+			{"1", {"1", "4" } },
+			{"2", {"2", "3" } },
+			{"3", {"4" } },
+			{"4", {"4", "5" } },
+			{"5", {"4" } }
+		};
+
+		to = {
+			{"1", "1", "1", "1", "1"},
+			{"1", "2", "3", "4", "5"},
+			{"4", "4", "3", "4", "5"},
+			{"4", "5", "3", "4", "5"}
+		};
+
+		EXPECT_EQ(Utility::filterResults(to, filters, index1, index2), to);
+
+		index1 = 0;
+		index2 = 4;
+		filters = {
+			{"1", {"1", "2" } },
+			{"2", {"1", "3" } },
+			{"3", {"1" } },
+			{"4", {"1", "5" } },
+			{"5", {"1" } }
+		};
+
+		to = {
+			{"1", "1", "1", "1", "1"},
+			{"4", "5", "3", "4", "5"},
+		};
+
+		EXPECT_EQ(Utility::filterResults(to, filters, index1, index2), to);
+
+		index1 = 3;
+		index2 = 4;
+		filters = {
+			{"1", {"1", "2" } },
+			{"2", {"2", "3" } },
+			{"3", {"3" } },
+			{"4", {"1", "2" } },
+			{"5", {"5" } }
+		};
+
+		to = { };
+
+		EXPECT_EQ(Utility::filterResults(to, filters, index1, index2), to);
+
+		index1 = 1;
+		index2 = 4;
+		filters = {
+			{"1", {"4", "5" } },
+			{"2", {"3", "5" } },
+			{"3", {"3" } },
+			{"4", {"5", "4" } },
+			{"5", {"5" } }
+		};
+
+		EXPECT_EQ(Utility::filterResults(to, filters, index1, index2), to);
+
+	}
+
 	TEST(Utility, patternMatch) {
 		//True test case
 		std::vector<std::string> originals1 = {
@@ -396,5 +671,342 @@ namespace UnitTesting {
 				EXPECT_FALSE(Utility::patternContain(it, it2));
 			}
 		}
+	}
+
+	TEST(Utility, mergeColumnEqual) {
+		std::vector<std::vector<std::string>> t1 = {
+			{"1", "1"},{"1", "2"},{"1", "3"},{"1", "4"},{"1", "5"},
+			{"2", "1"},{"2", "2"},{"2", "3"},{"2", "4"},{"2", "5"},
+			{"3", "1"},{"3", "2"},{"3", "3"},{"3", "4"},{"3", "5"},
+			{"4", "1"},{"4", "2"},{"4", "3"},{"4", "5"},
+			{"5", "1"},{"5", "2"},{"5", "3"},{"5", "4"},{"5", "5"}
+		};
+
+		std::vector<std::string> r1 = { "1", "2", "3", "5" };
+
+
+		std::vector<std::vector<std::string>> t2, t3;
+		std::vector<std::string> r2, r3;
+
+		for (int i1 = 0; i1 < 10; i1++) {
+			for (int i2 = 0; i2 < 10; i2++) {
+				for (int i3 = 0; i3 < 10; i3++) {
+					t2.push_back({ std::to_string(i1), std::to_string(i2), std::to_string(i3) });
+				}
+			}
+			r2.push_back(std::to_string(i1));
+		}
+		EXPECT_EQ(Utility::mergeColumnEqual(t2), r2);
+
+		for (int i1 = 0; i1 < 20; i1++) {
+			for (int i2 = 0; i2 < 20; i2++) {
+				for (int i3 = 0; i3 < 20; i3++) {
+					for (int i4 = 0; i4 < 20; i4++) {
+						t3.push_back({ std::to_string(i1), std::to_string(i2), 
+							std::to_string(i3),std::to_string(i4) });
+					}
+				}
+			}
+			r3.push_back(std::to_string(i1));
+		}
+
+		EXPECT_EQ(Utility::mergeColumnEqual(t3), r3);
+	}
+
+
+	TEST(Utility, joinTableSingleColumn) {
+
+		std::vector<std::vector<std::string>> from = {
+			{"1", "1"},
+			{"1", "2"},
+			{"1", "3"},
+			{"2", "1"},
+			{"2", "2"},
+			{"2", "3"},
+			{"3", "1"},
+			{"3", "2"},
+			{"3", "3"},
+		};
+
+		std::unordered_multimap<std::string, std::vector<std::string>> toJoin = {
+			{"1", { "1", "1" } },
+			{"2", { "2", "2" } },
+			{"3", { "3", "3" } },
+			{"4", { "4", "4" } },
+			{"5", { "5", "5" } }
+		};
+
+		int fromIndex = 0;
+		int toJoinIndex = 0;
+
+		std::vector<std::vector<std::string>> to = {
+			{"1", "1", "1"},
+			{"1", "2", "1"},
+			{"1", "3", "1"},
+			{"2", "1", "2"},
+			{"2", "2", "2"},
+			{"2", "3", "2"},
+			{"3", "1", "3"},
+			{"3", "2", "3"},
+			{"3", "3", "3"},
+		};
+
+		EXPECT_EQ(Utility::joinTable(from, fromIndex, toJoin, toJoinIndex), to);
+
+		fromIndex = 1;
+		toJoinIndex = 0;
+
+		to = {
+			{"1", "1", "1"},
+			{"1", "2", "2"},
+			{"1", "3", "3"},
+			{"2", "1", "1"},
+			{"2", "2", "2"},
+			{"2", "3", "3"},
+			{"3", "1", "1"},
+			{"3", "2", "2"},
+			{"3", "3", "3"},
+		};
+
+		EXPECT_EQ(Utility::joinTable(from, fromIndex, toJoin, toJoinIndex), to);
+		
+		from = {
+			{"1"},
+			{"2"},
+			{"3"}
+		};
+
+		toJoin = {
+			{"1", { "1", "1" } },
+			{"1", { "1", "2" } },
+			{"2", { "2", "3" } },
+			{"1", { "1", "4" } },
+			{"1", { "1", "5" } }
+		};
+
+		fromIndex = 0;
+		toJoinIndex = 0;
+
+		to = {
+			{"1", "1"},
+			{"1", "2"},
+			{"1", "4"},
+			{"1", "5"},
+			{"2", "3"}
+		};
+
+		EXPECT_EQ(Utility::joinTable(from, fromIndex, toJoin, toJoinIndex), to);
+
+		from = {
+			{"1"},
+			{"2"},
+			{"3"}
+		};
+
+		toJoin = {
+			{"1", { "1", "1", "5" } },
+			{"1", { "1", "2", "4" } },
+			{"2", { "2", "3", "3" } },
+			{"1", { "1", "4", "2" } },
+			{"1", { "1", "5", "1" } }
+		};
+
+		fromIndex = 0;
+		toJoinIndex = 0;
+
+		to = {
+			{"1", "1", "5" },
+			{"1", "2", "4" },
+			{"1", "4", "2" },
+			{"1", "5", "1" },
+			{"2", "3", "3" }
+		};
+
+		EXPECT_EQ(Utility::joinTable(from, fromIndex, toJoin, toJoinIndex), to);
+
+
+		from = {
+			{"1", "1"},
+			{"1", "2"},
+			{"1", "3"},
+			{"2", "1"},
+			{"2", "2"},
+			{"2", "3"},
+			{"3", "1"},
+			{"3", "2"},
+			{"3", "3"}
+		};
+
+		toJoin = {
+			{"1", { "1", "1", "5" } },
+			{"1", { "1", "2", "4" } },
+			{"2", { "2", "3", "3" } },
+			{"1", { "1", "4", "2" } },
+			{"1", { "1", "5", "1" } }
+		};
+
+		fromIndex = 0;
+		toJoinIndex = 0;
+
+		to = {
+			{"1", "1", "1", "5" },
+			{"1", "1", "2", "4" },
+			{"1", "1", "4", "2" },
+			{"1", "1", "5", "1" },
+			{"1", "2", "1", "5" },
+			{"1", "2", "2", "4" },
+			{"1", "2", "4", "2" },
+			{"1", "2", "5", "1" },
+			{"1", "3", "1", "5" },
+			{"1", "3", "2", "4" },
+			{"1", "3", "4", "2" },
+			{"1", "3", "5", "1" },
+			{"2", "1", "3", "3" },
+			{"2", "2", "3", "3" },
+			{"2", "3", "3", "3" }
+		};
+
+		EXPECT_EQ(Utility::joinTable(from, fromIndex, toJoin, toJoinIndex), to);
+
+		from = {
+			{"1"},
+			{"2"},
+			{"3"},
+			{"4"},
+			{"5"},
+			{"6"},
+			{"7"},
+			{"8"},
+			{"9"}
+		};
+
+		toJoin = {
+			{"1", { "1", "1", "5" } },
+			{"1", { "1", "2", "4" } },
+			{"1", { "1", "4", "2" } },
+			{"1", { "1", "5", "1" } }
+		};
+
+		fromIndex = 0;
+		toJoinIndex = 0;
+
+		to = {
+			{"1", "1", "5" },
+			{"1", "2", "4" },
+			{"1", "4", "2" },
+			{"1", "5", "1" }
+		};
+
+		EXPECT_EQ(Utility::joinTable(from, fromIndex, toJoin, toJoinIndex), to);
+
+
+		fromIndex = 0;
+		toJoinIndex = 1;
+
+		to = {
+			{"1", "1", "5" },
+			{"1", "1", "4" },
+			{"1", "1", "2" },
+			{"1", "1", "1" }
+		};
+
+		EXPECT_EQ(Utility::joinTable(from, fromIndex, toJoin, toJoinIndex), to);
+
+	}
+
+
+	TEST(Utility, joinTableDoubleColumn) {
+		
+		std::vector<std::vector<std::string>> from = {
+			{"1", "4"},
+			{"2", "5"},
+			{"3", "6"}
+		};
+
+		std::unordered_map<std::string, std::unordered_multimap<std::string, std::vector<std::string>>> toJoin = {
+			{"1", { { "4", { "1", "4", "7"} } , { "4", { "1", "4", "8"} } } },
+			{"2", { { "5", { "2", "5", "8"} } , { "5", { "2", "5", "9"} } } },
+			{"3", { { "6", { "5", "6", "9"} } } }
+		};
+
+		int fromIndex1 = 0;
+		int fromIndex2 = 1;
+		int toJoinIndex1 = 0;
+		int toJoinIndex2 = 1;
+
+		std::vector<std::vector<std::string>> to = {
+			{"1", "4", "7"},
+			{"1", "4", "8"},
+			{"2", "5", "8"},
+			{"2", "5", "9"},
+			{"3", "6", "9"},
+		};
+
+		EXPECT_EQ(Utility::joinTable(from, fromIndex1, fromIndex2, toJoin, toJoinIndex1, toJoinIndex2), to);
+
+		from = {
+			{"1", "4", "7"},
+			{"1", "4", "8"},
+			{"2", "5", "8"},
+			{"3", "6", "9"}
+		};
+
+		toJoin = {
+			{"1", { { "4", { "1", "4", "7"} } , { "4", { "1", "4", "8"} } } },
+			{"2", { { "5", { "2", "5", "8"} } , { "5", { "2", "5", "9"} } } },
+			{"3", { { "6", { "5", "6", "9"} } } }
+		};
+
+		fromIndex1 = 0;
+		fromIndex2 = 1;
+		toJoinIndex1 = 0;
+		toJoinIndex2 = 1;
+
+		to = {
+			{"1", "4", "7", "7"},
+			{"1", "4", "7", "8"},
+			{"1", "4", "8", "7"},
+			{"1", "4", "8", "8"},
+			{"2", "5", "8", "8"},
+			{"2", "5", "8", "9"},
+			{"3", "6", "9", "9"},
+		};
+
+		EXPECT_EQ(Utility::joinTable(from, fromIndex1, fromIndex2, toJoin, toJoinIndex1, toJoinIndex2), to);
+
+
+		fromIndex1 = 1;
+		fromIndex2 = 0;
+
+		to = { };
+
+		EXPECT_EQ(Utility::joinTable(from, fromIndex1, fromIndex2, toJoin, toJoinIndex1, toJoinIndex2), to);
+
+
+		from = {
+			{"4", "1", "7"},
+			{"4", "1", "8"},
+			{"5", "2", "8"},
+			{"6", "3", "9"}
+		};
+
+		toJoin = {
+			{"1", { { "4", { "1", "4", "7"} } , { "4", { "1", "4", "8"} } } },
+			{"2", { { "5", { "2", "5", "8"} } , { "5", { "2", "5", "9"} } } },
+			{"3", { { "6", { "5", "6", "9"} } } }
+		};
+
+		to = {
+			{"4", "1", "7", "7"},
+			{"4", "1", "7", "8"},
+			{"4", "1", "8", "7"},
+			{"4", "1", "8", "8"},
+			{"5", "2", "8", "8"},
+			{"5", "2", "8", "9"},
+			{"6", "3", "9", "9"},
+		};
+
+		EXPECT_EQ(Utility::joinTable(from, fromIndex1, fromIndex2, toJoin, toJoinIndex1, toJoinIndex2), to);
+
 	}
 }

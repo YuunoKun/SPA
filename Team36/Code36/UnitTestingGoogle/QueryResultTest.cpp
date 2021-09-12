@@ -44,7 +44,7 @@ namespace UnitTesting {
 		EXPECT_TRUE(queryResult.isInTables(queryTableHeader3.first));
 		EXPECT_TRUE(queryResult.isInTables(queryTableHeader3.second));
 		EXPECT_TRUE(queryResult.isInTables({ WHILE, Synonym{"test"} }));
-		EXPECT_FALSE(queryResult.isInTables({ PRINT,Synonym{ "test" } }));
+		EXPECT_FALSE(queryResult.isInTables({ PRINT,Synonym{ "test1" } }));
 	}
 
 	TEST(QueryResult, haveResult) {
