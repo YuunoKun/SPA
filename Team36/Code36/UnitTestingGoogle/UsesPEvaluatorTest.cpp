@@ -1,41 +1,54 @@
 #include "pch.h"
 
 #include "UsesPEvaluator.h"
+#include "PKB.h"
 
 namespace UnitTesting {
-	TEST(UsesPEvaluator, haveRelation) {
+	class UsesPEvaluatorTest : public testing::Test {
+	protected:
+		UsesPEvaluatorTest() {
+		}
+
+		virtual void SetUp() override {
+			PKB::getInstance().resetCache();
+		}
+
+		PKBAdapter pkb;
+		UsesPEvaluator evaluator;
+	};
+	TEST_F(UsesPEvaluatorTest, haveRelation) {
 		//TODO: Iteration 2
 	}
 
-	TEST(UsesPEvaluator, isRelation) {
+	TEST_F(UsesPEvaluatorTest, isRelation) {
 		//TODO: Iteration 2
 	}
 
-	TEST(UsesPEvaluator, haveRelationAtRight) {
+	TEST_F(UsesPEvaluatorTest, haveRelationAtRight) {
 		//TODO: Iteration 2
 	}
 
-	TEST(UsesPEvaluator, haveRelationAtLeft) {
+	TEST_F(UsesPEvaluatorTest, haveRelationAtLeft) {
 		//TODO: Iteration 2
 	}
 
-	TEST(UsesPEvaluator, getRelations) {
+	TEST_F(UsesPEvaluatorTest, getRelations) {
 		//TODO: Iteration 2
 	}
 
-	TEST(UsesPEvaluator, getRightRelations) {
+	TEST_F(UsesPEvaluatorTest, getRightRelations) {
 		//TODO: Iteration 2
 	}
 
-	TEST(UsesPEvaluator, getLeftRelations) {
+	TEST_F(UsesPEvaluatorTest, getLeftRelations) {
 		//TODO: Iteration 2
 	}
 
-	TEST(UsesPEvaluator, getRelationMatchLeft) {
+	TEST_F(UsesPEvaluatorTest, getRelationMatchLeft) {
 		//TODO: Iteration 2
 	}
 
-	TEST(UsesPEvaluator, getRelationMatchRight) {
+	TEST_F(UsesPEvaluatorTest, getRelationMatchRight) {
 		//TODO: Iteration 2
 	}
 }

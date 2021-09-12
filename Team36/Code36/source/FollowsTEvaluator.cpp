@@ -5,7 +5,6 @@
 #include "PKBAdapter.h"
 #include "FollowsTEvaluator.h"
 
-
 //Handle both wild : e.g Relation(_, _)
 bool FollowsTEvaluator::haveRelation() {
 	return !pkb.isFollowTEmpty();

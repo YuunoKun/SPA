@@ -5,7 +5,6 @@
 #include "PKBAdapter.h"
 #include "FollowsEvaluator.h"
 
-
 //Handle both wild : e.g Relation(_, _)
 bool FollowsEvaluator::haveRelation() {
 	return !pkb.isFollowEmpty();
