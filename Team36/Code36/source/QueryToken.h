@@ -30,7 +30,7 @@ public:
 		PROCEDURE,
 		AND,
 		PATTERN,
-		SUCHTHAT,
+		SUCH_THAT,
 
 		// PQL Variable Operators
 		WILDCARD,
@@ -43,7 +43,7 @@ public:
 		DIV,
 		MOD,
 
-		//Relationships 
+		//Relationships
 		// need parent type? cause will pass straight to relref class
 		MODIFIES_P,
 		MODIFIES_S,

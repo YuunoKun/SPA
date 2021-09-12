@@ -141,9 +141,9 @@ Query QueryPreprocessor::parse(std::string str) {
 		}
 
 		else if (isSelect) {
-			if (token.type == QueryToken::QueryTokenType::SUCHTHAT) {
-				output.push_back({ QueryToken::QueryTokenType::SUCHTHAT, "such that" });
-				patternOrSuchThat = { QueryToken::QueryTokenType::SUCHTHAT, "such that" };
+			if (token.type == QueryToken::QueryTokenType::SUCH_THAT) {
+				output.push_back({ QueryToken::QueryTokenType::SUCH_THAT, "such that" });
+				patternOrSuchThat = { QueryToken::QueryTokenType::SUCH_THAT, "such that" };
 			}
 			else if (token.type == QueryToken::QueryTokenType::PATTERN) {
 				output.push_back({ QueryToken::QueryTokenType::PATTERN, "pattern" });
@@ -154,7 +154,7 @@ Query QueryPreprocessor::parse(std::string str) {
 				parameterClause.push_back(token);
 			}
 
-			if (!isParameter && patternOrSuchThat.type == QueryToken::QueryTokenType::SUCHTHAT) {
+			if (!isParameter && patternOrSuchThat.type == QueryToken::QueryTokenType::SUCH_THAT) {
 				if (token.type == QueryToken::QueryTokenType::PARENT_T) {
 					output.push_back({ QueryToken::QueryTokenType::PARENT_T, "" });
 				}
