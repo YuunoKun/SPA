@@ -21,26 +21,28 @@ Query QueryPreprocessor::parse(std::string str) {
 	//const std::vector<QueryToken> v = query_tokenizer.get_query_token_chain();
 
 	std::vector<QueryToken> v;
-	QueryToken q1(QueryToken::QueryTokenType::IDENTIFIER, "stmt");
-	v.push_back(q1);
-	v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "s" });
-	v.push_back({ QueryToken::QueryTokenType::COMMA, "" });
-	v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "ss" });
-	v.push_back({ QueryToken::QueryTokenType::TERMINATOR, ";" });
-	v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "procedure" });
-	v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "p" });
-	v.push_back({ QueryToken::QueryTokenType::TERMINATOR, ";" });
+	//QueryToken q1(QueryToken::QueryTokenType::IDENTIFIER, "stmt");
+	//v.push_back(q1);
+	//v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "s" });
+	//v.push_back({ QueryToken::QueryTokenType::COMMA, "" });
+	//v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "ss" });
+	//v.push_back({ QueryToken::QueryTokenType::TERMINATOR, ";" });
+	//v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "procedure" });
+	//v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "p" });
+	//v.push_back({ QueryToken::QueryTokenType::TERMINATOR, ";" });
 	v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "Select" });
 	v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "p" });
+	v.push_back({ QueryToken::QueryTokenType::SUCH_THAT, "" });
+	v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "Modifies" });
 	//v.push_back({ QueryToken::QueryTokenType::COMMA, "" });
 	//v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "p" });
 	//v.push_back({ QueryToken::QueryTokenType::SUCHTHAT, "" });
 	//v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "Modifies" });
-	//v.push_back({ QueryToken::QueryTokenType::PARENTHESIS_OPEN, "" });
-	//v.push_back({ QueryToken::QueryTokenType::CONSTANT, "7" });
-	//v.push_back({ QueryToken::QueryTokenType::COMMA, "" });
-	//v.push_back({ QueryToken::QueryTokenType::WILDCARD, "" });
-	//v.push_back({ QueryToken::QueryTokenType::PARENTHESIS_CLOSE, "" });
+	v.push_back({ QueryToken::QueryTokenType::PARENTHESIS_OPEN, "" });
+	v.push_back({ QueryToken::QueryTokenType::CONSTANT, "7" });
+	v.push_back({ QueryToken::QueryTokenType::COMMA, "" });
+	v.push_back({ QueryToken::QueryTokenType::WILDCARD, "" });
+	v.push_back({ QueryToken::QueryTokenType::PARENTHESIS_CLOSE, "" });
 
 	// Collection of declared query tokens
 	std::vector<QueryToken> output;
@@ -67,7 +69,7 @@ Query QueryPreprocessor::parse(std::string str) {
 	QueryToken patternOrSuchThat;
 
 	// True when parsing is in selection, false when parsing is in declaration
-	bool isSelect = false;
+	bool isSelect = true;
 
 	// True when iterating inside the such that or pattern parameter, false otherwise
 	bool isParameter = false;
@@ -102,15 +104,15 @@ Query QueryPreprocessor::parse(std::string str) {
 
 		else if (isSelect) {
 			if (token.type == QueryToken::QueryTokenType::SUCH_THAT) {
-				output.push_back({ QueryToken::QueryTokenType::SUCH_THAT, "such that" });
-				patternOrSuchThat = { QueryToken::QueryTokenType::SUCH_THAT, "such that" };
+				output.push_back({ QueryToken::QueryTokenType::SUCH_THAT, "" });
+				patternOrSuchThat = { QueryToken::QueryTokenType::SUCH_THAT, "" };
 			}
 			else if (token.type == QueryToken::QueryTokenType::PATTERN) {
-				output.push_back({ QueryToken::QueryTokenType::PATTERN, "pattern" });
-				patternOrSuchThat = { QueryToken::QueryTokenType::PATTERN, "pattern" };
+				output.push_back({ QueryToken::QueryTokenType::PATTERN, "" });
+				patternOrSuchThat = { QueryToken::QueryTokenType::PATTERN, "" };
 			}
 
-			if (isParameter && !token.type == QueryToken::QueryTokenType::PARENTHESIS_CLOSE) {
+			if (isParameter && token.type != QueryToken::QueryTokenType::PARENTHESIS_CLOSE) {
 				parameterClause.push_back(token);
 			}
 
@@ -169,7 +171,7 @@ Query QueryPreprocessor::parse(std::string str) {
 				if (prevTokenSelect.type == QueryToken::QueryTokenType::PATTERN && token.type == QueryToken::QueryTokenType::IDENTIFIER) {
 					for (QueryToken each : output) {
 						if (token.token_value == each.token_value) {
-							selected.push_back({ each.type, token.token_value });
+							//selected.push_back({ each.type, token.token_value });
 							Synonym synonym;
 							synonym.name = token.token_value;
 							EntityType entityType = Utility::queryTokenTypeToEntityType(each.type);
