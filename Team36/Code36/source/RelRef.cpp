@@ -3,11 +3,10 @@
 
 RelRef::RelRef(RelType rel_type, Entity first_clause, Entity second_clause) {
 	// Checks that pattern types are valid
-	std::vector<Entity> clauses { first_clause, second_clause };
+	std::vector<Entity> clauses{ first_clause, second_clause };
 	// TODO: Add follows, followsT, parent, parentT after discussion for new type
 	if (rel_type == USES_P) {
-		
-		for (int i = 0; i < clauses.size(); ++i) {
+		for (unsigned int i = 0; i < clauses.size(); ++i) {
 			if (clauses[i].getType() != static_cast<EntityType>(ASSIGN) &&
 				clauses[i].getType() != static_cast<EntityType>(VARIABLE) &&
 				clauses[i].getType() != static_cast<EntityType>(PRINT) &&
@@ -22,7 +21,7 @@ RelRef::RelRef(RelType rel_type, Entity first_clause, Entity second_clause) {
 	}
 
 	if (rel_type == MODIFIES_P) {
-		for (int i = 0; i < clauses.size(); ++i) {
+		for (unsigned int i = 0; i < clauses.size(); ++i) {
 			if (clauses[i].getType() != static_cast<EntityType>(ASSIGN) &&
 				clauses[i].getType() != static_cast<EntityType>(VARIABLE) &&
 				clauses[i].getType() != static_cast<EntityType>(READ) &&
@@ -52,7 +51,6 @@ Entity RelRef::getFirstClause() {
 Entity RelRef::getSecondClause() {
 	return second_clause;
 }
-
 
 bool RelRef::operator==(const RelRef& entity) const {
 	return rel_type == entity.rel_type

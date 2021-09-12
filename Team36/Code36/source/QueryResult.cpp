@@ -28,6 +28,10 @@ bool QueryResult::isInTables(Entity e) {
 }
 
 void QueryResult::addResult(ResultTable t) {
+	if (t.isEmpty()) {
+		have_result = false;
+		return;
+	}
 	for (auto& table : results) {
 		if (table.merge(t)) {
 			if (table.isEmpty()) {
@@ -37,9 +41,6 @@ void QueryResult::addResult(ResultTable t) {
 		}
 	}
 	results.push_back(t);
-	if (t.isEmpty()) {
-		have_result = false;
-	}
 }
 
 std::list<std::string> QueryResult::getResult(Entity e) {

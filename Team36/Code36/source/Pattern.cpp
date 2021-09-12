@@ -1,7 +1,7 @@
 #include "Pattern.h"
 #include <iostream>
 
-Pattern::Pattern(Entity pattern_type, Entity left_expression, TNode expression, bool is_wild) {
+Pattern::Pattern(Entity pattern_type, Entity left_expression, std::string expression, bool is_wild) {
 	// Checks that pattern types are valid
 	if (pattern_type.getType() != static_cast<EntityType>(ASSIGN)) {
 		throw std::invalid_argument("Pattern Type is invalid");
@@ -26,7 +26,7 @@ Entity Pattern::getLeftExpression() {
 	return left_expression;
 }
 
-TNode Pattern::getExpression() {
+std::string Pattern::getExpression() {
 	return expression;
 }
 
@@ -38,6 +38,6 @@ bool Pattern::isWild() {
 bool Pattern::operator==(const Pattern& pattern) const {
 	return pattern_type == pattern.pattern_type
 		&& left_expression == pattern.left_expression
-		//&& expression == pattern.expression
+		&& expression == pattern.expression
 		&& is_wild == pattern.is_wild;
 }

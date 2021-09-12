@@ -8,3 +8,13 @@ constant c;
 Select c
 4, 5
 5000
+3 - comment
+variable v;
+Select v
+x, y
+5000
+4 - comment
+assign a;
+Select a
+3
+5000
