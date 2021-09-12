@@ -13,4 +13,10 @@ public:
 	QueryPreprocessor();
 
 	Query parse(std::string);
+
+private:
+
+	QueryToken setIdentifierToQueryTokenType(QueryToken&, QueryToken&, QueryToken&);
+
+	void validateDeclarationQuery(QueryToken&, QueryToken&);
 };
