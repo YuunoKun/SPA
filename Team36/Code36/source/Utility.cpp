@@ -170,6 +170,28 @@ bool Utility::patternMatch(std::string a, std::string b) {
 	return a == b;
 }
 
+bool Utility::patternContain(std::string original, std::string match) {
+	original.erase(std::remove_if(original.begin(), original.end(), ::isspace), original.end());
+	match.erase(std::remove_if(match.begin(), match.end(), ::isspace), match.end());
+
+	const char delim = ' ';
+	std::replace(original.begin(), original.end(), '*', delim); // replace all '*' to 'space'
+	std::replace(original.begin(), original.end(), '/', delim); // replace all '/' to 'space'
+	std::replace(original.begin(), original.end(), '+', delim); // replace all '+' to 'space'
+	std::replace(original.begin(), original.end(), '-', delim); // replace all '-' to 'space'
+	std::replace(original.begin(), original.end(), '%', delim); // replace all '-' to 'space'
+
+	std::stringstream ss(original);
+	std::vector<std::string> variables;
+
+	std::string s;
+	while (std::getline(ss, s, delim)) {
+		if (s == match) {
+			return true;
+		}
+	}
+	return false;
+}
 EntityType Utility::queryTokenTypeToEntityType(QueryToken::QueryTokenType& queryTokenType) {
 	if (queryTokenType == QueryToken::QueryTokenType::STMT) {
 		return EntityType::STMT;
@@ -202,25 +224,25 @@ EntityType Utility::queryTokenTypeToEntityType(QueryToken::QueryTokenType& query
 		return EntityType::CONSTANT;
 	}
 }
-bool Utility::patternContain(std::string original, std::string match) {
-	original.erase(std::remove_if(original.begin(), original.end(), ::isspace), original.end());
-	match.erase(std::remove_if(match.begin(), match.end(), ::isspace), match.end());
-
-	const char delim = ' ';
-	std::replace(original.begin(), original.end(), '*', delim); // replace all '*' to 'space'
-	std::replace(original.begin(), original.end(), '/', delim); // replace all '/' to 'space'
-	std::replace(original.begin(), original.end(), '+', delim); // replace all '+' to 'space'
-	std::replace(original.begin(), original.end(), '-', delim); // replace all '-' to 'space'
-	std::replace(original.begin(), original.end(), '%', delim); // replace all '-' to 'space'
-
-	std::stringstream ss(original);
-	std::vector<std::string> variables;
-
-	std::string s;
-	while (std::getline(ss, s, delim)) {
-		if (s == match) {
-			return true;
-		}
-	}
-	return false;
-}
+//bool Utility::patternContain(std::string original, std::string match) {
+//	original.erase(std::remove_if(original.begin(), original.end(), ::isspace), original.end());
+//	match.erase(std::remove_if(match.begin(), match.end(), ::isspace), match.end());
+//
+//	const char delim = ' ';
+//	std::replace(original.begin(), original.end(), '*', delim); // replace all '*' to 'space'
+//	std::replace(original.begin(), original.end(), '/', delim); // replace all '/' to 'space'
+//	std::replace(original.begin(), original.end(), '+', delim); // replace all '+' to 'space'
+//	std::replace(original.begin(), original.end(), '-', delim); // replace all '-' to 'space'
+//	std::replace(original.begin(), original.end(), '%', delim); // replace all '-' to 'space'
+//
+//	std::stringstream ss(original);
+//	std::vector<std::string> variables;
+//
+//	std::string s;
+//	while (std::getline(ss, s, delim)) {
+//		if (s == match) {
+//			return true;
+//		}
+//	}
+//	return false;
+//}

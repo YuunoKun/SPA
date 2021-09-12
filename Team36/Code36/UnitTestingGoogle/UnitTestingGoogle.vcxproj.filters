@@ -29,6 +29,9 @@
     <ClCompile Include="QueryEvaluatorTest.cpp">
       <Filter>PQL</Filter>
     </ClCompile>
+    <ClCompile Include="QueryPreprocessorTest.cpp">
+      <Filter>PQL</Filter>
+    </ClCompile>
     <ClCompile Include="UtilityTest.cpp">
       <Filter>PQL</Filter>
     </ClCompile>
@@ -50,6 +53,7 @@
     <ClCompile Include="ParentEvaluatorTest.cpp">
       <Filter>PQL</Filter>
     </ClCompile>
+    <ClCompile Include="PKBTest.cpp" />
     <ClCompile Include="ParentTEvaluatorTest.cpp">
       <Filter>PQL</Filter>
     </ClCompile>

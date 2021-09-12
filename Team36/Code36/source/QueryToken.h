@@ -43,7 +43,7 @@ public:
 		DIV,
 		MOD,
 
-		//Relationships 
+		//Relationships
 		// need parent type? cause will pass straight to relref class
 		MODIFIES_P,
 		MODIFIES_S,

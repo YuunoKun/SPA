@@ -48,6 +48,7 @@
     <ClCompile Include="QueryEvaluatorTest.cpp" />
     <ClCompile Include="PatternTest.cpp" />
     <ClCompile Include="QueryResultTest.cpp" />
+    <ClCompile Include="QueryPreprocessorTest.cpp" />
     <ClCompile Include="QueryTest.cpp" />
     <ClCompile Include="RelationsEvaluatorTest.cpp" />
     <ClCompile Include="FollowsEvaluatorTest.cpp" />
