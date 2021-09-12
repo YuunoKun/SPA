@@ -22,6 +22,10 @@ namespace SourceProcessor {
 
 		std::vector<stmt_index> get_caller();
 
+		void add_child(stmt_index);
+
+		std::vector<stmt_index> get_child();
+
 		void add_uses_variable(var_name);
 
 		std::vector<var_name> get_used_variable();
@@ -34,6 +38,7 @@ namespace SourceProcessor {
 		proc_name m_name;
 		proc_index m_index;
 		std::set<stmt_index> m_caller;
+		std::vector<stmt_index> m_contained_stmt;
 		std::unordered_set<var_name> m_uses;
 		std::unordered_set<var_name> m_modifies;
 	};
