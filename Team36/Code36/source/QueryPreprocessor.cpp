@@ -14,6 +14,8 @@ QueryPreprocessor::QueryPreprocessor() {
 
 Entity setStmtRef(Query& query, QueryToken token) {
 
+	//synonym | ‘_’ | INTEGER
+
 	// wild card check
 	if (token.type == QueryToken::WILDCARD) {
 		return Entity(EntityType::WILD);
@@ -34,6 +36,9 @@ Entity setStmtRef(Query& query, QueryToken token) {
 }
 
 Entity setEntRef(Query& query, std::vector<QueryToken> token_chain) {
+
+	// entRef : synonym | ‘_’ | ‘"’ IDENT ‘"’
+
 	if (token_chain.size() == 1) {
 		// wild card check
 		if (token_chain[0].type == QueryToken::WILDCARD) {
@@ -47,7 +52,6 @@ Entity setEntRef(Query& query, std::vector<QueryToken> token_chain) {
 		}
 	}
 
-
 	// is " "IDENT" "
 	if (token_chain[0].type == QueryToken::QUOTATION_OPEN &&
 		token_chain[1].type == QueryToken::IDENTIFIER &&
@@ -55,14 +59,21 @@ Entity setEntRef(Query& query, std::vector<QueryToken> token_chain) {
 		return Entity(EntityType::VARIABLE, token_chain[1].token_value);
 	}
 
-
-
 	std::runtime_error("Unknown stmtRef");
 }
 
+// takes in a token_chain with only IDENT* (no QUOTATION_OPEN/CLOSE or WILDCARD) 
 expr setExpr(std::vector<QueryToken> token_chain) {
-	//todo
-	return "pp";
+	
+	//expression-spec : ‘"‘ expr’"’ | ‘_’ ‘"’ expr ‘"’ ‘_’ | ‘_’
+
+	//TODO
+	// set to expression parser
+	if (token_chain.size() == 1 && token_chain[0].type == QueryToken::IDENTIFIER) {
+		return token_chain[0].token_value;
+	}
+
+
 }
 
 void parseParameterSuchThat(Query& query, QueryToken::QueryTokenType token_type, std::vector<QueryToken> token_chain) {
@@ -70,22 +81,24 @@ void parseParameterSuchThat(Query& query, QueryToken::QueryTokenType token_type,
 
 	switch (token_type) {
 	case QueryToken::MODIFIES_S:
+		// stmtRef , entRef
 		if (token_chain[1].type == QueryToken::COMMA) {
 			QueryToken stmt = token_chain[0];
 			token_chain.erase(token_chain.begin(), token_chain.begin() + 2);
 			query.addRelation(RelRef(RelType::MODIFIES_S,
-				setStmtRef(query, token_chain[0]),
+				setStmtRef(query, stmt),
 				setEntRef(query, token_chain)));
 		}
 		std::runtime_error("Unexpected parameters for Modifies");
 
 		break;
 	case QueryToken::USES_S:
+		// stmtRef , entRef
 		if (token_chain[1].type == QueryToken::COMMA) {
 			QueryToken stmt = token_chain[0];
 			token_chain.erase(token_chain.begin(), token_chain.begin() + 2);
 			query.addRelation(RelRef(RelType::USES_S,
-				setStmtRef(query, token_chain[0]),
+				setStmtRef(query, stmt),
 				setEntRef(query, token_chain)));
 		}
 		std::runtime_error("Unexpected parameters for Uses");
@@ -93,6 +106,7 @@ void parseParameterSuchThat(Query& query, QueryToken::QueryTokenType token_type,
 		break;
 
 	case QueryToken::PARENT:
+		// stmtRef , stmtRef
 		if (token_chain[1].type == QueryToken::COMMA) {
 			query.addRelation(RelRef(RelType::PARENT,
 				setStmtRef(query, token_chain[0]),
@@ -102,6 +116,7 @@ void parseParameterSuchThat(Query& query, QueryToken::QueryTokenType token_type,
 
 		break;
 	case QueryToken::PARENT_T:
+		// stmtRef , stmtRef
 		if (token_chain[1].type == QueryToken::COMMA) {
 			query.addRelation(RelRef(RelType::PARENT_T,
 				setStmtRef(query, token_chain[0]),
@@ -111,6 +126,7 @@ void parseParameterSuchThat(Query& query, QueryToken::QueryTokenType token_type,
 
 		break;
 	case QueryToken::FOLLOWS:
+		// stmtRef , stmtRef
 		if (token_chain[1].type == QueryToken::COMMA) {
 			query.addRelation(RelRef(RelType::FOLLOWS,
 				setStmtRef(query, token_chain[0]),
@@ -120,6 +136,7 @@ void parseParameterSuchThat(Query& query, QueryToken::QueryTokenType token_type,
 
 		break;
 	case QueryToken::FOLLOWS_T:
+		// stmtRef , stmtRef
 		if (token_chain[1].type == QueryToken::COMMA) {
 			query.addRelation(RelRef(RelType::FOLLOWS_T,
 				setStmtRef(query, token_chain[0]),
@@ -139,7 +156,9 @@ void parseParameterPattern(Query& query, Entity& synonym, std::vector<QueryToken
 	bool wild = false;
 	switch (synonym.getType()) {
 	case ASSIGN:
-		// find comma
+		// find comma 
+		// every QueryToken before comma token is sent to temp_token_chain
+		// Expect entRef token_chain
 		std::vector<QueryToken> temp_token_chain;
 		for (QueryToken& t : token_chain) {
 			if (t.type != QueryToken::COMMA) {
@@ -151,19 +170,26 @@ void parseParameterPattern(Query& query, Entity& synonym, std::vector<QueryToken
 			}
 		}
 
+		// check if the curr token_chain starts with comma
 		if (token_chain[0].type == QueryToken::COMMA) {
 			token_chain.erase(token_chain.begin());
 		}
 		else {
+			// if no comma found means invalid parameters
 			std::runtime_error("Unexpected parameters for Pattern");
 		}
 
+		//check second parameter if is WILDCARD
 		if (token_chain[0].type == QueryToken::WILDCARD) {
-			token_chain.erase(token_chain.begin());
 			wild = true;
+			// if first element is WILDCARD token, last element must be WILDCARD for last 2 cases below
+			// expression-spec : ‘"‘ expr’"’ | ‘_’ ‘"’ expr ‘"’ ‘_’ | ‘_’
 			if (token_chain[token_chain.size() - 1].type != QueryToken::WILDCARD) {
 				std::runtime_error("Unexpected parameters for Pattern");
 			}
+			// remove first WILDCARD token
+			token_chain.erase(token_chain.begin());
+
 		}
 		else {
 			std::runtime_error("Unexpected parameters for Pattern");
