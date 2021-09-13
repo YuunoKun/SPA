@@ -16,6 +16,7 @@ public:
 	bool isEmpty();
 	std::list<std::string> getEntityResult(Entity);
 	std::vector<Entity> getCommonHeaders(std::vector<Entity>);
+	std::vector<Entity> getHeaders();
 
 	bool operator==(const ResultTable&) const;
 
@@ -31,4 +32,10 @@ private:
 	std::vector<std::vector<std::string>> table;
 
 	int getHeaderIndex(Entity);
+
+	void filterTable(ResultTable, Entity);
+	void filterTable(ResultTable, Entity, Entity);
+
+	void joinTable(ResultTable, Entity);
+	void joinTable(ResultTable, Entity, Entity);
 };

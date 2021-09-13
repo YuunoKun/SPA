@@ -262,8 +262,6 @@ std::vector<std::vector<std::string>> Utility::joinTable(std::vector<std::vector
 	}
 
 	return results;
-
-	return std::vector<std::vector<std::string>>();
 }
 
 std::vector<std::vector<std::string>> Utility::joinTable(std::vector<std::vector<std::string>>& main, int mainIndex1, int mainIndex2,
