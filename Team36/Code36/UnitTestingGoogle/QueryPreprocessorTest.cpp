@@ -90,7 +90,7 @@ namespace UnitTesting {
 		EXPECT_NE(test.getEntities(), q.getEntities());
 	}
 
-	TEST(parse, validAddSinglePrint) {
+	TEST(parse, addSinglePrint) {
 		QueryPreprocessor qp;
 		Query test = qp.parse("print pr;");
 
@@ -104,7 +104,7 @@ namespace UnitTesting {
 		EXPECT_NE(test.getEntities(), q.getEntities());
 	}
 
-	TEST(parse, validAddMultiplePrints) {
+	TEST(parse, addMultiplePrints) {
 		QueryPreprocessor qp;
 		Query test = qp.parse("print pr, pr1;");
 
@@ -119,7 +119,7 @@ namespace UnitTesting {
 		EXPECT_NE(test.getEntities(), q.getEntities());
 	}
 
-	TEST(parse, validAddSingleCall) {
+	TEST(parse, addSingleCall) {
 		QueryPreprocessor qp;
 		Query test = qp.parse("call c;");
 
@@ -133,7 +133,7 @@ namespace UnitTesting {
 		EXPECT_NE(test.getEntities(), q.getEntities());
 	}
 
-	TEST(parse, validAddMultipleCalls) {
+	TEST(parse, addMultipleCalls) {
 		QueryPreprocessor qp;
 		Query test = qp.parse("call c, c1;");
 
@@ -148,7 +148,7 @@ namespace UnitTesting {
 		EXPECT_NE(test.getEntities(), q.getEntities());
 	}
 
-	TEST(parse, validAddSingleWhile) {
+	TEST(parse, addSingleWhile) {
 		QueryPreprocessor qp;
 		Query test = qp.parse("while w;");
 
@@ -162,7 +162,7 @@ namespace UnitTesting {
 		EXPECT_NE(test.getEntities(), q.getEntities());
 	}
 
-	TEST(parse, validAddMultipleWhiles) {
+	TEST(parse, addMultipleWhiles) {
 		QueryPreprocessor qp;
 		Query test = qp.parse("while w, w1;");
 
@@ -177,7 +177,7 @@ namespace UnitTesting {
 		EXPECT_NE(test.getEntities(), q.getEntities());
 	}
 
-	TEST(parse, validAddSingleIf) {
+	TEST(parse, addSingleIf) {
 		QueryPreprocessor qp;
 		Query test = qp.parse("ifs if;");
 
@@ -191,7 +191,7 @@ namespace UnitTesting {
 		EXPECT_NE(test.getEntities(), q.getEntities());
 	}
 
-	TEST(parse, validAddMultipleIfs) {
+	TEST(parse, addMultipleIfs) {
 		QueryPreprocessor qp;
 		Query test = qp.parse("ifs if, if1;");
 
@@ -206,7 +206,7 @@ namespace UnitTesting {
 		EXPECT_NE(test.getEntities(), q.getEntities());
 	}
 
-	TEST(parse, validAddSingleAssign) {
+	TEST(parse, addSingleAssign) {
 		QueryPreprocessor qp;
 		Query test = qp.parse("assign a;");
 
@@ -220,7 +220,7 @@ namespace UnitTesting {
 		EXPECT_NE(test.getEntities(), q.getEntities());
 	}
 
-	TEST(parse, validAddMultipleAssigns) {
+	TEST(parse, addMultipleAssigns) {
 		QueryPreprocessor qp;
 		Query test = qp.parse("assign a, a1;");
 
@@ -235,7 +235,7 @@ namespace UnitTesting {
 		EXPECT_NE(test.getEntities(), q.getEntities());
 	}
 
-	TEST(parse, validAddSingleVariable) {
+	TEST(parse, addSingleVariable) {
 		QueryPreprocessor qp;
 		Query test = qp.parse("variable v;");
 
@@ -249,7 +249,7 @@ namespace UnitTesting {
 		EXPECT_NE(test.getEntities(), q.getEntities());
 	}
 
-	TEST(parse, validAddMultipleVariables) {
+	TEST(parse, addMultipleVariables) {
 		QueryPreprocessor qp;
 		Query test = qp.parse("variable v, v1;");
 
@@ -264,7 +264,7 @@ namespace UnitTesting {
 		EXPECT_NE(test.getEntities(), q.getEntities());
 	}
 
-	TEST(parse, validAddSingleConstant) {
+	TEST(parse, addSingleConstant) {
 		QueryPreprocessor qp;
 		Query test = qp.parse("constant c;");
 
@@ -278,7 +278,7 @@ namespace UnitTesting {
 		EXPECT_NE(test.getEntities(), q.getEntities());
 	}
 
-	TEST(parse, validAddMultipleConstants) {
+	TEST(parse, addMultipleConstants) {
 		QueryPreprocessor qp;
 		Query test = qp.parse("constant c, c1;");
 
@@ -293,7 +293,7 @@ namespace UnitTesting {
 		EXPECT_NE(test.getEntities(), q.getEntities());
 	}
 
-	TEST(parse, validAddMultipleDeclarations) {
+	TEST(parse, addMultipleDeclarations) {
 		QueryPreprocessor qp;
 		Query test = qp.parse("variable v; procedure p;");
 
@@ -308,8 +308,14 @@ namespace UnitTesting {
 		EXPECT_NE(test.getEntities(), q.getEntities());
 	}
 
-	TEST(parse, validAddSelect) {
-		//TODO
+	TEST(parse, addValidSelect) {
+		QueryPreprocessor qp;
+		Query test = qp.parse("procedure p; Select p");
+
+		Query q;
+		q.addSelected(Entity(EntityType::PROCEDURE, Synonym{ "p" }));
+
+		EXPECT_EQ(test.getSelected(), q.getSelected());
 	}
 
 	TEST(parse, validSuchthatUses) {
