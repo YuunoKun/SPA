@@ -16,11 +16,11 @@ Query QueryPreprocessor::parse(std::string str) {
 	Query query = Query();
 	QueryTokenizer query_tokenizer;
 
-	//query_tokenizer.parse_into_query_tokens(str);
+	query_tokenizer.parse_into_query_tokens(str);
 
-	//const std::vector<QueryToken> v = query_tokenizer.get_query_token_chain();
+	const std::vector<QueryToken> v = query_tokenizer.get_query_token_chain();
 
-	std::vector<QueryToken> v;
+	//std::vector<QueryToken> v;
 	//QueryToken q1(QueryToken::QueryTokenType::IDENTIFIER, "stmt");
 	//v.push_back(q1);
 	//v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "s" });
@@ -30,19 +30,19 @@ Query QueryPreprocessor::parse(std::string str) {
 	//v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "procedure" });
 	//v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "p" });
 	//v.push_back({ QueryToken::QueryTokenType::TERMINATOR, ";" });
-	v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "Select" });
-	v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "p" });
-	v.push_back({ QueryToken::QueryTokenType::SUCH_THAT, "" });
-	v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "Modifies" });
+	//v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "Select" });
+	//v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "p" });
+	//v.push_back({ QueryToken::QueryTokenType::SUCH_THAT, "" });
+	//v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "Modifies" });
 	//v.push_back({ QueryToken::QueryTokenType::COMMA, "" });
 	//v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "p" });
-	//v.push_back({ QueryToken::QueryTokenType::SUCHTHAT, "" });
+	//v.push_back({ QueryToken::QueryTokenType::SUCH_THAT, "" });
 	//v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "Modifies" });
-	v.push_back({ QueryToken::QueryTokenType::PARENTHESIS_OPEN, "" });
-	v.push_back({ QueryToken::QueryTokenType::CONSTANT, "7" });
-	v.push_back({ QueryToken::QueryTokenType::COMMA, "" });
-	v.push_back({ QueryToken::QueryTokenType::WILDCARD, "" });
-	v.push_back({ QueryToken::QueryTokenType::PARENTHESIS_CLOSE, "" });
+	//v.push_back({ QueryToken::QueryTokenType::PARENTHESIS_OPEN, "" });
+	//v.push_back({ QueryToken::QueryTokenType::CONSTANT, "7" });
+	//v.push_back({ QueryToken::QueryTokenType::COMMA, "" });
+	//v.push_back({ QueryToken::QueryTokenType::WILDCARD, "" });
+	//v.push_back({ QueryToken::QueryTokenType::PARENTHESIS_CLOSE, "" });
 
 	// Collection of declared query tokens
 	std::vector<QueryToken> output;
@@ -54,22 +54,22 @@ Query QueryPreprocessor::parse(std::string str) {
 	std::vector<QueryToken> parameterClause;
 
 	// To keep track of previous token during declaration, includes COMMA and SEMICOLON
-	QueryToken prevToken;
+	QueryToken prevToken = QueryToken();
 
 	// To keep track of of previous important declaration token, excludes COMMA and SEMICOLON
-	QueryToken temp;
+	QueryToken temp = QueryToken();
 
 	// To keep track of previous token during Selection
-	QueryToken prevTokenSelect;
+	QueryToken prevTokenSelect = QueryToken();
 
 	// To keep track of valid such that clause type, eg: Uses, Modifies, Parent, ParentT
-	QueryToken queryParameter;
+	QueryToken queryParameter = QueryToken();
 
 	// To keep track if selection is in pattern or such that
-	QueryToken patternOrSuchThat;
+	QueryToken patternOrSuchThat = QueryToken();
 
 	// True when parsing is in selection, false when parsing is in declaration
-	bool isSelect = true;
+	bool isSelect = false;
 
 	// True when iterating inside the such that or pattern parameter, false otherwise
 	bool isParameter = false;
@@ -104,11 +104,11 @@ Query QueryPreprocessor::parse(std::string str) {
 
 		else if (isSelect) {
 			if (token.type == QueryToken::QueryTokenType::SUCH_THAT) {
-				output.push_back({ QueryToken::QueryTokenType::SUCH_THAT, "" });
+				//output.push_back({ QueryToken::QueryTokenType::SUCH_THAT, "" });
 				patternOrSuchThat = { QueryToken::QueryTokenType::SUCH_THAT, "" };
 			}
 			else if (token.type == QueryToken::QueryTokenType::PATTERN) {
-				output.push_back({ QueryToken::QueryTokenType::PATTERN, "" });
+				//output.push_back({ QueryToken::QueryTokenType::PATTERN, "" });
 				patternOrSuchThat = { QueryToken::QueryTokenType::PATTERN, "" };
 			}
 
@@ -214,8 +214,8 @@ QueryToken QueryPreprocessor::setIdentifierToQueryTokenType(QueryToken& prevToke
 		else if (token.token_value == "call") {
 			temp = { QueryToken::QueryTokenType::CALL, "call" };
 		}
-		else if (token.token_value == "if") {
-			temp = { QueryToken::QueryTokenType::IF, "if" };
+		else if (token.token_value == "ifs") {
+			temp = { QueryToken::QueryTokenType::IF, "ifs" };
 		}
 		else if (token.token_value == "while") {
 			temp = { QueryToken::QueryTokenType::WHILE, "while" };
