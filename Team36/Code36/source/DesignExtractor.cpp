@@ -285,7 +285,7 @@ void DesignExtractor::populateEntities() {
 
 void DesignExtractor::populateRelations() {
 	populateFollows();
-	PKB::getInstance().generateFollowT();
+	PKB::getInstance().generateFollowsT();
 	populateParent();
 	PKB::getInstance().generateParentT();
 	populateUses();
