@@ -57,6 +57,7 @@
     <ClCompile Include="ParentTEvaluatorTest.cpp" />
     <ClCompile Include="ModifiesSEvaluatorTest.cpp" />
     <ClCompile Include="ModifiesPEvaluatorTest.cpp" />
+    <ClCompile Include="QueryPatternSuchThatValidationTest.cpp" />
     <ClCompile Include="UsesSEvaluatorTest.cpp" />
     <ClCompile Include="UsesPEvaluatorTest.cpp" />
     <ClCompile Include="RelRefTest.cpp" />

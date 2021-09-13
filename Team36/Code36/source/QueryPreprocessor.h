@@ -14,6 +14,16 @@ public:
 
 	Query parse(std::string);
 
+	void parseParameterSuchThat(Query&, QueryToken::QueryTokenType, std::vector<QueryToken>);
+
+	void parseParameterPattern(Query&, Entity&, std::vector<QueryToken>);
+
+	Entity setStmtRef(Query&, QueryToken);
+
+	Entity setEntRef(Query&, std::vector<QueryToken>);
+
+	expr setExpr(std::vector<QueryToken>);
+
 private:
 
 	QueryToken setIdentifierToQueryTokenType(QueryToken&, QueryToken&, QueryToken&);

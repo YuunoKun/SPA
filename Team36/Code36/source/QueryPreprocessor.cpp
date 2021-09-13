@@ -12,6 +12,209 @@
 QueryPreprocessor::QueryPreprocessor() {
 }
 
+Entity QueryPreprocessor::setStmtRef(Query& query, QueryToken token) {
+	//synonym | ‘_’ | INTEGER
+
+	// wild card check
+	if (token.type == QueryToken::WILDCARD) {
+		return Entity(EntityType::WILD);
+	}
+
+	// is INTEGER, constant type
+	if (token.type == QueryToken::CONSTANT) {
+		return Entity(EntityType::CONSTANT, token.token_value);
+	}
+
+	// synonym check
+	std::unordered_map<std::string, Entity> ent_chain = query.getEntities();
+	if (ent_chain.find(token.token_value) != ent_chain.end()) {
+		return ent_chain.at(token.token_value);
+	}
+
+	std::runtime_error("Unknown stmtRef");
+}
+
+Entity QueryPreprocessor::setEntRef(Query& query, std::vector<QueryToken> token_chain) {
+	// entRef : synonym | ‘_’ | ‘"’ IDENT ‘"’
+
+	if (token_chain.size() == 1) {
+		// wild card check
+		if (token_chain[0].type == QueryToken::WILDCARD) {
+			return Entity(EntityType::WILD);
+		}
+
+		// synonym check
+		std::unordered_map<std::string, Entity> ent_chain = query.getEntities();
+		if (ent_chain.find(token_chain[0].token_value) != ent_chain.end()) {
+			return ent_chain.at(token_chain[0].token_value);
+		}
+	}
+
+	// is " "IDENT" "
+	if (token_chain[0].type == QueryToken::QUOTATION_OPEN &&
+		token_chain[1].type == QueryToken::IDENTIFIER &&
+		token_chain[2].type == QueryToken::QUOTATION_CLOSE) {
+		return Entity(EntityType::VARIABLE, token_chain[1].token_value);
+	}
+
+	std::runtime_error("Unknown stmtRef");
+}
+
+// takes in a token_chain with only IDENT* (no QUOTATION_OPEN/CLOSE or WILDCARD)
+expr QueryPreprocessor::setExpr(std::vector<QueryToken> token_chain) {
+	//expression-spec : ‘"‘ expr’"’ | ‘_’ ‘"’ expr ‘"’ ‘_’ | ‘_’
+
+	//TODO
+	// send to expression parser
+	if (token_chain.empty()) {
+		return "";
+	}
+	else if (token_chain.size() == 1 && token_chain[0].type == QueryToken::IDENTIFIER) {
+		return token_chain[0].token_value;
+	}
+}
+
+void QueryPreprocessor::parseParameterSuchThat(Query& query, QueryToken::QueryTokenType token_type, std::vector<QueryToken> token_chain) {
+	switch (token_type) {
+	case QueryToken::MODIFIES_S:
+		// stmtRef , entRef
+		if (token_chain[1].type == QueryToken::COMMA) {
+			QueryToken stmt = token_chain[0];
+			token_chain.erase(token_chain.begin(), token_chain.begin() + 2);
+			query.addRelation(RelRef(RelType::MODIFIES_S,
+				setStmtRef(query, stmt),
+				setEntRef(query, token_chain)));
+		}
+		std::runtime_error("Unexpected parameters for Modifies");
+
+		break;
+	case QueryToken::USES_S:
+		// stmtRef , entRef
+		if (token_chain[1].type == QueryToken::COMMA) {
+			QueryToken stmt = token_chain[0];
+			token_chain.erase(token_chain.begin(), token_chain.begin() + 2);
+			query.addRelation(RelRef(RelType::USES_S,
+				setStmtRef(query, stmt),
+				setEntRef(query, token_chain)));
+		}
+		std::runtime_error("Unexpected parameters for Uses");
+
+		break;
+
+	case QueryToken::PARENT:
+		// stmtRef , stmtRef
+		if (token_chain[1].type == QueryToken::COMMA) {
+			query.addRelation(RelRef(RelType::PARENT,
+				setStmtRef(query, token_chain[0]),
+				setStmtRef(query, token_chain[2])));
+		}
+		std::runtime_error("Unexpected parameters for Parent");
+
+		break;
+	case QueryToken::PARENT_T:
+		// stmtRef , stmtRef
+		if (token_chain[1].type == QueryToken::COMMA) {
+			query.addRelation(RelRef(RelType::PARENT_T,
+				setStmtRef(query, token_chain[0]),
+				setStmtRef(query, token_chain[2])));
+		}
+		std::runtime_error("Unexpected parameters for Parent*");
+
+		break;
+	case QueryToken::FOLLOWS:
+		// stmtRef , stmtRef
+		if (token_chain[1].type == QueryToken::COMMA) {
+			query.addRelation(RelRef(RelType::FOLLOWS,
+				setStmtRef(query, token_chain[0]),
+				setStmtRef(query, token_chain[2])));
+		}
+		std::runtime_error("Unexpected parameters for Follows");
+
+		break;
+	case QueryToken::FOLLOWS_T:
+		// stmtRef , stmtRef
+		if (token_chain[1].type == QueryToken::COMMA) {
+			query.addRelation(RelRef(RelType::FOLLOWS_T,
+				setStmtRef(query, token_chain[0]),
+				setStmtRef(query, token_chain[2])));
+		}
+		std::runtime_error("Unexpected parameters for Follows*");
+
+		break;
+
+	default:
+		std::runtime_error("Unknown RelRef query token type : \'" + token_type + '\'');
+	}
+}
+
+void QueryPreprocessor::parseParameterPattern(Query& query, Entity& synonym_ent, std::vector<QueryToken> token_chain) {
+	bool wild = false;
+	switch (synonym_ent.getType()) {
+	case ASSIGN:
+		// find comma
+		// every QueryToken before comma token is sent to temp_token_chain
+		// Expect entRef token_chain
+		std::vector<QueryToken> temp_token_chain;
+		for (int i = 0; i < token_chain.size(); i++) {
+			if (token_chain[0].type != QueryToken::COMMA) {
+				temp_token_chain.push_back(token_chain[0]);
+				token_chain.erase(token_chain.begin());
+			}
+			else {
+				break;
+			}
+		}
+
+		// check if the curr token_chain starts with comma
+		if (token_chain[0].type == QueryToken::COMMA) {
+			token_chain.erase(token_chain.begin());
+		}
+		else {
+			// if no comma found means invalid parameters
+			std::runtime_error("Unexpected parameters for Pattern");
+		}
+
+		//check second parameter if is WILDCARD
+		if (token_chain[0].type == QueryToken::WILDCARD) {
+			wild = true;
+			// if first element is WILDCARD token, last element must be WILDCARD for last 2 cases below
+			// expression-spec : ‘"‘ expr’"’ | ‘_’ ‘"’ expr ‘"’ ‘_’ | ‘_’
+			if (token_chain[token_chain.size() - 1].type != QueryToken::WILDCARD) {
+				std::runtime_error("Unexpected parameters for Pattern");
+			}
+			// remove first WILDCARD token
+			token_chain.erase(token_chain.begin());
+		}
+		else {
+			std::runtime_error("Unexpected parameters for Pattern");
+		}
+
+		std::vector<QueryToken> temp_token_chain_2;
+
+		if (token_chain.size() != 0) {
+			if (token_chain[0].type == QueryToken::QUOTATION_OPEN) {
+				token_chain.erase(token_chain.begin());
+
+				for (int i = 0; i < token_chain.size(); i++) {
+					if (token_chain[0].type != QueryToken::QUOTATION_CLOSE) {
+						temp_token_chain_2.push_back(token_chain[0]);
+						token_chain.erase(token_chain.begin());
+					}
+					else {
+						break;
+					}
+				}
+			}
+			else if (wild && token_chain[0].type == QueryToken::WILDCARD) {
+				// 2 WILDCARDS in a row
+				std::runtime_error("Unexpected parameters for Pattern");
+			}
+		}
+
+		query.addPattern(Pattern(synonym_ent, setEntRef(query, temp_token_chain), setExpr(temp_token_chain_2), wild));
+	}
+}
+
 Query QueryPreprocessor::parse(std::string str) {
 	Query query = Query();
 	QueryTokenizer query_tokenizer;
@@ -27,13 +230,13 @@ Query QueryPreprocessor::parse(std::string str) {
 	//v.push_back({ QueryToken::QueryTokenType::COMMA, "" });
 	//v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "ss" });
 	//v.push_back({ QueryToken::QueryTokenType::TERMINATOR, ";" });
+	//v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "assign" });
+	//v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "a" });
 	//v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "procedure" });
 	//v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "p" });
 	//v.push_back({ QueryToken::QueryTokenType::TERMINATOR, ";" });
 	//v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "Select" });
 	//v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "p" });
-	//v.push_back({ QueryToken::QueryTokenType::SUCH_THAT, "" });
-	//v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "Modifies" });
 	//v.push_back({ QueryToken::QueryTokenType::COMMA, "" });
 	//v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "p" });
 	//v.push_back({ QueryToken::QueryTokenType::SUCH_THAT, "" });
@@ -43,6 +246,10 @@ Query QueryPreprocessor::parse(std::string str) {
 	//v.push_back({ QueryToken::QueryTokenType::COMMA, "" });
 	//v.push_back({ QueryToken::QueryTokenType::WILDCARD, "" });
 	//v.push_back({ QueryToken::QueryTokenType::PARENTHESIS_CLOSE, "" });
+	//v.push_back({ QueryToken::QueryTokenType::PATTERN, "" });
+	//v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "a" });
+	//v.push_back({ QueryToken::QueryTokenType::PARENTHESIS_OPEN, "" });
+	//v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "" });
 
 	// Collection of declared query tokens
 	std::vector<QueryToken> output;
@@ -67,6 +274,9 @@ Query QueryPreprocessor::parse(std::string str) {
 
 	// To keep track if selection is in pattern or such that
 	QueryToken patternOrSuchThat = QueryToken();
+
+	// To keep track of pattern type entity, eg: ASSIGN
+	Entity patternTypeEntity;
 
 	// True when parsing is in selection, false when parsing is in declaration
 	bool isSelect = false;
@@ -107,35 +317,34 @@ Query QueryPreprocessor::parse(std::string str) {
 				//output.push_back({ QueryToken::QueryTokenType::SUCH_THAT, "" });
 				patternOrSuchThat = { QueryToken::QueryTokenType::SUCH_THAT, "" };
 			}
-			else if (token.type == QueryToken::QueryTokenType::PATTERN) {
-				//output.push_back({ QueryToken::QueryTokenType::PATTERN, "" });
-				patternOrSuchThat = { QueryToken::QueryTokenType::PATTERN, "" };
+			else if (token.type == QueryToken::QueryTokenType::IDENTIFIER && token.token_value == "pattern") {
+				patternOrSuchThat = { QueryToken::QueryTokenType::PATTERN, "pattern" };
 			}
 
 			if (isParameter && token.type != QueryToken::QueryTokenType::PARENTHESIS_CLOSE) {
 				parameterClause.push_back(token);
 			}
 
-			if (!isParameter && patternOrSuchThat.type == QueryToken::QueryTokenType::SUCH_THAT) {
+			if (patternOrSuchThat.type == QueryToken::QueryTokenType::SUCH_THAT) {
 				if (token.type == QueryToken::QueryTokenType::PARENT_T) {
 					output.push_back({ QueryToken::QueryTokenType::PARENT_T, "" });
 				}
 				else if (token.type == QueryToken::QueryTokenType::FOLLOWS_T) {
 					output.push_back({ QueryToken::QueryTokenType::FOLLOWS_T, "" });
 				}
-				else if (token.type == QueryToken::QueryTokenType::PARENTHESIS_OPEN) {
+				else if (!isParameter && token.type == QueryToken::QueryTokenType::PARENTHESIS_OPEN) {
 					isParameter = true;
 					if (prevTokenSelect.token_value == "Uses" && prevTokenSelect.type == QueryToken::QueryTokenType::IDENTIFIER) {
-						queryParameter = { QueryToken::QueryTokenType::IDENTIFIER, "Uses" };
+						queryParameter = { QueryToken::QueryTokenType::USES_S, "Uses" };
 					}
 					else if (prevTokenSelect.token_value == "Modifies" && prevTokenSelect.type == QueryToken::QueryTokenType::IDENTIFIER) {
-						queryParameter = { QueryToken::QueryTokenType::IDENTIFIER, "Modifies" };
+						queryParameter = { QueryToken::QueryTokenType::MODIFIES_S, "Modifies" };
 					}
 					else if (prevTokenSelect.token_value == "Parent" && prevTokenSelect.type == QueryToken::QueryTokenType::IDENTIFIER) {
-						queryParameter = { QueryToken::QueryTokenType::IDENTIFIER, "Parent" };
+						queryParameter = { QueryToken::QueryTokenType::PARENT, "Parent" };
 					}
 					else if (prevTokenSelect.token_value == "Follows" && prevTokenSelect.type == QueryToken::QueryTokenType::IDENTIFIER) {
-						queryParameter = { QueryToken::QueryTokenType::IDENTIFIER, "Follows" };
+						queryParameter = { QueryToken::QueryTokenType::FOLLOWS, "Follows" };
 					}
 					else if (prevTokenSelect.token_value == "" && prevTokenSelect.type == QueryToken::QueryTokenType::PARENT_T) {
 						queryParameter = { QueryToken::QueryTokenType::PARENT_T, "" };
@@ -146,32 +355,13 @@ Query QueryPreprocessor::parse(std::string str) {
 				}
 				else if (token.type == QueryToken::QueryTokenType::PARENTHESIS_CLOSE) {
 					isParameter = false;
-					if (queryParameter.token_value == "Uses" && queryParameter.type == QueryToken::QueryTokenType::IDENTIFIER) {
-						//query.addRelation()
-					}
-					else if (queryParameter.token_value == "Modifies" && queryParameter.type == QueryToken::QueryTokenType::IDENTIFIER) {
-						//query.addRelation()
-					}
-					else if (queryParameter.token_value == "Parent" && queryParameter.type == QueryToken::QueryTokenType::IDENTIFIER) {
-						//query.addRelation()
-					}
-					else if (queryParameter.token_value == "Follows" && queryParameter.type == QueryToken::QueryTokenType::IDENTIFIER) {
-						//query.addRelation()
-					}
-					else if (queryParameter.token_value == "" && queryParameter.type == QueryToken::QueryTokenType::PARENT_T) {
-						//query.addRelation()
-					}
-					else if (queryParameter.token_value == "" && queryParameter.type == QueryToken::QueryTokenType::FOLLOWS_T) {
-						//query.addRelation()
-					}
+					parseParameterSuchThat(query, queryParameter.type, parameterClause);
 				}
 			}
-			else if (!isParameter && patternOrSuchThat.type == QueryToken::QueryTokenType::PATTERN) {
-				Entity patternTypeEntity;
-				if (prevTokenSelect.type == QueryToken::QueryTokenType::PATTERN && token.type == QueryToken::QueryTokenType::IDENTIFIER) {
+			else if (patternOrSuchThat.type == QueryToken::QueryTokenType::PATTERN) {
+				if (prevTokenSelect.token_value == "pattern" && token.type == QueryToken::QueryTokenType::IDENTIFIER) {
 					for (QueryToken each : output) {
 						if (token.token_value == each.token_value) {
-							//selected.push_back({ each.type, token.token_value });
 							Synonym synonym;
 							synonym.name = token.token_value;
 							EntityType entityType = Utility::queryTokenTypeToEntityType(each.type);
@@ -179,14 +369,13 @@ Query QueryPreprocessor::parse(std::string str) {
 						}
 					}
 				}
-				else if (token.type == QueryToken::QueryTokenType::PARENTHESIS_OPEN) {
+				else if (!isParameter && token.type == QueryToken::QueryTokenType::PARENTHESIS_OPEN) {
 					isParameter = true;
 				}
-				else if (token.type == QueryToken::QueryTokenType::PARENTHESIS_CLOSE) {
+				else if (isParameter && token.type == QueryToken::QueryTokenType::PARENTHESIS_CLOSE) {
 					isParameter = false;
 					if (patternTypeEntity.getType() == EntityType::ASSIGN) {
-						// send to jiyu and receive back pattern
-						// query.addPattern()
+						parseParameterPattern(query, patternTypeEntity, parameterClause);
 					}
 				}
 			}
