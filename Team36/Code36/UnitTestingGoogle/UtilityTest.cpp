@@ -256,4 +256,188 @@ namespace UnitTesting {
 		EXPECT_EQ(Utility::filterResults({ ASSIGN, PRINT }, a), b);
 		EXPECT_EQ(Utility::filterResults({ ASSIGN, ASSIGN }, a), b);
 	}
+
+	TEST(Utility, patternMatch) {
+		//True test case
+		std::vector<std::string> originals1 = {
+			"x",
+			"x ",
+			" x",
+			"x  ",
+			"  x",
+			" x ",
+			"  x ",
+			" x  ",
+			"  x ",
+			"   x   "
+		};
+		for (auto it1 : originals1) {
+			for (auto it2 : originals1) {
+				EXPECT_TRUE(Utility::patternMatch(it1, it2));
+			}
+		}
+
+		//Failing test case
+		std::vector<std::string> originals2 = {
+			"y",
+			"y ",
+			" y",
+			"y  ",
+			"  y",
+			"x+y",
+			"x+y",
+			" x+y",
+			"x+y ",
+			"  x+y",
+			"x+y  ",
+			"x+ y",
+			"x +y",
+			"x + y",
+			"x+ y ",
+			"x +y ",
+			"x + y ",
+			" x+ y",
+			" x +y",
+			" x + y",
+			" x+ y ",
+			" x +y ",
+			" x + y ",
+			" x  + y",
+			" x +  y",
+			" x   +   y",
+			" x + y ",
+			"  x + y ",
+			"  x + y  "
+		};
+
+		std::string match = "x";
+		for (auto it1 : originals2) {
+			for (auto it2 : originals1) {
+				EXPECT_FALSE(Utility::patternMatch(it1, it2));
+			}
+		}
+	}
+
+	TEST(Utility, patternContain) {
+		//True test case
+		std::vector<std::string> originals = {
+			"x", "x ",
+			" x",
+			"x  ",
+			"  x",
+			" x ",
+			"  x ",
+			" x  ",
+			"  x ",
+			"   x   ",
+			"x+y",
+			"x/y",
+			" x*y",
+			"x%y ",
+			"  x-y",
+			"x%y  ",
+			"x+ y",
+			"x *y",
+			"x / y",
+			"x- y ",
+			"x +y ",
+			"x - y ",
+			" x* y",
+			" x +y",
+			" x - y",
+			" x/ y ",
+			" x *y ",
+			" x % y ",
+			" x  / y",
+			" x %  y",
+			" x   -   y",
+			" x / y ",
+			"  x * y ",
+			"  x + y  ",
+			"x * y",
+			"x / y",
+			"x % y",
+			"x - y",
+			"Z - y / a * x + a",
+		};
+		std::vector<std::string> matchs = {
+			"x",
+			"x ",
+			" x",
+			"x  ",
+			"  x",
+			" x ",
+			"  x ",
+			" x  ",
+			"  x ",
+			"   x   "
+		};
+
+		for (auto it : originals) {
+			for (auto m : matchs) {
+				EXPECT_TRUE(Utility::patternContain(it, m));
+			}
+		}
+		std::vector<std::string> invalids = {
+			"z",
+			"z ",
+			" z",
+			"z  ",
+			"  z",
+			" z ",
+			"  z ",
+			" z  ",
+			"  z ",
+			"   z   "
+		};
+		//False test case
+		for (auto it : originals) {
+			for (auto it2 : invalids) {
+				EXPECT_FALSE(Utility::patternContain(it, it2));
+			}
+		}
+	}
+
+	TEST(Utility, queryTokenTypeToEntityType) {
+		EntityType entType = STMT;
+		QueryToken::QueryTokenType temp = QueryToken::QueryTokenType::STMT;
+		EXPECT_EQ(Utility::queryTokenTypeToEntityType(temp), entType);
+
+		entType = PROCEDURE;
+		temp = QueryToken::QueryTokenType::PROCEDURE;
+		EXPECT_EQ(Utility::queryTokenTypeToEntityType(temp), entType);
+
+		entType = READ;
+		temp = QueryToken::QueryTokenType::READ;
+		EXPECT_EQ(Utility::queryTokenTypeToEntityType(temp), entType);
+
+		entType = PRINT;
+		temp = QueryToken::QueryTokenType::PRINT;
+		EXPECT_EQ(Utility::queryTokenTypeToEntityType(temp), entType);
+
+		entType = CALL;
+		temp = QueryToken::QueryTokenType::CALL;
+		EXPECT_EQ(Utility::queryTokenTypeToEntityType(temp), entType);
+
+		entType = IF;
+		temp = QueryToken::QueryTokenType::IF;
+		EXPECT_EQ(Utility::queryTokenTypeToEntityType(temp), entType);
+
+		entType = WHILE;
+		temp = QueryToken::QueryTokenType::WHILE;
+		EXPECT_EQ(Utility::queryTokenTypeToEntityType(temp), entType);
+
+		entType = ASSIGN;
+		temp = QueryToken::QueryTokenType::ASSIGN;
+		EXPECT_EQ(Utility::queryTokenTypeToEntityType(temp), entType);
+
+		entType = VARIABLE;
+		temp = QueryToken::QueryTokenType::VARIABLE;
+		EXPECT_EQ(Utility::queryTokenTypeToEntityType(temp), entType);
+
+		entType = CONSTANT;
+		EXPECT_NE(Utility::queryTokenTypeToEntityType(temp), entType);
+		temp = QueryToken::QueryTokenType::CONSTANT;
+		EXPECT_EQ(Utility::queryTokenTypeToEntityType(temp), entType);
+	}
 }

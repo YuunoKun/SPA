@@ -29,7 +29,7 @@ public:
 	void addUsesS(stmt_index user, var_name used);
 	void addModifiesS(stmt_index modifier, var_name modified);
 	void generateParentT();
-	void generateFollowT();
+	void generateFollowsT();
 
 	const std::vector<proc_name>& getProcedures();
 	const std::vector<var_name>& getVariables();
