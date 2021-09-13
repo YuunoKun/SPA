@@ -106,6 +106,26 @@ void DesignExtractor::add_constant(constant val) {
 }
 
 
+const std::vector<Procedure*>& DesignExtractor::get_procedures() {
+	return m_procedures;
+}
+
+
+const std::vector<Statement*>& DesignExtractor::get_statements() {
+	return m_statements;
+}
+
+
+const std::unordered_set<var_name>& DesignExtractor::get_variables() {
+	return m_variables;
+}
+
+
+const std::unordered_set<constant>& DesignExtractor::get_constants() {
+	return m_constants;
+}
+
+
 
 void DesignExtractor::add_statement_uses(var_name name) {
 	m_statements[m_curr_stmt_id - 1]->add_uses_variable(name);
@@ -215,37 +235,7 @@ void DesignExtractor::validate() {
 	}
 }
 
-
-void DesignExtractor::populateEntities() {
-
-	for (Procedure *p : m_procedures) {
-		PKB::getInstance().addProcedure(p->get_name());
-	}
-
-	for (Statement *s : m_statements) {
-		PKB::getInstance().addStmt(s->get_type());
-
-		if (s->get_type() == StmtType::STMT_ASSIGN) {
-			PKB::getInstance().addExprTree(s->get_index(), s->get_expr_str());
-		}
-	}
-
-	for (var_name v : m_variables) {
-		PKB::getInstance().addVariable(v);
-	}
-
-	for (constant c : m_constants) {
-		PKB::getInstance().addConstant(c);
-	}
-}
-
-
-void DesignExtractor::populateRelations() {
-	populateFollows();
-	PKB::getInstance().generateFollowT();
-	populateParent();
-	PKB::getInstance().generateParentT();
-
+void DesignExtractor::populate_post_validation() {
 	// Procedure uses and modifies, populate call statements too
 	for (proc_index proc : m_call_sequence) {
 		Procedure* p = m_procedures[proc - 1];
@@ -264,12 +254,12 @@ void DesignExtractor::populateRelations() {
 				}
 			}
 
-			for (Statement *child = s; child->get_direct_parent() != 0; child = m_statements[child->get_direct_parent() - 1]) {
-				Statement* parent = m_statements[child->get_direct_parent()];
-				for (auto used_var : child->get_used_variable()) {
+			if(s->get_direct_parent() != 0) {
+				Statement* parent = m_statements[s->get_direct_parent() - 1];
+				for (auto used_var : s->get_used_variable()) {
 					parent->add_uses_variable(used_var);
 				}
-				for (auto modified_var : child->get_modified_variable()) {
+				for (auto modified_var : s->get_modified_variable()) {
 					parent->add_modifies_variable(modified_var);
 				}
 			}
@@ -282,9 +272,56 @@ void DesignExtractor::populateRelations() {
 			}
 		}
 	}
+}
 
+
+void DesignExtractor::populateEntities() {
+	populateProcedures();
+	populateStatements();
+	populateVariables();
+	populateConstants();
+}
+
+
+void DesignExtractor::populateRelations() {
+	populateFollows();
+	PKB::getInstance().generateFollowT();
+	populateParent();
+	PKB::getInstance().generateParentT();
 	populateUses();
 	populateModifies();
+}
+
+
+void DesignExtractor::populateProcedures() {
+	for (Procedure* p : m_procedures) {
+		PKB::getInstance().addProcedure(p->get_name());
+	}
+}
+
+
+void DesignExtractor::populateStatements() {
+	for (Statement* s : m_statements) {
+		PKB::getInstance().addStmt(s->get_type());
+
+		if (s->get_type() == StmtType::STMT_ASSIGN) {
+			PKB::getInstance().addExprTree(s->get_index(), s->get_expr_str());
+		}
+	}
+}
+
+
+void DesignExtractor::populateVariables() {
+	for (var_name v : m_variables) {
+		PKB::getInstance().addVariable(v);
+	}
+}
+
+
+void DesignExtractor::populateConstants() {
+	for (constant c : m_constants) {
+		PKB::getInstance().addConstant(c);
+	}
 }
 
 

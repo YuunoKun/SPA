@@ -95,6 +95,7 @@ void FSM::expect_statement_type_read() {
 
 	Token var_name_token = expect_token_and_pop(TokenType::IDENTIFIER);
 	m_design_extractor->add_variable(var_name_token.get_token_value());
+	m_design_extractor->add_statement_modifies(var_name_token.get_token_value());
 
 	expect_token_and_pop(TokenType::TERMINATOR);
 }
@@ -105,6 +106,7 @@ void FSM::expect_statement_type_print() {
 
 	Token var_name_token = expect_token_and_pop(TokenType::IDENTIFIER);
 	m_design_extractor->add_variable(var_name_token.get_token_value());
+	m_design_extractor->add_statement_uses(var_name_token.get_token_value());
 
 	expect_token_and_pop(TokenType::TERMINATOR);
 }
@@ -112,8 +114,10 @@ void FSM::expect_statement_type_print() {
 
 void FSM::expect_statement_type_call() {
 	expect_token_and_pop(TokenType::CALL);
+
 	Token proc_name_token = expect_token_and_pop(TokenType::IDENTIFIER);
 	m_design_extractor->add_callee(proc_name_token.get_token_value());
+
 	expect_token_and_pop(TokenType::TERMINATOR);
 }
 
