@@ -154,9 +154,9 @@ void parseParameterSuchThat(Query& query, QueryToken::QueryTokenType token_type,
 
 }
 
-void parseParameterPattern(Query& query, Entity& synonym, std::vector<QueryToken> token_chain) {
+void parseParameterPattern(Query& query, Entity& synonym_ent, std::vector<QueryToken> token_chain) {
 	bool wild = false;
-	switch (synonym.getType()) {
+	switch (synonym_ent.getType()) {
 	case ASSIGN:
 		// find comma 
 		// every QueryToken before comma token is sent to temp_token_chain
@@ -220,7 +220,7 @@ void parseParameterPattern(Query& query, Entity& synonym, std::vector<QueryToken
 			}
 		}
 
-		query.addPattern(Pattern(synonym, setEntRef(query, temp_token_chain), setExpr(temp_token_chain_2), wild));
+		query.addPattern(Pattern(synonym_ent, setEntRef(query, temp_token_chain), setExpr(temp_token_chain_2), wild));
 
 	}
 }

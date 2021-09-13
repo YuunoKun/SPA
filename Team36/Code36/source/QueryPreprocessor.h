@@ -22,7 +22,7 @@ public:
 
 	Entity setEntRef(Query& query, std::vector<QueryToken> token_chain);
 
-	TNode setExpr(std::vector<QueryToken> token_chain);
+	expr setExpr(std::vector<QueryToken> token_chain);
 
 private:
 
