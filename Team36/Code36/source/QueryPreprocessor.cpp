@@ -261,19 +261,19 @@ Query QueryPreprocessor::parse(std::string str) {
 	std::vector<QueryToken> parameterClause;
 
 	// To keep track of previous token during declaration, includes COMMA and SEMICOLON
-	QueryToken prevToken;
+	QueryToken prevToken = QueryToken();
 
 	// To keep track of of previous important declaration token, excludes COMMA and SEMICOLON
-	QueryToken temp;
+	QueryToken temp = QueryToken();
 
 	// To keep track of previous token during Selection
-	QueryToken prevTokenSelect;
+	QueryToken prevTokenSelect = QueryToken();
 
 	// To keep track of valid such that clause type, eg: Uses, Modifies, Parent, ParentT
-	QueryToken queryParameter;
+	QueryToken queryParameter = QueryToken();
 
 	// To keep track if selection is in pattern or such that
-	QueryToken patternOrSuchThat;
+	QueryToken patternOrSuchThat = QueryToken();
 
 	// To keep track of pattern type entity, eg: ASSIGN
 	Entity patternTypeEntity;
@@ -314,11 +314,10 @@ Query QueryPreprocessor::parse(std::string str) {
 
 		else if (isSelect) {
 			if (token.type == QueryToken::QueryTokenType::SUCH_THAT) {
-				output.push_back({ QueryToken::QueryTokenType::SUCH_THAT, "such that" });
-				patternOrSuchThat = { QueryToken::QueryTokenType::SUCH_THAT, "such that" };
+				//output.push_back({ QueryToken::QueryTokenType::SUCH_THAT, "" });
+				patternOrSuchThat = { QueryToken::QueryTokenType::SUCH_THAT, "" };
 			}
 			else if (token.type == QueryToken::QueryTokenType::IDENTIFIER && token.token_value == "pattern") {
-				output.push_back({ QueryToken::QueryTokenType::PATTERN, "pattern" });
 				patternOrSuchThat = { QueryToken::QueryTokenType::PATTERN, "pattern" };
 			}
 
@@ -404,8 +403,8 @@ QueryToken QueryPreprocessor::setIdentifierToQueryTokenType(QueryToken& prevToke
 		else if (token.token_value == "call") {
 			temp = { QueryToken::QueryTokenType::CALL, "call" };
 		}
-		else if (token.token_value == "if") {
-			temp = { QueryToken::QueryTokenType::IF, "if" };
+		else if (token.token_value == "ifs") {
+			temp = { QueryToken::QueryTokenType::IF, "ifs" };
 		}
 		else if (token.token_value == "while") {
 			temp = { QueryToken::QueryTokenType::WHILE, "while" };
