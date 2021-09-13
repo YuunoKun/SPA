@@ -356,32 +356,13 @@ Query QueryPreprocessor::parse(std::string str) {
 				}
 				else if (token.type == QueryToken::QueryTokenType::PARENTHESIS_CLOSE) {
 					isParameter = false;
-					if (queryParameter.token_value == "Uses" && queryParameter.type == QueryToken::QueryTokenType::USES_S) {
-						//query.addRelation()
-					}
-					else if (queryParameter.token_value == "Modifies" && queryParameter.type == QueryToken::QueryTokenType::MODIFIES_S) {
-						//query.addRelation()
-						parseParameterSuchThat(query, queryParameter.type, parameterClause);
-					}
-					else if (queryParameter.token_value == "Parent" && queryParameter.type == QueryToken::QueryTokenType::PARENT) {
-						//query.addRelation()
-					}
-					else if (queryParameter.token_value == "Follows" && queryParameter.type == QueryToken::QueryTokenType::FOLLOWS) {
-						//query.addRelation()
-					}
-					else if (queryParameter.token_value == "" && queryParameter.type == QueryToken::QueryTokenType::PARENT_T) {
-						//query.addRelation()
-					}
-					else if (queryParameter.token_value == "" && queryParameter.type == QueryToken::QueryTokenType::FOLLOWS_T) {
-						//query.addRelation()
-					}
+					parseParameterSuchThat(query, queryParameter.type, parameterClause);
 				}
 			}
 			else if (patternOrSuchThat.type == QueryToken::QueryTokenType::PATTERN) {
-				if (prevTokenSelect.type == QueryToken::QueryTokenType::PATTERN && token.type == QueryToken::QueryTokenType::IDENTIFIER) {
+				if (prevTokenSelect.token_value == "pattern" && token.type == QueryToken::QueryTokenType::IDENTIFIER) {
 					for (QueryToken each : output) {
 						if (token.token_value == each.token_value) {
-							selected.push_back({ each.type, token.token_value });
 							Synonym synonym;
 							synonym.name = token.token_value;
 							EntityType entityType = Utility::queryTokenTypeToEntityType(each.type);
@@ -395,8 +376,6 @@ Query QueryPreprocessor::parse(std::string str) {
 				else if (isParameter && token.type == QueryToken::QueryTokenType::PARENTHESIS_CLOSE) {
 					isParameter = false;
 					if (patternTypeEntity.getType() == EntityType::ASSIGN) {
-						// send to jiyu and receive back pattern
-						// query.addPattern()
 						parseParameterPattern(query, patternTypeEntity, parameterClause);
 					}
 				}
