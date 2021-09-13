@@ -397,4 +397,47 @@ namespace UnitTesting {
 			}
 		}
 	}
+
+	TEST(Utility, queryTokenTypeToEntityType) {
+		EntityType entType = STMT;
+		QueryToken::QueryTokenType temp = QueryToken::QueryTokenType::STMT;
+		EXPECT_EQ(Utility::queryTokenTypeToEntityType(temp), entType);
+
+		entType = PROCEDURE;
+		temp = QueryToken::QueryTokenType::PROCEDURE;
+		EXPECT_EQ(Utility::queryTokenTypeToEntityType(temp), entType);
+
+		entType = READ;
+		temp = QueryToken::QueryTokenType::READ;
+		EXPECT_EQ(Utility::queryTokenTypeToEntityType(temp), entType);
+
+		entType = PRINT;
+		temp = QueryToken::QueryTokenType::PRINT;
+		EXPECT_EQ(Utility::queryTokenTypeToEntityType(temp), entType);
+
+		entType = CALL;
+		temp = QueryToken::QueryTokenType::CALL;
+		EXPECT_EQ(Utility::queryTokenTypeToEntityType(temp), entType);
+
+		entType = IF;
+		temp = QueryToken::QueryTokenType::IF;
+		EXPECT_EQ(Utility::queryTokenTypeToEntityType(temp), entType);
+
+		entType = WHILE;
+		temp = QueryToken::QueryTokenType::WHILE;
+		EXPECT_EQ(Utility::queryTokenTypeToEntityType(temp), entType);
+
+		entType = ASSIGN;
+		temp = QueryToken::QueryTokenType::ASSIGN;
+		EXPECT_EQ(Utility::queryTokenTypeToEntityType(temp), entType);
+
+		entType = VARIABLE;
+		temp = QueryToken::QueryTokenType::VARIABLE;
+		EXPECT_EQ(Utility::queryTokenTypeToEntityType(temp), entType);
+
+		entType = CONSTANT;
+		EXPECT_NE(Utility::queryTokenTypeToEntityType(temp), entType);
+		temp = QueryToken::QueryTokenType::CONSTANT;
+		EXPECT_EQ(Utility::queryTokenTypeToEntityType(temp), entType);
+	}
 }
