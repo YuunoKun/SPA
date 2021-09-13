@@ -314,7 +314,6 @@ Query QueryPreprocessor::parse(std::string str) {
 
 		else if (isSelect) {
 			if (token.type == QueryToken::QueryTokenType::SUCH_THAT) {
-				//output.push_back({ QueryToken::QueryTokenType::SUCH_THAT, "" });
 				patternOrSuchThat = { QueryToken::QueryTokenType::SUCH_THAT, "" };
 			}
 			else if (token.type == QueryToken::QueryTokenType::IDENTIFIER && token.token_value == "pattern") {
@@ -334,24 +333,7 @@ Query QueryPreprocessor::parse(std::string str) {
 				}
 				else if (!isParameter && token.type == QueryToken::QueryTokenType::PARENTHESIS_OPEN) {
 					isParameter = true;
-					if (prevTokenSelect.token_value == "Uses" && prevTokenSelect.type == QueryToken::QueryTokenType::IDENTIFIER) {
-						queryParameter = { QueryToken::QueryTokenType::USES_S, "Uses" };
-					}
-					else if (prevTokenSelect.token_value == "Modifies" && prevTokenSelect.type == QueryToken::QueryTokenType::IDENTIFIER) {
-						queryParameter = { QueryToken::QueryTokenType::MODIFIES_S, "Modifies" };
-					}
-					else if (prevTokenSelect.token_value == "Parent" && prevTokenSelect.type == QueryToken::QueryTokenType::IDENTIFIER) {
-						queryParameter = { QueryToken::QueryTokenType::PARENT, "Parent" };
-					}
-					else if (prevTokenSelect.token_value == "Follows" && prevTokenSelect.type == QueryToken::QueryTokenType::IDENTIFIER) {
-						queryParameter = { QueryToken::QueryTokenType::FOLLOWS, "Follows" };
-					}
-					else if (prevTokenSelect.token_value == "" && prevTokenSelect.type == QueryToken::QueryTokenType::PARENT_T) {
-						queryParameter = { QueryToken::QueryTokenType::PARENT_T, "" };
-					}
-					else if (prevTokenSelect.token_value == "" && prevTokenSelect.type == QueryToken::QueryTokenType::FOLLOWS_T) {
-						queryParameter = { QueryToken::QueryTokenType::FOLLOWS_T, "" };
-					}
+					setQueryParameter(prevTokenSelect, queryParameter);
 				}
 				else if (token.type == QueryToken::QueryTokenType::PARENTHESIS_CLOSE) {
 					isParameter = false;
@@ -461,4 +443,25 @@ void QueryPreprocessor::addSelectedToQuery(Query& query, Entity& ent, std::vecto
 	}
 	isSelect = true;
 	query.addSelected(ent);
+}
+
+void QueryPreprocessor::setQueryParameter(QueryToken& prevTokenSelect, QueryToken& queryParameter) {
+	if (prevTokenSelect.token_value == "Uses" && prevTokenSelect.type == QueryToken::QueryTokenType::IDENTIFIER) {
+		queryParameter = { QueryToken::QueryTokenType::USES_S, "Uses" };
+	}
+	else if (prevTokenSelect.token_value == "Modifies" && prevTokenSelect.type == QueryToken::QueryTokenType::IDENTIFIER) {
+		queryParameter = { QueryToken::QueryTokenType::MODIFIES_S, "Modifies" };
+	}
+	else if (prevTokenSelect.token_value == "Parent" && prevTokenSelect.type == QueryToken::QueryTokenType::IDENTIFIER) {
+		queryParameter = { QueryToken::QueryTokenType::PARENT, "Parent" };
+	}
+	else if (prevTokenSelect.token_value == "Follows" && prevTokenSelect.type == QueryToken::QueryTokenType::IDENTIFIER) {
+		queryParameter = { QueryToken::QueryTokenType::FOLLOWS, "Follows" };
+	}
+	else if (prevTokenSelect.token_value == "" && prevTokenSelect.type == QueryToken::QueryTokenType::PARENT_T) {
+		queryParameter = { QueryToken::QueryTokenType::PARENT_T, "" };
+	}
+	else if (prevTokenSelect.token_value == "" && prevTokenSelect.type == QueryToken::QueryTokenType::FOLLOWS_T) {
+		queryParameter = { QueryToken::QueryTokenType::FOLLOWS_T, "" };
+	}
 }
