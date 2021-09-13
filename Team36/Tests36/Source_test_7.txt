@@ -1,0 +1,27 @@
+procedure nested {
+  a = 0; 1
+  b = 1; 2
+  c = 2; 3
+  d = 3; 4
+  e = 4; 5
+  f = 5; 6
+  g = 6; 7
+  while (g > f) { 8
+	while(f > e) { 9
+	  while(e > d) { 10
+	    while(d > c) { 11
+		  while(c > b) { 12
+		    while(b > a) { 13
+			  b = b - 1; 14
+			}
+			c = c - 1; 15
+		  }
+		   d = d - 1; 16
+		}
+		 e = e - 1; 17
+	  }
+	   f = f - 1; 18
+	}
+	 g = g - 1; 19
+  }
+}
