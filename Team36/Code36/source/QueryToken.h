@@ -30,19 +30,35 @@ public:
 		PROCEDURE,
 		AND,
 		PATTERN,
-		SUCHTHAT,
+		SUCH_THAT,
 
 		// PQL Variable Operators
 		WILDCARD,
 		QUOTATION_OPEN,
 		QUOTATION_CLOSE,
-		ASTERISK,
 
 		PLUS,
 		MINUS,
-
+		MUL,
 		DIV,
 		MOD,
+
+		//Relationships
+		// need parent type? cause will pass straight to relref class
+		MODIFIES_P,
+		MODIFIES_S,
+		USES_P,
+		USES_S,
+		CALLS,
+		CALLS_T,
+		PARENT,
+		PARENT_T,
+		FOLLOWS,
+		FOLLOWS_T,
+		NEXT,
+		NEXT_T,
+		AFFECTS,
+		AFFECTS_T,
 
 		//  PQL Conditional Operators
 	/*	BOOL_AND,

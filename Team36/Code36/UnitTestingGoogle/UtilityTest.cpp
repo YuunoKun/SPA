@@ -696,6 +696,7 @@ namespace UnitTesting {
 			}
 			r2.push_back(std::to_string(i1));
 		}
+
 		EXPECT_EQ(Utility::mergeColumnEqual(t2), r2);
 
 		for (int i1 = 0; i1 < 20; i1++) {
@@ -916,7 +917,7 @@ namespace UnitTesting {
 
 
 	TEST(Utility, joinTableDoubleColumn) {
-		
+
 		std::vector<std::vector<std::string>> from = {
 			{"1", "4"},
 			{"2", "5"},
@@ -1008,5 +1009,49 @@ namespace UnitTesting {
 
 		EXPECT_EQ(Utility::joinTable(from, fromIndex1, fromIndex2, toJoin, toJoinIndex1, toJoinIndex2), to);
 
+	}
+
+
+	TEST(Utility, queryTokenTypeToEntityType) {
+		EntityType entType = STMT;
+		QueryToken::QueryTokenType temp = QueryToken::QueryTokenType::STMT;
+		EXPECT_EQ(Utility::queryTokenTypeToEntityType(temp), entType);
+
+		entType = PROCEDURE;
+		temp = QueryToken::QueryTokenType::PROCEDURE;
+		EXPECT_EQ(Utility::queryTokenTypeToEntityType(temp), entType);
+
+		entType = READ;
+		temp = QueryToken::QueryTokenType::READ;
+		EXPECT_EQ(Utility::queryTokenTypeToEntityType(temp), entType);
+
+		entType = PRINT;
+		temp = QueryToken::QueryTokenType::PRINT;
+		EXPECT_EQ(Utility::queryTokenTypeToEntityType(temp), entType);
+
+		entType = CALL;
+		temp = QueryToken::QueryTokenType::CALL;
+		EXPECT_EQ(Utility::queryTokenTypeToEntityType(temp), entType);
+
+		entType = IF;
+		temp = QueryToken::QueryTokenType::IF;
+		EXPECT_EQ(Utility::queryTokenTypeToEntityType(temp), entType);
+
+		entType = WHILE;
+		temp = QueryToken::QueryTokenType::WHILE;
+		EXPECT_EQ(Utility::queryTokenTypeToEntityType(temp), entType);
+
+		entType = ASSIGN;
+		temp = QueryToken::QueryTokenType::ASSIGN;
+		EXPECT_EQ(Utility::queryTokenTypeToEntityType(temp), entType);
+
+		entType = VARIABLE;
+		temp = QueryToken::QueryTokenType::VARIABLE;
+		EXPECT_EQ(Utility::queryTokenTypeToEntityType(temp), entType);
+
+		entType = CONSTANT;
+		EXPECT_NE(Utility::queryTokenTypeToEntityType(temp), entType);
+		temp = QueryToken::QueryTokenType::CONSTANT;
+		EXPECT_EQ(Utility::queryTokenTypeToEntityType(temp), entType);
 	}
 }

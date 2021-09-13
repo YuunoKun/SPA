@@ -296,3 +296,37 @@ std::vector<std::vector<std::string>> Utility::joinTable(std::vector<std::vector
 
 	return results;
 }
+
+
+EntityType Utility::queryTokenTypeToEntityType(QueryToken::QueryTokenType& queryTokenType) {
+	if (queryTokenType == QueryToken::QueryTokenType::STMT) {
+		return EntityType::STMT;
+	}
+	else if (queryTokenType == QueryToken::QueryTokenType::PROCEDURE) {
+		return EntityType::PROCEDURE;
+	}
+	else if (queryTokenType == QueryToken::QueryTokenType::READ) {
+		return EntityType::READ;
+	}
+	else if (queryTokenType == QueryToken::QueryTokenType::PRINT) {
+		return EntityType::PRINT;
+	}
+	else if (queryTokenType == QueryToken::QueryTokenType::CALL) {
+		return EntityType::CALL;
+	}
+	else if (queryTokenType == QueryToken::QueryTokenType::IF) {
+		return EntityType::IF;
+	}
+	else if (queryTokenType == QueryToken::QueryTokenType::WHILE) {
+		return EntityType::WHILE;
+	}
+	else if (queryTokenType == QueryToken::QueryTokenType::ASSIGN) {
+		return EntityType::ASSIGN;
+	}
+	else if (queryTokenType == QueryToken::QueryTokenType::VARIABLE) {
+		return EntityType::VARIABLE;
+	}
+	else if (queryTokenType == QueryToken::QueryTokenType::CONSTANT) {
+		return EntityType::CONSTANT;
+	}
+}
