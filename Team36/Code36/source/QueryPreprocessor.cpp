@@ -12,7 +12,7 @@
 QueryPreprocessor::QueryPreprocessor() {
 }
 
-Entity setStmtRef(Query& query, QueryToken token) {
+Entity QueryPreprocessor::setStmtRef(Query& query, QueryToken token) {
 
 	//synonym | ‘_’ | INTEGER
 
@@ -35,7 +35,7 @@ Entity setStmtRef(Query& query, QueryToken token) {
 	std::runtime_error("Unknown stmtRef");
 }
 
-Entity setEntRef(Query& query, std::vector<QueryToken> token_chain) {
+Entity QueryPreprocessor::setEntRef(Query& query, std::vector<QueryToken> token_chain) {
 
 	// entRef : synonym | ‘_’ | ‘"’ IDENT ‘"’
 
@@ -63,7 +63,7 @@ Entity setEntRef(Query& query, std::vector<QueryToken> token_chain) {
 }
 
 // takes in a token_chain with only IDENT* (no QUOTATION_OPEN/CLOSE or WILDCARD) 
-expr setExpr(std::vector<QueryToken> token_chain) {
+expr QueryPreprocessor::setExpr(std::vector<QueryToken> token_chain) {
 	
 	//expression-spec : ‘"‘ expr’"’ | ‘_’ ‘"’ expr ‘"’ ‘_’ | ‘_’
 
@@ -78,7 +78,7 @@ expr setExpr(std::vector<QueryToken> token_chain) {
 
 }
 
-void parseParameterSuchThat(Query& query, QueryToken::QueryTokenType token_type, std::vector<QueryToken> token_chain) {
+void QueryPreprocessor::parseParameterSuchThat(Query& query, QueryToken::QueryTokenType token_type, std::vector<QueryToken> token_chain) {
 
 
 	switch (token_type) {
@@ -154,7 +154,7 @@ void parseParameterSuchThat(Query& query, QueryToken::QueryTokenType token_type,
 
 }
 
-void parseParameterPattern(Query& query, Entity& synonym_ent, std::vector<QueryToken> token_chain) {
+void QueryPreprocessor::parseParameterPattern(Query& query, Entity& synonym_ent, std::vector<QueryToken> token_chain) {
 	bool wild = false;
 	switch (synonym_ent.getType()) {
 	case ASSIGN:
@@ -362,6 +362,7 @@ Query QueryPreprocessor::parse(std::string str) {
 					}
 					else if (queryParameter.token_value == "Modifies" && queryParameter.type == QueryToken::QueryTokenType::IDENTIFIER) {
 						//query.addRelation()
+						parseParameterSuchThat(query, queryParameter.type, parameterClause);
 					}
 					else if (queryParameter.token_value == "Parent" && queryParameter.type == QueryToken::QueryTokenType::IDENTIFIER) {
 						//query.addRelation()
@@ -406,6 +407,7 @@ Query QueryPreprocessor::parse(std::string str) {
 	}
 	return query;
 }
+
 
 QueryToken QueryPreprocessor::setIdentifierToQueryTokenType(QueryToken& prevToken, QueryToken& temp, QueryToken& token) {
 	if (prevToken.type == QueryToken::QueryTokenType::WHITESPACE ||
