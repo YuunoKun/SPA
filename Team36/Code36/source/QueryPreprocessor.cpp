@@ -13,7 +13,6 @@ QueryPreprocessor::QueryPreprocessor() {
 }
 
 Entity QueryPreprocessor::setStmtRef(Query& query, QueryToken token) {
-
 	//synonym | ‘_’ | INTEGER
 
 	// wild card check
@@ -36,7 +35,6 @@ Entity QueryPreprocessor::setStmtRef(Query& query, QueryToken token) {
 }
 
 Entity QueryPreprocessor::setEntRef(Query& query, std::vector<QueryToken> token_chain) {
-
 	// entRef : synonym | ‘_’ | ‘"’ IDENT ‘"’
 
 	if (token_chain.size() == 1) {
@@ -62,25 +60,21 @@ Entity QueryPreprocessor::setEntRef(Query& query, std::vector<QueryToken> token_
 	std::runtime_error("Unknown stmtRef");
 }
 
-// takes in a token_chain with only IDENT* (no QUOTATION_OPEN/CLOSE or WILDCARD) 
+// takes in a token_chain with only IDENT* (no QUOTATION_OPEN/CLOSE or WILDCARD)
 expr QueryPreprocessor::setExpr(std::vector<QueryToken> token_chain) {
-	
 	//expression-spec : ‘"‘ expr’"’ | ‘_’ ‘"’ expr ‘"’ ‘_’ | ‘_’
 
 	//TODO
 	// send to expression parser
 	if (token_chain.empty()) {
 		return "";
-	} else if (token_chain.size() == 1 && token_chain[0].type == QueryToken::IDENTIFIER) {
+	}
+	else if (token_chain.size() == 1 && token_chain[0].type == QueryToken::IDENTIFIER) {
 		return token_chain[0].token_value;
 	}
-
-
 }
 
 void QueryPreprocessor::parseParameterSuchThat(Query& query, QueryToken::QueryTokenType token_type, std::vector<QueryToken> token_chain) {
-
-
 	switch (token_type) {
 	case QueryToken::MODIFIES_S:
 		// stmtRef , entRef
@@ -151,14 +145,13 @@ void QueryPreprocessor::parseParameterSuchThat(Query& query, QueryToken::QueryTo
 	default:
 		std::runtime_error("Unknown RelRef query token type : \'" + token_type + '\'');
 	}
-
 }
 
 void QueryPreprocessor::parseParameterPattern(Query& query, Entity& synonym_ent, std::vector<QueryToken> token_chain) {
 	bool wild = false;
 	switch (synonym_ent.getType()) {
 	case ASSIGN:
-		// find comma 
+		// find comma
 		// every QueryToken before comma token is sent to temp_token_chain
 		// Expect entRef token_chain
 		std::vector<QueryToken> temp_token_chain;
@@ -191,7 +184,6 @@ void QueryPreprocessor::parseParameterPattern(Query& query, Entity& synonym_ent,
 			}
 			// remove first WILDCARD token
 			token_chain.erase(token_chain.begin());
-
 		}
 		else {
 			std::runtime_error("Unexpected parameters for Pattern");
@@ -200,7 +192,6 @@ void QueryPreprocessor::parseParameterPattern(Query& query, Entity& synonym_ent,
 		std::vector<QueryToken> temp_token_chain_2;
 
 		if (token_chain.size() != 0) {
-
 			if (token_chain[0].type == QueryToken::QUOTATION_OPEN) {
 				token_chain.erase(token_chain.begin());
 
@@ -221,7 +212,6 @@ void QueryPreprocessor::parseParameterPattern(Query& query, Entity& synonym_ent,
 		}
 
 		query.addPattern(Pattern(synonym_ent, setEntRef(query, temp_token_chain), setExpr(temp_token_chain_2), wild));
-
 	}
 }
 
@@ -229,31 +219,37 @@ Query QueryPreprocessor::parse(std::string str) {
 	Query query = Query();
 	QueryTokenizer query_tokenizer;
 
-	//query_tokenizer.parse_into_query_tokens(str);
+	query_tokenizer.parse_into_query_tokens(str);
 
-	//const std::vector<QueryToken> v = query_tokenizer.get_query_token_chain();
+	const std::vector<QueryToken> v = query_tokenizer.get_query_token_chain();
 
-	std::vector<QueryToken> v;
-	QueryToken q1(QueryToken::QueryTokenType::IDENTIFIER, "stmt");
-	v.push_back(q1);
-	v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "s" });
-	v.push_back({ QueryToken::QueryTokenType::COMMA, "" });
-	v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "ss" });
-	v.push_back({ QueryToken::QueryTokenType::TERMINATOR, ";" });
-	v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "procedure" });
-	v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "p" });
-	v.push_back({ QueryToken::QueryTokenType::TERMINATOR, ";" });
-	v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "Select" });
-	v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "p" });
+	//std::vector<QueryToken> v;
+	//QueryToken q1(QueryToken::QueryTokenType::IDENTIFIER, "stmt");
+	//v.push_back(q1);
+	//v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "s" });
+	//v.push_back({ QueryToken::QueryTokenType::COMMA, "" });
+	//v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "ss" });
+	//v.push_back({ QueryToken::QueryTokenType::TERMINATOR, ";" });
+	//v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "assign" });
+	//v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "a" });
+	//v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "procedure" });
+	//v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "p" });
+	//v.push_back({ QueryToken::QueryTokenType::TERMINATOR, ";" });
+	//v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "Select" });
+	//v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "p" });
 	//v.push_back({ QueryToken::QueryTokenType::COMMA, "" });
 	//v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "p" });
-	//v.push_back({ QueryToken::QueryTokenType::SUCHTHAT, "" });
+	//v.push_back({ QueryToken::QueryTokenType::SUCH_THAT, "" });
 	//v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "Modifies" });
 	//v.push_back({ QueryToken::QueryTokenType::PARENTHESIS_OPEN, "" });
 	//v.push_back({ QueryToken::QueryTokenType::CONSTANT, "7" });
 	//v.push_back({ QueryToken::QueryTokenType::COMMA, "" });
 	//v.push_back({ QueryToken::QueryTokenType::WILDCARD, "" });
 	//v.push_back({ QueryToken::QueryTokenType::PARENTHESIS_CLOSE, "" });
+	//v.push_back({ QueryToken::QueryTokenType::PATTERN, "" });
+	//v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "a" });
+	//v.push_back({ QueryToken::QueryTokenType::PARENTHESIS_OPEN, "" });
+	//v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "" });
 
 	// Collection of declared query tokens
 	std::vector<QueryToken> output;
@@ -278,6 +274,9 @@ Query QueryPreprocessor::parse(std::string str) {
 
 	// To keep track if selection is in pattern or such that
 	QueryToken patternOrSuchThat;
+
+	// To keep track of pattern type entity, eg: ASSIGN
+	Entity patternTypeEntity;
 
 	// True when parsing is in selection, false when parsing is in declaration
 	bool isSelect = false;
@@ -318,35 +317,35 @@ Query QueryPreprocessor::parse(std::string str) {
 				output.push_back({ QueryToken::QueryTokenType::SUCH_THAT, "such that" });
 				patternOrSuchThat = { QueryToken::QueryTokenType::SUCH_THAT, "such that" };
 			}
-			else if (token.type == QueryToken::QueryTokenType::PATTERN) {
+			else if (token.type == QueryToken::QueryTokenType::IDENTIFIER && token.token_value == "pattern") {
 				output.push_back({ QueryToken::QueryTokenType::PATTERN, "pattern" });
 				patternOrSuchThat = { QueryToken::QueryTokenType::PATTERN, "pattern" };
 			}
 
-			if (isParameter && !token.type == QueryToken::QueryTokenType::PARENTHESIS_CLOSE) {
+			if (isParameter && token.type != QueryToken::QueryTokenType::PARENTHESIS_CLOSE) {
 				parameterClause.push_back(token);
 			}
 
-			if (!isParameter && patternOrSuchThat.type == QueryToken::QueryTokenType::SUCH_THAT) {
+			if (patternOrSuchThat.type == QueryToken::QueryTokenType::SUCH_THAT) {
 				if (token.type == QueryToken::QueryTokenType::PARENT_T) {
 					output.push_back({ QueryToken::QueryTokenType::PARENT_T, "" });
 				}
 				else if (token.type == QueryToken::QueryTokenType::FOLLOWS_T) {
 					output.push_back({ QueryToken::QueryTokenType::FOLLOWS_T, "" });
 				}
-				else if (token.type == QueryToken::QueryTokenType::PARENTHESIS_OPEN) {
+				else if (!isParameter && token.type == QueryToken::QueryTokenType::PARENTHESIS_OPEN) {
 					isParameter = true;
 					if (prevTokenSelect.token_value == "Uses" && prevTokenSelect.type == QueryToken::QueryTokenType::IDENTIFIER) {
-						queryParameter = { QueryToken::QueryTokenType::IDENTIFIER, "Uses" };
+						queryParameter = { QueryToken::QueryTokenType::USES_S, "Uses" };
 					}
 					else if (prevTokenSelect.token_value == "Modifies" && prevTokenSelect.type == QueryToken::QueryTokenType::IDENTIFIER) {
-						queryParameter = { QueryToken::QueryTokenType::IDENTIFIER, "Modifies" };
+						queryParameter = { QueryToken::QueryTokenType::MODIFIES_S, "Modifies" };
 					}
 					else if (prevTokenSelect.token_value == "Parent" && prevTokenSelect.type == QueryToken::QueryTokenType::IDENTIFIER) {
-						queryParameter = { QueryToken::QueryTokenType::IDENTIFIER, "Parent" };
+						queryParameter = { QueryToken::QueryTokenType::PARENT, "Parent" };
 					}
 					else if (prevTokenSelect.token_value == "Follows" && prevTokenSelect.type == QueryToken::QueryTokenType::IDENTIFIER) {
-						queryParameter = { QueryToken::QueryTokenType::IDENTIFIER, "Follows" };
+						queryParameter = { QueryToken::QueryTokenType::FOLLOWS, "Follows" };
 					}
 					else if (prevTokenSelect.token_value == "" && prevTokenSelect.type == QueryToken::QueryTokenType::PARENT_T) {
 						queryParameter = { QueryToken::QueryTokenType::PARENT_T, "" };
@@ -357,17 +356,17 @@ Query QueryPreprocessor::parse(std::string str) {
 				}
 				else if (token.type == QueryToken::QueryTokenType::PARENTHESIS_CLOSE) {
 					isParameter = false;
-					if (queryParameter.token_value == "Uses" && queryParameter.type == QueryToken::QueryTokenType::IDENTIFIER) {
+					if (queryParameter.token_value == "Uses" && queryParameter.type == QueryToken::QueryTokenType::USES_S) {
 						//query.addRelation()
 					}
-					else if (queryParameter.token_value == "Modifies" && queryParameter.type == QueryToken::QueryTokenType::IDENTIFIER) {
+					else if (queryParameter.token_value == "Modifies" && queryParameter.type == QueryToken::QueryTokenType::MODIFIES_S) {
 						//query.addRelation()
 						parseParameterSuchThat(query, queryParameter.type, parameterClause);
 					}
-					else if (queryParameter.token_value == "Parent" && queryParameter.type == QueryToken::QueryTokenType::IDENTIFIER) {
+					else if (queryParameter.token_value == "Parent" && queryParameter.type == QueryToken::QueryTokenType::PARENT) {
 						//query.addRelation()
 					}
-					else if (queryParameter.token_value == "Follows" && queryParameter.type == QueryToken::QueryTokenType::IDENTIFIER) {
+					else if (queryParameter.token_value == "Follows" && queryParameter.type == QueryToken::QueryTokenType::FOLLOWS) {
 						//query.addRelation()
 					}
 					else if (queryParameter.token_value == "" && queryParameter.type == QueryToken::QueryTokenType::PARENT_T) {
@@ -378,8 +377,7 @@ Query QueryPreprocessor::parse(std::string str) {
 					}
 				}
 			}
-			else if (!isParameter && patternOrSuchThat.type == QueryToken::QueryTokenType::PATTERN) {
-				Entity patternTypeEntity;
+			else if (patternOrSuchThat.type == QueryToken::QueryTokenType::PATTERN) {
 				if (prevTokenSelect.type == QueryToken::QueryTokenType::PATTERN && token.type == QueryToken::QueryTokenType::IDENTIFIER) {
 					for (QueryToken each : output) {
 						if (token.token_value == each.token_value) {
@@ -391,14 +389,15 @@ Query QueryPreprocessor::parse(std::string str) {
 						}
 					}
 				}
-				else if (token.type == QueryToken::QueryTokenType::PARENTHESIS_OPEN) {
+				else if (!isParameter && token.type == QueryToken::QueryTokenType::PARENTHESIS_OPEN) {
 					isParameter = true;
 				}
-				else if (token.type == QueryToken::QueryTokenType::PARENTHESIS_CLOSE) {
+				else if (isParameter && token.type == QueryToken::QueryTokenType::PARENTHESIS_CLOSE) {
 					isParameter = false;
 					if (patternTypeEntity.getType() == EntityType::ASSIGN) {
 						// send to jiyu and receive back pattern
 						// query.addPattern()
+						parseParameterPattern(query, patternTypeEntity, parameterClause);
 					}
 				}
 			}
@@ -407,7 +406,6 @@ Query QueryPreprocessor::parse(std::string str) {
 	}
 	return query;
 }
-
 
 QueryToken QueryPreprocessor::setIdentifierToQueryTokenType(QueryToken& prevToken, QueryToken& temp, QueryToken& token) {
 	if (prevToken.type == QueryToken::QueryTokenType::WHITESPACE ||
