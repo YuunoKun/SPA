@@ -7,7 +7,8 @@ RelRef::RelRef(RelType rel_type, Entity first_clause, Entity second_clause) {
 	// TODO: Add follows, followsT, parent, parentT after discussion for new type
 	if (rel_type == USES_P) {
 		for (unsigned int i = 0; i < clauses.size(); ++i) {
-			if (clauses[i].getType() != static_cast<EntityType>(ASSIGN) &&
+			if (clauses[i].getType() != static_cast<EntityType>(STMT) && 
+				clauses[i].getType() != static_cast<EntityType>(ASSIGN) &&
 				clauses[i].getType() != static_cast<EntityType>(VARIABLE) &&
 				clauses[i].getType() != static_cast<EntityType>(PRINT) &&
 				clauses[i].getType() != static_cast<EntityType>(IF) &&
@@ -22,7 +23,8 @@ RelRef::RelRef(RelType rel_type, Entity first_clause, Entity second_clause) {
 
 	if (rel_type == MODIFIES_P) {
 		for (unsigned int i = 0; i < clauses.size(); ++i) {
-			if (clauses[i].getType() != static_cast<EntityType>(ASSIGN) &&
+			if (clauses[i].getType() != static_cast<EntityType>(STMT) && 
+				clauses[i].getType() != static_cast<EntityType>(ASSIGN) &&
 				clauses[i].getType() != static_cast<EntityType>(VARIABLE) &&
 				clauses[i].getType() != static_cast<EntityType>(READ) &&
 				clauses[i].getType() != static_cast<EntityType>(IF) &&
