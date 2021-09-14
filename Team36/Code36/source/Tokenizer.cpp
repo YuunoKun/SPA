@@ -48,6 +48,7 @@ void Tokenizer::parse_into_tokens(const char* input) {
 			add_token(current_token);
 			break;
 		case ' ':
+		case '	':
 			// Ignore extra white spaces, also terminates forming of potential identifiers
 			// This also ensure that token values does not contain extra whitespaces.
 			add_token(current_token);
