@@ -3,7 +3,7 @@ procedure BumbleBee {
   y = 2 * x;
   call Megatron;
   z = p - y;
-  if (q! = 1) then {
+  if (q!= 1) then {
     z = x + 24;
     call Ironhide;
   } else {
