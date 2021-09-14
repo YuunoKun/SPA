@@ -45,6 +45,7 @@
     <ClCompile Include="..\source\PatternEvaluator.cpp" />
     <ClCompile Include="..\source\ResultTable.cpp" />
     <ClCompile Include="..\source\Utility.cpp" />
+    <ClCompile Include="..\source\PatternRelRefValidator.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\source\DesignExtractor.h" />
@@ -84,6 +85,7 @@
     <ClInclude Include="..\source\UsesPEvaluator.h" />
     <ClInclude Include="..\source\ResultTable.h" />
     <ClInclude Include="..\source\Utility.h" />
+    <ClInclude Include="..\source\PatternRelRefValidator.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{DC21A1EA-D2C6-4D14-A2B4-E025B64BDE81}</ProjectGuid>
