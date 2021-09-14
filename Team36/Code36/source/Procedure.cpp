@@ -30,6 +30,16 @@ std::vector<stmt_index> Procedure::get_caller() {
 }
 
 
+void Procedure::add_child(stmt_index id) {
+	m_contained_stmt.push_back(id);
+}
+
+
+std::vector<stmt_index> Procedure::get_child() {
+	return m_contained_stmt;
+}
+
+
 void Procedure::add_uses_variable(var_name name) {
 	m_uses.insert(name);
 }

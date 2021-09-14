@@ -1,7 +1,7 @@
 #include "Pattern.h"
 #include <iostream>
 
-Pattern::Pattern(Entity pattern_type, Entity left_expression, std::string expression, bool is_wild) {
+Pattern::Pattern(Entity pattern_type, Entity left_expression, expr expression, bool is_wild) {
 	// Checks that pattern types are valid
 	if (pattern_type.getType() != static_cast<EntityType>(ASSIGN)) {
 		throw std::invalid_argument("Pattern Type is invalid");

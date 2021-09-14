@@ -3,6 +3,7 @@
 #include "Entity.h"
 #include "Common.h"
 #include "Stmt.h"
+#include "QueryToken.h"
 
 class Utility {
 public:
@@ -29,4 +30,5 @@ public:
 
 	static bool patternMatch(std::string, std::string);
 	static bool patternContain(std::string, std::string);
+	static EntityType queryTokenTypeToEntityType(QueryToken::QueryTokenType&);
 };

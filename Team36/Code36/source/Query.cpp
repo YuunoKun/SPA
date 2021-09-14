@@ -36,3 +36,10 @@ void Query::addRelation(RelRef& relation) {
 void Query::addPattern(Pattern& pattern) {
 	patterns.push_back(pattern);
 }
+
+bool Query::operator==(const Query& query) const {
+	return entities == query.entities &&
+		relations == query.relations &&
+		patterns == query.patterns &&
+		selected == query.selected;
+}

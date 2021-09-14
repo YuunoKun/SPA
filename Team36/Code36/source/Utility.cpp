@@ -192,3 +192,57 @@ bool Utility::patternContain(std::string original, std::string match) {
 	}
 	return false;
 }
+EntityType Utility::queryTokenTypeToEntityType(QueryToken::QueryTokenType& queryTokenType) {
+	if (queryTokenType == QueryToken::QueryTokenType::STMT) {
+		return EntityType::STMT;
+	}
+	else if (queryTokenType == QueryToken::QueryTokenType::PROCEDURE) {
+		return EntityType::PROCEDURE;
+	}
+	else if (queryTokenType == QueryToken::QueryTokenType::READ) {
+		return EntityType::READ;
+	}
+	else if (queryTokenType == QueryToken::QueryTokenType::PRINT) {
+		return EntityType::PRINT;
+	}
+	else if (queryTokenType == QueryToken::QueryTokenType::CALL) {
+		return EntityType::CALL;
+	}
+	else if (queryTokenType == QueryToken::QueryTokenType::IF) {
+		return EntityType::IF;
+	}
+	else if (queryTokenType == QueryToken::QueryTokenType::WHILE) {
+		return EntityType::WHILE;
+	}
+	else if (queryTokenType == QueryToken::QueryTokenType::ASSIGN) {
+		return EntityType::ASSIGN;
+	}
+	else if (queryTokenType == QueryToken::QueryTokenType::VARIABLE) {
+		return EntityType::VARIABLE;
+	}
+	else if (queryTokenType == QueryToken::QueryTokenType::CONSTANT) {
+		return EntityType::CONSTANT;
+	}
+}
+//bool Utility::patternContain(std::string original, std::string match) {
+//	original.erase(std::remove_if(original.begin(), original.end(), ::isspace), original.end());
+//	match.erase(std::remove_if(match.begin(), match.end(), ::isspace), match.end());
+//
+//	const char delim = ' ';
+//	std::replace(original.begin(), original.end(), '*', delim); // replace all '*' to 'space'
+//	std::replace(original.begin(), original.end(), '/', delim); // replace all '/' to 'space'
+//	std::replace(original.begin(), original.end(), '+', delim); // replace all '+' to 'space'
+//	std::replace(original.begin(), original.end(), '-', delim); // replace all '-' to 'space'
+//	std::replace(original.begin(), original.end(), '%', delim); // replace all '-' to 'space'
+//
+//	std::stringstream ss(original);
+//	std::vector<std::string> variables;
+//
+//	std::string s;
+//	while (std::getline(ss, s, delim)) {
+//		if (s == match) {
+//			return true;
+//		}
+//	}
+//	return false;
+//}
