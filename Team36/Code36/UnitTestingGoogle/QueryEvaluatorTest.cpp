@@ -1392,9 +1392,6 @@ namespace UnitTesting {
 	//Modifies_S Relation Test ----------------------------------------------------------------------------------------------------
 	TEST_F(QueryEvaluatorTest, evaluateQueryModifiesBooleanTrue) {
 		RelType type = MODIFIES_S;
-
-		std::vector<std::string> lefts = MODIFIES_LEFTS;
-		std::vector<std::string> rights = MODIFIES_RIGHTS;
 		std::string left1 = MODIFIES_LEFT1;
 		std::string left2 = MODIFIES_LEFT2;
 		std::string right1 = MODIFIES_RIGHT1;

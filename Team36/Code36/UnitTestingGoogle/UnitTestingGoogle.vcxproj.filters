@@ -90,6 +90,9 @@
     <ClCompile Include="QueryPatternSuchThatValidationTest.cpp">
       <Filter>PQL</Filter>
     </ClCompile>
+    <ClCompile Include="QueryEvaluatorMultiClausesTest.cpp">
+      <Filter>PQL</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
