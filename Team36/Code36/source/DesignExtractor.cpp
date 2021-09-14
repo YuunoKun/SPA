@@ -275,92 +275,92 @@ void DesignExtractor::populate_post_validation() {
 }
 
 
-void DesignExtractor::populateEntities() {
-	populateProcedures();
-	populateStatements();
-	populateVariables();
-	populateConstants();
+void DesignExtractor::populateEntities(PKB& pkb) {
+	populateProcedures(pkb);
+	populateStatements(pkb);
+	populateVariables(pkb);
+	populateConstants(pkb);
 }
 
 
-void DesignExtractor::populateRelations() {
-	populateFollows();
-	PKB::getInstance().generateFollowsT();
-	populateParent();
-	PKB::getInstance().generateParentT();
-	populateUses();
-	populateModifies();
+void DesignExtractor::populateRelations(PKB& pkb) {
+	populateFollows(pkb);
+	pkb.generateFollowsT();
+	populateParent(pkb);
+	pkb.generateParentT();
+	populateUses(pkb);
+	populateModifies(pkb);
 }
 
 
-void DesignExtractor::populateProcedures() {
+void DesignExtractor::populateProcedures(PKB& pkb) {
 	for (Procedure* p : m_procedures) {
-		PKB::getInstance().addProcedure(p->get_name());
+		pkb.addProcedure(p->get_name());
 	}
 }
 
 
-void DesignExtractor::populateStatements() {
+void DesignExtractor::populateStatements(PKB& pkb) {
 	for (Statement* s : m_statements) {
-		PKB::getInstance().addStmt(s->get_type());
+		pkb.addStmt(s->get_type());
 
 		if (s->get_type() == StmtType::STMT_ASSIGN) {
-			PKB::getInstance().addExprTree(s->get_index(), s->get_expr_str());
+			pkb.addExprTree(s->get_index(), s->get_expr_str());
 		}
 	}
 }
 
 
-void DesignExtractor::populateVariables() {
+void DesignExtractor::populateVariables(PKB& pkb) {
 	for (var_name v : m_variables) {
-		PKB::getInstance().addVariable(v);
+		pkb.addVariable(v);
 	}
 }
 
 
-void DesignExtractor::populateConstants() {
+void DesignExtractor::populateConstants(PKB& pkb) {
 	for (constant c : m_constants) {
-		PKB::getInstance().addConstant(c);
+		pkb.addConstant(c);
 	}
 }
 
 
 
-void DesignExtractor::populateFollows() {
+void DesignExtractor::populateFollows(PKB& pkb) {
 	std::unordered_map<int, stmt_index> um;
 
 	for (Statement* s : m_statements) {
 		int list_id = s->get_stmt_list();
 		if (um.find(list_id) != um.end()) {
-			PKB::getInstance().addFollows(um[list_id], s->get_index());
+			pkb.addFollows(um[list_id], s->get_index());
 		}
 		um[list_id] = s->get_index();
 	}
 }
 
 
-void DesignExtractor::populateParent() {
+void DesignExtractor::populateParent(PKB& pkb) {
 	for (Statement* s : m_statements) {
 		for (stmt_index id : s->get_direct_child()) {
-			PKB::getInstance().addParent(s->get_index(), id);
+			pkb.addParent(s->get_index(), id);
 		}
 	}
 }
 
 
-void DesignExtractor::populateUses() {
+void DesignExtractor::populateUses(PKB& pkb) {
 	for (Statement* s : m_statements) {
 		for (var_name used_var : s->get_used_variable()) {
-			PKB::getInstance().addUsesS(s->get_index(), used_var);
+			pkb.addUsesS(s->get_index(), used_var);
 		}
 	}
 }
 
 
-void DesignExtractor::populateModifies() {
+void DesignExtractor::populateModifies(PKB& pkb) {
 	for (Statement* s : m_statements) {
 		for (var_name modified_var : s->get_modified_variable()) {
-			PKB::getInstance().addModifiesS(s->get_index(), modified_var);
+			pkb.addModifiesS(s->get_index(), modified_var);
 		}
 	}
 }

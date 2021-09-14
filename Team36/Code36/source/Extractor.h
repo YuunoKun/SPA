@@ -3,6 +3,7 @@
 #include <string>
 #include "Common.h"
 #include "Token.h"
+#include "PKB.h"
 
 namespace SourceProcessor {
 
@@ -38,9 +39,11 @@ namespace SourceProcessor {
 
 		virtual void validate() = 0;
 
-		virtual void populateEntities() = 0;
+		virtual void populate_post_validation() = 0;
 
-		virtual void populateRelations() = 0;
+		virtual void populateEntities(PKB&) = 0;
+
+		virtual void populateRelations(PKB&) = 0;
 	};
 
 } // namespace SourceProcessor
