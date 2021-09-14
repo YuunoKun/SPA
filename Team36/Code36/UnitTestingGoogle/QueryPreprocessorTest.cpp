@@ -179,7 +179,7 @@ namespace UnitTesting {
 
 	TEST(parse, addSingleIf) {
 		QueryPreprocessor qp;
-		Query test = qp.parse("ifs if;");
+		Query test = qp.parse("if if;");
 
 		Query q;
 		q.addEntity(Entity(EntityType::IF, Synonym{ "if" }));
@@ -193,7 +193,7 @@ namespace UnitTesting {
 
 	TEST(parse, addMultipleIfs) {
 		QueryPreprocessor qp;
-		Query test = qp.parse("ifs if, if1;");
+		Query test = qp.parse("if if, if1;");
 
 		Query q;
 		q.addEntity(Entity(EntityType::IF, Synonym{ "if" }));
