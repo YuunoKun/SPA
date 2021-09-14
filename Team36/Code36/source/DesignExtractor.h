@@ -55,11 +55,11 @@ namespace SourceProcessor {
 
 		void validate() override;
 
-		void populate_post_validation();
+		void populate_post_validation() override;
 
-		void populateEntities() override;
+		void populateEntities(PKB&) override;
 
-		void populateRelations() override;
+		void populateRelations(PKB&) override;
 
 
 	private:
@@ -75,15 +75,15 @@ namespace SourceProcessor {
 		int m_stmt_list_id;
 		std::vector<proc_index> m_call_sequence;
 
-		void populateProcedures();
-		void populateStatements();
-		void populateVariables();
-		void populateConstants();
+		void populateProcedures(PKB&);
+		void populateStatements(PKB&);
+		void populateVariables(PKB&);
+		void populateConstants(PKB&);
 
-		void populateFollows();
-		void populateParent();
-		void populateUses();
-		void populateModifies();
+		void populateFollows(PKB&);
+		void populateParent(PKB&);
+		void populateUses(PKB&);
+		void populateModifies(PKB&);
 
 	};
 
