@@ -50,9 +50,11 @@ namespace UnitTesting {
 
 		void validate() {}
 
-		void populateEntities() {}
+		void populate_post_validation() {}
 
-		void populateRelations() {}
+		void populateEntities(PKB&) {}
+
+		void populateRelations(PKB&) {}
 	};
 
 
