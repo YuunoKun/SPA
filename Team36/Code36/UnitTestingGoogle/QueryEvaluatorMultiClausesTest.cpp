@@ -850,6 +850,8 @@ namespace UnitTesting {
 		const Synonym COMMON_SYNONYM2 = { "cs2" };
 		const Synonym COMMON_SYNONYM3 = { "cs3" };
 		const Synonym COMMON_SYNONYM4 = { "cs4" };
+		const Synonym COMMON_SYNONYM5 = { "cs5" };
+		const Synonym COMMON_SYNONYM6 = { "cs6" };
 
 		// select v
 		const std::list<std::string> ALL_VARIABLE = { x, y, z };
@@ -939,13 +941,6 @@ namespace UnitTesting {
 	}
 
 	TEST_F(QueryEvaluatorMultiClausesTest, evaluateQueryPatternRelationFilterSingleCommonSynonymsEmpty) {
-		std::string left1 = MODIFIES_LEFT3;
-		std::string left2 = MODIFIES_LEFT4;
-		std::string right1 = MODIFIES_RIGHT3;
-		std::string right2 = MODIFIES_RIGHT4;
-
-		Entity lhsX = { VARIABLE, x };
-		Entity lhsY = { VARIABLE, y };
 
 		Entity assignCommon = { ASSIGN,  COMMON_SYNONYM1 };
 		Entity lhsCommon = { VARIABLE, COMMON_SYNONYM2 };
@@ -962,6 +957,20 @@ namespace UnitTesting {
 		//Handle result for Select a pattern a(v, "x") such that Uses(a,_)
 		pattern = Pattern(assignCommon, lhsCommon, x, false);
 		relation = RelRef(USES_S, assignCommon, WILD_CARD);
+		selected = assignCommon;
+		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation }, { pattern }, selected)), EMPTY_RESULT);
+
+
+		//Handle result for Select a pattern a(_, "z") such that Modifies(a,_)
+		pattern = Pattern(assignCommon, WILD_CARD, z, false);
+		relation = RelRef(MODIFIES_S, assignCommon, WILD_CARD);
+		selected = assignCommon;
+		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation }, { pattern }, selected)), EMPTY_RESULT);
+
+
+		//Handle result for Select a pattern a(v, _"z"_) such that Modifies(a,_)
+		pattern = Pattern(assignCommon, lhsCommon, z, true);
+		relation = RelRef(MODIFIES_S, assignCommon, WILD_CARD);
 		selected = assignCommon;
 		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation }, { pattern }, selected)), EMPTY_RESULT);
 
@@ -989,27 +998,19 @@ namespace UnitTesting {
 		selected = stmtCommon;
 		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation }, { pattern }, selected)), EMPTY_RESULT);
 
-
 	}
 
 
 	TEST_F(QueryEvaluatorMultiClausesTest, evaluateQueryPatternRelationJoinSingleCommonSynonymsEmpty) {
-		std::string left1 = MODIFIES_LEFT3;
-		std::string left2 = MODIFIES_LEFT4;
-		std::string right1 = MODIFIES_RIGHT3;
-		std::string right2 = MODIFIES_RIGHT4;
-
-		Entity lhsX = { VARIABLE, x };
-		Entity lhsY = { VARIABLE, y };
 
 		Entity assignCommon = { ASSIGN,  COMMON_SYNONYM1 };
 		Entity lhsCommon = { VARIABLE, COMMON_SYNONYM2 };
 		Entity lhsCommon1 = { VARIABLE, COMMON_SYNONYM4 };
 		Entity stmtCommon = { STMT,  COMMON_SYNONYM3 };
-		Entity stmtCommon1 = { STMT,  COMMON_SYNONYM4 };
+		Entity stmtCommon1 = { STMT,  COMMON_SYNONYM5 };
 
-		//Handle result for Select a pattern a(v, _) such that Uses(s,v)
-		Pattern pattern(assignCommon, lhsCommon, "", false);
+		//Handle result for Select a pattern a(v, _"z"_) such that Uses(s,v)
+		Pattern pattern(assignCommon, lhsCommon, z, true);
 		RelRef relation(USES_S, stmtCommon, lhsCommon);
 
 		Entity selected = assignCommon;
@@ -1020,7 +1021,7 @@ namespace UnitTesting {
 		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation }, { pattern }, selected)), EMPTY_RESULT);
 
 
-		//Handle result for Select a pattern a(v, _) such that Uses(a,v)
+		//Handle result for Select a pattern a(v, "x") such that Uses(a,v1)
 		pattern = Pattern(assignCommon, lhsCommon, x, false);
 		relation = RelRef(USES_S, assignCommon, lhsCommon1);
 
@@ -1055,16 +1056,41 @@ namespace UnitTesting {
 		selected = stmtCommon;
 		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation }, { pattern }, selected)), EMPTY_RESULT);
 
+	}
+
+	TEST_F(QueryEvaluatorMultiClausesTest, evaluateQueryPatternRelationFilterDoubleCommonSynonymsEmpty) {
+
+		Entity assignCommon = { ASSIGN,  COMMON_SYNONYM1 };
+		Entity lhsCommon = { VARIABLE, COMMON_SYNONYM2 };
+
+		//Handle result for Select a pattern a(v, "y") such that MODIFIES_S(a,v)
+		Pattern pattern(assignCommon, lhsCommon, y, false);
+		RelRef relation(MODIFIES_S, assignCommon, lhsCommon);
+		Entity selected = assignCommon;
+		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation }, { pattern }, selected)), EMPTY_RESULT);
+		selected = lhsCommon;
+		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation }, { pattern }, selected)), EMPTY_RESULT);
+
+		//Handle result for Select a pattern a(v, _"z"_) such that MODIFIES_S(a,v)
+		pattern = Pattern(assignCommon, lhsCommon, z, true);
+		relation = RelRef(MODIFIES_S, assignCommon, lhsCommon);
+		selected = assignCommon;
+		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation }, { pattern }, selected)), EMPTY_RESULT);
+		selected = lhsCommon;
+		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation }, { pattern }, selected)), EMPTY_RESULT);
+
+		//Handle result for Select a pattern a(v, _) such that USES_S(a,v)
+		pattern = Pattern(assignCommon, lhsCommon, "", true);
+		relation = RelRef(USES_S, assignCommon, lhsCommon);
+		selected = assignCommon;
+		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation }, { pattern }, selected)), EMPTY_RESULT);
+		selected = lhsCommon;
+		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation }, { pattern }, selected)), EMPTY_RESULT);
 
 	}
-	TEST_F(QueryEvaluatorMultiClausesTest, evaluateQueryPatternRelationFilterSingleCommonSynonyms) {
-		std::string left1 = MODIFIES_LEFT3;
-		std::string left2 = MODIFIES_LEFT4;
-		std::string right1 = MODIFIES_RIGHT3;
-		std::string right2 = MODIFIES_RIGHT4;
 
-		Entity lhsX = { VARIABLE, x };
-		Entity lhsY = { VARIABLE, y };
+
+	TEST_F(QueryEvaluatorMultiClausesTest, evaluateQueryPatternRelationFilterSingleCommonSynonyms) {
 
 		Entity assignCommon = { ASSIGN,  COMMON_SYNONYM1 };
 		Entity lhsCommon = { VARIABLE, COMMON_SYNONYM2 };
@@ -1210,13 +1236,6 @@ namespace UnitTesting {
 
 
 	TEST_F(QueryEvaluatorMultiClausesTest, evaluateQueryPatternRelationJoinSingleCommonSynonyms) {
-		std::string left1 = MODIFIES_LEFT3;
-		std::string left2 = MODIFIES_LEFT4;
-		std::string right1 = MODIFIES_RIGHT3;
-		std::string right2 = MODIFIES_RIGHT4;
-
-		Entity lhsX = { VARIABLE, x };
-		Entity lhsY = { VARIABLE, y };
 
 		Entity assignCommon = { ASSIGN,  COMMON_SYNONYM1 };
 		Entity lhsCommon = { VARIABLE, COMMON_SYNONYM2 };
@@ -1229,9 +1248,6 @@ namespace UnitTesting {
 		Entity selected = assignCommon;
 		std::list<std::string> result = { MODIFIES_LEFT3 };
 		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation }, { pattern }, selected)), result);
-
-		pattern = Pattern(assignCommon, lhsCommon, x, false);
-		relation = RelRef(USES_S, stmtCommon, lhsCommon);
 
 		selected = lhsCommon;
 		result = { MODIFIES_RIGHT3 };
@@ -1270,7 +1286,6 @@ namespace UnitTesting {
 		selected = lhsCommon;
 		result = { MODIFIES_RIGHT4 };
 		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation }, { pattern }, selected)), result);
-
 
 		selected = stmtCommon;
 		result = { USES_LEFT1 };
@@ -1325,6 +1340,162 @@ namespace UnitTesting {
 		selected = stmtCommon;
 		result = { MODIFIES_LEFT4, MODIFIES_LEFT3, MODIFIES_LEFT1, MODIFIES_LEFT2 };
 		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation }, { pattern }, selected)), result);
+
+	}
+
+
+	TEST_F(QueryEvaluatorMultiClausesTest, evaluateQueryPatternRelationFilterDoubleCommonSynonyms) {
+
+		Entity assignCommon = { ASSIGN,  COMMON_SYNONYM1 };
+		Entity lhsCommon = { VARIABLE, COMMON_SYNONYM2 };
+
+		//Handle result for Select a pattern a(v, "_") such that MODIFIES_S(a,v)
+		Pattern pattern(assignCommon, lhsCommon, "", true);
+		RelRef relation(MODIFIES_S, assignCommon, lhsCommon);
+
+		std::list<std::string> result = { MODIFIES_LEFT4, MODIFIES_LEFT3 };
+		Entity selected = assignCommon;
+		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation }, { pattern }, selected)), result);
+
+		selected = lhsCommon;
+		result = { MODIFIES_RIGHT3, MODIFIES_RIGHT4 };
+		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation }, { pattern }, selected)), result);
+
+
+		//Handle result for Select a pattern a(v, "x") such that MODIFIES_S(a,v)
+		pattern = Pattern(assignCommon, lhsCommon, "x", false);
+		relation = RelRef(MODIFIES_S, assignCommon, lhsCommon);
+
+		result = { MODIFIES_LEFT3, };
+		selected = assignCommon;
+		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation }, { pattern }, selected)), result);
+
+		selected = lhsCommon;
+		result = { MODIFIES_RIGHT3 };
+		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation }, { pattern }, selected)), result);
+
+	}
+
+
+	TEST_F(QueryEvaluatorMultiClausesTest, evaluateQueryPatternRelationJoinDoubleCommonSynonyms) {
+
+		Entity assignCommon = { ASSIGN,  COMMON_SYNONYM1 };
+		Entity lhsCommon = { VARIABLE, COMMON_SYNONYM2 };
+		Entity stmtCommon = { STMT,  COMMON_SYNONYM3 };
+		Entity assignCommon1 = { ASSIGN,  COMMON_SYNONYM4 };
+		Entity lhsCommon1 = { VARIABLE, COMMON_SYNONYM5 };
+		Entity stmtCommon1 = { STMT,  COMMON_SYNONYM6 };
+
+		Pattern pattern1(assignCommon, lhsCommon, "", true);
+		RelRef relation1(MODIFIES_S, assignCommon, lhsCommon);
+		Pattern pattern2(assignCommon1, lhsCommon1, "", true);
+		RelRef relation2(MODIFIES_S, assignCommon1, lhsCommon1);
+		Pattern pattern3(assignCommon1, lhsCommon, "", true);
+
+		Entity selected = assignCommon;
+		std::list<std::string> result = { MODIFIES_LEFT4, MODIFIES_LEFT3 };
+		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation1, relation2 }, { pattern1, pattern2, pattern3 }, selected)), result);
+		selected = assignCommon1;
+		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation1, relation2 }, { pattern1, pattern2, pattern3 }, selected)), result);
+
+		selected = lhsCommon;
+		result = { MODIFIES_RIGHT3, MODIFIES_RIGHT4 };
+		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation1, relation2 }, { pattern1, pattern2, pattern3 }, selected)), result);
+		selected = lhsCommon1;
+		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation1, relation2 }, { pattern1, pattern2, pattern3 }, selected)), result);
+
+		pattern1 = Pattern(assignCommon, lhsCommon, "", true);
+		relation1 = RelRef(MODIFIES_S, stmtCommon, lhsCommon);
+		pattern2 = Pattern(assignCommon1, lhsCommon1, "", true);
+		relation2 = RelRef(MODIFIES_S, stmtCommon1, lhsCommon1);
+		pattern3 = Pattern(assignCommon1, lhsCommon, "", true);
+
+		selected = assignCommon;
+		result = { MODIFIES_LEFT4, MODIFIES_LEFT3 };
+		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation1, relation2 }, { pattern1, pattern2, pattern3 }, selected)), result);
+		selected = assignCommon1;
+		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation1, relation2 }, { pattern1, pattern2, pattern3 }, selected)), result);
+
+		selected = lhsCommon;
+		result = { MODIFIES_RIGHT3, MODIFIES_RIGHT4 };
+		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation1, relation2 }, { pattern1, pattern2, pattern3 }, selected)), result);
+		selected = lhsCommon1;
+		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation1, relation2 }, { pattern1, pattern2, pattern3 }, selected)), result);
+
+		selected = stmtCommon;
+		result = { MODIFIES_LEFT4, MODIFIES_LEFT3, MODIFIES_LEFT1, MODIFIES_LEFT2 };
+		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation1, relation2 }, { pattern1, pattern2, pattern3 }, selected)), result);
+		selected = stmtCommon1;
+		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation1, relation2 }, { pattern1, pattern2, pattern3 }, selected)), result);
+	}
+
+
+	TEST_F(QueryEvaluatorMultiClausesTest, evaluateQueryPatternRelationJoinDoubleCommonSynonymsEmpty) {
+
+		Entity assignCommon = { ASSIGN,  COMMON_SYNONYM1 };
+		Entity lhsCommon = { VARIABLE, COMMON_SYNONYM2 };
+		Entity stmtCommon = { STMT,  COMMON_SYNONYM3 };
+		Entity assignCommon1 = { ASSIGN,  COMMON_SYNONYM4 };
+		Entity lhsCommon1 = { VARIABLE, COMMON_SYNONYM5 };
+		Entity stmtCommon1 = { STMT,  COMMON_SYNONYM6 };
+
+		Pattern pattern1(assignCommon, lhsCommon, "", true);
+		RelRef relation1(MODIFIES_S, assignCommon, lhsCommon);
+		Pattern pattern2(assignCommon1, lhsCommon1, "", true);
+		RelRef relation2(MODIFIES_S, assignCommon1, lhsCommon1);
+		Pattern pattern3(assignCommon1, lhsCommon, "z", true);
+
+		Entity selected = assignCommon;
+		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation1, relation2 }, { pattern1, pattern2, pattern3 }, selected)), EMPTY_RESULT);
+		selected = assignCommon1;
+		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation1, relation2 }, { pattern1, pattern2, pattern3 }, selected)), EMPTY_RESULT);
+
+		selected = lhsCommon;
+		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation1, relation2 }, { pattern1, pattern2, pattern3 }, selected)), EMPTY_RESULT);
+		selected = lhsCommon1;
+		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation1, relation2 }, { pattern1, pattern2, pattern3 }, selected)), EMPTY_RESULT);
+
+		pattern1 = Pattern(assignCommon, lhsCommon, "", true);
+		relation1 = RelRef(MODIFIES_S, stmtCommon, lhsCommon);
+		pattern2 = Pattern(assignCommon1, lhsCommon1, "", true);
+		relation2 = RelRef(MODIFIES_S, stmtCommon1, lhsCommon1);
+		pattern3 = Pattern(assignCommon1, lhsCommon, "z", true);
+
+		selected = assignCommon;
+		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation1, relation2 }, { pattern1, pattern2, pattern3 }, selected)), EMPTY_RESULT);
+		selected = assignCommon1;
+		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation1, relation2 }, { pattern1, pattern2, pattern3 }, selected)), EMPTY_RESULT);
+
+		selected = lhsCommon;
+		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation1, relation2 }, { pattern1, pattern2, pattern3 }, selected)), EMPTY_RESULT);
+		selected = lhsCommon1;
+		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation1, relation2 }, { pattern1, pattern2, pattern3 }, selected)), EMPTY_RESULT);
+
+		selected = stmtCommon;
+		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation1, relation2 }, { pattern1, pattern2, pattern3 }, selected)), EMPTY_RESULT);
+		selected = stmtCommon1;
+		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation1, relation2 }, { pattern1, pattern2, pattern3 }, selected)), EMPTY_RESULT);
+
+		pattern1 = Pattern(assignCommon, lhsCommon, "", true);
+		relation1 = RelRef(MODIFIES_S, stmtCommon, lhsCommon);
+		pattern2 = Pattern(assignCommon1, lhsCommon1, "", true);
+		relation2 = RelRef(PARENT, stmtCommon, stmtCommon1);
+		pattern3 = Pattern(assignCommon1, lhsCommon, "z", true);
+
+		selected = assignCommon;
+		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation1, relation2 }, { pattern1, pattern2, pattern3 }, selected)), EMPTY_RESULT);
+		selected = assignCommon1;
+		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation1, relation2 }, { pattern1, pattern2, pattern3 }, selected)), EMPTY_RESULT);
+
+		selected = lhsCommon;
+		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation1, relation2 }, { pattern1, pattern2, pattern3 }, selected)), EMPTY_RESULT);
+		selected = lhsCommon1;
+		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation1, relation2 }, { pattern1, pattern2, pattern3 }, selected)), EMPTY_RESULT);
+
+		selected = stmtCommon;
+		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation1, relation2 }, { pattern1, pattern2, pattern3 }, selected)), EMPTY_RESULT);
+		selected = stmtCommon1;
+		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation1, relation2 }, { pattern1, pattern2, pattern3 }, selected)), EMPTY_RESULT);
 
 	}
 }
