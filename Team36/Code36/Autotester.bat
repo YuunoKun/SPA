@@ -8,7 +8,7 @@ Debug\AutoTester.exe ..\Tests36\Source_test_3.txt ..\Tests36\Query_test_3.txt .\
 Debug\AutoTester.exe ..\Tests36\Source_test_4.txt ..\Tests36\Query_test_4.txt .\Tests\out-4.xml
 Debug\AutoTester.exe ..\Tests36\Source_test_5.txt ..\Tests36\Query_test_5.txt .\Tests\out-5.xml
 Debug\AutoTester.exe ..\Tests36\Source_test_6.txt ..\Tests36\Query_test_6.txt .\Tests\out-6.xml
-Debug\AutoTester.exe ..\Tests36\Source_test_6.txt ..\Tests36\Query_test_7.txt .\Tests\out-7.xml
+Debug\AutoTester.exe ..\Tests36\Source_test_7.txt ..\Tests36\Query_test_7.txt .\Tests\out-7.xml
 
 echo FINISHED
 pause
