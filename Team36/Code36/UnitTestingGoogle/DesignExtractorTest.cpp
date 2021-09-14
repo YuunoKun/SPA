@@ -4,6 +4,70 @@
 #include <vector>
 #include <algorithm>
 #include "../../source/DesignExtractor.h"
+#include "PKB.h"
+
+/*
+// Stub PKB
+class StubPKB {
+public:
+
+	void addConstant(constant constant) {
+		stub_const_table.insert(constant);
+	}
+
+	void addProcedure(proc_name proc_name) {
+		stub_proc_table.insert(proc_name);
+	}
+
+	void addVariable(var_name var_name) {
+		stub_var_table.insert(var_name);
+	}
+
+	void addStmt(StmtType stmt_type) {
+		stub_stmt_table.push_back({ stub_curr_stmt_id++, stmt_type });
+	}
+
+	void addExprTree(stmt_index stmt_index, expr expr) {
+		stub_expr_table.push_back({ stmt_index, expr });
+	}
+
+	void addParent(stmt_index parent, stmt_index child) {
+		stub_parent_table[parent].insert(child);
+	}
+
+	void addFollows(stmt_index first, stmt_index second) {
+		stub_follows_table[first] = second;
+	}
+
+	void addUsesS(stmt_index user, var_name used) {
+		stub_uses_table[user].insert(used);
+	}
+
+	void addModifiesS(stmt_index modifier, var_name modified) {
+		stub_modifies_table[modifier].insert(modified);
+	}
+
+	void generateParentT() {}
+
+	void generateFollowsT() {}
+
+
+	std::unordered_set<proc_name> stub_proc_table;
+	std::unordered_set<var_name> stub_var_table;
+	std::vector<std::pair<stmt_index, StmtType>> stub_stmt_table;
+	std::vector<std::pair<stmt_index, expr>> stub_expr_table;
+	std::unordered_set<constant> stub_const_table;
+
+	std::unordered_map<stmt_index, std::unordered_set<stmt_index>> stub_parent_table;
+	std::unordered_map<stmt_index, stmt_index> stub_follows_table;
+	std::unordered_map<stmt_index, std::unordered_set<var_name>> stub_uses_table;
+	std::unordered_map<stmt_index, std::unordered_set<var_name>> stub_modifies_table;
+
+	unsigned int stub_curr_stmt_id{ 1 };
+
+};
+*/
+
 
 namespace UnitTesting {
 
@@ -514,6 +578,117 @@ namespace UnitTesting {
 		//ASSERT_EQ(p1->get_caller().size(), 1);
 		//ASSERT_EQ(p1->get_caller()[0], 1);
 
+
+		/*
+		
+		// test population
+		PKB stub_pkb;
+
+		// test populate entites
+		extractor->populateEntities(stub_pkb);
+
+
+		std::vector<constant> expected_populated_constants = {1,13,2,4,15,11};
+		ASSERT_EQ(stub_pkb.stub_const_table.size(), expected_populated_constants.size());
+		for (constant c : expected_populated_constants) {
+			ASSERT_TRUE(stub_pkb.stub_const_table.find(c) != stub_pkb.stub_const_table.end());
+		}
+
+		std::vector<var_name> expected_populated_variables = {
+			"mainX","readVar","printVar","beforeIf",
+			"mainIfCond","beforeCall","afterCall","beforeWhile",
+			"whileCond","inWhile","afterWhile","afterIf","p2Var"
+		};
+		ASSERT_EQ(stub_pkb.stub_var_table.size(), expected_populated_variables.size());
+		for (var_name v : expected_populated_variables) {
+			ASSERT_TRUE(stub_pkb.stub_var_table.find(v) != stub_pkb.stub_var_table.end());
+		}
+
+		std::vector<proc_name> expected_populated_proc = { "main","p2" };
+		ASSERT_EQ(stub_pkb.stub_proc_table.size(), expected_populated_proc.size());
+		for (proc_name p : expected_populated_proc) {
+			ASSERT_TRUE(stub_pkb.stub_proc_table.find(p) != stub_pkb.stub_proc_table.end());
+		}
+
+		std::vector<std::pair<stmt_index, StmtType>> expected_populated_stmt = 
+		{ 
+			{1, STMT_ASSIGN},
+			{2, STMT_READ},
+			{3, STMT_PRINT},
+			{4, STMT_ASSIGN},
+			{5, STMT_IF},
+			{6, STMT_ASSIGN},
+			{7, STMT_CALL},
+			{8, STMT_ASSIGN},
+			{9, STMT_ASSIGN},
+			{10, STMT_WHILE},
+			{11, STMT_ASSIGN},
+			{12, STMT_ASSIGN},
+			{13, STMT_ASSIGN},
+			{14, STMT_ASSIGN}
+		};
+		ASSERT_EQ(stub_pkb.stub_stmt_table.size(), expected_populated_stmt.size());
+		for (int i = 0; i < expected_populated_stmt.size(); i++) {
+			ASSERT_EQ(stub_pkb.stub_stmt_table[i].first, expected_populated_stmt[i].first);
+			ASSERT_EQ(stub_pkb.stub_stmt_table[i].second, expected_populated_stmt[i].second);
+		}
+
+
+		// test populate relations
+		extractor->populateRelations(stub_pkb);
+
+		// uses
+		std::vector<std::vector<var_name>> expected_used_variables =
+		{
+			{},
+			{},
+			{"printVar"},
+			{"beforeIf","mainX"},
+			{"mainIfCond","beforeCall","p2Var","afterCall","beforeWhile","whileCond","inWhile","afterWhile"},
+			{"beforeCall"},
+			{"p2Var"},
+			{"afterCall"},
+			{"beforeWhile"},
+			{"whileCond","inWhile"},
+			{"inWhile"},
+			{"afterWhile"},
+			{"afterIf"},
+			{"p2Var"}
+		};
+		ASSERT_EQ(stub_pkb.stub_uses_table.size(), expected_used_variables.size());
+		for (int i = 0; i < expected_used_variables.size(); i++) {
+			ASSERT_EQ(stub_pkb.stub_uses_table[i + 1].size(), expected_used_variables[i + 1].size());
+			for (var_name v: expected_used_variables[i]) {
+				ASSERT_TRUE(stub_pkb.stub_uses_table[i + 1].find(v) != stub_pkb.stub_uses_table[i + 1].end());
+			}
+		}
+
+		// modifies
+		std::vector<std::vector<var_name>> expected_modified_variables =
+		{
+			{"mainX"},
+			{"readVar"},
+			{},
+			{"beforeIf"},
+			{"beforeCall","p2Var","afterCall","beforeWhile","inWhile","afterWhile"},
+			{"beforeCall"},
+			{"p2Var"},
+			{"afterCall"},
+			{"beforeWhile"},
+			{"inWhile"},
+			{"inWhile"},
+			{"afterWhile"},
+			{"afterIf"},
+			{"p2Var"}
+		};
+		ASSERT_EQ(stub_pkb.stub_modifies_table.size(), expected_modified_variables.size());
+		for (int i = 0; i < expected_modified_variables.size(); i++) {
+			ASSERT_EQ(stub_pkb.stub_modifies_table[i + 1].size(), expected_modified_variables[i + 1].size());
+			for (var_name v : expected_modified_variables[i]) {
+				ASSERT_TRUE(stub_pkb.stub_modifies_table[i + 1].find(v) != stub_pkb.stub_modifies_table[i + 1].end());
+			}
+		}
+		*/
 	}
 
 

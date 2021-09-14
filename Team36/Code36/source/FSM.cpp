@@ -29,9 +29,10 @@ void FSM::build() {
 		expect_procedure();
 	}
 
-	m_design_extractor->populateEntities();
+	m_design_extractor->populateEntities(PKB::getInstance());
 	m_design_extractor->validate();
-	m_design_extractor->populateRelations();
+	m_design_extractor->populate_post_validation();
+	m_design_extractor->populateRelations(PKB::getInstance());
 }
 
 
