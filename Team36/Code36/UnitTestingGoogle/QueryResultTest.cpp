@@ -132,7 +132,15 @@ namespace UnitTesting {
 		std::vector<StmtInfo> a2 = { { 1, STMT_WHILE } , { 3, STMT_READ }, { 5, STMT_CALL }, { 7, STMT_ASSIGN} };
 		ResultTable t1(e1, a1);
 		ResultTable t2(e2, a2);
-		EXPECT_FALSE(t1.merge(t2));
+
+		QueryResult q;
+		q.addResult(t1);
+		q.addResult(t2);
+		std::list<std::string> b1 = { "1", "2", "3", "4", "5", "6", "7" };
+		std::list<std::string> b2 = { "1", "3", "5", "7" };
+
+		EXPECT_EQ(q.getResult(e1), b1);
+		EXPECT_EQ(q.getResult(e2), b2);
 	}
 	TEST(QueryResult, addResultMergeFilterSingleColumnSingleTable) {
 
@@ -142,41 +150,49 @@ namespace UnitTesting {
 		std::vector<StmtInfo> a2 = { { 1, STMT_WHILE } , { 3, STMT_READ }, { 5, STMT_CALL }, { 7, STMT_ASSIGN} };
 		ResultTable t1(e, a1);
 		ResultTable t2(e, a2);
-		EXPECT_TRUE(t1.merge(t2));
+		QueryResult q;
+		q.addResult(t1);
+		q.addResult(t2);
 		std::list<std::string> b = { "1", "3", "5", "7" };
-		EXPECT_EQ(t1.getEntityResult(e), b);
-		EXPECT_TRUE(t1.merge(t2));
-		EXPECT_EQ(t1.getEntityResult(e), b);
+		EXPECT_EQ(q.getResult(e), b);
+		q.addResult(t2);
+		EXPECT_EQ(q.getResult(e), b);
 
 		a1 = { { 1, STMT_WHILE } , { 3, STMT_READ }, { 5, STMT_CALL }, { 7, STMT_ASSIGN} };
 		a2 = { { 1, STMT_WHILE }, { 2, STMT_IF} , { 3, STMT_READ },
 			{ 4, STMT_PRINT}, { 5, STMT_CALL }, { 6, STMT_ASSIGN}, { 7, STMT_ASSIGN} };
 		t1 = ResultTable(e, a1);
 		t2 = ResultTable(e, a2);
-		t1.merge(t2);
-		EXPECT_EQ(t1.getEntityResult(e), b);
-		EXPECT_TRUE(t1.merge(t2));
-		EXPECT_EQ(t1.getEntityResult(e), b);
+		q = QueryResult();
+		q.addResult(t1);
+		q.addResult(t2);
+		EXPECT_EQ(q.getResult(e), b);
+		q.addResult(t2);
+		EXPECT_EQ(q.getResult(e), b);
 
 		a1 = { { 1, STMT_WHILE }, { 2, STMT_IF} , { 3, STMT_READ },
 			{ 4, STMT_PRINT}, { 5, STMT_CALL }, { 6, STMT_ASSIGN}, { 7, STMT_ASSIGN} };
 		a2 = { { 8, STMT_WHILE } , { 9, STMT_READ }, { 10, STMT_CALL }, { 11, STMT_ASSIGN} };
 		t1 = ResultTable(e, a1);
 		t2 = ResultTable(e, a2);
-		t1.merge(t2);
-		EXPECT_TRUE(t1.isEmpty());
-		EXPECT_TRUE(t1.merge(t2));
-		EXPECT_TRUE(t1.isEmpty());
+		q = QueryResult();
+		q.addResult(t1);
+		q.addResult(t2);
+		EXPECT_FALSE(q.haveResult());
+		q.addResult(t1);
+		EXPECT_FALSE(q.haveResult());
 
 		a1 = { { 8, STMT_WHILE } , { 9, STMT_READ }, { 10, STMT_CALL }, { 11, STMT_ASSIGN} };
 		a2 = { { 1, STMT_WHILE }, { 2, STMT_IF} , { 3, STMT_READ },
 			{ 4, STMT_PRINT}, { 5, STMT_CALL }, { 6, STMT_ASSIGN}, { 7, STMT_ASSIGN} };
 		t1 = ResultTable(e, a1);
 		t2 = ResultTable(e, a2);
-		EXPECT_TRUE(t1.merge(t2));
-		EXPECT_TRUE(t1.isEmpty());
-		EXPECT_TRUE(t1.merge(t2));
-		EXPECT_TRUE(t1.isEmpty());
+		q = QueryResult();
+		q.addResult(t1);
+		q.addResult(t2);
+		EXPECT_FALSE(q.haveResult());
+		q.addResult(t1);
+		EXPECT_FALSE(q.haveResult());
 	}
 
 	TEST(QueryResult, addResultMergeFilterSingleColumnDoubleTable) {
@@ -195,36 +211,49 @@ namespace UnitTesting {
 
 		ResultTable t1(e1, a1);
 		ResultTable t2(e2, a2);
-		EXPECT_TRUE(t1.merge(t2));
+
+		QueryResult q;
+		q.addResult(t1);
+		q.addResult(t2);
 		std::list<std::string> b1 = { "9", "1", "5" };
 		std::list<std::string> b2 = { "2", "6", "10" };
-		EXPECT_EQ(t1.getEntityResult(e1.first), b1);
-		EXPECT_EQ(t1.getEntityResult(e1.second), b2);
+		EXPECT_EQ(q.getResult(e1.first), b1);
+		EXPECT_EQ(q.getResult(e1.second), b2);
 
 		t1 = ResultTable(e2, a2);
 		t2 = ResultTable(e1, a1);
-		EXPECT_TRUE(t1.merge(t2));
-		EXPECT_EQ(t1.getEntityResult(e1.first), b1);
-		EXPECT_EQ(t1.getEntityResult(e1.second), b2);
+		q = QueryResult();
+		q.addResult(t1);
+		q.addResult(t2);
+		EXPECT_EQ(q.getResult(e1.first), b1);
+		EXPECT_EQ(q.getResult(e1.second), b2);
 
 		e2 = { STMT, Synonym{ "y" } };
 		a2 = { { 4, STMT_WHILE }, { 8, STMT_CALL } };
 
 		t1 = ResultTable(e1, a1);
 		t2 = ResultTable(e2, a2);
-		EXPECT_TRUE(t1.merge(t2));
+
+		q = QueryResult();
+		q.addResult(t1);
+		q.addResult(t2);
 		b1 = { "3", "7" };
 		b2 = { "4", "8" };
-		EXPECT_EQ(t1.getEntityResult(e1.first), b1);
-		EXPECT_EQ(t1.getEntityResult(e1.second), b2);
+		EXPECT_EQ(q.getResult(e1.first), b1);
+		EXPECT_EQ(q.getResult(e1.second), b2);
 
 		a2 = { { 4, STMT_WHILE }, { 8, STMT_CALL } };
 
 		t1 = ResultTable(e2, a2);
 		t2 = ResultTable(e1, a1);
-		EXPECT_TRUE(t1.merge(t2));
-		EXPECT_EQ(t1.getEntityResult(e1.first), b1);
-		EXPECT_EQ(t1.getEntityResult(e1.second), b2);
+
+
+		q = QueryResult();
+		q.addResult(t1);
+		q.addResult(t2);
+		EXPECT_EQ(q.getResult(e1.first), b1);
+		EXPECT_EQ(q.getResult(e1.second), b2);
+
 
 
 		e1 = { {STMT, Synonym{"x"} } , { STMT,Synonym{"y"} } };
@@ -240,39 +269,38 @@ namespace UnitTesting {
 
 		t1 = ResultTable(e1, a1);
 		t2 = ResultTable(e2, a2);
-		EXPECT_TRUE(t1.merge(t2));
-		EXPECT_TRUE(t1.isEmpty());
+
+		q = QueryResult();
+		q.addResult(t1);
+		q.addResult(t2);
+		b1 = { "3", "7" };
+		b2 = { "4", "8" };
+		EXPECT_FALSE(q.haveResult());
 
 		t1 = ResultTable(e2, a2);
 		t2 = ResultTable(e1, a1);
-		EXPECT_TRUE(t1.merge(t2));
-		EXPECT_TRUE(t1.isEmpty());
-		EXPECT_TRUE(t1.merge(t2));
-		EXPECT_TRUE(t1.isEmpty());
-		EXPECT_TRUE(t2.merge(t1));
-		EXPECT_TRUE(t2.isEmpty());
-		EXPECT_TRUE(t1.merge(t2));
-		EXPECT_TRUE(t1.isEmpty());
-		EXPECT_TRUE(t2.merge(t1));
-		EXPECT_TRUE(t2.isEmpty());
+
+		q = QueryResult();
+		q.addResult(t1);
+		q.addResult(t2);
+		EXPECT_FALSE(q.haveResult());
 
 		e2 = { STMT, Synonym{ "y" } };
 
 		t1 = ResultTable(e1, a1);
 		t2 = ResultTable(e2, a2);
-		EXPECT_TRUE(t1.merge(t2));
-		EXPECT_TRUE(t1.isEmpty());
+		q = QueryResult();
+		q.addResult(t1);
+		q.addResult(t2);
+		EXPECT_FALSE(q.haveResult());
 
 		t1 = ResultTable(e2, a2);
 		t2 = ResultTable(e1, a1);
-		EXPECT_TRUE(t1.merge(t2));
-		EXPECT_TRUE(t1.isEmpty());
-		EXPECT_TRUE(t2.merge(t1));
-		EXPECT_TRUE(t2.isEmpty());
-		EXPECT_TRUE(t1.merge(t2));
-		EXPECT_TRUE(t1.isEmpty());
-		EXPECT_TRUE(t2.merge(t1));
-		EXPECT_TRUE(t2.isEmpty());
+		q = QueryResult();
+		q.addResult(t1);
+		q.addResult(t2);
+		EXPECT_FALSE(q.haveResult());
+
 	}
 	TEST(QueryResult, addResultMergeFilterDoubleColumnDoubleTable) {
 
@@ -293,11 +321,14 @@ namespace UnitTesting {
 
 		ResultTable t1(e1, a1);
 		ResultTable t2(e2, a2);
-		EXPECT_TRUE(t1.merge(t2));
+
+		QueryResult q;
+		q.addResult(t1);
+		q.addResult(t2);
 		std::list<std::string> b1 = { "9", "1", "5" };
 		std::list<std::string> b2 = { "2", "6", "10" };
-		EXPECT_EQ(t1.getEntityResult(e1.first), b1);
-		EXPECT_EQ(t1.getEntityResult(e1.second), b2);
+		EXPECT_EQ(q.getResult(e1.first), b1);
+		EXPECT_EQ(q.getResult(e1.second), b2);
 
 
 		e2 = { {STMT, Synonym{"y"} } , { STMT,Synonym{"x"} } };
@@ -307,13 +338,14 @@ namespace UnitTesting {
 			{ "10", "9", }
 		};
 
-		t1 = ResultTable(e1, a1);
-		t2 = ResultTable(e2, a2);
-		EXPECT_TRUE(t1.merge(t2));
+		q = QueryResult();
+		q.addResult(t1);
+		q.addResult(t2);
 		b1 = { "9", "1", "5" };
 		b2 = { "2", "6", "10" };
-		EXPECT_EQ(t1.getEntityResult(e1.first), b1);
-		EXPECT_EQ(t1.getEntityResult(e1.second), b2);
+		EXPECT_EQ(q.getResult(e1.first), b1);
+		EXPECT_EQ(q.getResult(e1.second), b2);
+
 
 
 		e2 = { {STMT, Synonym{"y"} } , { STMT,Synonym{"x"} } };
@@ -325,13 +357,16 @@ namespace UnitTesting {
 
 		t1 = ResultTable(e1, a1);
 		t2 = ResultTable(e2, a2);
-		EXPECT_TRUE(t1.merge(t2));
-		EXPECT_TRUE(t1.isEmpty());
+
+		q = QueryResult();
+		q.addResult(t1);
+		q.addResult(t2);
+		EXPECT_FALSE(q.haveResult());
 
 	}
 
 
-	TEST(QueryResult, addResultmergeFilterDoubleColumnTripleTable) {
+	TEST(QueryResult, addResultMergeFilterDoubleColumnTripleTable) {
 		Entity e1 = { STMT, Synonym{"x"} };
 		Entity e2 = { STMT, Synonym{"y"} };
 		Entity e3 = { STMT, Synonym{"z"} };
@@ -357,23 +392,29 @@ namespace UnitTesting {
 		ResultTable t1(h1, a1);
 		ResultTable t2(h2, a2);
 		ResultTable t3(h3, a3);
-		EXPECT_TRUE(t1.merge(t2));
-		EXPECT_TRUE(t1.merge(t3));
+
+		QueryResult q;
+		q.addResult(t1);
+		q.addResult(t2);
+		q.addResult(t3);
 		std::list<std::string> b1 = { "1", "2" };
 		std::list<std::string> b2 = { "4", "5" };
 		std::list<std::string> b3 = { "7", "8" };
-		EXPECT_EQ(t1.getEntityResult(e1), b1);
-		EXPECT_EQ(t1.getEntityResult(e2), b2);
-		EXPECT_EQ(t1.getEntityResult(e3), b3);
-
+		EXPECT_EQ(q.getResult(e1), b1);
+		EXPECT_EQ(q.getResult(e2), b2);
+		EXPECT_EQ(q.getResult(e3), b3);
+		/*
 		t1 = ResultTable(h1, a1);
 		t2 = ResultTable(h2, a2);
 		t2 = ResultTable(h3, a3);
-		EXPECT_TRUE(t1.merge(t2));
-		EXPECT_TRUE(t3.merge(t1));
-		EXPECT_EQ(t1.getEntityResult(e1), b1);
-		EXPECT_EQ(t1.getEntityResult(e2), b2);
-		EXPECT_EQ(t1.getEntityResult(e3), b3);
+
+		q = QueryResult();
+		q.addResult(t1);
+		q.addResult(t2);
+		q.addResult(t3);
+		EXPECT_EQ(q.getResult(e1), b1);
+		EXPECT_EQ(q.getResult(e2), b2);
+		EXPECT_EQ(q.getResult(e3), b3);
 
 		h1 = { e1, e2 };
 		h2 = { e3, e2 };
@@ -396,12 +437,14 @@ namespace UnitTesting {
 		t1 = ResultTable(h1, a1);
 		t2 = ResultTable(h2, a2);
 		t2 = ResultTable(h3, a3);
-		EXPECT_TRUE(t1.merge(t2));
-		EXPECT_TRUE(t1.merge(t3));
-		EXPECT_TRUE(t1.isEmpty());
+		q = QueryResult();
+		q.addResult(t1);
+		q.addResult(t2);
+		q.addResult(t3);
+		EXPECT_FALSE(q.haveResult());*/
 	}
 
-	TEST(ResultTable, addResultMergeJoinTableSingleColumn) {
+	TEST(QueryResult, addResultMergeJoinTableSingleColumn) {
 		Entity e1 = { STMT, Synonym{"x"} };
 		Entity e2 = { STMT, Synonym{"y"} };
 		Entity e3 = { STMT, Synonym{"z"} };
@@ -420,13 +463,15 @@ namespace UnitTesting {
 
 		ResultTable t1(h1, a1);
 		ResultTable t2(h2, a2);
-		EXPECT_TRUE(t1.merge(t2));
+		QueryResult q;
+		q.addResult(t1);
+		q.addResult(t2);
 		std::list<std::string> b1 = { "1", "2", "3" };
 		std::list<std::string> b2 = { "4", "5", "6" };
 		std::list<std::string> b3 = { "7", "8", "9" };
-		EXPECT_EQ(t1.getEntityResult(e1), b1);
-		EXPECT_EQ(t1.getEntityResult(e2), b2);
-		EXPECT_EQ(t1.getEntityResult(e3), b3);
+		EXPECT_EQ(q.getResult(e1), b1);
+		EXPECT_EQ(q.getResult(e2), b2);
+		EXPECT_EQ(q.getResult(e3), b3);
 
 
 
@@ -445,10 +490,19 @@ namespace UnitTesting {
 
 		t1 = ResultTable(h1, a1);
 		t2 = ResultTable(h2, a2);
-		EXPECT_TRUE(t1.merge(t2));
-		EXPECT_EQ(t1.getEntityResult(e1), b1);
-		EXPECT_EQ(t1.getEntityResult(e2), b2);
-		EXPECT_EQ(t1.getEntityResult(e3), b3);
+		q = QueryResult();
+		q.addResult(t1);
+		q.addResult(t2);
+		EXPECT_EQ(q.getResult(e1), b1);
+		EXPECT_EQ(q.getResult(e2), b2);
+		EXPECT_EQ(q.getResult(e3), b3);
+
+		q = QueryResult();
+		q.addResult(t2);
+		q.addResult(t1);
+		EXPECT_EQ(q.getResult(e1), b1);
+		EXPECT_EQ(q.getResult(e2), b2);
+		EXPECT_EQ(q.getResult(e3), b3);
 
 		h1 = { e1, e2 };
 		h2 = { e1, e3 };
@@ -465,16 +519,21 @@ namespace UnitTesting {
 
 		t1 = ResultTable(h1, a1);
 		t2 = ResultTable(h2, a2);
-		EXPECT_TRUE(t1.merge(t2));
-		EXPECT_EQ(t1.getEntityResult(e1), b1);
-		EXPECT_EQ(t1.getEntityResult(e2), b2);
-		EXPECT_EQ(t1.getEntityResult(e3), b3);
-
-
-
+		q = QueryResult();
+		q.addResult(t1);
+		q.addResult(t2);
+		EXPECT_EQ(q.getResult(e1), b1);
+		EXPECT_EQ(q.getResult(e2), b2);
+		EXPECT_EQ(q.getResult(e3), b3);
+		q = QueryResult();
+		q.addResult(t2);
+		q.addResult(t1);
+		EXPECT_EQ(q.getResult(e1), b1);
+		EXPECT_EQ(q.getResult(e2), b2);
+		EXPECT_EQ(q.getResult(e3), b3);
 	}
 
-	TEST(ResultTable, addResultMergeJoinDoubleColumnTripleTable) {
+	TEST(QueryResult, addResultMergeJoinDoubleColumnTripleTable) {
 		Entity e1 = { STMT, Synonym{"x"} };
 		Entity e2 = { STMT, Synonym{"y"} };
 		Entity e3 = { STMT, Synonym{"z"} };
@@ -509,17 +568,85 @@ namespace UnitTesting {
 		ResultTable t2(h2, a2);
 		ResultTable t3(h3, a3);
 		ResultTable t4(h4, a4);
-		EXPECT_TRUE(t1.merge(t2));
-		EXPECT_TRUE(t3.merge(t4));
-		EXPECT_TRUE(t1.merge(t3));
+		QueryResult q;
+		q.addResult(t1);
+		q.addResult(t2);
+		q.addResult(t3);
+		q.addResult(t4);
 		std::list<std::string> b1 = { "1", "2", "3" };
 		std::list<std::string> b2 = { "4", "5", "6" };
 		std::list<std::string> b3 = { "7", "8", "9" };
 		std::list<std::string> b4 = { "a", "b", "c" };
-		EXPECT_EQ(t1.getEntityResult(e1), b1);
-		EXPECT_EQ(t1.getEntityResult(e2), b2);
-		EXPECT_EQ(t1.getEntityResult(e3), b3);
-		EXPECT_EQ(t1.getEntityResult(e4), b4);
+
+		t1 = ResultTable(h1, a1);
+		t2 = ResultTable(h2, a2);
+		t3 = ResultTable(h3, a3);
+		t4 = ResultTable(h4, a4);
+		q = QueryResult();
+		q.addResult(t1);
+		q.addResult(t2);
+		q.addResult(t4);
+		q.addResult(t3);
+		EXPECT_EQ(q.getResult(e1), b1);
+		EXPECT_EQ(q.getResult(e2), b2);
+		EXPECT_EQ(q.getResult(e3), b3);
+		EXPECT_EQ(q.getResult(e4), b4);
+
+		t1 = ResultTable(h1, a1);
+		t2 = ResultTable(h2, a2);
+		t3 = ResultTable(h3, a3);
+		t4 = ResultTable(h4, a4);
+		q = QueryResult();
+		q.addResult(t1);
+		q.addResult(t4);
+		q.addResult(t2);
+		q.addResult(t3);
+		EXPECT_EQ(q.getResult(e1), b1);
+		EXPECT_EQ(q.getResult(e2), b2);
+		EXPECT_EQ(q.getResult(e3), b3);
+		EXPECT_EQ(q.getResult(e4), b4);
+
+		t1 = ResultTable(h1, a1);
+		t2 = ResultTable(h2, a2);
+		t3 = ResultTable(h3, a3);
+		t4 = ResultTable(h4, a4);
+		q = QueryResult();
+		q.addResult(t1);
+		q.addResult(t4);
+		q.addResult(t3);
+		q.addResult(t2);
+		EXPECT_EQ(q.getResult(e1), b1);
+		EXPECT_EQ(q.getResult(e2), b2);
+		EXPECT_EQ(q.getResult(e3), b3);
+		EXPECT_EQ(q.getResult(e4), b4);
+
+		t1 = ResultTable(h1, a1);
+		t2 = ResultTable(h2, a2);
+		t3 = ResultTable(h3, a3);
+		t4 = ResultTable(h4, a4);
+		q = QueryResult();
+		q.addResult(t1);
+		q.addResult(t4);
+		q.addResult(t2);
+		q.addResult(t3);
+		EXPECT_EQ(q.getResult(e1), b1);
+		EXPECT_EQ(q.getResult(e2), b2);
+		EXPECT_EQ(q.getResult(e3), b3);
+		EXPECT_EQ(q.getResult(e4), b4);
+
+		t1 = ResultTable(h1, a1);
+		t2 = ResultTable(h2, a2);
+		t3 = ResultTable(h3, a3);
+		t4 = ResultTable(h4, a4);
+		q = QueryResult();
+		q.addResult(t4);
+		q.addResult(t1);
+		q.addResult(t2);
+		q.addResult(t3);
+		EXPECT_EQ(q.getResult(e1), b1);
+		EXPECT_EQ(q.getResult(e2), b2);
+		EXPECT_EQ(q.getResult(e3), b3);
+		EXPECT_EQ(q.getResult(e4), b4);
 
 		h1 = { e1, e2 };
 		h2 = { e3, e2 };
@@ -547,17 +674,20 @@ namespace UnitTesting {
 		t2 = ResultTable(h2, a2);
 		t3 = ResultTable(h3, a3);
 		t4 = ResultTable(h4, a4);
-		EXPECT_TRUE(t1.merge(t2));
-		EXPECT_TRUE(t3.merge(t4));
-		EXPECT_TRUE(t1.merge(t3));
+
+		q = QueryResult();
+		q.addResult(t1);
+		q.addResult(t2);
+		q.addResult(t3);
+		q.addResult(t4);
 		b1 = { "1" };
 		b2 = { "4" };
 		b3 = { "7" };
 		b4 = { "10" };
-		EXPECT_EQ(t1.getEntityResult(e1), b1);
-		EXPECT_EQ(t1.getEntityResult(e2), b2);
-		EXPECT_EQ(t1.getEntityResult(e3), b3);
-		EXPECT_EQ(t1.getEntityResult(e4), b4);
+		EXPECT_EQ(q.getResult(e1), b1);
+		EXPECT_EQ(q.getResult(e2), b2);
+		EXPECT_EQ(q.getResult(e3), b3);
+		EXPECT_EQ(q.getResult(e4), b4);
 
 		h1 = { e1, e2 };
 		h2 = { e2, e3 };
@@ -587,17 +717,19 @@ namespace UnitTesting {
 		t2 = ResultTable(h2, a2);
 		t3 = ResultTable(h3, a3);
 		t4 = ResultTable(h4, a4);
-		EXPECT_TRUE(t1.merge(t2));
-		EXPECT_TRUE(t3.merge(t4));
-		EXPECT_TRUE(t1.merge(t3));
+		q = QueryResult();
+		q.addResult(t1);
+		q.addResult(t2);
+		q.addResult(t3);
+		q.addResult(t4);
 		b1 = { "1" };
 		b2 = { "1" };
 		b3 = { "1" };
 		b4 = { "4", "5", "6" };
-		EXPECT_EQ(t1.getEntityResult(e1), b1);
-		EXPECT_EQ(t1.getEntityResult(e2), b2);
-		EXPECT_EQ(t1.getEntityResult(e3), b3);
-		EXPECT_EQ(t1.getEntityResult(e4), b4);
+		EXPECT_EQ(q.getResult(e1), b1);
+		EXPECT_EQ(q.getResult(e2), b2);
+		EXPECT_EQ(q.getResult(e3), b3);
+		EXPECT_EQ(q.getResult(e4), b4);
 
 
 		h1 = { e1, e2 };
@@ -628,13 +760,11 @@ namespace UnitTesting {
 		t2 = ResultTable(h2, a2);
 		t3 = ResultTable(h3, a3);
 		t4 = ResultTable(h4, a4);
-		EXPECT_TRUE(t1.merge(t2));
-		EXPECT_TRUE(t3.merge(t4));
-		EXPECT_TRUE(t1.merge(t3));
-		b1 = { "1" };
-		b2 = { "1" };
-		b3 = { "1" };
-		b4 = { "4", "5", "6" };
-		EXPECT_TRUE(t1.isEmpty());
+		q = QueryResult();
+		q.addResult(t1);
+		q.addResult(t2);
+		q.addResult(t3);
+		q.addResult(t4);
+		EXPECT_FALSE(q.haveResult());
 	}
 }

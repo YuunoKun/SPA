@@ -488,12 +488,109 @@ namespace UnitTesting {
 
 		t1 = ResultTable(h1, a1);
 		t2 = ResultTable(h2, a2);
-		t2 = ResultTable(h3, a3);
+		t3 = ResultTable(h3, a3);
 		EXPECT_TRUE(t1.merge(t2));
 		EXPECT_TRUE(t3.merge(t1));
+		EXPECT_EQ(t3.getEntityResult(e1), b1);
+		EXPECT_EQ(t3.getEntityResult(e2), b2);
+		EXPECT_EQ(t3.getEntityResult(e3), b3);
+
+		t1 = ResultTable(h1, a1);
+		t2 = ResultTable(h2, a2);
+		t3 = ResultTable(h3, a3);
+		EXPECT_TRUE(t1.merge(t3));
+		EXPECT_TRUE(t1.merge(t2));
 		EXPECT_EQ(t1.getEntityResult(e1), b1);
 		EXPECT_EQ(t1.getEntityResult(e2), b2);
 		EXPECT_EQ(t1.getEntityResult(e3), b3);
+
+
+		t1 = ResultTable(h1, a1);
+		t2 = ResultTable(h2, a2);
+		t3 = ResultTable(h3, a3);
+		EXPECT_TRUE(t1.merge(t3));
+		EXPECT_TRUE(t2.merge(t1));
+		EXPECT_EQ(t2.getEntityResult(e1), b1);
+		EXPECT_EQ(t2.getEntityResult(e2), b2);
+		EXPECT_EQ(t2.getEntityResult(e3), b3);
+
+		t1 = ResultTable(h1, a1);
+		t2 = ResultTable(h2, a2);
+		t3 = ResultTable(h3, a3);
+		EXPECT_TRUE(t2.merge(t1));
+		EXPECT_TRUE(t2.merge(t3));
+		EXPECT_EQ(t2.getEntityResult(e1), b1);
+		EXPECT_EQ(t2.getEntityResult(e2), b2);
+		EXPECT_EQ(t2.getEntityResult(e3), b3);
+
+
+		t1 = ResultTable(h1, a1);
+		t2 = ResultTable(h2, a2);
+		t3 = ResultTable(h3, a3);
+		EXPECT_TRUE(t2.merge(t1));
+		EXPECT_TRUE(t3.merge(t2));
+		EXPECT_EQ(t3.getEntityResult(e1), b1);
+		EXPECT_EQ(t3.getEntityResult(e2), b2);
+		EXPECT_EQ(t3.getEntityResult(e3), b3);
+
+		t1 = ResultTable(h1, a1);
+		t2 = ResultTable(h2, a2);
+		t3 = ResultTable(h3, a3);
+		EXPECT_TRUE(t2.merge(t3));
+		EXPECT_TRUE(t2.merge(t1));
+		EXPECT_EQ(t2.getEntityResult(e1), b1);
+		EXPECT_EQ(t2.getEntityResult(e2), b2);
+		EXPECT_EQ(t2.getEntityResult(e3), b3);
+
+
+		t1 = ResultTable(h1, a1);
+		t2 = ResultTable(h2, a2);
+		t3 = ResultTable(h3, a3);
+		EXPECT_TRUE(t2.merge(t3));
+		EXPECT_TRUE(t1.merge(t3));
+		EXPECT_EQ(t1.getEntityResult(e1), b1);
+		EXPECT_EQ(t1.getEntityResult(e2), b2);
+		EXPECT_EQ(t1.getEntityResult(e3), b3);
+
+		t1 = ResultTable(h1, a1);
+		t2 = ResultTable(h2, a2);
+		t3 = ResultTable(h3, a3);
+		EXPECT_TRUE(t3.merge(t1));
+		EXPECT_TRUE(t3.merge(t2));
+		EXPECT_EQ(t3.getEntityResult(e1), b1);
+		EXPECT_EQ(t3.getEntityResult(e2), b2);
+		EXPECT_EQ(t3.getEntityResult(e3), b3);
+
+
+		t1 = ResultTable(h1, a1);
+		t2 = ResultTable(h2, a2);
+		t3 = ResultTable(h3, a3);
+		EXPECT_TRUE(t3.merge(t1));
+		EXPECT_TRUE(t2.merge(t3));
+		EXPECT_EQ(t2.getEntityResult(e1), b1);
+		EXPECT_EQ(t2.getEntityResult(e2), b2);
+		EXPECT_EQ(t2.getEntityResult(e3), b3);
+
+		t1 = ResultTable(h1, a1);
+		t2 = ResultTable(h2, a2);
+		t3 = ResultTable(h3, a3);
+		EXPECT_TRUE(t3.merge(t2));
+		EXPECT_TRUE(t3.merge(t1));
+		EXPECT_EQ(t3.getEntityResult(e1), b1);
+		EXPECT_EQ(t3.getEntityResult(e2), b2);
+		EXPECT_EQ(t3.getEntityResult(e3), b3);
+
+
+		t1 = ResultTable(h1, a1);
+		t2 = ResultTable(h2, a2);
+		t3 = ResultTable(h3, a3);
+		EXPECT_TRUE(t3.merge(t2));
+		EXPECT_TRUE(t1.merge(t3));
+		EXPECT_EQ(t1.getEntityResult(e1), b1);
+		EXPECT_EQ(t1.getEntityResult(e2), b2);
+		EXPECT_EQ(t1.getEntityResult(e3), b3);
+
+
 
 		h1 = { e1, e2 };
 		h2 = { e3, e2 };

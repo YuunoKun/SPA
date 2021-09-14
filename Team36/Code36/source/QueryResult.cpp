@@ -45,7 +45,7 @@ void QueryResult::addResult(ResultTable t) {
 
 	//Common header found, began merge
 	std::vector<ResultTable> newResults;
-	while (results.empty()) {
+	while (!results.empty()) {
 		ResultTable r = results.back();
 		results.pop_back();
 		if (t.merge(r)) {
@@ -63,22 +63,21 @@ void QueryResult::addResult(ResultTable t) {
 	results = newResults;
 }
 
-std::list<std::string> QueryResult::getResult(Entity e) {
-	for (auto& table : results) {
-		if (table.isInTable(e)) {
-			return table.getEntityResult(e);
-		}
-	}
-	throw std::domain_error("Invalid Entity, Source: QueryResult.getResult");
-}
-
 void QueryResult::addHeader(std::vector<Entity> v) {
 	for (auto& it : v) {
 		headerSet.insert(it.getSynonym());
 	}
 }
 
-std::list<std::string> QueryResult::getResult(std::vector<Entity> e) {
+std::list<std::string> QueryResult::getResults(std::vector<Entity> e) {
 	return getResult(e[0]);
+}
+
+std::list<std::string> QueryResult::getResult(Entity e) {
+	for (auto& table : results) {
+		if (table.isInTable(e)) {
+			return table.getEntityResult(e);
+		}
+	}
 	throw std::domain_error("Invalid Entity, Source: QueryResult.getResult");
 }
