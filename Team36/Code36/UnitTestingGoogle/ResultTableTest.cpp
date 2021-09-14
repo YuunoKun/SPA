@@ -242,9 +242,7 @@ namespace UnitTesting {
 		EXPECT_EQ(t.getEntityResult(e.second), b);
 	}
 
-
 	TEST(ResultTable, mergeFail) {
-
 		Entity e1(STMT, Synonym{ "x" });
 		Entity e2(STMT, Synonym{ "y" });
 		std::vector<StmtInfo> a1 = { { 1, STMT_WHILE }, { 2, STMT_IF} , { 3, STMT_READ },
@@ -255,7 +253,6 @@ namespace UnitTesting {
 		EXPECT_FALSE(t1.merge(t2));
 	}
 	TEST(ResultTable, mergeFilterSingleColumnSingleTable) {
-
 		Entity e(STMT, Synonym{ "x" });
 		std::vector<StmtInfo> a1 = { { 1, STMT_WHILE }, { 2, STMT_IF} , { 3, STMT_READ },
 			{ 4, STMT_PRINT}, { 5, STMT_CALL }, { 6, STMT_ASSIGN}, { 7, STMT_ASSIGN} };
@@ -263,7 +260,7 @@ namespace UnitTesting {
 		ResultTable t1(e, a1);
 		ResultTable t2(e, a2);
 		EXPECT_TRUE(t1.merge(t2));
-		std::list<std::string> b = { "1", "3", "5", "7"};
+		std::list<std::string> b = { "1", "3", "5", "7" };
 		EXPECT_EQ(t1.getEntityResult(e), b);
 		EXPECT_TRUE(t1.merge(t2));
 		EXPECT_EQ(t1.getEntityResult(e), b);
@@ -300,8 +297,6 @@ namespace UnitTesting {
 	}
 
 	TEST(ResultTable, mergeFilterSingleColumnDoubleTable) {
-
-
 		std::pair<Entity, Entity> e1{ {STMT, Synonym{"x"} } , { STMT,Synonym{"y"} } };
 		Entity e2(STMT, Synonym{ "x" });
 		std::vector<std::pair<std::string, std::string>> a1{
@@ -320,7 +315,7 @@ namespace UnitTesting {
 		std::list<std::string> b2 = { "2", "6", "10" };
 		EXPECT_EQ(t1.getEntityResult(e1.first), b1);
 		EXPECT_EQ(t1.getEntityResult(e1.second), b2);
-		
+
 		t1 = ResultTable(e2, a2);
 		t2 = ResultTable(e1, a1);
 		EXPECT_TRUE(t1.merge(t2));
@@ -345,7 +340,6 @@ namespace UnitTesting {
 		EXPECT_TRUE(t1.merge(t2));
 		EXPECT_EQ(t1.getEntityResult(e1.first), b1);
 		EXPECT_EQ(t1.getEntityResult(e1.second), b2);
-
 
 		e1 = { {STMT, Synonym{"x"} } , { STMT,Synonym{"y"} } };
 		e2 = { STMT, Synonym{ "x" } };
@@ -395,7 +389,6 @@ namespace UnitTesting {
 		EXPECT_TRUE(t2.isEmpty());
 	}
 	TEST(ResultTable, mergeFilterDoubleColumnDoubleTable) {
-
 		std::pair<Entity, Entity> e1{ {STMT, Synonym{"x"} } , { STMT,Synonym{"y"} } };
 		std::pair<Entity, Entity> e2{ {STMT, Synonym{"x"} } , { STMT,Synonym{"y"} } };
 		std::vector<std::pair<std::string, std::string>> a1{
@@ -403,7 +396,7 @@ namespace UnitTesting {
 			{ "3", "4", },
 			{ "5", "6", },
 			{ "7", "8", },
-			{ "9", "10", } 
+			{ "9", "10", }
 		};
 		std::vector<std::pair<std::string, std::string>> a2{
 			{ "1", "2", },
@@ -418,7 +411,6 @@ namespace UnitTesting {
 		std::list<std::string> b2 = { "2", "6", "10" };
 		EXPECT_EQ(t1.getEntityResult(e1.first), b1);
 		EXPECT_EQ(t1.getEntityResult(e1.second), b2);
-
 
 		e2 = { {STMT, Synonym{"y"} } , { STMT,Synonym{"x"} } };
 		a2 = {
@@ -435,7 +427,6 @@ namespace UnitTesting {
 		EXPECT_EQ(t1.getEntityResult(e1.first), b1);
 		EXPECT_EQ(t1.getEntityResult(e1.second), b2);
 
-
 		e2 = { {STMT, Synonym{"y"} } , { STMT,Synonym{"x"} } };
 		a2 = {
 			{ "2", "2", },
@@ -447,9 +438,7 @@ namespace UnitTesting {
 		t2 = ResultTable(e2, a2);
 		EXPECT_TRUE(t1.merge(t2));
 		EXPECT_TRUE(t1.isEmpty());
-
 	}
-
 
 	TEST(ResultTable, mergeFilterDoubleColumnTripleTable) {
 		Entity e1 = { STMT, Synonym{"x"} };
@@ -472,7 +461,6 @@ namespace UnitTesting {
 			{ "1", "7", },
 			{ "2", "8", }
 		};
-
 
 		ResultTable t1(h1, a1);
 		ResultTable t2(h2, a2);
@@ -504,7 +492,6 @@ namespace UnitTesting {
 		EXPECT_EQ(t1.getEntityResult(e2), b2);
 		EXPECT_EQ(t1.getEntityResult(e3), b3);
 
-
 		t1 = ResultTable(h1, a1);
 		t2 = ResultTable(h2, a2);
 		t3 = ResultTable(h3, a3);
@@ -523,7 +510,6 @@ namespace UnitTesting {
 		EXPECT_EQ(t2.getEntityResult(e2), b2);
 		EXPECT_EQ(t2.getEntityResult(e3), b3);
 
-
 		t1 = ResultTable(h1, a1);
 		t2 = ResultTable(h2, a2);
 		t3 = ResultTable(h3, a3);
@@ -541,7 +527,6 @@ namespace UnitTesting {
 		EXPECT_EQ(t2.getEntityResult(e1), b1);
 		EXPECT_EQ(t2.getEntityResult(e2), b2);
 		EXPECT_EQ(t2.getEntityResult(e3), b3);
-
 
 		t1 = ResultTable(h1, a1);
 		t2 = ResultTable(h2, a2);
@@ -561,7 +546,6 @@ namespace UnitTesting {
 		EXPECT_EQ(t3.getEntityResult(e2), b2);
 		EXPECT_EQ(t3.getEntityResult(e3), b3);
 
-
 		t1 = ResultTable(h1, a1);
 		t2 = ResultTable(h2, a2);
 		t3 = ResultTable(h3, a3);
@@ -580,7 +564,6 @@ namespace UnitTesting {
 		EXPECT_EQ(t3.getEntityResult(e2), b2);
 		EXPECT_EQ(t3.getEntityResult(e3), b3);
 
-
 		t1 = ResultTable(h1, a1);
 		t2 = ResultTable(h2, a2);
 		t3 = ResultTable(h3, a3);
@@ -589,8 +572,6 @@ namespace UnitTesting {
 		EXPECT_EQ(t1.getEntityResult(e1), b1);
 		EXPECT_EQ(t1.getEntityResult(e2), b2);
 		EXPECT_EQ(t1.getEntityResult(e3), b3);
-
-
 
 		h1 = { e1, e2 };
 		h2 = { e3, e2 };
@@ -645,8 +626,6 @@ namespace UnitTesting {
 		EXPECT_EQ(t1.getEntityResult(e2), b2);
 		EXPECT_EQ(t1.getEntityResult(e3), b3);
 
-
-
 		h1 = { e1, e2 };
 		h2 = { e3, e2 };
 		a1 = {
@@ -686,9 +665,6 @@ namespace UnitTesting {
 		EXPECT_EQ(t1.getEntityResult(e1), b1);
 		EXPECT_EQ(t1.getEntityResult(e2), b2);
 		EXPECT_EQ(t1.getEntityResult(e3), b3);
-
-		
-
 	}
 
 	TEST(ResultTable, mergeJoinDoubleColumnTripleTable) {
@@ -721,7 +697,6 @@ namespace UnitTesting {
 			{ "6", "c", }
 		};
 
-
 		ResultTable t1(h1, a1);
 		ResultTable t2(h2, a2);
 		ResultTable t3(h3, a3);
@@ -729,10 +704,10 @@ namespace UnitTesting {
 		EXPECT_TRUE(t1.merge(t2));
 		EXPECT_TRUE(t3.merge(t4));
 		EXPECT_TRUE(t1.merge(t3));
-		std::list<std::string> b1 = { "1", "2", "3"};
-		std::list<std::string> b2 = { "4", "5", "6"};
-		std::list<std::string> b3 = { "7", "8", "9"};
-		std::list<std::string> b4 = { "a", "b", "c"};
+		std::list<std::string> b1 = { "1", "2", "3" };
+		std::list<std::string> b2 = { "4", "5", "6" };
+		std::list<std::string> b3 = { "7", "8", "9" };
+		std::list<std::string> b4 = { "a", "b", "c" };
 		EXPECT_EQ(t1.getEntityResult(e1), b1);
 		EXPECT_EQ(t1.getEntityResult(e2), b2);
 		EXPECT_EQ(t1.getEntityResult(e3), b3);
@@ -815,7 +790,6 @@ namespace UnitTesting {
 		EXPECT_EQ(t1.getEntityResult(e2), b2);
 		EXPECT_EQ(t1.getEntityResult(e3), b3);
 		EXPECT_EQ(t1.getEntityResult(e4), b4);
-
 
 		h1 = { e1, e2 };
 		h2 = { e2, e3 };
@@ -912,6 +886,5 @@ namespace UnitTesting {
 
 		v = { };
 		EXPECT_EQ(table.getCommonHeaders({ resultTableHeader2.first, resultTableHeader2.second }), v);
-
 	}
 }

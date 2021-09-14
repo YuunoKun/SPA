@@ -47,7 +47,6 @@ namespace UnitTesting {
 			PKB::getInstance().addExprTree(std::stoi(MODIFIES_LEFT4), EXPRESSION2);
 			PKB::getInstance().generateFollowsT();
 			PKB::getInstance().generateParentT();
-
 		}
 
 		~QueryEvaluatorTest() override {
@@ -95,7 +94,6 @@ namespace UnitTesting {
 			}
 		}
 
-
 		void validateEmptyPatterns(std::vector<Pattern> patterns) {
 			for (unsigned int i = 0; i < patterns.size(); i++) {
 				for (unsigned int j = 0; j < ALL_SELECT.size(); j++) {
@@ -131,7 +129,6 @@ namespace UnitTesting {
 				}
 			}
 		}
-
 
 		const var_name x = "x";
 		const var_name y = "y";
@@ -188,7 +185,7 @@ namespace UnitTesting {
 		const std::string MODIFIES_RIGHT4 = y;
 
 		const std::string EXPRESSION1 = "x";
-		const std::string EXPRESSION2= "x + y";
+		const std::string EXPRESSION2 = "x + y";
 
 		const std::vector<std::string> MODIFIES_LEFTS = { MODIFIES_LEFT1, MODIFIES_LEFT2, MODIFIES_LEFT3, MODIFIES_LEFT4 };
 		const std::vector<std::string> MODIFIES_RIGHTS = { MODIFIES_RIGHT1, MODIFIES_RIGHT2, MODIFIES_RIGHT3, MODIFIES_RIGHT4 };
@@ -257,7 +254,6 @@ namespace UnitTesting {
 			{STMT, "1"}, {STMT, "2"}, {STMT, "3"}, {STMT, "4"}, {STMT, "5"}, {STMT, "6"},
 			{STMT, "7"}, {STMT, "8"}, {STMT, "9"}, {STMT, "10"}, {STMT, "11"}, {STMT, "12"}
 		};
-
 
 		std::vector<Entity> ALL_VARIABLES = { { VARIABLE, x }, { VARIABLE, y }, { VARIABLE, z } };
 	};
@@ -1954,7 +1950,7 @@ namespace UnitTesting {
 
 		patterns.push_back(Pattern(assignCommon, lhsCommon, x, true));
 		selected.push_back(lhsCommon);
-		results.push_back({ right1, right2});
+		results.push_back({ right1, right2 });
 
 		patterns.push_back(Pattern(assignCommon, lhsCommon, y, false));
 		selected.push_back(lhsCommon);
@@ -1997,7 +1993,6 @@ namespace UnitTesting {
 		patterns.push_back(Pattern(assignCommon, lhsY, y, true));
 		selected.push_back(assignCommon);
 		results.push_back({ left2 });
-
 
 		for (unsigned int i = 0; i < patterns.size(); i++) {
 			Query q = initQuery(patterns[i], selected[i]);

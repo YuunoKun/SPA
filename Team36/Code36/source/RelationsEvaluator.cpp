@@ -11,7 +11,6 @@
 #include "UsesSEvaluator.h"
 
 void RelationsEvaluator::evaluateRelation(QueryResult& result, RelRef& relation) {
-	
 	switch (relation.getType()) {
 	case FOLLOWS: evaluateRelation(result, relation, FollowsEvaluator()); break;
 	case FOLLOWS_T: evaluateRelation(result, relation, FollowsTEvaluator()); break;
@@ -23,7 +22,6 @@ void RelationsEvaluator::evaluateRelation(QueryResult& result, RelRef& relation)
 	case USES_S: evaluateRelation(result, relation, UsesSEvaluator()); break;
 	default: throw std::domain_error("Some Relation is not being handle!!!!");
 	}
-	
 }
 
 void RelationsEvaluator::evaluateRelation(QueryResult& queryResult, RelRef& relation, RelationEvaluatorInterface& evaluator) {
@@ -37,7 +35,8 @@ void RelationsEvaluator::evaluateRelation(QueryResult& queryResult, RelRef& rela
 			//Get all follow relation
 			ResultTable resultTable = evaluator.getRelations(clauses1, clauses2);
 			queryResult.addResult(resultTable);
-		}else if (clauses1.isSynonym() && clauses2.getType() == WILD) {
+		}
+		else if (clauses1.isSynonym() && clauses2.getType() == WILD) {
 			//If left side is declaration and right side is WILD: e.g Follows(a, _)
 			ResultTable resultTable = evaluator.getLeftRelations(clauses1);
 			queryResult.addResult(resultTable);
@@ -61,8 +60,8 @@ void RelationsEvaluator::evaluateRelation(QueryResult& queryResult, RelRef& rela
 		else {
 			throw std::out_of_range("Some Follow logic have not be handle for one side declaration");
 		}
-		
-	}else {
+	}
+	else {
 		//Handle both side NOT declartion
 		bool haveResult = false;
 

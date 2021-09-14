@@ -266,11 +266,9 @@ std::vector<std::vector<std::string>> Utility::joinTable(std::vector<std::vector
 
 std::vector<std::vector<std::string>> Utility::joinTable(std::vector<std::vector<std::string>>& main, int mainIndex1, int mainIndex2,
 	std::unordered_map<std::string, std::unordered_multimap<std::string, std::vector<std::string>>>& toJoin, int toJoinIndex1, int toJoinIndex2) {
-
 	std::vector<std::vector<std::string>> results;
 
 	for (auto& it : main) {
-
 		auto it1 = toJoin.find(it[mainIndex1]);
 		if (it1 == toJoin.end()) {
 			continue;
@@ -294,7 +292,6 @@ std::vector<std::vector<std::string>> Utility::joinTable(std::vector<std::vector
 
 	return results;
 }
-
 
 EntityType Utility::queryTokenTypeToEntityType(QueryToken::QueryTokenType& queryTokenType) {
 	if (queryTokenType == QueryToken::QueryTokenType::STMT) {

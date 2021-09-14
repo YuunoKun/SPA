@@ -5,8 +5,6 @@
 #include "PKBAdapter.h"
 #include "ParentTEvaluator.h"
 
-
-
 //Handle both wild : e.g Relation(_, _)
 bool ParentTEvaluator::haveRelation() {
 	return !pkb.isParentTEmpty();

@@ -278,7 +278,6 @@ namespace UnitTesting {
 		t = ResultTable(header, v);
 		EXPECT_EQ(evaluator.getRelationMatchLeft(match, header), t);
 
-
 		v = { p3 };
 		header = { IF, Synonym{"a"} };
 		match = { STMT, "2" };

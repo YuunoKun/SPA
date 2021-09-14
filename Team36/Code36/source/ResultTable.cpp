@@ -49,7 +49,6 @@ bool ResultTable::merge(ResultTable t) {
 	else {
 		throw std::exception("Error: table merging scenario is not handled!!!");
 	}
-	
 
 	return true;
 }
@@ -149,7 +148,8 @@ void ResultTable::filterTable(ResultTable t, Entity commonHeader) {
 		filterTable = table;
 		header = t.header;
 		headerSet = t.headerSet;
-	} else {
+	}
+	else {
 		throw std::exception("Error: table filter 1 column scenario is not handled!!!");
 	}
 
@@ -186,7 +186,8 @@ void ResultTable::filterTable(ResultTable t, Entity commonHeader1, Entity common
 		filterTable = table;
 		header = t.header;
 		headerSet = t.headerSet;
-	} else {
+	}
+	else {
 		throw std::exception("Error: table filter 2 column scenario is not handled!!!");
 	}
 
@@ -225,7 +226,6 @@ void ResultTable::joinTable(ResultTable t, Entity commonHeader1, Entity commonHe
 	std::unordered_map<std::string, std::unordered_multimap<std::string, std::vector<std::string>>> toJoin;
 
 	for (auto& it : t.table) {
-
 		if (toJoin.find(it[toJoinIndex1]) == toJoin.end()) {
 			toJoin.insert({ it[toJoinIndex1], {} });
 		}

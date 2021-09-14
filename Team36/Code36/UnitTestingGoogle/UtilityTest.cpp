@@ -258,7 +258,6 @@ namespace UnitTesting {
 	}
 
 	TEST(Utility, filterResultsSingleColumn) {
-		
 		std::vector<std::vector<std::string>> from = {
 			{"1", "1", "1", "1", "1"},
 			{"1", "2", "3", "4", "5"},
@@ -338,12 +337,9 @@ namespace UnitTesting {
 		to = { };
 
 		EXPECT_EQ(Utility::filterResults(from, filters, index), to);
-		
 	}
 
-
 	TEST(Utility, filterResultsDoubleColumn) {
-
 		std::vector<std::vector<std::string>> from = {
 			{"1", "1", "1", "1", "1"},
 			{"1", "2", "3", "4", "5"},
@@ -406,7 +402,6 @@ namespace UnitTesting {
 		};
 
 		EXPECT_EQ(Utility::filterResults(to, filters, index1, index2), to);
-
 
 		index1 = 1;
 		index2 = 2;
@@ -529,7 +524,6 @@ namespace UnitTesting {
 		};
 
 		EXPECT_EQ(Utility::filterResults(to, filters, index1, index2), to);
-
 	}
 
 	TEST(Utility, patternMatch) {
@@ -684,7 +678,6 @@ namespace UnitTesting {
 
 		std::vector<std::string> r1 = { "1", "2", "3", "5" };
 
-
 		std::vector<std::vector<std::string>> t2, t3;
 		std::vector<std::string> r2, r3;
 
@@ -703,7 +696,7 @@ namespace UnitTesting {
 			for (int i2 = 0; i2 < 20; i2++) {
 				for (int i3 = 0; i3 < 20; i3++) {
 					for (int i4 = 0; i4 < 20; i4++) {
-						t3.push_back({ std::to_string(i1), std::to_string(i2), 
+						t3.push_back({ std::to_string(i1), std::to_string(i2),
 							std::to_string(i3),std::to_string(i4) });
 					}
 				}
@@ -714,9 +707,7 @@ namespace UnitTesting {
 		EXPECT_EQ(Utility::mergeColumnEqual(t3), r3);
 	}
 
-
 	TEST(Utility, joinTableSingleColumn) {
-
 		std::vector<std::vector<std::string>> from = {
 			{"1", "1"},
 			{"1", "2"},
@@ -770,7 +761,7 @@ namespace UnitTesting {
 		};
 
 		EXPECT_EQ(Utility::joinTable(from, fromIndex, toJoin, toJoinIndex), to);
-		
+
 		from = {
 			{"1"},
 			{"2"},
@@ -824,7 +815,6 @@ namespace UnitTesting {
 		};
 
 		EXPECT_EQ(Utility::joinTable(from, fromIndex, toJoin, toJoinIndex), to);
-
 
 		from = {
 			{"1", "1"},
@@ -900,7 +890,6 @@ namespace UnitTesting {
 
 		EXPECT_EQ(Utility::joinTable(from, fromIndex, toJoin, toJoinIndex), to);
 
-
 		fromIndex = 0;
 		toJoinIndex = 1;
 
@@ -912,12 +901,9 @@ namespace UnitTesting {
 		};
 
 		EXPECT_EQ(Utility::joinTable(from, fromIndex, toJoin, toJoinIndex), to);
-
 	}
 
-
 	TEST(Utility, joinTableDoubleColumn) {
-
 		std::vector<std::vector<std::string>> from = {
 			{"1", "4"},
 			{"2", "5"},
@@ -975,14 +961,12 @@ namespace UnitTesting {
 
 		EXPECT_EQ(Utility::joinTable(from, fromIndex1, fromIndex2, toJoin, toJoinIndex1, toJoinIndex2), to);
 
-
 		fromIndex1 = 1;
 		fromIndex2 = 0;
 
 		to = { };
 
 		EXPECT_EQ(Utility::joinTable(from, fromIndex1, fromIndex2, toJoin, toJoinIndex1, toJoinIndex2), to);
-
 
 		from = {
 			{"4", "1", "7"},
@@ -1008,9 +992,7 @@ namespace UnitTesting {
 		};
 
 		EXPECT_EQ(Utility::joinTable(from, fromIndex1, fromIndex2, toJoin, toJoinIndex1, toJoinIndex2), to);
-
 	}
-
 
 	TEST(Utility, queryTokenTypeToEntityType) {
 		EntityType entType = STMT;

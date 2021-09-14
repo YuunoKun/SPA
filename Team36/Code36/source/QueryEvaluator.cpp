@@ -17,7 +17,7 @@ std::list<std::string> QueryEvaluator::evaluateQuery(Query query) {
 
 		return getResult(query, result);;
 	}
-	catch (...){
+	catch (...) {
 		//Some error occur, return empty list
 		return {};
 	}
@@ -67,7 +67,7 @@ std::list<std::string> QueryEvaluator::getResult(Query& query, QueryResult& resu
 		return {};
 	}
 
-	if(query.getSelected().size() > 1) {
+	if (query.getSelected().size() > 1) {
 		//For iteration 2, handling tuples result
 	}
 

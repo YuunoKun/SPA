@@ -122,9 +122,7 @@ namespace UnitTesting {
 		}
 	}
 
-
 	TEST(QueryResult, addResultNoMerge) {
-
 		Entity e1(STMT, Synonym{ "x" });
 		Entity e2(STMT, Synonym{ "y" });
 		std::vector<StmtInfo> a1 = { { 1, STMT_WHILE }, { 2, STMT_IF} , { 3, STMT_READ },
@@ -143,7 +141,6 @@ namespace UnitTesting {
 		EXPECT_EQ(q.getResult(e2), b2);
 	}
 	TEST(QueryResult, addResultMergeFilterSingleColumnSingleTable) {
-
 		Entity e(STMT, Synonym{ "x" });
 		std::vector<StmtInfo> a1 = { { 1, STMT_WHILE }, { 2, STMT_IF} , { 3, STMT_READ },
 			{ 4, STMT_PRINT}, { 5, STMT_CALL }, { 6, STMT_ASSIGN}, { 7, STMT_ASSIGN} };
@@ -196,8 +193,6 @@ namespace UnitTesting {
 	}
 
 	TEST(QueryResult, addResultMergeFilterSingleColumnDoubleTable) {
-
-
 		std::pair<Entity, Entity> e1{ {STMT, Synonym{"x"} } , { STMT,Synonym{"y"} } };
 		Entity e2(STMT, Synonym{ "x" });
 		std::vector<std::pair<std::string, std::string>> a1{
@@ -247,14 +242,11 @@ namespace UnitTesting {
 		t1 = ResultTable(e2, a2);
 		t2 = ResultTable(e1, a1);
 
-
 		q = QueryResult();
 		q.addResult(t1);
 		q.addResult(t2);
 		EXPECT_EQ(q.getResult(e1.first), b1);
 		EXPECT_EQ(q.getResult(e1.second), b2);
-
-
 
 		e1 = { {STMT, Synonym{"x"} } , { STMT,Synonym{"y"} } };
 		e2 = { STMT, Synonym{ "x" } };
@@ -300,10 +292,8 @@ namespace UnitTesting {
 		q.addResult(t1);
 		q.addResult(t2);
 		EXPECT_FALSE(q.haveResult());
-
 	}
 	TEST(QueryResult, addResultMergeFilterDoubleColumnDoubleTable) {
-
 		std::pair<Entity, Entity> e1{ {STMT, Synonym{"x"} } , { STMT,Synonym{"y"} } };
 		std::pair<Entity, Entity> e2{ {STMT, Synonym{"x"} } , { STMT,Synonym{"y"} } };
 		std::vector<std::pair<std::string, std::string>> a1{
@@ -330,7 +320,6 @@ namespace UnitTesting {
 		EXPECT_EQ(q.getResult(e1.first), b1);
 		EXPECT_EQ(q.getResult(e1.second), b2);
 
-
 		e2 = { {STMT, Synonym{"y"} } , { STMT,Synonym{"x"} } };
 		a2 = {
 			{ "2", "1", },
@@ -346,8 +335,6 @@ namespace UnitTesting {
 		EXPECT_EQ(q.getResult(e1.first), b1);
 		EXPECT_EQ(q.getResult(e1.second), b2);
 
-
-
 		e2 = { {STMT, Synonym{"y"} } , { STMT,Synonym{"x"} } };
 		a2 = {
 			{ "2", "2", },
@@ -362,9 +349,7 @@ namespace UnitTesting {
 		q.addResult(t1);
 		q.addResult(t2);
 		EXPECT_FALSE(q.haveResult());
-
 	}
-
 
 	TEST(QueryResult, addResultMergeFilterDoubleColumnTripleTable) {
 		Entity e1 = { STMT, Synonym{"x"} };
@@ -387,7 +372,6 @@ namespace UnitTesting {
 			{ "1", "7", },
 			{ "2", "8", }
 		};
-
 
 		ResultTable t1(h1, a1);
 		ResultTable t2(h2, a2);
@@ -472,8 +456,6 @@ namespace UnitTesting {
 		EXPECT_EQ(q.getResult(e1), b1);
 		EXPECT_EQ(q.getResult(e2), b2);
 		EXPECT_EQ(q.getResult(e3), b3);
-
-
 
 		h1 = { e1, e2 };
 		h2 = { e3, e2 };
@@ -562,7 +544,6 @@ namespace UnitTesting {
 			{ "5", "b", },
 			{ "6", "c", }
 		};
-
 
 		ResultTable t1(h1, a1);
 		ResultTable t2(h2, a2);
@@ -730,7 +711,6 @@ namespace UnitTesting {
 		EXPECT_EQ(q.getResult(e2), b2);
 		EXPECT_EQ(q.getResult(e3), b3);
 		EXPECT_EQ(q.getResult(e4), b4);
-
 
 		h1 = { e1, e2 };
 		h2 = { e2, e3 };
