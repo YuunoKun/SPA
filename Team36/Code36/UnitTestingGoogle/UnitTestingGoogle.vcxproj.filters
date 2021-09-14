@@ -87,7 +87,7 @@
     <ClCompile Include="QueryTokenizerTest.cpp">
       <Filter>PQL</Filter>
     </ClCompile>
-    <ClCompile Include="QueryPatternSuchThatValidationTest.cpp">
+    <ClCompile Include="PatternRelRefValidatorTest.cpp">
       <Filter>PQL</Filter>
     </ClCompile>
     <ClCompile Include="QueryEvaluatorMultiClausesTest.cpp">

@@ -2,8 +2,9 @@
 
 #include <vector>
 #include <stack>
-#include "Extractor.h"
 #include <unordered_set>
+#include <unordered_map>
+#include "Extractor.h"
 #include "Procedure.h"
 #include "Statement.h"
 
@@ -16,17 +17,29 @@ namespace SourceProcessor {
 
 		DesignExtractor();
 
+		~DesignExtractor() override;
+
 		void start_nesting() override;
+
+		void chop_nesting() override;
 
 		void end_nesting() override;
 
 		void add_procedure(proc_name) override;
 
+		const std::vector<Procedure*>& get_procedures();
+
 		void add_statement(TokenType) override;
+
+		const std::vector<Statement*>& get_statements();
 
 		void add_variable(var_name) override;
 
+		const std::unordered_set<var_name>& get_variables();
+
 		void add_constant(constant) override;
+
+		const std::unordered_set<constant>& get_constants();
 
 		void add_statement_uses(var_name) override;
 
@@ -34,31 +47,43 @@ namespace SourceProcessor {
 
 		void start_expr() override;
 
+		void add_expr_segment(std::string) override;
+
 		void end_expr() override;
 
-		void populateEntities() override;
+		void add_callee(proc_name) override;
 
-		void populateRelations() override;
+		void validate() override;
+
+		void populate_post_validation() override;
+
+		void populateEntities(PKB&) override;
+
+		void populateRelations(PKB&) override;
 
 
 	private:
-		std::vector<Procedure> m_procedures;
-		std::vector<Statement> m_statements;
+		std::vector<Procedure*> m_procedures;
+		std::vector<Statement*> m_statements;
 		std::unordered_set<var_name> m_variables;
 		std::unordered_set<constant> m_constants;
-
+		std::unordered_map<proc_name, proc_index> m_proc_name_to_id;
 		proc_index m_curr_proc_id;
 		stmt_index m_curr_stmt_id;
 		std::stack<stmt_index> m_curr_nesting_stk;
 		std::string m_expr_builder;
+		int m_stmt_list_id;
+		std::vector<proc_index> m_call_sequence;
 
+		void populateProcedures(PKB&);
+		void populateStatements(PKB&);
+		void populateVariables(PKB&);
+		void populateConstants(PKB&);
 
-		void populateFollows();
-		void populateFollowsT();
-		void populateParent();
-		void populateParentT();
-		void populateUses();
-		void populateModifies();
+		void populateFollows(PKB&);
+		void populateParent(PKB&);
+		void populateUses(PKB&);
+		void populateModifies(PKB&);
 
 	};
 

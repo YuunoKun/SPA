@@ -186,7 +186,7 @@ namespace UnitTesting {
 			PKB::getInstance().addStmt(STMT_ASSIGN);
 			PKB::getInstance().addVariable(v[i]);
 			si.push_back({ s[i], STMT_ASSIGN });
-			a.push_back(std::make_pair( si[i], v[i] ));
+			a.push_back(std::make_pair(si[i], v[i]));
 			PKB::getInstance().addModifiesS(s[i], v[i]);
 			PKB::getInstance().addExprTree(s[i], e[i]);
 		}
@@ -392,6 +392,7 @@ namespace UnitTesting {
 		PKB::getInstance().addStmt(STMT_PRINT);
 		PKB::getInstance().addStmt(STMT_READ);
 		PKB::getInstance().addStmt(STMT_IF);
+		PKB::getInstance().generateFollowsT();
 		EXPECT_TRUE(pkb.isFollowTEmpty());
 		PKB::getInstance().addFollows(1, 2);
 		PKB::getInstance().generateFollowsT();
@@ -409,6 +410,7 @@ namespace UnitTesting {
 		PKB::getInstance().addFollows(1, 2);
 		PKB::getInstance().addFollows(2, 3);
 		PKB::getInstance().generateFollowsT();
+
 		EXPECT_TRUE(pkb.isFollowT(1, 2));
 		EXPECT_TRUE(pkb.isFollowT(1, 3));
 		EXPECT_TRUE(pkb.isFollowT(2, 3));
@@ -435,6 +437,7 @@ namespace UnitTesting {
 		PKB::getInstance().addFollows(1, 2);
 		PKB::getInstance().addFollows(2, 3);
 		PKB::getInstance().generateFollowsT();
+
 		EXPECT_TRUE(pkb.isFollowedT(1));
 		EXPECT_TRUE(pkb.isFollowedT(2));
 		EXPECT_FALSE(pkb.isFollowedT(3));
@@ -540,11 +543,10 @@ namespace UnitTesting {
 		PKB::getInstance().addFollows(1, 2);
 		PKB::getInstance().addFollows(2, 3);
 		PKB::getInstance().generateFollowsT();
-		std::vector<std::pair<StmtInfo, StmtInfo>> v = { {p2, p3}, {p1, p2}, {p1, p3} };
-		std::vector<std::pair<StmtInfo, StmtInfo>> r = pkb.getFollowsT();
-		sort(v.begin(), v.end());
-		sort(r.begin(), r.end());
-		EXPECT_EQ(r, v);
+		std::vector<std::pair<StmtInfo, StmtInfo>> v1 = { {p1, p2}, {p1, p3}, {p2, p3} };
+		std::vector<std::pair<StmtInfo, StmtInfo>> v2 = pkb.getFollowsT();
+		std::sort(v2.begin(), v2.end());
+		EXPECT_EQ(v1, v2);
 	}
 
 	TEST_F(PKBAdapterTest, isParentEmpty) {
@@ -738,6 +740,7 @@ namespace UnitTesting {
 		PKB::getInstance().addParent(2, 3);
 		PKB::getInstance().addParent(3, 4);
 		PKB::getInstance().generateParentT();
+
 		EXPECT_TRUE(pkb.isParentT(1, 2));
 		EXPECT_TRUE(pkb.isParentT(1, 3));
 		EXPECT_TRUE(pkb.isParentT(1, 4));
@@ -782,6 +785,7 @@ namespace UnitTesting {
 		PKB::getInstance().addParent(2, 3);
 		PKB::getInstance().addParent(3, 4);
 		PKB::getInstance().generateParentT();
+
 		EXPECT_FALSE(pkb.isChildT(1));
 		EXPECT_TRUE(pkb.isChildT(2));
 		EXPECT_TRUE(pkb.isChildT(3));

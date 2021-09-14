@@ -19,13 +19,16 @@ TokenType Token::get_token_type() {
 	return m_type;
 }
 
+
 void Token::set_token_type(TokenType type) {
 	m_type = type;
 }
 
+
 std::string &Token::get_token_value() {
 	return m_token_value;
 }
+
 
 void Token::set_token_value(std::string value) {
 	m_token_value = value;

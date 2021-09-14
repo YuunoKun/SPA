@@ -1,40 +1,350 @@
-1 - select procedure
-procedure p;
-Select p
-abc
-5000
-2 - select statement
-stmt s;
-Select s
-1, 2, 3, 4, 5
-5000
-3 - select variable;
-variable v;
-Select v
-x
-5000
-4 - select assignment
+1 - modifies, 1 such that and 1 unknown synonym
 assign a;
-Select a;
-3, 5
+Select a such that Modifies(a, "x")
+1, 15
 5000
-5 - follows, 1 such that and 1 unknown synonym
-stmt s;
-Select s such that Follows(1, s)
-2, 4
+2 - modifies, 1 such that and 1 unknown synonym
+variable v;
+Select v such that Modifies(2, v)
+y
 5000
-6 - parent, 1 such that and 1 unknown synonym
-stmt s;
-Select s such that Parent(1, s)
-3, 5
+3 - modifies, 1 such that and 1 unknown synonym
+read r;
+Select r such that Modifies(r, "z")
+3
 5000
-7 - modifies, 1 such that and 1 unknown synonym
+4 - modifies, 1 such that and 1 unknown synonym
 variable v;
 Select v such that Modifies(3, v)
-X
+z
 5000
-8 - uses, 1 such that and 1 unknown synonym
+5 - modifies, 1 such that and 1 unknown synonym
+if ifs;
+Select ifs such that Modifies(ifs, "y")
+6, 17
+5000
+6 - modifies, 1 such that and 1 unknown synonym
 variable v;
-Select v such that Uses(5, v)
-V
+Select v such that Modifies(6, v)
+y
+5000
+7 - modifies, 1 such that and 1 unknown synonym
+while w;
+Select w such that Modifies(w, "x")
+13
+5000
+8 - modifies, 1 such that and 1 unknown synonym
+variable v;
+Select v such that Modifies(4, v)
+y
+5000
+9 - uses, 1 such that and 1 unknown synonym
+assign a;
+Select a such that Uses(a, "x")
+8, 14, 15, 18
+5000
+10 - uses, 1 such that and 1 unknown synonym
+variable v;
+Select v such that Uses(18, v)
+x, y, z
+5000
+11 - uses, 1 such that and 1 unknown synonym
+print pn;
+select pn such that Uses(pn, "z")
+11
+5000
+12 - uses, 1 such that and 1 unknown synonym
+variable v;
+Select v such that Uses(9, v)
+x
+5000
+13 - uses, 1 such that and 1 unknown synonym
+if ifs;
+Select ifs such that Uses(ifs, "y")
+6, 17
+5000
+14 - uses, 1 such that and 1 unknown synonym
+variable v;
+Select v such that Uses(6, v)
+x, y
+5000
+15 - uses, 1 such that and 1 unknown synonym
+while w;
+Select w such that Uses(w, "z")
+13
+5000
+16 - uses, 1 such that and 1 unknown synonym
+variable v;
+Select v such that Uses(4, v)
+x, y, z, var1
+5000
+17 - parent, 1 such that and 1 unknown synonym
+stmt s;
+Select s such that Parent(4, s)
+5, 6
+5000
+18 - parent, 1 such that and 1 unknown synonym
+stmt s;
+Select s such that Parent(s, 8)
+6
+5000
+19 - parentT, 1 such that and 1 unknown synonym
+stmt s;
+Select s such that Parent*(4, s)
+5, 6, 7, 8
+5000
+20 - parentT, 1 such that and 1 unknown synonym
+stmt s;
+Select s such that Parent*(s, 7)
+4, 6
+5000
+21 - follows, 1 such that and 1 unknown synonym
+stmt s;
+Select s such that Follows(3, s)
+4
+5000
+22 - follows, 1 such that and 1 unknown synonym
+stmt s;
+Select s such that Follows(s, 15)
+14
+5000
+23 - followsT, 1 such that and 1 unknown synonym
+stmt s;
+Select s such that Follows*(3, s)
+4, 9, 10, 11
+5000
+24 - followsT, 1 such that and 1 unknown synonym
+stmt s;
+Select s such that Follows*(s, 4)
+1, 2, 3
+5000
+25 - modifies, 1 such that and 2 unknown synonyms
+assign a; variable v;
+Select a such that Modifies(a, v)
+1, 2, 8, 14, 15, 18, 19
+5000
+26 - modifies, 1 such that and 2 unknown synonyms
+read r; variable v;
+Select r such that Modifies(r, v)
+3
+5000
+27 - modifies, 1 such that and 2 unknown synonyms
+if ifs; variable v;
+Select ifs such that Modifies(ifs, v)
+6, 17
+5000
+28 - modifies, 1 such that and 2 unknown synonyms
+while w; variable v;
+Select w such that Modifies(w, v)
+4, 13
+5000
+29 - uses, 1 such that and 2 unknown synonyms
+assign a; variable v;
+Select a such that Uses(a, v)
+8, 14, 15, 18, 19
+5000
+30 - uses, 1 such that and 2 unknown synonyms
+print pn; variable v;
+Select pn such that Uses(pn, v)
+9, 10, 11
+5000
+31 - uses, 1 such that and 2 unknown synonyms
+if ifs; variable v;
+Select ifs such that Uses(ifs, v)
+6, 17
+5000
+32 - uses, 1 such that and 2 unknown synonyms
+while w; variable v;
+Select w such that Uses(w, v)
+4, 13
+5000
+33 - Parent, 1 such that and 2 unknown synonyms
+stmt s1, s2;
+Select s1 such that Parent(s1, s2)
+4, 6, 13, 18
+5000
+34 - ParentT, 1 such that and 2 unknown synonyms
+stmt s1, s2;
+Select s2 such that Parent*(s1, s2)
+5, 6, 7, 8, 14, 15, 17, 19
+5000
+35 - 1 pattern and 1 unknown synonym, wildcard RHS
+assign a;
+Select a pattern a("y", _)
+2, 8, 18, 19
+5000
+36 - 1 pattern and 1 unknown synonym, variable RHS
+assign a;
+Select a pattern a("y", _"z"_)
+18, 19
+5000
+37 - 1 pattern and 1 unknown synonym, constant RHS
+assign a;
+Select a pattern a("x", _"1"_)
+15
+5000
+38 - 1 pattern and 1 unknown synonym, wild card bothside
+assign a;
+Select a pattern a(_,_)
+1, 2, 8, 14, 15, 18, 19
+5000
+39 - 1 pattern and 1 unknown synonym, wildcard LHS
+assign a;
+Select a pattern a(_, _"x"_)
+8, 15, 18
+5000
+40 - 1 pattern and 1 unknown synonym, variable LHS
+assign a;
+Select a pattern a("y", _"x"_)
+8, 18
+5000
+41 - 1 pattern and 2 unknown synonym, wildcard RHS
+assign a; variable v;
+Select a pattern a(v, _)
+1, 2, 8, 14, 15, 17, 18
+5000
+42 - 1 pattern and 2 unknown synonyms, variable RHS
+assign a; variable v;
+Select a pattern a(v, _"x"_)
+8, 14, 15, 18
+5000
+43 - modifies, 1 such that and assign synonym LHS, wildcard RHS
+assign a;
+Select a such that Modifies(a,_)
+1, 2, 8, 12, 14, 15, 18, 19
+5000
+44 - modifies, 1 such that and read synonym LHS, wildcard RHS
+read r;
+Select r such that Modifies(r, _)
+3
+5000
+45 - modifies, 1 such that and while synonym LHS, wildcard RHS
+while w;
+Select w such that Modifies(w,_)
+4, 13
+5000
+46 - modifies, 1 such that and if synonym LHS, wildcard RHS
+if ifs;
+Select ifs such that Modifies(ifs, _)
+6, 17
+5000
+47 - modifies, 1 such that and wildcard LHS, synonym RHS
+variable v;
+Select v such that Modifies(_, v)
+x, y, z, var1
+5000
+48 - Uses, 1 such that and assign synonym LHS, wildcard RHS
+assign a;
+Select a such that Uses(a,_)
+8, 14, 15, 18, 19
+5000
+49 - Uses, 1 such that and print synonym LHS, wildcard RHS
+print pn;
+Select r such that Uses(pn, _)
+3
+5000
+50 - uses, 1 such that and while synonym LHS, wildcard RHS
+while w;
+Select w such that Uses(w,_)
+4, 13
+5000
+51 - Uses, 1 such that and if synonym LHS, wildcard RHS
+if ifs;
+Select ifs such that Uses(ifs, _)
+6, 17
+5000
+52 - Use, 1 such that and wildcard LHS, synonym RHS
+variable v;
+Select v such that Uses(_, v)
+x, y, z, var1
+5000
+53 - parent, 1 such that and stmt synonym LHS, wildcard RHS
+stmt s;
+Select s such that Parent(s,_)
+4, 6, 13, 17
+5000
+54 - parent, 1 such that and wildcard LHS, stmt synonym RHS
+stmt s;
+Select s such that Parent(_, s)
+5, 6, 7, 8, 14, 15, 17, 18
+5000
+55 - parentT, 1 such that and stmt synonym LHS, wildcard RHS
+stmt s;
+Select s such that Parent*(s,_)
+4, 6, 13, 17
+5000
+56 - parentT, 1 such that and wildcard LHS, stmt synonym RHS
+stmt s;
+Select s such that Parent*(_, s)
+5, 6, 7, 8, 14, 15, 17, 18
+5000
+57 - follows, 1 such that and stmt synonym LHS, wildcard RHS
+stmt s;
+Select s such that Follows(s,_)
+1, 2, 3, 4, 5, 7, 9, 10, 12, 13, 14, 18
+5000
+58 - follows, 1 such that and wildcard LHS, stmt synonym RHS
+stmt s;
+Select s such that Follows(_, s)
+2, 3, 4, 6, 8, 9, 10, 11, 13, 15, 16, 19
+5000
+59 - followsT, 1 such that and stmt synonym LHS, wildcard RHS
+stmt s;
+Select s such that Follows*(s,_)
+1, 2, 3, 4, 5, 7, 9, 10, 12, 13, 14, 18
+5000
+60 - followsT, 1 such that and wildcard LHS, stmt synonym RHS
+stmt s;
+Select s such that Follows*(_, s)
+2, 3, 4, 6, 8, 9, 10, 11, 13, 15, 16, 19
+5000
+61 - parent, 1 such that and result boolean
+stmt s;
+Select s such that Parent(1, 2)
+none
+5000
+62 - parent, 1 such that and result boolean
+stmt s;
+Select s such that Parent(4, 5)
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19
+5000
+63 - parent, 1 such that and 2 wildcards
+stmt s;
+Select s such that Parent(_, _)
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19
+5000
+64 - follows, 1 such that and result boolean
+stmt s;
+Select s such that Follows(1, _)
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19
+5000
+65 - follows, 1 such that and result boolean
+stmt s;
+Select s such that Follows(_, 1)
+none
+5000
+66 - follows, 1 such that and result boolean
+stmt s;
+Select s such that Follows(4, 5)
+none
+5000
+67 - follows, 1 such that and 2 wildcards
+stmt s;
+Select s such that Follows(_, _)
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19
+5000
+68 - 1 pattern clause, exact string match
+assign a;
+Select a pattern a("x", "2")
+1
+5000
+69 - 1 pattern and 2 unknown synonyms, variable synonym LHS, wildcard exp RHS
+assign a; variable v;
+Select v pattern a(v, _"x"_)
+x, y
+5000
+70 - 1 pattern and 2 unknown synonyms, variable synonym LHS, exp RHS
+assign a; variable v;
+Select v pattern a(v, "x")
+none
 5000

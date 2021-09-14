@@ -181,6 +181,9 @@ RelationTable<T, S> RelationTable<T, S>::findTransitiveClosure()
 		}
 	}
 
+	for (auto& pair : res.forward_table) {
+		std::sort(pair.second.begin(), pair.second.end());
+	}
 	for (auto& pair : res.backward_table) {
 		std::sort(pair.second.begin(), pair.second.end());
 	}
