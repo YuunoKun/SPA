@@ -84,7 +84,9 @@ namespace UnitTesting {
 		std::sort(expected_assign.begin(), expected_assign.end());
 
 		UniqueRelationTable<stmt_index, var_name> table = PKB::getInstance().getAssigns();
-		EXPECT_EQ(table.getPairs(), expected_assign);
+		std::vector<std::pair<stmt_index, var_name>> v = table.getPairs();
+		std::sort(v.begin(), v.end());
+		EXPECT_EQ(v, expected_assign);
 	}
 
 	TEST_F(ParserPKBTest, Sample5Test_Expr) {
@@ -92,13 +94,14 @@ namespace UnitTesting {
 		parser.load_file("../UnitTestingGoogle/SPTest/TestSource/Sample5.txt");
 		parser.parse();
 
-		std::vector<std::pair<stmt_index, expr>> expected_expr = { {1, "0"}, {7, "0" }, {10, "count + 1"},
-			{13, "1"}, {14, "cenX / count"}, {15, "cenX * cenX + cenY * cenY"} };
+		std::vector<std::pair<stmt_index, expr>> expected_expr = { {1, "0"}, {7, "0" }, {10, "count+1"},
+			{13, "1"}, {14, "cenX/count"}, {15, "cenX*cenX+cenY*cenY"} };
 		std::sort(expected_expr.begin(), expected_expr.end());
 
 		UniqueRelationTable<stmt_index, expr> table = PKB::getInstance().getExpr();
-
-		EXPECT_EQ(table.getPairs(), expected_expr);
+		std::vector<std::pair<stmt_index, expr>> v = table.getPairs();
+		std::sort(v.begin(), v.end());
+		EXPECT_EQ(v, expected_expr);
 	}
 
 	TEST_F(ParserPKBTest, Sample5Test_Follows) {
@@ -107,7 +110,7 @@ namespace UnitTesting {
 		parser.parse();
 
 		std::vector<std::pair<stmt_index, stmt_index>> expected_follows = {
-			{1,2}, {2,3}, {5,6}, {7,8}, {8,9}, {10,11}, {12,15}
+			{1,2}, {2,3}, {5,6}, {7,8}, {8,9}, {9, 12}, {10,11}, {12,15}
 		};
 		std::sort(expected_follows.begin(), expected_follows.end());
 
@@ -128,7 +131,7 @@ namespace UnitTesting {
 		parser.parse();
 
 		std::vector<std::pair<stmt_index, stmt_index>> expected_followsT = {
-			{1,2}, {1,3}, {2,3}, {5,6}, {7,8}, {7,9}, {6,12}, {7,15}, {8,9}, {8,12}, {8,15}, {10,11}, {12,15}
+			{1,2}, {1,3}, {2,3}, {5,6}, {7,8}, {7,9}, {7,12}, {7,15}, {8,9}, {8,12}, {8,15}, {9, 12}, {9, 15}, {10,11}, {12,15}
 		};
 		std::sort(expected_followsT.begin(), expected_followsT.end());
 
@@ -215,7 +218,7 @@ namespace UnitTesting {
 
 		std::vector<std::pair<stmt_index, var_name>> expected_modifiesS = {
 			{1, "flag"}, {2, "count"}, {2, "x"}, {2, "flag"}, {2, "cenX"}, {2, "normSq"}, {4, "x"}, {7, "count"},
-			{8, "x"}, {9, "count"}, {9, "x"}, {10, "count"}, {11, "x"}, {12, "flag"}, {13, "flag"}, {14, "cenX"},
+			{8, "x"}, {9, "count"}, {9, "x"}, {10, "count"}, {11, "x"}, {12, "flag"}, {12, "cenX"}, {13, "flag"}, {14, "cenX"},
 			{15, "normSq"}
 		};
 		std::sort(expected_modifiesS.begin(), expected_modifiesS.end());
