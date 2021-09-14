@@ -30,6 +30,8 @@ void FSM::build() {
 	}
 
 	m_design_extractor->populateEntities();
+	m_design_extractor->validate();
+	m_design_extractor->populateRelations();
 }
 
 
@@ -93,6 +95,7 @@ void FSM::expect_statement_type_read() {
 
 	Token var_name_token = expect_token_and_pop(TokenType::IDENTIFIER);
 	m_design_extractor->add_variable(var_name_token.get_token_value());
+	m_design_extractor->add_statement_modifies(var_name_token.get_token_value());
 
 	expect_token_and_pop(TokenType::TERMINATOR);
 }
@@ -103,6 +106,7 @@ void FSM::expect_statement_type_print() {
 
 	Token var_name_token = expect_token_and_pop(TokenType::IDENTIFIER);
 	m_design_extractor->add_variable(var_name_token.get_token_value());
+	m_design_extractor->add_statement_uses(var_name_token.get_token_value());
 
 	expect_token_and_pop(TokenType::TERMINATOR);
 }
@@ -110,7 +114,9 @@ void FSM::expect_statement_type_print() {
 
 void FSM::expect_statement_type_call() {
 	expect_token_and_pop(TokenType::CALL);
+
 	Token proc_name_token = expect_token_and_pop(TokenType::IDENTIFIER);
+	m_design_extractor->add_callee(proc_name_token.get_token_value());
 
 	expect_token_and_pop(TokenType::TERMINATOR);
 }
@@ -123,9 +129,11 @@ void FSM::expect_statement_type_while() {
 	expect_conditional_expression();
 	expect_token_and_pop(TokenType::PARENTHESIS_CLOSE);
 
+	m_design_extractor->start_nesting();
 	expect_token_and_pop(TokenType::STATEMENT_LIST_OPEN);
 	expect_statement_list();
 	expect_token_and_pop(TokenType::STATEMENT_LIST_CLOSE);
+	m_design_extractor->end_nesting();
 }
 
 
@@ -139,15 +147,18 @@ void FSM::expect_statement_type_if() {
 
 	expect_token_and_pop(TokenType::THEN);
 
+	m_design_extractor->start_nesting();
 	expect_token_and_pop(TokenType::STATEMENT_LIST_OPEN);
 	expect_statement_list();
 	expect_token_and_pop(TokenType::STATEMENT_LIST_CLOSE);
 
 	expect_token_and_pop(TokenType::ELSE);
+	m_design_extractor->chop_nesting();
 
 	expect_token_and_pop(TokenType::STATEMENT_LIST_OPEN);
 	expect_statement_list();
 	expect_token_and_pop(TokenType::STATEMENT_LIST_CLOSE);
+	m_design_extractor->end_nesting();
 }
 
 
@@ -155,9 +166,12 @@ void FSM::expect_statement_type_assign() {
 	// make assign stmt
 	Token var_name_token = expect_token_and_pop(TokenType::IDENTIFIER);
 	m_design_extractor->add_variable(var_name_token.get_token_value());
+	m_design_extractor->add_statement_modifies(var_name_token.get_token_value());
 
 	expect_token_and_pop(TokenType::ASSIGN);
+	m_design_extractor->start_expr();
 	expect_expression();
+	m_design_extractor->end_expr();
 	expect_token_and_pop(TokenType::TERMINATOR);
 }
 
@@ -237,6 +251,7 @@ void FSM::expect_expression() {
 	switch (m_tokenizer.peek_token().get_token_type()) {
 	case TokenType::PLUS:
 	case TokenType::MINUS:
+		m_design_extractor->add_expr_segment(m_tokenizer.peek_token().get_token_value());
 		expect_token_and_pop(m_tokenizer.peek_token().get_token_type());
 		expect_expression();
 		break;
@@ -252,6 +267,7 @@ void FSM::expect_term() {
 	case TokenType::MUL:
 	case TokenType::DIV:
 	case TokenType::MOD:
+		m_design_extractor->add_expr_segment(m_tokenizer.peek_token().get_token_value());
 		expect_token_and_pop(m_tokenizer.peek_token().get_token_type());
 		expect_term();
 		break;
@@ -264,14 +280,20 @@ void FSM::expect_term() {
 void FSM::expect_factor() {
 	switch (m_tokenizer.peek_token().get_token_type()) {
 	case TokenType::IDENTIFIER:
-		m_design_extractor->add_variable(expect_token_and_pop(TokenType::IDENTIFIER).get_token_value());
+		m_design_extractor->add_expr_segment(m_tokenizer.peek_token().get_token_value());
+		m_design_extractor->add_variable(m_tokenizer.peek_token().get_token_value());
+		m_design_extractor->add_statement_uses(m_tokenizer.peek_token().get_token_value());
+		expect_token_and_pop(TokenType::IDENTIFIER);
 		break;
 	case TokenType::CONSTANT:
+		m_design_extractor->add_expr_segment(m_tokenizer.peek_token().get_token_value());
 		m_design_extractor->add_constant(std::stoul(expect_token_and_pop(TokenType::CONSTANT).get_token_value(), nullptr, 0));
 		break;
 	case TokenType::PARENTHESIS_OPEN:
+		m_design_extractor->add_expr_segment(m_tokenizer.peek_token().get_token_value());
 		expect_token_and_pop(TokenType::PARENTHESIS_OPEN);
 		expect_expression();
+		m_design_extractor->add_expr_segment(m_tokenizer.peek_token().get_token_value());
 		expect_token_and_pop(TokenType::PARENTHESIS_CLOSE);
 		break;
 	default:
