@@ -306,30 +306,35 @@ none
 62 - parent, 1 such that and result boolean
 stmt s;
 Select s such that Parent(4, 5)
-none
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19
 5000
 63 - parent, 1 such that and 2 wildcards
 stmt s;
 Select s such that Parent(_, _)
-4, 5, 6, 7, 8, 13, 14, 15, 17, 18, 19
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19
 5000
 64 - follows, 1 such that and result boolean
 stmt s;
-Select s such that Follows(1, 2)
-none
+Select s such that Follows(1, _)
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19
 5000
 65 - follows, 1 such that and result boolean
+stmt s;
+Select s such that Follows(_, 1)
+none
+5000
+66 - follows, 1 such that and result boolean
 stmt s;
 Select s such that Follows(4, 5)
 none
 5000
-66 - follows, 1 such that and 2 wildcards
+67 - follows, 1 such that and 2 wildcards
 stmt s;
 Select s such that Follows(_, _)
 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19
 5000
-67 - 1 pattern clause, exact string match
+68 - 1 pattern clause, exact string match
 assign a;
-Select a pattern a("x", 2)
+Select a pattern a("x", "2")
 1
 5000
