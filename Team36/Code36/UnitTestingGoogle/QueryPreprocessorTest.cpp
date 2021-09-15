@@ -648,6 +648,162 @@ namespace UnitTesting {
 		EXPECT_EQ(test5, q5);
 	}
 
+	TEST(parse, oneSuchThatAndOnePatternClauseFollows) {
+		QueryPreprocessor qp;
+		Query test = qp.parse("stmt s; assign a, a1; variable v; Select a such that Follows(s, a) pattern a1(v, _)");
+
+		Query q;
+		q.addEntity(Entity(EntityType::STMT, Synonym{ "s" }));
+		q.addEntity(Entity(EntityType::ASSIGN, Synonym{ "a" }));
+		q.addEntity(Entity(EntityType::ASSIGN, Synonym{ "a1" }));
+		q.addEntity(Entity(EntityType::VARIABLE, Synonym{ "v" }));
+		q.addSelected(Entity(EntityType::ASSIGN, Synonym{ "a" }));
+		q.addRelation(RelRef(RelType::FOLLOWS, Entity(EntityType::STMT, Synonym{ "s" }), Entity(EntityType::ASSIGN, Synonym{ "a" })));
+		q.addPattern(Pattern(Entity(EntityType::ASSIGN, Synonym{ "a1" }), Entity(EntityType::VARIABLE, Synonym{ "v" }), "", true));
+
+		EXPECT_EQ(test, q);
+
+		Query test2 = qp.parse("assign a; stmt s; Select a such that Follows(s, 9) pattern a(\"q\", _\"p\"_)");
+
+		Query q2;
+		q2.addEntity(Entity(EntityType::ASSIGN, Synonym{ "a" }));
+		q2.addEntity(Entity(EntityType::STMT, Synonym{ "s" }));
+		q2.addSelected(Entity(EntityType::ASSIGN, Synonym{ "a" }));
+		q2.addRelation(RelRef(RelType::FOLLOWS, Entity(EntityType::STMT, Synonym{ "s" }), Entity(EntityType::CONSTANT, "9")));
+		q2.addPattern(Pattern(Entity(EntityType::ASSIGN, Synonym{ "a" }), Entity(EntityType::VARIABLE, "q"), "p", true));
+
+		EXPECT_EQ(test2, q2);
+
+		Query test3 = qp.parse("assign a, a1; stmt s; Select a such that Follows(s, a) pattern a1(\"i\", \"10\")");
+
+		Query q3;
+		q3.addEntity(Entity(EntityType::ASSIGN, Synonym{ "a" }));
+		q3.addEntity(Entity(EntityType::ASSIGN, Synonym{ "a1" }));
+		q3.addEntity(Entity(EntityType::STMT, Synonym{ "s" }));
+		q3.addSelected(Entity(EntityType::ASSIGN, Synonym{ "a" }));
+		q3.addRelation(RelRef(RelType::FOLLOWS_T, Entity(EntityType::STMT, Synonym{ "s" }), Entity(EntityType::ASSIGN, Synonym{ "a" })));
+		q3.addPattern(Pattern(Entity(EntityType::ASSIGN, Synonym{ "a1" }), Entity(EntityType::VARIABLE, "i"), "10", false));
+
+		EXPECT_EQ(test3, q3);
+	}
+
+	TEST(parse, oneSuchThatAndOnePatternClauseFollowsT) {
+		QueryPreprocessor qp;
+		Query test = qp.parse("stmt s; assign a, a1; variable v; Select a such that Follows*(s, a) pattern a1(v, _)");
+
+		Query q;
+		q.addEntity(Entity(EntityType::STMT, Synonym{ "s" }));
+		q.addEntity(Entity(EntityType::ASSIGN, Synonym{ "a" }));
+		q.addEntity(Entity(EntityType::ASSIGN, Synonym{ "a1" }));
+		q.addEntity(Entity(EntityType::VARIABLE, Synonym{ "v" }));
+		q.addSelected(Entity(EntityType::ASSIGN, Synonym{ "a" }));
+		q.addRelation(RelRef(RelType::FOLLOWS_T, Entity(EntityType::STMT, Synonym{ "s" }), Entity(EntityType::ASSIGN, Synonym{ "a" })));
+		q.addPattern(Pattern(Entity(EntityType::ASSIGN, Synonym{ "a1" }), Entity(EntityType::VARIABLE, Synonym{ "v" }), "", true));
+
+		EXPECT_EQ(test, q);
+
+		Query test2 = qp.parse("assign a; stmt s; Select a such that Follows*(s, 9) pattern a(\"q\", _\"p\"_)");
+
+		Query q2;
+		q2.addEntity(Entity(EntityType::ASSIGN, Synonym{ "a" }));
+		q2.addEntity(Entity(EntityType::STMT, Synonym{ "s" }));
+		q2.addSelected(Entity(EntityType::ASSIGN, Synonym{ "a" }));
+		q2.addRelation(RelRef(RelType::FOLLOWS_T, Entity(EntityType::STMT, Synonym{ "s" }), Entity(EntityType::CONSTANT, "9")));
+		q2.addPattern(Pattern(Entity(EntityType::ASSIGN, Synonym{ "a" }), Entity(EntityType::VARIABLE, "q"), "p", true));
+
+		EXPECT_EQ(test2, q2);
+
+		Query test3 = qp.parse("assign a, a1; stmt s; Select a such that Follows*(s, a) pattern a1(\"i\", \"10\")");
+
+		Query q3;
+		q3.addEntity(Entity(EntityType::ASSIGN, Synonym{ "a" }));
+		q3.addEntity(Entity(EntityType::ASSIGN, Synonym{ "a1" }));
+		q3.addEntity(Entity(EntityType::STMT, Synonym{ "s" }));
+		q3.addSelected(Entity(EntityType::ASSIGN, Synonym{ "a" }));
+		q3.addRelation(RelRef(RelType::FOLLOWS_T, Entity(EntityType::STMT, Synonym{ "s" }), Entity(EntityType::ASSIGN, Synonym{ "a" })));
+		q3.addPattern(Pattern(Entity(EntityType::ASSIGN, Synonym{ "a1" }), Entity(EntityType::VARIABLE, "i"), "10", false));
+
+		EXPECT_EQ(test3, q3);
+	}
+
+	TEST(parse, oneSuchThatAndOnePatternClauseParent) {
+		QueryPreprocessor qp;
+		Query test = qp.parse("stmt s; assign a, a1; variable v; Select a such that Parent(s, a) pattern a1(v, _)");
+
+		Query q;
+		q.addEntity(Entity(EntityType::STMT, Synonym{ "s" }));
+		q.addEntity(Entity(EntityType::ASSIGN, Synonym{ "a" }));
+		q.addEntity(Entity(EntityType::ASSIGN, Synonym{ "a1" }));
+		q.addEntity(Entity(EntityType::VARIABLE, Synonym{ "v" }));
+		q.addSelected(Entity(EntityType::ASSIGN, Synonym{ "a" }));
+		q.addRelation(RelRef(RelType::PARENT, Entity(EntityType::STMT, Synonym{ "s" }), Entity(EntityType::ASSIGN, Synonym{ "a" })));
+		q.addPattern(Pattern(Entity(EntityType::ASSIGN, Synonym{ "a1" }), Entity(EntityType::VARIABLE, Synonym{ "v" }), "", true));
+
+		EXPECT_EQ(test, q);
+
+		Query test2 = qp.parse("assign a; stmt s; Select a such that Parent(s, 9) pattern a(\"q\", _\"p\"_)");
+
+		Query q2;
+		q2.addEntity(Entity(EntityType::ASSIGN, Synonym{ "a" }));
+		q2.addEntity(Entity(EntityType::STMT, Synonym{ "s" }));
+		q2.addSelected(Entity(EntityType::ASSIGN, Synonym{ "a" }));
+		q2.addRelation(RelRef(RelType::PARENT, Entity(EntityType::STMT, Synonym{ "s" }), Entity(EntityType::CONSTANT, "9")));
+		q2.addPattern(Pattern(Entity(EntityType::ASSIGN, Synonym{ "a" }), Entity(EntityType::VARIABLE, "q"), "p", true));
+
+		EXPECT_EQ(test2, q2);
+
+		Query test3 = qp.parse("assign a, a1; stmt s; Select a such that Parent(s, a) pattern a1(\"i\", \"10\")");
+
+		Query q3;
+		q3.addEntity(Entity(EntityType::ASSIGN, Synonym{ "a" }));
+		q3.addEntity(Entity(EntityType::ASSIGN, Synonym{ "a1" }));
+		q3.addEntity(Entity(EntityType::STMT, Synonym{ "s" }));
+		q3.addSelected(Entity(EntityType::ASSIGN, Synonym{ "a" }));
+		q3.addRelation(RelRef(RelType::PARENT, Entity(EntityType::STMT, Synonym{ "s" }), Entity(EntityType::ASSIGN, Synonym{ "a" })));
+		q3.addPattern(Pattern(Entity(EntityType::ASSIGN, Synonym{ "a1" }), Entity(EntityType::VARIABLE, "i"), "10", false));
+
+		EXPECT_EQ(test3, q3);
+	}
+
+	TEST(parse, oneSuchThatAndOnePatternClauseParentT) {
+		QueryPreprocessor qp;
+		Query test = qp.parse("stmt s; assign a, a1; variable v; Select a such that Parent*(s, a) pattern a1(v, _)");
+
+		Query q;
+		q.addEntity(Entity(EntityType::STMT, Synonym{ "s" }));
+		q.addEntity(Entity(EntityType::ASSIGN, Synonym{ "a" }));
+		q.addEntity(Entity(EntityType::ASSIGN, Synonym{ "a1" }));
+		q.addEntity(Entity(EntityType::VARIABLE, Synonym{ "v" }));
+		q.addSelected(Entity(EntityType::ASSIGN, Synonym{ "a" }));
+		q.addRelation(RelRef(RelType::PARENT_T, Entity(EntityType::STMT, Synonym{ "s" }), Entity(EntityType::ASSIGN, Synonym{ "a" })));
+		q.addPattern(Pattern(Entity(EntityType::ASSIGN, Synonym{ "a1" }), Entity(EntityType::VARIABLE, Synonym{ "v" }), "", true));
+
+		EXPECT_EQ(test, q);
+
+		Query test2 = qp.parse("assign a; stmt s; Select a such that Parent*(s, 9) pattern a(\"q\", _\"p\"_)");
+
+		Query q2;
+		q2.addEntity(Entity(EntityType::ASSIGN, Synonym{ "a" }));
+		q2.addEntity(Entity(EntityType::STMT, Synonym{ "s" }));
+		q2.addSelected(Entity(EntityType::ASSIGN, Synonym{ "a" }));
+		q2.addRelation(RelRef(RelType::PARENT_T, Entity(EntityType::STMT, Synonym{ "s" }), Entity(EntityType::CONSTANT, "9")));
+		q2.addPattern(Pattern(Entity(EntityType::ASSIGN, Synonym{ "a" }), Entity(EntityType::VARIABLE, "q"), "p", true));
+
+		EXPECT_EQ(test2, q2);
+
+		Query test3 = qp.parse("assign a, a1; stmt s; Select a such that Parent*(s, a) pattern a1(\"i\", \"10\")");
+
+		Query q3;
+		q3.addEntity(Entity(EntityType::ASSIGN, Synonym{ "a" }));
+		q3.addEntity(Entity(EntityType::ASSIGN, Synonym{ "a1" }));
+		q3.addEntity(Entity(EntityType::STMT, Synonym{ "s" }));
+		q3.addSelected(Entity(EntityType::ASSIGN, Synonym{ "a" }));
+		q3.addRelation(RelRef(RelType::PARENT_T, Entity(EntityType::STMT, Synonym{ "s" }), Entity(EntityType::ASSIGN, Synonym{ "a" })));
+		q3.addPattern(Pattern(Entity(EntityType::ASSIGN, Synonym{ "a1" }), Entity(EntityType::VARIABLE, "i"), "10", false));
+
+		EXPECT_EQ(test3, q3);
+	}
+
 	TEST(parse, patternThenSuchThat) {
 		QueryPreprocessor qp;
 		Query test = qp.parse("assign a, a1; Select a pattern a1(\"y\", _\"x\"_) such that Modifies(a, \"x\") ");
