@@ -20,7 +20,7 @@ namespace UnitTesting {
 			RelRef relation2(type, { STMT, "1" }, { STMT, "2" });
 			RelRef relation3(type, { STMT, "1" }, { WILD });
 			RelRef relation4(type, { WILD }, { STMT, "2" });
-			RelRef relation5(type, { STMT, Synonym{"a"} }, { STMT, Synonym{"a"} });
+			RelRef relation5(type, { STMT, Synonym{"a"} }, { STMT, Synonym{"b"} });
 			RelRef relation6(type, { WILD }, { STMT, Synonym{"a"} });
 			RelRef relation7(type, { STMT, Synonym{"a"} }, { WILD });
 			RelRef relation8(type, { STMT, "1" }, { STMT, Synonym{"a"} });
@@ -43,7 +43,7 @@ namespace UnitTesting {
 			RelRef relation2(type, { STMT, "1" }, { STMT, "2" });
 			RelRef relation3(type, { STMT, "1" }, { WILD });
 			RelRef relation4(type, { WILD }, { STMT, "2" });
-			RelRef relation5(type, { STMT, Synonym{"a"} }, { STMT, Synonym{"a"} });
+			RelRef relation5(type, { STMT, Synonym{"a"} }, { STMT, Synonym{"b"} });
 			RelRef relation6(type, { WILD }, { STMT, Synonym{"a"} });
 			RelRef relation7(type, { STMT, Synonym{"a"} }, { WILD });
 			RelRef relation8(type, { STMT, "1" }, { STMT, Synonym{"a"} });

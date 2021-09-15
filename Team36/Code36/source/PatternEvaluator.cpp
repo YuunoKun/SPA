@@ -9,14 +9,14 @@ void PatternEvaluator::evaluatePattern(QueryResult& queryResult, Pattern& patter
 	std::vector<assign_info> assignInfos;
 	if (pattern.getExpression() == "" && pattern.isWild()) {
 		assignInfos = pkb.getAssignInfo();
-	} else {
+	}
+	else {
 		assignInfos = pkb.getAssignInfo(pattern.getExpression(), pattern.isWild());
 	}
 
 	Entity patternType = pattern.getPatternType();
 	Entity lhsEntity = pattern.getLeftExpression();
 	std::string expression = pattern.getExpression();
-
 
 	//If left side is wild and right side is WILD: e.g a(v, _"x"_)
 	//if lhs side is at least is declaration, return 2 column table
@@ -35,7 +35,6 @@ void PatternEvaluator::evaluatePattern(QueryResult& queryResult, Pattern& patter
 			}
 			ResultTable resultTable(patternType, table);
 			queryResult.addResult(resultTable);
-
 		}
 		else {
 			//If left side is constant and right side is normal: e.g a("x", "x")

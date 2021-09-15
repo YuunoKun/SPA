@@ -5,11 +5,9 @@
 #include <PatternEvaluator.h>
 
 namespace UnitTesting {
-
 	TEST(PatternEvaluator, evaluatePattern) {
 		PKB::getInstance().resetCache();
 		PatternEvaluator evaluator;
-		
 
 		Entity assign = { ASSIGN, "a" };
 		Entity lhsSynonym = { VARIABLE, Synonym{"a"} };
@@ -54,7 +52,7 @@ namespace UnitTesting {
 		}
 
 		//Test for pattern a(a, "x")
-		lhsExistList = { lhsSynonym, lhsX  };
+		lhsExistList = { lhsSynonym, lhsX };
 		for (auto exist : lhsExistList) {
 			QueryResult result;
 			Pattern pattern(assign, exist, "x", false);
@@ -126,5 +124,4 @@ namespace UnitTesting {
 			EXPECT_FALSE(result.haveResult());
 		}
 	}
-
 }

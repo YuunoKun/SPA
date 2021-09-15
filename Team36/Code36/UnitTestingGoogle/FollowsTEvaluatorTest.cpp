@@ -23,6 +23,7 @@ namespace UnitTesting {
 		PKB::getInstance().addStmt(STMT_IF);
 		EXPECT_FALSE(evaluator.haveRelation());
 		PKB::getInstance().addFollows(1, 2);
+		PKB::getInstance().generateFollowsT();
 		EXPECT_TRUE(evaluator.haveRelation());
 	}
 
@@ -38,6 +39,7 @@ namespace UnitTesting {
 		PKB::getInstance().addStmt(STMT_IF);
 		PKB::getInstance().addFollows(1, 2);
 		PKB::getInstance().addFollows(2, 3);
+		PKB::getInstance().generateFollowsT();
 		EXPECT_TRUE(evaluator.isRelation(e1, e2));
 		EXPECT_TRUE(evaluator.isRelation(e1, e3));
 		EXPECT_TRUE(evaluator.isRelation(e2, e3));
@@ -67,6 +69,7 @@ namespace UnitTesting {
 		PKB::getInstance().addStmt(STMT_IF);
 		PKB::getInstance().addFollows(1, 2);
 		PKB::getInstance().addFollows(2, 3);
+		PKB::getInstance().generateFollowsT();
 		EXPECT_TRUE(evaluator.haveRelationAtRight(e1));
 		EXPECT_TRUE(evaluator.haveRelationAtRight(e2));
 		EXPECT_FALSE(evaluator.haveRelationAtRight(e3));
@@ -84,6 +87,7 @@ namespace UnitTesting {
 		PKB::getInstance().addStmt(STMT_IF);
 		PKB::getInstance().addFollows(1, 2);
 		PKB::getInstance().addFollows(2, 3);
+		PKB::getInstance().generateFollowsT();
 		EXPECT_FALSE(evaluator.haveRelationAtLeft(e1));
 		EXPECT_TRUE(evaluator.haveRelationAtLeft(e2));
 		EXPECT_TRUE(evaluator.haveRelationAtLeft(e3));
@@ -102,6 +106,7 @@ namespace UnitTesting {
 		PKB::getInstance().addStmt(STMT_IF);
 		PKB::getInstance().addFollows(1, 2);
 		PKB::getInstance().addFollows(2, 3);
+		PKB::getInstance().generateFollowsT();
 
 		std::vector<std::pair<StmtInfo, StmtInfo>> v = pkb.getFollowsT();
 		Entity left = { STMT, Synonym{"a"} };
@@ -133,7 +138,7 @@ namespace UnitTesting {
 
 		v = { };
 		left = { READ, Synonym{"a"} };
-		right = { READ, Synonym{"b"} };
+		right = { IF, Synonym{"b"} };
 		header = { left, right };
 		t = ResultTable(header, v);
 		EXPECT_EQ(evaluator.getRelations(left, right), t);
@@ -157,6 +162,7 @@ namespace UnitTesting {
 		PKB::getInstance().addStmt(STMT_IF);
 		PKB::getInstance().addFollows(1, 2);
 		PKB::getInstance().addFollows(2, 3);
+		PKB::getInstance().generateFollowsT();
 
 		std::vector<StmtInfo> v = pkb.getFollowingT();
 		Entity header = { STMT, Synonym{"a"} };
@@ -168,7 +174,7 @@ namespace UnitTesting {
 		t = ResultTable(header, v);
 		EXPECT_EQ(evaluator.getRightRelations(header), t);
 
-		v = { p1 };
+		v = { p2, p3 };
 		header = { READ, Synonym{"a"} };
 		t = ResultTable(header, v);
 		EXPECT_EQ(evaluator.getRightRelations(header), t);
@@ -200,6 +206,7 @@ namespace UnitTesting {
 		PKB::getInstance().addStmt(STMT_IF);
 		PKB::getInstance().addFollows(1, 2);
 		PKB::getInstance().addFollows(2, 3);
+		PKB::getInstance().generateFollowsT();
 
 		std::vector<StmtInfo> v = pkb.getFollowedT();
 		Entity header = { STMT, Synonym{"a"} };
@@ -243,6 +250,7 @@ namespace UnitTesting {
 		PKB::getInstance().addStmt(STMT_IF);
 		PKB::getInstance().addFollows(1, 2);
 		PKB::getInstance().addFollows(2, 3);
+		PKB::getInstance().generateFollowsT();
 
 		std::vector<StmtInfo> v = { p2, p3 };
 		Entity header = { STMT, Synonym{"a"} };
@@ -250,14 +258,20 @@ namespace UnitTesting {
 		ResultTable t(header, v);
 		EXPECT_EQ(evaluator.getRelationMatchLeft(match, header), t);
 
-		v = { p3 };
-		header = { STMT, Synonym{"a"} };
-		match = { STMT, "2" };
+		v = { p2 };
+		header = { PRINT, Synonym{"a"} };
+		match = { STMT, "1" };
 		t = ResultTable(header, v);
 		EXPECT_EQ(evaluator.getRelationMatchLeft(match, header), t);
 
-		v = { p2 };
-		header = { PRINT, Synonym{"a"} };
+		v = { p3 };
+		header = { READ, Synonym{"a"} };
+		match = { STMT, "1" };
+		t = ResultTable(header, v);
+		EXPECT_EQ(evaluator.getRelationMatchLeft(match, header), t);
+
+		v = { p3 };
+		header = { STMT, Synonym{"a"} };
 		match = { STMT, "2" };
 		t = ResultTable(header, v);
 		EXPECT_EQ(evaluator.getRelationMatchLeft(match, header), t);
@@ -303,6 +317,7 @@ namespace UnitTesting {
 		PKB::getInstance().addStmt(STMT_IF);
 		PKB::getInstance().addFollows(1, 2);
 		PKB::getInstance().addFollows(2, 3);
+		PKB::getInstance().generateFollowsT();
 
 		std::vector<StmtInfo> v = { p1, p2 };
 		Entity header = { STMT, Synonym{"a"} };
