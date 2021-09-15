@@ -500,4 +500,18 @@ namespace UnitTesting {
 
 		EXPECT_EQ(test7, q7);
 	}
+
+	TEST(parse, oneSuchThatAndOnePatternClause) {
+		QueryPreprocessor qp;
+		Query test = qp.parse("assign a, a1; Select a such that Modifies(a, \"x\") pattern a1(\"y\", _\"x\"_)");
+
+		Query q;
+		q.addEntity(Entity(EntityType::ASSIGN, Synonym{ "a" }));
+		q.addEntity(Entity(EntityType::ASSIGN, Synonym{ "a1" }));
+		q.addSelected(Entity(EntityType::ASSIGN, Synonym{ "a" }));
+		q.addRelation(RelRef(RelType::MODIFIES_S, Entity(EntityType::ASSIGN, Synonym{ "a" }), Entity(EntityType::VARIABLE, "x")));
+		q.addPattern(Pattern(Entity(EntityType::ASSIGN, Synonym{ "a1" }), Entity(EntityType::VARIABLE, "y"), "x", true));
+
+		EXPECT_EQ(test, q);
+	}
 }
