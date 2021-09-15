@@ -817,4 +817,15 @@ namespace UnitTesting {
 
 		EXPECT_EQ(test, q);
 	}
+
+	TEST(parse, invalidQueries) {
+		QueryPreprocessor qp;
+		Query q = Query();
+
+		Query test1 = qp.parse("asg a;");
+		Query test2 = qp.parse("la;skdjf lkasdfj laks;fdj");
+
+		EXPECT_EQ(test1, q);
+		EXPECT_EQ(test2, q);
+	}
 }
