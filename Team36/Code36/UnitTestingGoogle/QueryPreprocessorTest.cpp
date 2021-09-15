@@ -2,6 +2,7 @@
 
 #include "QueryPreprocessor.h"
 #include "Entity.h"
+#include "RelRef.h"
 
 namespace UnitTesting {
 	TEST(parse, addSingleStatement) {
@@ -179,7 +180,7 @@ namespace UnitTesting {
 
 	TEST(parse, addSingleIf) {
 		QueryPreprocessor qp;
-		Query test = qp.parse("ifs if;");
+		Query test = qp.parse("if if;");
 
 		Query q;
 		q.addEntity(Entity(EntityType::IF, Synonym{ "if" }));
@@ -193,7 +194,7 @@ namespace UnitTesting {
 
 	TEST(parse, addMultipleIfs) {
 		QueryPreprocessor qp;
-		Query test = qp.parse("ifs if, if1;");
+		Query test = qp.parse("if if, if1;");
 
 		Query q;
 		q.addEntity(Entity(EntityType::IF, Synonym{ "if" }));
@@ -318,31 +319,53 @@ namespace UnitTesting {
 		EXPECT_EQ(test.getSelected(), q.getSelected());
 	}
 
-	TEST(parse, validSuchthatUses) {
-		//TODO
-	}
+	TEST(parse, oneSuchThatClause) {
+		QueryPreprocessor qp;
+		Query test = qp.parse("stmt s; Select s such that Follows* (6, s)");
 
-	TEST(parse, validSuchthatModifies) {
-		//TODO
-	}
+		Query q;
+		q.addEntity(Entity(EntityType::STMT, Synonym{ "s" }));
+		q.addSelected(Entity(EntityType::STMT, Synonym{ "s" }));
+		q.addRelation(RelRef(RelType::FOLLOWS_T, Entity(EntityType::CONSTANT, "6"), Entity(EntityType::STMT, Synonym{ "s" })));
 
-	TEST(parse, validSuchthatParent) {
-		//TODO
-	}
+		EXPECT_EQ(test, q);
 
-	TEST(parse, validSuchthatParentT) {
-		//TODO
-	}
+		Query test2 = qp.parse("variable v; Select v such that Modifies (6, v)");
 
-	TEST(parse, validSuchthatFollows) {
-		//TODO
-	}
+		Query q2;
+		q.addEntity(Entity(EntityType::VARIABLE, Synonym{ "v" }));
+		q.addSelected(Entity(EntityType::VARIABLE, Synonym{ "v" }));
+		q.addRelation(RelRef(RelType::MODIFIES_S, Entity(EntityType::CONSTANT, "6"), Entity(EntityType::VARIABLE, Synonym{ "v" })));
 
-	TEST(parse, validSuchthatFollowsT) {
-		//TODO
-	}
+		EXPECT_EQ(test2, q2);
 
-	TEST(parse, validPattern) {
-		//TODO
+		//Query test3 = qp.parse("variable v; Select v such that Uses (14, v)");
+
+		//Query q3;
+		//q.addEntity(Entity(EntityType::VARIABLE, Synonym{ "v" }));
+		//q.addSelected(Entity(EntityType::VARIABLE, Synonym{ "v" }));
+		//q.addRelation(RelRef(RelType::USES_S, Entity(EntityType::CONSTANT, "14"), Entity(EntityType::VARIABLE, Synonym{ "v" })));
+
+		//EXPECT_EQ(test3, q3);
+
+		//Query test4 = qp.parse("variable v; procedure p; Select p such that Modifies (p, “x”)");
+
+		//Query q4;
+		//q.addEntity(Entity(EntityType::VARIABLE, Synonym{ "v" }));
+		//q.addEntity(Entity(EntityType::PROCEDURE, Synonym{ "p" }));
+		//q.addSelected(Entity(EntityType::PROCEDURE, Synonym{ "p" }));
+		//q.addRelation(RelRef(RelType::MODIFIES_S, Entity(EntityType::PROCEDURE, Synonym{ "p" }), Entity(EntityType::VARIABLE, "x")));
+
+		//EXPECT_EQ(test4, q4);
+
+		//Query test5 = qp.parse("assign a; while w; Select a such that Parent* (w, a)");
+
+		//Query q5;
+		//q.addEntity(Entity(EntityType::ASSIGN, Synonym{ "a" }));
+		//q.addEntity(Entity(EntityType::WHILE, Synonym{ "w" }));
+		//q.addSelected(Entity(EntityType::ASSIGN, Synonym{ "a" }));
+		//q.addRelation(RelRef(RelType::PARENT_T, Entity(EntityType::WHILE, Synonym{ "w" }), Entity(EntityType::ASSIGN, Synonym{ "a" })));
+
+		//EXPECT_EQ(test5, q5);
 	}
 }
