@@ -25,7 +25,7 @@ Select w such that Modifies(w, _)
 5000
 6 - select whiles that modifies variable 'f'
 while w;
-Select w such that Modifies(w, 'f')
+Select w such that Modifies(w, "f")
 none
 5000
 3 - Select variables that are modified in a while
