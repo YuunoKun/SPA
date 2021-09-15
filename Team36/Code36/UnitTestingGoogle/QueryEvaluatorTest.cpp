@@ -45,7 +45,8 @@ namespace UnitTesting {
 			PKB::getInstance().addUsesS(std::stoi(USES_LEFT2), USES_RIGHT2);
 			PKB::getInstance().addExprTree(std::stoi(MODIFIES_LEFT3), EXPRESSION1);
 			PKB::getInstance().addExprTree(std::stoi(MODIFIES_LEFT4), EXPRESSION2);
-
+			PKB::getInstance().generateFollowsT();
+			PKB::getInstance().generateParentT();
 		}
 
 		~QueryEvaluatorTest() override {
@@ -93,7 +94,6 @@ namespace UnitTesting {
 			}
 		}
 
-
 		void validateEmptyPatterns(std::vector<Pattern> patterns) {
 			for (unsigned int i = 0; i < patterns.size(); i++) {
 				for (unsigned int j = 0; j < ALL_SELECT.size(); j++) {
@@ -129,7 +129,6 @@ namespace UnitTesting {
 				}
 			}
 		}
-
 
 		const var_name x = "x";
 		const var_name y = "y";
@@ -186,7 +185,7 @@ namespace UnitTesting {
 		const std::string MODIFIES_RIGHT4 = y;
 
 		const std::string EXPRESSION1 = "x";
-		const std::string EXPRESSION2= "x + y";
+		const std::string EXPRESSION2 = "x + y";
 
 		const std::vector<std::string> MODIFIES_LEFTS = { MODIFIES_LEFT1, MODIFIES_LEFT2, MODIFIES_LEFT3, MODIFIES_LEFT4 };
 		const std::vector<std::string> MODIFIES_RIGHTS = { MODIFIES_RIGHT1, MODIFIES_RIGHT2, MODIFIES_RIGHT3, MODIFIES_RIGHT4 };
@@ -255,7 +254,6 @@ namespace UnitTesting {
 			{STMT, "1"}, {STMT, "2"}, {STMT, "3"}, {STMT, "4"}, {STMT, "5"}, {STMT, "6"},
 			{STMT, "7"}, {STMT, "8"}, {STMT, "9"}, {STMT, "10"}, {STMT, "11"}, {STMT, "12"}
 		};
-
 
 		std::vector<Entity> ALL_VARIABLES = { { VARIABLE, x }, { VARIABLE, y }, { VARIABLE, z } };
 	};
@@ -346,12 +344,12 @@ namespace UnitTesting {
 		std::string right1 = FOLLOW_RIGHT1;
 		std::string right2 = FOLLOW_RIGHT2;
 		//Have Result for matching header
-		relations.push_back(RelRef(type, { STMT, Synonym{"a"} }, { STMT, Synonym{"a"} }));
-		relations.push_back(RelRef(type, { IF, Synonym{"a"} }, { STMT, Synonym{"a"} }));
-		relations.push_back(RelRef(type, { STMT, Synonym{"a"} }, { IF, Synonym{"a"} }));
-		relations.push_back(RelRef(type, { STMT, Synonym{"a"} }, { WHILE, Synonym{"a"} }));
-		relations.push_back(RelRef(type, { IF, Synonym{"a"} }, { IF, Synonym{"a"} }));
-		relations.push_back(RelRef(type, { IF, Synonym{"a"} }, { WHILE, Synonym{"a"} }));
+		relations.push_back(RelRef(type, { STMT, Synonym{"a"} }, { STMT, Synonym{"b"} }));
+		relations.push_back(RelRef(type, { IF, Synonym{"a"} }, { STMT, Synonym{"b"} }));
+		relations.push_back(RelRef(type, { STMT, Synonym{"a"} }, { IF, Synonym{"b"} }));
+		relations.push_back(RelRef(type, { STMT, Synonym{"a"} }, { WHILE, Synonym{"b"} }));
+		relations.push_back(RelRef(type, { IF, Synonym{"a"} }, { IF, Synonym{"b"} }));
+		relations.push_back(RelRef(type, { IF, Synonym{"a"} }, { WHILE, Synonym{"b"} }));
 		relations.push_back(RelRef(type, WILD_CARD, { STMT, Synonym{"a"} }));
 		relations.push_back(RelRef(type, WILD_CARD, { IF, Synonym{"a"} }));
 		relations.push_back(RelRef(type, WILD_CARD, { WHILE, Synonym{"a"} }));
@@ -606,11 +604,11 @@ namespace UnitTesting {
 
 		std::vector<RelRef> relations;
 		//Have Result for matching header
-		relations.push_back(RelRef(type, { STMT, Synonym{"a"} }, { STMT, Synonym{"a"} }));
-		relations.push_back(RelRef(type, { IF, Synonym{"a"} }, { STMT, Synonym{"a"} }));
-		relations.push_back(RelRef(type, { STMT, Synonym{"a"} }, { IF, Synonym{"a"} }));
-		relations.push_back(RelRef(type, { IF, Synonym{"a"} }, { IF, Synonym{"a"} }));
-		relations.push_back(RelRef(type, { IF, Synonym{"a"} }, { WHILE, Synonym{"a"} }));
+		relations.push_back(RelRef(type, { STMT, Synonym{"a"} }, { STMT, Synonym{"b"} }));
+		relations.push_back(RelRef(type, { IF, Synonym{"a"} }, { STMT, Synonym{"b"} }));
+		relations.push_back(RelRef(type, { STMT, Synonym{"a"} }, { IF, Synonym{"b"} }));
+		relations.push_back(RelRef(type, { IF, Synonym{"a"} }, { IF, Synonym{"b"} }));
+		relations.push_back(RelRef(type, { IF, Synonym{"a"} }, { WHILE, Synonym{"b"} }));
 		relations.push_back(RelRef(type, WILD_CARD, { STMT, Synonym{"a"} }));
 		relations.push_back(RelRef(type, WILD_CARD, { IF, Synonym{"a"} }));
 		relations.push_back(RelRef(type, WILD_CARD, { WHILE, Synonym{"a"} }));
@@ -879,14 +877,14 @@ namespace UnitTesting {
 		std::string right3 = PARENT_RIGHT3;
 
 		//Have Result for matching header
-		relations.push_back(RelRef(type, { STMT, Synonym{"a"} }, { STMT, Synonym{"a"} }));
-		relations.push_back(RelRef(type, { IF, Synonym{"a"} }, { STMT, Synonym{"a"} }));
-		relations.push_back(RelRef(type, { WHILE, Synonym{"a"} }, { STMT, Synonym{"a"} }));
-		relations.push_back(RelRef(type, { STMT, Synonym{"a"} }, { IF, Synonym{"a"} }));
-		relations.push_back(RelRef(type, { STMT, Synonym{"a"} }, { WHILE, Synonym{"a"} }));
-		relations.push_back(RelRef(type, { IF, Synonym{"a"} }, { IF, Synonym{"a"} }));
-		relations.push_back(RelRef(type, { IF, Synonym{"a"} }, { WHILE, Synonym{"a"} }));
-		relations.push_back(RelRef(type, { WHILE, Synonym{"a"} }, { WHILE, Synonym{"a"} }));
+		relations.push_back(RelRef(type, { STMT, Synonym{"a"} }, { STMT, Synonym{"b"} }));
+		relations.push_back(RelRef(type, { IF, Synonym{"a"} }, { STMT, Synonym{"b"} }));
+		relations.push_back(RelRef(type, { WHILE, Synonym{"a"} }, { STMT, Synonym{"b"} }));
+		relations.push_back(RelRef(type, { STMT, Synonym{"a"} }, { IF, Synonym{"b"} }));
+		relations.push_back(RelRef(type, { STMT, Synonym{"a"} }, { WHILE, Synonym{"b"} }));
+		relations.push_back(RelRef(type, { IF, Synonym{"a"} }, { IF, Synonym{"b"} }));
+		relations.push_back(RelRef(type, { IF, Synonym{"a"} }, { WHILE, Synonym{"b"} }));
+		relations.push_back(RelRef(type, { WHILE, Synonym{"a"} }, { WHILE, Synonym{"b"} }));
 		relations.push_back(RelRef(type, WILD_CARD, { STMT, Synonym{"a"} }));
 		relations.push_back(RelRef(type, WILD_CARD, { IF, Synonym{"a"} }));
 		relations.push_back(RelRef(type, WILD_CARD, { WHILE, Synonym{"a"} }));
@@ -1177,14 +1175,14 @@ namespace UnitTesting {
 
 		std::vector<RelRef> relations;
 		//Have Result for matching header
-		relations.push_back(RelRef(type, { STMT, Synonym{"a"} }, { STMT, Synonym{"a"} }));
-		relations.push_back(RelRef(type, { IF, Synonym{"a"} }, { STMT, Synonym{"a"} }));
-		relations.push_back(RelRef(type, { WHILE, Synonym{"a"} }, { STMT, Synonym{"a"} }));
-		relations.push_back(RelRef(type, { STMT, Synonym{"a"} }, { IF, Synonym{"a"} }));
-		relations.push_back(RelRef(type, { STMT, Synonym{"a"} }, { WHILE, Synonym{"a"} }));
-		relations.push_back(RelRef(type, { IF, Synonym{"a"} }, { IF, Synonym{"a"} }));
-		relations.push_back(RelRef(type, { IF, Synonym{"a"} }, { WHILE, Synonym{"a"} }));
-		relations.push_back(RelRef(type, { WHILE, Synonym{"a"} }, { WHILE, Synonym{"a"} }));
+		relations.push_back(RelRef(type, { STMT, Synonym{"a"} }, { STMT, Synonym{"b"} }));
+		relations.push_back(RelRef(type, { IF, Synonym{"a"} }, { STMT, Synonym{"b"} }));
+		relations.push_back(RelRef(type, { WHILE, Synonym{"a"} }, { STMT, Synonym{"b"} }));
+		relations.push_back(RelRef(type, { STMT, Synonym{"a"} }, { IF, Synonym{"b"} }));
+		relations.push_back(RelRef(type, { STMT, Synonym{"a"} }, { WHILE, Synonym{"b"} }));
+		relations.push_back(RelRef(type, { IF, Synonym{"a"} }, { IF, Synonym{"b"} }));
+		relations.push_back(RelRef(type, { IF, Synonym{"a"} }, { WHILE, Synonym{"b"} }));
+		relations.push_back(RelRef(type, { WHILE, Synonym{"a"} }, { WHILE, Synonym{"b"} }));
 		relations.push_back(RelRef(type, WILD_CARD, { STMT, Synonym{"a"} }));
 		relations.push_back(RelRef(type, WILD_CARD, { IF, Synonym{"a"} }));
 		relations.push_back(RelRef(type, WILD_CARD, { WHILE, Synonym{"a"} }));
@@ -1307,9 +1305,9 @@ namespace UnitTesting {
 		}
 
 		//Test case for Select a such that ParentT("1", selected)
-		resultList[0] = { right1, right2 };
+		resultList[0] = { right1, right2, right3 };
 		resultList[1] = { right1 };
-		resultList[2] = { right2 };
+		resultList[2] = { right2, right3 };
 		for (unsigned int i = 0; i < selectedList.size(); i++) {
 			RelRef relation(type, { STMT, left1 }, selectedList[i]);
 			Query q = initQuery(relation, selectedList[i]);
@@ -1317,9 +1315,9 @@ namespace UnitTesting {
 		}
 
 		//Test case for Select a such that ParentT("2", selected)
-		resultList[0] = { right2 };
+		resultList[0] = { right2, right3 };
 		resultList[1] = { };
-		resultList[2] = { right2 };
+		resultList[2] = { right2, right3 };
 		for (unsigned int i = 0; i < selectedList.size(); i++) {
 			RelRef relation(type, { STMT, left2 }, selectedList[i]);
 			Query q = initQuery(relation, selectedList[i]);
@@ -1367,8 +1365,8 @@ namespace UnitTesting {
 		}
 
 		//Test case for Select a such that ParentT(selected, "4")
-		resultList[0] = { left3 };
-		resultList[1] = { };
+		resultList[0] = { left1, left2, left3 };
+		resultList[1] = { left1, left2 };
 		resultList[2] = { left3 };
 		for (unsigned int i = 0; i < selectedList.size(); i++) {
 			RelRef relation(type, selectedList[i], { STMT, right3 });
@@ -1390,9 +1388,6 @@ namespace UnitTesting {
 	//Modifies_S Relation Test ----------------------------------------------------------------------------------------------------
 	TEST_F(QueryEvaluatorTest, evaluateQueryModifiesBooleanTrue) {
 		RelType type = MODIFIES_S;
-
-		std::vector<std::string> lefts = MODIFIES_LEFTS;
-		std::vector<std::string> rights = MODIFIES_RIGHTS;
 		std::string left1 = MODIFIES_LEFT1;
 		std::string left2 = MODIFIES_LEFT2;
 		std::string right1 = MODIFIES_RIGHT1;
@@ -1582,7 +1577,7 @@ namespace UnitTesting {
 		resultList[2] = { right2 };
 		resultList[3] = { right3, right4 };
 
-		Entity selected(VARIABLE, COMMON_SYNONYM1);
+		Entity selected(VARIABLE, COMMON_SYNONYM2);
 		for (unsigned int i = 0; i < selectedList.size(); i++) {
 			RelRef relation(type, selectedList[i], selected);
 			Query q = initQuery(relation, selected);
@@ -1810,7 +1805,7 @@ namespace UnitTesting {
 		resultList[1] = { right1 };
 		resultList[2] = { right2 };
 
-		Entity selected(VARIABLE, COMMON_SYNONYM1);
+		Entity selected(VARIABLE, COMMON_SYNONYM2);
 		for (unsigned int i = 0; i < selectedList.size(); i++) {
 			RelRef relation(type, selectedList[i], selected);
 			Query q = initQuery(relation, selected);
@@ -1955,7 +1950,7 @@ namespace UnitTesting {
 
 		patterns.push_back(Pattern(assignCommon, lhsCommon, x, true));
 		selected.push_back(lhsCommon);
-		results.push_back({ right1, right2});
+		results.push_back({ right1, right2 });
 
 		patterns.push_back(Pattern(assignCommon, lhsCommon, y, false));
 		selected.push_back(lhsCommon);
@@ -1998,7 +1993,6 @@ namespace UnitTesting {
 		patterns.push_back(Pattern(assignCommon, lhsY, y, true));
 		selected.push_back(assignCommon);
 		results.push_back({ left2 });
-
 
 		for (unsigned int i = 0; i < patterns.size(); i++) {
 			Query q = initQuery(patterns[i], selected[i]);

@@ -50,7 +50,7 @@ x, y, z
 5000
 11 - uses, 1 such that and 1 unknown synonym
 print pn;
-select pn such that Uses(pn, "z")
+Select pn such that Uses(pn, "z")
 11
 5000
 12 - uses, 1 such that and 1 unknown synonym

@@ -5,8 +5,6 @@
 #include "PKBAdapter.h"
 #include "ParentTEvaluator.h"
 
-
-
 //Handle both wild : e.g Relation(_, _)
 bool ParentTEvaluator::haveRelation() {
 	return !pkb.isParentTEmpty();
@@ -33,7 +31,7 @@ bool ParentTEvaluator::haveRelationAtLeft(Entity e) {
 
 //If both side is declartion: e.g Relation(a, b)
 ResultTable ParentTEvaluator::getRelations(Entity left, Entity right) {
-	std::vector<std::pair<StmtInfo, StmtInfo>> results = pkb.getAllParentRelation();
+	std::vector<std::pair<StmtInfo, StmtInfo>> results = pkb.getAllParentTRelation();
 	std::pair<Entity, Entity> header{ left, right };
 	ResultTable result = ResultTable(header, results);
 	return result;
