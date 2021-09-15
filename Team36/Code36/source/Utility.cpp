@@ -207,6 +207,8 @@ bool Utility::patternContain(std::string original, std::string match) {
 	std::replace(original.begin(), original.end(), '+', delim); // replace all '+' to 'space'
 	std::replace(original.begin(), original.end(), '-', delim); // replace all '-' to 'space'
 	std::replace(original.begin(), original.end(), '%', delim); // replace all '-' to 'space'
+	std::replace(original.begin(), original.end(), '(', delim); // replace all '(' to 'space'
+	std::replace(original.begin(), original.end(), ')', delim); // replace all ')' to 'space'
 
 	std::stringstream ss(original);
 	std::vector<std::string> variables;
