@@ -501,9 +501,70 @@ namespace UnitTesting {
 		EXPECT_EQ(test7, q7);
 	}
 
-	TEST(parse, oneSuchThatAndOnePatternClause) {
+	TEST(parse, oneSuchThatAndOnePatternClauseModifies) {
 		QueryPreprocessor qp;
 		Query test = qp.parse("assign a, a1; Select a such that Modifies(a, \"x\") pattern a1(\"y\", _\"x\"_)");
+
+		Query q;
+		q.addEntity(Entity(EntityType::ASSIGN, Synonym{ "a" }));
+		q.addEntity(Entity(EntityType::ASSIGN, Synonym{ "a1" }));
+		q.addSelected(Entity(EntityType::ASSIGN, Synonym{ "a" }));
+		q.addRelation(RelRef(RelType::MODIFIES_S, Entity(EntityType::ASSIGN, Synonym{ "a" }), Entity(EntityType::VARIABLE, "x")));
+		q.addPattern(Pattern(Entity(EntityType::ASSIGN, Synonym{ "a1" }), Entity(EntityType::VARIABLE, "y"), "x", true));
+
+		EXPECT_EQ(test, q);
+
+		Query test2 = qp.parse("assign a; variable v; Select a such that Modifies(6, \"z\") pattern a(v, _);");
+
+		Query q2;
+		q2.addEntity(Entity(EntityType::ASSIGN, Synonym{ "a" }));
+		q2.addEntity(Entity(EntityType::VARIABLE, Synonym{ "v" }));
+		q2.addSelected(Entity(EntityType::ASSIGN, Synonym{ "a" }));
+		q2.addRelation(RelRef(RelType::MODIFIES_S, Entity(EntityType::CONSTANT, "6"), Entity(EntityType::VARIABLE, "z")));
+		q2.addPattern(Pattern(Entity(EntityType::ASSIGN, Synonym{ "a" }), Entity(EntityType::VARIABLE, Synonym{ "v" }), "", true));
+
+		EXPECT_EQ(test2, q2);
+
+		Query test3 = qp.parse("assign a; variable v; Select a such that Modifies(15, \"p\") pattern a(v, _\"y\"_)");
+
+		Query q3;
+		q3.addEntity(Entity(EntityType::ASSIGN, Synonym{ "a" }));
+		q3.addEntity(Entity(EntityType::VARIABLE, Synonym{ "v" }));
+		q3.addSelected(Entity(EntityType::ASSIGN, Synonym{ "a" }));
+		q3.addRelation(RelRef(RelType::MODIFIES_S, Entity(EntityType::CONSTANT, "15"), Entity(EntityType::VARIABLE, "p")));
+		q3.addPattern(Pattern(Entity(EntityType::ASSIGN, Synonym{ "a" }), Entity(EntityType::VARIABLE, Synonym{ "v" }), "y", true));
+
+		EXPECT_EQ(test3, q3);
+
+		Query test4 = qp.parse("assign a, a1; variable v; Select v such that Modifies(a, \"q\") pattern a1(v, \"p\")");
+
+		Query q4;
+		q4.addEntity(Entity(EntityType::ASSIGN, Synonym{ "a" }));
+		q4.addEntity(Entity(EntityType::ASSIGN, Synonym{ "a1" }));
+		q4.addEntity(Entity(EntityType::VARIABLE, Synonym{ "v" }));
+		q4.addSelected(Entity(EntityType::VARIABLE, Synonym{ "v" }));
+		q4.addRelation(RelRef(RelType::MODIFIES_S, Entity(EntityType::ASSIGN, Synonym{ "a" }), Entity(EntityType::VARIABLE, "q")));
+		q4.addPattern(Pattern(Entity(EntityType::ASSIGN, Synonym{ "a1" }), Entity(EntityType::VARIABLE, Synonym{ "v" }), "p", false));
+
+		EXPECT_EQ(test4, q4);
+
+		Query test5 = qp.parse("assign a, a1; variable v, v1; Select v1 such that Modifies(a, v) pattern a1(v1, _\"5\"_)");
+
+		Query q5;
+		q5.addEntity(Entity(EntityType::ASSIGN, Synonym{ "a" }));
+		q5.addEntity(Entity(EntityType::ASSIGN, Synonym{ "a1" }));
+		q5.addEntity(Entity(EntityType::VARIABLE, Synonym{ "v" }));
+		q5.addEntity(Entity(EntityType::VARIABLE, Synonym{ "v1" }));
+		q5.addSelected(Entity(EntityType::VARIABLE, Synonym{ "v1" }));
+		q5.addRelation(RelRef(RelType::MODIFIES_S, Entity(EntityType::ASSIGN, Synonym{ "a" }), Entity(EntityType::VARIABLE, Synonym{ "v" })));
+		q5.addPattern(Pattern(Entity(EntityType::ASSIGN, Synonym{ "a1" }), Entity(EntityType::VARIABLE, Synonym{ "v1" }), "5", true));
+
+		EXPECT_EQ(test5, q5);
+	}
+
+	TEST(parse, patternThenSuchThat) {
+		QueryPreprocessor qp;
+		Query test = qp.parse("assign a, a1; Select a pattern a1(\"y\", _\"x\"_) such that Modifies(a, \"x\") ");
 
 		Query q;
 		q.addEntity(Entity(EntityType::ASSIGN, Synonym{ "a" }));
