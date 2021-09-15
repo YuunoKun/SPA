@@ -73,6 +73,10 @@ expr PatternRelRefValidator::setExpr(std::vector<QueryToken> token_chain) {
              token_chain[0].type == QueryToken::IDENTIFIER) {
     return token_chain[0].token_value;
   }
+  else if (token_chain.size() == 1 &&
+      token_chain[0].type == QueryToken::CONSTANT) {
+      return token_chain[0].token_value;
+  }
 }
 
 void PatternRelRefValidator::parseParameterSuchThat(
