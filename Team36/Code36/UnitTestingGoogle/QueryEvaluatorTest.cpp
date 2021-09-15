@@ -185,7 +185,8 @@ namespace UnitTesting {
 		const std::string MODIFIES_RIGHT4 = y;
 
 		const std::string EXPRESSION1 = "x";
-		const std::string EXPRESSION2 = "x + y";
+		const std::string EXPRESSION2 = "x + (y * 5)";
+		const std::string EXPRESSION_CONSTANT = "5";
 
 		const std::vector<std::string> MODIFIES_LEFTS = { MODIFIES_LEFT1, MODIFIES_LEFT2, MODIFIES_LEFT3, MODIFIES_LEFT4 };
 		const std::vector<std::string> MODIFIES_RIGHTS = { MODIFIES_RIGHT1, MODIFIES_RIGHT2, MODIFIES_RIGHT3, MODIFIES_RIGHT4 };
@@ -1850,31 +1851,34 @@ namespace UnitTesting {
 		Entity lhsY = { VARIABLE, y };
 
 		std::vector<Pattern> patterns;
-		patterns.push_back(Pattern(assign, lhsX, "x", true));
-		patterns.push_back(Pattern(assign, lhsX, "x", false));
-		patterns.push_back(Pattern(assign, lhsY, "y", true));
-		patterns.push_back(Pattern(assign, lhsY, "x", true));
+		patterns.push_back(Pattern(assign, lhsX, x, true));
+		patterns.push_back(Pattern(assign, lhsX, x, false));
+		patterns.push_back(Pattern(assign, lhsY, y, true));
+		patterns.push_back(Pattern(assign, lhsY, x, true));
 
-		patterns.push_back(Pattern(assign, lhsSynonym, "x", true));
-		patterns.push_back(Pattern(assign, lhsSynonym, "x", false));
-		patterns.push_back(Pattern(assign, lhsSynonym, "y", true));
+		patterns.push_back(Pattern(assign, lhsSynonym, x, true));
+		patterns.push_back(Pattern(assign, lhsSynonym, x, false));
+		patterns.push_back(Pattern(assign, lhsSynonym, y, true));
+		patterns.push_back(Pattern(assign, lhsY, EXPRESSION_CONSTANT, true));
+		patterns.push_back(Pattern(assign, lhsSynonym, EXPRESSION_CONSTANT, true));
 
 		validatePatterns(patterns);
 	}
 
 	TEST_F(QueryEvaluatorTest, evaluateQueryPatternFilterNoCommonSynonymFalse) {
+		std::string n = "n";
 		Entity assign = { ASSIGN, "a" };
 		Entity lhsSynonym = { VARIABLE, Synonym{"a"} };
 		Entity lhsX = { VARIABLE, x };
 		Entity lhsY = { VARIABLE, y };
 		Entity lhsZ = { VARIABLE, z };
-		Entity lhsN = { VARIABLE, "n" };
+		Entity lhsN = { VARIABLE, n };
 
 		std::vector<std::string> patternExpr;
-		patternExpr.push_back("x");
-		patternExpr.push_back("y");
-		patternExpr.push_back("z");
-		patternExpr.push_back("n");
+		patternExpr.push_back(x);
+		patternExpr.push_back(y);
+		patternExpr.push_back(z);
+		patternExpr.push_back(n);
 		std::vector<Pattern> patterns;
 		for (auto expr : patternExpr) {
 			patterns.push_back(Pattern(assign, lhsZ, expr, false));
@@ -1883,15 +1887,16 @@ namespace UnitTesting {
 			patterns.push_back(Pattern(assign, lhsN, expr, true));
 		}
 
-		patterns.push_back(Pattern(assign, lhsX, "y", true));
-		patterns.push_back(Pattern(assign, lhsX, "y", false));
-		patterns.push_back(Pattern(assign, lhsY, "y", false));
-		patterns.push_back(Pattern(assign, lhsY, "x", false));
-		patterns.push_back(Pattern(assign, lhsSynonym, "y", false));
-		patterns.push_back(Pattern(assign, lhsSynonym, "z", false));
-		patterns.push_back(Pattern(assign, lhsSynonym, "n", false));
-		patterns.push_back(Pattern(assign, lhsSynonym, "z", true));
-		patterns.push_back(Pattern(assign, lhsSynonym, "n", true));
+		patterns.push_back(Pattern(assign, lhsX, y, true));
+		patterns.push_back(Pattern(assign, lhsX, y, false));
+		patterns.push_back(Pattern(assign, lhsY, y, false));
+		patterns.push_back(Pattern(assign, lhsY, x, false));
+		patterns.push_back(Pattern(assign, lhsSynonym, y, false));
+		patterns.push_back(Pattern(assign, lhsSynonym, z, false));
+		patterns.push_back(Pattern(assign, lhsSynonym, n, false));
+		patterns.push_back(Pattern(assign, lhsSynonym, z, true));
+		patterns.push_back(Pattern(assign, lhsSynonym, n, true));
+		patterns.push_back(Pattern(assign, lhsSynonym, EXPRESSION_CONSTANT, false));
 
 		validateEmptyPatterns(patterns);
 	}
@@ -1917,62 +1922,84 @@ namespace UnitTesting {
 		results.push_back({ left1, left2 });
 
 		//Handle result for Select a pattern a(v, _)
-		patterns.push_back(Pattern(assignCommon, lhsCommon, "", true));
+		patterns.push_back(Pattern(assignCommon, WILD_CARD, "", true));
 		selected.push_back(assignCommon);
 		results.push_back({ left1, left2 });
 
-		//Handle result for Select v pattern a(v, _)
-		patterns.push_back(Pattern(assignCommon, lhsCommon, "", true));
-		selected.push_back(lhsCommon);
-		results.push_back({ right1, right2 });
+
+		//Handle result for Select a pattern a(_, "x")
+		patterns.push_back(Pattern(assignCommon, WILD_CARD, x, false));
+		selected.push_back(assignCommon);
+		results.push_back({ left1 });
+
+
+		//Handle result for Select a pattern a(_, _"x"_)
+		patterns.push_back(Pattern(assignCommon, WILD_CARD, x, true));
+		selected.push_back(assignCommon);
+		results.push_back({ left1, left2 });
+
+
+		//Handle result for Select a pattern a(_, "y")
+		patterns.push_back(Pattern(assignCommon, WILD_CARD, y, false));
+		selected.push_back(assignCommon);
+		results.push_back({ });
+
+		//Handle result for Select a pattern a(_, _"y"_)
+		patterns.push_back(Pattern(assignCommon, WILD_CARD, y, true));
+		selected.push_back(assignCommon);
+		results.push_back({ left2 });
 
 		//Handle result for Select a pattern a(v, "x")
 		patterns.push_back(Pattern(assignCommon, lhsCommon, x, false));
 		selected.push_back(assignCommon);
 		results.push_back({ left1 });
-
-		patterns.push_back(Pattern(assignCommon, lhsCommon, x, true));
-		selected.push_back(assignCommon);
-		results.push_back({ left1, left2 });
-
-		patterns.push_back(Pattern(assignCommon, lhsCommon, y, false));
-		selected.push_back(assignCommon);
-		results.push_back({ });
-
-		patterns.push_back(Pattern(assignCommon, lhsCommon, y, true));
-		selected.push_back(assignCommon);
-		results.push_back({ left2 });
-
-		//Handle result for Select v pattern a(v, "x")
 		patterns.push_back(Pattern(assignCommon, lhsCommon, x, false));
 		selected.push_back(lhsCommon);
 		results.push_back({ right1 });
 
+
+		//Handle result for Select a pattern a(v, _"x"_)
+		patterns.push_back(Pattern(assignCommon, lhsCommon, x, true));
+		selected.push_back(assignCommon);
+		results.push_back({ left1, left2 });
 		patterns.push_back(Pattern(assignCommon, lhsCommon, x, true));
 		selected.push_back(lhsCommon);
 		results.push_back({ right1, right2 });
 
+
+		//Handle result for Select a pattern a(v, "y")
+		patterns.push_back(Pattern(assignCommon, lhsCommon, y, false));
+		selected.push_back(assignCommon);
+		results.push_back({ });
 		patterns.push_back(Pattern(assignCommon, lhsCommon, y, false));
 		selected.push_back(lhsCommon);
 		results.push_back({ });
 
+		//Handle result for Select a pattern a(v, _"y"_)
+		patterns.push_back(Pattern(assignCommon, lhsCommon, y, true));
+		selected.push_back(assignCommon);
+		results.push_back({ left2 });
 		patterns.push_back(Pattern(assignCommon, lhsCommon, y, true));
 		selected.push_back(lhsCommon);
 		results.push_back({ right2 });
+			
 
 		//Handle result for Select a pattern a("x", "x")
 		patterns.push_back(Pattern(assignCommon, lhsX, x, false));
 		selected.push_back(assignCommon);
 		results.push_back({ left1 });
 
+		//Handle result for Select a pattern a("x", _"x"_)
 		patterns.push_back(Pattern(assignCommon, lhsX, x, true));
 		selected.push_back(assignCommon);
 		results.push_back({ left1 });
 
+		//Handle result for Select a pattern a("x", "y")
 		patterns.push_back(Pattern(assignCommon, lhsX, y, false));
 		selected.push_back(assignCommon);
 		results.push_back({ });
 
+		//Handle result for Select a pattern a("x", _"y"_)
 		patterns.push_back(Pattern(assignCommon, lhsX, y, true));
 		selected.push_back(assignCommon);
 		results.push_back({ });
@@ -1982,17 +2009,39 @@ namespace UnitTesting {
 		selected.push_back(assignCommon);
 		results.push_back({ });
 
+		//Handle result for Select a pattern a("y", _"x"_)
 		patterns.push_back(Pattern(assignCommon, lhsY, x, true));
 		selected.push_back(assignCommon);
 		results.push_back({ left2 });
 
-		patterns.push_back(Pattern(assignCommon, lhsY, y, false));
-		selected.push_back(assignCommon);
-		results.push_back({ });
-
+		//Handle result for Select a pattern a("y", _"y"_)
 		patterns.push_back(Pattern(assignCommon, lhsY, y, true));
 		selected.push_back(assignCommon);
 		results.push_back({ left2 });
+
+		//Handle result for Select a pattern a("y", "5")
+		patterns.push_back(Pattern(assignCommon, lhsY, EXPRESSION_CONSTANT, false));
+		selected.push_back(assignCommon);
+		results.push_back({ });
+
+		//Handle result for Select a pattern a("y", _"5"_)
+		patterns.push_back(Pattern(assignCommon, lhsY, EXPRESSION_CONSTANT, true));
+		selected.push_back(assignCommon);
+		results.push_back({ left2 });
+
+		//Handle result for Select a pattern a(_, _"5"_)
+		patterns.push_back(Pattern(assignCommon, WILD_CARD, EXPRESSION_CONSTANT, true));
+		selected.push_back(assignCommon);
+		results.push_back({ left2 });
+
+		//Handle result for Select a pattern a(v, _"5"_)
+		patterns.push_back(Pattern(assignCommon, lhsCommon, EXPRESSION_CONSTANT, true));
+		selected.push_back(assignCommon);
+		results.push_back({ left2 });
+		patterns.push_back(Pattern(assignCommon, lhsCommon, EXPRESSION_CONSTANT, true));
+		selected.push_back(lhsCommon);
+		results.push_back({ right2 });
+
 
 		for (unsigned int i = 0; i < patterns.size(); i++) {
 			Query q = initQuery(patterns[i], selected[i]);
