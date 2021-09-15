@@ -4,8 +4,6 @@
 #include "Common.h"
 #include <iostream>
 
-
-
 namespace UnitTesting {
 	class PatternRelRefValidatorTest : public ::testing::Test {
 	protected:
@@ -27,11 +25,10 @@ namespace UnitTesting {
 
 		// Class members declared here can be used by all tests in the test suite
 		// for Foo.
-
 	};
 
 	// Test setStmtRef
-	// 3 diff params 
+	// 3 diff params
 	TEST(PatternRelRefValidatorTest, setStmtRefTest) {
 		PatternRelRefValidator validator;
 
@@ -87,7 +84,7 @@ namespace UnitTesting {
 		synonym.name = "s";
 		Entity expected_declared_stmt = Entity(EntityType::STMT, synonym);
 		query.addEntity(expected_declared_stmt);
-		
+
 		//Result
 		QueryToken stmt_s_token = QueryToken(QueryToken::IDENTIFIER, "s");
 		temp_token_chain.push_back(stmt_s_token);
@@ -170,7 +167,7 @@ namespace UnitTesting {
 
 		//Result
 		validator.parseParameterSuchThat(query, QueryToken::MODIFIES_S, temp_token_chain);
-		
+
 		EXPECT_TRUE(query.getRelations()[0] == expected_rel);
 	}
 
@@ -216,8 +213,6 @@ namespace UnitTesting {
 		temp_token_chain.push_back({ QueryToken::IDENTIFIER, "s" });
 		temp_token_chain.push_back({ QueryToken::QUOTATION_CLOSE, "" });
 
-
-
 		std::vector<QueryToken> left_expr_token_chain;
 		left_expr_token_chain.push_back({ QueryToken::QUOTATION_OPEN, "" });
 		left_expr_token_chain.push_back({ QueryToken::IDENTIFIER, "procName" });
@@ -225,7 +220,6 @@ namespace UnitTesting {
 
 		std::vector<QueryToken> right_expr_token_chain;
 		right_expr_token_chain.push_back({ QueryToken::IDENTIFIER, "s" });
-
 
 		//Synonym
 		//Expected
@@ -237,7 +231,7 @@ namespace UnitTesting {
 		Entity expected_ent_wildcard = Entity(EntityType::WILD);
 
 		Pattern expected_pat = Pattern(expected_declared_assign, validator.setEntRef(query, left_expr_token_chain), validator.setExpr(right_expr_token_chain), false);
-		
+
 		//Result
 		validator.parseParameterPattern(query, expected_declared_assign, temp_token_chain);
 
@@ -261,9 +255,6 @@ namespace UnitTesting {
 		temp_token_chain.push_back({ QueryToken::QUOTATION_CLOSE, "" });
 		temp_token_chain.push_back({ QueryToken::WILDCARD, "" });
 
-
-
-
 		std::vector<QueryToken> left_expr_token_chain;
 		left_expr_token_chain.push_back({ QueryToken::QUOTATION_OPEN, "" });
 		left_expr_token_chain.push_back({ QueryToken::IDENTIFIER, "procName" });
@@ -271,7 +262,6 @@ namespace UnitTesting {
 
 		std::vector<QueryToken> right_expr_token_chain;
 		right_expr_token_chain.push_back({ QueryToken::IDENTIFIER, "s" });
-
 
 		//Synonym
 		//Expected
@@ -303,16 +293,12 @@ namespace UnitTesting {
 		temp_token_chain.push_back({ QueryToken::COMMA, "" });
 		temp_token_chain.push_back({ QueryToken::WILDCARD, "" });
 
-
-
-
 		std::vector<QueryToken> left_expr_token_chain;
 		left_expr_token_chain.push_back({ QueryToken::QUOTATION_OPEN, "" });
 		left_expr_token_chain.push_back({ QueryToken::IDENTIFIER, "procName" });
 		left_expr_token_chain.push_back({ QueryToken::QUOTATION_CLOSE, "" });
 
 		std::vector<QueryToken> right_expr_token_chain;
-
 
 		//Synonym
 		//Expected
@@ -330,5 +316,4 @@ namespace UnitTesting {
 
 		EXPECT_TRUE(query.getPatterns()[0] == expected_pat);
 	}
-
 }

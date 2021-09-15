@@ -7,21 +7,21 @@ procedure nested {
   f = 5;
   g = 6;
   while (g > f) {
-	while(f > e) {
-	  while(e > d) {
-	    while(d > c) {
-		  while(c > b) {
-		    while(b > a) {
-			  b = b - 1;
-			}
-			c = c - 1;
-		  }
-		   d = d - 1;
-		}
-		 e = e - 1;
-	  }
-	   f = f - 1;
-	}
-	 g = g - 1;
+ while(f > e) {
+   while(e > d) {
+     while(d > c) {
+    while(c > b) {
+      while(b > a) {
+     b = b - 1;
+   }
+   c = c - 1;
+    }
+     d = d - 1;
+  }
+   e = e - 1;
+   }
+    f = f - 1;
+ }
+  g = g - 1;
   }
 }

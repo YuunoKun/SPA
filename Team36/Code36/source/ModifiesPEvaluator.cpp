@@ -5,7 +5,6 @@
 #include "PKBAdapter.h"
 #include "ModifiesPEvaluator.h"
 
-
 //Handle both wild : e.g Relation(_, _)
 bool ModifiesPEvaluator::haveRelation() {
 	throw std::invalid_argument("haveRelation(): Wild is not allowed for first argument of Modifies_P");

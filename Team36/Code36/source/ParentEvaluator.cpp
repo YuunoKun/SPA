@@ -5,7 +5,6 @@
 #include "PKBAdapter.h"
 #include "ParentEvaluator.h"
 
-
 //Handle both wild : e.g Relation(_, _)
 bool ParentEvaluator::haveRelation() {
 	return !pkb.isParentEmpty();

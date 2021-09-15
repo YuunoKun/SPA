@@ -18,7 +18,6 @@ Query QueryPreprocessor::parse(std::string str) {
 	QueryTokenizer query_tokenizer;
 	PatternRelRefValidator validator;
 
-
 	query_tokenizer.parse_into_query_tokens(str);
 
 	const std::vector<QueryToken> v = query_tokenizer.get_query_token_chain();
