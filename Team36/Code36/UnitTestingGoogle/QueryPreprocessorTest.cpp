@@ -319,6 +319,31 @@ namespace UnitTesting {
 		EXPECT_EQ(test.getSelected(), q.getSelected());
 	}
 
+	TEST(parse, similarDeclarationName) {
+		QueryPreprocessor qp;
+		Query test = qp.parse("procedure procedure; if if; stmt stmt; call call; while while;");
+
+		Query q;
+		q.addEntity(Entity(EntityType::PROCEDURE, Synonym{ "procedure" }));
+		q.addEntity(Entity(EntityType::IF, Synonym{ "if" }));
+		q.addEntity(Entity(EntityType::STMT, Synonym{ "stmt" }));
+		q.addEntity(Entity(EntityType::CALL, Synonym{ "call" }));
+		q.addEntity(Entity(EntityType::WHILE, Synonym{ "while" }));
+
+		EXPECT_EQ(test.getEntities(), q.getEntities());
+	}
+
+	TEST(parse, similarSelectName) {
+		QueryPreprocessor qp;
+		Query test = qp.parse("procedure select; Select select");
+
+		Query q;
+		q.addEntity(Entity(EntityType::PROCEDURE, Synonym{ "select" }));
+		q.addSelected(Entity(EntityType::PROCEDURE, Synonym{ "select" }));
+
+		EXPECT_EQ(test, q);
+	}
+
 	TEST(parse, oneSuchThatClause) {
 		QueryPreprocessor qp;
 		Query test = qp.parse("stmt s; Select s such that Follows* (6, s)");
