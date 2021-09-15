@@ -681,7 +681,7 @@ namespace UnitTesting {
 		q3.addEntity(Entity(EntityType::ASSIGN, Synonym{ "a1" }));
 		q3.addEntity(Entity(EntityType::STMT, Synonym{ "s" }));
 		q3.addSelected(Entity(EntityType::ASSIGN, Synonym{ "a" }));
-		q3.addRelation(RelRef(RelType::FOLLOWS_T, Entity(EntityType::STMT, Synonym{ "s" }), Entity(EntityType::ASSIGN, Synonym{ "a" })));
+		q3.addRelation(RelRef(RelType::FOLLOWS, Entity(EntityType::STMT, Synonym{ "s" }), Entity(EntityType::ASSIGN, Synonym{ "a" })));
 		q3.addPattern(Pattern(Entity(EntityType::ASSIGN, Synonym{ "a1" }), Entity(EntityType::VARIABLE, "i"), "10", false));
 
 		EXPECT_EQ(test3, q3);
