@@ -378,14 +378,59 @@ namespace UnitTesting {
 
 		EXPECT_EQ(test6, q6);
 
-		//Query test7 = qp.parse("assign a; Select a pattern a(\"y\", _)");
+		Query test7 = qp.parse("while w; Select w such that Modifies(w,_)");
 
-		//Query q7;
-		//q7.addEntity(Entity(EntityType::ASSIGN, Synonym{ "a" }));
-		//q7.addSelected(Entity(EntityType::ASSIGN, Synonym{ "a" }));
-		//q7.addRelation(RelRef(RelType::MODIFIES_S, Entity(EntityType::READ, Synonym{ "r" }), Entity(EntityType::VARIABLE, Synonym{ "v" })));
+		Query q7;
+		q7.addEntity(Entity(EntityType::WHILE, Synonym{ "w" }));
+		q7.addSelected(Entity(EntityType::WHILE, Synonym{ "w" }));
+		q7.addRelation(RelRef(RelType::MODIFIES_S, Entity(EntityType::WHILE, Synonym{ "w" }), Entity(EntityType::WILD, Synonym{ "" })));
 
-		//EXPECT_EQ(test7, q7);
+		EXPECT_EQ(test7, q7);
+
+		Query test8 = qp.parse("variable v; Select v such that Modifies(_, v)");
+
+		Query q8;
+		q8.addEntity(Entity(EntityType::VARIABLE, Synonym{ "v" }));
+		q8.addSelected(Entity(EntityType::VARIABLE, Synonym{ "v" }));
+		q8.addRelation(RelRef(RelType::MODIFIES_S, Entity(EntityType::WILD, Synonym{ "" }), Entity(EntityType::VARIABLE, Synonym{ "v" })));
+
+		EXPECT_EQ(test8, q8);
+
+		Query test9 = qp.parse("stmt s; Select s such that Parent(1, 2)");
+
+		Query q9;
+		q9.addEntity(Entity(EntityType::STMT, Synonym{ "s" }));
+		q9.addSelected(Entity(EntityType::STMT, Synonym{ "s" }));
+		q9.addRelation(RelRef(RelType::PARENT, Entity(EntityType::CONSTANT, "1"), Entity(EntityType::CONSTANT, "2")));
+
+		EXPECT_EQ(test9, q9);
+
+		Query test10 = qp.parse("stmt s; Select s such that Follows(1, _)");
+
+		Query q10;
+		q10.addEntity(Entity(EntityType::STMT, Synonym{ "s" }));
+		q10.addSelected(Entity(EntityType::STMT, Synonym{ "s" }));
+		q10.addRelation(RelRef(RelType::FOLLOWS, Entity(EntityType::CONSTANT, "1"), Entity(EntityType::WILD, "")));
+
+		EXPECT_EQ(test10, q10);
+
+		Query test11 = qp.parse("stmt s; Select s such that Follows(_, 1)");
+
+		Query q11;
+		q11.addEntity(Entity(EntityType::STMT, Synonym{ "s" }));
+		q11.addSelected(Entity(EntityType::STMT, Synonym{ "s" }));
+		q11.addRelation(RelRef(RelType::FOLLOWS, Entity(EntityType::WILD, ""), Entity(EntityType::CONSTANT, "1")));
+
+		EXPECT_EQ(test11, q11);
+
+		Query test12 = qp.parse("stmt s; Select s such that Follows(_, _)");
+
+		Query q12;
+		q12.addEntity(Entity(EntityType::STMT, Synonym{ "s" }));
+		q12.addSelected(Entity(EntityType::STMT, Synonym{ "s" }));
+		q12.addRelation(RelRef(RelType::FOLLOWS, Entity(EntityType::WILD, ""), Entity(EntityType::WILD, "")));
+
+		EXPECT_EQ(test12, q12);
 	}
 
 	TEST(parse, onePatternClause) {
@@ -416,5 +461,43 @@ namespace UnitTesting {
 		q3.addPattern(Pattern(Entity(EntityType::ASSIGN, Synonym{ "a" }), Entity(EntityType::VARIABLE, "x"), "1", true));
 
 		EXPECT_EQ(test3, q3);
+
+		Query test4 = qp.parse("assign a; Select a pattern a(_,_)");
+
+		Query q4;
+		q4.addEntity(Entity(EntityType::ASSIGN, Synonym{ "a" }));
+		q4.addSelected(Entity(EntityType::ASSIGN, Synonym{ "a" }));
+		q4.addPattern(Pattern(Entity(EntityType::ASSIGN, Synonym{ "a" }), Entity(EntityType::WILD, ""), "", true));
+
+		EXPECT_EQ(test4, q4);
+
+		Query test5 = qp.parse("assign a; Select a pattern a(_, _\"x\"_)");
+
+		Query q5;
+		q5.addEntity(Entity(EntityType::ASSIGN, Synonym{ "a" }));
+		q5.addSelected(Entity(EntityType::ASSIGN, Synonym{ "a" }));
+		q5.addPattern(Pattern(Entity(EntityType::ASSIGN, Synonym{ "a" }), Entity(EntityType::WILD, ""), "x", true));
+
+		EXPECT_EQ(test5, q5);
+
+		Query test6 = qp.parse("assign a; variable v; Select v pattern a(v, _\"x\"_)");
+
+		Query q6;
+		q6.addEntity(Entity(EntityType::ASSIGN, Synonym{ "a" }));
+		q6.addEntity(Entity(EntityType::VARIABLE, Synonym{ "v" }));
+		q6.addSelected(Entity(EntityType::VARIABLE, Synonym{ "v" }));
+		q6.addPattern(Pattern(Entity(EntityType::ASSIGN, Synonym{ "a" }), Entity(EntityType::VARIABLE, Synonym{ "v" }), "x", true));
+
+		EXPECT_EQ(test6, q6);
+
+		Query test7 = qp.parse("assign a; variable v; Select v pattern a(v, \"x\")");
+
+		Query q7;
+		q7.addEntity(Entity(EntityType::ASSIGN, Synonym{ "a" }));
+		q7.addEntity(Entity(EntityType::VARIABLE, Synonym{ "v" }));
+		q7.addSelected(Entity(EntityType::VARIABLE, Synonym{ "v" }));
+		q7.addPattern(Pattern(Entity(EntityType::ASSIGN, Synonym{ "a" }), Entity(EntityType::VARIABLE, Synonym{ "v" }), "x", false));
+
+		EXPECT_EQ(test7, q7);
 	}
 }
