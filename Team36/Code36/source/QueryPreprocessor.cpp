@@ -231,6 +231,7 @@ void QueryPreprocessor::addEntityToQuery(Query& query, Entity& ent, std::vector<
 }
 
 void QueryPreprocessor::addSelectedToQuery(Query& query, Entity& ent, std::vector<QueryToken>& output, std::vector<QueryToken> selected, QueryToken& prevToken, QueryToken& token, bool& isSelect) {
+	bool isValid = false;
 	for (QueryToken each : output) {
 		if (token.token_value == each.token_value) {
 			selected.push_back({ each.type, token.token_value });
@@ -238,7 +239,11 @@ void QueryPreprocessor::addSelectedToQuery(Query& query, Entity& ent, std::vecto
 			synonym.name = token.token_value;
 			EntityType entityType = Utility::queryTokenTypeToEntityType(each.type);
 			ent = { entityType, synonym };
+			isValid = true;
 		}
+	}
+	if (!isValid) {
+		throw std::runtime_error("Select variable content has not been declared");
 	}
 	isSelect = true;
 	query.addSelected(ent);
