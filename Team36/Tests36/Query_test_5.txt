@@ -31,12 +31,12 @@ y
 7 - modifies, 1 such that and 1 unknown synonym
 while w;
 Select w such that Modifies(w, "x")
-13
+4, 13
 5000
 8 - modifies, 1 such that and 1 unknown synonym
 variable v;
 Select v such that Modifies(4, v)
-y
+y, var1, x
 5000
 9 - uses, 1 such that and 1 unknown synonym
 assign a;
@@ -66,12 +66,12 @@ Select ifs such that Uses(ifs, "y")
 14 - uses, 1 such that and 1 unknown synonym
 variable v;
 Select v such that Uses(6, v)
-x, y
+x, y, z
 5000
 15 - uses, 1 such that and 1 unknown synonym
 while w;
 Select w such that Uses(w, "z")
-13
+4, 13
 5000
 16 - uses, 1 such that and 1 unknown synonym
 variable v;
@@ -121,7 +121,7 @@ Select s such that Follows*(s, 4)
 25 - modifies, 1 such that and 2 unknown synonyms
 assign a; variable v;
 Select a such that Modifies(a, v)
-1, 2, 8, 14, 15, 18, 19
+1, 2, 8, 12, 14, 15, 18, 19
 5000
 26 - modifies, 1 such that and 2 unknown synonyms
 read r; variable v;
@@ -146,7 +146,7 @@ Select a such that Uses(a, v)
 30 - uses, 1 such that and 2 unknown synonyms
 print pn; variable v;
 Select pn such that Uses(pn, v)
-9, 10, 11
+9, 10, 11, 16
 5000
 31 - uses, 1 such that and 2 unknown synonyms
 if ifs; variable v;
@@ -161,12 +161,12 @@ Select w such that Uses(w, v)
 33 - Parent, 1 such that and 2 unknown synonyms
 stmt s1, s2;
 Select s1 such that Parent(s1, s2)
-4, 6, 13, 18
+4, 6, 13, 17
 5000
 34 - ParentT, 1 such that and 2 unknown synonyms
 stmt s1, s2;
 Select s2 such that Parent*(s1, s2)
-5, 6, 7, 8, 14, 15, 17, 19
+5, 6, 7, 8, 14, 15, 18, 19
 5000
 35 - 1 pattern and 1 unknown synonym, wildcard RHS
 assign a;
@@ -186,12 +186,12 @@ Select a pattern a("x", _"1"_)
 38 - 1 pattern and 1 unknown synonym, wild card bothside
 assign a;
 Select a pattern a(_,_)
-1, 2, 8, 14, 15, 18, 19
+1, 2, 8, 12, 14, 15, 18, 19
 5000
 39 - 1 pattern and 1 unknown synonym, wildcard LHS
 assign a;
 Select a pattern a(_, _"x"_)
-8, 15, 18
+8, 14, 15, 18
 5000
 40 - 1 pattern and 1 unknown synonym, variable LHS
 assign a;
@@ -201,7 +201,7 @@ Select a pattern a("y", _"x"_)
 41 - 1 pattern and 2 unknown synonym, wildcard RHS
 assign a; variable v;
 Select a pattern a(v, _)
-1, 2, 8, 14, 15, 17, 18
+1, 2, 8, 12, 14, 15, 18, 19
 5000
 42 - 1 pattern and 2 unknown synonyms, variable RHS
 assign a; variable v;
@@ -240,8 +240,8 @@ Select a such that Uses(a,_)
 5000
 49 - Uses, 1 such that and print synonym LHS, wildcard RHS
 print pn;
-Select r such that Uses(pn, _)
-3
+Select pn such that Uses(pn, _)
+9, 10, 11, 16
 5000
 50 - uses, 1 such that and while synonym LHS, wildcard RHS
 while w;
@@ -266,7 +266,7 @@ Select s such that Parent(s,_)
 54 - parent, 1 such that and wildcard LHS, stmt synonym RHS
 stmt s;
 Select s such that Parent(_, s)
-5, 6, 7, 8, 14, 15, 17, 18
+5, 6, 7, 8, 14, 15, 18, 19
 5000
 55 - parentT, 1 such that and stmt synonym LHS, wildcard RHS
 stmt s;
@@ -276,27 +276,27 @@ Select s such that Parent*(s,_)
 56 - parentT, 1 such that and wildcard LHS, stmt synonym RHS
 stmt s;
 Select s such that Parent*(_, s)
-5, 6, 7, 8, 14, 15, 17, 18
+5, 6, 7, 8, 14, 15, 18, 19
 5000
 57 - follows, 1 such that and stmt synonym LHS, wildcard RHS
 stmt s;
 Select s such that Follows(s,_)
-1, 2, 3, 4, 5, 7, 9, 10, 12, 13, 14, 18
+1, 2, 3, 4, 5, 9, 10, 12, 13, 14
 5000
 58 - follows, 1 such that and wildcard LHS, stmt synonym RHS
 stmt s;
 Select s such that Follows(_, s)
-2, 3, 4, 6, 8, 9, 10, 11, 13, 15, 16, 19
+2, 3, 4, 6, 9, 10, 11, 13, 15, 16
 5000
 59 - followsT, 1 such that and stmt synonym LHS, wildcard RHS
 stmt s;
 Select s such that Follows*(s,_)
-1, 2, 3, 4, 5, 7, 9, 10, 12, 13, 14, 18
+1, 2, 3, 4, 5, 9, 10, 12, 13, 14
 5000
 60 - followsT, 1 such that and wildcard LHS, stmt synonym RHS
 stmt s;
 Select s such that Follows*(_, s)
-2, 3, 4, 6, 8, 9, 10, 11, 13, 15, 16, 19
+2, 3, 4, 6, 9, 10, 11, 13, 15, 16
 5000
 61 - parent, 1 such that and result boolean
 stmt s;
@@ -341,10 +341,15 @@ Select a pattern a("x", "2")
 69 - 1 pattern and 2 unknown synonyms, variable synonym LHS, wildcard exp RHS
 assign a; variable v;
 Select v pattern a(v, _"x"_)
-x, y
+x, y, var1
 5000
 70 - 1 pattern and 2 unknown synonyms, variable synonym LHS, exp RHS
 assign a; variable v;
 Select v pattern a(v, "x")
+none
+5000
+71 - Uses, 1 such that and read synonym LHS, wildcard RHS
+read r;
+Select r such that Uses(r,_)
 none
 5000

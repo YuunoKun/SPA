@@ -1,4 +1,0 @@
-procedure readAndprint {
- read x;
- print x;
-}
