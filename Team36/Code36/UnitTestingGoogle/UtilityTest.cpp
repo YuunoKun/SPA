@@ -608,7 +608,7 @@ namespace UnitTesting {
 			"x+ y",
 			"x *y",
 			"x / y",
-			"x- y ",
+			"(x- y) ",
 			"x +y ",
 			"x - y ",
 			" x* y",
@@ -625,9 +625,9 @@ namespace UnitTesting {
 			"  x + y  ",
 			"x * y",
 			"x / y",
-			"x % y",
+			"(x % y)",
 			"x - y",
-			"Z - y / a * x + a",
+			"Z - (y / a * x) + a",
 		};
 		std::vector<std::string> matchs = {
 			"x",

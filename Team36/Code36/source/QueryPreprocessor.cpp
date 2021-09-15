@@ -124,19 +124,20 @@ Query QueryPreprocessor::parse(std::string str) {
 			}
 
 			if (patternOrSuchThat.type == QueryToken::QueryTokenType::SUCH_THAT) {
-				if (token.type == QueryToken::QueryTokenType::PARENT_T) {
-					output.push_back({ QueryToken::QueryTokenType::PARENT_T, "" });
-				}
-				else if (token.type == QueryToken::QueryTokenType::FOLLOWS_T) {
-					output.push_back({ QueryToken::QueryTokenType::FOLLOWS_T, "" });
-				}
-				else if (!isParameter && token.type == QueryToken::QueryTokenType::PARENTHESIS_OPEN) {
+				//if (token.type == QueryToken::QueryTokenType::PARENT_T) {
+				//	output.push_back({ QueryToken::QueryTokenType::PARENT_T, "" });
+				//}
+				//else if (token.type == QueryToken::QueryTokenType::FOLLOWS_T) {
+				//	output.push_back({ QueryToken::QueryTokenType::FOLLOWS_T, "" });
+				//}
+				if (!isParameter && token.type == QueryToken::QueryTokenType::PARENTHESIS_OPEN) {
 					isParameter = true;
 					setQueryParameter(prevTokenSelect, queryParameter);
 				}
 				else if (token.type == QueryToken::QueryTokenType::PARENTHESIS_CLOSE) {
 					isParameter = false;
 					validator.parseParameterSuchThat(query, queryParameter.type, parameterClause);
+					parameterClause.clear();
 				}
 			}
 			else if (patternOrSuchThat.type == QueryToken::QueryTokenType::PATTERN) {
@@ -157,6 +158,7 @@ Query QueryPreprocessor::parse(std::string str) {
 					isParameter = false;
 					if (patternTypeEntity.getType() == EntityType::ASSIGN) {
 						validator.parseParameterPattern(query, patternTypeEntity, parameterClause);
+						parameterClause.clear();
 					}
 				}
 			}
@@ -231,6 +233,7 @@ void QueryPreprocessor::addEntityToQuery(Query& query, Entity& ent, std::vector<
 }
 
 void QueryPreprocessor::addSelectedToQuery(Query& query, Entity& ent, std::vector<QueryToken>& output, std::vector<QueryToken> selected, QueryToken& prevToken, QueryToken& token, bool& isSelect) {
+	bool isValid = false;
 	for (QueryToken each : output) {
 		if (token.token_value == each.token_value) {
 			selected.push_back({ each.type, token.token_value });
@@ -238,7 +241,11 @@ void QueryPreprocessor::addSelectedToQuery(Query& query, Entity& ent, std::vecto
 			synonym.name = token.token_value;
 			EntityType entityType = Utility::queryTokenTypeToEntityType(each.type);
 			ent = { entityType, synonym };
+			isValid = true;
 		}
+	}
+	if (!isValid) {
+		throw std::runtime_error("Select variable content has not been declared");
 	}
 	isSelect = true;
 	query.addSelected(ent);

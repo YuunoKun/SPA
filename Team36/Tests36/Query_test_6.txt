@@ -59,8 +59,8 @@ Select a such that Uses(a, "x") pattern a1("i", _"y"_)
 none
 5000
 13 - uses, 1 such that and 1 pattern, no common synonyms
-assign a;
-Select a such that Uses(4, "p") patttern a(v, _"q"_)
+assign a; variable v;
+Select a such that Uses(4, "p") pattern a(v, _"q"_)
 9, 11, 27
 5000
 14 - uses, 1 such that and 1 pattern, no common synonyms
@@ -129,7 +129,7 @@ Select s such that Parent(s, 10) pattern a("j", _)
 8
 5000
 27 - parent, 1 such that and 1 pattern, no common synonyms
-assign a, a1;
+assign a, a1; stmt s;
 Select a such that Parent(s, a) pattern a1("i", _"10"_)
 6, 7, 9, 10, 11, 18, 26
 5000
@@ -184,7 +184,7 @@ Select s such that Parent*(s, 10) pattern a("j", _)
 8, 5
 5000
 38 - parentT, 1 such that and 1 pattern. no common synonyms
-assign a, a1;
+assign a, a1; stmt s;
 Select a such that Parent*(s, a) pattern a1("i", _"10"_)
 6, 7, 9, 10, 11, 18, 26
 5000
@@ -244,7 +244,7 @@ Select s such that Follows(s, 10) pattern a("j", _)
 9
 5000
 51 - follows, 1 such that and 1 pattern, no common synonyms
-assign a, a1;
+assign a, a1; stmt s;
 Select a such that Follows(s, a) pattern a1("i", _"10"_)
 2, 4, 10, 11, 13, 16, 20, 22, 26
 5000
@@ -304,7 +304,7 @@ Select s such that Follows*(s, 11) pattern a("j", _)
 6, 7, 8
 5000
 63 - followsT, 1 such that and 1 pattern, no common synonyms
-assign a, a1;
+assign a, a1; stmt s;
 Select a such that Follows*(s, a) pattern a1("i", _"10"_)
 2, 4, 10, 11, 13, 16, 20, 22, 26
 5000
