@@ -827,5 +827,27 @@ namespace UnitTesting {
 
 		EXPECT_EQ(test1, q);
 		EXPECT_EQ(test2, q);
+
+		try {
+			Query test3 = qp.parse("assign a; Select s");
+		}
+		catch (std::runtime_error const& err) {
+			EXPECT_EQ(err.what(), std::string("Select variable content has not been declared"));
+		}
+		catch (...) {
+			FAIL();
+		}
+
+		try {
+			Query test4 = qp.parse("assign a; stmt s; procedure p; Select a pattern p(s, _)");
+			Query test5 = qp.parse("assign a; stmt s; call c; Select a pattern c(s, _)");
+			Query test6 = qp.parse("assign a; stmt s; Select a pattern s(s, _)");
+		}
+		catch (std::runtime_error const& err) {
+			EXPECT_EQ(err.what(), std::string("Invalid pattern type"));
+		}
+		catch (...) {
+			FAIL();
+		}
 	}
 }
