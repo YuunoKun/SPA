@@ -348,3 +348,8 @@ assign a; variable v;
 Select v pattern a(v, "x")
 none
 5000
+71 - Uses, 1 such that and read synonym LHS, wildcard RHS
+read r;
+Select r such that Uses(r,_)
+none
+5000
