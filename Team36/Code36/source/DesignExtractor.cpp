@@ -354,6 +354,12 @@ void DesignExtractor::populateUses(PKB& pkb) {
 			pkb.addUsesS(s->get_index(), used_var);
 		}
 	}
+
+	for (Procedure* p : m_procedures) {
+		for (var_name used_var : p->get_used_variable()) {
+			//pkb.addUsesP(p->get_index(), used_var);
+		}
+	}
 }
 
 
@@ -361,6 +367,12 @@ void DesignExtractor::populateModifies(PKB& pkb) {
 	for (Statement* s : m_statements) {
 		for (var_name modified_var : s->get_modified_variable()) {
 			pkb.addModifiesS(s->get_index(), modified_var);
+		}
+	}
+
+	for (Procedure* p : m_procedures) {
+		for (var_name modified_var : p->get_modified_variable()) {
+			//pkb.addModifiesP(p->get_index(), modified_var);
 		}
 	}
 }

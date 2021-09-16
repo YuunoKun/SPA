@@ -115,7 +115,7 @@ namespace UnitTesting {
 		ASSERT_NO_THROW(fsm_2.expect_expression());
 		ASSERT_FALSE(fsm_2.get_tokenizer().has_token());
 
-		tokenizer.parse_into_tokens("x+y-1");
+		tokenizer.parse_into_tokens("(x)+(y)-(1)");
 		tokenizer.init_token_stack();
 		FSM fsm_3(tokenizer, &dde);
 		ASSERT_NO_THROW(fsm_3.expect_expression());
@@ -133,7 +133,7 @@ namespace UnitTesting {
 		ASSERT_NO_THROW(fsm_5.expect_expression());
 		ASSERT_FALSE(fsm_5.get_tokenizer().has_token());
 
-		tokenizer.parse_into_tokens("x+y*(k-1)");
+		tokenizer.parse_into_tokens("x+y*(k-1)/3");
 		tokenizer.init_token_stack();
 		FSM fsm_6(tokenizer, &dde);
 		ASSERT_NO_THROW(fsm_6.expect_expression());
@@ -160,10 +160,15 @@ namespace UnitTesting {
 		FSM fsm_2(tokenizer, &dde);
 		ASSERT_NO_THROW(fsm_2.expect_relational_factor());
 
-		tokenizer.parse_into_tokens("x+y-1");
+		tokenizer.parse_into_tokens("(3)");
 		tokenizer.init_token_stack();
 		FSM fsm_3(tokenizer, &dde);
 		ASSERT_NO_THROW(fsm_3.expect_relational_factor());
+
+		tokenizer.parse_into_tokens("x+y-1");
+		tokenizer.init_token_stack();
+		FSM fsm_4(tokenizer, &dde);
+		ASSERT_NO_THROW(fsm_4.expect_relational_factor());
 	}
 
 	TEST(FSM, expect_relational_expression) {
@@ -180,12 +185,12 @@ namespace UnitTesting {
 		FSM fsm_2(tokenizer, &dde);
 		ASSERT_NO_THROW(fsm_2.expect_relational_factor());
 
-		tokenizer.parse_into_tokens("123 > a");
+		tokenizer.parse_into_tokens("(123) > a");
 		tokenizer.init_token_stack();
 		FSM fsm_3(tokenizer, &dde);
 		ASSERT_NO_THROW(fsm_3.expect_relational_factor());
 
-		tokenizer.parse_into_tokens("val + 1 >= k");
+		tokenizer.parse_into_tokens("val + 1 >= (k)");
 		tokenizer.init_token_stack();
 		FSM fsm_4(tokenizer, &dde);
 		ASSERT_NO_THROW(fsm_4.expect_relational_factor());
@@ -223,7 +228,17 @@ namespace UnitTesting {
 		tokenizer.parse_into_tokens("!((n>=0)&&((a-1>b)||(k<m*1)))");
 		tokenizer.init_token_stack();
 		FSM fsm_4(tokenizer, &dde);
-		fsm_4.expect_conditional_expression();
+		ASSERT_NO_THROW(fsm_4.expect_conditional_expression());
+
+		tokenizer.parse_into_tokens("(4 / k + b) == (7)");
+		tokenizer.init_token_stack();
+		FSM fsm_5(tokenizer, &dde);
+		ASSERT_NO_THROW(fsm_5.expect_conditional_expression());
+
+		tokenizer.parse_into_tokens("((1)+(1)<(1)+(1))&&(((1)-(1)<(1))||((((1)/(1)>=(1)%(1))||(!(1==1)))&&((1)>(1))))");
+		tokenizer.init_token_stack();
+		FSM fsm_7(tokenizer, &dde);
+		ASSERT_NO_THROW(fsm_7.expect_conditional_expression());
 	}
 
 	TEST(FSM, expect_statement_type_read) {
@@ -331,4 +346,134 @@ namespace UnitTesting {
 		ASSERT_NO_THROW(fsm_1.expect_procedure());
 	}
 
+
+	TEST(FSM, optional_factor) {
+		Tokenizer tokenizer;
+		DummyDesignExtractor dde;
+
+		tokenizer.parse_into_tokens("arandomvariable 0983425");
+		tokenizer.init_token_stack();
+		FSM fsm_1(tokenizer, &dde);
+		ASSERT_TRUE(fsm_1.optional_factor());
+		ASSERT_TRUE(fsm_1.optional_factor());
+
+
+		tokenizer.parse_into_tokens("a");
+		tokenizer.init_token_stack();
+		FSM fsm_2(tokenizer, &dde);
+		ASSERT_TRUE(fsm_2.optional_factor());
+
+		tokenizer.parse_into_tokens("0");
+		tokenizer.init_token_stack();
+		FSM fsm_3(tokenizer, &dde);
+		ASSERT_TRUE(fsm_3.optional_factor());
+	}
+
+	TEST(FSM, optional_term) {
+		Tokenizer tokenizer;
+		DummyDesignExtractor dde;
+		tokenizer.parse_into_tokens("something*somethingelse/ anotherthing %lastthing ;&&");
+		tokenizer.init_token_stack();
+		FSM fsm(tokenizer, &dde);
+		ASSERT_TRUE(fsm.optional_term());
+	}
+
+	TEST(FSM, optional_expression) {
+		Tokenizer tokenizer;
+		DummyDesignExtractor dde;
+
+		tokenizer.parse_into_tokens("x");
+		tokenizer.init_token_stack();
+		FSM fsm_1(tokenizer, &dde);
+		ASSERT_TRUE(fsm_1.optional_expression());
+		tokenizer.parse_into_tokens("1");
+		tokenizer.init_token_stack();
+		FSM fsm_2(tokenizer, &dde);
+		ASSERT_TRUE(fsm_2.optional_expression());
+
+		tokenizer.parse_into_tokens("(x)+(y)-(1)");
+		tokenizer.init_token_stack();
+		FSM fsm_3(tokenizer, &dde);
+		ASSERT_TRUE(fsm_3.optional_expression());
+
+		tokenizer.parse_into_tokens("2-x+y");
+		tokenizer.init_token_stack();
+		FSM fsm_4(tokenizer, &dde);
+		ASSERT_TRUE(fsm_4.optional_expression());
+
+		tokenizer.parse_into_tokens("x+y*k");
+		tokenizer.init_token_stack();
+		FSM fsm_5(tokenizer, &dde);
+		ASSERT_TRUE(fsm_5.optional_expression());
+
+		tokenizer.parse_into_tokens("x+y*(k-1)/3");
+		tokenizer.init_token_stack();
+		FSM fsm_6(tokenizer, &dde);
+		ASSERT_TRUE(fsm_6.optional_expression());
+
+		tokenizer.parse_into_tokens("x+y*((val-1)*t%(con/m))*a+z-a-b*c+1");
+		tokenizer.init_token_stack();
+		FSM fsm_7(tokenizer, &dde);
+		ASSERT_TRUE(fsm_7.optional_expression());
+	}
+
+	TEST(FSM, optional_relational_factor) {
+		Tokenizer tokenizer;
+		DummyDesignExtractor dde;
+
+		tokenizer.parse_into_tokens("x");
+		tokenizer.init_token_stack();
+		FSM fsm_1(tokenizer, &dde);
+		ASSERT_TRUE(fsm_1.optional_relational_factor());
+
+		tokenizer.parse_into_tokens("1");
+		tokenizer.init_token_stack();
+		FSM fsm_2(tokenizer, &dde);
+		ASSERT_TRUE(fsm_2.optional_relational_factor());
+
+		tokenizer.parse_into_tokens("(3)");
+		tokenizer.init_token_stack();
+		FSM fsm_3(tokenizer, &dde);
+		ASSERT_TRUE(fsm_3.optional_relational_factor());
+
+		tokenizer.parse_into_tokens("x+y-1");
+		tokenizer.init_token_stack();
+		FSM fsm_4(tokenizer, &dde);
+		ASSERT_TRUE(fsm_4.optional_relational_factor());
+	}
+
+	TEST(FSM, optional_relational_expression) {
+		Tokenizer tokenizer;
+		DummyDesignExtractor dde;
+
+		tokenizer.parse_into_tokens("1==1");
+		tokenizer.init_token_stack();
+		FSM fsm_1(tokenizer, &dde);
+		ASSERT_TRUE(fsm_1.optional_relational_expression());
+
+		tokenizer.parse_into_tokens("x!=1");
+		tokenizer.init_token_stack();
+		FSM fsm_2(tokenizer, &dde);
+		ASSERT_TRUE(fsm_2.optional_relational_expression());
+
+		tokenizer.parse_into_tokens("(123) > a");
+		tokenizer.init_token_stack();
+		FSM fsm_3(tokenizer, &dde);
+		ASSERT_TRUE(fsm_3.optional_relational_expression());
+
+		tokenizer.parse_into_tokens("val + 1 >= (k)");
+		tokenizer.init_token_stack();
+		FSM fsm_4(tokenizer, &dde);
+		ASSERT_TRUE(fsm_4.optional_relational_expression());
+
+		tokenizer.parse_into_tokens("m < b * 0");
+		tokenizer.init_token_stack();
+		FSM fsm_5(tokenizer, &dde);
+		ASSERT_TRUE(fsm_5.optional_relational_expression());
+
+		tokenizer.parse_into_tokens("val + 1 <= k + (j-1)*h");
+		tokenizer.init_token_stack();
+		FSM fsm_6(tokenizer, &dde);
+		ASSERT_TRUE(fsm_6.optional_relational_expression());
+	}
 }

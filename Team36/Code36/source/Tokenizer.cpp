@@ -235,6 +235,7 @@ void Tokenizer::add_token(Token& token) {
 
 void Tokenizer::init_token_stack() {
 	m_pos = 0;
+	m_probe = 0;
 }
 
 
@@ -248,6 +249,7 @@ Token &Tokenizer::peek_token() {
 		return Token(TokenType::INVAL, "");
 	}
 	else {
+		m_probe = m_pos;
 		return m_token_cache[m_pos];
 	}
 }
@@ -258,6 +260,27 @@ Token &Tokenizer::pop_token() {
 		return Token(TokenType::INVAL, "");
 	}
 	else {
+		m_probe = m_pos + 1;
 		return m_token_cache[m_pos++];
+	}
+}
+
+
+Token& Tokenizer::peek_probe() {
+	if (m_probe >= m_token_cache.size()) {
+		return Token(TokenType::INVAL, "");
+	}
+	else {
+		return m_token_cache[m_probe];
+	}
+}
+
+
+Token& Tokenizer::pop_probe() {
+	if (m_probe >= m_token_cache.size()) {
+		return Token(TokenType::INVAL, "");
+	}
+	else {
+		return m_token_cache[m_probe++];
 	}
 }

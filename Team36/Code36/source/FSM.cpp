@@ -178,6 +178,11 @@ void FSM::expect_statement_type_assign() {
 
 
 void FSM::expect_conditional_expression() {
+	if (optional_relational_expression()) {
+		expect_relational_expression();
+		return;
+	}
+
 	switch (m_tokenizer.peek_token().get_token_type()) {
 	case TokenType::BOOL_NEGATE:
 		expect_token_and_pop(TokenType::BOOL_NEGATE);
@@ -199,12 +204,13 @@ void FSM::expect_conditional_expression() {
 			expect_token_and_pop(TokenType::PARENTHESIS_CLOSE);
 			break;
 		default:
-			unexpected_token("expect_conditional_expression error.");
+			unexpected_token("expect_conditional_expression error. Expecting '&&' or '||'.");
 			break;
 		}
+		
 		break;
 	default:
-		expect_relational_expression();
+		unexpected_token("expect_conditional_expression error.");
 		break;
 	}
 }
@@ -304,6 +310,86 @@ void FSM::expect_factor() {
 }
 
 
+bool FSM::optional_relational_expression() {
+	if (!optional_relational_factor()){
+		return false;
+	}
+
+	if (!(probe_and_pop(TokenType::BOOL_GT)
+		|| probe_and_pop(TokenType::BOOL_GTEQ)
+		|| probe_and_pop(TokenType::BOOL_LT)
+		|| probe_and_pop(TokenType::BOOL_LTEQ)
+		|| probe_and_pop(TokenType::BOOL_EQUIV)
+		|| probe_and_pop(TokenType::BOOL_NEQUIV))) {
+		return false;
+	}
+
+	if (!optional_relational_factor()) {
+		return false;
+	}
+}
+
+
+bool FSM::optional_relational_factor() {
+	return optional_expression();
+	//switch (m_tokenizer.peek_token().get_token_type()) {
+	//case TokenType::IDENTIFIER:
+	//	m_design_extractor.add_variable(expect_token_and_pop(TokenType::IDENTIFIER).get_token_value());
+	//	break;
+	//case TokenType::CONSTANT:
+	//	m_design_extractor.add_constant(std::stoul(expect_token_and_pop(TokenType::CONSTANT).get_token_value(), nullptr, 0));
+	//	break;
+	//default:
+	//	// start of expression
+	//	expect_expression();
+	//	break;
+	//}
+}
+
+
+bool FSM::optional_expression() {
+	if (!optional_term()) {
+		return false;
+	}
+
+	if ((probe_and_pop(TokenType::PLUS) || probe_and_pop(TokenType::MINUS))) {
+		if (!optional_expression()) {
+			return false;
+		}
+	}
+
+	return true;
+}
+
+
+bool FSM::optional_term() {
+	if (!optional_factor()) {
+		return false;
+	}
+
+	if ((probe_and_pop(TokenType::MUL) || probe_and_pop(TokenType::DIV) || probe_and_pop(TokenType::MOD))) {
+		if (!optional_term()) {
+			return false;
+		}
+	}
+
+	return true;
+}
+
+
+bool FSM::optional_factor() {
+	if ((probe_and_pop(TokenType::IDENTIFIER) || probe_and_pop(TokenType::CONSTANT))) {
+		return true;
+	}
+	else if (probe_and_pop(TokenType::PARENTHESIS_OPEN)) {
+		return optional_expression() && probe_and_pop(TokenType::PARENTHESIS_CLOSE);
+	}
+	else {
+		return false;
+	}
+}
+
+
 Token& FSM::expect_token_and_pop(TokenType token_type) {
 	if (optional_token(token_type)) {
 		return m_tokenizer.pop_token();
@@ -314,13 +400,27 @@ Token& FSM::expect_token_and_pop(TokenType token_type) {
 }
 
 
-void FSM::unexpected_token(std::string message) {
-	throw std::runtime_error(message + std::string(" Unexpected token: ") + tokenTypeStrings[m_tokenizer.peek_token().get_token_type()]);
-}
-
-
 bool FSM::optional_token(TokenType token_type) {
 	return m_tokenizer.peek_token().get_token_type() == token_type;
 }
 
 
+bool FSM::probe_and_pop(TokenType token_type) {
+	if (probe_and_peek(token_type)) {
+		m_tokenizer.pop_probe();
+		return true;
+	}
+	else {
+		return false;
+	}
+}
+
+
+bool FSM::probe_and_peek(TokenType token_type) {
+	return m_tokenizer.peek_probe().get_token_type() == token_type;
+}
+
+
+void FSM::unexpected_token(std::string message) {
+	throw std::runtime_error(message + std::string(" Unexpected token: ") + tokenTypeStrings[m_tokenizer.peek_token().get_token_type()]);
+}

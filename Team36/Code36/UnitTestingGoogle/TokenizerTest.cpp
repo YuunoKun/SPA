@@ -147,6 +147,37 @@ namespace UnitTesting {
 		ASSERT_EQ(tokenizer.pop_token().get_token_type(), TokenType::STATEMENT_LIST_CLOSE);
 		ASSERT_FALSE(tokenizer.has_token());
 		ASSERT_EQ(tokenizer.pop_token().get_token_type(), TokenType::INVAL);
+
+		tokenizer.init_token_stack();
+		ASSERT_EQ(tokenizer.peek_token().get_token_type(), TokenType::PROCEDURE);
+		ASSERT_EQ(tokenizer.pop_token().get_token_type(), TokenType::PROCEDURE);
+		ASSERT_EQ(tokenizer.pop_token().get_token_type(), TokenType::IDENTIFIER);
+		ASSERT_EQ(tokenizer.pop_token().get_token_type(), TokenType::STATEMENT_LIST_OPEN);
+
+		ASSERT_EQ(tokenizer.peek_probe().get_token_type(), TokenType::IDENTIFIER);
+		ASSERT_EQ(tokenizer.pop_probe().get_token_type(), TokenType::IDENTIFIER);
+		ASSERT_EQ(tokenizer.pop_probe().get_token_type(), TokenType::ASSIGN);
+		ASSERT_EQ(tokenizer.pop_probe().get_token_type(), TokenType::IDENTIFIER);
+		ASSERT_EQ(tokenizer.pop_probe().get_token_type(), TokenType::PLUS);
+		ASSERT_EQ(tokenizer.pop_probe().get_token_type(), TokenType::CONSTANT);
+		ASSERT_EQ(tokenizer.pop_probe().get_token_type(), TokenType::TERMINATOR);
+
+		ASSERT_EQ(tokenizer.peek_probe().get_token_type(), TokenType::STATEMENT_LIST_CLOSE);
+		ASSERT_EQ(tokenizer.pop_probe().get_token_type(), TokenType::STATEMENT_LIST_CLOSE);
+
+		ASSERT_NO_THROW(tokenizer.pop_probe().get_token_type());
+
+		ASSERT_EQ(tokenizer.pop_token().get_token_type(), TokenType::IDENTIFIER);
+		ASSERT_EQ(tokenizer.pop_token().get_token_type(), TokenType::ASSIGN);
+		ASSERT_EQ(tokenizer.pop_token().get_token_type(), TokenType::IDENTIFIER);
+		ASSERT_EQ(tokenizer.pop_token().get_token_type(), TokenType::PLUS);
+		ASSERT_EQ(tokenizer.pop_token().get_token_type(), TokenType::CONSTANT);
+		ASSERT_EQ(tokenizer.pop_token().get_token_type(), TokenType::TERMINATOR);
+
+		ASSERT_TRUE(tokenizer.has_token());
+		ASSERT_EQ(tokenizer.pop_token().get_token_type(), TokenType::STATEMENT_LIST_CLOSE);
+		ASSERT_FALSE(tokenizer.has_token());
+		ASSERT_EQ(tokenizer.pop_token().get_token_type(), TokenType::INVAL);
 	}
 
 }

@@ -58,11 +58,19 @@ namespace SourceProcessor {
 		void expect_statement_type_assign();
 
 		// Expects a conditional expression.
-		// cond_expr: rel_expr | ¡®!¡¯ ¡®(¡¯ cond_expr ¡®)¡¯ | ¡®(¡¯ cond_expr ¡®)¡¯ ¡®&&¡¯ ¡®(¡¯ cond_expr ¡®)¡¯ | ¡®(¡¯ cond_expr ¡®)¡¯ ¡®||¡¯ ¡®(¡¯ cond_expr ¡®)¡¯
+		// cond_expr: rel_expr 
+		//			| ¡®!¡¯ ¡®(¡¯ cond_expr ¡®)¡¯ 
+		//			| ¡®(¡¯ cond_expr ¡®)¡¯ ¡®&&¡¯ ¡®(¡¯ cond_expr ¡®)¡¯ 
+		//			| ¡®(¡¯ cond_expr ¡®)¡¯ ¡®||¡¯ ¡®(¡¯ cond_expr ¡®)¡¯
 		void expect_conditional_expression();
 
 		// Expects a relational expression.
-		// rel_expr: rel_factor ¡®>¡¯ rel_factor | rel_factor ¡®>=¡¯ rel_factor | rel_factor ¡®<¡¯ rel_factor | rel_factor ¡®<=¡¯ rel_factor | rel_factor ¡®==¡¯ rel_factor | rel_factor ¡®!=¡¯ rel_factor
+		// rel_expr : rel_factor ¡®>¡¯ rel_factor
+		//			| rel_factor ¡®>=¡¯ rel_factor 
+		//			| rel_factor ¡®<¡¯ rel_factor 
+		//			| rel_factor ¡®<=¡¯ rel_factor 
+		//			| rel_factor ¡®==¡¯ rel_factor 
+		//			| rel_factor ¡®!=¡¯ rel_factor
 		void expect_relational_expression();
 
 		// Expects a replational factor.
@@ -81,13 +89,25 @@ namespace SourceProcessor {
 		// factor: var_name | const_value | ¡®(¡¯ expr ¡®)¡¯
 		void expect_factor();
 
+		// Optional relational expression.
+		bool optional_relational_expression();
+
+		// Optional replational factor.
+		bool optional_relational_factor();
+
+		// Optional expression.
+		bool optional_expression();
+
+		// Optional term.
+		bool optional_term();
+
+		// Optional factor.
+		bool optional_factor();
+
 
 	private:
 		Tokenizer m_tokenizer;
 		Extractor *m_design_extractor;
-
-		// Throws exception
-		void unexpected_token(std::string);
 
 		// Expects a compulsory token with given token type, or else the build fails.
 		Token& expect_token_and_pop(TokenType);
@@ -95,6 +115,14 @@ namespace SourceProcessor {
 		// This token can be optional, will return a boolean value indicating if that token exists
 		bool optional_token(TokenType);
 
+		// Expects an optional token with given token type.
+		bool probe_and_pop(TokenType);
+
+		// Expects an optional token with given token type.
+		bool probe_and_peek(TokenType);
+
+		// Throws exception
+		void unexpected_token(std::string);
 	};
 
 
