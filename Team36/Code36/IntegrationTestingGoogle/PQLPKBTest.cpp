@@ -54,6 +54,27 @@ namespace UnitTesting {
 		QuerySystem qs;
 		PKBAdapter pkb;
 
+		void validateAnswer(std::list<std::string> expected, std::list<std::string> result) {
+
+			std::list<std::string>::iterator result_it;
+			std::list<std::string>::iterator expected_it;
+
+			
+			EXPECT_EQ(expected.size(), result.size());
+			
+			for (result_it = result.begin(), expected_it = expected.begin(); 
+				result_it != result.end() && expected_it != result.end(); 
+				result_it++, expected_it++) {
+				
+				EXPECT_EQ(*expected_it, *result_it);
+			}
+
+			//for (auto const& i: expected) {
+			//	EXPECT_TRUE(i == *result_it);
+			//	result_it++;
+			//}
+		}
+
 		const var_name x = "x";
 		const var_name y = "y";
 		const var_name z = "z";
@@ -79,6 +100,21 @@ namespace UnitTesting {
 		const std::string ASSIGN2 = "10";
 		const std::string CALL1 = "11";
 		const std::string CALL2 = "12";
+
+		const std::list<std::string> STMTS = { IF1, IF2, WHILE1, WHILE2, READ1, READ2,
+			PRINT1, PRINT2, ASSIGN1, ASSIGN2, CALL1, CALL2 };
+
+		const std::list<std::string> IFS = { IF1, IF2 };
+
+		const std::list<std::string> WHILES = { WHILE1, WHILE2 };
+
+		const std::list<std::string> READS = { READ1, READ2 };
+
+		const std::list<std::string> PRINTS = { PRINT1, PRINT2 };
+
+		const std::list<std::string> ASSIGNS = { ASSIGN1, ASSIGN2 };
+
+		const std::list<std::string> CALLS = { CALL1, CALL2 };
 
 		const std::string FOLLOW_LEFT1 = "1";
 		const std::string FOLLOW_LEFT2 = "2";
@@ -124,8 +160,7 @@ namespace UnitTesting {
 		const std::vector<std::string> USES_LEFTS = { USES_LEFT1, USES_LEFT2 };
 		const std::vector<std::string> USES_RIGHTS = { USES_RIGHT1, USES_RIGHT2 };
 
-		const std::list<std::string> STMTS = { IF1, IF2, WHILE1, WHILE2, READ1, READ2,
-			PRINT1, PRINT2, ASSIGN1, ASSIGN2, CALL1, CALL2 };
+		
 		//QueryEvaluator evaluator;
 
 		const Synonym COMMON_SYNONYM1 = { "cs1" };
@@ -208,23 +243,45 @@ namespace UnitTesting {
 			{ 13, STMT_ASSIGN },  { 14, STMT_ASSIGN }, { 15, STMT_ASSIGN } };*/
 	};
 
-	TEST_F(PQLPKBTest, sampleTest) {
-		//std::list<std::string> ans = qs.processQuery("");	
-		std::list<std::string> ans = {};
-		std::list<std::string>::iterator it;
-
-		for (auto const& i : ans) {
-			EXPECT_TRUE(i == "");
-		}
+	TEST_F(PQLPKBTest, ValidateAnswerTest) {
+		validateAnswer({ "1", "2", "3"}, { "1", "2", "3" });
+		validateAnswer({}, {});
 	}
 
-	TEST_F(PQLPKBTest, Sample3TokenizerTest) {
-		std::list<std::string> ans = qs.processQuery("stmt s; Select s");	
-		std::list<std::string> ans = {};
-		std::list<std::string>::iterator it;
+	TEST_F(PQLPKBTest, noSuchThatPatternStmtTest) {
+		//std::list<std::string> ans_stmt = qs.processQuery("stmt s; Select s");	
 
-		for (auto const& i : ans) {
-			EXPECT_TRUE(i == "");
-		}
+		//std::list<std::string> ans_if = qs.processQuery("ifs if; Select if");
+
+		//std::list<std::string> ans_while = qs.processQuery("while w; Select w");
+
+		//std::list<std::string> ans_read = qs.processQuery("read r; Select r");
+
+		//std::list<std::string> ans_assign = qs.processQuery("assign a; Select a");
+
+		//std::list<std::string> ans_call = qs.processQuery("call c; Select c");
+
+		//validateAnswer(STMTS, ans_stmt);
+		//validateAnswer(IFS, ans_if);
+		//validateAnswer(WHILES, ans_while);
+		//validateAnswer(READS, ans_read);
+		//validateAnswer(ASSIGNS, ans_assign);
+		//validateAnswer(CALLS, ans_call);
+
 	}
+
+	//TEST_F(PQLPKBTest, noSuchThatPatternIfTest) {
+
+	//	std::list<std::string> ans_if = qs.processQuery("ifs if; Select if");
+
+	//	validateAnswer(IFS, ans_if);
+
+	//}
+	
+		
+	//one such that cl
+
+	// one pattern cl
+
+	// one st and one pattern cl
 }
