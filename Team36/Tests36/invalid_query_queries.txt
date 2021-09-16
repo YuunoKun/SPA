@@ -45,7 +45,7 @@ none
 5000
 10 - Syntactically invalid select
 stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select s //Change this to select, will crash
+select s
 none
 5000
 11 - Syntactically invalid select
