@@ -84,7 +84,7 @@ void QueryTokenizer::parse_into_query_tokens(std::string input) {
 				separator_validation_stk.pop();
 			}
 			else {
-				std::runtime_error("Unexpected symbol : \'" + c + '\'');
+				throw std::runtime_error( std::string("Unexpected symbol : \')\'"));
 			}
 			add_query_token(curr_query_token);
 			curr_query_token.type = QueryToken::PARENTHESIS_CLOSE;
@@ -213,7 +213,7 @@ void QueryTokenizer::parse_into_query_tokens(std::string input) {
 				curr_query_token.token_value.push_back(c);
 			}
 			else {
-				std::runtime_error("Unknown symbol : \'" + c + '\'');
+				throw std::runtime_error("Unknown symbol present");
 			}
 			break;
 		}
@@ -222,10 +222,10 @@ void QueryTokenizer::parse_into_query_tokens(std::string input) {
 
 	// Check for open brackets, open quotation marks, temp token active
 	if (!separator_validation_stk.empty()) {
-		std::runtime_error("expected \')\'");
+		throw std::runtime_error("expected \')\'");
 	}
 	if (quotation_validation) {
-		std::runtime_error("missing terminating \" character");
+		throw std::runtime_error("missing terminating \" character");
 	}
 	if (is_such_temp) {
 		add_query_token(temp_query_token);

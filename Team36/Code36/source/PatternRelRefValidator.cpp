@@ -31,7 +31,7 @@ Entity PatternRelRefValidator::setStmtRef(Query& query, QueryToken token) {
     return ent_chain.at(token.token_value);
   }
 
-  std::runtime_error("Unknown stmtRef");
+  throw std::runtime_error("Unknown stmtRef");
 }
 
 Entity PatternRelRefValidator::setEntRef(Query& query,
@@ -58,7 +58,7 @@ Entity PatternRelRefValidator::setEntRef(Query& query,
     return Entity(EntityType::VARIABLE, token_chain[1].token_value);
   }
 
-  std::runtime_error("Unknown stmtRef");
+  throw std::runtime_error("Unknown stmtRef");
 }
 
 // takes in a token_chain with only IDENT* (no QUOTATION_OPEN/CLOSE or WILDCARD)
@@ -72,11 +72,12 @@ expr PatternRelRefValidator::setExpr(std::vector<QueryToken> token_chain) {
   } else if (token_chain.size() == 1 &&
              token_chain[0].type == QueryToken::IDENTIFIER) {
     return token_chain[0].token_value;
-  }
-  else if (token_chain.size() == 1 &&
+  } else if (token_chain.size() == 1 &&
       token_chain[0].type == QueryToken::CONSTANT) {
       return token_chain[0].token_value;
   }
+
+  throw std::runtime_error("Unknown expr");
 }
 
 void PatternRelRefValidator::parseParameterSuchThat(
@@ -91,8 +92,9 @@ void PatternRelRefValidator::parseParameterSuchThat(
         query.addRelation(RelRef(RelType::MODIFIES_S, setStmtRef(query, stmt),
                                  setEntRef(query, token_chain)));
       }
-      std::runtime_error("Unexpected parameters for Modifies");
-
+      else {
+          throw std::runtime_error("Unexpected parameters for Modifies");
+      }
       break;
     case QueryToken::USES_S:
       // stmtRef , entRef
@@ -102,8 +104,9 @@ void PatternRelRefValidator::parseParameterSuchThat(
         query.addRelation(RelRef(RelType::USES_S, setStmtRef(query, stmt),
                                  setEntRef(query, token_chain)));
       }
-      std::runtime_error("Unexpected parameters for Uses");
-
+      else {
+          throw std::runtime_error("Unexpected parameters for Uses");
+      }
       break;
 
     case QueryToken::PARENT:
@@ -113,8 +116,9 @@ void PatternRelRefValidator::parseParameterSuchThat(
                                  setStmtRef(query, token_chain[0]),
                                  setStmtRef(query, token_chain[2])));
       }
-      std::runtime_error("Unexpected parameters for Parent");
-
+      else {
+          throw std::runtime_error("Unexpected parameters for Parent");
+      }
       break;
     case QueryToken::PARENT_T:
       // stmtRef , stmtRef
@@ -123,7 +127,9 @@ void PatternRelRefValidator::parseParameterSuchThat(
                                  setStmtRef(query, token_chain[0]),
                                  setStmtRef(query, token_chain[2])));
       }
-      std::runtime_error("Unexpected parameters for Parent*");
+      else {
+          throw std::runtime_error("Unexpected parameters for Parent*");
+      }
 
       break;
     case QueryToken::FOLLOWS:
@@ -133,7 +139,9 @@ void PatternRelRefValidator::parseParameterSuchThat(
                                  setStmtRef(query, token_chain[0]),
                                  setStmtRef(query, token_chain[2])));
       }
-      std::runtime_error("Unexpected parameters for Follows");
+      else {
+          throw std::runtime_error("Unexpected parameters for Follows");
+      }
 
       break;
     case QueryToken::FOLLOWS_T:
@@ -143,12 +151,14 @@ void PatternRelRefValidator::parseParameterSuchThat(
                                  setStmtRef(query, token_chain[0]),
                                  setStmtRef(query, token_chain[2])));
       }
-      std::runtime_error("Unexpected parameters for Follows*");
+      else {
+          throw std::runtime_error("Unexpected parameters for Follows*");
+      }
 
       break;
 
     default:
-      std::runtime_error("Unknown RelRef query token type : \'" + token_type +
+      throw std::runtime_error("Unknown RelRef query token type : \'" + token_type +
                          '\'');
   }
 }
@@ -176,7 +186,7 @@ void PatternRelRefValidator::parseParameterPattern(
         token_chain.erase(token_chain.begin());
       } else {
         // if no comma found means invalid parameters
-        std::runtime_error("Unexpected parameters for Pattern");
+        throw std::runtime_error("Unexpected parameters for Pattern");
       }
 
       // check second parameter if is WILDCARD
@@ -186,13 +196,11 @@ void PatternRelRefValidator::parseParameterPattern(
         // last 2 cases below expression-spec : ‘"‘ expr’"’ | ‘_’ ‘"’ expr ‘"’
         // ‘_’ | ‘_’
         if (token_chain[token_chain.size() - 1].type != QueryToken::WILDCARD) {
-          std::runtime_error("Unexpected parameters for Pattern");
+          throw std::runtime_error("Unexpected parameters for Pattern");
         }
         // remove first WILDCARD token
         token_chain.erase(token_chain.begin());
-      } else {
-        std::runtime_error("Unexpected parameters for Pattern");
-      }
+      } 
 
       std::vector<QueryToken> temp_token_chain_2;
 
@@ -210,7 +218,7 @@ void PatternRelRefValidator::parseParameterPattern(
           }
         } else if (wild && token_chain[0].type == QueryToken::WILDCARD) {
           // 2 WILDCARDS in a row
-          std::runtime_error("Unexpected parameters for Pattern");
+          throw std::runtime_error("Unexpected parameters for Pattern");
         }
       }
 
