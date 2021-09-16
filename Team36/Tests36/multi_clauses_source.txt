@@ -4,8 +4,6 @@ procedure nested {
   a = a + b + c;
   a = a + b + c + d;
   b = a + b + c + d;
-  x = x + y + z + w;
-  x = x + y + z;
-  x = x + y;
-  x = x;
+  c = a + b + c + d;
+  d = a + b + c + d;
 }
