@@ -1,0 +1,10 @@
+1 - select assign statement that assign a
+assign a; variable v
+Select s pattern a(v, "a")
+1
+5000
+2 - select stmt
+assign a; variable b;
+Select s pattern a (a, _"a"_)
+1, 2, 3, 4
+5000
