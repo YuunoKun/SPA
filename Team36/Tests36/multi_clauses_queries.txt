@@ -1,0 +1,335 @@
+1 - select assign that assign a
+assign a; variable v;
+Select a pattern a(v, "a")
+1
+5000
+2 - select assign that use a
+assign a; variable v;
+Select a pattern a (v, _"a"_)
+1, 2, 3, 4, 5, 6, 7
+5000
+3 - select assign that use a, b
+assign a; variable v1, v2;
+Select a pattern a (v1, _"a"_) pattern a (v2, _"b"_)
+2, 3, 4, 5, 6, 7
+5000
+4 - select assign that use a, b, c
+assign a; variable v;
+Select a pattern a (v, _"a"_) pattern a (v, _"b"_) pattern a (v, _"c"_)
+3, 4, 5, 6, 7
+5000
+5 - select assign that use a, b, c, d
+assign a; variable v1, v2, v3, v4;
+Select a pattern a (v1, _"a"_) pattern a(v2,  _"b"_) pattern a (v3, _"c"_) pattern a (v4, _"d"_)
+4, 5, 6, 7
+5000
+5 - select assign that use a, b, c, d and there exist a modifies
+assign a, a1; variable v1, v2, v3, v4, v5;
+Select a pattern a (v1, _"a"_) pattern a(v2,  _"b"_) pattern a (v3, _"c"_) pattern a (v4, _"d"_) such that Modifies(a1, v5)
+4, 5, 6, 7
+5000
+6 - select assign that use a, b, c, d and modifies a
+assign a; variable v;
+Select a pattern a (v, _"a"_) pattern a (v, _"b"_) pattern a (v, _"c"_  ) pattern a (v, _"d"_) such that Modifies(a, "a")
+4
+5000
+7 - select assign that use a, b, c, d and modifies b
+assign a; variable v1, v2, v3, v4;
+Select a pattern a (v1, _"a"_) pattern a (v2, _"b"_) pattern a (v3, _"c"_) such that Modifies(a, "b") pattern a (v4, _"d"_)
+5
+5000
+8 - select assign that use a, b, c, d and modifies c
+assign a; variable v;
+Select a pattern a (v, _"a"_) pattern a (v, _"b"_) such that Modifies(a, "c") pattern a (v, _"c"_) pattern a (v, _"d"_)
+6
+5000
+9 - select assign that use a, b, c, d and modifies d
+assign a; variable v1, v2, v3, v4;
+Select a such that Modifies(a, "d") pattern a (v1, _"a"_) pattern a (v2, _"b"_) pattern a (v3, _"c"_) pattern a (v4, _"d"_)
+7
+5000
+10 - select assign that use a, b, c, d with uses and pattern
+assign a; variable v;
+Select a pattern a (v, _"a"_) pattern a(v,  _"b"_) pattern a (v, _"c"_) pattern a (v, _"d"_) such that Uses(a, "a") such that Uses(a, "b") such that Uses(a, "c") such that Uses(a, "d")
+4, 5, 6, 7
+5000
+11 - select assign that use a, b, c, d
+assign a; variable v1, v3, v4;
+Select a pattern a (v1, _"a"_) such that Uses(a,"b") pattern a (v3, _"c"_) pattern a (v4, _"d"_)
+4, 5, 6, 7
+5000
+12 - select assign that use a, b, c, d
+assign a; variable v1, v2;
+Select a pattern a (v1, _"a"_) such that Uses(a,"b") pattern a (v2, _"c"_) such that Uses(a,"d")
+4, 5, 6, 7
+5000
+13 - select assign that use a, b, c, d
+assign a; variable v1;
+Select a pattern a (v1, _"a"_) such that Uses(a,"b") such that Uses(a,"c") such that Uses(a,"d")
+4, 5, 6, 7
+5000
+14 - select assign that use a, b, c, d
+assign a;
+Select a such that Uses(a,"a") such that Uses(a,"b") such that Uses(a,"c") such that Uses(a,"d")
+4, 5, 6, 7
+5000
+15 - select stmt with 3 follow chained permutation 1
+stmt s1, s2, s3, s4;
+Select s1 such that Follows(s1, s2) such that Follows(s2, s3) such that Follows(s3, s4)
+1, 2, 3, 4
+5000
+16 - select stmt with 3 follow chained permutation 2
+stmt s1, s2, s3, s4;
+Select s2 such that Follows(s1, s2) such that Follows(s3, s4) such that Follows(s2, s3)
+2, 3, 4, 5
+5000
+17 - select stmt with 3 follow chained permutation 3
+stmt s1, s2, s3, s4;
+Select s3 such that Follows(s3, s4) such that Follows(s1, s2) such that Follows(s2, s3)
+3, 4, 5, 6
+5000
+18 - select stmt with 3 follow chained permutation 4
+stmt s1, s2, s3, s4;
+Select s4 such that Follows(s3, s4) such that Follows(s2, s3) such that Follows(s1, s2)
+4, 5, 6, 7
+5000
+19 - select stmt with 3 follow chained empty
+stmt s1, s2, s3, s4, s5, s6;
+Select s4 such that Follows(s3, s1) such that Follows(s2, s3) such that Follows(s1, s2)
+none
+5000
+20 - select stmt with 4 follow chained permutation 1
+stmt s1, s2, s3, s4, s5;
+Select s1 such that Follows(s1, s2) such that Follows(s2, s3) such that Follows(s3, s4) such that Follows(s4, s5)
+1, 2, 3
+5000
+21 - select stmt with 4 follow chained permutation 2
+stmt s1, s2, s3, s4, s5;
+Select s2 such that Follows(s1, s2) such that Follows(s2, s3) such that Follows(s4, s5) such that Follows(s3, s4)
+2, 3, 4
+5000
+22 - select stmt with 4 follow chained permutation 3
+stmt s1, s2, s3, s4, s5;
+Select s3 such that Follows(s1, s2) such that Follows(s3, s4) such that Follows(s2, s3) such that Follows(s4, s5)
+3, 4, 5
+5000
+23 - select stmt with 4 follow chained permutation 4
+stmt s1, s2, s3, s4, s5;
+Select s4 such that Follows(s1, s2) such that Follows(s3, s4) such that Follows(s4, s5) such that Follows(s2, s3)
+4, 5, 6
+5000
+24 - select stmt with 4 follow chained permutation 5
+stmt s1, s2, s3, s4, s5;
+Select s5 such that Follows(s1, s2) such that Follows(s4, s5) such that Follows(s2, s3) such that Follows(s3, s4)
+5, 6, 7
+5000
+25 - select stmt with 4 follow chained permutation 6
+stmt s1, s2, s3, s4, s5;
+Select s1 such that Follows(s1, s2) such that Follows(s4, s5) such that Follows(s3, s4) such that Follows(s2, s3) 
+1, 2, 3
+5000
+26 - select stmt with 4 follow chained permutation 7
+stmt s1, s2, s3, s4, s5;
+Select s2 such that Follows(s2, s3) such that Follows(s1, s2) such that Follows(s3, s4) such that Follows(s4, s5)
+2, 3, 4
+5000
+27 - select stmt with 4 follow chained permutation 8
+stmt s1, s2, s3, s4, s5;
+Select s3 such that Follows(s2, s3) such that Follows(s1, s2) such that Follows(s4, s5) such that Follows(s3, s4)
+3, 4, 5
+5000
+28 - select stmt with 4 follow chained permutation 9
+stmt s1, s2, s3, s4, s5;
+Select s4 such that Follows(s2, s3) such that Follows(s3, s4) such that Follows(s1, s2) such that Follows(s4, s5)
+4, 5, 6
+5000
+29 - select stmt with 4 follow chained permutation 10
+stmt s1, s2, s3, s4, s5;
+Select s5 such that Follows(s2, s3) such that Follows(s3, s4) such that Follows(s4, s5) such that Follows(s1, s2)
+5, 6, 7
+5000
+30 - select stmt with 4 follow chained permutation 11
+stmt s1, s2, s3, s4, s5;
+Select s1 such that Follows(s2, s3) such that Follows(s4, s5) such that Follows(s1, s2) such that Follows(s3, s4)
+1, 2, 3
+5000
+31 - select stmt with 4 follow chained permutation 12
+stmt s1, s2, s3, s4, s5;
+Select s2 such that Follows(s2, s3) such that Follows(s4, s5) such that Follows(s3, s4) such that Follows(s1, s2) 
+2, 3, 4
+5000
+32 - select stmt with 4 follow chained permutation 13
+stmt s1, s2, s3, s4, s5;
+Select s3 such that Follows(s3, s4) such that Follows(s1, s2) such that Follows(s2, s3) such that Follows(s4, s5)
+3, 4, 5
+5000
+33 - select stmt with 4 follow chained permutation 14
+stmt s1, s2, s3, s4, s5;
+Select s4 such that Follows(s3, s4) such that Follows(s1, s2)  such that Follows(s4, s5) such that Follows(s2, s3)
+4, 5, 6
+5000
+34 - select stmt with 4 follow chained permutation 15
+stmt s1, s2, s3, s4, s5;
+Select s5 such that Follows(s3, s4) such that Follows(s2, s3) such that Follows(s1, s2)  such that Follows(s4, s5)
+5, 6, 7
+5000
+34 - select stmt with 4 follow chained permutation 16
+stmt s1, s2, s3, s4, s5;
+Select s1 such that Follows(s3, s4) such that Follows(s2, s3) such that Follows(s4, s5) such that Follows(s1, s2) 
+1, 2, 3
+5000
+35 - select stmt with 4 follow chained permutation 17
+stmt s1, s2, s3, s4, s5;
+Select s2 such that Follows(s3, s4) such that Follows(s4, s5) such that Follows(s1, s2) such that Follows(s2, s3) 
+2, 3, 4
+5000
+36 - select stmt with 4 follow chained permutation 18
+stmt s1, s2, s3, s4, s5;
+Select s3 such that Follows(s3, s4) such that Follows(s4, s5) such that Follows(s2, s3) such that Follows(s1, s2) 
+3, 4, 5
+5000
+37 - select stmt with 4 follow chained permutation 19
+stmt s1, s2, s3, s4, s5;
+Select s4 such that Follows(s4, s5)  such that Follows(s1, s2) such that Follows(s2, s3) such that Follows(s3, s4) 
+4, 5, 6
+5000
+38 - select stmt with 4 follow chained permutation 20
+stmt s1, s2, s3, s4, s5;
+Select s5 such that Follows(s4, s5)  such that Follows(s1, s2) such that Follows(s3, s4)  such that Follows(s2, s3) 
+5, 6, 7
+5000
+39 - select stmt with 4 follow chained permutation 21
+stmt s1, s2, s3, s4, s5;
+Select s1 such that Follows(s4, s5)  such that Follows(s2, s3) such that Follows(s1, s2) such that Follows(s3, s4) 
+1, 2, 3
+5000
+40 - select stmt with 4 follow chained permutation 22
+stmt s1, s2, s3, s4, s5;
+Select s2 such that Follows(s4, s5)  such that Follows(s2, s3) such that Follows(s3, s4)  such that Follows(s1, s2) 
+2, 3, 4
+5000
+41 - select stmt with 4 follow chained permutation 23
+stmt s1, s2, s3, s4, s5;
+Select s3 such that Follows(s4, s5) such that Follows(s3, s4) such that Follows(s1, s2) such that Follows(s2, s3) 
+3, 4, 5
+5000
+42 - select stmt with 4 follow chained permutation 24
+stmt s1, s2, s3, s4, s5;
+Select s4 such that Follows(s4, s5) such that Follows(s3, s4) such that Follows(s2, s3) such that Follows(s1, s2) 
+4, 5, 6
+5000
+43 - select stmt with 5 follow chained permutation 1
+stmt s1, s2, s3, s4, s5, s6;
+Select s1 such that Follows(s1, s2) such that Follows(s2, s3) such that Follows(s3, s4) such that Follows(s4, s5)  such that Follows(s5, s6) 
+1, 2
+5000
+44 - select stmt with 5 follow chained permutation 2
+stmt s1, s2, s3, s4, s5, s6;
+Select s2 such that Follows(s1, s2) such that Follows(s2, s3) such that Follows(s3, s4) such that Follows(s5, s6) such that Follows(s4, s5)  
+2, 3
+5000
+45 - select stmt with 5 follow chained permutation 3
+stmt s1, s2, s3, s4, s5, s6;
+Select s3 such that Follows(s1, s2) such that Follows(s2, s3) such that Follows(s5, s6) such that Follows(s3, s4) such that Follows(s4, s5)  
+3, 4
+5000
+46 - select stmt with 5 follow chained permutation 4
+stmt s1, s2, s3, s4, s5, s6;
+Select s4 such that Follows(s1, s2)  such that Follows(s5, s6) such that Follows(s3, s4) such that Follows(s2, s3) such that Follows(s4, s5)  
+4, 5
+5000
+47 - select stmt with 5 follow chained permutation 5
+stmt s1, s2, s3, s4, s5, s6;
+Select s5 such that Follows(s5, s6) such that Follows(s1, s2)  such that Follows(s2, s3) such that Follows(s3, s4) such that Follows(s4, s5)  
+5, 6
+5000
+48 - select stmt with 54 follow chained permutation 6
+stmt s1, s2, s3, s4, s5, s6;
+Select s6 such that Follows(s5, s6) such that Follows(s1, s2)  such that Follows(s2, s3) such that Follows(s4, s5) such that Follows(s3, s4)
+6, 7
+5000
+49 - select stmt with 5 follow chained permutation 7
+stmt s1, s2, s3, s4, s5, s6;
+Select s1 such that Follows(s5, s6) such that Follows(s1, s2)  such that Follows(s4, s5)  such that Follows(s2, s3) such that Follows(s3, s4)
+1, 2
+5000
+50 - select stmt with 5 follow chained permutation 8
+stmt s1, s2, s3, s4, s5, s6;
+Select s2 such that Follows(s5, s6) such that Follows(s4, s5) such that Follows(s1, s2)  such that Follows(s2, s3) such that Follows(s3, s4)
+2, 3
+5000
+51 - select stmt with 5 follow chained permutation 9
+stmt s1, s2, s3, s4, s5, s6;
+Select s3 such that Follows(s4, s5) such that Follows(s5, s6)  such that Follows(s1, s2)  such that Follows(s2, s3) such that Follows(s3, s4)
+3, 4
+5000
+52 - select stmt with 5 follow chained permutation 10
+stmt s1, s2, s3, s4, s5, s6;
+Select s4 such that Follows(s4, s5) such that Follows(s5, s6)  such that Follows(s1, s2)  such that Follows(s3, s4) such that Follows(s2, s3)
+4, 5
+5000
+53 - select stmt with 5 follow chained permutation 11
+stmt s1, s2, s3, s4, s5, s6;
+Select s5 such that Follows(s4, s5) such that Follows(s5, s6)  such that Follows(s3, s4) such that Follows(s1, s2)  such that Follows(s2, s3)
+5, 6
+5000
+54 - select stmt with 54 follow chained permutation 12
+stmt s1, s2, s3, s4, s5, s6;
+Select s6 such that Follows(s4, s5) such that Follows(s3, s4) such that Follows(s5, s6)  such that Follows(s1, s2)  such that Follows(s2, s3)
+6, 7
+5000
+55 - select stmt with 5 follow chained permutation 13
+stmt s1, s2, s3, s4, s5, s6;
+Select s1 such that Follows(s3, s4) such that Follows(s4, s5)  such that Follows(s5, s6)  such that Follows(s1, s2)  such that Follows(s2, s3)
+1, 2
+5000
+56 - select stmt with 5 follow chained permutation 14
+stmt s1, s2, s3, s4, s5, s6;
+Select s2 such that Follows(s3, s4) such that Follows(s4, s5)  such that Follows(s5, s6) such that Follows(s2, s3) such that Follows(s1, s2) 
+2, 3
+5000
+57 - select stmt with 5 follow chained permutation 15
+stmt s1, s2, s3, s4, s5, s6;
+Select s3 such that Follows(s3, s4) such that Follows(s4, s5)  such that Follows(s2, s3) such that Follows(s5, s6) such that Follows(s1, s2) 
+3, 4
+5000
+58 - select stmt with 5 follow chained permutation 16
+stmt s1, s2, s3, s4, s5, s6;
+Select s4 such that Follows(s3, s4) such that Follows(s2, s3) such that Follows(s4, s5)  such that Follows(s5, s6) such that Follows(s1, s2) 
+4, 5
+5000
+59 - select stmt with 5 follow chained permutation 17
+stmt s1, s2, s3, s4, s5, s6;
+Select s5 such that Follows(s2, s3) such that Follows(s3, s4) such that Follows(s4, s5)  such that Follows(s5, s6) such that Follows(s1, s2) 
+5, 6
+5000
+60 - select stmt with 54 follow chained permutation 18
+stmt s1, s2, s3, s4, s5, s6;
+Select s6 such that Follows(s2, s3) such that Follows(s3, s4) such that Follows(s4, s5)  such that Follows(s1, s2)  such that Follows(s5, s6) 
+6, 7
+5000
+60 - select stmt no common clauses
+stmt s, s1, s2, s3, s4, s5, s6, s7, s8, s9, s10;
+Select s such that Follows(s1, s2) such that Follows(s3, s4) such that Follows(s5, s6)  such that Follows(s7, s8)  such that Follows(s9, s10) 
+1, 2, 3, 4, 5, 6, 7
+5000
+61 - select stmt with 3 follow chained use d, modifies b and pattern c
+assign a1, a2, a3, a4, a;
+Select a2 such that Follows(a1, a2) such that Follows(a2, a3) such that Follows(a3, a4) pattern a2(_, _"c"_) such that Uses(a2, "d") such that Modifies(a2, "b")
+5
+5000
+62 - select stmt with 3 follow chained use c, modifies a and pattern b
+assign a1, a2, a3, a4;
+Select a2 such that Follows(a1, a2) such that Follows(a2, a3) such that Follows(a3, a4) pattern a2(_, _"b"_) such that Uses(a2, "c") such that Modifies(a2, "a")
+3, 4
+5000
+64 - select stmt with 3 follow chained use c, modifies a and pattern d
+assign a1, a2, a3, a4;
+Select a2 such that Follows(a1, a2) such that Follows(a2, a3) such that Follows(a3, a4) pattern a2(_, _"d"_) such that Uses(a2, "c") such that Modifies(a2, "a")
+4
+5000
+64 - select stmt with 3 follow chained use c, modifies a and pattern d and modifies b
+assign a1, a2, a3, a4;
+Select a2 such that Follows(a1, a2) such that Follows(a2, a3) such that Follows(a3, a4) pattern a2(_, _"d"_) such that Uses(a2, "c") such that Modifies(a2, "a") such that Modifies(a2, "b")
+none
+5000
