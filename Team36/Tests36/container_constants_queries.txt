@@ -1,0 +1,35 @@
+1 - Select ifs that uses a variable
+if ifs;
+Select ifs such that Uses(ifs, _)
+1
+5000
+2 - Select ifs that modifies a variable
+if ifs;
+Select ifs such that Modifies(ifs, _)
+1, 4
+5000
+3 - Select variables that are modified in a if
+variable v; if ifs;
+Select v such that Modifies(ifs, v)
+f
+5000
+4 - Select whiles that uses a variable
+while w;
+Select w such that Uses(w, _)
+none
+5000
+5 - select whiles that modifies a variable
+while w;
+Select w such that Modifies(w, _)
+7
+5000
+6 - select whiles that modifies variable 'f'
+while w;
+Select w such that Modifies(w, "f")
+none
+5000
+3 - Select variables that are modified in a while
+variable v; while w;
+Select v such that Modifies(w, v)
+g
+5000

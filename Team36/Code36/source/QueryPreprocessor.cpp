@@ -124,19 +124,20 @@ Query QueryPreprocessor::parse(std::string str) {
 			}
 
 			if (patternOrSuchThat.type == QueryToken::QueryTokenType::SUCH_THAT) {
-				if (token.type == QueryToken::QueryTokenType::PARENT_T) {
-					output.push_back({ QueryToken::QueryTokenType::PARENT_T, "" });
-				}
-				else if (token.type == QueryToken::QueryTokenType::FOLLOWS_T) {
-					output.push_back({ QueryToken::QueryTokenType::FOLLOWS_T, "" });
-				}
-				else if (!isParameter && token.type == QueryToken::QueryTokenType::PARENTHESIS_OPEN) {
+				//if (token.type == QueryToken::QueryTokenType::PARENT_T) {
+				//	output.push_back({ QueryToken::QueryTokenType::PARENT_T, "" });
+				//}
+				//else if (token.type == QueryToken::QueryTokenType::FOLLOWS_T) {
+				//	output.push_back({ QueryToken::QueryTokenType::FOLLOWS_T, "" });
+				//}
+				if (!isParameter && token.type == QueryToken::QueryTokenType::PARENTHESIS_OPEN) {
 					isParameter = true;
 					setQueryParameter(prevTokenSelect, queryParameter);
 				}
 				else if (token.type == QueryToken::QueryTokenType::PARENTHESIS_CLOSE) {
 					isParameter = false;
 					validator.parseParameterSuchThat(query, queryParameter.type, parameterClause);
+					parameterClause.clear();
 				}
 			}
 			else if (patternOrSuchThat.type == QueryToken::QueryTokenType::PATTERN) {
@@ -157,6 +158,7 @@ Query QueryPreprocessor::parse(std::string str) {
 					isParameter = false;
 					if (patternTypeEntity.getType() == EntityType::ASSIGN) {
 						validator.parseParameterPattern(query, patternTypeEntity, parameterClause);
+						parameterClause.clear();
 					}
 				}
 			}
