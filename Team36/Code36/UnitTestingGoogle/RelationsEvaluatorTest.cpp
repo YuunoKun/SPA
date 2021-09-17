@@ -20,7 +20,7 @@ namespace UnitTesting {
 			RelRef relation2(type, { STMT, "1" }, { STMT, "2" });
 			RelRef relation3(type, { STMT, "1" }, { WILD });
 			RelRef relation4(type, { WILD }, { STMT, "2" });
-			RelRef relation5(type, { STMT, Synonym{"a"} }, { STMT, Synonym{"a"} });
+			RelRef relation5(type, { STMT, Synonym{"a"} }, { STMT, Synonym{"b"} });
 			RelRef relation6(type, { WILD }, { STMT, Synonym{"a"} });
 			RelRef relation7(type, { STMT, Synonym{"a"} }, { WILD });
 			RelRef relation8(type, { STMT, "1" }, { STMT, Synonym{"a"} });
@@ -28,7 +28,7 @@ namespace UnitTesting {
 
 			std::vector<RelRef> relations{ relation1, relation2, relation3, relation4,
 				relation5,relation6,relation7 ,relation8,relation9 };
-			for (int i = 0; i < relations.size(); i++) {
+			for (unsigned int i = 0; i < relations.size(); i++) {
 				QueryResult result;
 				evaluator.evaluateRelation(result, relations[i]);
 				EXPECT_FALSE(result.haveResult()) << "ERROR AT RELATION : " << i + 1;
@@ -43,7 +43,7 @@ namespace UnitTesting {
 			RelRef relation2(type, { STMT, "1" }, { STMT, "2" });
 			RelRef relation3(type, { STMT, "1" }, { WILD });
 			RelRef relation4(type, { WILD }, { STMT, "2" });
-			RelRef relation5(type, { STMT, Synonym{"a"} }, { STMT, Synonym{"a"} });
+			RelRef relation5(type, { STMT, Synonym{"a"} }, { STMT, Synonym{"b"} });
 			RelRef relation6(type, { WILD }, { STMT, Synonym{"a"} });
 			RelRef relation7(type, { STMT, Synonym{"a"} }, { WILD });
 			RelRef relation8(type, { STMT, "1" }, { STMT, Synonym{"a"} });
@@ -51,7 +51,7 @@ namespace UnitTesting {
 
 			std::vector<RelRef> relations{ relation1, relation2, relation3, relation4,
 				relation5,relation6,relation7 ,relation8,relation9 };
-			for (int i = 0; i < relations.size(); i++) {
+			for (unsigned int i = 0; i < relations.size(); i++) {
 				QueryResult result;
 				evaluator.evaluateRelation(result, relations[i]);
 				EXPECT_TRUE(result.haveResult()) << "ERROR AT RELATION : " << i + 1;
@@ -67,7 +67,7 @@ namespace UnitTesting {
 			RelRef relation5(type, { STMT, Synonym{"a"} }, { STMT, "1" });
 
 			std::vector<RelRef> relations{ relation1, relation2, relation3, relation4, relation5 };
-			for (int i = 0; i < relations.size(); i++) {
+			for (unsigned int i = 0; i < relations.size(); i++) {
 				QueryResult result;
 				evaluator.evaluateRelation(result, relations[i]);
 				EXPECT_FALSE(result.haveResult()) << "ERROR AT RELATION : " << i + 1;
@@ -101,7 +101,7 @@ namespace UnitTesting {
 
 			std::vector<RelRef> relations{ relation1, relation2, relation3, relation4,
 				relation5,relation6,relation7 ,relation8,relation9 };
-			for (int i = 0; i < relations.size(); i++) {
+			for (unsigned int i = 0; i < relations.size(); i++) {
 				QueryResult result;
 				evaluator.evaluateRelation(result, relations[i]);
 				EXPECT_FALSE(result.haveResult()) << "ERROR AT RELATION : " << i + 1;
@@ -124,7 +124,7 @@ namespace UnitTesting {
 
 			std::vector<RelRef> relations{ relation1, relation2, relation3, relation4,
 				relation5,relation6,relation7 ,relation8,relation9 };
-			for (int i = 0; i < relations.size(); i++) {
+			for (unsigned int i = 0; i < relations.size(); i++) {
 				QueryResult result;
 				evaluator.evaluateRelation(result, relations[i]);
 				EXPECT_TRUE(result.haveResult()) << "ERROR AT RELATION : " << i + 1;
@@ -140,7 +140,7 @@ namespace UnitTesting {
 			RelRef relation5(type, { STMT, Synonym{"a"} }, { VARIABLE, "y" });
 
 			std::vector<RelRef> relations{ relation1, relation2, relation3, relation4, relation5 };
-			for (int i = 0; i < relations.size(); i++) {
+			for (unsigned int i = 0; i < relations.size(); i++) {
 				QueryResult result;
 				evaluator.evaluateRelation(result, relations[i]);
 				EXPECT_FALSE(result.haveResult()) << "ERROR AT RELATION : " << i + 1;

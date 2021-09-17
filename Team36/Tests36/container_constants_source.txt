@@ -1,0 +1,16 @@
+procedure nested {
+  if (3 < 5) then{
+ print f;
+} else {
+ read f;
+}
+  if (3 < 5) then{
+ read f;
+} else {
+ read f;
+}
+
+  while (3 < 4) {
+  g = 3;
+  }
+}

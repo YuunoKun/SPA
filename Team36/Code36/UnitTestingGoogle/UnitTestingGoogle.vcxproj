@@ -43,10 +43,13 @@
     <ClCompile Include="EntityTest.cpp" />
     <ClCompile Include="FSMTest.cpp" />
     <ClCompile Include="ParserTest.cpp" />
+    <ClCompile Include="PatternEvaluatorTest.cpp" />
     <ClCompile Include="PKBAdapterTest.cpp" />
+    <ClCompile Include="QueryEvaluatorMultiClausesTest.cpp" />
     <ClCompile Include="QueryEvaluatorTest.cpp" />
     <ClCompile Include="PatternTest.cpp" />
     <ClCompile Include="QueryResultTest.cpp" />
+    <ClCompile Include="QueryPreprocessorTest.cpp" />
     <ClCompile Include="QueryTest.cpp" />
     <ClCompile Include="RelationsEvaluatorTest.cpp" />
     <ClCompile Include="FollowsEvaluatorTest.cpp" />
@@ -55,7 +58,7 @@
     <ClCompile Include="ParentTEvaluatorTest.cpp" />
     <ClCompile Include="ModifiesSEvaluatorTest.cpp" />
     <ClCompile Include="ModifiesPEvaluatorTest.cpp" />
-    <ClCompile Include="TokenizerTest.cpp" />
+    <ClCompile Include="PatternRelRefValidatorTest.cpp" />
     <ClCompile Include="UsesSEvaluatorTest.cpp" />
     <ClCompile Include="UsesPEvaluatorTest.cpp" />
     <ClCompile Include="RelRefTest.cpp" />
@@ -70,6 +73,7 @@
     <ClCompile Include="UtilityTest.cpp" />
     <ClCompile Include="RelationTableTest.cpp" />
     <ClCompile Include="QueryTokenizerTest.cpp" />
+    <ClCompile Include="TokenizerTest.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SPA\SPA.vcxproj">

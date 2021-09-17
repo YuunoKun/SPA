@@ -29,6 +29,9 @@ public:
 	RelationTable<T, S> findTransitiveClosure();
 	RelationTable<S, T> findReverse();
 
+	std::unordered_map<T, std::vector<S>> getTableForward();
+	std::unordered_map<S, std::vector<T>> getTableBackward();
+
 	bool operator==(const RelationTable&) const;
 	bool operator!=(const RelationTable&) const;
 
@@ -36,9 +39,6 @@ protected:
 	std::unordered_map<T, std::vector<S>> forward_table;
 	std::unordered_map<S, std::vector<T>> backward_table;
 	bool uniqueKey;
-
-	std::unordered_map<T, std::vector<S>> getTableForward();
-	std::unordered_map<S, std::vector<T>> getTableBackward();
 };
 
 template <class T, class S>

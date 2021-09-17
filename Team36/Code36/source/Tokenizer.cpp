@@ -12,7 +12,7 @@ Tokenizer::Tokenizer(void) {
 void Tokenizer::parse_into_tokens(const char* input) {
 	m_token_cache = {};
 	Token current_token;
-	std::stack<char> separator_validation_stk;
+
 	std::string source = std::string(input);
 	for (char c : source) {
 		//std::cout << (int)c << " ";
@@ -20,43 +20,35 @@ void Tokenizer::parse_into_tokens(const char* input) {
 		case '{':
 			add_token(current_token);
 			current_token.set_token_type(TokenType::STATEMENT_LIST_OPEN);
+			current_token.set_token_value("{");
 			add_token(current_token);
-			separator_validation_stk.push('{');
 			break;
 		case '}':
-			if (!separator_validation_stk.empty() && separator_validation_stk.top() == '{') {
-				separator_validation_stk.pop();
-			}
-			else {
-				//throw std::runtime_error("Unexpected symbol : \'" + c + '\'');
-			}
 			add_token(current_token);
 			current_token.set_token_type(TokenType::STATEMENT_LIST_CLOSE);
+			current_token.set_token_value("}");
 			add_token(current_token);
 			break;
 		case '(':
 			add_token(current_token);
 			current_token.set_token_type(TokenType::PARENTHESIS_OPEN);
+			current_token.set_token_value("(");
 			add_token(current_token);
-			separator_validation_stk.push('(');
 			break;
 		case ')':
-			if (!separator_validation_stk.empty() && separator_validation_stk.top() == '(') {
-				separator_validation_stk.pop();
-			}
-			else {
-				//throw std::runtime_error("Unexpected symbol : \'" + c + '\'');
-			}
 			add_token(current_token);
 			current_token.set_token_type(TokenType::PARENTHESIS_CLOSE);
+			current_token.set_token_value(")");
 			add_token(current_token);
 			break;
 		case ';':
 			add_token(current_token);
 			current_token.set_token_type(TokenType::TERMINATOR);
+			current_token.set_token_value(";");
 			add_token(current_token);
 			break;
 		case ' ':
+		case '	':
 			// Ignore extra white spaces, also terminates forming of potential identifiers
 			// This also ensure that token values does not contain extra whitespaces.
 			add_token(current_token);
@@ -65,51 +57,63 @@ void Tokenizer::parse_into_tokens(const char* input) {
 		case '&':
 			if (current_token.get_token_type() == TokenType::BIT_AND) {
 				current_token.set_token_type(TokenType::BOOL_AND);
+				current_token.set_token_value("&&");
 				add_token(current_token);
 			}
 			else {
 				add_token(current_token);
 				current_token.set_token_type(TokenType::BIT_AND);
+				current_token.set_token_value("&");
 			}
 			break;
 		case '|':
 			if (current_token.get_token_type() == TokenType::BIT_OR) {
 				current_token.set_token_type(TokenType::BOOL_OR);
+				current_token.set_token_value("||");
 				add_token(current_token);
 			}
 			else {
 				add_token(current_token);
 				current_token.set_token_type(TokenType::BIT_OR);
+				current_token.set_token_value("|");
 			}
 			break;
 		case '!':
 			add_token(current_token);
 			current_token.set_token_type(TokenType::BOOL_NEGATE);
+			current_token.set_token_value("!");
 			break;
 		case '>':
 			add_token(current_token);
 			current_token.set_token_type(TokenType::BOOL_GT);
+			current_token.set_token_value(">");
 			break;
 		case '<':
 			add_token(current_token);
 			current_token.set_token_type(TokenType::BOOL_LT);
+			current_token.set_token_value("<");
 			break;
 		case '=':
 			if (current_token.get_token_type() == TokenType::BOOL_NEGATE) {
 				current_token.set_token_type(TokenType::BOOL_NEQUIV);
+				current_token.set_token_value("!=");
 			}
 			else if (current_token.get_token_type() == TokenType::BOOL_LT) {
 				current_token.set_token_type(TokenType::BOOL_LTEQ);
+				current_token.set_token_value("<=");
 			}
 			else if (current_token.get_token_type() == TokenType::BOOL_GT) {
 				current_token.set_token_type(TokenType::BOOL_GTEQ);
+				current_token.set_token_value(">=");
 			}
 			else if (current_token.get_token_type() == TokenType::ASSIGN) {
 				current_token.set_token_type(TokenType::BOOL_EQUIV);
+				current_token.set_token_value("==");
 			}
 			else {
 				add_token(current_token);
 				current_token.set_token_type(TokenType::ASSIGN);
+				current_token.set_token_value("=");
 				break;
 			}
 			add_token(current_token);
@@ -117,26 +121,31 @@ void Tokenizer::parse_into_tokens(const char* input) {
 		case '+':
 			add_token(current_token);
 			current_token.set_token_type(TokenType::PLUS);
+			current_token.set_token_value("+");
 			add_token(current_token);
 			break;
 		case '-':
 			add_token(current_token);
 			current_token.set_token_type(TokenType::MINUS);
+			current_token.set_token_value("-");
 			add_token(current_token);
 			break;
 		case '*':
 			add_token(current_token);
 			current_token.set_token_type(TokenType::MUL);
+			current_token.set_token_value("*");
 			add_token(current_token);
 			break;
 		case '/':
 			add_token(current_token);
 			current_token.set_token_type(TokenType::DIV);
+			current_token.set_token_value("/");
 			add_token(current_token);
 			break;
 		case '%':
 			add_token(current_token);
 			current_token.set_token_type(TokenType::MOD);
+			current_token.set_token_value("%");
 			add_token(current_token);
 			break;
 		default:

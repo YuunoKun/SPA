@@ -13,4 +13,18 @@ public:
 	QueryPreprocessor();
 
 	Query parse(std::string);
+
+private:
+
+	QueryToken setIdentifierToQueryTokenType(QueryToken&, QueryToken&, QueryToken&);
+
+	void validateDeclarationQuery(QueryToken&, QueryToken&);
+
+	void addEntityToQuery(Query&, Entity&, std::vector<QueryToken>&, QueryToken&, QueryToken&);
+
+	void addSelectedToQuery(Query&, Entity&, std::vector<QueryToken>&, std::vector<QueryToken>, QueryToken&, QueryToken&, bool&);
+
+	void setQueryParameter(QueryToken&, QueryToken&);
+
+	void setPatternTypeEntity(std::vector<QueryToken>&, QueryToken&, Entity&);
 };

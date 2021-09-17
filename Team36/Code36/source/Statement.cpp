@@ -4,11 +4,12 @@
 using namespace SourceProcessor;
 
 
-Statement::Statement(stmt_index id, StmtType type, proc_name parent_proc_name) {
+Statement::Statement(stmt_index id, StmtType type, proc_name parent_proc_name, int stmt_list) {
 	m_index = id;
 	m_type = type;
 	m_under_procedure = parent_proc_name;
 	m_direct_parent = 0;
+	m_stmt_list = stmt_list;
 }
 
 
@@ -22,7 +23,12 @@ stmt_index Statement::get_index() {
 }
 
 
-void Statement::add_direct_parent(stmt_index parent) {
+proc_name Statement::get_proc_name() {
+	return m_under_procedure;
+}
+
+
+void Statement::set_direct_parent(stmt_index parent) {
 	m_direct_parent = parent;
 }
 
@@ -39,6 +45,11 @@ void Statement::add_direct_child(stmt_index child) {
 
 std::vector<stmt_index>& Statement::get_direct_child() {
 	return m_direct_child;
+}
+
+
+int Statement::get_stmt_list() {
+	return m_stmt_list;
 }
 
 

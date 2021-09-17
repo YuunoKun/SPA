@@ -528,6 +528,6 @@ FodyWeavers.xsd
 # Additional files built by Visual Studio
 
 Team36/Code36/Tests/out.xml
-
+Team36/Code36/Tests/AutoTester/AutoTester.vcxproj
 
 # End of https://www.toptal.com/developers/gitignore/api/c++,windows,visualstudio,qt,qtcreator

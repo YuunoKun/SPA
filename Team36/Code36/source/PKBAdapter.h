@@ -20,6 +20,8 @@ public:
 	std::vector<StmtInfo> getReads();
 	std::vector<StmtInfo> getWhiles();
 	std::vector<StmtInfo> getIfs();
+	std::vector<assign_info> getAssignInfo();
+	std::vector<assign_info> getAssignInfo(std::string, bool);
 
 	//Follow relation function
 	bool isFollowEmpty();
@@ -42,7 +44,6 @@ public:
 	std::vector<StmtInfo> getFollowedT(stmt_index);
 	std::vector<StmtInfo> getFollowingT(stmt_index);
 	std::vector<std::pair<StmtInfo, StmtInfo>> getFollowsT();
-
 
 	//Parent relation function
 	bool isParentEmpty();

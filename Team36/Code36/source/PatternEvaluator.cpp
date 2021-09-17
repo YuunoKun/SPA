@@ -1,48 +1,52 @@
 #include "PatternEvaluator.h"
+#include <stdexcept>
 
 void PatternEvaluator::evaluatePattern(QueryResult& queryResult, Pattern& pattern) {
+	if (pattern.getPatternType().getType() != ASSIGN) {
+		throw std::invalid_argument("evaluatePattern(): only ASSIGN pattern type is allowed for iteration 1");
+	}
+
+	std::vector<assign_info> assignInfos;
+	if (pattern.getExpression() == "" && pattern.isWild()) {
+		assignInfos = pkb.getAssignInfo();
+	}
+	else {
+		assignInfos = pkb.getAssignInfo(pattern.getExpression(), pattern.isWild());
+	}
 
 	Entity patternType = pattern.getPatternType();
 	Entity lhsEntity = pattern.getLeftExpression();
+	std::string expression = pattern.getExpression();
 
-	TNode expression = pattern.getExpression();
-
-	ResultTable* resultTable;
-
-	//if lhs side is at least one side is declaration
+	//If left side is wild and right side is WILD: e.g a(v, _"x"_)
+	//if lhs side is at least is declaration, return 2 column table
 	if (lhsEntity.isSynonym()) {
-		 if ( pattern.isWild()) {
-			//If left side is declaration and right side is WILD: e.g a(x, _""_)
-			//Todo
-
-		}else{
-			//If left side is declaration and right side is not wild: e.g a(x, "x")
-			//Todo
-
-		}
+		std::pair<Entity, Entity> header = { patternType, lhsEntity };
+		ResultTable resultTable(header, assignInfos);
+		queryResult.addResult(resultTable);
 	}
 	else {
 		//if lhs side is not declaration
-		if (lhsEntity.getType() == WILD && pattern.isWild()) {
+		if (lhsEntity.getType() == WILD) {
 			//If left side is wild and right side is WILD: e.g a(_, _"x"_)
-			//Todo
-		}else if (lhsEntity.getType() == WILD) {
-			//If left side is wild and right side is normal: e.g a(_, "x")
-			//Todo
-		}else if (pattern.isWild()) {
-			//If left side is constant and right side is WILD: e.g a("x", _"x"_)
-			//Todo
+			std::vector<StmtInfo> table;
+			for (auto it : assignInfos) {
+				table.push_back(it.first);
+			}
+			ResultTable resultTable(patternType, table);
+			queryResult.addResult(resultTable);
 		}
 		else {
-			//If left side is constant and right side is normal: e.g a(_, "x")
-			//Todo
+			//If left side is constant and right side is normal: e.g a("x", "x")
+			//return all assign statment that match expression and lhs
+			std::vector<StmtInfo> table;
+			for (auto it : assignInfos) {
+				if (it.second == lhsEntity.getValue()) {
+					table.push_back(it.first);
+				}
+			}
+			ResultTable resultTable(patternType, table);
+			queryResult.addResult(resultTable);
 		}
-	}
-
-	if (resultTable->isEmpty()) {
-		queryResult.setNoResult();
-	}
-	else {
-		queryResult.addResult(*resultTable);
 	}
 }

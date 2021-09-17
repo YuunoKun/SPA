@@ -1,5 +1,6 @@
 #pragma once
-
+#include <iostream>
+#include <queue>
 #include "RelationTable.h"
 
 template <class T, class S>
@@ -150,8 +151,43 @@ bool RelationTable<T, S>::containsPair(T key, S value)
 }
 
 template <class T, class S>
-RelationTable<T, S> RelationTable<T, S>::findTransitiveClosure() {
-	return RelationTable();
+RelationTable<T, S> RelationTable<T, S>::findTransitiveClosure()
+{
+	static_assert(std::is_same<T, S>::value, "Transitive closure must be used with a table with columns of same datatype");
+	RelationTable<T, S> res;
+	for (auto const& pair : forward_table) {
+		T key = pair.first;
+		auto v1 = pair.second;
+		for (auto const& value : v1) {
+			res.insert(key, value);
+		}
+	}
+
+	std::vector<T> keys = getKeys();
+	std::vector<S> vals = getValues();
+
+	for (auto middleIt = keys.begin(); middleIt != keys.end(); ++middleIt) {
+		// Pick all vertices as source one by one
+		for (auto keyIt = keys.begin(); keyIt != keys.end(); ++keyIt) {
+			for (auto valIt = vals.begin(); valIt != vals.end(); ++valIt) {
+				if (!res.containsPair(*keyIt, *valIt) &&
+					res.containsPair(*keyIt, *middleIt) &&
+					res.containsPair(*middleIt, *valIt)) {
+					T newKey = *keyIt;
+					T newVal = *valIt;
+					res.insert(newKey, newVal);
+				}
+			}
+		}
+	}
+
+	for (auto& pair : res.forward_table) {
+		std::sort(pair.second.begin(), pair.second.end());
+	}
+	for (auto& pair : res.backward_table) {
+		std::sort(pair.second.begin(), pair.second.end());
+	}
+	return res;
 }
 
 template <class T, class S>
