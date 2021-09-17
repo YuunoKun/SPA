@@ -1,4 +1,65 @@
-
+procedure reads {
+  read x;
+  read x;
+  print x;
+  read x;
+  call c;
+  read x;
+  y = 1 * x;
+  read x;
+  if (q!= 1) then {
+    read x;
+  } else {
+    read x;
+  }
+  read x;
+  while(z>0) {
+    read x;
+  }
+  read x;
+}
+procedure prints {
+  print x;
+  print x;
+  read x;
+  print x;
+  call c;
+  print x;
+  y = 1 * x;
+  print x;
+  if (q!= 1) then {
+    print x;
+  } else {
+    print x;
+  }
+  print x;
+  while(z>0) {
+    print x;
+  }
+  print x;
+}
+procedure calls {
+  call c;
+  call c;
+  read x;
+  call c;
+  print x;
+  call c;
+  print x;
+  call c;
+  y = 1 * x;
+  call c;
+  if (q!= 1) then {
+    call c;
+  } else {
+    call c;
+  }
+  call c;
+  while(z>0) {
+    call c;
+  }
+  call c;
+}
 procedure assigns{
   y = 1 * x;
   y = 1 * x;
@@ -120,4 +181,5 @@ procedure whiles{
 }
 procedure c {
     print x;
+    read x;
 }
