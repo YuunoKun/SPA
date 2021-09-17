@@ -4,7 +4,6 @@
 #include "RelationTable.cpp"
 #include "Common.h"
 
-/*
 namespace UnitTesting {
 	TEST(RelationTable, isUniqueKey) {
 		UniqueRelationTable<int, int> table1;
@@ -291,38 +290,86 @@ namespace UnitTesting {
 		EXPECT_EQ(table2.containsPair(0, 1), false);
 	}
 
-	//TEST(RelationTable, reverse) {
-	//	RelationTable<int, int> table1, table2, reversed_table1, reversed_table3;
-	//	UniqueRelationTable<int, int> table3;
-	//	std::vector<std::pair<int, int>> testInput{ {1, 2}, {1, 3}, {2, 2}, {2, 2}, {2, 4} };
+	TEST(RelationTable, reverse) {
+		RelationTable<int, int> table1, table2, reversed_table1, reversed_table3;
+		UniqueRelationTable<int, int> table3;
+		std::vector<std::pair<int, int>> testInput{ {1, 2}, {1, 3}, {2, 2}, {2, 2}, {2, 4} };
 
-	//	table1.insert(testInput[0].first, testInput[0].second);
-	//	table1.insert(testInput[1].first, testInput[1].second);
-	//	table1.insert(testInput[2].first, testInput[2].second);
-	//	table1.insert(testInput[3].first, testInput[3].second);
-	//	table1.insert(testInput[4].first, testInput[4].second);
+		table1.insert(testInput[0].first, testInput[0].second);
+		table1.insert(testInput[1].first, testInput[1].second);
+		table1.insert(testInput[2].first, testInput[2].second);
+		table1.insert(testInput[3].first, testInput[3].second);
+		table1.insert(testInput[4].first, testInput[4].second);
 
-	//	table3.insert(testInput[0].first, testInput[0].second);
-	//	table3.insert(testInput[1].first, testInput[1].second);
-	//	table3.insert(testInput[2].first, testInput[2].second);
-	//	table3.insert(testInput[3].first, testInput[3].second);
-	//	table3.insert(testInput[4].first, testInput[4].second);
+		table3.insert(testInput[0].first, testInput[0].second);
+		table3.insert(testInput[1].first, testInput[1].second);
+		table3.insert(testInput[2].first, testInput[2].second);
+		table3.insert(testInput[3].first, testInput[3].second);
+		table3.insert(testInput[4].first, testInput[4].second);
 
-	//	reversed_table1.insert(testInput[0].second, testInput[0].first);
-	//	reversed_table1.insert(testInput[1].second, testInput[1].first);
-	//	reversed_table1.insert(testInput[2].second, testInput[2].first);
-	//	reversed_table1.insert(testInput[3].second, testInput[3].first);
-	//	reversed_table1.insert(testInput[4].second, testInput[4].first);
+		reversed_table1.insert(testInput[0].second, testInput[0].first);
+		reversed_table1.insert(testInput[1].second, testInput[1].first);
+		reversed_table1.insert(testInput[2].second, testInput[2].first);
+		reversed_table1.insert(testInput[3].second, testInput[3].first);
+		reversed_table1.insert(testInput[4].second, testInput[4].first);
 
-	//	reversed_table3.insert(testInput[0].second, testInput[0].first);
-	//	reversed_table3.insert(testInput[2].second, testInput[2].first);
+		reversed_table3.insert(testInput[0].second, testInput[0].first);
+		reversed_table3.insert(testInput[2].second, testInput[2].first);
 
-	//	EXPECT_EQ(table1.findReverse(), reversed_table1);
-	//	EXPECT_NE(table1.findReverse(), table1);
-	//	EXPECT_NE(table1.findReverse(), table2);
-	//	EXPECT_EQ(table3.findReverse(), reversed_table3);
-	//}
+		EXPECT_EQ(table1.findReverse(), reversed_table1);
+		EXPECT_NE(table1.findReverse(), table1);
+		EXPECT_NE(table1.findReverse(), table2);
+		EXPECT_EQ(table3.findReverse(), reversed_table3);
+	}
 
+	TEST(RelationTable, findTransitiveClosure) {
+		RelationTable<int, int> table1, transitive_table1;
+		std::vector<std::pair<int, int>> testInput1{ {1, 2}, {2, 3}, {2, 4}, {3, 3}, {3, 4}, {4, 5} };
+		std::vector<std::pair<int, int>> testExpected1{ {1, 2}, {1, 3}, {1, 4}, {1, 5}, {2, 3}, {2, 4}, {2, 5}, {3, 3}, {3, 4}, {3, 5}, {4, 5} };
+		table1.insert(testInput1[0].first, testInput1[0].second);
+		table1.insert(testInput1[1].first, testInput1[1].second);
+		table1.insert(testInput1[2].first, testInput1[2].second);
+		table1.insert(testInput1[3].first, testInput1[3].second);
+		table1.insert(testInput1[4].first, testInput1[4].second);
+		table1.insert(testInput1[5].first, testInput1[5].second);
+
+		transitive_table1.insert(testExpected1[0].first, testExpected1[0].second);
+		transitive_table1.insert(testExpected1[1].first, testExpected1[1].second);
+		transitive_table1.insert(testExpected1[2].first, testExpected1[2].second);
+		transitive_table1.insert(testExpected1[3].first, testExpected1[3].second);
+		transitive_table1.insert(testExpected1[4].first, testExpected1[4].second);
+		transitive_table1.insert(testExpected1[5].first, testExpected1[5].second);
+		transitive_table1.insert(testExpected1[6].first, testExpected1[6].second);
+		transitive_table1.insert(testExpected1[7].first, testExpected1[7].second);
+		transitive_table1.insert(testExpected1[8].first, testExpected1[8].second);
+		transitive_table1.insert(testExpected1[9].first, testExpected1[9].second);
+		transitive_table1.insert(testExpected1[10].first, testExpected1[10].second);
+
+		auto test1 = table1.findTransitiveClosure();
+		EXPECT_EQ(test1, transitive_table1);
+	}
+
+	TEST(RelationTable, findTransitiveClosureCycle) {
+		RelationTable<int, int> table, transitive_table;
+		std::vector<std::pair<int, int>> testInput2{ {1, 2}, {2, 3}, {3,1} };
+		std::vector<std::pair<int, int>> testExpected2{ {1, 1}, {1, 2}, {1, 3}, {2, 1}, {2, 2}, {2, 3}, {3, 1}, {3, 2}, {3, 3} };
+		table.insert(testInput2[0].first, testInput2[0].second);
+		table.insert(testInput2[1].first, testInput2[1].second);
+		table.insert(testInput2[2].first, testInput2[2].second);
+
+		transitive_table.insert(testExpected2[0].first, testExpected2[0].second);
+		transitive_table.insert(testExpected2[1].first, testExpected2[1].second);
+		transitive_table.insert(testExpected2[2].first, testExpected2[2].second);
+		transitive_table.insert(testExpected2[3].first, testExpected2[3].second);
+		transitive_table.insert(testExpected2[4].first, testExpected2[4].second);
+		transitive_table.insert(testExpected2[5].first, testExpected2[5].second);
+		transitive_table.insert(testExpected2[6].first, testExpected2[6].second);
+		transitive_table.insert(testExpected2[7].first, testExpected2[7].second);
+		transitive_table.insert(testExpected2[8].first, testExpected2[8].second);
+
+		auto test2 = table.findTransitiveClosure();
+		EXPECT_EQ(test2, transitive_table);
+	}
 	TEST(RelationTable, clear) {
 		RelationTable<int, int> table1, table2;
 		std::vector<std::pair<int, int>> testInput{ {1, 2} };
@@ -344,4 +391,3 @@ namespace UnitTesting {
 		EXPECT_TRUE(table1.isEmpty());
 	}
 }
-*/

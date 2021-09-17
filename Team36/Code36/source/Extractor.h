@@ -1,7 +1,9 @@
 #pragma once
 
+#include <string>
 #include "Common.h"
 #include "Token.h"
+#include "PKB.h"
 
 namespace SourceProcessor {
 
@@ -10,6 +12,8 @@ namespace SourceProcessor {
 		virtual ~Extractor() {}
 
 		virtual void start_nesting() = 0;
+
+		virtual void chop_nesting() = 0;
 
 		virtual void end_nesting() = 0;
 
@@ -27,11 +31,19 @@ namespace SourceProcessor {
 
 		virtual void start_expr() = 0;
 
+		virtual void add_expr_segment(std::string) = 0;
+
 		virtual void end_expr() = 0;
 
-		virtual void populateEntities() = 0;
+		virtual void add_callee(proc_name) = 0;
 
-		virtual void populateRelations() = 0;
+		virtual void validate() = 0;
+
+		virtual void populate_post_validation() = 0;
+
+		virtual void populateEntities(PKB&) = 0;
+
+		virtual void populateRelations(PKB&) = 0;
 	};
 
 } // namespace SourceProcessor

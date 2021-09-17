@@ -16,6 +16,8 @@ namespace UnitTesting {
 
 		void start_nesting() {}
 
+		void chop_nesting() {}
+
 		void end_nesting() {}
 
 		void add_procedure(proc_name name) {
@@ -40,11 +42,19 @@ namespace UnitTesting {
 
 		void start_expr() {}
 
+		void add_expr_segment(std::string str) {}
+
 		void end_expr() {}
 
-		void populateEntities() {}
+		void add_callee(proc_name name) {}
 
-		void populateRelations() {}
+		void validate() {}
+
+		void populate_post_validation() {}
+
+		void populateEntities(PKB&) {}
+
+		void populateRelations(PKB&) {}
 	};
 
 

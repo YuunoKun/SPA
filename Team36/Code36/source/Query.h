@@ -20,6 +20,7 @@ public:
 	void addEntity(Entity&);
 	void addRelation(RelRef&);
 	void addPattern(Pattern&);
+	bool operator==(const Query&) const;
 
 private:
 	//Member Variable

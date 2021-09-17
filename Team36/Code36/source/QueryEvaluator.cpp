@@ -17,7 +17,7 @@ std::list<std::string> QueryEvaluator::evaluateQuery(Query query) {
 
 		return getResult(query, result);;
 	}
-	catch (...){
+	catch (...) {
 		//Some error occur, return empty list
 		return {};
 	}
@@ -67,11 +67,16 @@ std::list<std::string> QueryEvaluator::getResult(Query& query, QueryResult& resu
 		return {};
 	}
 
+	if (query.getSelected().size() > 1) {
+		//For iteration 2, handling tuples result
+	}
+
+	//Handle non-tuples result
 	//If the variable is not found in one of the result table, return all of selected entity type
-	if (!result.isInTables(query.getSelected())) {
+	if (!result.isInTables(query.getSelected()[0])) {
 		return getRawResult(query.getSelected()[0]);
 	}
 
 	//If the variable is found in one of the result table
-	return result.getResult(query.getSelected());
+	return result.getResult(query.getSelected()[0]);
 }
