@@ -229,6 +229,13 @@ void QueryPreprocessor::validateDeclarationQuery(QueryToken& prevToken, QueryTok
 }
 
 void QueryPreprocessor::addEntityToQuery(Query& query, Entity& ent, std::vector<QueryToken>& output, QueryToken& prevToken, QueryToken& token) {
+	// Check if entity name is already used, exists in output, should return error
+	for (QueryToken each : output) {
+		if (token.token_value == each.token_value) {
+			throw std::runtime_error("Name is already used!");
+		}
+	}
+
 	// Declaring goes into output
 	output.push_back({ prevToken.type, { token.token_value } });
 	Synonym synonym;
