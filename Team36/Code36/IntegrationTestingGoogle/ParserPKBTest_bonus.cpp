@@ -7,10 +7,10 @@
 #include "RelationTable.cpp"
 
 namespace IntegrationTesting {
-	class ParserPKBTest : public testing::Test {
+	class ParserPKBTestBonus : public testing::Test {
 	protected:
 
-		ParserPKBTest() {
+		ParserPKBTestBonus() {
 			// You can do set-up work for each test here.
 		}
 
@@ -29,7 +29,7 @@ namespace IntegrationTesting {
 		}
 	};
 
-	TEST_F(ParserPKBTest, NoProcedureCallsTest_UsesP) {
+	TEST_F(ParserPKBTestBonus, NoProcedureCallsTest_UsesP) {
 		SourceProcessor::Parser parser;
 		parser.load_file("./Tests/no_procedure_call_source.txt");
 		parser.parse();
@@ -45,7 +45,7 @@ namespace IntegrationTesting {
 		EXPECT_EQ(v, expected_usesP);
 	}
 
-	TEST_F(ParserPKBTest, NoProcedureCallsTest_ModifiesP) {
+	TEST_F(ParserPKBTestBonus, NoProcedureCallsTest_ModifiesP) {
 		SourceProcessor::Parser parser;
 		parser.load_file("./Tests/no_procedure_call_source.txt");
 		parser.parse();
@@ -62,7 +62,7 @@ namespace IntegrationTesting {
 		EXPECT_EQ(v, expected_modifiesP);
 	}
 
-	TEST_F(ParserPKBTest, ProcedureCallsTest_UsesP) {
+	TEST_F(ParserPKBTestBonus, ProcedureCallsTest_UsesP) {
 		SourceProcessor::Parser parser;
 		parser.load_file("./Tests/procedure_call_source.txt");
 		parser.parse();
@@ -81,7 +81,7 @@ namespace IntegrationTesting {
 		EXPECT_EQ(v, expected_usesP);
 	}
 
-	TEST_F(ParserPKBTest, ProcedureCallsTest_ModifiesP) {
+	TEST_F(ParserPKBTestBonus, ProcedureCallsTest_ModifiesP) {
 		SourceProcessor::Parser parser;
 		parser.load_file("./Tests/procedure_call_source.txt");
 		parser.parse();

@@ -10,7 +10,6 @@
 
 #include "Common.h"
 #include "KnowledgeBase.h"
-#include "Stmt.h"
 #include "RelationTable.h"
 
 class PKB : public KnowledgeBase {
@@ -19,42 +18,42 @@ public:
 	PKB(PKB const&) = delete;
 	void operator=(PKB const&) = delete;
 
-	void addConstant(constant constant);
-	void addProcedure(proc_name proc_name);
-	void addVariable(var_name var_name);
-	void addStmt(StmtType stmt_type);
-	void addExprTree(stmt_index stmt_index, expr expr);
+	void addConstant(constant constant) override;
+	void addProcedure(proc_name proc_name) override;
+	void addVariable(var_name var_name) override;
+	void addStmt(StmtType stmt_type) override;
+	void addExprTree(stmt_index stmt_index, expr expr) override;
 
-	void addParent(stmt_index parent, stmt_index child);
-	void addFollows(stmt_index first, stmt_index second);
-	void addUsesS(stmt_index user, var_name used);
-	void addModifiesS(stmt_index modifier, var_name modified);
-	void addModifiesP(proc_name proc, var_name modified);
-	void addUsesP(proc_name proc, var_name used);
+	void addParent(stmt_index parent, stmt_index child) override;
+	void addFollows(stmt_index first, stmt_index second) override;
+	void addUsesS(stmt_index user, var_name used) override;
+	void addModifiesS(stmt_index modifier, var_name modified) override;
+	void addModifiesP(proc_name proc, var_name modified) override;
+	void addUsesP(proc_name proc, var_name used) override;
 
-	void generateParentT();
-	void generateFollowsT();
+	void generateParentT() override;
+	void generateFollowsT() override;
 
-	const std::vector<proc_name>& getProcedures();
-	const std::vector<var_name>& getVariables();
-	const std::vector<StmtInfo>& getStmts();
-	const StmtInfo getStmt(stmt_index stmt_index);
-	const var_name getAssignment(stmt_index stmt_index);
-	const expr getExpression(stmt_index stmt_index);
-	const std::vector<constant> getConstants();
+	const std::vector<proc_name>& getProcedures() override;
+	const std::vector<var_name>& getVariables() override;
+	const std::vector<StmtInfo>& getStmts() override;
+	const StmtInfo getStmt(stmt_index stmt_index) override;
+	const var_name getAssignment(stmt_index stmt_index) override;
+	const expr getExpression(stmt_index stmt_index) override;
+	const std::vector<constant> getConstants() override;
 	const UniqueRelationTable<stmt_index, var_name>& getAssigns();
-	const UniqueRelationTable<stmt_index, expr>& getExpr();
-	const UniqueRelationTable<StmtInfo, StmtInfo>& getFollows();
-	const RelationTable<StmtInfo, StmtInfo>& getParent();
-	const RelationTable<StmtInfo, StmtInfo>& getFollowsT();
-	const RelationTable<StmtInfo, StmtInfo>& getParentT();
-	const RelationTable<StmtInfo, var_name>& getUsesS();
-	const RelationTable<StmtInfo, var_name>& getModifiesS();
-	const RelationTable<proc_name, var_name>& getUsesP();
-	const RelationTable<proc_name, var_name>& getModifiesP();
+	const UniqueRelationTable<stmt_index, expr>& getExpr() override;
+	const UniqueRelationTable<StmtInfo, StmtInfo>& getFollows() override;
+	const RelationTable<StmtInfo, StmtInfo>& getParent() override;
+	const RelationTable<StmtInfo, StmtInfo>& getFollowsT() override;
+	const RelationTable<StmtInfo, StmtInfo>& getParentT() override;
+	const RelationTable<StmtInfo, var_name>& getUsesS() override;
+	const RelationTable<StmtInfo, var_name>& getModifiesS() override;
+	const RelationTable<proc_name, var_name>& getUsesP() override;
+	const RelationTable<proc_name, var_name>& getModifiesP() override;
 
-	void resetCache();
-	void resetEntities();
+	void resetCache() override;
+	void resetEntities() override;
 
 private:
 	std::vector<proc_name> proc_table;
