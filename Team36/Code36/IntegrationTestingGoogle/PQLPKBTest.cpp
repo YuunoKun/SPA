@@ -10,7 +10,6 @@ namespace UnitTesting {
 
 		PQLPKBTest() {
 			// You can do set-up work for each test here.
-
 			PKB::getInstance().resetCache();
 			PKB::getInstance().addVariable({ x });
 			PKB::getInstance().addVariable({ y });
@@ -407,9 +406,9 @@ namespace UnitTesting {
 	// one pattern cl ----------------------------------------------------------------------------------------------------------------
 
 	TEST_F(PQLPKBTest, PatternTest) {
-		std::list<std::string> ans_pattern = qs.processQuery("assign a; Select a pattern a (_,\"x\"");
+		std::list<std::string> ans = qs.processQuery("assign a; Select a pattern a (_,\"x\")");
 
-		validateAnswer(PROCEDURES, ans_pattern);
+		validateAnswer({"9"}, ans);
 	}
 
 	// one st and one pattern cl -----------------------------------------------------------------------------------------------------
