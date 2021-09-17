@@ -124,12 +124,6 @@ Query QueryPreprocessor::parse(std::string str) {
 			}
 
 			if (patternOrSuchThat.type == QueryToken::QueryTokenType::SUCH_THAT) {
-				//if (token.type == QueryToken::QueryTokenType::PARENT_T) {
-				//	output.push_back({ QueryToken::QueryTokenType::PARENT_T, "" });
-				//}
-				//else if (token.type == QueryToken::QueryTokenType::FOLLOWS_T) {
-				//	output.push_back({ QueryToken::QueryTokenType::FOLLOWS_T, "" });
-				//}
 				if (!isParameter && token.type == QueryToken::QueryTokenType::PARENTHESIS_OPEN) {
 					isParameter = true;
 					setQueryParameter(prevTokenSelect, queryParameter);
@@ -205,6 +199,9 @@ QueryToken QueryPreprocessor::setIdentifierToQueryTokenType(QueryToken& prevToke
 		// Need to enforce that Select must only come after a terminator
 		else if (prevToken.type == QueryToken::QueryTokenType::TERMINATOR && token.token_value == "Select") {
 			temp = { QueryToken::QueryTokenType::SELECT, "Select" };
+		}
+		else {
+			throw std::runtime_error("Invalid syntax for declaration or select");
 		}
 	}
 	return temp;
