@@ -14,39 +14,39 @@ namespace SourceProcessor {
 		Tokenizer();
 
 		// General tokenizing. Parse input into a chain of tokens for further use.
-		void parse_into_tokens(const char*);
+		void parseIntoTokens(const char*);
 
 		// Provide access to token_chain
-		const std::vector<Token> &get_token_chain() const;
+		const std::vector<Token> &getTokenChain() const;
 
 		// Init
-		void init_token_stack();
+		void initTokenStack();
 
 		// Check if there is remaining tokens
-		bool has_token();
+		bool hasToken();
 
 		// Peek token.
-		Token &peek_token();
+		Token &peekToken();
 
 		// Pop token
-		Token &pop_token();
+		Token &popToken();
 
 		// Peek probe
-		Token& peek_probe();
+		Token& peekProbe();
 
 		// Pop probe
-		Token& pop_probe();
+		Token& popProbe();
 
 		// Reset probe position to pos
-		void reset_probe();
+		void resetProbe();
 
 	private:
-		std::vector<Token> m_token_cache;
-		int m_pos;
-		int m_probe;
+		std::vector<Token> token_cache;
+		int pos;
+		int probe;
 
 		// Push token to token_cache
-		void add_token(Token&);
+		void addToken(Token&);
 
 	};
 

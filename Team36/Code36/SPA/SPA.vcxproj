@@ -18,7 +18,6 @@
     <ClCompile Include="..\source\RelationTable.cpp" />
     <ClCompile Include="..\source\PKB.cpp" />
     <ClCompile Include="..\source\Statement.cpp" />
-    <ClCompile Include="..\source\TNode.cpp" />
     <ClCompile Include="..\source\Entity.cpp" />
     <ClCompile Include="..\source\Pattern.cpp" />
     <ClCompile Include="..\source\PKBAdapter.cpp" />
@@ -56,7 +55,6 @@
     <ClInclude Include="..\source\Procedure.h" />
     <ClInclude Include="..\source\RelationTable.h" />
     <ClInclude Include="..\source\Statement.h" />
-    <ClInclude Include="..\source\TNode.h" />
     <ClInclude Include="..\source\Common.h" />
     <ClInclude Include="..\source\QueryResult.h" />
     <ClInclude Include="..\source\Entity.h" />

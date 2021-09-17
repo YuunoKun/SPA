@@ -36,9 +36,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\source\TNode.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\source\Entity.cpp">
       <Filter>Source Files\PQL</Filter>
     </ClCompile>
@@ -62,9 +59,6 @@
     </ClCompile>
     <ClCompile Include="..\source\RelRef.cpp">
       <Filter>Source Files\PQL</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\Stmt.cpp">
-      <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\source\QueryResult.cpp">
       <Filter>Source Files\PQL</Filter>
@@ -141,6 +135,9 @@
     <ClCompile Include="..\source\PatternRelRefValidator.cpp">
       <Filter>Source Files\PQL</Filter>
     </ClCompile>
+    <ClCompile Include="..\source\Stmt.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\source\Parser.h">
@@ -170,9 +167,6 @@
     <ClInclude Include="..\source\PatternEvaluator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\source\TNode.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\source\Entity.h">
       <Filter>Header Files\PQL</Filter>
     </ClInclude>
@@ -199,9 +193,6 @@
     </ClInclude>
     <ClInclude Include="..\source\Common.h">
       <Filter>Header Files\Common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\Stmt.h">
-      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\source\QueryToken.h">
       <Filter>Header Files\PQL</Filter>
@@ -259,6 +250,9 @@
     </ClInclude>
     <ClInclude Include="..\source\PatternRelRefValidator.h">
       <Filter>Header Files\PQL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\Stmt.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
