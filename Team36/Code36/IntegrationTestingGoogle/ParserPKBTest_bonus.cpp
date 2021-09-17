@@ -29,9 +29,42 @@ namespace IntegrationTesting {
 		}
 	};
 
-	TEST_F(ParserPKBTest, Sample5Test_UsesP) {
+	TEST_F(ParserPKBTest, NoProcedureCallsTest_UsesP) {
 		SourceProcessor::Parser parser;
-		parser.load_file("../UnitTestingGoogle/SPTest/TestSource/Sample5.txt");
+		parser.load_file("./Tests/no_procedure_call_source.txt");
+		parser.parse();
+
+		std::vector<std::pair<proc_name, var_name>> expected_usesP = {
+			{"mySecondProcedure ", "x"}, {"mySecondProcedure ", "y"}
+		};
+		std::sort(expected_usesP.begin(), expected_usesP.end());
+
+		RelationTable<proc_name, var_name> table = PKB::getInstance().getUsesP();
+		auto v = table.getPairs();
+		std::sort(v.begin(), v.end());
+		EXPECT_EQ(v, expected_usesP);
+	}
+
+	TEST_F(ParserPKBTest, NoProcedureCallsTest_ModifiesP) {
+		SourceProcessor::Parser parser;
+		parser.load_file("./Tests/no_procedure_call_source.txt");
+		parser.parse();
+
+		std::vector<std::pair<proc_name, var_name>> expected_modifiesP = {
+			{"myFirstProcedure", "x"}, {"myFirstProcedure", "y"},
+			{"mySecondProcedure ", "z"}, {"mySecondProcedure ", "x"}, {"mySecondProcedure ", "w"}
+		};
+		std::sort(expected_modifiesP.begin(), expected_modifiesP.end());
+
+		RelationTable<proc_name, var_name> table = PKB::getInstance().getModifiesP();
+		auto v = table.getPairs();
+		std::sort(v.begin(), v.end());
+		EXPECT_EQ(v, expected_modifiesP);
+	}
+
+	TEST_F(ParserPKBTest, ProcedureCallsTest_UsesP) {
+		SourceProcessor::Parser parser;
+		parser.load_file("./Tests/procedure_call_source.txt");
 		parser.parse();
 
 		std::vector<std::pair<proc_name, var_name>> expected_usesP = {
@@ -48,9 +81,9 @@ namespace IntegrationTesting {
 		EXPECT_EQ(v, expected_usesP);
 	}
 
-	TEST_F(ParserPKBTest, Sample5Test_ModifiesP) {
+	TEST_F(ParserPKBTest, ProcedureCallsTest_ModifiesP) {
 		SourceProcessor::Parser parser;
-		parser.load_file("../UnitTestingGoogle/SPTest/TestSource/Sample5.txt");
+		parser.load_file("./Tests/procedure_call_source.txt");
 		parser.parse();
 
 		std::vector<std::pair<proc_name, var_name>> expected_modifiesP = {
