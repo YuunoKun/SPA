@@ -12,6 +12,8 @@ namespace UnitTesting {
 
 	class DummyDesignExtractor : public Extractor {
 	public:
+		DummyDesignExtractor() {}
+
 		~DummyDesignExtractor() {}
 
 		void startNesting() {}
@@ -279,7 +281,6 @@ namespace UnitTesting {
 		DummyDesignExtractor dde;
 
 		tokenizer.parseIntoTokens("call myProcedure;");
-		//for(Token tk: tokenizer.get_token_chain()) std::cout << tokenTypeStrings[tk.get_token_type()] << std::endl;
 		tokenizer.initTokenStack();
 		FSM fsm_1(tokenizer, &dde);
 		ASSERT_NO_THROW(fsm_1.expectStatementTypeCall());
@@ -323,10 +324,6 @@ namespace UnitTesting {
 		tokenizer.initTokenStack();
 		FSM fsm_3(tokenizer, &dde);
 		ASSERT_NO_THROW(fsm_3.expectStatementTypeAssign());
-	}
-
-	TEST(FSM, expect_statement) {
-		//
 	}
 
 	TEST(FSM, expectStatementList) {
@@ -497,6 +494,6 @@ namespace UnitTesting {
 		tokenizer.parseIntoTokens("procedure procedure{call call; print print; read read;if(if<then)then{then=else;}else{else=while;}while(while>procedure){while=if;}}");
 		tokenizer.initTokenStack();
 		FSM fsm(tokenizer, &dde);
-		fsm.expectProcedure();
+		ASSERT_NO_THROW(fsm.expectProcedure());
 	}
 }

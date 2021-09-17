@@ -13,7 +13,7 @@ void Tokenizer::parseIntoTokens(const char* input) {
 	token_cache = {};
 	Token current_token;
 
-	std::string source = std::string(input);
+	std::string source(input);
 	for (char c : source) {
 		//std::cout << (int)c << " ";
 		switch (c) {

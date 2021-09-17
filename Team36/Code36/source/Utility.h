@@ -1,8 +1,10 @@
 #pragma once
 
+#include <string>
+#include <unordered_map>
+
 #include "Entity.h"
 #include "Common.h"
-#include "Stmt.h"
 #include "QueryToken.h"
 
 class Utility {
@@ -14,7 +16,7 @@ public:
 	static std::list<std::string> variablesToStringList(std::vector<var_name>&);
 	static std::list<std::string> unorderedSetToStringList(std::unordered_set<std::string>&);
 
-	static std::vector<StmtInfo> stmtToStmtInfoVector(std::vector<Stmt>&);
+	//static std::vector<StmtInfo> stmtToStmtInfoVector(std::vector<Stmt>&);
 	static std::vector<std::string> stmtInfoToStringVector(std::vector<StmtInfo>&);
 	static  std::vector<std::vector<std::string>> pairToStringTable(std::vector<std::pair<std::string, std::string>>&);
 	static  std::vector<std::vector<std::string>> pairToStringTable(std::vector<std::pair<StmtInfo, std::string>>&);
