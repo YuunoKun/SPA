@@ -89,6 +89,9 @@ namespace SourceProcessor {
 		// factor: var_name | const_value | ¡®(¡¯ expr ¡®)¡¯
 		void expect_factor();
 
+		// Expects an identifier.
+		Token& expect_identifier();
+
 		// Optional relational expression.
 		bool optional_relational_expression();
 
@@ -104,6 +107,8 @@ namespace SourceProcessor {
 		// Optional factor.
 		bool optional_factor();
 
+		// Optional identifier.
+		bool optional_identifier();
 
 	private:
 		Tokenizer m_tokenizer;
@@ -113,7 +118,7 @@ namespace SourceProcessor {
 		Token& expect_token_and_pop(TokenType);
 
 		// This token can be optional, will return a boolean value indicating if that token exists
-		bool optional_token(TokenType);
+		bool peek_token(TokenType);
 
 		// Expects an optional token with given token type.
 		bool probe_and_pop(TokenType);

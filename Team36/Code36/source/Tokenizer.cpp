@@ -284,3 +284,8 @@ Token& Tokenizer::pop_probe() {
 		return m_token_cache[m_probe++];
 	}
 }
+
+
+void Tokenizer::reset_probe() {
+	m_probe = m_pos;
+}

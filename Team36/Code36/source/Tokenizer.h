@@ -37,6 +37,9 @@ namespace SourceProcessor {
 		// Pop probe
 		Token& pop_probe();
 
+		// Reset probe position to pos
+		void reset_probe();
+
 	private:
 		std::vector<Token> m_token_cache;
 		int m_pos;

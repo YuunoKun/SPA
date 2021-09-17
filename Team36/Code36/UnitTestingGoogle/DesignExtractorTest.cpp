@@ -689,6 +689,180 @@ namespace UnitTesting {
 			}
 		}
 		*/
+
+
+		// test population 
+
+		// test populate entites
+		PKB* pkb = &PKB::getInstance();
+		extractor->populateEntities(*pkb);
+
+		std::unordered_set<constant> expected_populated_constants = {1,13,2,4,15,11};
+		ASSERT_EQ(pkb->getConstants().size(), expected_populated_constants.size());
+		for (constant c : pkb->getConstants()) {
+			ASSERT_TRUE(expected_populated_constants.find(c) != expected_populated_constants.end());
+		}
+
+		std::unordered_set<var_name> expected_populated_variables = {
+			"mainX","readVar","printVar","beforeIf",
+			"mainIfCond","beforeCall","afterCall","beforeWhile",
+			"whileCond","inWhile","afterWhile","afterIf","p2Var"
+		};
+		ASSERT_EQ(pkb->getVariables().size(), expected_populated_variables.size());
+		for (var_name v : pkb->getVariables()) {
+			ASSERT_TRUE(expected_populated_variables.find(v) != expected_populated_variables.end());
+		}
+
+		std::unordered_set<proc_name> expected_populated_proc = { "main","p2" };
+		ASSERT_EQ(pkb->getProcedures().size(), expected_populated_proc.size());
+		for (proc_name p : pkb->getProcedures()) {
+			ASSERT_TRUE(expected_populated_proc.find(p) != expected_populated_proc.end());
+		}
+
+		std::vector<std::pair<stmt_index, StmtType>> expected_populated_stmt = 
+		{ 
+			{1, STMT_ASSIGN},
+			{2, STMT_READ},
+			{3, STMT_PRINT},
+			{4, STMT_ASSIGN},
+			{5, STMT_IF},
+			{6, STMT_ASSIGN},
+			{7, STMT_CALL},
+			{8, STMT_ASSIGN},
+			{9, STMT_ASSIGN},
+			{10, STMT_WHILE},
+			{11, STMT_ASSIGN},
+			{12, STMT_ASSIGN},
+			{13, STMT_ASSIGN},
+			{14, STMT_ASSIGN}
+		};
+		ASSERT_EQ(pkb->getStmts().size(), expected_populated_stmt.size());
+		std::vector<StmtInfo> res = pkb->getStmts();
+		sort(res.begin(), res.end(), [](StmtInfo s1, StmtInfo s2) { return s1.stmt_index < s2.stmt_index; });
+		for (int i = 0; i < expected_populated_stmt.size(); i++) {
+			ASSERT_EQ(res[i].stmt_index, expected_populated_stmt[i].first);
+			ASSERT_EQ(res[i].stmt_type, expected_populated_stmt[i].second);
+		}
+
+
+
+		std::vector<StmtInfo> expected_stmt_info =
+		{
+			{1, STMT_ASSIGN},
+			{2, STMT_READ},
+			{3, STMT_PRINT},
+			{4, STMT_ASSIGN},
+			{5, STMT_IF},
+			{6, STMT_ASSIGN},
+			{7, STMT_CALL},
+			{8, STMT_ASSIGN},
+			{9, STMT_ASSIGN},
+			{10, STMT_WHILE},
+			{11, STMT_ASSIGN},
+			{12, STMT_ASSIGN},
+			{13, STMT_ASSIGN},
+			{14, STMT_ASSIGN}
+		};
+
+		// test populate relations
+		extractor->populateRelations(*pkb);
+
+		// uses
+		std::vector<std::vector<var_name>> expected_used_variables =
+		{
+			{},
+			{},
+			{"printVar"},
+			{"beforeIf","mainX"},
+			{"mainIfCond","beforeCall","p2Var","afterCall","beforeWhile","whileCond","inWhile","afterWhile"},
+			{"beforeCall"},
+			{"p2Var"},
+			{"afterCall"},
+			{"beforeWhile"},
+			{"whileCond","inWhile"},
+			{"inWhile"},
+			{"afterWhile"},
+			{"afterIf"},
+			{"p2Var"}
+		};
+		auto table_u = pkb->getUsesS();
+		ASSERT_EQ(table_u.getPairs().size(), 21);
+		for (int i = 0; i < expected_used_variables.size(); i++) {
+			for (var_name v: expected_used_variables[i]) {
+				ASSERT_TRUE(table_u.containsPair(expected_stmt_info[i], v));
+			}
+		}
+
+		// modifies
+		std::vector<std::vector<var_name>> expected_modified_variables =
+		{
+			{"mainX"},
+			{"readVar"},
+			{},
+			{"beforeIf"},
+			{"beforeCall","p2Var","afterCall","beforeWhile","inWhile","afterWhile"},
+			{"beforeCall"},
+			{"p2Var"},
+			{"afterCall"},
+			{"beforeWhile"},
+			{"inWhile"},
+			{"inWhile"},
+			{"afterWhile"},
+			{"afterIf"},
+			{"p2Var"}
+		};
+		auto table_m = pkb->getModifiesS();
+		ASSERT_EQ(table_m.getPairs().size(), 18);
+		for (int i = 0; i < expected_modified_variables.size(); i++) {
+			for (var_name v : expected_modified_variables[i]) {
+				ASSERT_TRUE(table_m.containsPair(expected_stmt_info[i], v));
+			}
+		}
+
+
+		auto table_f = pkb->getFollows();
+		std::vector<std::pair<stmt_index,stmt_index>> expected_follows =
+		{
+			{1,2},{2,3},{3,4},{4,5},{6,7},{7,8},
+			{9,10},{10,12},{5,13}
+		};
+		ASSERT_EQ(table_f.getPairs().size(), expected_follows.size());
+		for (auto p: expected_follows) {
+			ASSERT_TRUE(table_f.containsPair(expected_stmt_info[p.first - 1], expected_stmt_info[p.second - 1]));
+		}
+
+		auto table_p = pkb->getParent();
+		std::vector<std::pair<stmt_index, stmt_index>> expected_parent =
+		{
+			{5,6},{5,7},{5,8},{5,9},{5,10},{5,12},
+			{10,11}
+		};
+		ASSERT_EQ(table_p.getPairs().size(), expected_parent.size());
+		for (auto p : expected_parent) {
+			ASSERT_TRUE(table_p.containsPair(expected_stmt_info[p.first - 1], expected_stmt_info[p.second - 1]));
+		}
+		/*
+		* procedure main {
+		1	mainX = 1;
+		2	read readVar;
+		3	print printVar;
+		4	beforeIf = beforeIf * mainX;
+		5	if(mainIfCond==13) then {
+		6		beforeCall = beforeCall + 2;
+		7		call p2;
+		8		afterCall = afterCall + 4;
+			} else {
+		9		beforeWhile = beforeWhile;
+		10		while(whileCond < 15) {
+		11			inWhile = inWhile;
+				}
+		12		afterWhile = afterWhile;}
+		13	afterIf = afterIf;}
+		*
+		* procedure p2 {
+		14	p2Var = p2Var - 11;
+		* }
+		*/
 	}
 
 
@@ -801,5 +975,4 @@ namespace UnitTesting {
 
 		ASSERT_THROW(extractor->validate(), std::runtime_error);
 	}
-
 }

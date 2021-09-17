@@ -57,6 +57,19 @@ namespace UnitTesting {
 		void populateRelations(PKB&) {}
 	};
 
+	TEST(FSM, expect_identifier) {
+		Tokenizer tokenizer;
+		DummyDesignExtractor dde;
+
+		tokenizer.parse_into_tokens("bac procedure read print call if then else while abc");
+		tokenizer.init_token_stack();
+		FSM fsm(tokenizer, &dde);
+
+		std::vector<std::string> expected = { "bac", "procedure", "read", "print", "call", "if", "then", "else", "while", "abc"};
+		for (auto s : expected) {
+			ASSERT_EQ(fsm.expect_identifier().get_token_value(),s);
+		}
+	}
 
 	TEST(FSM, expect_factor_valid) {
 		Tokenizer tokenizer;
@@ -218,7 +231,7 @@ namespace UnitTesting {
 		tokenizer.parse_into_tokens("(x > 1) && (y <= k)");
 		tokenizer.init_token_stack();
 		FSM fsm_2(tokenizer, &dde);
-		ASSERT_NO_THROW(fsm_2.expect_conditional_expression());
+		fsm_2.expect_conditional_expression();
 
 		tokenizer.parse_into_tokens("(aa != 3) || (1 < 2)");
 		tokenizer.init_token_stack();
@@ -475,5 +488,15 @@ namespace UnitTesting {
 		tokenizer.init_token_stack();
 		FSM fsm_6(tokenizer, &dde);
 		ASSERT_TRUE(fsm_6.optional_relational_expression());
+	}
+
+	TEST(FSM, keywords_variable_name) {
+		Tokenizer tokenizer;
+		DummyDesignExtractor dde;
+
+		tokenizer.parse_into_tokens("procedure procedure{call call; print print; read read;if(if<then)then{then=else;}else{else=while;}while(while>procedure){while=if;}}");
+		tokenizer.init_token_stack();
+		FSM fsm(tokenizer, &dde);
+		fsm.expect_procedure();
 	}
 }
