@@ -4,7 +4,7 @@ Select s
 none
 5000
 2 - Syntactically invalid read
-stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+stmt s; Read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
 Select s
 none
 5000
