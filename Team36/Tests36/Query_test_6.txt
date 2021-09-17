@@ -351,7 +351,7 @@ y, i, p, j, q, z
 72 - modifies, 1 such that and 1 pattern, 1 common synonynm
 assign a; variable v;
 Select a such that Modifies(a, "y") pattern a(v, _"x"_)
-2, 9, 11, 26
+9, 11, 26
 5000
 73 - modifies, 1 such that and 1 pattern, 1 common synonynm
 assign a; variable v;
@@ -401,7 +401,7 @@ none
 82 - uses, 1 such that and 1 pattern, 1 common synonynm
 assign a, a1; variable v;
 Select a such that Uses(a, v) pattern a1(v, _)
-2, 4, 9, 10, 11, 13, 16, 20, 22, 26, 27
+2, 4, 9, 10, 11, 13, 16, 18, 20, 22, 26, 27
 5000
 83 - uses, 1 such that and 1 pattern, 1 common synonynm
 assign a, a1; variable v;
