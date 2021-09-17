@@ -4,14 +4,14 @@
 using namespace SourceProcessor;
 
 
-FSM::FSM(Tokenizer& tokenizer) {
-	tokenizer = tokenizer;
+FSM::FSM(Tokenizer& t) {
+	tokenizer = t;
 	design_extractor = new DesignExtractor();
 }
 
 
-FSM::FSM(Tokenizer& tokenizer, Extractor *extractor) {
-	tokenizer = tokenizer;
+FSM::FSM(Tokenizer& t, Extractor *extractor) {
+	tokenizer = t;
 	design_extractor = extractor;
 }
 

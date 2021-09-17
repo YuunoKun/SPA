@@ -357,7 +357,7 @@ void DesignExtractor::populateUses(PKB& pkb) {
 
 	for (Procedure* p : de_procedures) {
 		for (var_name used_var : p->getUsedVariable()) {
-			//pkb.addUsesP(p->getIndex(), used_var);
+			pkb.addUsesP(p->getName(), used_var);
 		}
 	}
 }
@@ -372,7 +372,7 @@ void DesignExtractor::populateModifies(PKB& pkb) {
 
 	for (Procedure* p : de_procedures) {
 		for (var_name modified_var : p->getModifiedVariable()) {
-			//pkb.addModifiesP(p->getIndex(), modified_var);
+			pkb.addModifiesP(p->getName(), modified_var);
 		}
 	}
 }

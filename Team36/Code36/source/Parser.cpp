@@ -44,7 +44,7 @@ void Parser::load_file(std::string file) {
 		}
 	}
 	else {
-		std::cout << "Cannot open file." << std::endl;
+		throw std::runtime_error("Failed to open file");
 	}
 	input_file.close();
 };

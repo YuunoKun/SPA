@@ -4,7 +4,10 @@
 #include <vector>
 #include <algorithm>
 #include "../../source/DesignExtractor.h"
-#include "PKB.h"
+#include "../../source/PKB.h"
+#include "../../source/KnowledgeBase.h"
+#include "../../source/RelationTable.h"
+#include "../../source/RelationTable.cpp"
 
 /*
 // Stub PKB
@@ -793,6 +796,32 @@ namespace UnitTesting {
 			}
 		}
 
+
+		// usesP
+		auto table_uP = pkb->getUsesP();
+		std::vector<std::pair<proc_name, var_name>> expected_usesP =
+		{
+			{"main","mainX"},
+			{"main","printVar"},
+			{"main","beforeIf"},
+			{"main","mainIfCond"},
+			{"main","beforeCall"},
+			{"main","afterCall"},
+			{"main","beforeWhile"},
+			{"main","whileCond"},
+			{"main","inWhile"},
+			{"main","afterWhile"},
+			{"main","afterIf"},
+			{"main","p2Var"},
+			{"p2","p2Var"}
+		};
+		ASSERT_EQ(table_uP.getPairs().size(), expected_usesP.size());
+		for (auto p : expected_usesP) {
+			ASSERT_TRUE(table_uP.containsPair(p.first, p.second));
+		}
+
+
+
 		// modifies
 		std::vector<std::vector<var_name>> expected_modified_variables =
 		{
@@ -820,6 +849,29 @@ namespace UnitTesting {
 		}
 
 
+		// modifiesP
+		auto table_mP = pkb->getModifiesP();
+		std::vector<std::pair<proc_name, var_name>> expected_modifiesP =
+		{
+			{"main","mainX"},
+			{"main","readVar"},
+			{"main","beforeIf"},
+			{"main","beforeCall"},
+			{"main","afterCall"},
+			{"main","beforeWhile"},
+			{"main","inWhile"},
+			{"main","afterWhile"},
+			{"main","afterIf"},
+			{"main","p2Var"},
+			{"p2","p2Var"}
+		};
+		ASSERT_EQ(table_mP.getPairs().size(), expected_modifiesP.size());
+		for (auto p : expected_modifiesP) {
+			ASSERT_TRUE(table_mP.containsPair(p.first, p.second));
+		}
+
+
+		// Follows
 		auto table_f = pkb->getFollows();
 		std::vector<std::pair<stmt_index,stmt_index>> expected_follows =
 		{
@@ -831,6 +883,8 @@ namespace UnitTesting {
 			ASSERT_TRUE(table_f.containsPair(expected_stmt_info[p.first - 1], expected_stmt_info[p.second - 1]));
 		}
 
+
+		// Parent
 		auto table_p = pkb->getParent();
 		std::vector<std::pair<stmt_index, stmt_index>> expected_parent =
 		{
@@ -841,28 +895,7 @@ namespace UnitTesting {
 		for (auto p : expected_parent) {
 			ASSERT_TRUE(table_p.containsPair(expected_stmt_info[p.first - 1], expected_stmt_info[p.second - 1]));
 		}
-		/*
-		* procedure main {
-		1	mainX = 1;
-		2	read readVar;
-		3	print printVar;
-		4	beforeIf = beforeIf * mainX;
-		5	if(mainIfCond==13) then {
-		6		beforeCall = beforeCall + 2;
-		7		call p2;
-		8		afterCall = afterCall + 4;
-			} else {
-		9		beforeWhile = beforeWhile;
-		10		while(whileCond < 15) {
-		11			inWhile = inWhile;
-				}
-		12		afterWhile = afterWhile;}
-		13	afterIf = afterIf;}
-		*
-		* procedure p2 {
-		14	p2Var = p2Var - 11;
-		* }
-		*/
+
 	}
 
 
