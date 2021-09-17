@@ -497,5 +497,23 @@ namespace UnitTesting {
 		}
 	}
 
+	TEST(QueryTokenizer, InvalidSingleQuotationTest) {
+
+		try {
+			QueryTokenizer query_tokenizer;
+			std::string input = "\'procName\'";
+			query_tokenizer.parse_into_query_tokens(input);
+			std::vector<QueryToken> output = query_tokenizer.get_query_token_chain();
+			FAIL();
+		}
+		catch (std::runtime_error const& err) {
+			EXPECT_EQ(err.what(), std::string("Unknown symbol present"));
+		}
+		catch (...) {
+			// Test case should fail if not caught as runtime_error 
+			FAIL();
+		}
+	}
+
 	
 }

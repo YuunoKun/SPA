@@ -1,6 +1,6 @@
 procedure BumbleBee {
   read x;
-  y = 2 * x;
+  y = 2 * z;
   call Megatron;
   z = p - y;
   if (q!= 1) then {
@@ -12,6 +12,7 @@ procedure BumbleBee {
       z = z - 1;
     }
     y = x + y * z + p * q;
+    call Ironhide;
   }
   i = x + j + z;
   call Barricade;
