@@ -163,6 +163,7 @@ Query QueryPreprocessor::parse(std::string str) {
 			prevTokenSelect = token;
 		}
 	}
+	QueryPreprocessor::validateQuery(query);
 	return query;
 }
 
@@ -267,5 +268,15 @@ void QueryPreprocessor::setQueryParameter(QueryToken& prevTokenSelect, QueryToke
 	}
 	else if (prevTokenSelect.token_value == "" && prevTokenSelect.type == QueryToken::QueryTokenType::FOLLOWS_T) {
 		queryParameter = { QueryToken::QueryTokenType::FOLLOWS_T, "" };
+	}
+}
+
+void QueryPreprocessor::validateQuery(Query& query) {
+	if (query.getEntities().size() == 0) {
+		throw std::runtime_error("No declaration has been made in your query");
+	}
+	// TODO: only size 1 is allowed for iteration 1, would allow multiple selects in future iterations
+	if (query.getSelected().size() != 1) {
+		throw std::runtime_error("There is no selected variable in your query");
 	}
 }
