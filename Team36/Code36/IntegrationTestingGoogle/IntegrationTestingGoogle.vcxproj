@@ -41,6 +41,7 @@
 	<ItemGroup>
 		<ClCompile Include="ParserPKBTest.cpp" />
 		<ClCompile Include="ParserPKBTest_bonus.cpp" />
+		<ClCompile Include="PQLPKBTest.cpp" />
 		<ClCompile Include="test.cpp" />
 		<ClCompile Include="pch.cpp">
 			<PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
