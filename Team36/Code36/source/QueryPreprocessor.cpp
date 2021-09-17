@@ -166,7 +166,7 @@ Query QueryPreprocessor::parse(std::string str) {
 			prevTokenSelect = token;
 		}
 	}
-	QueryPreprocessor::validateQuery(query, v);
+	QueryPreprocessor::validateQuery(query);
 	return query;
 }
 
@@ -296,7 +296,7 @@ void QueryPreprocessor::setQueryParameter(QueryToken& prevTokenSelect, QueryToke
 	}
 }
 
-void QueryPreprocessor::validateQuery(Query& query, std::vector<QueryToken>& v) {
+void QueryPreprocessor::validateQuery(Query& query) {
 	if (query.getEntities().size() == 0) {
 		throw std::runtime_error("No declaration has been made in your query");
 	}
@@ -306,7 +306,19 @@ void QueryPreprocessor::validateQuery(Query& query, std::vector<QueryToken>& v) 
 	}
 
 	// Final check
-	if (int(v.size() / 2) < query.getEntities().size()) {
-		throw std::runtime_error("Oops, something went wrong in the query");
+
+	for (std::pair<std::string, Entity> ent : query.getEntities()) {
+		if (ent.second.getType() != EntityType::STMT &&
+			ent.second.getType() != EntityType::PROCEDURE &&
+			ent.second.getType() != EntityType::READ &&
+			ent.second.getType() != EntityType::PRINT &&
+			ent.second.getType() != EntityType::CALL &&
+			ent.second.getType() != EntityType::IF &&
+			ent.second.getType() != EntityType::WHILE &&
+			ent.second.getType() != EntityType::VARIABLE &&
+			ent.second.getType() != EntityType::CONSTANT &&
+			ent.second.getType() != EntityType::ASSIGN) {
+			throw std::runtime_error("Declaration fails!");
+		}
 	}
 }

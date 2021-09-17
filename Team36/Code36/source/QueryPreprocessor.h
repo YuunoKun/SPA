@@ -28,5 +28,5 @@ private:
 
 	void setPatternTypeEntity(std::vector<QueryToken>&, QueryToken&, Entity&);
 
-	void validateQuery(Query&, std::vector<QueryToken>&);
+	void validateQuery(Query&);
 };
