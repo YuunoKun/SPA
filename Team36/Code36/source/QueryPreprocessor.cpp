@@ -136,13 +136,18 @@ Query QueryPreprocessor::parse(std::string str) {
 			}
 			else if (patternOrSuchThat.type == QueryToken::QueryTokenType::PATTERN) {
 				if (prevTokenSelect.token_value == "pattern" && token.type == QueryToken::QueryTokenType::IDENTIFIER) {
+					bool isValid = false;
 					for (QueryToken each : output) {
 						if (token.token_value == each.token_value) {
 							Synonym synonym;
 							synonym.name = token.token_value;
 							EntityType entityType = Utility::queryTokenTypeToEntityType(each.type);
 							patternTypeEntity = { entityType, synonym };
+							isValid = true;
 						}
+					}
+					if (!isValid) {
+						throw std::runtime_error("Pattern type has not been declared");
 					}
 				}
 				else if (!isParameter && token.type == QueryToken::QueryTokenType::PARENTHESIS_OPEN) {
@@ -153,6 +158,9 @@ Query QueryPreprocessor::parse(std::string str) {
 					if (patternTypeEntity.getType() == EntityType::ASSIGN) {
 						validator.parseParameterPattern(query, patternTypeEntity, parameterClause);
 						parameterClause.clear();
+					}
+					else {
+						throw std::runtime_error("Invalid pattern type");
 					}
 				}
 			}
