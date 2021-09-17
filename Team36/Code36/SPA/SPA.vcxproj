@@ -30,7 +30,6 @@
     <ClCompile Include="..\source\QueryTokenizer.cpp" />
     <ClCompile Include="..\source\QuerySystem.cpp" />
     <ClCompile Include="..\source\RelRef.cpp" />
-    <ClCompile Include="..\source\Stmt.cpp" />
     <ClCompile Include="..\source\Token.cpp" />
     <ClCompile Include="..\source\Tokenizer.cpp" />
     <ClCompile Include="..\source\RelationsEvaluator.cpp" />
@@ -69,7 +68,6 @@
     <ClInclude Include="..\source\QueryTokenizer.h" />
     <ClInclude Include="..\source\QuerySystem.h" />
     <ClInclude Include="..\source\RelRef.h" />
-    <ClInclude Include="..\source\Stmt.h" />
     <ClInclude Include="..\source\Token.h" />
     <ClInclude Include="..\source\Tokenizer.h" />
     <ClInclude Include="..\source\RelationsEvaluator.h" />
