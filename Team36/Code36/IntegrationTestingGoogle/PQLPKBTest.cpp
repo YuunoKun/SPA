@@ -179,6 +179,12 @@ namespace UnitTesting {
 		const std::string EXPRESSION2 = "x + (y * 5)";
 		const std::string EXPRESSION_CONSTANT = "5";
 
+		const std::list<std::string> EXPECTED_ASSIGN_PATTERN1 = { ASSIGN1 };
+		const std::list<std::string> EXPECTED_ASSIGN_PATTERN2 = { ASSIGN2, ASSIGN1 };
+		const std::list<std::string> EXPECTED_ASSIGN_PATTERN3 = { ASSIGN2 };
+
+
+
 		const std::vector<std::string> MODIFIES_LEFTS = { MODIFIES_LEFT1, MODIFIES_LEFT2, MODIFIES_LEFT3, MODIFIES_LEFT4 };
 		const std::vector<std::string> MODIFIES_RIGHTS = { MODIFIES_RIGHT1, MODIFIES_RIGHT2, MODIFIES_RIGHT3, MODIFIES_RIGHT4 };
 		
@@ -195,7 +201,9 @@ namespace UnitTesting {
 		const std::vector<std::string> USES_LEFTS = { USES_LEFT1, USES_LEFT2 };
 		const std::vector<std::string> USES_RIGHTS = { USES_RIGHT1, USES_RIGHT2 };
 
-		
+		// for ST and pattern clauses
+		const std::list<std::string> EXPECTED_ST_PATTERN1 = { ASSIGN1 };
+
 		//QueryEvaluator evaluator;
 
 		const Synonym COMMON_SYNONYM1 = { "cs1" };
@@ -349,6 +357,7 @@ namespace UnitTesting {
 
 		validateAnswer(EXPECTED_MODIFIES2, ans);
 	}
+
 	TEST_F(PQLPKBTest, SuchThatUsesSTest1) {
 		std::list<std::string> ans = qs.processQuery("variable v; Select v such that Uses(1,v)");
 
@@ -405,16 +414,34 @@ namespace UnitTesting {
 
 	// one pattern cl ----------------------------------------------------------------------------------------------------------------
 
-	TEST_F(PQLPKBTest, PatternTest) {
+	TEST_F(PQLPKBTest, PatternTest1) {
 		std::list<std::string> ans = qs.processQuery("assign a; Select a pattern a (_,\"x\")");
 
-		validateAnswer({"9"}, ans);
+		validateAnswer(EXPECTED_ASSIGN_PATTERN1, ans);
+	}
+
+	TEST_F(PQLPKBTest, PatternTest2) {
+		std::list<std::string> ans = qs.processQuery("assign a; Select a pattern a (_,_\"x\"_)");
+
+		validateAnswer(EXPECTED_ASSIGN_PATTERN2, ans);
+	}
+
+	TEST_F(PQLPKBTest, PatternTest3) {
+		std::list<std::string> ans = qs.processQuery("assign a; Select a pattern a (_,_\"5\"_)");
+
+		validateAnswer(EXPECTED_ASSIGN_PATTERN3, ans);
 	}
 
 	// one st and one pattern cl -----------------------------------------------------------------------------------------------------
-	TEST_F(PQLPKBTest, SuchThatPatternTest) {
-		std::list<std::string> ans_pattern = qs.processQuery("assign a; variable v; Select a such that Uses(a, v) pattern a(v, _)");
+	TEST_F(PQLPKBTest, SuchThatPatternTest1) {
+		std::list<std::string> ans = qs.processQuery("stmt s; assign a; variable v; Select a such that Modifies(s, v) pattern a(_,\"x\")");
 
-		validateAnswer(PROCEDURES, ans_pattern);
+		validateAnswer(EXPECTED_ST_PATTERN1, ans);
+	}
+
+	TEST_F(PQLPKBTest, SuchThatPatternTest2) {
+		std::list<std::string> ans = qs.processQuery("stmt s; assign a; variable v; Select a pattern a(_,\"x\") such that Modifies(s, v) ");
+
+		validateAnswer(EXPECTED_ST_PATTERN1, ans);
 	}
 }
