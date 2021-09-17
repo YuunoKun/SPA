@@ -321,7 +321,7 @@ namespace UnitTesting {
 
 	TEST(QueryPreprocessor, similarDeclarationName) {
 		QueryPreprocessor qp;
-		Query test = qp.parse("procedure procedure; if if; stmt stmt; call call; while while;");
+		Query test = qp.parse("procedure procedure; if if; stmt stmt; call call; while while; Select procedure");
 
 		Query q;
 		q.addEntity(Entity(EntityType::PROCEDURE, Synonym{ "procedure" }));
@@ -822,11 +822,16 @@ namespace UnitTesting {
 		QueryPreprocessor qp;
 		Query q = Query();
 
-		Query test1 = qp.parse("asg a;");
-		Query test2 = qp.parse("la;skdjf lkasdfj laks;fdj");
-
-		EXPECT_EQ(test1, q);
-		EXPECT_EQ(test2, q);
+		try {
+			Query test1 = qp.parse("asg a;");
+			Query test2 = qp.parse("la;skdjf lkasdfj laks;fdj");
+		}
+		catch (std::runtime_error const& err) {
+			EXPECT_EQ(err.what(), std::string("Invalid syntax for declaration or select"));
+		}
+		catch (...) {
+			FAIL();
+		}
 
 		try {
 			Query test3 = qp.parse("assign a; Select s");
