@@ -135,19 +135,7 @@ Query QueryPreprocessor::parse(std::string str) {
 			}
 			else if (patternOrSuchThat.type == QueryToken::QueryTokenType::PATTERN) {
 				if (prevTokenSelect.token_value == "pattern" && token.type == QueryToken::QueryTokenType::IDENTIFIER) {
-					bool isValid = false;
-					for (QueryToken each : output) {
-						if (token.token_value == each.token_value) {
-							Synonym synonym;
-							synonym.name = token.token_value;
-							EntityType entityType = Utility::queryTokenTypeToEntityType(each.type);
-							patternTypeEntity = { entityType, synonym };
-							isValid = true;
-						}
-					}
-					if (!isValid) {
-						throw std::runtime_error("Pattern type has not been declared");
-					}
+					QueryPreprocessor::addPatternToQuery(patternTypeEntity, output, prevToken, token);
 				}
 				else if (!isParameter && token.type == QueryToken::QueryTokenType::PARENTHESIS_OPEN) {
 					isParameter = true;
@@ -254,6 +242,22 @@ void QueryPreprocessor::addEntityToQuery(Query& query, Entity& ent, std::vector<
 	EntityType entityType = Utility::queryTokenTypeToEntityType(prevToken.type);
 	ent = { entityType, synonym };
 	query.addEntity(ent);
+}
+
+void QueryPreprocessor::addPatternToQuery(Entity& patternTypeEntity, std::vector<QueryToken>& output, QueryToken& prevToken, QueryToken& token) {
+	bool isValid = false;
+	for (QueryToken each : output) {
+		if (token.token_value == each.token_value) {
+			Synonym synonym;
+			synonym.name = token.token_value;
+			EntityType entityType = Utility::queryTokenTypeToEntityType(each.type);
+			patternTypeEntity = { entityType, synonym };
+			isValid = true;
+		}
+	}
+	if (!isValid) {
+		throw std::runtime_error("Pattern type has not been declared");
+	}
 }
 
 void QueryPreprocessor::addSelectedToQuery(Query& query, Entity& ent, std::vector<QueryToken>& output, std::vector<QueryToken> selected, QueryToken& prevToken, QueryToken& token, bool& isSelect) {
