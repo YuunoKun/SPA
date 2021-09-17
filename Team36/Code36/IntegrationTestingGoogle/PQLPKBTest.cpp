@@ -204,61 +204,10 @@ namespace UnitTesting {
 		// for ST and pattern clauses
 		const std::list<std::string> EXPECTED_ST_PATTERN1 = { ASSIGN1 };
 
-		//QueryEvaluator evaluator;
-
-		const Synonym COMMON_SYNONYM1 = { "cs1" };
-		const Synonym COMMON_SYNONYM2 = { "cs2" };
-
-		//// select v
-		//const std::list<std::string> ALL_VARIABLE = { x, y, z };
-		//const Entity SELECT_VARIABLE = { VARIABLE, COMMON_SYNONYM1 };
-		//// select c
-		//const std::list<std::string> ALL_CONSTANT = { c1s, c2s, c3s };
-		//const Entity SELECT_CONSTANT = { CONSTANT, COMMON_SYNONYM1 };
-		//// select p
-		////const std::list<std::string> ALL_PROCEDURE = { p1, p2, p3 };
-		//const std::list<std::string> ALL_PROCEDURE = { p1 };
-		//const Entity SELECT_PROCEDURE = { PROCEDURE, COMMON_SYNONYM1 };
-		//// select s
-		//const std::list<std::string> ALL_STMT = STMTS;
-		//const Entity SELECT_STMT = { STMT, COMMON_SYNONYM1 };
-		//// select ifs
-		//const std::list<std::string> ALL_IF = { IF1, IF2 };
-		//const Entity SELECT_IF = { IF, COMMON_SYNONYM1 };
-		//// select w
-		//const std::list<std::string> ALL_WHILE = { WHILE1, WHILE2 };
-		//const Entity SELECT_WHILE = { WHILE, COMMON_SYNONYM1 };
-		//// select read
-		//const std::list<std::string> ALL_READ = { READ1, READ2 };
-		//const Entity SELECT_READ = { READ, COMMON_SYNONYM1 };
-		//// select print
-		//const std::list<std::string> ALL_PRINT = { PRINT1, PRINT2 };
-		//const Entity SELECT_PRINT = { PRINT, COMMON_SYNONYM1 };
-		//// select assign
-		//const std::list<std::string> ALL_ASSIGN = { ASSIGN1, ASSIGN2 };
-		//const Entity SELECT_ASSIGN = { ASSIGN, COMMON_SYNONYM1 };
-		//// select call
-		//const std::list<std::string> ALL_CALL = { CALL1, CALL2 };
-		//const Entity SELECT_CALL = { CALL, COMMON_SYNONYM1 };
-
-		//const std::vector<std::list<std::string>> ALL_RESULT = {
-		//	ALL_VARIABLE , ALL_CONSTANT , ALL_PROCEDURE, ALL_STMT, ALL_IF,
-		//	ALL_WHILE, ALL_READ, ALL_PRINT, ALL_ASSIGN, ALL_CALL };
-
-		//const std::vector<Entity> ALL_SELECT = {
-		//	SELECT_VARIABLE , SELECT_CONSTANT , SELECT_PROCEDURE, SELECT_STMT, SELECT_IF,
-		//	SELECT_WHILE, SELECT_READ, SELECT_PRINT, SELECT_ASSIGN, SELECT_CALL };
+		//const Synonym COMMON_SYNONYM1 = { "cs1" };
+		//const Synonym COMMON_SYNONYM2 = { "cs2" };
 
 		const std::list<std::string> EMPTY_RESULT = {};
-
-		//const Entity WILD_CARD = { WILD };
-
-		//const std::vector<Entity> VALID_CONSTANT_STMT_ENTITY = { WILD_CARD,
-		//	{STMT, "1"}, {STMT, "2"}, {STMT, "3"}, {STMT, "4"}, {STMT, "5"}, {STMT, "6"},
-		//	{STMT, "7"}, {STMT, "8"}, {STMT, "9"}, {STMT, "10"}, {STMT, "11"}, {STMT, "12"}
-		//};
-
-		//std::vector<Entity> ALL_VARIABLES = { { VARIABLE, x }, { VARIABLE, y }, { VARIABLE, z } };
 
 		// If the constructor and destructor are not enough for setting up
 		// and cleaning up each test, you can define the following methods:
@@ -272,18 +221,7 @@ namespace UnitTesting {
 			// Code here will be called immediately after each test (right
 			// before the destructor).
 		}
-	/*	template<typename T>
-		bool compare(std::vector<T> v1, std::vector<T> v2)
-		{
-			std::sort(v1.begin(), v1.end());
-			std::sort(v2.begin(), v2.end());
-			return v1 == v2;
-		}*/
 
-		/*std::vector<StmtInfo> sample5_stmts = { { 1, STMT_ASSIGN }, { 2, STMT_CALL} , { 3, STMT_CALL },
-			{ 4, STMT_READ}, { 5, STMT_PRINT }, { 6, STMT_PRINT}, { 7, STMT_ASSIGN}, { 8, STMT_CALL},
-			{ 9, STMT_WHILE} , { 10, STMT_ASSIGN} , { 11, STMT_CALL} , { 12, STMT_IF},
-			{ 13, STMT_ASSIGN },  { 14, STMT_ASSIGN }, { 15, STMT_ASSIGN } };*/
 	};
 
 	TEST_F(PQLPKBTest, ValidateAnswerTest) {
