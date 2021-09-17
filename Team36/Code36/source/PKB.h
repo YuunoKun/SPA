@@ -28,6 +28,9 @@ public:
 	void addFollows(stmt_index first, stmt_index second);
 	void addUsesS(stmt_index user, var_name used);
 	void addModifiesS(stmt_index modifier, var_name modified);
+	void addModifiesP(proc_name proc, var_name modified);
+	void addUsesP(proc_name proc, var_name used);
+
 	void generateParentT();
 	void generateFollowsT();
 
@@ -46,6 +49,8 @@ public:
 	const RelationTable<StmtInfo, StmtInfo>& getParentT();
 	const RelationTable<StmtInfo, var_name>& getUsesS();
 	const RelationTable<StmtInfo, var_name>& getModifiesS();
+	const RelationTable<proc_name, var_name>& getUsesP();
+	const RelationTable<proc_name, var_name>& getModifiesP();
 
 	void resetCache();
 	void resetEntities();
@@ -63,12 +68,8 @@ private:
 	RelationTable<StmtInfo, StmtInfo> parentT_table;
 	RelationTable<StmtInfo, var_name> usesS_table;
 	RelationTable<StmtInfo, var_name> modifiesS_table;
-	RelationTable<StmtInfo, StmtInfo> follows_reverse_table;
-	RelationTable<StmtInfo, StmtInfo> parent_reverse_table;
-	RelationTable<StmtInfo, StmtInfo> followsT_reverse_table;
-	RelationTable<StmtInfo, StmtInfo> parentT_reverse_table;
-	RelationTable<var_name, StmtInfo> usesS_reverse_table;
-	RelationTable<var_name, StmtInfo> modifiesS_reverse_table;
+	RelationTable<proc_name, var_name> usesP_table;
+	RelationTable<proc_name, var_name> modifiesP_table;
 
 	PKB() {};
 };
