@@ -394,7 +394,7 @@ Select sc such that Follows(sc, 2) such that Follows*(p, r)
 1
 5000
 22 - valid Follows*
-stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+stmt sc, s; read r; print p, p1; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
 Select sc such that Follows(sc, 2) such that Follows*(p, p1)
 1
 5000
@@ -595,7 +595,7 @@ Select sc such that Follows(sc, 2) such that Parent(w, _)
 5000
 4 - valid Parent
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Parent(w, s1)
+Select sc such that Follows(sc, 2) such that Parent(w, s)
 1
 5000
 5 - valid Parent
@@ -685,7 +685,7 @@ Select sc such that Follows(sc, 2) such that Parent*(w, _)
 5000
 4 - valid Parent*
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Parent*(w, s1)
+Select sc such that Follows(sc, 2) such that Parent*(w, s)
 1
 5000
 5 - valid Parent*
