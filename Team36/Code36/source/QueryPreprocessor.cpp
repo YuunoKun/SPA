@@ -20,7 +20,7 @@ Query QueryPreprocessor::parse(std::string str) {
 
 	query_tokenizer.parse_into_query_tokens(str);
 
-	const std::vector<QueryToken> v = query_tokenizer.get_query_token_chain();
+	std::vector<QueryToken> v = query_tokenizer.get_query_token_chain();
 
 	//std::vector<QueryToken> v;
 	//QueryToken q1(QueryToken::QueryTokenType::IDENTIFIER, "stmt");
@@ -62,7 +62,7 @@ Query QueryPreprocessor::parse(std::string str) {
 	// To keep track of previous token during declaration, includes COMMA and SEMICOLON
 	QueryToken prevToken = QueryToken();
 
-	// To keep track of of previous important declaration token, excludes COMMA and SEMICOLON
+	// To keep track of previous important declaration token, excludes COMMA and SEMICOLON
 	QueryToken temp = QueryToken();
 
 	// To keep track of previous token during Selection
@@ -88,7 +88,6 @@ Query QueryPreprocessor::parse(std::string str) {
 		// Check what is my previous token
 		if (!isSelect) {
 			temp = setIdentifierToQueryTokenType(prevToken, temp, token);
-
 			validateDeclarationQuery(prevToken, token);
 
 			if (token.type == QueryToken::QueryTokenType::TERMINATOR) {
@@ -167,7 +166,7 @@ Query QueryPreprocessor::parse(std::string str) {
 			prevTokenSelect = token;
 		}
 	}
-	QueryPreprocessor::validateQuery(query);
+	QueryPreprocessor::validateQuery(query, v);
 	return query;
 }
 
@@ -217,9 +216,21 @@ QueryToken QueryPreprocessor::setIdentifierToQueryTokenType(QueryToken& prevToke
 
 void QueryPreprocessor::validateDeclarationQuery(QueryToken& prevToken, QueryToken& token) {
 	// Guard clauses to catch semantically wrong input, all usage of token should be temp
-	if (prevToken.type == QueryToken::QueryTokenType::IDENTIFIER &&
-		(token.type != QueryToken::QueryTokenType::COMMA &&
-			token.type != QueryToken::QueryTokenType::TERMINATOR)) {
+	if ((
+		token.type == QueryToken::QueryTokenType::PROCEDURE ||
+		token.type == QueryToken::QueryTokenType::STMT ||
+		token.type == QueryToken::QueryTokenType::READ ||
+		token.type == QueryToken::QueryTokenType::PRINT ||
+		token.type == QueryToken::QueryTokenType::CALL ||
+		token.type == QueryToken::QueryTokenType::IF ||
+		token.type == QueryToken::QueryTokenType::WHILE ||
+		token.type == QueryToken::QueryTokenType::ASSIGN ||
+		token.type == QueryToken::QueryTokenType::VARIABLE
+		)
+		&&
+		(prevToken.type != QueryToken::QueryTokenType::COMMA &&
+			prevToken.type != QueryToken::QueryTokenType::TERMINATOR &&
+			prevToken.type != QueryToken::QueryTokenType::WHITESPACE)) {
 		throw std::runtime_error("During declaration, only comma and terminator is accepted after identifier.");
 	}
 	if (prevToken.type == QueryToken::QueryTokenType::COMMA &&
@@ -285,12 +296,17 @@ void QueryPreprocessor::setQueryParameter(QueryToken& prevTokenSelect, QueryToke
 	}
 }
 
-void QueryPreprocessor::validateQuery(Query& query) {
+void QueryPreprocessor::validateQuery(Query& query, std::vector<QueryToken>& v) {
 	if (query.getEntities().size() == 0) {
 		throw std::runtime_error("No declaration has been made in your query");
 	}
 	// TODO: only size 1 is allowed for iteration 1, would allow multiple selects in future iterations
 	if (query.getSelected().size() != 1) {
 		throw std::runtime_error("There is no selected variable in your query");
+	}
+
+	// Final check
+	if (int(v.size() / 2) < query.getEntities().size()) {
+		throw std::runtime_error("Oops, something went wrong in the query");
 	}
 }
