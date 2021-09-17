@@ -9,10 +9,11 @@
 #include <vector>
 
 #include "Common.h"
+#include "KnowledgeBase.h"
 #include "Stmt.h"
 #include "RelationTable.h"
 
-class PKB {
+class PKB : public KnowledgeBase {
 public:
 	static PKB& PKB::getInstance();
 	PKB(PKB const&) = delete;
