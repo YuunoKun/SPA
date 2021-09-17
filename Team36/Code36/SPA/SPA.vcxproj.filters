@@ -63,9 +63,6 @@
     <ClCompile Include="..\source\RelRef.cpp">
       <Filter>Source Files\PQL</Filter>
     </ClCompile>
-    <ClCompile Include="..\source\Stmt.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\source\QueryResult.cpp">
       <Filter>Source Files\PQL</Filter>
     </ClCompile>
@@ -199,9 +196,6 @@
     </ClInclude>
     <ClInclude Include="..\source\Common.h">
       <Filter>Header Files\Common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\Stmt.h">
-      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\source\QueryToken.h">
       <Filter>Header Files\PQL</Filter>
