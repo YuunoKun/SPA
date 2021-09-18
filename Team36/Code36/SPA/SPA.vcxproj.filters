@@ -36,9 +36,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\source\TNode.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\source\Entity.cpp">
       <Filter>Source Files\PQL</Filter>
     </ClCompile>
@@ -167,9 +164,6 @@
     <ClInclude Include="..\source\PatternEvaluator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\source\TNode.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\source\Entity.h">
       <Filter>Header Files\PQL</Filter>
     </ClInclude>
@@ -253,6 +247,9 @@
     </ClInclude>
     <ClInclude Include="..\source\PatternRelRefValidator.h">
       <Filter>Header Files\PQL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\KnowledgeBase.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

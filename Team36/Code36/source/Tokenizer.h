@@ -14,32 +14,39 @@ namespace SourceProcessor {
 		Tokenizer();
 
 		// General tokenizing. Parse input into a chain of tokens for further use.
-		// Separator validations happens here.
-		// IMPORTANT : due to the nature of fopen and fread, I am unsure about \n \r characters, this is only a temporary solution!
-		void parse_into_tokens(const char*);
+		void parseIntoTokens(const char*);
 
 		// Provide access to token_chain
-		const std::vector<Token> &get_token_chain() const;
+		const std::vector<Token> &getTokenChain() const;
 
 		// Init
-		void init_token_stack();
+		void initTokenStack();
 
 		// Check if there is remaining tokens
-		bool has_token();
+		bool hasToken();
 
 		// Peek token.
-		Token &peek_token();
+		Token &peekToken();
 
 		// Pop token
-		Token &pop_token();
+		Token &popToken();
+
+		// Peek probe
+		Token& peekProbe();
+
+		// Pop probe
+		Token& popProbe();
+
+		// Reset probe position to pos
+		void resetProbe();
 
 	private:
-		std::vector<Token> m_token_cache;
-
-		int m_pos;
+		std::vector<Token> token_cache;
+		int pos;
+		int probe;
 
 		// Push token to token_cache
-		void add_token(Token&);
+		void addToken(Token&);
 
 	};
 
