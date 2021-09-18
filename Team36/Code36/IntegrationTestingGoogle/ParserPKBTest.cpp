@@ -6,7 +6,7 @@
 #include "RelationTable.h"
 #include "RelationTable.cpp"
 
-namespace UnitTesting {
+namespace IntegrationTesting {
 	class ParserPKBTest : public testing::Test {
 	protected:
 

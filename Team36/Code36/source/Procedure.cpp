@@ -5,56 +5,56 @@ using namespace SourceProcessor;
 
 
 Procedure::Procedure(proc_name name, proc_index id) {
-	m_name = name;
-	m_index = id;
+	procedure_name = name;
+	procedure_index = id;
 }
 
 
-proc_name Procedure::get_name() {
-	return m_name;
+proc_name Procedure::getName() {
+	return procedure_name;
 }
 
 
-proc_index Procedure::get_index() {
-	return m_index;
+proc_index Procedure::getIndex() {
+	return procedure_index;
 }
 
 
-void Procedure::add_caller(stmt_index id) {
-	m_caller.insert(id);
+void Procedure::addCaller(stmt_index id) {
+	procedure_caller.insert(id);
 }
 
 
-std::vector<stmt_index> Procedure::get_caller() {
-	return std::vector<stmt_index>(m_caller.begin(), m_caller.end());
+std::vector<stmt_index> Procedure::getCaller() {
+	return std::vector<stmt_index>(procedure_caller.begin(), procedure_caller.end());
 }
 
 
-void Procedure::add_child(stmt_index id) {
-	m_contained_stmt.push_back(id);
+void Procedure::addChild(stmt_index id) {
+	procedure_contained_stmt.push_back(id);
 }
 
 
-std::vector<stmt_index> Procedure::get_child() {
-	return m_contained_stmt;
+std::vector<stmt_index> Procedure::getChild() {
+	return procedure_contained_stmt;
 }
 
 
-void Procedure::add_uses_variable(var_name name) {
-	m_uses.insert(name);
+void Procedure::addUsesVariable(var_name name) {
+	procedure_uses.insert(name);
 }
 
 
-std::vector<var_name> Procedure::get_used_variable() {
-	return std::vector<var_name>(m_uses.begin(), m_uses.end());
+std::vector<var_name> Procedure::getUsedVariable() {
+	return std::vector<var_name>(procedure_uses.begin(), procedure_uses.end());
 }
 
 
-void Procedure::add_modifies_variable(var_name name) {
-	m_modifies.insert(name);
+void Procedure::addModifiesVariable(var_name name) {
+	procedure_modifies.insert(name);
 }
 
 
-std::vector<var_name> Procedure::get_modified_variable() {
-	return std::vector<var_name>(m_modifies.begin(), m_modifies.end());
+std::vector<var_name> Procedure::getModifiedVariable() {
+	return std::vector<var_name>(procedure_modifies.begin(), procedure_modifies.end());
 }

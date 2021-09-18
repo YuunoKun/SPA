@@ -316,4 +316,82 @@ namespace UnitTesting {
 
 		EXPECT_TRUE(query.getPatterns()[0] == expected_pat);
 	}
+
+	// test invalid Modiefies ans Uses with 1st param as WILDCARD
+	TEST(PatternRelRefValidatorTest, invalidWildcardModifiesSTest) {
+		PatternRelRefValidator validator;
+
+		Query query;
+		std::vector<QueryToken> temp_token_chain;
+		temp_token_chain.push_back({ QueryToken::WILDCARD, "" });
+		temp_token_chain.push_back({ QueryToken::COMMA, "" });
+		temp_token_chain.push_back({ QueryToken::WILDCARD, "" });
+
+		//Synonym
+		//Expected
+		//Synonym synonym;
+		//synonym.name = "s";
+		//Entity expected_declared_stmt = Entity(EntityType::STMT, synonym);
+		//query.addEntity(expected_declared_stmt);
+
+		//Entity expected_ent_wildcard = Entity(EntityType::WILD);
+
+		//RelRef expected_rel = RelRef(RelType::MODIFIES_S, expected_declared_stmt, expected_ent_wildcard);
+
+		//Result
+		
+
+		//EXPECT_TRUE(query.getRelations()[0] == expected_rel);
+
+		try {
+			validator.parseParameterSuchThat(query, QueryToken::MODIFIES_S, temp_token_chain);
+			FAIL();
+		}
+		catch (std::runtime_error const& err) {
+			EXPECT_EQ(err.what(), std::string("Invalid parameters for Modifies"));
+		}
+		catch (...) {
+			// Test case should fail if not caught as runtime_error 
+			FAIL();
+		}
+	}
+
+	TEST(PatternRelRefValidatorTest, invalidWildcardUseSTest) {
+		PatternRelRefValidator validator;
+
+		Query query;
+		std::vector<QueryToken> temp_token_chain;
+		temp_token_chain.push_back({ QueryToken::WILDCARD, "" });
+		temp_token_chain.push_back({ QueryToken::COMMA, "" });
+		temp_token_chain.push_back({ QueryToken::WILDCARD, "" });
+
+		//Synonym
+		//Expected
+		//Synonym synonym;
+		//synonym.name = "s";
+		//Entity expected_declared_stmt = Entity(EntityType::STMT, synonym);
+		//query.addEntity(expected_declared_stmt);
+
+		//Entity expected_ent_wildcard = Entity(EntityType::WILD);
+
+		//RelRef expected_rel = RelRef(RelType::MODIFIES_S, expected_declared_stmt, expected_ent_wildcard);
+
+		//Result
+
+
+		//EXPECT_TRUE(query.getRelations()[0] == expected_rel);
+
+		try {
+			validator.parseParameterSuchThat(query, QueryToken::USES_S, temp_token_chain);
+			FAIL();
+		}
+		catch (std::runtime_error const& err) {
+			EXPECT_EQ(err.what(), std::string("Invalid parameters for Uses"));
+		}
+		catch (...) {
+			// Test case should fail if not caught as runtime_error 
+			FAIL();
+		}
+	}
+
 }

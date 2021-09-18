@@ -5,89 +5,89 @@ using namespace SourceProcessor;
 
 
 Statement::Statement(stmt_index id, StmtType type, proc_name parent_proc_name, int stmt_list) {
-	m_index = id;
-	m_type = type;
-	m_under_procedure = parent_proc_name;
-	m_direct_parent = 0;
-	m_stmt_list = stmt_list;
+	statement_index = id;
+	statement_type = type;
+	under_procedure = parent_proc_name;
+	statement_direct_parent = 0;
+	statement_list_no = stmt_list;
 }
 
 
-StmtType Statement::get_type() {
-	return m_type;
+StmtType Statement::getType() {
+	return statement_type;
 }
 
 
-stmt_index Statement::get_index() {
-	return m_index;
+stmt_index Statement::getIndex() {
+	return statement_index;
 }
 
 
-proc_name Statement::get_proc_name() {
-	return m_under_procedure;
+proc_name Statement::getProcName() {
+	return under_procedure;
 }
 
 
-void Statement::set_direct_parent(stmt_index parent) {
-	m_direct_parent = parent;
+void Statement::setDirectParent(stmt_index parent) {
+	statement_direct_parent = parent;
 }
 
 
-stmt_index Statement::get_direct_parent() {
-	return m_direct_parent;
+stmt_index Statement::getDirectParent() {
+	return statement_direct_parent;
 }
 
 
-void Statement::add_direct_child(stmt_index child) {
-	m_direct_child.push_back(child);
+void Statement::addDirectChild(stmt_index child) {
+	statement_direct_child.push_back(child);
 }
 
 
-std::vector<stmt_index>& Statement::get_direct_child() {
-	return m_direct_child;
+std::vector<stmt_index>& Statement::getDirectChild() {
+	return statement_direct_child;
 }
 
 
-int Statement::get_stmt_list() {
-	return m_stmt_list;
+int Statement::getStmtList() {
+	return statement_list_no;
 }
 
 
-void Statement::add_uses_variable(var_name var) {
-	m_uses.insert(var);
+void Statement::addUsesVariable(var_name var) {
+	statement_uses.insert(var);
 }
 
 
-std::vector<var_name> Statement::get_used_variable() {
-	return std::vector<var_name>(m_uses.begin(), m_uses.end());
+std::vector<var_name> Statement::getUsedVariable() {
+	return std::vector<var_name>(statement_uses.begin(), statement_uses.end());
 }
 
 
-void Statement::add_modifies_variable(var_name var) {
-	m_modifies.insert(var);
+void Statement::addModifiesVariable(var_name var) {
+	statement_modifies.insert(var);
 }
 
 
-std::vector<var_name> Statement::get_modified_variable() {
-	return std::vector<var_name>(m_modifies.begin(), m_modifies.end());
+std::vector<var_name> Statement::getModifiedVariable() {
+	return std::vector<var_name>(statement_modifies.begin(), statement_modifies.end());
 }
 
 
-void Statement::set_expr_str(std::string expr) {
-	m_expr = expr;
+void Statement::setExprStr(std::string expr) {
+	statement_expr = expr;
 }
 
 
-std::string Statement::get_expr_str() {
-	return m_expr;
+std::string Statement::getExprStr() {
+	return statement_expr;
 }
 
 
-void Statement::set_callee(proc_name name) {
-	m_callee = name;
+void Statement::setCallee(proc_name name) {
+	statement_callee = name;
 }
 
 
-proc_name Statement::get_callee() {
-	return m_callee;
+proc_name Statement::getCallee() {
+	return statement_callee;
 }

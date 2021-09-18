@@ -115,19 +115,19 @@ namespace SourceProcessor {
 		// Constructor with arguments
 		Token(TokenType, std::string);
 
-		TokenType get_token_type();
+		TokenType getTokenType();
 
-		void set_token_type(TokenType);
+		void setTokenType(TokenType);
 
-		std::string &get_token_value();
+		std::string &getTokenValue();
 
-		void set_token_value(std::string);
+		void setTokenValue(std::string);
 
-		std::string to_string();
+		std::string toString();
 
 	private:
-		TokenType m_type;
-		std::string m_token_value;
+		TokenType token_type;
+		std::string token_value;
 	};
 } // namespace SourceProcessor
 
