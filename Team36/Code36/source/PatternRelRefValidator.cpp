@@ -10,6 +10,41 @@
 #include "Query.h"
 #include "Utility.h"
 
+//expect stmtref
+bool PatternRelRefValidator::isStmtRef(std::vector<QueryToken> token_chain) {
+    if (token_chain.size() == 0) {
+        throw std::invalid_argument("Invalid argument, no StmtRef found");
+    }
+    //TODO
+    // check if size more than 2
+
+    //if got quotation?
+    // return false
+
+    // if wild return true
+
+    // if no quotation
+    // need check query if the synonym is proc or statement
+
+}
+
+//expect entref
+bool PatternRelRefValidator::isEntRef(std::vector<QueryToken> token_chain) {
+    if (token_chain.size() == 0) {
+        throw std::invalid_argument("Invalid argument, no EntRef found");
+    }
+}
+
+//expectcomma
+bool PatternRelRefValidator::isCommaRef(std::vector<QueryToken> token_chain) {
+    if (token_chain.size() == 0) {
+        throw std::invalid_argument("Invalid argument, no comma found");
+    }
+    if (token_chain[0].type != QueryToken::COMMA) {
+        throw std::invalid_argument("Invalid argument, expected a comma");
+    }
+}
+
 PatternRelRefValidator::PatternRelRefValidator() {}
 
 Entity PatternRelRefValidator::setStmtRef(Query& query, QueryToken token) {
@@ -84,22 +119,26 @@ void PatternRelRefValidator::parseParameterSuchThat(
     Query& query, QueryToken::QueryTokenType token_type,
     std::vector<QueryToken> token_chain) {
   switch (token_type) {
-    case QueryToken::MODIFIES_S:
+  case QueryToken::MODIFIES_S: {
       // stmtRef , entRef
-      if (token_chain[1].type == QueryToken::COMMA) {
-        QueryToken stmt = token_chain[0];
-        // wild card check
-        if (stmt.type == QueryToken::WILDCARD) {
-            throw std::runtime_error("Invalid parameters for Modifies");
-        }
-        token_chain.erase(token_chain.begin(), token_chain.begin() + 2);
-        query.addRelation(RelRef(RelType::MODIFIES_S, setStmtRef(query, stmt),
-                                 setEntRef(query, token_chain)));
+      
+      isStmtRef(token_chain);
+      QueryToken stmt = token_chain[0];
+      if (stmt.type == QueryToken::WILDCARD) {
+          throw std::runtime_error("Invalid parameters for Modifies");
       }
-      else {
-          throw std::runtime_error("Unexpected parameters for Modifies");
-      }
+      token_chain.erase(token_chain.begin(), token_chain.begin() + 1);
+      
+      isCommaRef(token_chain);
+      token_chain.erase(token_chain.begin(), token_chain.begin() + 1);
+
+      isEntRef(token_chain);
+      query.addRelation(RelRef(RelType::MODIFIES_S, setStmtRef(query, stmt),
+          setEntRef(query, token_chain)));
+
       break;
+    }
+      
     case QueryToken::USES_S:
       // stmtRef , entRef
       if (token_chain[1].type == QueryToken::COMMA) {

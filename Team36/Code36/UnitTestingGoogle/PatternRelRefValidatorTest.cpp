@@ -317,7 +317,7 @@ namespace UnitTesting {
 		EXPECT_TRUE(query.getPatterns()[0] == expected_pat);
 	}
 
-	// test invalid Modiefies ans Uses with 1st param as WILDCARD
+	// test invalid Modiefies with 1st param as WILDCARD
 	TEST(PatternRelRefValidatorTest, invalidWildcardModifiesSTest) {
 		PatternRelRefValidator validator;
 
@@ -356,6 +356,7 @@ namespace UnitTesting {
 		}
 	}
 
+	// test invalid Uses with 1st param as WILDCARD
 	TEST(PatternRelRefValidatorTest, invalidWildcardUseSTest) {
 		PatternRelRefValidator validator;
 
@@ -394,4 +395,26 @@ namespace UnitTesting {
 		}
 	}
 
+	// Test invalid cases in ModifiesS with no param
+	TEST(PatternRelRefValidatorTest, invalidEmptyParamModifiesSTest) {
+		PatternRelRefValidator validator;
+
+		Query query;
+		std::vector<QueryToken> temp_token_chain;
+		//temp_token_chain.push_back({ QueryToken::IDENTIFIER, "s" });
+		//temp_token_chain.push_back({ QueryToken::COMMA, "" });
+		//temp_token_chain.push_back({ QueryToken::WILDCARD, "" });
+
+		try {
+			validator.parseParameterSuchThat(query, QueryToken::MODIFIES_S, temp_token_chain);
+			FAIL();
+		}
+		catch (std::invalid_argument const& err) {
+			EXPECT_EQ(err.what(), std::string("Invalid argument, no StmtRef found"));
+		}
+		catch (...) {
+			// Test case should fail if not caught as invalid_argument
+			FAIL();
+		}
+	}
 }
