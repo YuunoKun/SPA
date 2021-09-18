@@ -31,11 +31,11 @@ namespace IntegrationTesting {
 
 	TEST_F(ParserPKBTestBonus, NoProcedureCallsTest_UsesP) {
 		SourceProcessor::Parser parser;
-		parser.load_file("./Tests/no_procedure_call_source.txt");
+		parser.load_file("../IntegrationTestingGoogle/Tests/no_procedure_call_source.txt");
 		parser.parse();
 
 		std::vector<std::pair<proc_name, var_name>> expected_usesP = {
-			{"mySecondProcedure ", "x"}, {"mySecondProcedure ", "y"}
+			{"mySecondProcedure", "x"}, {"mySecondProcedure", "y"}
 		};
 		std::sort(expected_usesP.begin(), expected_usesP.end());
 
@@ -47,12 +47,12 @@ namespace IntegrationTesting {
 
 	TEST_F(ParserPKBTestBonus, NoProcedureCallsTest_ModifiesP) {
 		SourceProcessor::Parser parser;
-		parser.load_file("./Tests/no_procedure_call_source.txt");
+		parser.load_file("../IntegrationTestingGoogle/Tests/no_procedure_call_source.txt");
 		parser.parse();
 
 		std::vector<std::pair<proc_name, var_name>> expected_modifiesP = {
 			{"myFirstProcedure", "x"}, {"myFirstProcedure", "y"},
-			{"mySecondProcedure ", "z"}, {"mySecondProcedure ", "x"}, {"mySecondProcedure ", "w"}
+			{"mySecondProcedure", "z"}, {"mySecondProcedure", "x"}, {"mySecondProcedure", "w"}
 		};
 		std::sort(expected_modifiesP.begin(), expected_modifiesP.end());
 
@@ -64,14 +64,14 @@ namespace IntegrationTesting {
 
 	TEST_F(ParserPKBTestBonus, ProcedureCallsTest_UsesP) {
 		SourceProcessor::Parser parser;
-		parser.load_file("./Tests/procedure_call_source.txt");
+		parser.load_file("../IntegrationTestingGoogle/Tests/procedure_call_source.txt");
 		parser.parse();
 
 		std::vector<std::pair<proc_name, var_name>> expected_usesP = {
 			{"main", "x"}, {"main", "y"},{"main", "count"},{"main", "cenX"},{"main", "cenY"},
 			{"printResults", "cenX"},{"printResults", "cenY"},
-			{"computeCentroid ", "x"}, {"computeCentroid ", "y"},{"computeCentroid ", "count"},
-				{"computeCentroid ", "cenX"},{"computeCentroid ", "cenY"}
+			{"computeCentroid", "x"}, {"computeCentroid", "y"},{"computeCentroid", "count"},
+				{"computeCentroid", "cenX"},{"computeCentroid", "cenY"}
 		};
 		std::sort(expected_usesP.begin(), expected_usesP.end());
 
@@ -83,14 +83,14 @@ namespace IntegrationTesting {
 
 	TEST_F(ParserPKBTestBonus, ProcedureCallsTest_ModifiesP) {
 		SourceProcessor::Parser parser;
-		parser.load_file("./Tests/procedure_call_source.txt");
+		parser.load_file("../IntegrationTestingGoogle/Tests/procedure_call_source.txt");
 		parser.parse();
 
 		std::vector<std::pair<proc_name, var_name>> expected_modifiesP = {
 			{"main", "count"}, {"main", "x"}, {"main", "flag"},{"main", "cenX"},{"main", "normSq"},
-			{"printResults", "x"},
-			{"computeCentroid ", "count"}, {"computeCentroid ", "x"},{"computeCentroid ", "flag"},
-				{"computeCentroid ", "cenX"},{"computeCentroid ", "normSq"}
+			{"readPoint", "x"},
+			{"computeCentroid", "count"}, {"computeCentroid", "x"},{"computeCentroid", "flag"},
+				{"computeCentroid", "cenX"},{"computeCentroid", "normSq"}
 		};
 		std::sort(expected_modifiesP.begin(), expected_modifiesP.end());
 

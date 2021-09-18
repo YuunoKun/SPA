@@ -16,93 +16,118 @@ namespace SourceProcessor {
 
 		FSM(Tokenizer&, Extractor*);
 
-		Tokenizer &get_tokenizer();
+		Tokenizer& getTokenizer();
 
 		// Build data structure with the given tokenizer
 		void build();
 
 		// Expects a procedure.
 		// procedure: ¡®procedure¡¯ proc_name ¡®{¡® stmtLst ¡®}¡¯
-		void expect_procedure();
+		void expectProcedure();
 
 		// Expects a statement list.
 		// stmtLst: stmt+
-		void expect_statement_list();
+		void expectStatementList();
 
 		// Expects a statement.
 		// stmt: read | print | call | while | if | assign
-		void expect_statement();
+		void expectStatement();
 
 		// Expects a read statement.
 		// read: ¡®read¡¯ var_name¡¯;¡¯
-		void expect_statement_type_read();
+		void expectStatementTypeRead();
 
 		// Expects a print statement.
 		// print: ¡®print¡¯ var_name¡¯;¡¯
-		void expect_statement_type_print();
+		void expectStatementTypePrint();
 
 		// Expects a call statement.
 		// call: ¡®call¡¯ proc_name ¡®;¡¯
-		void expect_statement_type_call();
+		void expectStatementTypeCall();
 
 		// Expects a while container statement.
 		// while: ¡®while¡¯ ¡®(¡¯ cond_expr ¡®)¡¯ ¡®{¡® stmtLst ¡®}¡¯
-		void expect_statement_type_while();
+		void expectStatementTypeWhile();
 
 		// Expects a if container statement.
 		// if: ¡®if¡¯ ¡®(¡¯ cond_expr ¡®)¡¯ ¡®then¡¯ ¡®{¡® stmtLst ¡®}¡¯ ¡®else¡¯ ¡®{¡® stmtLst ¡®}¡¯
-		void expect_statement_type_if();
+		void expectStatementTypeIf();
 
 		// Expects a assignment statement.
 		// assign: var_name ¡®=¡¯ expr ¡®;¡¯
-		void expect_statement_type_assign();
+		void expectStatementTypeAssign();
 
 		// Expects a conditional expression.
-		// cond_expr: rel_expr | ¡®!¡¯ ¡®(¡¯ cond_expr ¡®)¡¯ | ¡®(¡¯ cond_expr ¡®)¡¯ ¡®&&¡¯ ¡®(¡¯ cond_expr ¡®)¡¯ | ¡®(¡¯ cond_expr ¡®)¡¯ ¡®||¡¯ ¡®(¡¯ cond_expr ¡®)¡¯
-		void expect_conditional_expression();
+		// cond_expr: rel_expr 
+		//			| ¡®!¡¯ ¡®(¡¯ cond_expr ¡®)¡¯ 
+		//			| ¡®(¡¯ cond_expr ¡®)¡¯ ¡®&&¡¯ ¡®(¡¯ cond_expr ¡®)¡¯ 
+		//			| ¡®(¡¯ cond_expr ¡®)¡¯ ¡®||¡¯ ¡®(¡¯ cond_expr ¡®)¡¯
+		void expectConditionalExpression();
 
 		// Expects a relational expression.
-		// rel_expr: rel_factor ¡®>¡¯ rel_factor | rel_factor ¡®>=¡¯ rel_factor | rel_factor ¡®<¡¯ rel_factor | rel_factor ¡®<=¡¯ rel_factor | rel_factor ¡®==¡¯ rel_factor | rel_factor ¡®!=¡¯ rel_factor
-		void expect_relational_expression();
+		// rel_expr : rel_factor ¡®>¡¯ rel_factor
+		//			| rel_factor ¡®>=¡¯ rel_factor 
+		//			| rel_factor ¡®<¡¯ rel_factor 
+		//			| rel_factor ¡®<=¡¯ rel_factor 
+		//			| rel_factor ¡®==¡¯ rel_factor 
+		//			| rel_factor ¡®!=¡¯ rel_factor
+		void expectRelationalExpression();
 
 		// Expects a replational factor.
 		// rel_factor: var_name | const_value | expr
-		void expect_relational_factor();
+		void expectRelationalFactor();
 
 		// Expects a expression.
 		// expr: expr ¡®+¡¯ term | expr ¡®-¡¯ term | term
-		void expect_expression();
+		void expectExpression();
 
 		// Expects a term.
 		// term: term ¡®*¡¯ factor | term ¡®/¡¯ factor | term ¡®%¡¯ factor | factor
-		void expect_term();
+		void expectTerm();
 
 		// Expects a factor.
 		// factor: var_name | const_value | ¡®(¡¯ expr ¡®)¡¯
-		void expect_factor();
+		void expectFactor();
 
+		// Expects an identifier.
+		Token& expectIdentifier();
+
+		// Optional relational expression.
+		bool optionalRelationalExpression();
+
+		// Optional replational factor.
+		bool optionalRelationalFactor();
+
+		// Optional expression.
+		bool optionalExpression();
+
+		// Optional term.
+		bool optionalTerm();
+
+		// Optional factor.
+		bool optionalFactor();
+
+		// Optional identifier.
+		bool optionalIdentifier();
 
 	private:
-		Tokenizer m_tokenizer;
-		Extractor *m_design_extractor;
-
-		// Throws exception
-		void unexpected_token(std::string);
+		Tokenizer tokenizer;
+		Extractor *design_extractor;
 
 		// Expects a compulsory token with given token type, or else the build fails.
-		Token& expect_token_and_pop(TokenType);
+		Token& expectTokenAndPop(TokenType);
 
 		// This token can be optional, will return a boolean value indicating if that token exists
-		bool optional_token(TokenType);
+		bool peekToken(TokenType);
 
+		// Expects an optional token with given token type.
+		bool probeAndPop(TokenType);
+
+		// Expects an optional token with given token type.
+		bool probeAndPeek(TokenType);
+
+		// Throws exception
+		void unexpectedToken(std::string);
 	};
-
-
-	typedef enum BUILD_STATUS {
-		INIT,
-		SUCCESS,
-		FAILURE,
-		INVALID
-	} BuildStatus;
 
 } // namespace SourceProcessor
