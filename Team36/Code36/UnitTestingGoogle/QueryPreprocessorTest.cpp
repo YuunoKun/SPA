@@ -344,6 +344,17 @@ namespace UnitTesting {
 		EXPECT_EQ(test, q);
 	}
 
+	TEST(QueryPreprocessor, endSelectWithTerminator) {
+		QueryPreprocessor qp;
+		Query test = qp.parse("procedure p; Select p;");
+
+		Query q;
+		q.addEntity(Entity(EntityType::PROCEDURE, Synonym{ "p" }));
+		q.addSelected(Entity(EntityType::PROCEDURE, Synonym{ "p" }));
+
+		EXPECT_EQ(test, q);
+	}
+
 	TEST(QueryPreprocessor, oneSuchThatClause) {
 		QueryPreprocessor qp;
 		Query test = qp.parse("stmt s; Select s such that Follows* (6, s)");
