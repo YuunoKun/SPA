@@ -268,6 +268,9 @@ void PatternRelRefValidator::parseParameterPattern(
       // find comma
       // every QueryToken before comma token is sent to temp_token_chain
       // Expect entRef token_chain
+      if (token_chain.size() == 0) {
+          throw std::invalid_argument("Invalid argument, no entRef found");
+      }
       std::vector<QueryToken> temp_token_chain;
       for (int i = 0; i < token_chain.size(); i++) {
         if (token_chain[0].type != QueryToken::COMMA) {
@@ -277,6 +280,12 @@ void PatternRelRefValidator::parseParameterPattern(
           break;
         }
       }
+      if (temp_token_chain.size() == 0) {
+          throw std::invalid_argument("Invalid argument, no entRef found");
+      }
+      if (token_chain.size() == 0) {
+          throw std::invalid_argument("Invalid argument, no comma found");
+      }
 
       // check if the curr token_chain starts with comma
       if (token_chain[0].type == QueryToken::COMMA) {
@@ -285,7 +294,9 @@ void PatternRelRefValidator::parseParameterPattern(
         // if no comma found means invalid parameters
         throw std::runtime_error("Unexpected parameters for Pattern");
       }
-
+      if (token_chain.size() == 0) {
+          throw std::invalid_argument("Invalid argument, no expr found");
+      }
       // check second parameter if is WILDCARD
       if (token_chain[0].type == QueryToken::WILDCARD) {
         wild = true;
@@ -318,7 +329,10 @@ void PatternRelRefValidator::parseParameterPattern(
           throw std::runtime_error("Unexpected parameters for Pattern");
         }
       }
-
+      if (temp_token_chain.size() == 0) {
+          throw std::invalid_argument("Invalid argument, no entRef found");
+      }
+ 
       query.addPattern(Pattern(synonym_ent, setEntRef(query, temp_token_chain),
                                setExpr(temp_token_chain_2), wild));
   }
