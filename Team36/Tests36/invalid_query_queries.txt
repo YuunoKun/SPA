@@ -4,7 +4,7 @@ Select s
 none
 5000
 2 - Syntactically invalid read
-stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+stmt s; Read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
 Select s
 none
 5000
@@ -607,7 +607,7 @@ none
 5000
 122 - Syntactically invalid Modifies
 stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select s such that Modifies(_,)
+Select s such that Modifies(1,)
 none
 5000
 123 - Syntactically invalid Modifies
@@ -717,7 +717,7 @@ none
 5000
 144 - Syntactically invalid Uses
 stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select s such that Uses(_,)
+Select s such that Uses(1,)
 none
 5000
 145 - Syntactically invalid Uses
@@ -815,27 +815,32 @@ stmt a>b;
 Select a>b
 none
 5000
-164 - Syntactically invalid double declaration
+164 - Syntactically invalid declaration (procedure with underscore)
+procedure _p; 
+Select _p
+none
+5000
+165 - Syntactically invalid double declaration
 read s; stmt s;
 Select s
 none
 5000
-165 - Syntactically invalid pattern (additional underscore)
+166 - Syntactically invalid pattern (additional underscore)
 assign a; variable v;
 Select v pattern a(v, __"a"_)
 none
 5000
-166 - Syntactically invalid pattern (missing pattern)
+167 - Syntactically invalid pattern (missing pattern)
 assign a; variable v;
 Select v a(v, _"a"_)
 none
 5000
-167 - Syntactically invalid pattern (additional and)
+168 - Syntactically invalid pattern (additional and)
 assign a; variable v;
 Select v and pattern a(v, _"a"_)
 none
 5000
-168 - Syntactically invalid pattern (missing parentheses)
+169 - Syntactically invalid pattern (missing parentheses)
 assign a; variable v;
 Select v pattern a(v, _"a"_
 none
@@ -1229,11 +1234,15 @@ none
 stmt s; variable v;
 Select v such that Modifies(s, v1)
 none
-76 - Valid Modifies (stmtRef out of range)
-variable v;
-Select v such that Modifies(13814814018720157301750817081370141335364112121, v)
+76 - Semantically invalid Modifies (underscore on LHS of Modifies)
+stmt s; variable v;
+Select v such that Modifies(_, v)
 none
-76 - Valid Parent (stmtRef out of range)
-variable v;
-Select v such that Parent(13814814018720157301750817081370141335364112121, 13814814018720157301750817081370141335364112121)
+77 - Semantically invalid Uses (underscore on LHS of Uses)
+stmt s; variable v;
+Select v such that Uses(_, v)
+none
+78 - Semantically invalid Uses (variable LHS, stmt RHS)
+variable v; stmt s; 
+Select v such that Uses(v, s)
 none

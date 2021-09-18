@@ -4,42 +4,42 @@ using namespace SourceProcessor;
 
 
 Token::Token() {
-	m_type = TokenType::WHITESPACE;
-	m_token_value = "";
+	token_type = TokenType::WHITESPACE;
+	token_value = "";
 }
 
 
 Token::Token(TokenType type, std::string token_value) {
-	m_type = type;
-	m_token_value = token_value;
+	token_type = type;
+	token_value = token_value;
 }
 
 
-TokenType Token::get_token_type() {
-	return m_type;
+TokenType Token::getTokenType() {
+	return token_type;
 }
 
 
-void Token::set_token_type(TokenType type) {
-	m_type = type;
+void Token::setTokenType(TokenType type) {
+	token_type = type;
 }
 
 
-std::string &Token::get_token_value() {
-	return m_token_value;
+std::string &Token::getTokenValue() {
+	return token_value;
 }
 
 
-void Token::set_token_value(std::string value) {
-	m_token_value = value;
+void Token::setTokenValue(std::string value) {
+	token_value = value;
 }
 
 
-std::string Token::to_string() {
-	if (m_token_value == "") {
+std::string Token::toString() {
+	if (token_value == "") {
 		return "Empty token.";
 	}
 	else {
-		//return "Token type : " + tokenTypeStrings[m_type] + ", token value : " + m_token_value;
+		//return "Token type : " + tokenTypeStrings[token_type] + ", token value : " + token_value;
 	}
 }

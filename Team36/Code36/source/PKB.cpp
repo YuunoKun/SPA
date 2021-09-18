@@ -5,6 +5,7 @@
 
 #include "PKB.h"
 #include "TNode.h"
+#include "Common.h"
 #include "RelationTable.h"
 // need to include this .cpp for template classes
 #include "RelationTable.cpp"
@@ -130,6 +131,34 @@ void PKB::addModifiesS(stmt_index modifier, var_name modified)
 	}
 }
 
+void PKB::addModifiesP(proc_name proc, var_name modified)
+{
+	std::vector<var_name>::iterator it_var = std::find(var_table.begin(), var_table.end(), modified);
+	std::vector<proc_name>::iterator it_proc = std::find(proc_table.begin(), proc_table.end(), proc);
+
+	if (it_var == var_table.end()) {
+		throw std::invalid_argument("addModifiesP: Invalid var name: " + modified);
+	}
+	else if (it_proc == proc_table.end()) {
+		throw std::invalid_argument("addModifiesP: Invalid proc name: " + proc);
+	}
+	modifiesP_table.insert(proc, modified);
+}
+
+void PKB::addUsesP(proc_name proc, var_name used)
+{
+	std::vector<var_name>::iterator it_var = std::find(var_table.begin(), var_table.end(), used);
+	std::vector<proc_name>::iterator it_proc = std::find(proc_table.begin(), proc_table.end(), proc);
+
+	if (it_var == var_table.end()) {
+		throw std::invalid_argument("addUsesP: Invalid var name: " + used);
+	}
+	else if (it_proc == proc_table.end()) {
+		throw std::invalid_argument("addUsesP: Invalid proc name: " + proc);
+	}
+	usesP_table.insert(proc, used);
+}
+
 void PKB::generateParentT()
 {
 	parentT_table = parent_table.findTransitiveClosure();
@@ -155,12 +184,8 @@ void PKB::resetCache()
 	parentT_table.clear();
 	usesS_table.clear();
 	modifiesS_table.clear();
-	follows_reverse_table.clear();
-	parent_reverse_table.clear();
-	followsT_reverse_table.clear();
-	parentT_reverse_table.clear();
-	usesS_reverse_table.clear();
-	modifiesS_reverse_table.clear();
+	usesP_table.clear();
+	modifiesP_table.clear();
 }
 
 void PKB::resetEntities()
@@ -275,4 +300,14 @@ const RelationTable<StmtInfo, var_name>& PKB::getUsesS()
 const RelationTable<StmtInfo, var_name>& PKB::getModifiesS()
 {
 	return modifiesS_table;
+}
+
+const RelationTable<proc_name, var_name>& PKB::getUsesP()
+{
+	return usesP_table;
+}
+
+const RelationTable<proc_name, var_name>& PKB::getModifiesP()
+{
+	return modifiesP_table;
 }
