@@ -815,27 +815,32 @@ stmt a>b;
 Select a>b
 none
 5000
-164 - Syntactically invalid double declaration
+164 - Syntactically invalid declaration (procedure with underscore)
+procedure _p; 
+Select _p
+none
+5000
+165 - Syntactically invalid double declaration
 read s; stmt s;
 Select s
 none
 5000
-165 - Syntactically invalid pattern (additional underscore)
+166 - Syntactically invalid pattern (additional underscore)
 assign a; variable v;
 Select v pattern a(v, __"a"_)
 none
 5000
-166 - Syntactically invalid pattern (missing pattern)
+167 - Syntactically invalid pattern (missing pattern)
 assign a; variable v;
 Select v a(v, _"a"_)
 none
 5000
-167 - Syntactically invalid pattern (additional and)
+168 - Syntactically invalid pattern (additional and)
 assign a; variable v;
 Select v and pattern a(v, _"a"_)
 none
 5000
-168 - Syntactically invalid pattern (missing parentheses)
+169 - Syntactically invalid pattern (missing parentheses)
 assign a; variable v;
 Select v pattern a(v, _"a"_
 none
@@ -1236,4 +1241,8 @@ none
 77 - Semantically invalid Uses (underscore on LHS of Uses)
 stmt s; variable v;
 Select v such that Uses(_, v)
+none
+78 - Semantically invalid Uses (variable LHS, stmt RHS)
+variable v; stmt s; 
+Select v such that Uses(v, s)
 none
