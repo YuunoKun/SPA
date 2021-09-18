@@ -59,27 +59,22 @@ Query QueryPreprocessor::parse(std::string str) {
 		// First iteration, set identifier to correct type
 		// Check what is my previous token
 		if (!isSelect) {
+			// temp holds the casted version (can be non-identifier)
 			temp = setIdentifierToQueryTokenType(prevToken, temp, token);
 			validateDeclarationQuery(prevToken, token);
-
-			if (token.type == QueryToken::QueryTokenType::TERMINATOR) {
-				temp = token;
-			}
 
 			Entity ent;
 			if (prevToken.type != QueryToken::QueryTokenType::WHITESPACE &&
 				prevToken.type != QueryToken::QueryTokenType::TERMINATOR &&
 				token.type == QueryToken::QueryTokenType::IDENTIFIER) {
-				// If declaring add into entity
-				if (prevToken.type != QueryToken::QueryTokenType::SELECT) {
-					addEntityToQuery(query, ent, output, prevToken, token);
+				if (temp.type == QueryToken::QueryTokenType::SELECT) {
+					addSelectedToQuery(query, ent, output, selected, temp, token, isSelect);
 				}
-				// If select add into selected
 				else {
-					addSelectedToQuery(query, ent, output, selected, prevToken, token, isSelect);
+					addEntityToQuery(query, ent, output, temp, token);
 				}
 			}
-			prevToken = temp;
+			prevToken = token;
 		}
 
 		else if (isSelect) {
@@ -179,22 +174,12 @@ QueryToken QueryPreprocessor::setIdentifierToQueryTokenType(QueryToken& prevToke
 
 void QueryPreprocessor::validateDeclarationQuery(QueryToken& prevToken, QueryToken& token) {
 	// Guard clauses to catch semantically wrong input, all usage of token should be temp
-	if ((
-		token.type == QueryToken::QueryTokenType::PROCEDURE ||
-		token.type == QueryToken::QueryTokenType::STMT ||
-		token.type == QueryToken::QueryTokenType::READ ||
-		token.type == QueryToken::QueryTokenType::PRINT ||
-		token.type == QueryToken::QueryTokenType::CALL ||
-		token.type == QueryToken::QueryTokenType::IF ||
-		token.type == QueryToken::QueryTokenType::WHILE ||
-		token.type == QueryToken::QueryTokenType::ASSIGN ||
-		token.type == QueryToken::QueryTokenType::VARIABLE
-		)
-		&&
-		(prevToken.type != QueryToken::QueryTokenType::COMMA &&
+	if (token.type == QueryToken::QueryTokenType::IDENTIFIER &&
+		(prevToken.type != QueryToken::QueryTokenType::IDENTIFIER &&
 			prevToken.type != QueryToken::QueryTokenType::TERMINATOR &&
+			prevToken.type != QueryToken::QueryTokenType::COMMA &&
 			prevToken.type != QueryToken::QueryTokenType::WHITESPACE)) {
-		throw std::runtime_error("During declaration, only comma and terminator is accepted after identifier.");
+		throw std::runtime_error("During declaration, only identifier can exists excluding terminator and whitespace");
 	}
 	if (prevToken.type == QueryToken::QueryTokenType::COMMA &&
 		token.type != QueryToken::QueryTokenType::IDENTIFIER) {
