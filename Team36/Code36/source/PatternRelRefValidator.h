@@ -10,7 +10,7 @@
 class PatternRelRefValidator {
 private:
 
-	bool PatternRelRefValidator::isStmtRef(std::vector<QueryToken> token_chain);
+	bool PatternRelRefValidator::isStmtRef(Query& query, std::vector<QueryToken> token_chain);
 
 	bool PatternRelRefValidator::isCommaRef(std::vector<QueryToken> token_chain);
 

@@ -11,21 +11,34 @@
 #include "Utility.h"
 
 //expect stmtref
-bool PatternRelRefValidator::isStmtRef(std::vector<QueryToken> token_chain) {
+bool PatternRelRefValidator::isStmtRef(Query& query, std::vector<QueryToken> token_chain) {
     if (token_chain.size() == 0) {
         throw std::invalid_argument("Invalid argument, no StmtRef found");
     }
-    //TODO
-    // check if size more than 2
+    
+    QueryToken token = token_chain[0];
+    //if integer, return true
+    if (token.type == QueryToken::CONSTANT) {
+        return true;
+    }
+
+    if (token.type == QueryToken::WILDCARD) {
+        return true;
+    }
+
+    // check synonym if is STMT
+    if (token.type == QueryToken::IDENTIFIER) {
+        std::unordered_map<std::string, Entity> ent_chain = query.getEntities();
+        if (ent_chain.find(token.token_value) != ent_chain.end()) {
+            return ent_chain.at(token.token_value).getType() == EntityType::STMT;
+        }
+    }
 
     //if got quotation?
     // return false
-
-    // if wild return true
-
-    // if no quotation
-    // need check query if the synonym is proc or statement
-
+    if (token.type == QueryToken::QUOTATION_OPEN) {
+        return false;
+    }
 }
 
 //expect entref
@@ -122,7 +135,7 @@ void PatternRelRefValidator::parseParameterSuchThat(
   case QueryToken::MODIFIES_S: {
       // stmtRef , entRef
       
-      isStmtRef(token_chain);
+      isStmtRef(query, token_chain);
       QueryToken stmt = token_chain[0];
       if (stmt.type == QueryToken::WILDCARD) {
           throw std::runtime_error("Invalid parameters for Modifies");
