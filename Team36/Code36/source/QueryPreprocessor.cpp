@@ -68,7 +68,7 @@ Query QueryPreprocessor::parse(std::string str) {
 				prevToken.type != QueryToken::QueryTokenType::TERMINATOR &&
 				token.type == QueryToken::QueryTokenType::IDENTIFIER) {
 				if (temp.type == QueryToken::QueryTokenType::SELECT) {
-					addSelectedToQuery(query, ent, output, selected, temp, token, isSelect);
+					addSelectedToQuery(query, ent, output, selected, token, isSelect);
 				}
 				else {
 					addEntityToQuery(query, ent, output, temp, token);
@@ -187,7 +187,7 @@ void QueryPreprocessor::validateDeclarationQuery(QueryToken& prevToken, QueryTok
 	}
 }
 
-void QueryPreprocessor::addEntityToQuery(Query& query, Entity& ent, std::vector<QueryToken>& output, QueryToken& prevToken, QueryToken& token) {
+void QueryPreprocessor::addEntityToQuery(Query& query, Entity& ent, std::vector<QueryToken>& output, QueryToken& temp, QueryToken& token) {
 	// Check if entity name is already used, exists in output, should return error
 	for (QueryToken each : output) {
 		if (token.token_value == each.token_value) {
@@ -196,10 +196,10 @@ void QueryPreprocessor::addEntityToQuery(Query& query, Entity& ent, std::vector<
 	}
 
 	// Declaring goes into output
-	output.push_back({ prevToken.type, { token.token_value } });
+	output.push_back({ temp.type, { token.token_value } });
 	Synonym synonym;
 	synonym.name = token.token_value;
-	EntityType entityType = Utility::queryTokenTypeToEntityType(prevToken.type);
+	EntityType entityType = Utility::queryTokenTypeToEntityType(temp.type);
 	ent = { entityType, synonym };
 	query.addEntity(ent);
 }
@@ -220,7 +220,7 @@ void QueryPreprocessor::addPatternToQuery(Entity& patternTypeEntity, std::vector
 	}
 }
 
-void QueryPreprocessor::addSelectedToQuery(Query& query, Entity& ent, std::vector<QueryToken>& output, std::vector<QueryToken> selected, QueryToken& prevToken, QueryToken& token, bool& isSelect) {
+void QueryPreprocessor::addSelectedToQuery(Query& query, Entity& ent, std::vector<QueryToken>& output, std::vector<QueryToken> selected, QueryToken& token, bool& isSelect) {
 	bool isValid = false;
 	for (QueryToken each : output) {
 		if (token.token_value == each.token_value) {

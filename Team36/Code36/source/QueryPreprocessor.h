@@ -22,7 +22,7 @@ private:
 
 	void addEntityToQuery(Query&, Entity&, std::vector<QueryToken>&, QueryToken&, QueryToken&);
 
-	void addSelectedToQuery(Query&, Entity&, std::vector<QueryToken>&, std::vector<QueryToken>, QueryToken&, QueryToken&, bool&);
+	void addSelectedToQuery(Query&, Entity&, std::vector<QueryToken>&, std::vector<QueryToken>, QueryToken&, bool&);
 
 	void addPatternToQuery(Entity&, std::vector<QueryToken>&, QueryToken&, QueryToken&);
 
