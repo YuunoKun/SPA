@@ -8,8 +8,9 @@ std::list<std::string> QuerySystem::processQuery(std::string input) {
 		std::list<std::string> result = evaluator.evaluateQuery(query);
 		return result;
 	}
-	catch (...) {
-		//Some error occur, return empty list
+	catch (std::exception& e)
+	{
+		std::cout << "Standard exception: " << e.what() << std::endl;
 		return {};
 	}
 }
