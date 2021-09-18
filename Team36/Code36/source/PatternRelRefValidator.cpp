@@ -152,71 +152,107 @@ void PatternRelRefValidator::parseParameterSuchThat(
       break;
     }
       
-    case QueryToken::USES_S:
-      // stmtRef , entRef
-      if (token_chain[1].type == QueryToken::COMMA) {
-        QueryToken stmt = token_chain[0];
+    case QueryToken::USES_S: {
+        // stmtRef , entRef
 
+        isStmtRef(query, token_chain);
+        QueryToken stmt = token_chain[0];
         if (stmt.type == QueryToken::WILDCARD) {
             throw std::runtime_error("Invalid parameters for Uses");
         }
+        token_chain.erase(token_chain.begin(), token_chain.begin() + 1);
 
-        token_chain.erase(token_chain.begin(), token_chain.begin() + 2);
+        isCommaRef(token_chain);
+        token_chain.erase(token_chain.begin(), token_chain.begin() + 1);
+
+        isEntRef(token_chain);
         query.addRelation(RelRef(RelType::USES_S, setStmtRef(query, stmt),
-                                 setEntRef(query, token_chain)));
-      }
-      else {
-          throw std::runtime_error("Unexpected parameters for Uses");
-      }
-      break;
+            setEntRef(query, token_chain)));
 
-    case QueryToken::PARENT:
-      // stmtRef , stmtRef
-      if (token_chain[1].type == QueryToken::COMMA) {
+        break;
+    }
+
+    case QueryToken::PARENT: {
+        // stmtRef , stmtRef
+        isStmtRef(query, token_chain);
+        QueryToken stmt = token_chain[0];
+        token_chain.erase(token_chain.begin(), token_chain.begin() + 1);
+
+        isCommaRef(token_chain);
+        token_chain.erase(token_chain.begin(), token_chain.begin() + 1);
+
+        isStmtRef(query, token_chain);
+        QueryToken stmt2 = token_chain[0];
+        token_chain.erase(token_chain.begin(), token_chain.begin() + 1);
+        if (token_chain.size() != 0) {
+            throw std::runtime_error("Unexpected parameters for Parent");
+        }
         query.addRelation(RelRef(RelType::PARENT,
-                                 setStmtRef(query, token_chain[0]),
-                                 setStmtRef(query, token_chain[2])));
-      }
-      else {
-          throw std::runtime_error("Unexpected parameters for Parent");
-      }
-      break;
-    case QueryToken::PARENT_T:
-      // stmtRef , stmtRef
-      if (token_chain[1].type == QueryToken::COMMA) {
+            setStmtRef(query, stmt),
+            setStmtRef(query, stmt2)));
+        break;
+    }
+      
+    case QueryToken::PARENT_T: {
+        // stmtRef , stmtRef
+        isStmtRef(query, token_chain);
+        QueryToken stmt = token_chain[0];
+        token_chain.erase(token_chain.begin(), token_chain.begin() + 1);
+
+        isCommaRef(token_chain);
+        token_chain.erase(token_chain.begin(), token_chain.begin() + 1);
+
+        isStmtRef(query, token_chain);
+        QueryToken stmt2 = token_chain[0];
+        token_chain.erase(token_chain.begin(), token_chain.begin() + 1);
+        if (token_chain.size() != 0) {
+            throw std::runtime_error("Unexpected parameters for Parent*");
+        }
         query.addRelation(RelRef(RelType::PARENT_T,
-                                 setStmtRef(query, token_chain[0]),
-                                 setStmtRef(query, token_chain[2])));
-      }
-      else {
-          throw std::runtime_error("Unexpected parameters for Parent*");
-      }
+            setStmtRef(query, stmt),
+            setStmtRef(query, stmt2)));
+        break;
+    }
+    case QueryToken::FOLLOWS: {
+        // stmtRef , stmtRef
+        isStmtRef(query, token_chain);
+        QueryToken stmt = token_chain[0];
+        token_chain.erase(token_chain.begin(), token_chain.begin() + 1);
 
-      break;
-    case QueryToken::FOLLOWS:
-      // stmtRef , stmtRef
-      if (token_chain[1].type == QueryToken::COMMA) {
+        isCommaRef(token_chain);
+        token_chain.erase(token_chain.begin(), token_chain.begin() + 1);
+
+        isStmtRef(query, token_chain);
+        QueryToken stmt2 = token_chain[0];
+        token_chain.erase(token_chain.begin(), token_chain.begin() + 1);
+        if (token_chain.size() != 0) {
+            throw std::runtime_error("Unexpected parameters for Follows");
+        }
         query.addRelation(RelRef(RelType::FOLLOWS,
-                                 setStmtRef(query, token_chain[0]),
-                                 setStmtRef(query, token_chain[2])));
-      }
-      else {
-          throw std::runtime_error("Unexpected parameters for Follows");
-      }
+            setStmtRef(query, stmt),
+            setStmtRef(query, stmt2)));
+        break;
+    }
+    case QueryToken::FOLLOWS_T: {
+        // stmtRef , stmtRef
+        isStmtRef(query, token_chain);
+        QueryToken stmt = token_chain[0];
+        token_chain.erase(token_chain.begin(), token_chain.begin() + 1);
 
-      break;
-    case QueryToken::FOLLOWS_T:
-      // stmtRef , stmtRef
-      if (token_chain[1].type == QueryToken::COMMA) {
-        query.addRelation(RelRef(RelType::FOLLOWS_T,
-                                 setStmtRef(query, token_chain[0]),
-                                 setStmtRef(query, token_chain[2])));
-      }
-      else {
-          throw std::runtime_error("Unexpected parameters for Follows*");
-      }
+        isCommaRef(token_chain);
+        token_chain.erase(token_chain.begin(), token_chain.begin() + 1);
 
-      break;
+        isStmtRef(query, token_chain);
+        QueryToken stmt2 = token_chain[0];
+        token_chain.erase(token_chain.begin(), token_chain.begin() + 1);
+        if (token_chain.size() != 0) {
+            throw std::runtime_error("Unexpected parameters for Follows*");
+        }
+        query.addRelation(RelRef(RelType::PARENT,
+            setStmtRef(query, stmt),
+            setStmtRef(query, stmt2)));
+        break;
+    }
 
     default:
       throw std::runtime_error("Unknown RelRef query token type : \'" + token_type +
