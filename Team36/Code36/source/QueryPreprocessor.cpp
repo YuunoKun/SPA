@@ -124,10 +124,7 @@ Query QueryPreprocessor::parse(std::string str) {
 				}
 			}
 			else {
-				// Do not throw error if the query ends with a terminator. Eg: stmt s; Select s;
-				if (token.type != QueryToken::QueryTokenType::TERMINATOR) {
-					throw std::runtime_error("Invalid query");
-				}
+				throw std::runtime_error("Invalid query");
 			}
 			prevTokenSelect = token;
 		}
