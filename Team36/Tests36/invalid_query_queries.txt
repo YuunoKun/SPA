@@ -607,7 +607,7 @@ none
 5000
 122 - Syntactically invalid Modifies
 stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select s such that Modifies(_,)
+Select s such that Modifies(1,)
 none
 5000
 123 - Syntactically invalid Modifies
@@ -717,7 +717,7 @@ none
 5000
 144 - Syntactically invalid Uses
 stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select s such that Uses(_,)
+Select s such that Uses(1,)
 none
 5000
 145 - Syntactically invalid Uses
@@ -1229,11 +1229,11 @@ none
 stmt s; variable v;
 Select v such that Modifies(s, v1)
 none
-76 - Valid Modifies (stmtRef out of range)
-variable v;
-Select v such that Modifies(13814814018720157301750817081370141335364112121, v)
+76 - Semantically invalid Modifies (underscore on LHS of Modifies)
+stmt s; variable v;
+Select v such that Modifies(_, v)
 none
-76 - Valid Parent (stmtRef out of range)
-variable v;
-Select v such that Parent(13814814018720157301750817081370141335364112121, 13814814018720157301750817081370141335364112121)
+77 - Semantically invalid Uses (underscore on LHS of Uses)
+stmt s; variable v;
+Select v such that Uses(_, v)
 none
