@@ -854,5 +854,22 @@ namespace UnitTesting {
 		catch (...) {
 			FAIL();
 		}
+
+		try {
+			Query test7 = qp.parse("assign a; stmt s; Select s Follows(s,a)");
+			Query test8 = qp.parse("assign a; stmt s; Select s Such that Follows(s,a)");
+			Query test9 = qp.parse("assign a; stmt s; Select s such That Follows(s,a)");
+			Query test10 = qp.parse("assign a; stmt s; Select s suchthat Follows(s,a)");
+			Query test11 = qp.parse("assign a; stmt s; Select s such   that Follows(s,a)");
+			Query test12 = qp.parse("assign a; stmt s; Select s such that such that Follows(s,a)");
+			Query test13 = qp.parse("assign a; stmt s; Select s such that Follows(1,2) Follows(s,a)");
+			Query test14 = qp.parse("assign a; stmt s; Select s such that Follows(1,2) such That Follows(s,a)");
+		}
+		catch (std::runtime_error const& err) {
+			EXPECT_EQ(err.what(), std::string("Invalid query"));
+		}
+		catch (...) {
+			FAIL();
+		}
 	}
 }
