@@ -55,6 +55,8 @@ Query QueryPreprocessor::parse(std::string str) {
 	// True when iterating inside the such that or pattern parameter, false otherwise
 	bool isParameter = false;
 
+	bool isExpectingPatternType = false;
+
 	for (QueryToken token : v) {
 		// First iteration, set identifier to correct type
 		// Check what is my previous token
@@ -81,7 +83,10 @@ Query QueryPreprocessor::parse(std::string str) {
 			if (token.type == QueryToken::QueryTokenType::SUCH_THAT) {
 				patternOrSuchThat = { QueryToken::QueryTokenType::SUCH_THAT, "" };
 			}
-			else if (token.type == QueryToken::QueryTokenType::IDENTIFIER && token.token_value == "pattern") {
+			// pattern only valid when previous token is either identifier or )
+			else if (!isExpectingPatternType && token.type == QueryToken::QueryTokenType::IDENTIFIER &&
+				token.token_value == "pattern") {
+				isExpectingPatternType = true;
 				patternOrSuchThat = { QueryToken::QueryTokenType::PATTERN, "pattern" };
 			}
 
@@ -102,12 +107,13 @@ Query QueryPreprocessor::parse(std::string str) {
 			}
 			else if (patternOrSuchThat.type == QueryToken::QueryTokenType::PATTERN) {
 				if (prevTokenSelect.token_value == "pattern" && token.type == QueryToken::QueryTokenType::IDENTIFIER) {
-					QueryPreprocessor::addPatternToQuery(patternTypeEntity, output, prevToken, token);
+					QueryPreprocessor::addPatternToQuery(patternTypeEntity, output, token);
 				}
 				else if (!isParameter && token.type == QueryToken::QueryTokenType::PARENTHESIS_OPEN) {
 					isParameter = true;
 				}
 				else if (isParameter && token.type == QueryToken::QueryTokenType::PARENTHESIS_CLOSE) {
+					isExpectingPatternType = false;
 					isParameter = false;
 					if (patternTypeEntity.getType() == EntityType::ASSIGN) {
 						validator.parseParameterPattern(query, patternTypeEntity, parameterClause);
@@ -204,7 +210,7 @@ void QueryPreprocessor::addEntityToQuery(Query& query, Entity& ent, std::vector<
 	query.addEntity(ent);
 }
 
-void QueryPreprocessor::addPatternToQuery(Entity& patternTypeEntity, std::vector<QueryToken>& output, QueryToken& prevToken, QueryToken& token) {
+void QueryPreprocessor::addPatternToQuery(Entity& patternTypeEntity, std::vector<QueryToken>& output, QueryToken& token) {
 	bool isValid = false;
 	for (QueryToken each : output) {
 		if (token.token_value == each.token_value) {
