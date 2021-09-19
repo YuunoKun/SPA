@@ -27,14 +27,6 @@ std::list<std::string> Utility::stmtInfoToStringList(std::vector<StmtInfo>& from
 	return to;
 }
 
-//std::vector<StmtInfo> Utility::stmtToStmtInfoVector(std::vector<Stmt>& from) {
-//	std::vector<StmtInfo> to;
-//	for (auto& it : from) {
-//		to.push_back({ it.getNum(), it.getType() });
-//	}
-//	return to;
-//}
-
 std::vector<std::string> Utility::stmtInfoToStringVector(std::vector<StmtInfo>& from) {
 	std::vector<std::string> to;
 	for (auto& it : from) {
