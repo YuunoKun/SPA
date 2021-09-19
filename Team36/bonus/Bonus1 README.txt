@@ -12,7 +12,6 @@ Instructions on compiling Autotester:
 Instructions on testing extension
 1. Open Powershell and navigate to `Team36\Code36\Debug`
 2. Run the following commands:
-.\AutoTester.exe ..\..\bonus\Tests\valid_query_source.txt ..\..\bonus\Tests\valid_query_queries.txt ..\..\bonus\Tests\out_valid_query.xml
 .\AutoTester.exe ..\..\bonus\Tests\multi_clauses_source.txt ..\..\bonus\Tests\multi_clauses_queries.txt ..\..\bonus\Tests\out_multi_clauses.xml
 3. Verify the results of the out.xml files in `Team36\bonus\Tests`.
 

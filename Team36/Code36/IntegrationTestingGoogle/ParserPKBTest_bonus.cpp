@@ -100,7 +100,7 @@ namespace IntegrationTesting {
 		EXPECT_EQ(v, expected_modifiesP);
 	}
 
-	TEST_F(ParserPKBTestBonus, DuplicateProcedureNames) {
+	/*TEST_F(ParserPKBTestBonus, DuplicateProcedureNames) {
 		SourceProcessor::Parser parser;
 		parser.load_file("../IntegrationTestingGoogle/Tests/duplicate_procedure_name_source.txt");
 		ASSERT_THROW(parser.parse(), std::runtime_error);
@@ -122,5 +122,5 @@ namespace IntegrationTesting {
 		SourceProcessor::Parser parser;
 		parser.load_file("../IntegrationTestingGoogle/Tests/cyclic_calls_source.txt");
 		ASSERT_THROW(parser.parse(), std::runtime_error);
-	}
+	}*/
 }

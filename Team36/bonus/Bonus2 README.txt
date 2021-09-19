@@ -1,4 +1,4 @@
-Bonus 3. Validation: detection of 
+Bonus 2. Source Processor Validation: detection of 
    - duplicate procedure names
    - recursive calls
    - cyclic calls
@@ -7,12 +7,6 @@ Bonus 3. Validation: detection of
 ----------------------------------------------------------------------
 Visual Studio version used : Microsoft Visual Studio Community 2019
 Configuration : Debug
-
-Instructions on running integration test: (OPTIONAL)
-1. Open 'Team36\Code36\StartupSPASolution.sln' with Visual Studio
-2. In Visual Studio toolbar, navigate to Build -> Rebuild Solution
-3. In Solution Explorer, navigate to IntegrationTestingGoogle -> ParserPKBTest_bonus.cpp
-4. Right click on it and select 'Run Tests'
 
 Instructions on compiling Autotester:
 1. Open 'Team36\Code36\StartupSPASolution.sln' with Visual Studio
@@ -28,13 +22,16 @@ Instructions on testing extension
 .\AutoTester.exe ..\..\bonus\Tests\bonus3_recursive_calls_source.txt ..\..\bonus\Tests\bonus3_no_queries.txt ..\..\bonus\Tests\bonus3_no_query.xml
 .\AutoTester.exe ..\..\bonus\Tests\bonus3_cyclic_calls_source.txt ..\..\bonus\Tests\bonus3_no_queries.txt ..\..\bonus\Tests\bonus3_no_query.xml
 
-3. The above tests should abort and the error message can be shown in the terminal. For example, "Duplicate procedure names detected." will be shown if the first line of command is being excuted.
+Expected behaviour: The above tests aborts and the error message is shown in Powershell. For example, "Duplicate procedure names detected." will be shown if the first line of command is being executed.
 
-4. And valid cases consisting multiple procedures without any violations.
+3. And valid cases consisting multiple procedures without any violations.
 .\AutoTester.exe ..\..\bonus\Tests\bonus3_valid_1_source.txt ..\..\bonus\Tests\bonus3_no_queries.txt ..\..\bonus\Tests\bonus3_no_query.xml
 .\AutoTester.exe ..\..\bonus\Tests\bonus3_valid_2_source.txt ..\..\bonus\Tests\bonus3_no_queries.txt ..\..\bonus\Tests\bonus3_no_query.xml
+
+Expected behaviour: Tests run successfully without any error.
 The above 2 cases takes valid source as input and will successfully parse and validate. You can observe this from the outputs in the terminal.
 We do not provide queries for the valid sources in bonus 3. For multiple procedures relations, please refer to bonus 4.
+
 On a side note: Recursive calls and cyclic calls are pretty similar, so they will show the same error message.
 
 ----------------------------------------------------------------------
