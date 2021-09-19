@@ -61,8 +61,13 @@ void Parser::parse() {
 	If source_program = "";
 	An error message should be pushed
 	*/
-
-	tokenizer.parseIntoTokens(source_program.c_str());
-	FSM finite_state_machine(tokenizer);
-	finite_state_machine.build();
+	try {
+		tokenizer.parseIntoTokens(source_program.c_str());
+		FSM finite_state_machine(tokenizer);
+		finite_state_machine.build();
+	}
+	catch (std::exception e) {
+		std::cout << e.what() << std::endl;
+		throw e;
+	}
 }

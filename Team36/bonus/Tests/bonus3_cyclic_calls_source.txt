@@ -1,0 +1,9 @@
+procedure myproc {
+x =1;
+call anotherproc;
+y = 3+7*f;
+}
+
+procedure anotherproc {
+call myproc;
+}
