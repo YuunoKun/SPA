@@ -140,4 +140,73 @@ namespace UnitTesting {
 			}
 		}
 	}
+
+
+	TEST(RelationsEvaluatorTest, evaluateRelationType3) {
+		PKB::getInstance().resetCache();
+		proc_name main1 = "main1";
+		proc_name main2 = "main2";
+		PKB::getInstance().addProcedure(main1);
+		PKB::getInstance().addProcedure(main2);
+		PKB::getInstance().addVariable("x");
+		PKB::getInstance().addVariable("y");
+
+		RelationsEvaluator evaluator;
+		QueryResult result;
+
+		std::vector<RelType> types = { MODIFIES_P, USES_P };
+
+		//Negative Test Case
+		for (auto type : types) {
+			RelRef relation1(type, { PROCEDURE, main1 }, { VARIABLE, "x" });
+			RelRef relation2(type, { PROCEDURE, main1 }, { WILD });
+			RelRef relation3(type, { PROCEDURE, Synonym{"a"} }, { VARIABLE, Synonym{"a"} });
+			RelRef relation4(type, { PROCEDURE, Synonym{"a"} }, { WILD });
+			RelRef relation5(type, { PROCEDURE, main1  }, { VARIABLE, Synonym{"a"} });
+			RelRef relation6(type, { PROCEDURE, Synonym{"a"} }, { VARIABLE, "x" });
+
+			std::vector<RelRef> relations{ relation1, relation2, relation3, relation4,
+				relation5,relation6 };
+			for (unsigned int i = 0; i < relations.size(); i++) {
+				QueryResult result;
+				evaluator.evaluateRelation(result, relations[i]);
+				EXPECT_FALSE(result.haveResult()) << "ERROR AT RELATION : " << i + 1;
+			}
+		}
+		PKB::getInstance().addModifiesP(main1, "x");
+		PKB::getInstance().addUsesP(main1, "x");
+
+		//Positive Test Case
+		for (auto type : types) {
+			RelRef relation1(type, { PROCEDURE, main1 }, { VARIABLE, "x" });
+			RelRef relation2(type, { PROCEDURE, main1 }, { WILD });
+			RelRef relation3(type, { PROCEDURE, Synonym{"a"} }, { VARIABLE, Synonym{"a"} });
+			RelRef relation4(type, { PROCEDURE, Synonym{"a"} }, { WILD });
+			RelRef relation5(type, { PROCEDURE, main1 }, { VARIABLE, Synonym{"a"} });
+			RelRef relation6(type, { PROCEDURE, Synonym{"a"} }, { VARIABLE, "x" });
+
+			std::vector<RelRef> relations{ relation1, relation2, relation3, relation4,
+				relation5,relation6 };
+			for (unsigned int i = 0; i < relations.size(); i++) {
+				QueryResult result;
+				evaluator.evaluateRelation(result, relations[i]);
+				EXPECT_TRUE(result.haveResult()) << "ERROR AT RELATION : " << i + 1;
+			}
+		}
+
+		//Negative Test Case
+		for (auto type : types) {
+			RelRef relation1(type, { PROCEDURE, main1 }, { VARIABLE, "y" });
+			RelRef relation2(type, { PROCEDURE, main2 }, { WILD });
+			RelRef relation3(type, { PROCEDURE, main2 }, { VARIABLE, Synonym{"a"} });
+			RelRef relation4(type, { PROCEDURE, Synonym{"a"} }, { VARIABLE, "y" });
+
+			std::vector<RelRef> relations{ relation1, relation2, relation3, relation4 };
+			for (unsigned int i = 0; i < relations.size(); i++) {
+				QueryResult result;
+				evaluator.evaluateRelation(result, relations[i]);
+				EXPECT_FALSE(result.haveResult()) << "ERROR AT RELATION : " << i + 1;
+			}
+		}
+	}
 }
