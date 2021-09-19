@@ -18,6 +18,14 @@ void QueryTokenizer::parse_into_query_tokens(std::string input) {
 
 	for (char c : input) {
 
+		if (curr_query_token.type == QueryToken::IDENTIFIER
+			&& curr_query_token.token_value == "such "
+			&& c != 't') {
+			curr_query_token.token_value.pop_back();
+			add_query_token(curr_query_token);
+			curr_query_token.type = QueryToken::WHITESPACE;
+		}
+
 		switch (c) {
 		case '(':
 			add_query_token(curr_query_token);
@@ -72,9 +80,6 @@ void QueryTokenizer::parse_into_query_tokens(std::string input) {
 				&& curr_query_token.token_value == "such") {
 				curr_query_token.token_value.push_back(c);
 				break;
-			}else if (curr_query_token.type == QueryToken::IDENTIFIER
-				&& curr_query_token.token_value == "such ") {
-				curr_query_token.token_value.pop_back();
 			}else if (curr_query_token.type == QueryToken::IDENTIFIER
 				&& curr_query_token.token_value == "such that") { 
 				// check for "such that" in such that
