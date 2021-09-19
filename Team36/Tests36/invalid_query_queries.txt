@@ -1068,6 +1068,26 @@ assign a; variable v;
 Select s1 pattern a(v,_"x"_) s
 none
 5000
+209 - Syntactically invalid declaration (number)
+assign 1;
+Select 1
+none
+5000
+210 - Syntactically invalid declaration (number)
+assign 1;
+Select 1
+none
+5000
+212 - Syntactically invalid declaration (number)
+assign 12;
+Select 12
+none
+5000
+213 - Syntactically invalid declaration (double such that)
+assign a; stmt s;
+Select s such that such that Follows(s,a)
+none
+5000
 1 - Semantically invalid Follows
 stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
 Select s such that Follows(s,v)
