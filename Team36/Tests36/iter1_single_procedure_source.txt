@@ -1,0 +1,68 @@
+procedure main {
+    a = 0; 
+    b = 12; 
+    c = 6; 
+    read d; 
+    read e; 
+    d = b / 3 + c; 
+    e = b * c;  
+    while (e > c) { 
+        if (a < 1 ) then { 
+            a = b + c * c;  
+            read f;  
+            f = f + 2; 
+            print f;  
+        } else {
+            e = e * 2;  
+            a = a + d * e;  
+            while (b > 0) {  
+                if (e != 0) then {  
+                    b = b - 1;  
+                } else {
+                    b = b / 2;  
+                }
+            }
+        }
+        e = e - b + a;  
+    }
+    read g;  
+    if (g > 0) then {  
+        read h;  
+        while (h != 1) {  
+            h = h - 1;  
+            print e;  
+        }
+        g = g - 1;  
+    } else {
+        g = g / 2 + a;  
+        print g;  
+    }
+    print a;  
+    print b;  
+    print c;  
+    read i;  
+    while (i > 0) {  
+        read j;  
+        while (j > 0) {  
+            read k;  
+            while (k > 0) {  
+                k = k - 1;  
+            }
+            print k;  
+            j = j - 1;  
+        }
+        i = i - 1;  
+    }
+    print i;  
+    if (b > a) then {  
+        if (c > a) then {  
+             a = a * i + d; 
+        } else {
+            c = c * a + d;  
+        }
+    } else {
+        b = b * a + d;  
+    }
+    print d;  
+    print e;  
+}

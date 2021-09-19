@@ -208,55 +208,55 @@ assign a; variable v;
 Select a pattern a(v, _"x"_)
 8, 14, 15, 18
 5000
-43 - modifies, 1 such that and assign synonym LHS, wildcard RHS
+43 - 1 pattern and 2 unknown synonym, wildcard RHS
+procedure p; assign pattern;
+Select p pattern pattern(	_, _	)
+a, b, c
+5000
+44 - 1 pattern and 2 unknown synonyms, variable RHS
+assign pattern;
+Select pattern pattern pattern(_,_"		y"_)
+8, 14, 18, 19
+5000
+45 - modifies, 1 such that and assign synonym LHS, wildcard RHS
 assign a;
 Select a such that Modifies(a,_)
 1, 2, 8, 12, 14, 15, 18, 19
 5000
-44 - modifies, 1 such that and read synonym LHS, wildcard RHS
+46 - modifies, 1 such that and read synonym LHS, wildcard RHS
 read r;
 Select r such that Modifies(r, _)
 3
 5000
-45 - modifies, 1 such that and while synonym LHS, wildcard RHS
+47 - modifies, 1 such that and while synonym LHS, wildcard RHS
 while w;
 Select w such that Modifies(w,_)
 4, 13
 5000
-46 - modifies, 1 such that and if synonym LHS, wildcard RHS
+48 - modifies, 1 such that and if synonym LHS, wildcard RHS
 if ifs;
 Select ifs such that Modifies(ifs, _)
 6, 17
 5000
-47 - modifies, 1 such that and wildcard LHS, synonym RHS
-variable v;
-Select v such that Modifies(_, v)
-x, y, z, var1
-5000
-48 - Uses, 1 such that and assign synonym LHS, wildcard RHS
+49 - Uses, 1 such that and assign synonym LHS, wildcard RHS
 assign a;
 Select a such that Uses(a,_)
 8, 14, 15, 18, 19
 5000
-49 - Uses, 1 such that and print synonym LHS, wildcard RHS
+50 - Uses, 1 such that and print synonym LHS, wildcard RHS
 print pn;
 Select pn such that Uses(pn, _)
 9, 10, 11, 16
 5000
-50 - uses, 1 such that and while synonym LHS, wildcard RHS
+51 - uses, 1 such that and while synonym LHS, wildcard RHS
 while w;
 Select w such that Uses(w,_)
 4, 13
 5000
-51 - Uses, 1 such that and if synonym LHS, wildcard RHS
+52 - Uses, 1 such that and if synonym LHS, wildcard RHS
 if ifs;
 Select ifs such that Uses(ifs, _)
 6, 17
-5000
-52 - Use, 1 such that and wildcard LHS, synonym RHS
-variable v;
-Select v such that Uses(_, v)
-x, y, z, var1
 5000
 53 - parent, 1 such that and stmt synonym LHS, wildcard RHS
 stmt s;

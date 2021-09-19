@@ -1,6 +1,7 @@
 procedure BumbleBee {
   read x;
   y = 2 * x;
+  x = x;
   call Megatron;
   z = p - y;
   if (q!= 1) then {

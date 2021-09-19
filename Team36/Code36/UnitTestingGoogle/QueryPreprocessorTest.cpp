@@ -7,7 +7,7 @@
 namespace UnitTesting {
 	TEST(QueryPreprocessor, addSingleStatement) {
 		QueryPreprocessor qp;
-		Query test = qp.parse("stmt s;");
+		Query test = qp.parse("stmt s; Select s");
 
 		Query q;
 		q.addEntity(Entity(EntityType::STMT, Synonym{ "s" }));
@@ -21,7 +21,7 @@ namespace UnitTesting {
 
 	TEST(QueryPreprocessor, addMultipleStatements) {
 		QueryPreprocessor qp;
-		Query test = qp.parse("stmt s, s1;");
+		Query test = qp.parse("stmt s, s1; Select s");
 
 		Query q;
 		q.addEntity(Entity(EntityType::STMT, Synonym{ "s" }));
@@ -35,7 +35,7 @@ namespace UnitTesting {
 
 	TEST(QueryPreprocessor, addSingleProcedure) {
 		QueryPreprocessor qp;
-		Query test = qp.parse("procedure p;");
+		Query test = qp.parse("procedure p; Select p");
 
 		Query q;
 		q.addEntity(Entity(EntityType::PROCEDURE, Synonym{ "p" }));
@@ -49,7 +49,7 @@ namespace UnitTesting {
 
 	TEST(QueryPreprocessor, addMultipleProcedures) {
 		QueryPreprocessor qp;
-		Query test = qp.parse("procedure p, p1;");
+		Query test = qp.parse("procedure p, p1; Select p1");
 
 		Query q;
 		q.addEntity(Entity(EntityType::PROCEDURE, Synonym{ "p" }));
@@ -64,7 +64,7 @@ namespace UnitTesting {
 
 	TEST(QueryPreprocessor, addSingleRead) {
 		QueryPreprocessor qp;
-		Query test = qp.parse("read r;");
+		Query test = qp.parse("read r; Select r");
 
 		Query q;
 		q.addEntity(Entity(EntityType::READ, Synonym{ "r" }));
@@ -78,7 +78,7 @@ namespace UnitTesting {
 
 	TEST(QueryPreprocessor, addMultipleReads) {
 		QueryPreprocessor qp;
-		Query test = qp.parse("read r, r1;");
+		Query test = qp.parse("read r, r1; Select r1");
 
 		Query q;
 		q.addEntity(Entity(EntityType::READ, Synonym{ "r" }));
@@ -93,7 +93,7 @@ namespace UnitTesting {
 
 	TEST(QueryPreprocessor, addSinglePrint) {
 		QueryPreprocessor qp;
-		Query test = qp.parse("print pr;");
+		Query test = qp.parse("print pr; Select pr");
 
 		Query q;
 		q.addEntity(Entity(EntityType::PRINT, Synonym{ "pr" }));
@@ -107,7 +107,7 @@ namespace UnitTesting {
 
 	TEST(QueryPreprocessor, addMultiplePrints) {
 		QueryPreprocessor qp;
-		Query test = qp.parse("print pr, pr1;");
+		Query test = qp.parse("print pr, pr1; Select pr");
 
 		Query q;
 		q.addEntity(Entity(EntityType::PRINT, Synonym{ "pr" }));
@@ -122,7 +122,7 @@ namespace UnitTesting {
 
 	TEST(QueryPreprocessor, addSingleCall) {
 		QueryPreprocessor qp;
-		Query test = qp.parse("call c;");
+		Query test = qp.parse("call c; Select c");
 
 		Query q;
 		q.addEntity(Entity(EntityType::CALL, Synonym{ "c" }));
@@ -136,7 +136,7 @@ namespace UnitTesting {
 
 	TEST(QueryPreprocessor, addMultipleCalls) {
 		QueryPreprocessor qp;
-		Query test = qp.parse("call c, c1;");
+		Query test = qp.parse("call c, c1; Select c");
 
 		Query q;
 		q.addEntity(Entity(EntityType::CALL, Synonym{ "c" }));
@@ -151,7 +151,7 @@ namespace UnitTesting {
 
 	TEST(QueryPreprocessor, addSingleWhile) {
 		QueryPreprocessor qp;
-		Query test = qp.parse("while w;");
+		Query test = qp.parse("while w; Select w");
 
 		Query q;
 		q.addEntity(Entity(EntityType::WHILE, Synonym{ "w" }));
@@ -165,7 +165,7 @@ namespace UnitTesting {
 
 	TEST(QueryPreprocessor, addMultipleWhiles) {
 		QueryPreprocessor qp;
-		Query test = qp.parse("while w, w1;");
+		Query test = qp.parse("while w, w1; Select w");
 
 		Query q;
 		q.addEntity(Entity(EntityType::WHILE, Synonym{ "w" }));
@@ -180,7 +180,7 @@ namespace UnitTesting {
 
 	TEST(QueryPreprocessor, addSingleIf) {
 		QueryPreprocessor qp;
-		Query test = qp.parse("if if;");
+		Query test = qp.parse("if if; Select if");
 
 		Query q;
 		q.addEntity(Entity(EntityType::IF, Synonym{ "if" }));
@@ -194,7 +194,7 @@ namespace UnitTesting {
 
 	TEST(QueryPreprocessor, addMultipleIfs) {
 		QueryPreprocessor qp;
-		Query test = qp.parse("if if, if1;");
+		Query test = qp.parse("if if, if1; Select if");
 
 		Query q;
 		q.addEntity(Entity(EntityType::IF, Synonym{ "if" }));
@@ -209,7 +209,7 @@ namespace UnitTesting {
 
 	TEST(QueryPreprocessor, addSingleAssign) {
 		QueryPreprocessor qp;
-		Query test = qp.parse("assign a;");
+		Query test = qp.parse("assign a; Select a");
 
 		Query q;
 		q.addEntity(Entity(EntityType::ASSIGN, Synonym{ "a" }));
@@ -223,7 +223,7 @@ namespace UnitTesting {
 
 	TEST(QueryPreprocessor, addMultipleAssigns) {
 		QueryPreprocessor qp;
-		Query test = qp.parse("assign a, a1;");
+		Query test = qp.parse("assign a, a1; Select a");
 
 		Query q;
 		q.addEntity(Entity(EntityType::ASSIGN, Synonym{ "a" }));
@@ -238,7 +238,7 @@ namespace UnitTesting {
 
 	TEST(QueryPreprocessor, addSingleVariable) {
 		QueryPreprocessor qp;
-		Query test = qp.parse("variable v;");
+		Query test = qp.parse("variable v; Select v");
 
 		Query q;
 		q.addEntity(Entity(EntityType::VARIABLE, Synonym{ "v" }));
@@ -252,7 +252,7 @@ namespace UnitTesting {
 
 	TEST(QueryPreprocessor, addMultipleVariables) {
 		QueryPreprocessor qp;
-		Query test = qp.parse("variable v, v1;");
+		Query test = qp.parse("variable v, v1; Select v");
 
 		Query q;
 		q.addEntity(Entity(EntityType::VARIABLE, Synonym{ "v" }));
@@ -267,7 +267,7 @@ namespace UnitTesting {
 
 	TEST(QueryPreprocessor, addSingleConstant) {
 		QueryPreprocessor qp;
-		Query test = qp.parse("constant c;");
+		Query test = qp.parse("constant c; Select c");
 
 		Query q;
 		q.addEntity(Entity(EntityType::CONSTANT, Synonym{ "c" }));
@@ -281,7 +281,7 @@ namespace UnitTesting {
 
 	TEST(QueryPreprocessor, addMultipleConstants) {
 		QueryPreprocessor qp;
-		Query test = qp.parse("constant c, c1;");
+		Query test = qp.parse("constant c, c1; Select c");
 
 		Query q;
 		q.addEntity(Entity(EntityType::CONSTANT, Synonym{ "c" }));
@@ -296,7 +296,7 @@ namespace UnitTesting {
 
 	TEST(QueryPreprocessor, addMultipleDeclarations) {
 		QueryPreprocessor qp;
-		Query test = qp.parse("variable v; procedure p;");
+		Query test = qp.parse("variable v; procedure p; Select v");
 
 		Query q;
 		q.addEntity(Entity(EntityType::VARIABLE, Synonym{ "v" }));
@@ -321,7 +321,7 @@ namespace UnitTesting {
 
 	TEST(QueryPreprocessor, similarDeclarationName) {
 		QueryPreprocessor qp;
-		Query test = qp.parse("procedure procedure; if if; stmt stmt; call call; while while;");
+		Query test = qp.parse("procedure procedure; if if; stmt stmt; call call; while while; Select procedure");
 
 		Query q;
 		q.addEntity(Entity(EntityType::PROCEDURE, Synonym{ "procedure" }));
@@ -373,7 +373,8 @@ namespace UnitTesting {
 
 		EXPECT_EQ(test3, q3);
 
-		Query test4 = qp.parse("variable v; procedure p; Select p such that Modifies (p, \"x\")");
+		//iteration 2
+		/*Query test4 = qp.parse("variable v; procedure p; Select p such that Modifies (p, \"x\")");
 
 		Query q4 = Query();
 		q4.addEntity(Entity(EntityType::VARIABLE, Synonym{ "v" }));
@@ -381,7 +382,7 @@ namespace UnitTesting {
 		q4.addSelected(Entity(EntityType::PROCEDURE, Synonym{ "p" }));
 		q4.addRelation(RelRef(RelType::MODIFIES_S, Entity(EntityType::PROCEDURE, Synonym{ "p" }), Entity(EntityType::VARIABLE, "x")));
 
-		EXPECT_EQ(test4, q4);
+		EXPECT_EQ(test4, q4);*/
 
 		Query test5 = qp.parse("assign a; while w; Select a such that Parent* (w, a)");
 
@@ -412,50 +413,41 @@ namespace UnitTesting {
 
 		EXPECT_EQ(test7, q7);
 
-		Query test8 = qp.parse("variable v; Select v such that Modifies(_, v)");
+		Query test8 = qp.parse("stmt s; Select s such that Parent(1, 2)");
 
 		Query q8;
-		q8.addEntity(Entity(EntityType::VARIABLE, Synonym{ "v" }));
-		q8.addSelected(Entity(EntityType::VARIABLE, Synonym{ "v" }));
-		q8.addRelation(RelRef(RelType::MODIFIES_S, Entity(EntityType::WILD, Synonym{ "" }), Entity(EntityType::VARIABLE, Synonym{ "v" })));
+		q8.addEntity(Entity(EntityType::STMT, Synonym{ "s" }));
+		q8.addSelected(Entity(EntityType::STMT, Synonym{ "s" }));
+		q8.addRelation(RelRef(RelType::PARENT, Entity(EntityType::CONSTANT, "1"), Entity(EntityType::CONSTANT, "2")));
 
 		EXPECT_EQ(test8, q8);
 
-		Query test9 = qp.parse("stmt s; Select s such that Parent(1, 2)");
+		Query test9 = qp.parse("stmt s; Select s such that Follows(1, _)");
 
 		Query q9;
 		q9.addEntity(Entity(EntityType::STMT, Synonym{ "s" }));
 		q9.addSelected(Entity(EntityType::STMT, Synonym{ "s" }));
-		q9.addRelation(RelRef(RelType::PARENT, Entity(EntityType::CONSTANT, "1"), Entity(EntityType::CONSTANT, "2")));
+		q9.addRelation(RelRef(RelType::FOLLOWS, Entity(EntityType::CONSTANT, "1"), Entity(EntityType::WILD, "")));
 
 		EXPECT_EQ(test9, q9);
 
-		Query test10 = qp.parse("stmt s; Select s such that Follows(1, _)");
+		Query test10 = qp.parse("stmt s; Select s such that Follows(_, 1)");
 
 		Query q10;
 		q10.addEntity(Entity(EntityType::STMT, Synonym{ "s" }));
 		q10.addSelected(Entity(EntityType::STMT, Synonym{ "s" }));
-		q10.addRelation(RelRef(RelType::FOLLOWS, Entity(EntityType::CONSTANT, "1"), Entity(EntityType::WILD, "")));
+		q10.addRelation(RelRef(RelType::FOLLOWS, Entity(EntityType::WILD, ""), Entity(EntityType::CONSTANT, "1")));
 
 		EXPECT_EQ(test10, q10);
 
-		Query test11 = qp.parse("stmt s; Select s such that Follows(_, 1)");
+		Query test11 = qp.parse("stmt s; Select s such that Follows(_, _)");
 
 		Query q11;
 		q11.addEntity(Entity(EntityType::STMT, Synonym{ "s" }));
 		q11.addSelected(Entity(EntityType::STMT, Synonym{ "s" }));
-		q11.addRelation(RelRef(RelType::FOLLOWS, Entity(EntityType::WILD, ""), Entity(EntityType::CONSTANT, "1")));
+		q11.addRelation(RelRef(RelType::FOLLOWS, Entity(EntityType::WILD, ""), Entity(EntityType::WILD, "")));
 
 		EXPECT_EQ(test11, q11);
-
-		Query test12 = qp.parse("stmt s; Select s such that Follows(_, _)");
-
-		Query q12;
-		q12.addEntity(Entity(EntityType::STMT, Synonym{ "s" }));
-		q12.addSelected(Entity(EntityType::STMT, Synonym{ "s" }));
-		q12.addRelation(RelRef(RelType::FOLLOWS, Entity(EntityType::WILD, ""), Entity(EntityType::WILD, "")));
-
-		EXPECT_EQ(test12, q12);
 	}
 
 	TEST(QueryPreprocessor, onePatternClause) {
@@ -524,6 +516,16 @@ namespace UnitTesting {
 		q7.addPattern(Pattern(Entity(EntityType::ASSIGN, Synonym{ "a" }), Entity(EntityType::VARIABLE, Synonym{ "v" }), "x", false));
 
 		EXPECT_EQ(test7, q7);
+
+		Query test8 = qp.parse("assign pattern; procedure p; Select p pattern pattern(_,_)");
+
+		Query q8;
+		q8.addEntity(Entity(EntityType::ASSIGN, Synonym{ "pattern" }));
+		q8.addEntity(Entity(EntityType::PROCEDURE, Synonym{ "p" }));
+		q8.addSelected(Entity(EntityType::PROCEDURE, Synonym{ "p" }));
+		q8.addPattern(Pattern(Entity(EntityType::ASSIGN, Synonym{ "pattern" }), Entity(EntityType::WILD, ""), "", true));
+
+		EXPECT_EQ(test8, q8);
 	}
 
 	TEST(QueryPreprocessor, oneSuchThatAndOnePatternClauseModifies) {
@@ -822,11 +824,16 @@ namespace UnitTesting {
 		QueryPreprocessor qp;
 		Query q = Query();
 
-		Query test1 = qp.parse("asg a;");
-		Query test2 = qp.parse("la;skdjf lkasdfj laks;fdj");
-
-		EXPECT_EQ(test1, q);
-		EXPECT_EQ(test2, q);
+		try {
+			Query test1 = qp.parse("asg a;");
+			Query test2 = qp.parse("la;skdjf lkasdfj laks;fdj");
+		}
+		catch (std::runtime_error const& err) {
+			EXPECT_EQ(err.what(), std::string("Invalid syntax for declaration or select"));
+		}
+		catch (...) {
+			FAIL();
+		}
 
 		try {
 			Query test3 = qp.parse("assign a; Select s");
@@ -845,6 +852,23 @@ namespace UnitTesting {
 		}
 		catch (std::runtime_error const& err) {
 			EXPECT_EQ(err.what(), std::string("Invalid pattern type"));
+		}
+		catch (...) {
+			FAIL();
+		}
+
+		try {
+			Query test7 = qp.parse("assign a; stmt s; Select s Follows(s,a)");
+			Query test8 = qp.parse("assign a; stmt s; Select s Such that Follows(s,a)");
+			Query test9 = qp.parse("assign a; stmt s; Select s such That Follows(s,a)");
+			Query test10 = qp.parse("assign a; stmt s; Select s suchthat Follows(s,a)");
+			Query test11 = qp.parse("assign a; stmt s; Select s such   that Follows(s,a)");
+			Query test12 = qp.parse("assign a; stmt s; Select s such that such that Follows(s,a)");
+			Query test13 = qp.parse("assign a; stmt s; Select s such that Follows(1,2) Follows(s,a)");
+			Query test14 = qp.parse("assign a; stmt s; Select s such that Follows(1,2) such That Follows(s,a)");
+		}
+		catch (std::runtime_error const& err) {
+			EXPECT_EQ(err.what(), std::string("Invalid query"));
 		}
 		catch (...) {
 			FAIL();

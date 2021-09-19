@@ -1,0 +1,9 @@
+procedure myproc {
+x =1;
+call anotherproc;
+call myproc;
+}
+
+procedure anotherproc {
+print y;
+}
