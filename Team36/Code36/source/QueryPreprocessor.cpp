@@ -62,6 +62,8 @@ Query QueryPreprocessor::parse(std::string str) {
 
 	bool isExpectingPatternType = false;
 
+	bool endOfCurrentClauses = true;
+
 	for (QueryToken token : v) {
 		// First iteration, set identifier to correct type
 		// Check what is my previous token
@@ -101,55 +103,72 @@ Query QueryPreprocessor::parse(std::string str) {
 		}
 
 		else if (isSelect) {
-			if (token.type == QueryToken::QueryTokenType::SUCH_THAT) {
-				patternOrSuchThat = { QueryToken::QueryTokenType::SUCH_THAT, "" };
-			}
-			// pattern only valid when previous token is either identifier or )
-			else if (!isExpectingPatternType && token.type == QueryToken::QueryTokenType::IDENTIFIER &&
-				token.token_value == "pattern") {
-				isExpectingPatternType = true;
-				patternOrSuchThat = { QueryToken::QueryTokenType::PATTERN, "pattern" };
-			}
+			if (endOfCurrentClauses) {
+				if (token.type == QueryToken::QueryTokenType::SUCH_THAT) {
+					patternOrSuchThat = { QueryToken::QueryTokenType::SUCH_THAT, "" };
+					endOfCurrentClauses = false;
+				}
+				// pattern only valid when previous token is either identifier or )
+				else if (token.type == QueryToken::QueryTokenType::IDENTIFIER &&
+					token.token_value == "pattern") {
+					isExpectingPatternType = true;
+					patternOrSuchThat = { QueryToken::QueryTokenType::PATTERN, "pattern" };
+					endOfCurrentClauses = false;
+				}
+				else {
+					throw std::runtime_error("Invalid query");
+				}
 
-			else if (isParameter && token.type != QueryToken::QueryTokenType::PARENTHESIS_CLOSE) {
-				parameterClause.push_back(token);
-			}
-
-			else if (patternOrSuchThat.type == QueryToken::QueryTokenType::SUCH_THAT) {
-				if (!isParameter && token.type == QueryToken::QueryTokenType::PARENTHESIS_OPEN) {
-					isParameter = true;
-					setQueryParameter(prevTokenSelect, queryParameter);
-				}
-				else if (token.type == QueryToken::QueryTokenType::PARENTHESIS_CLOSE) {
-					isParameter = false;
-					validator.parseParameterSuchThat(query, queryParameter.type, parameterClause);
-					parameterClause.clear();
-				}
-			}
-			else if (patternOrSuchThat.type == QueryToken::QueryTokenType::PATTERN) {
-				if (prevTokenSelect.token_value == "pattern" && token.type == QueryToken::QueryTokenType::IDENTIFIER) {
-					QueryPreprocessor::addPatternToQuery(patternTypeEntity, output, token);
-				}
-				else if (!isParameter && token.type == QueryToken::QueryTokenType::PARENTHESIS_OPEN) {
-					isParameter = true;
-				}
-				else if (isParameter && token.type == QueryToken::QueryTokenType::PARENTHESIS_CLOSE) {
-					isExpectingPatternType = false;
-					isParameter = false;
-					if (patternTypeEntity.getType() == EntityType::ASSIGN) {
-						validator.parseParameterPattern(query, patternTypeEntity, parameterClause);
-						parameterClause.clear();
-					}
-					else {
-						throw std::runtime_error("Invalid pattern type");
-					}
-				}
 			}
 			else {
-				throw std::runtime_error("Invalid query");
+				if (token.type == QueryToken::QueryTokenType::SUCH_THAT) {
+					throw std::runtime_error("Invalid query");
+				}
+				// pattern only valid when previous token is either identifier or )
+				else if (isParameter && token.type != QueryToken::QueryTokenType::PARENTHESIS_CLOSE) {
+					parameterClause.push_back(token);
+				}else if (patternOrSuchThat.type == QueryToken::QueryTokenType::SUCH_THAT) {
+					if (!isParameter && token.type == QueryToken::QueryTokenType::PARENTHESIS_OPEN) {
+						isParameter = true;
+						setQueryParameter(prevTokenSelect, queryParameter);
+					}
+					else if (token.type == QueryToken::QueryTokenType::PARENTHESIS_CLOSE) {
+						isParameter = false;
+						validator.parseParameterSuchThat(query, queryParameter.type, parameterClause);
+						parameterClause.clear();
+						endOfCurrentClauses = true;
+					}
+				}
+				else if (patternOrSuchThat.type == QueryToken::QueryTokenType::PATTERN) {
+					if (prevTokenSelect.token_value == "pattern" && token.type == QueryToken::QueryTokenType::IDENTIFIER
+						&& isExpectingPatternType) {
+						QueryPreprocessor::addPatternToQuery(patternTypeEntity, output, token);
+						isExpectingPatternType = false;
+					}
+					else if (!isParameter && token.type == QueryToken::QueryTokenType::PARENTHESIS_OPEN) {
+						isParameter = true;
+					}
+					else if (isParameter && token.type == QueryToken::QueryTokenType::PARENTHESIS_CLOSE) {
+						isParameter = false;
+						endOfCurrentClauses = true;
+						if (patternTypeEntity.getType() == EntityType::ASSIGN) {
+							validator.parseParameterPattern(query, patternTypeEntity, parameterClause);
+							parameterClause.clear();
+						}
+						else {
+							throw std::runtime_error("Invalid pattern type");
+						}
+					}
+				}else {
+					throw std::runtime_error("Invalid query");
+				}
 			}
+			
 			prevTokenSelect = token;
 		}
+	}
+	if (!endOfCurrentClauses) {
+		throw std::runtime_error("Invalid query");
 	}
 	QueryPreprocessor::validateQuery(query);
 	return query;

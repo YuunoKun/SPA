@@ -541,7 +541,7 @@ namespace UnitTesting {
 
 		EXPECT_EQ(test, q);
 
-		Query test2 = qp.parse("assign a; variable v; Select a such that Modifies(6, \"z\") pattern a(v, _);");
+		Query test2 = qp.parse("assign a; variable v; Select a such that Modifies(6, \"z\") pattern a(v, _)");
 
 		Query q2;
 		q2.addEntity(Entity(EntityType::ASSIGN, Synonym{ "a" }));
@@ -602,7 +602,7 @@ namespace UnitTesting {
 
 		EXPECT_EQ(test, q);
 
-		Query test2 = qp.parse("assign a; variable v; Select a such that Uses(6, \"z\") pattern a(v, _);");
+		Query test2 = qp.parse("assign a; variable v; Select a such that Uses(6, \"z\") pattern a(v, _)");
 
 		Query q2;
 		q2.addEntity(Entity(EntityType::ASSIGN, Synonym{ "a" }));
@@ -872,6 +872,37 @@ namespace UnitTesting {
 			}
 		}
 
+		queries.clear();
+		queries.push_back("assign a; variable v; Select a pattern pattern(v, _)");
+		queries.push_back("assign a; variable v; Select a pattern pattern a(v, _)");
+		for (std::string s : queries) {
+			try {
+				Query test1 = qp.parse(s);
+				FAIL() << s << ", synonym: " << test1.getSelected()[0].getSynonym();
+			}
+			catch (std::runtime_error const& err) {
+				EXPECT_EQ(err.what(), std::string("Pattern type has not been declared")) << s;
+			}
+			catch (...) {
+				FAIL();
+			}
+		}
+
+		queries.clear();
+		queries.push_back("assign a, pattern; variable s; Select a pattern pattern a(v, _)");
+		queries.push_back("assign pattern; variable s; Select pattern pattern pattern(v, _)");
+		for (std::string s : queries) {
+			try {
+				Query test1 = qp.parse(s);
+				FAIL() << s << ", synonym: " << test1.getSelected()[0].getSynonym();
+			}
+			catch (std::runtime_error const& err) {
+				EXPECT_EQ(err.what(), std::string("Unknown entRef")) << s;
+			}
+			catch (...) {
+				FAIL();
+			}
+		}
 
 		queries.clear();
 		queries.push_back("assign a; stmt s; Select s Such that Follows(s,a)");
@@ -879,6 +910,10 @@ namespace UnitTesting {
 		queries.push_back("assign a; stmt s; Select s suchthat Follows(s,a)");
 		queries.push_back("assign a; stmt s; Select s such   that Follows(s,a)");
 		queries.push_back("assign a; stmt s; Select s such that such that Follows(s,a)");
+		queries.push_back("assign a; stmt s; Select s such that Follows(s,a) such Follows(s,a)");
+		queries.push_back("assign a; stmt s; Select s such that Follows(s,a) that Follows(s,a)");
+		queries.push_back("assign a; stmt s; Select s such that Follows(s,a) such That Follows(s,a)");
+		queries.push_back("assign a; stmt s; Select s such that Follows(s,a) Such that Follows(s,a)");
 		queries.push_back("assign a; stmt s; Select s such that Follows(1,2) Follows(s,a)");
 		queries.push_back("assign a; stmt s; Select s such that Follows(1,2) such That Follows(s,a)");
 		for (std::string s : queries) {

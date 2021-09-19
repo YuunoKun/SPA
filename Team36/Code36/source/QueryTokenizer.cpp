@@ -15,63 +15,8 @@ void QueryTokenizer::parse_into_query_tokens(std::string input) {
 	std::stack<char> separator_validation_stk;
 
 	bool quotation_validation = false;
-	bool is_such = false;
-	bool is_such_temp = false;
-	bool may_be_wild = false;
 
 	for (char c : input) {
-		if (is_such) {
-			if (c == ' ' && temp_query_token.type == QueryToken::IDENTIFIER
-				&& temp_query_token.token_value == "that") {
-
-				is_such_temp = false;
-
-				curr_query_token.type = QueryToken::SUCH_THAT;
-				curr_query_token.token_value = "";
-				add_query_token(curr_query_token);
-
-				//reset temp_query_token
-				temp_query_token.type = QueryToken::WHITESPACE;
-				temp_query_token.token_value = "";
-
-				is_such = false;
-				continue;
-			}
-
-			if (isalpha(c)) {
-				is_such_temp = true;
-
-				temp_query_token.type = QueryToken::IDENTIFIER;
-				temp_query_token.token_value.push_back(c);
-				continue;
-			}
-			else if (c == ' ' && temp_query_token.type == QueryToken::IDENTIFIER
-				&& temp_query_token.token_value == "that") {
-				
-				curr_query_token.type = QueryToken::SUCH_THAT;
-				curr_query_token.token_value = "";
-				add_query_token(curr_query_token);
-				
-				//reset temp_query_token
-				temp_query_token.type = QueryToken::WHITESPACE;
-				temp_query_token.token_value = "";
-
-				is_such_temp = false;
-				is_such = false;
-				continue;
-			}
-			else {
-				is_such = false;
-				add_query_token(curr_query_token);
-				curr_query_token.type = temp_query_token.type;
-				curr_query_token.token_value = temp_query_token.token_value;
-
-				//reset temp_query_token
-				temp_query_token.type = QueryToken::WHITESPACE;
-				temp_query_token.token_value = "";
-			}
-			
-		}
 
 		switch (c) {
 		case '(':
@@ -112,7 +57,6 @@ void QueryTokenizer::parse_into_query_tokens(std::string input) {
 			add_query_token(curr_query_token);
 			break;
 		case '_':
-			may_be_wild = true;
 			add_query_token(curr_query_token);
 			curr_query_token.type = QueryToken::WILDCARD;
 			add_query_token(curr_query_token);
@@ -126,7 +70,17 @@ void QueryTokenizer::parse_into_query_tokens(std::string input) {
 			// check for "such" in such that
 			if (curr_query_token.type == QueryToken::IDENTIFIER
 				&& curr_query_token.token_value == "such") {
-				is_such = true;
+				curr_query_token.token_value.push_back(c);
+				break;
+			}else if (curr_query_token.type == QueryToken::IDENTIFIER
+				&& curr_query_token.token_value == "such ") {
+				curr_query_token.token_value.pop_back();
+			}else if (curr_query_token.type == QueryToken::IDENTIFIER
+				&& curr_query_token.token_value == "such that") { 
+				// check for "such that" in such that
+				curr_query_token.type = QueryToken::SUCH_THAT;
+				curr_query_token.token_value = "";
+				add_query_token(curr_query_token);
 				break;
 			}
 			add_query_token(curr_query_token);
@@ -234,9 +188,6 @@ void QueryTokenizer::parse_into_query_tokens(std::string input) {
 	}
 	if (quotation_validation) {
 		throw std::runtime_error("missing terminating \" character");
-	}
-	if (is_such_temp) {
-		add_query_token(temp_query_token);
 	}
 	
 }
