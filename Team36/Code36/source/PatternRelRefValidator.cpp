@@ -136,6 +136,7 @@ Entity PatternRelRefValidator::setEntRef(Query& query,
   }
 
   // is " "IDENT" "
+  // IDENT : LETTER ( LETTER | DIGIT )*
   if (token_chain.size() == 3) {
       if (token_chain[0].type == QueryToken::QUOTATION_OPEN &&
           token_chain[1].type == QueryToken::IDENTIFIER &&
@@ -175,11 +176,11 @@ void PatternRelRefValidator::parseParameterSuchThat(
       // stmtRef , entRef
       
       if (!isStmtRef(query, token_chain)) {
-          throw std::runtime_error("Invalid parameters for Modifies");
+          throw std::invalid_argument("Invalid parameters for Modifies");
       }
       QueryToken stmt = token_chain[0];
       if (stmt.type == QueryToken::WILDCARD) {
-          throw std::runtime_error("Invalid parameters for Modifies");
+          throw std::invalid_argument("Invalid parameters for Modifies");
       }
       token_chain.erase(token_chain.begin(), token_chain.begin() + 1);
       
@@ -188,7 +189,7 @@ void PatternRelRefValidator::parseParameterSuchThat(
 
       
       if (!isEntRef(query, token_chain)) {
-          throw std::runtime_error("Invalid parameters for Modifies");
+          throw std::invalid_argument("Invalid parameters for Modifies");
       }
       query.addRelation(RelRef(RelType::MODIFIES_S, setStmtRef(query, stmt),
           setEntRef(query, token_chain)));
@@ -200,11 +201,11 @@ void PatternRelRefValidator::parseParameterSuchThat(
         // stmtRef , entRef
 
         if (!isStmtRef(query, token_chain)) {
-            throw std::runtime_error("Invalid parameters for Uses");
+            throw std::invalid_argument("Invalid parameters for Uses");
         }
         QueryToken stmt = token_chain[0];
         if (stmt.type == QueryToken::WILDCARD) {
-            throw std::runtime_error("Invalid parameters for Uses");
+            throw std::invalid_argument("Invalid parameters for Uses");
         }
         token_chain.erase(token_chain.begin(), token_chain.begin() + 1);
 
@@ -212,7 +213,7 @@ void PatternRelRefValidator::parseParameterSuchThat(
         token_chain.erase(token_chain.begin(), token_chain.begin() + 1);
 
         if (!isEntRef(query, token_chain)) {
-            throw std::runtime_error("Invalid parameters for Uses");
+            throw std::invalid_argument("Invalid parameters for Uses");
         }
         query.addRelation(RelRef(RelType::USES_S, setStmtRef(query, stmt),
             setEntRef(query, token_chain)));
@@ -223,7 +224,7 @@ void PatternRelRefValidator::parseParameterSuchThat(
     case QueryToken::PARENT: {
         // stmtRef , stmtRef
         if (!isStmtRef(query, token_chain)) {
-            throw std::runtime_error("Invalid parameters for Parent");
+            throw std::invalid_argument("Invalid parameters for Parent");
         }
 
         QueryToken stmt = token_chain[0];
@@ -233,12 +234,12 @@ void PatternRelRefValidator::parseParameterSuchThat(
         token_chain.erase(token_chain.begin(), token_chain.begin() + 1);
 
         if (!isStmtRef(query, token_chain)) {
-            throw std::runtime_error("Invalid parameters for Parent");
+            throw std::invalid_argument("Invalid parameters for Parent");
         }
         QueryToken stmt2 = token_chain[0];
         token_chain.erase(token_chain.begin(), token_chain.begin() + 1);
         if (token_chain.size() != 0) {
-            throw std::runtime_error("Unexpected parameters for Parent");
+            throw std::invalid_argument("Unexpected parameters for Parent");
         }
         query.addRelation(RelRef(RelType::PARENT,
             setStmtRef(query, stmt),
@@ -249,7 +250,7 @@ void PatternRelRefValidator::parseParameterSuchThat(
     case QueryToken::PARENT_T: {
         // stmtRef , stmtRef
         if (!isStmtRef(query, token_chain)) {
-            throw std::runtime_error("Invalid parameters for Parent*");
+            throw std::invalid_argument("Invalid parameters for Parent*");
         }        
         QueryToken stmt = token_chain[0];
         token_chain.erase(token_chain.begin(), token_chain.begin() + 1);
@@ -258,12 +259,12 @@ void PatternRelRefValidator::parseParameterSuchThat(
         token_chain.erase(token_chain.begin(), token_chain.begin() + 1);
 
         if (!isStmtRef(query, token_chain)) {
-            throw std::runtime_error("Invalid parameters for Parent*");
+            throw std::invalid_argument("Invalid parameters for Parent*");
         }
         QueryToken stmt2 = token_chain[0];
         token_chain.erase(token_chain.begin(), token_chain.begin() + 1);
         if (token_chain.size() != 0) {
-            throw std::runtime_error("Unexpected parameters for Parent*");
+            throw std::invalid_argument("Unexpected parameters for Parent*");
         }
         query.addRelation(RelRef(RelType::PARENT_T,
             setStmtRef(query, stmt),
@@ -273,7 +274,7 @@ void PatternRelRefValidator::parseParameterSuchThat(
     case QueryToken::FOLLOWS: {
         // stmtRef , stmtRef
         if (!isStmtRef(query, token_chain)) {
-            throw std::runtime_error("Invalid parameters for Follows");
+            throw std::invalid_argument("Invalid parameters for Follows");
         }        
         QueryToken stmt = token_chain[0];
         token_chain.erase(token_chain.begin(), token_chain.begin() + 1);
@@ -282,12 +283,12 @@ void PatternRelRefValidator::parseParameterSuchThat(
         token_chain.erase(token_chain.begin(), token_chain.begin() + 1);
 
         if (!isStmtRef(query, token_chain)) {
-            throw std::runtime_error("Invalid parameters for Follows");
+            throw std::invalid_argument("Invalid parameters for Follows");
         }
         QueryToken stmt2 = token_chain[0];
         token_chain.erase(token_chain.begin(), token_chain.begin() + 1);
         if (token_chain.size() != 0) {
-            throw std::runtime_error("Unexpected parameters for Follows");
+            throw std::invalid_argument("Unexpected parameters for Follows");
         }
         query.addRelation(RelRef(RelType::FOLLOWS,
             setStmtRef(query, stmt),
@@ -297,7 +298,7 @@ void PatternRelRefValidator::parseParameterSuchThat(
     case QueryToken::FOLLOWS_T: {
         // stmtRef , stmtRef
         if (!isStmtRef(query, token_chain)) {
-            throw std::runtime_error("Invalid parameters for Follows*");
+            throw std::invalid_argument("Invalid parameters for Follows*");
         }
         QueryToken stmt = token_chain[0];
         token_chain.erase(token_chain.begin(), token_chain.begin() + 1);
@@ -306,12 +307,12 @@ void PatternRelRefValidator::parseParameterSuchThat(
         token_chain.erase(token_chain.begin(), token_chain.begin() + 1);
 
         if (!isStmtRef(query, token_chain)) {
-            throw std::runtime_error("Invalid parameters for Follows*");
+            throw std::invalid_argument("Invalid parameters for Follows*");
         }
         QueryToken stmt2 = token_chain[0];
         token_chain.erase(token_chain.begin(), token_chain.begin() + 1);
         if (token_chain.size() != 0) {
-            throw std::runtime_error("Unexpected parameters for Follows*");
+            throw std::invalid_argument("Unexpected parameters for Follows*");
         }
         query.addRelation(RelRef(RelType::FOLLOWS_T,
             setStmtRef(query, stmt),
