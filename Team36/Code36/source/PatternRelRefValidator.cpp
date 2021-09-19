@@ -35,7 +35,8 @@ bool PatternRelRefValidator::isStmtRef(Query& query, std::vector<QueryToken> tok
         if (ent_chain.find(token.token_value) != ent_chain.end()) {
             return ent_chain.at(token.token_value).getType() == EntityType::STMT || 
                 ent_chain.at(token.token_value).getType() == EntityType::READ ||
-                ent_chain.at(token.token_value).getType() == EntityType::PRINT || 
+                ent_chain.at(token.token_value).getType() == EntityType::PRINT ||
+                ent_chain.at(token.token_value).getType() == EntityType::CALL ||
                 ent_chain.at(token.token_value).getType() == EntityType::WHILE || 
                 ent_chain.at(token.token_value).getType() == EntityType::IF || 
                 ent_chain.at(token.token_value).getType() == EntityType::ASSIGN;
