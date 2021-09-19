@@ -1,14 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <LocalDebuggerCommandArguments>..\Tests36\invalid_query_source.txt ..\Tests36\invalid_query_queries.txt .\Tests\out-1.xml</LocalDebuggerCommandArguments>
-    <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <LocalDebuggerCommandArguments> ..\Tests\Sample_source.txt ..\Tests\Sample_queries.txt ..\Tests\out.xml</LocalDebuggerCommandArguments>
-    <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
-  </PropertyGroup>
-  <PropertyGroup>
-    <ShowAllFiles>false</ShowAllFiles>
-  </PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+		<LocalDebuggerCommandArguments>..\Tests36\invalid_query_source.txt ..\Tests36\invalid_query_queries.txt .\Tests\out-invalid-query.xml</LocalDebuggerCommandArguments>
+		<DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+		<LocalDebuggerCommandArguments> ..\Tests\Sample_source.txt ..\Tests\Sample_queries.txt ..\Tests\out.xml</LocalDebuggerCommandArguments>
+		<DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
+	</PropertyGroup>
+	<PropertyGroup>
+		<ShowAllFiles>false</ShowAllFiles>
+	</PropertyGroup>
 </Project>

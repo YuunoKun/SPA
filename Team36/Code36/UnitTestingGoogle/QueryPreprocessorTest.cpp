@@ -516,6 +516,16 @@ namespace UnitTesting {
 		q7.addPattern(Pattern(Entity(EntityType::ASSIGN, Synonym{ "a" }), Entity(EntityType::VARIABLE, Synonym{ "v" }), "x", false));
 
 		EXPECT_EQ(test7, q7);
+
+		Query test8 = qp.parse("assign pattern; procedure p; Select p pattern pattern(_,_)");
+
+		Query q8;
+		q8.addEntity(Entity(EntityType::ASSIGN, Synonym{ "pattern" }));
+		q8.addEntity(Entity(EntityType::PROCEDURE, Synonym{ "p" }));
+		q8.addSelected(Entity(EntityType::PROCEDURE, Synonym{ "p" }));
+		q8.addPattern(Pattern(Entity(EntityType::ASSIGN, Synonym{ "pattern" }), Entity(EntityType::WILD, ""), "", true));
+
+		EXPECT_EQ(test8, q8);
 	}
 
 	TEST(QueryPreprocessor, oneSuchThatAndOnePatternClauseModifies) {
