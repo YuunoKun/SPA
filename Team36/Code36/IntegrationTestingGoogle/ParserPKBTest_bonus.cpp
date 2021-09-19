@@ -99,4 +99,28 @@ namespace IntegrationTesting {
 		std::sort(v.begin(), v.end());
 		EXPECT_EQ(v, expected_modifiesP);
 	}
+
+	/*TEST_F(ParserPKBTestBonus, DuplicateProcedureNames) {
+		SourceProcessor::Parser parser;
+		parser.load_file("../IntegrationTestingGoogle/Tests/duplicate_procedure_name_source.txt");
+		ASSERT_THROW(parser.parse(), std::runtime_error);
+	}
+
+	TEST_F(ParserPKBTestBonus, CallUndefinedProcedureName) {
+		SourceProcessor::Parser parser;
+		parser.load_file("../IntegrationTestingGoogle/Tests/call_undefined_procedure_source.txt");
+		ASSERT_THROW(parser.parse(), std::runtime_error);
+	}
+
+	TEST_F(ParserPKBTestBonus, RecursiveCallSource) {
+		SourceProcessor::Parser parser;
+		parser.load_file("../IntegrationTestingGoogle/Tests/recursive_calls_source.txt");
+		ASSERT_THROW(parser.parse(), std::runtime_error);
+	}
+
+	TEST_F(ParserPKBTestBonus, CyclicCallSource) {
+		SourceProcessor::Parser parser;
+		parser.load_file("../IntegrationTestingGoogle/Tests/cyclic_calls_source.txt");
+		ASSERT_THROW(parser.parse(), std::runtime_error);
+	}*/
 }

@@ -1,0 +1,14 @@
+procedure p {
+x=3;
+print x;
+}
+
+procedure q {
+read z;
+z = (k * m) - 3;
+}
+
+procedure p {
+read m;
+var = k-1;
+}
