@@ -4,34 +4,15 @@
 #include "../../source/PKB.h"
 
 namespace UnitTesting {
-	// The fixture for testing class Foo.
-	class ParserTest : public ::testing::Test {
-	protected:
 
-		ParserTest() {
-			// You can do set-up work for each test here.
-		}
-
-		// If the constructor and destructor are not enough for setting up
-		// and cleaning up each test, you can define the following methods:
-
-		void SetUp() override {
-			// Code here will be called immediately after the constructor (right
-			// before each test).
-		}
-
-		void TearDown() override {
-			// Code here will be called immediately after each test (right
-			// before the destructor).
-		}
-
-		// Class members declared here can be used by all tests in the test suite
-		// for Foo.
-	};
-
-	TEST(ParserTest, Sample3TokenizerTest) {
+	using namespace SourceProcessor;
+	TEST(Parser, load_file_pass) {
+		Parser parser;
+		ASSERT_NO_THROW(parser.load_file("../UnitTestingGoogle/SPTest/Load_file_test.txt"));
 	}
 
-	TEST(ParserTest, Sample4TokenizerTest) {
+	TEST(Parser, load_file_fail) {
+		Parser parser;
+		ASSERT_THROW(parser.load_file("../UnitTestingGoogle/SPTest/Load_file_test_does_not_exist.txt"), std::runtime_error);
 	}
 } // namespace UnitTesting

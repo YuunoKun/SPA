@@ -13,50 +13,50 @@ namespace SourceProcessor {
 
 		Statement(stmt_index, StmtType, proc_name, int);
 
-		StmtType get_type();
+		StmtType getType();
 
-		stmt_index get_index();
+		stmt_index getIndex();
 
-		proc_name get_proc_name();
+		proc_name getProcName();
 
-		void set_direct_parent(stmt_index);
+		void setDirectParent(stmt_index);
 
-		stmt_index get_direct_parent();
+		stmt_index getDirectParent();
 
-		void add_direct_child(stmt_index);
+		void addDirectChild(stmt_index);
 
-		std::vector<stmt_index>& get_direct_child();
+		std::vector<stmt_index>& getDirectChild();
 
-		int get_stmt_list();
+		int getStmtList();
 
-		void add_uses_variable(var_name);
+		void addUsesVariable(var_name);
 
-		std::vector<var_name> get_used_variable();
+		std::vector<var_name> getUsedVariable();
 
-		void add_modifies_variable(var_name);
+		void addModifiesVariable(var_name);
 
-		std::vector<var_name> get_modified_variable();
+		std::vector<var_name> getModifiedVariable();
 
-		void set_expr_str(std::string);
+		void setExprStr(std::string);
 
-		std::string get_expr_str();
+		std::string getExprStr();
 
-		void set_callee(proc_name);
+		void setCallee(proc_name);
 
-		proc_name get_callee();
+		proc_name getCallee();
 
 
 	private:
-		stmt_index m_index;
-		StmtType m_type;
-		proc_name m_under_procedure;
-		stmt_index m_direct_parent{ 0 };
-		std::vector<stmt_index> m_direct_child;
-		int m_stmt_list{ 0 };
-		std::unordered_set<var_name> m_uses;
-		std::unordered_set<var_name> m_modifies;
-		std::string m_expr;
-		proc_name m_callee;
+		stmt_index statement_index;
+		StmtType statement_type;
+		proc_name under_procedure;
+		stmt_index statement_direct_parent{ 0 };
+		std::vector<stmt_index> statement_direct_child;
+		int statement_list_no{ 0 };
+		std::unordered_set<var_name> statement_uses;
+		std::unordered_set<var_name> statement_modifies;
+		std::string statement_expr;
+		proc_name statement_callee;
 	};
 
 } // SourceProcessor

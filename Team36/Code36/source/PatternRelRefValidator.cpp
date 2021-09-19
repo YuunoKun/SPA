@@ -88,6 +88,10 @@ void PatternRelRefValidator::parseParameterSuchThat(
       // stmtRef , entRef
       if (token_chain[1].type == QueryToken::COMMA) {
         QueryToken stmt = token_chain[0];
+        // wild card check
+        if (stmt.type == QueryToken::WILDCARD) {
+            throw std::runtime_error("Invalid parameters for Modifies");
+        }
         token_chain.erase(token_chain.begin(), token_chain.begin() + 2);
         query.addRelation(RelRef(RelType::MODIFIES_S, setStmtRef(query, stmt),
                                  setEntRef(query, token_chain)));
@@ -100,6 +104,11 @@ void PatternRelRefValidator::parseParameterSuchThat(
       // stmtRef , entRef
       if (token_chain[1].type == QueryToken::COMMA) {
         QueryToken stmt = token_chain[0];
+
+        if (stmt.type == QueryToken::WILDCARD) {
+            throw std::runtime_error("Invalid parameters for Uses");
+        }
+
         token_chain.erase(token_chain.begin(), token_chain.begin() + 2);
         query.addRelation(RelRef(RelType::USES_S, setStmtRef(query, stmt),
                                  setEntRef(query, token_chain)));
