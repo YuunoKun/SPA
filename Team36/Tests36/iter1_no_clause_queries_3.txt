@@ -35,6 +35,6 @@ Select a
 5000
 8 - select call
 call c;
-Select c;
+Select c
 7, 10
 5000
