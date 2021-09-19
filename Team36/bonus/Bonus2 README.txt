@@ -17,20 +17,20 @@ Instructions on testing extension
 1. Open Powershell and navigate to `Team36\Code36\Debug`
 
 2. Run the following commands:
-.\AutoTester.exe ..\..\bonus\Tests\bonus3_duplicate_procedure_name_source.txt ..\..\bonus\Tests\bonus3_no_queries.txt ..\..\bonus\Tests\bonus3_no_query.xml
-.\AutoTester.exe ..\..\bonus\Tests\bonus3_call_undefined_procedure_source.txt ..\..\bonus\Tests\bonus3_no_queries.txt ..\..\bonus\Tests\bonus3_no_query.xml
-.\AutoTester.exe ..\..\bonus\Tests\bonus3_recursive_calls_source.txt ..\..\bonus\Tests\bonus3_no_queries.txt ..\..\bonus\Tests\bonus3_no_query.xml
-.\AutoTester.exe ..\..\bonus\Tests\bonus3_cyclic_calls_source.txt ..\..\bonus\Tests\bonus3_no_queries.txt ..\..\bonus\Tests\bonus3_no_query.xml
+.\AutoTester.exe ..\..\bonus\Tests\bonus2_duplicate_procedure_name_source.txt ..\..\bonus\Tests\bonus2_no_queries.txt ..\..\bonus\Tests\bonus2_no_query.xml
+.\AutoTester.exe ..\..\bonus\Tests\bonus2_call_undefined_procedure_source.txt ..\..\bonus\Tests\bonus2_no_queries.txt ..\..\bonus\Tests\bonus2_no_query.xml
+.\AutoTester.exe ..\..\bonus\Tests\bonus2_recursive_calls_source.txt ..\..\bonus\Tests\bonus2_no_queries.txt ..\..\bonus\Tests\bonus2_no_query.xml
+.\AutoTester.exe ..\..\bonus\Tests\bonus2_cyclic_calls_source.txt ..\..\bonus\Tests\bonus2_no_queries.txt ..\..\bonus\Tests\bonus2_no_query.xml
 
 Expected behaviour: The above tests aborts and the error message is shown in Powershell. For example, "Duplicate procedure names detected." will be shown if the first line of command is being executed.
 
 3. And valid cases consisting multiple procedures without any violations.
-.\AutoTester.exe ..\..\bonus\Tests\bonus3_valid_1_source.txt ..\..\bonus\Tests\bonus3_no_queries.txt ..\..\bonus\Tests\bonus3_no_query.xml
-.\AutoTester.exe ..\..\bonus\Tests\bonus3_valid_2_source.txt ..\..\bonus\Tests\bonus3_no_queries.txt ..\..\bonus\Tests\bonus3_no_query.xml
+.\AutoTester.exe ..\..\bonus\Tests\bonus2_valid_1_source.txt ..\..\bonus\Tests\bonus2_no_queries.txt ..\..\bonus\Tests\bonus2_no_query.xml
+.\AutoTester.exe ..\..\bonus\Tests\bonus2_valid_2_source.txt ..\..\bonus\Tests\bonus2_no_queries.txt ..\..\bonus\Tests\bonus2_no_query.xml
 
 Expected behaviour: Tests run successfully without any error.
 The above 2 cases takes valid source as input and will successfully parse and validate. You can observe this from the outputs in the terminal.
-We do not provide queries for the valid sources in bonus 3. For multiple procedures relations, please refer to bonus 4.
+We do not provide queries for the valid sources in bonus 2. For multiple procedures relations, please refer to bonus 3.
 
 On a side note: Recursive calls and cyclic calls are pretty similar, so they will show the same error message.
 
