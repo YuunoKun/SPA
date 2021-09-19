@@ -16,7 +16,7 @@ Instructions on testing extension
 3. Verify the results of the out.xml files in `Team36\bonus\Tests`.
 
 ----------------------------------------------------------------------
-Explanation (refer to EvaluatingMultipleClauses.docx for visual representation):
+Explanation:
 Managing multiple clauses is split into 2 parts, the table merging and the retrieving of the result.
 
 The table merging algorithm takes care of four different scenarios. 
