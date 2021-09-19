@@ -215,7 +215,7 @@ a, b, c
 5000
 44 - 1 pattern and 2 unknown synonyms, variable RHS
 assign pattern;
-Select pattern pattern pattern(_,_"		y"_)"
+Select pattern pattern pattern(_,_"		y"_)
 8, 14, 18, 19
 5000
 45 - modifies, 1 such that and assign synonym LHS, wildcard RHS
