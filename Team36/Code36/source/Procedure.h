@@ -14,33 +14,33 @@ namespace SourceProcessor {
 
 		Procedure(proc_name, proc_index);
 
-		proc_name get_name();
+		proc_name getName();
 
-		proc_index get_index();
+		proc_index getIndex();
 
-		void add_caller(stmt_index);
+		void addCaller(stmt_index);
 
-		std::vector<stmt_index> get_caller();
+		std::vector<stmt_index> getCaller();
 
-		void add_child(stmt_index);
+		void addChild(stmt_index);
 
-		std::vector<stmt_index> get_child();
+		std::vector<stmt_index> getChild();
 
-		void add_uses_variable(var_name);
+		void addUsesVariable(var_name);
 
-		std::vector<var_name> get_used_variable();
+		std::vector<var_name> getUsedVariable();
 
-		void add_modifies_variable(var_name);
+		void addModifiesVariable(var_name);
 
-		std::vector<var_name> get_modified_variable();
+		std::vector<var_name> getModifiedVariable();
 
 	private:
-		proc_name m_name;
-		proc_index m_index;
-		std::set<stmt_index> m_caller;
-		std::vector<stmt_index> m_contained_stmt;
-		std::unordered_set<var_name> m_uses;
-		std::unordered_set<var_name> m_modifies;
+		proc_name procedure_name;
+		proc_index procedure_index;
+		std::set<stmt_index> procedure_caller;
+		std::vector<stmt_index> procedure_contained_stmt;
+		std::unordered_set<var_name> procedure_uses;
+		std::unordered_set<var_name> procedure_modifies;
 	};
 
 } // SourceProcessor

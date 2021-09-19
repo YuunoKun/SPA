@@ -136,6 +136,29 @@ namespace UnitTesting {
 		EXPECT_TRUE(output[1].type == S_token.type);
 	}
 
+	TEST(QueryTokenizer, IdentifierTest2) {
+
+		//Result
+		QueryTokenizer query_tokenizer;
+		std::string input = "stmt +S";
+		query_tokenizer.parse_into_query_tokens(input);
+		std::vector<QueryToken> output = query_tokenizer.get_query_token_chain();
+
+		//Expected
+		QueryToken stmt_token = QueryToken(QueryToken::IDENTIFIER, "stmt");
+		QueryToken plus_token = QueryToken(QueryToken::PLUS, "");
+		QueryToken S_token = QueryToken(QueryToken::IDENTIFIER, "S");
+
+		EXPECT_TRUE(output[0].token_value == stmt_token.token_value);
+		EXPECT_TRUE(output[0].type == stmt_token.type);
+
+		EXPECT_TRUE(output[1].token_value == plus_token.token_value);
+		EXPECT_TRUE(output[1].type == plus_token.type);
+
+		EXPECT_TRUE(output[2].token_value == S_token.token_value);
+		EXPECT_TRUE(output[2].type == S_token.type);
+	}
+
 	// Test for open and close parenthesis
 	TEST(QueryTokenizer, ParenthesisOpenCloseTest) {
 
@@ -508,6 +531,24 @@ namespace UnitTesting {
 		}
 		catch (std::runtime_error const& err) {
 			EXPECT_EQ(err.what(), std::string("Unknown symbol present"));
+		}
+		catch (...) {
+			// Test case should fail if not caught as runtime_error 
+			FAIL();
+		}
+	}
+
+	TEST(QueryTokenizer, InvalidIdentTest) {
+
+		try {
+			QueryTokenizer query_tokenizer;
+			std::string input = "1procName";
+			query_tokenizer.parse_into_query_tokens(input);
+			std::vector<QueryToken> output = query_tokenizer.get_query_token_chain();
+			FAIL();
+		}
+		catch (std::runtime_error const& err) {
+			EXPECT_EQ(err.what(), std::string("Invalid Name present"));
 		}
 		catch (...) {
 			// Test case should fail if not caught as runtime_error 

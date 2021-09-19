@@ -14,15 +14,15 @@ namespace SourceProcessor {
 		void load_file(std::string file);
 
 		// Return input string
-		std::string get_source_program();
+		std::string getSourceProgram();
 			
 		// Load and parse source file
 		void parse();
 
 
 	private:
-		std::string m_source_program;
-		Tokenizer m_tokenizer;
+		std::string source_program;
+		Tokenizer tokenizer;
 	};
 
 } // namespace SourceProcessor

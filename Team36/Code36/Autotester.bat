@@ -11,7 +11,11 @@ Debug\AutoTester.exe ..\Tests36\iter1_two_clauses_source.txt ..\Tests36\iter1_tw
 Debug\AutoTester.exe ..\Tests36\iter1_nested_while_source.txt ..\Tests36\iter1_nested_while_queries.txt .\Tests\out-7.xml
 Debug\AutoTester.exe ..\Tests36\iter1_single_procedure_source.txt ..\Tests36\iter1_single_procedure_queries .\Tests\out-8.xml
 Debug\AutoTester.exe ..\Tests36\container_constants_source.txt ..\Tests36\container_constants_queries.txt .\Tests\out-container_constants.xml
+Debug\AutoTester.exe ..\Tests36\multi_clauses_source.txt ..\Tests36\multi_clauses_queries.txt .\Tests\out-multi-clauses.xml
+Debug\AutoTester.exe ..\Tests36\valid_query_source.txt ..\Tests36\valid_query_queries.txt .\Tests\out-valid-query.xml
+Debug\AutoTester.exe ..\Tests36\invalid_query_source.txt ..\Tests36\invalid_query_queries.txt .\Tests\out-invalid-query.xml
 
 echo FINISHED
 pause
 exit
+

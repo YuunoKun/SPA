@@ -14,321 +14,486 @@ namespace UnitTesting {
 	public:
 		DummyDesignExtractor() {}
 
-		void start_nesting() {}
+		~DummyDesignExtractor() {}
 
-		void chop_nesting() {}
+		void startNesting() {}
 
-		void end_nesting() {}
+		void chopNesting() {}
 
-		void add_procedure(proc_name name) {
+		void endNesting() {}
+
+		void addProcedure(proc_name name) {
 			std::cout << "Adds procedure : " << name << std::endl;
 		}
 
-		void add_statement(TokenType type) {
+		void addStatement(TokenType type) {
 			std::cout << "Adds statement of type : " << tokenTypeStrings[type] << std::endl;
 		}
 
-		void add_variable(var_name name) {
+		void addVariable(var_name name) {
 			std::cout << "Adds variable : " << name << std::endl;
 		}
 
-		void add_constant(constant c) {
+		void addConstant(constant c) {
 			std::cout << "Adds constant : " << c << std::endl;
 		}
 
-		void add_statement_uses(var_name name) {}
+		void addStatementUses(var_name name) {}
 
-		void add_statement_modifies(var_name name) {}
+		void addStatementModifies(var_name name) {}
 
-		void start_expr() {}
+		void startExpr() {}
 
-		void add_expr_segment(std::string str) {}
+		void addExprSegment(std::string str) {}
 
-		void end_expr() {}
+		void endExpr() {}
 
-		void add_callee(proc_name name) {}
+		void addCallee(proc_name name) {}
 
 		void validate() {}
 
-		void populate_post_validation() {}
+		void populatePostValidation() {}
 
 		void populateEntities(PKB&) {}
 
 		void populateRelations(PKB&) {}
 	};
 
-
-	TEST(FSM, expect_factor_valid) {
+	TEST(FSM, expectIdentifier) {
 		Tokenizer tokenizer;
 		DummyDesignExtractor dde;
 
-		tokenizer.parse_into_tokens("arandomvariable 0983425");
-		tokenizer.init_token_stack();
-		FSM fsm_1(tokenizer, &dde);
-		ASSERT_NO_THROW(fsm_1.expect_factor());
-		ASSERT_NO_THROW(fsm_1.expect_factor());
-
-
-		tokenizer.parse_into_tokens("a");
-		tokenizer.init_token_stack();
-		FSM fsm_2(tokenizer, &dde);
-		ASSERT_NO_THROW(fsm_2.expect_factor());
-
-		tokenizer.parse_into_tokens("0");
-		tokenizer.init_token_stack();
-		FSM fsm_3(tokenizer, &dde);
-		ASSERT_NO_THROW(fsm_3.expect_factor());
-	}
-
-	TEST(FSM, expect_factor_invalid) {
-		Tokenizer tokenizer;
-		DummyDesignExtractor dde;
-
-		tokenizer.parse_into_tokens("{");
-		tokenizer.init_token_stack();
+		tokenizer.parseIntoTokens("bac procedure read print call if then else while abc");
+		tokenizer.initTokenStack();
 		FSM fsm(tokenizer, &dde);
-		ASSERT_THROW(fsm.expect_factor(), std::runtime_error);
+
+		std::vector<std::string> expected = { "bac", "procedure", "read", "print", "call", "if", "then", "else", "while", "abc"};
+		for (auto s : expected) {
+			ASSERT_EQ(fsm.expectIdentifier().getTokenValue(),s);
+		}
 	}
 
-	TEST(FSM, expect_term) {
-		Tokenizer tokenizer;
-		DummyDesignExtractor dde;
-		tokenizer.parse_into_tokens("something*somethingelse/ anotherthing %lastthing ;&&");
-		tokenizer.init_token_stack();
-		FSM fsm(tokenizer, &dde);
-		ASSERT_NO_THROW(fsm.expect_term());
-	}
-
-	TEST(FSM, expect_expression) {
+	TEST(FSM, expectFactor_valid) {
 		Tokenizer tokenizer;
 		DummyDesignExtractor dde;
 
-		tokenizer.parse_into_tokens("x");
-		tokenizer.init_token_stack();
+		tokenizer.parseIntoTokens("arandomvariable 0983425");
+		tokenizer.initTokenStack();
 		FSM fsm_1(tokenizer, &dde);
-		ASSERT_NO_THROW(fsm_1.expect_expression());
-		ASSERT_FALSE(fsm_1.get_tokenizer().has_token());
+		ASSERT_NO_THROW(fsm_1.expectFactor());
+		ASSERT_NO_THROW(fsm_1.expectFactor());
 
-		tokenizer.parse_into_tokens("1");
-		tokenizer.init_token_stack();
+
+		tokenizer.parseIntoTokens("a");
+		tokenizer.initTokenStack();
 		FSM fsm_2(tokenizer, &dde);
-		ASSERT_NO_THROW(fsm_2.expect_expression());
-		ASSERT_FALSE(fsm_2.get_tokenizer().has_token());
+		ASSERT_NO_THROW(fsm_2.expectFactor());
 
-		tokenizer.parse_into_tokens("x+y-1");
-		tokenizer.init_token_stack();
+		tokenizer.parseIntoTokens("0");
+		tokenizer.initTokenStack();
 		FSM fsm_3(tokenizer, &dde);
-		ASSERT_NO_THROW(fsm_3.expect_expression());
-		ASSERT_FALSE(fsm_3.get_tokenizer().has_token());
+		ASSERT_NO_THROW(fsm_3.expectFactor());
+	}
 
-		tokenizer.parse_into_tokens("2-x+y");
-		tokenizer.init_token_stack();
+	TEST(FSM, expectFactor_invalid) {
+		Tokenizer tokenizer;
+		DummyDesignExtractor dde;
+
+		tokenizer.parseIntoTokens("{");
+		tokenizer.initTokenStack();
+		FSM fsm(tokenizer, &dde);
+		ASSERT_THROW(fsm.expectFactor(), std::runtime_error);
+	}
+
+	TEST(FSM, expectTerm) {
+		Tokenizer tokenizer;
+		DummyDesignExtractor dde;
+		tokenizer.parseIntoTokens("something*somethingelse/ anotherthing %lastthing ;&&");
+		tokenizer.initTokenStack();
+		FSM fsm(tokenizer, &dde);
+		ASSERT_NO_THROW(fsm.expectTerm());
+	}
+
+	TEST(FSM, expectExpression) {
+		Tokenizer tokenizer;
+		DummyDesignExtractor dde;
+
+		tokenizer.parseIntoTokens("x");
+		tokenizer.initTokenStack();
+		FSM fsm_1(tokenizer, &dde);
+		ASSERT_NO_THROW(fsm_1.expectExpression());
+		ASSERT_FALSE(fsm_1.getTokenizer().hasToken());
+
+		tokenizer.parseIntoTokens("1");
+		tokenizer.initTokenStack();
+		FSM fsm_2(tokenizer, &dde);
+		ASSERT_NO_THROW(fsm_2.expectExpression());
+		ASSERT_FALSE(fsm_2.getTokenizer().hasToken());
+
+		tokenizer.parseIntoTokens("(x)+(y)-(1)");
+		tokenizer.initTokenStack();
+		FSM fsm_3(tokenizer, &dde);
+		ASSERT_NO_THROW(fsm_3.expectExpression());
+		ASSERT_FALSE(fsm_3.getTokenizer().hasToken());
+
+		tokenizer.parseIntoTokens("2-x+y");
+		tokenizer.initTokenStack();
 		FSM fsm_4(tokenizer, &dde);
-		ASSERT_NO_THROW(fsm_4.expect_expression());
-		ASSERT_FALSE(fsm_4.get_tokenizer().has_token());
+		ASSERT_NO_THROW(fsm_4.expectExpression());
+		ASSERT_FALSE(fsm_4.getTokenizer().hasToken());
 
-		tokenizer.parse_into_tokens("x+y*k");
-		tokenizer.init_token_stack();
+		tokenizer.parseIntoTokens("x+y*k");
+		tokenizer.initTokenStack();
 		FSM fsm_5(tokenizer, &dde);
-		ASSERT_NO_THROW(fsm_5.expect_expression());
-		ASSERT_FALSE(fsm_5.get_tokenizer().has_token());
+		ASSERT_NO_THROW(fsm_5.expectExpression());
+		ASSERT_FALSE(fsm_5.getTokenizer().hasToken());
 
-		tokenizer.parse_into_tokens("x+y*(k-1)");
-		tokenizer.init_token_stack();
+		tokenizer.parseIntoTokens("x+y*(k-1)/3");
+		tokenizer.initTokenStack();
 		FSM fsm_6(tokenizer, &dde);
-		ASSERT_NO_THROW(fsm_6.expect_expression());
-		ASSERT_FALSE(fsm_6.get_tokenizer().has_token());
+		ASSERT_NO_THROW(fsm_6.expectExpression());
+		ASSERT_FALSE(fsm_6.getTokenizer().hasToken());
 
-		tokenizer.parse_into_tokens("x+y*((val-1)*t%(con/m))*a+z-a-b*c+1");
-		tokenizer.init_token_stack();
+		tokenizer.parseIntoTokens("x+y*((val-1)*t%(con/m))*a+z-a-b*c+1");
+		tokenizer.initTokenStack();
 		FSM fsm_7(tokenizer, &dde);
-		ASSERT_NO_THROW(fsm_7.expect_expression());
-		ASSERT_FALSE(fsm_7.get_tokenizer().has_token());
+		ASSERT_NO_THROW(fsm_7.expectExpression());
+		ASSERT_FALSE(fsm_7.getTokenizer().hasToken());
 	}
 
-	TEST(FSM, expect_relational_factor) {
+	TEST(FSM, expectRelationalFactor) {
 		Tokenizer tokenizer;
 		DummyDesignExtractor dde;
 
-		tokenizer.parse_into_tokens("x");
-		tokenizer.init_token_stack();
+		tokenizer.parseIntoTokens("x");
+		tokenizer.initTokenStack();
 		FSM fsm_1(tokenizer, &dde);
-		ASSERT_NO_THROW(fsm_1.expect_relational_factor());
+		ASSERT_NO_THROW(fsm_1.expectRelationalFactor());
 
-		tokenizer.parse_into_tokens("1");
-		tokenizer.init_token_stack();
+		tokenizer.parseIntoTokens("1");
+		tokenizer.initTokenStack();
 		FSM fsm_2(tokenizer, &dde);
-		ASSERT_NO_THROW(fsm_2.expect_relational_factor());
+		ASSERT_NO_THROW(fsm_2.expectRelationalFactor());
 
-		tokenizer.parse_into_tokens("x+y-1");
-		tokenizer.init_token_stack();
+		tokenizer.parseIntoTokens("(3)");
+		tokenizer.initTokenStack();
 		FSM fsm_3(tokenizer, &dde);
-		ASSERT_NO_THROW(fsm_3.expect_relational_factor());
+		ASSERT_NO_THROW(fsm_3.expectRelationalFactor());
+
+		tokenizer.parseIntoTokens("x+y-1");
+		tokenizer.initTokenStack();
+		FSM fsm_4(tokenizer, &dde);
+		ASSERT_NO_THROW(fsm_4.expectRelationalFactor());
 	}
 
 	TEST(FSM, expect_relational_expression) {
 		Tokenizer tokenizer;
 		DummyDesignExtractor dde;
 
-		tokenizer.parse_into_tokens("1==1");
-		tokenizer.init_token_stack();
+		tokenizer.parseIntoTokens("1==1");
+		tokenizer.initTokenStack();
 		FSM fsm_1(tokenizer, &dde);
-		ASSERT_NO_THROW(fsm_1.expect_relational_factor());
+		ASSERT_NO_THROW(fsm_1.expectRelationalFactor());
 
-		tokenizer.parse_into_tokens("x!=1");
-		tokenizer.init_token_stack();
+		tokenizer.parseIntoTokens("x!=1");
+		tokenizer.initTokenStack();
 		FSM fsm_2(tokenizer, &dde);
-		ASSERT_NO_THROW(fsm_2.expect_relational_factor());
+		ASSERT_NO_THROW(fsm_2.expectRelationalFactor());
 
-		tokenizer.parse_into_tokens("123 > a");
-		tokenizer.init_token_stack();
+		tokenizer.parseIntoTokens("(123) > a");
+		tokenizer.initTokenStack();
 		FSM fsm_3(tokenizer, &dde);
-		ASSERT_NO_THROW(fsm_3.expect_relational_factor());
+		ASSERT_NO_THROW(fsm_3.expectRelationalFactor());
 
-		tokenizer.parse_into_tokens("val + 1 >= k");
-		tokenizer.init_token_stack();
+		tokenizer.parseIntoTokens("val + 1 >= (k)");
+		tokenizer.initTokenStack();
 		FSM fsm_4(tokenizer, &dde);
-		ASSERT_NO_THROW(fsm_4.expect_relational_factor());
+		ASSERT_NO_THROW(fsm_4.expectRelationalFactor());
 
-		tokenizer.parse_into_tokens("m < b * 0");
-		tokenizer.init_token_stack();
+		tokenizer.parseIntoTokens("m < b * 0");
+		tokenizer.initTokenStack();
 		FSM fsm_5(tokenizer, &dde);
-		ASSERT_NO_THROW(fsm_5.expect_relational_factor());
+		ASSERT_NO_THROW(fsm_5.expectRelationalFactor());
 
-		tokenizer.parse_into_tokens("val + 1 <= k + (j-1)*h");
-		tokenizer.init_token_stack();
+		tokenizer.parseIntoTokens("val + 1 <= k + (j-1)*h");
+		tokenizer.initTokenStack();
 		FSM fsm_6(tokenizer, &dde);
-		ASSERT_NO_THROW(fsm_6.expect_relational_factor());
+		ASSERT_NO_THROW(fsm_6.expectRelationalFactor());
 	}
 
-	TEST(FSM, expect_conditional_expression) {
+	TEST(FSM, expectConditionalExpression) {
 		Tokenizer tokenizer;
 		DummyDesignExtractor dde;
 
-		tokenizer.parse_into_tokens("1==1");
-		tokenizer.init_token_stack();
+		tokenizer.parseIntoTokens("1==1");
+		tokenizer.initTokenStack();
 		FSM fsm_1(tokenizer, &dde);
-		ASSERT_NO_THROW(fsm_1.expect_conditional_expression());
+		ASSERT_NO_THROW(fsm_1.expectConditionalExpression());
 
-		tokenizer.parse_into_tokens("(x > 1) && (y <= k)");
-		tokenizer.init_token_stack();
+		tokenizer.parseIntoTokens("(x > 1) && (y <= k)");
+		tokenizer.initTokenStack();
 		FSM fsm_2(tokenizer, &dde);
-		ASSERT_NO_THROW(fsm_2.expect_conditional_expression());
+		fsm_2.expectConditionalExpression();
 
-		tokenizer.parse_into_tokens("(aa != 3) || (1 < 2)");
-		tokenizer.init_token_stack();
+		tokenizer.parseIntoTokens("(aa != 3) || (1 < 2)");
+		tokenizer.initTokenStack();
 		FSM fsm_3(tokenizer, &dde);
-		ASSERT_NO_THROW(fsm_3.expect_conditional_expression());
+		ASSERT_NO_THROW(fsm_3.expectConditionalExpression());
 
-		tokenizer.parse_into_tokens("!((n>=0)&&((a-1>b)||(k<m*1)))");
-		tokenizer.init_token_stack();
+		tokenizer.parseIntoTokens("!((n>=0)&&((a-1>b)||(k<m*1)))");
+		tokenizer.initTokenStack();
 		FSM fsm_4(tokenizer, &dde);
-		fsm_4.expect_conditional_expression();
+		ASSERT_NO_THROW(fsm_4.expectConditionalExpression());
+
+		tokenizer.parseIntoTokens("(4 / k + b) == (7)");
+		tokenizer.initTokenStack();
+		FSM fsm_5(tokenizer, &dde);
+		ASSERT_NO_THROW(fsm_5.expectConditionalExpression());
+
+		tokenizer.parseIntoTokens("((1)+(1)<(1)+(1))&&(((1)-(1)<(1))||((((1)/(1)>=(1)%(1))||(!(1==1)))&&((1)>(1))))");
+		tokenizer.initTokenStack();
+		FSM fsm_7(tokenizer, &dde);
+		ASSERT_NO_THROW(fsm_7.expectConditionalExpression());
 	}
 
-	TEST(FSM, expect_statement_type_read) {
+	TEST(FSM, expectStatementTypeRead) {
 		Tokenizer tokenizer;
 		DummyDesignExtractor dde;
 
-		tokenizer.parse_into_tokens("read abc;");
-		tokenizer.init_token_stack();
+		tokenizer.parseIntoTokens("read abc;");
+		tokenizer.initTokenStack();
 		FSM fsm_1(tokenizer, &dde);
-		ASSERT_NO_THROW(fsm_1.expect_statement_type_read());
+		ASSERT_NO_THROW(fsm_1.expectStatementTypeRead());
 	}
 
-	TEST(FSM, expect_statement_type_print) {
+	TEST(FSM, expectStatementTypePrint) {
 		Tokenizer tokenizer;
 		DummyDesignExtractor dde;
 
-		tokenizer.parse_into_tokens("print xyz;");
-		tokenizer.init_token_stack();
+		tokenizer.parseIntoTokens("print xyz;");
+		tokenizer.initTokenStack();
 		FSM fsm_1(tokenizer, &dde);
-		ASSERT_NO_THROW(fsm_1.expect_statement_type_print());
+		ASSERT_NO_THROW(fsm_1.expectStatementTypePrint());
 	}
 
-	TEST(FSM, expect_statement_type_call) {
+	TEST(FSM, expectStatementTypeCall) {
 		Tokenizer tokenizer;
 		DummyDesignExtractor dde;
 
-		tokenizer.parse_into_tokens("call myProcedure;");
-		//for(Token tk: tokenizer.get_token_chain()) std::cout << tokenTypeStrings[tk.get_token_type()] << std::endl;
-		tokenizer.init_token_stack();
+		tokenizer.parseIntoTokens("call myProcedure;");
+		tokenizer.initTokenStack();
 		FSM fsm_1(tokenizer, &dde);
-		ASSERT_NO_THROW(fsm_1.expect_statement_type_call());
+		ASSERT_NO_THROW(fsm_1.expectStatementTypeCall());
 	}
 
-	TEST(FSM, expect_statement_type_while) {
+	TEST(FSM, expectStatementTypeWhile) {
 		Tokenizer tokenizer;
 		DummyDesignExtractor dde;
 
-		tokenizer.parse_into_tokens("while(1==1){x=1;}");
-		tokenizer.init_token_stack();
+		tokenizer.parseIntoTokens("while(1==1){x=1;}");
+		tokenizer.initTokenStack();
 		FSM fsm_1(tokenizer, &dde);
-		ASSERT_NO_THROW(fsm_1.expect_statement_type_while());
+		ASSERT_NO_THROW(fsm_1.expectStatementTypeWhile());
 	}
 
-	TEST(FSM, expect_statement_type_if) {
+	TEST(FSM, expectStatementTypeIf) {
 		Tokenizer tokenizer;
 		DummyDesignExtractor dde;
 
-		tokenizer.parse_into_tokens("if(n>0)then{call someProcedure;}else{print anotherVariable;}");
-		tokenizer.init_token_stack();
+		tokenizer.parseIntoTokens("if(n>0)then{call someProcedure;}else{print anotherVariable;}");
+		tokenizer.initTokenStack();
 		FSM fsm_1(tokenizer, &dde);
-		ASSERT_NO_THROW(fsm_1.expect_statement_type_if());
+		ASSERT_NO_THROW(fsm_1.expectStatementTypeIf());
 	}
 
-	TEST(FSM, expect_statement_type_assign) {
+	TEST(FSM, expectStatementTypeAssign) {
 		Tokenizer tokenizer;
 		DummyDesignExtractor dde;
 
-		tokenizer.parse_into_tokens("x=1;");
-		tokenizer.init_token_stack();
+		tokenizer.parseIntoTokens("x=1;");
+		tokenizer.initTokenStack();
 		FSM fsm_1(tokenizer, &dde);
-		ASSERT_NO_THROW(fsm_1.expect_statement_type_assign());
+		ASSERT_NO_THROW(fsm_1.expectStatementTypeAssign());
 
-		tokenizer.parse_into_tokens("val = anotherVal;");
-		tokenizer.init_token_stack();
+		tokenizer.parseIntoTokens("val = anotherVal;");
+		tokenizer.initTokenStack();
 		FSM fsm_2(tokenizer, &dde);
-		ASSERT_NO_THROW(fsm_2.expect_statement_type_assign());
+		ASSERT_NO_THROW(fsm_2.expectStatementTypeAssign());
 
-		tokenizer.parse_into_tokens("lost = lost - 1;");
-		tokenizer.init_token_stack();
+		tokenizer.parseIntoTokens("lost = lost - 1;");
+		tokenizer.initTokenStack();
 		FSM fsm_3(tokenizer, &dde);
-		ASSERT_NO_THROW(fsm_3.expect_statement_type_assign());
+		ASSERT_NO_THROW(fsm_3.expectStatementTypeAssign());
 	}
 
-	TEST(FSM, expect_statement) {
-		//
-	}
-
-	TEST(FSM, expect_statement_list) {
+	TEST(FSM, expectStatementList) {
 		Tokenizer tokenizer;
 		DummyDesignExtractor dde;
 
-		tokenizer.parse_into_tokens("x=1;}");
-		tokenizer.init_token_stack();
+		tokenizer.parseIntoTokens("x=1;}");
+		tokenizer.initTokenStack();
 		FSM fsm_1(tokenizer, &dde);
-		ASSERT_NO_THROW(fsm_1.expect_statement_list());
+		ASSERT_NO_THROW(fsm_1.expectStatementList());
 
-		tokenizer.parse_into_tokens("read x;print x;call myProcedure;}");
-		tokenizer.init_token_stack();
+		tokenizer.parseIntoTokens("read x;print x;call myProcedure;}");
+		tokenizer.initTokenStack();
 		FSM fsm_2(tokenizer, &dde);
-		ASSERT_NO_THROW(fsm_2.expect_statement_list());
+		ASSERT_NO_THROW(fsm_2.expectStatementList());
 
-		tokenizer.parse_into_tokens("x=1;if(x>1)then{x=2;}else{x=3;}x=4;while(x==5){x=6;}x=7;}");
-		tokenizer.init_token_stack();
+		tokenizer.parseIntoTokens("x=1;if(x>1)then{x=2;}else{x=3;}x=4;while(x==5){x=6;}x=7;}");
+		tokenizer.initTokenStack();
 		FSM fsm_3(tokenizer, &dde);
-		ASSERT_NO_THROW(fsm_3.expect_statement_list());
+		ASSERT_NO_THROW(fsm_3.expectStatementList());
 	}
 
-	TEST(FSM, expect_procedure) {
+	TEST(FSM, expectProcedure) {
 		Tokenizer tokenizer;
 		DummyDesignExtractor dde;
 
-		tokenizer.parse_into_tokens("procedure myProcedure{x=y+1;}");
-		tokenizer.init_token_stack();
+		tokenizer.parseIntoTokens("procedure myProcedure{x=y+1;}");
+		tokenizer.initTokenStack();
 		FSM fsm_1(tokenizer, &dde);
-		ASSERT_NO_THROW(fsm_1.expect_procedure());
+		ASSERT_NO_THROW(fsm_1.expectProcedure());
 	}
 
+
+	TEST(FSM, optionalFactor) {
+		Tokenizer tokenizer;
+		DummyDesignExtractor dde;
+
+		tokenizer.parseIntoTokens("arandomvariable 0983425");
+		tokenizer.initTokenStack();
+		FSM fsm_1(tokenizer, &dde);
+		ASSERT_TRUE(fsm_1.optionalFactor());
+		ASSERT_TRUE(fsm_1.optionalFactor());
+
+
+		tokenizer.parseIntoTokens("a");
+		tokenizer.initTokenStack();
+		FSM fsm_2(tokenizer, &dde);
+		ASSERT_TRUE(fsm_2.optionalFactor());
+
+		tokenizer.parseIntoTokens("0");
+		tokenizer.initTokenStack();
+		FSM fsm_3(tokenizer, &dde);
+		ASSERT_TRUE(fsm_3.optionalFactor());
+	}
+
+	TEST(FSM, optionalTerm) {
+		Tokenizer tokenizer;
+		DummyDesignExtractor dde;
+		tokenizer.parseIntoTokens("something*somethingelse/ anotherthing %lastthing ;&&");
+		tokenizer.initTokenStack();
+		FSM fsm(tokenizer, &dde);
+		ASSERT_TRUE(fsm.optionalTerm());
+	}
+
+	TEST(FSM, optionalExpression) {
+		Tokenizer tokenizer;
+		DummyDesignExtractor dde;
+
+		tokenizer.parseIntoTokens("x");
+		tokenizer.initTokenStack();
+		FSM fsm_1(tokenizer, &dde);
+		ASSERT_TRUE(fsm_1.optionalExpression());
+		tokenizer.parseIntoTokens("1");
+		tokenizer.initTokenStack();
+		FSM fsm_2(tokenizer, &dde);
+		ASSERT_TRUE(fsm_2.optionalExpression());
+
+		tokenizer.parseIntoTokens("(x)+(y)-(1)");
+		tokenizer.initTokenStack();
+		FSM fsm_3(tokenizer, &dde);
+		ASSERT_TRUE(fsm_3.optionalExpression());
+
+		tokenizer.parseIntoTokens("2-x+y");
+		tokenizer.initTokenStack();
+		FSM fsm_4(tokenizer, &dde);
+		ASSERT_TRUE(fsm_4.optionalExpression());
+
+		tokenizer.parseIntoTokens("x+y*k");
+		tokenizer.initTokenStack();
+		FSM fsm_5(tokenizer, &dde);
+		ASSERT_TRUE(fsm_5.optionalExpression());
+
+		tokenizer.parseIntoTokens("x+y*(k-1)/3");
+		tokenizer.initTokenStack();
+		FSM fsm_6(tokenizer, &dde);
+		ASSERT_TRUE(fsm_6.optionalExpression());
+
+		tokenizer.parseIntoTokens("x+y*((val-1)*t%(con/m))*a+z-a-b*c+1");
+		tokenizer.initTokenStack();
+		FSM fsm_7(tokenizer, &dde);
+		ASSERT_TRUE(fsm_7.optionalExpression());
+	}
+
+	TEST(FSM, optionalRelationalFactor) {
+		Tokenizer tokenizer;
+		DummyDesignExtractor dde;
+
+		tokenizer.parseIntoTokens("x");
+		tokenizer.initTokenStack();
+		FSM fsm_1(tokenizer, &dde);
+		ASSERT_TRUE(fsm_1.optionalRelationalFactor());
+
+		tokenizer.parseIntoTokens("1");
+		tokenizer.initTokenStack();
+		FSM fsm_2(tokenizer, &dde);
+		ASSERT_TRUE(fsm_2.optionalRelationalFactor());
+
+		tokenizer.parseIntoTokens("(3)");
+		tokenizer.initTokenStack();
+		FSM fsm_3(tokenizer, &dde);
+		ASSERT_TRUE(fsm_3.optionalRelationalFactor());
+
+		tokenizer.parseIntoTokens("x+y-1");
+		tokenizer.initTokenStack();
+		FSM fsm_4(tokenizer, &dde);
+		ASSERT_TRUE(fsm_4.optionalRelationalFactor());
+	}
+
+	TEST(FSM, optionalRelationalExpression) {
+		Tokenizer tokenizer;
+		DummyDesignExtractor dde;
+
+		tokenizer.parseIntoTokens("1==1");
+		tokenizer.initTokenStack();
+		FSM fsm_1(tokenizer, &dde);
+		ASSERT_TRUE(fsm_1.optionalRelationalExpression());
+
+		tokenizer.parseIntoTokens("x!=1");
+		tokenizer.initTokenStack();
+		FSM fsm_2(tokenizer, &dde);
+		ASSERT_TRUE(fsm_2.optionalRelationalExpression());
+
+		tokenizer.parseIntoTokens("(123) > a");
+		tokenizer.initTokenStack();
+		FSM fsm_3(tokenizer, &dde);
+		ASSERT_TRUE(fsm_3.optionalRelationalExpression());
+
+		tokenizer.parseIntoTokens("val + 1 >= (k)");
+		tokenizer.initTokenStack();
+		FSM fsm_4(tokenizer, &dde);
+		ASSERT_TRUE(fsm_4.optionalRelationalExpression());
+
+		tokenizer.parseIntoTokens("m < b * 0");
+		tokenizer.initTokenStack();
+		FSM fsm_5(tokenizer, &dde);
+		ASSERT_TRUE(fsm_5.optionalRelationalExpression());
+
+		tokenizer.parseIntoTokens("val + 1 <= k + (j-1)*h");
+		tokenizer.initTokenStack();
+		FSM fsm_6(tokenizer, &dde);
+		ASSERT_TRUE(fsm_6.optionalRelationalExpression());
+	}
+
+	TEST(FSM, keywords_variable_name) {
+		Tokenizer tokenizer;
+		DummyDesignExtractor dde;
+
+		tokenizer.parseIntoTokens("procedure procedure{call call; print print; read read;if(if<then)then{then=else;}else{else=while;}while(while>procedure){while=if;}}");
+		tokenizer.initTokenStack();
+		FSM fsm(tokenizer, &dde);
+		ASSERT_NO_THROW(fsm.expectProcedure());
+	}
 }

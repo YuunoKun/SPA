@@ -9,7 +9,7 @@
 using namespace SourceProcessor;
 
 Parser::Parser(void) {
-	m_tokenizer = Tokenizer();
+	tokenizer = Tokenizer();
 }
 
 void Parser::load_file(std::string file) {
@@ -23,14 +23,14 @@ void Parser::load_file(std::string file) {
 		fseek(input_file, 0, SEEK_END);
 		size_t file_size = ftell(input_file);
 		fseek(input_file, 0, SEEK_SET);
-		m_source_program = std::string(file_size, ' ');
-		fread(m_source_program.data(), 1, file_size, input_file);
+		source_program = std::string(file_size, ' ');
+		fread(source_program.data(), 1, file_size, input_file);
 
 		fclose(input_file);
 	}
 	catch (...) {
 		std::runtime_error("Error : Unknown error loading file.");
-		m_source_program = "";
+		source_program = "";
 		fclose(input_file);
 	}
 	*/
@@ -40,17 +40,17 @@ void Parser::load_file(std::string file) {
 	if (input_file.is_open()) {
 		std::string temp;
 		while (std::getline(input_file, temp)) {
-			m_source_program.append(temp);
+			source_program.append(temp);
 		}
 	}
 	else {
-		std::cout << "Cannot open file." << std::endl;
+		throw std::runtime_error("Failed to open file");
 	}
 	input_file.close();
 };
 
-std::string Parser::get_source_program() {
-	return m_source_program;
+std::string Parser::getSourceProgram() {
+	return source_program;
 }
 
 void Parser::parse() {
@@ -58,11 +58,11 @@ void Parser::parse() {
 
 	/* 
 	TODO:
-	If m_source_program = "";
+	If source_program = "";
 	An error message should be pushed
 	*/
 
-	m_tokenizer.parse_into_tokens(m_source_program.c_str());
-	FSM finite_state_machine(m_tokenizer);
+	tokenizer.parseIntoTokens(source_program.c_str());
+	FSM finite_state_machine(tokenizer);
 	finite_state_machine.build();
 }

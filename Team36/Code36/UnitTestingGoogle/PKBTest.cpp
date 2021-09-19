@@ -204,6 +204,68 @@ namespace UnitTesting {
 		EXPECT_NE(expected_table, PKB::getInstance().getModifiesS());
 	}
 
+	TEST(PKB, getUsesP) {
+		PKB::getInstance().resetCache();
+
+		proc_name first = "first";
+		proc_name second = "second";
+		proc_name invalid = "invalid";
+		var_name x = "x";
+		var_name y = "y";
+		RelationTable<proc_name, var_name> expected_table;
+		expected_table.insert(first, x);
+		expected_table.insert(first, y);
+		expected_table.insert(second, y);
+
+		PKB::getInstance().addProcedure(first);
+		PKB::getInstance().addProcedure(second);
+		PKB::getInstance().addVariable(x);
+		PKB::getInstance().addUsesP(first, x);
+
+		EXPECT_THROW(PKB::getInstance().addUsesP(first, y), std::invalid_argument);
+		PKB::getInstance().addVariable(y);
+		EXPECT_NO_THROW(PKB::getInstance().addUsesP(first, y));
+		EXPECT_NO_THROW(PKB::getInstance().addUsesP(second, y));
+
+		EXPECT_THROW(PKB::getInstance().addUsesP(invalid, x), std::invalid_argument);
+		PKB::getInstance().addProcedure(invalid);
+
+		EXPECT_EQ(expected_table, PKB::getInstance().getUsesP());
+		PKB::getInstance().resetCache();
+		EXPECT_NE(expected_table, PKB::getInstance().getUsesP());
+	}
+
+	TEST(PKB, getModifiesP) {
+		PKB::getInstance().resetCache();
+
+		proc_name first = "first";
+		proc_name second = "second";
+		proc_name invalid = "invalid";
+		var_name x = "x";
+		var_name y = "y";
+		RelationTable<proc_name, var_name> expected_table;
+		expected_table.insert(first, x);
+		expected_table.insert(first, y);
+		expected_table.insert(second, y);
+
+		PKB::getInstance().addProcedure(first);
+		PKB::getInstance().addProcedure(second);
+		PKB::getInstance().addVariable(x);
+		PKB::getInstance().addModifiesP(first, x);
+
+		EXPECT_THROW(PKB::getInstance().addModifiesP(first, y), std::invalid_argument);
+		PKB::getInstance().addVariable(y);
+		EXPECT_NO_THROW(PKB::getInstance().addModifiesP(first, y));
+		EXPECT_NO_THROW(PKB::getInstance().addModifiesP(second, y));
+
+		EXPECT_THROW(PKB::getInstance().addModifiesP(invalid, x), std::invalid_argument);
+		PKB::getInstance().addProcedure(invalid);
+
+		EXPECT_EQ(expected_table, PKB::getInstance().getModifiesP());
+		PKB::getInstance().resetCache();
+		EXPECT_NE(expected_table, PKB::getInstance().getModifiesP());
+	}
+
 	TEST(PKB, getAssigns) {
 		PKB::getInstance().resetCache();
 

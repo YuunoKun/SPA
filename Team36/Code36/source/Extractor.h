@@ -11,35 +11,35 @@ namespace SourceProcessor {
 	public:
 		virtual ~Extractor() {}
 
-		virtual void start_nesting() = 0;
+		virtual void startNesting() = 0;
 
-		virtual void chop_nesting() = 0;
+		virtual void chopNesting() = 0;
 
-		virtual void end_nesting() = 0;
+		virtual void endNesting() = 0;
 
-		virtual void add_procedure(proc_name) = 0;
+		virtual void addProcedure(proc_name) = 0;
 
-		virtual void add_statement(TokenType) = 0;
+		virtual void addStatement(TokenType) = 0;
 
-		virtual void add_variable(var_name) = 0;
+		virtual void addVariable(var_name) = 0;
 
-		virtual void add_constant(constant) = 0;
+		virtual void addConstant(constant) = 0;
 
-		virtual void add_statement_uses(var_name) = 0;
+		virtual void addStatementUses(var_name) = 0;
 
-		virtual void add_statement_modifies(var_name) = 0;
+		virtual void addStatementModifies(var_name) = 0;
 
-		virtual void start_expr() = 0;
+		virtual void startExpr() = 0;
 
-		virtual void add_expr_segment(std::string) = 0;
+		virtual void addExprSegment(std::string) = 0;
 
-		virtual void end_expr() = 0;
+		virtual void endExpr() = 0;
 
-		virtual void add_callee(proc_name) = 0;
+		virtual void addCallee(proc_name) = 0;
 
 		virtual void validate() = 0;
 
-		virtual void populate_post_validation() = 0;
+		virtual void populatePostValidation() = 0;
 
 		virtual void populateEntities(PKB&) = 0;
 
