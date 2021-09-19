@@ -89,18 +89,15 @@ namespace UnitTesting {
 
 		//Negative Test Case
 		for (auto type : types) {
-			RelRef relation1(type, { WILD }, { WILD });
-			RelRef relation2(type, { STMT, "1" }, { VARIABLE, "x" });
-			RelRef relation3(type, { STMT, "1" }, { WILD });
-			RelRef relation4(type, { WILD }, { VARIABLE, "x" });
-			RelRef relation5(type, { STMT, Synonym{"a"} }, { VARIABLE, Synonym{"a"} });
-			RelRef relation6(type, { WILD }, { VARIABLE, Synonym{"a"} });
-			RelRef relation7(type, { STMT, Synonym{"a"} }, { WILD });
-			RelRef relation8(type, { STMT, "1" }, { VARIABLE, Synonym{"a"} });
-			RelRef relation9(type, { STMT, Synonym{"a"} }, { VARIABLE, "x" });
+			RelRef relation1(type, { STMT, "1" }, { VARIABLE, "x" });
+			RelRef relation2(type, { STMT, "1" }, { WILD });
+			RelRef relation3(type, { STMT, Synonym{"a"} }, { VARIABLE, Synonym{"a"} });
+			RelRef relation4(type, { STMT, Synonym{"a"} }, { WILD });
+			RelRef relation5(type, { STMT, "1" }, { VARIABLE, Synonym{"a"} });
+			RelRef relation6(type, { STMT, Synonym{"a"} }, { VARIABLE, "x" });
 
 			std::vector<RelRef> relations{ relation1, relation2, relation3, relation4,
-				relation5,relation6,relation7 ,relation8,relation9 };
+				relation5,relation6 };
 			for (unsigned int i = 0; i < relations.size(); i++) {
 				QueryResult result;
 				evaluator.evaluateRelation(result, relations[i]);
@@ -112,18 +109,15 @@ namespace UnitTesting {
 
 		//Positive Test Case
 		for (auto type : types) {
-			RelRef relation1(type, { WILD }, { WILD });
-			RelRef relation2(type, { STMT, "1" }, { VARIABLE, "x" });
-			RelRef relation3(type, { STMT, "1" }, { WILD });
-			RelRef relation4(type, { WILD }, { VARIABLE, "x" });
-			RelRef relation5(type, { STMT, Synonym{"a"} }, { VARIABLE, Synonym{"a"} });
-			RelRef relation6(type, { WILD }, { VARIABLE, Synonym{"a"} });
-			RelRef relation7(type, { STMT, Synonym{"a"} }, { WILD });
-			RelRef relation8(type, { STMT, "1" }, { VARIABLE, Synonym{"a"} });
-			RelRef relation9(type, { STMT, Synonym{"a"} }, { VARIABLE, "x" });
+			RelRef relation1(type, { STMT, "1" }, { VARIABLE, "x" });
+			RelRef relation2(type, { STMT, "1" }, { WILD });
+			RelRef relation3(type, { STMT, Synonym{"a"} }, { VARIABLE, Synonym{"a"} });
+			RelRef relation4(type, { STMT, Synonym{"a"} }, { WILD });
+			RelRef relation5(type, { STMT, "1" }, { VARIABLE, Synonym{"a"} });
+			RelRef relation6(type, { STMT, Synonym{"a"} }, { VARIABLE, "x" });
 
 			std::vector<RelRef> relations{ relation1, relation2, relation3, relation4,
-				relation5,relation6,relation7 ,relation8,relation9 };
+				relation5,relation6 };
 			for (unsigned int i = 0; i < relations.size(); i++) {
 				QueryResult result;
 				evaluator.evaluateRelation(result, relations[i]);
@@ -135,11 +129,10 @@ namespace UnitTesting {
 		for (auto type : types) {
 			RelRef relation1(type, { STMT, "1" }, { VARIABLE, "y" });
 			RelRef relation2(type, { STMT, "2" }, { WILD });
-			RelRef relation3(type, { WILD }, { VARIABLE, "y" });
-			RelRef relation4(type, { STMT, "2" }, { VARIABLE, Synonym{"a"} });
-			RelRef relation5(type, { STMT, Synonym{"a"} }, { VARIABLE, "y" });
+			RelRef relation3(type, { STMT, "2" }, { VARIABLE, Synonym{"a"} });
+			RelRef relation4(type, { STMT, Synonym{"a"} }, { VARIABLE, "y" });
 
-			std::vector<RelRef> relations{ relation1, relation2, relation3, relation4, relation5 };
+			std::vector<RelRef> relations{ relation1, relation2, relation3, relation4 };
 			for (unsigned int i = 0; i < relations.size(); i++) {
 				QueryResult result;
 				evaluator.evaluateRelation(result, relations[i]);

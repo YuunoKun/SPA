@@ -1396,13 +1396,10 @@ namespace UnitTesting {
 
 		std::vector<RelRef> relations;
 		//Test true boolean equation
-		relations.push_back(RelRef(type, WILD_CARD, WILD_CARD));
 		relations.push_back(RelRef(type, { STMT, left1 }, { VARIABLE, right1 }));
 		relations.push_back(RelRef(type, { STMT, left2 }, { VARIABLE, right2 }));
 		relations.push_back(RelRef(type, { STMT, left1 }, WILD_CARD));
 		relations.push_back(RelRef(type, { STMT, left2 }, WILD_CARD));
-		relations.push_back(RelRef(type, WILD_CARD, { VARIABLE, right1 }));
-		relations.push_back(RelRef(type, WILD_CARD, { VARIABLE, right2 }));
 
 		validateRelations(relations);
 	}
@@ -1460,7 +1457,6 @@ namespace UnitTesting {
 		relations.push_back(RelRef(type, { STMT, Synonym{"a"} }, { VARIABLE, Synonym{"a"} }));
 		relations.push_back(RelRef(type, { IF, Synonym{"a"} }, { VARIABLE, Synonym{"a"} }));
 		relations.push_back(RelRef(type, { WHILE, Synonym{"a"} }, { VARIABLE, Synonym{"a"} }));
-		relations.push_back(RelRef(type, WILD_CARD, { VARIABLE, Synonym{"a"} }));
 		relations.push_back(RelRef(type, { STMT, Synonym{"a"} }, WILD_CARD));
 		relations.push_back(RelRef(type, { IF, Synonym{"a"} }, WILD_CARD));
 		relations.push_back(RelRef(type, { WHILE, Synonym{"a"} }, WILD_CARD));
@@ -1585,18 +1581,12 @@ namespace UnitTesting {
 			EXPECT_EQ(evaluator.evaluateQuery(q), resultList[i]);
 		}
 
-		resultList[0] = { right1, right2 };
-		//Test case for Select a such that Modifies_S(_, selected)
-		RelRef relation(type, WILD_CARD, selected);
-		Query q = initQuery(relation, selected);
-		EXPECT_EQ(evaluator.evaluateQuery(q), resultList[0]);
-
 		//Test case for Select a such that Modifies_S("1", selected)
 		resultList[0] = { right1 };
 		resultList[1] = { };
 		resultList[2] = { };
-		relation = RelRef(type, { STMT, left1 }, selected);
-		q = initQuery(relation, selected);
+		RelRef relation(type, { STMT, left1 }, selected);
+		Query q = initQuery(relation, selected);
 		EXPECT_EQ(evaluator.evaluateQuery(q), resultList[0]);
 
 		//Test case for Select a such that Modifies_S("3", selected)
@@ -1637,13 +1627,10 @@ namespace UnitTesting {
 
 		std::vector<RelRef> relations;
 		//Test true boolean equation
-		relations.push_back(RelRef(type, WILD_CARD, WILD_CARD));
 		relations.push_back(RelRef(type, { STMT, left1 }, { VARIABLE, right1 }));
 		relations.push_back(RelRef(type, { STMT, left2 }, { VARIABLE, right2 }));
 		relations.push_back(RelRef(type, { STMT, left1 }, WILD_CARD));
 		relations.push_back(RelRef(type, { STMT, left2 }, WILD_CARD));
-		relations.push_back(RelRef(type, WILD_CARD, { VARIABLE, right1 }));
-		relations.push_back(RelRef(type, WILD_CARD, { VARIABLE, right2 }));
 
 		validateRelations(relations);
 	}
@@ -1700,7 +1687,6 @@ namespace UnitTesting {
 		relations.push_back(RelRef(type, { STMT, Synonym{"a"} }, { VARIABLE, Synonym{"a"} }));
 		relations.push_back(RelRef(type, { IF, Synonym{"a"} }, { VARIABLE, Synonym{"a"} }));
 		relations.push_back(RelRef(type, { WHILE, Synonym{"a"} }, { VARIABLE, Synonym{"a"} }));
-		relations.push_back(RelRef(type, WILD_CARD, { VARIABLE, Synonym{"a"} }));
 		relations.push_back(RelRef(type, { STMT, Synonym{"a"} }, WILD_CARD));
 		relations.push_back(RelRef(type, { IF, Synonym{"a"} }, WILD_CARD));
 		relations.push_back(RelRef(type, { WHILE, Synonym{"a"} }, WILD_CARD));
@@ -1813,18 +1799,12 @@ namespace UnitTesting {
 			EXPECT_EQ(evaluator.evaluateQuery(q), resultList[i]);
 		}
 
-		resultList[0] = { right1, right2 };
-		//Test case for Select a such that USES_S(_, selected)
-		RelRef relation(type, WILD_CARD, selected);
-		Query q = initQuery(relation, selected);
-		EXPECT_EQ(evaluator.evaluateQuery(q), resultList[0]);
-
 		//Test case for Select a such that USES_S("1", selected)
 		resultList[0] = { right1 };
 		resultList[1] = { };
 		resultList[2] = { };
-		relation = RelRef(type, { STMT, left1 }, selected);
-		q = initQuery(relation, selected);
+		RelRef relation(type, { STMT, left1 }, selected);
+		Query q = initQuery(relation, selected);
 		EXPECT_EQ(evaluator.evaluateQuery(q), resultList[0]);
 
 		//Test case for Select a such that USES_S("3", selected)
