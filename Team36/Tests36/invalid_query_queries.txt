@@ -458,19 +458,17 @@ stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; pro
 Select s such that Parent*(1,"")
 none
 5000
-92 - Syntactically invalid Parent*
+93 - Syntactically invalid Parent*
 stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
 Select s such that Parent*(1,")
 none
 5000
 94 - Syntactically invalid Parent*
-5000
 stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
 Select s such that Parent*("",2)
 none
 5000
 95 - Syntactically invalid Parent*
-5000
 stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
 Select s such that Parent*(",2)
 none
@@ -1234,15 +1232,19 @@ none
 stmt s; variable v;
 Select v such that Modifies(s, v1)
 none
+5000
 76 - Semantically invalid Modifies (underscore on LHS of Modifies)
 stmt s; variable v;
 Select v such that Modifies(_, v)
 none
+5000
 77 - Semantically invalid Uses (underscore on LHS of Uses)
 stmt s; variable v;
 Select v such that Uses(_, v)
 none
+5000
 78 - Semantically invalid Uses (variable LHS, stmt RHS)
 variable v; stmt s; 
 Select v such that Uses(v, s)
 none
+5000
