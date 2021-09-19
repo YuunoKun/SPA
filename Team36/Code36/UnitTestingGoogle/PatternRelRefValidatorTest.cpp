@@ -410,7 +410,7 @@ namespace UnitTesting {
 			FAIL();
 		}
 		catch (std::invalid_argument const& err) {
-			EXPECT_EQ(err.what(), std::string("Invalid argument, no StmtRef found"));
+			EXPECT_EQ(err.what(), std::string("Invalid StmtRef arguments"));
 		}
 		catch (...) {
 			// Test case should fail if not caught as invalid_argument
