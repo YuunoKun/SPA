@@ -114,7 +114,7 @@ namespace UnitTesting {
 		EXPECT_EQ(tableResult, result);
 
 		try {
-			tableResult = queryResult.getResult({ STMT, Synonym{"Does not exist"} });
+			tableResult = queryResult.getResult({ STMT, Synonym{"DoesNotExist"} });
 			FAIL();
 		}
 		catch (std::domain_error const& ex) {

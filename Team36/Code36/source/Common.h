@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include <stdexcept>
 
 typedef std::string proc_name;
 typedef std::string var_name;
@@ -35,6 +36,18 @@ typedef std::pair<StmtInfo, var_name> assign_info;
 
 struct Synonym {
 	std::string name;
+	Synonym() {};
+	Synonym(std::string name) {
+		if (name.size() == 0 || !isalpha(name[0])) {
+			throw std::invalid_argument("Invalid synonym");
+		}
+		for (char c : name) {
+			if (!isalnum(c)) {
+				throw std::invalid_argument("Invalid synonym");
+			}
+		}
+		this->name = name;
+	}
 
 	bool operator==(const Synonym& synonyms) const {
 		return name == synonyms.name;

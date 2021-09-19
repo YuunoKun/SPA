@@ -409,7 +409,7 @@ namespace UnitTesting {
 		Query q7;
 		q7.addEntity(Entity(EntityType::WHILE, Synonym{ "w" }));
 		q7.addSelected(Entity(EntityType::WHILE, Synonym{ "w" }));
-		q7.addRelation(RelRef(RelType::MODIFIES_S, Entity(EntityType::WHILE, Synonym{ "w" }), Entity(EntityType::WILD, Synonym{ "" })));
+		q7.addRelation(RelRef(RelType::MODIFIES_S, Entity(EntityType::WHILE, Synonym{ "w" }), Entity(EntityType::WILD)));
 
 		EXPECT_EQ(test7, q7);
 
@@ -427,7 +427,7 @@ namespace UnitTesting {
 		Query q9;
 		q9.addEntity(Entity(EntityType::STMT, Synonym{ "s" }));
 		q9.addSelected(Entity(EntityType::STMT, Synonym{ "s" }));
-		q9.addRelation(RelRef(RelType::FOLLOWS, Entity(EntityType::CONSTANT, "1"), Entity(EntityType::WILD, "")));
+		q9.addRelation(RelRef(RelType::FOLLOWS, Entity(EntityType::CONSTANT, "1"), Entity(EntityType::WILD)));
 
 		EXPECT_EQ(test9, q9);
 
@@ -445,7 +445,7 @@ namespace UnitTesting {
 		Query q11;
 		q11.addEntity(Entity(EntityType::STMT, Synonym{ "s" }));
 		q11.addSelected(Entity(EntityType::STMT, Synonym{ "s" }));
-		q11.addRelation(RelRef(RelType::FOLLOWS, Entity(EntityType::WILD, ""), Entity(EntityType::WILD, "")));
+		q11.addRelation(RelRef(RelType::FOLLOWS, Entity(EntityType::WILD, ""), Entity(EntityType::WILD)));
 
 		EXPECT_EQ(test11, q11);
 	}
@@ -823,55 +823,75 @@ namespace UnitTesting {
 	TEST(QueryPreprocessor, invalidQueries) {
 		QueryPreprocessor qp;
 		Query q = Query();
+		std::vector<std::string> queries;
+		queries.push_back("asg a;");
+		queries.push_back("la;skdjf lkasdfj laks;fdj");
 
-		try {
-			Query test1 = qp.parse("asg a;");
-			Query test2 = qp.parse("la;skdjf lkasdfj laks;fdj");
-		}
-		catch (std::runtime_error const& err) {
-			EXPECT_EQ(err.what(), std::string("Invalid syntax for declaration or select"));
-		}
-		catch (...) {
-			FAIL();
-		}
-
-		try {
-			Query test3 = qp.parse("assign a; Select s");
-		}
-		catch (std::runtime_error const& err) {
-			EXPECT_EQ(err.what(), std::string("Select variable content has not been declared"));
-		}
-		catch (...) {
-			FAIL();
+		for (std::string s : queries) {
+			try {
+				Query test1 = qp.parse(s);
+				FAIL();
+			}
+			catch (std::runtime_error const& err) {
+				EXPECT_EQ(err.what(), std::string("Invalid syntax for declaration or select"));
+			}
+			catch (...) {
+				FAIL();
+			}
 		}
 
-		try {
-			Query test4 = qp.parse("assign a; stmt s; procedure p; Select a pattern p(s, _)");
-			Query test5 = qp.parse("assign a; stmt s; call c; Select a pattern c(s, _)");
-			Query test6 = qp.parse("assign a; stmt s; Select a pattern s(s, _)");
-		}
-		catch (std::runtime_error const& err) {
-			EXPECT_EQ(err.what(), std::string("Invalid pattern type"));
-		}
-		catch (...) {
-			FAIL();
+		queries.clear();
+		queries.push_back("assign a; Select s");
+		for (std::string s : queries) {
+			try {
+				Query test1 = qp.parse(s);
+				FAIL();
+			}
+			catch (std::runtime_error const& err) {
+				EXPECT_EQ(err.what(), std::string("Select variable content has not been declared"));
+			}
+			catch (...) {
+				FAIL();
+			}
 		}
 
-		try {
-			Query test7 = qp.parse("assign a; stmt s; Select s Follows(s,a)");
-			Query test8 = qp.parse("assign a; stmt s; Select s Such that Follows(s,a)");
-			Query test9 = qp.parse("assign a; stmt s; Select s such That Follows(s,a)");
-			Query test10 = qp.parse("assign a; stmt s; Select s suchthat Follows(s,a)");
-			Query test11 = qp.parse("assign a; stmt s; Select s such   that Follows(s,a)");
-			Query test12 = qp.parse("assign a; stmt s; Select s such that such that Follows(s,a)");
-			Query test13 = qp.parse("assign a; stmt s; Select s such that Follows(1,2) Follows(s,a)");
-			Query test14 = qp.parse("assign a; stmt s; Select s such that Follows(1,2) such That Follows(s,a)");
+		queries.clear();
+		queries.push_back("assign a; stmt s; procedure p; Select a pattern p(s, _)");
+		queries.push_back("assign a; stmt s; call c; Select a pattern c(s, _)");
+		queries.push_back("assign a; stmt s; Select a pattern s(s, _)");
+		for (std::string s : queries) {
+			try {
+				Query test1 = qp.parse(s);
+				FAIL();
+			}
+			catch (std::runtime_error const& err) {
+				EXPECT_EQ(err.what(), std::string("Invalid pattern type"));
+			}
+			catch (...) {
+				FAIL();
+			}
 		}
-		catch (std::runtime_error const& err) {
-			EXPECT_EQ(err.what(), std::string("Invalid query"));
-		}
-		catch (...) {
-			FAIL();
+
+		queries.clear();
+		queries.push_back("assign a; stmt s; Select s Such that Follows(s,a)");
+		queries.push_back("assign a; stmt s; Select s such That Follows(s,a)");
+		queries.push_back("assign a; stmt s; Select s suchthat Follows(s,a)");
+		queries.push_back("assign a; stmt s; Select s such   that Follows(s,a)");
+		queries.push_back("assign a; stmt s; Select s such that such that Follows(s,a)");
+		queries.push_back("assign a; stmt s; Select s such that Follows(1,2) Follows(s,a)");
+		queries.push_back("assign a; stmt s; Select s such that Follows(1,2) such That Follows(s,a)");
+		queries.push_back("procedure _p, Select _p");
+		for (std::string s : queries) {
+			try {
+				Query test1 = qp.parse(s);
+				FAIL() << s <<", synonym: " <<test1.getSelected()[0].getSynonym();
+			}
+			catch (std::runtime_error const& err) {
+				EXPECT_EQ(err.what(), std::string("Invalid query"));
+			}
+			catch (...) {
+				FAIL();
+			}
 		}
 	}
 }

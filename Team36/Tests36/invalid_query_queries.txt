@@ -1083,6 +1083,11 @@ assign 12;
 Select 12
 none
 5000
+213 - Syntactically invalid declaration (double such that)
+assign a; stmt s;
+Select s such that such that Follows(s,a)
+none
+5000
 1 - Semantically invalid Follows
 stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
 Select s such that Follows(s,v)
