@@ -364,7 +364,8 @@ void PatternRelRefValidator::parseParameterPattern(
       if (token_chain.size() == 0) {
           throw std::invalid_argument("Invalid argument, no expr found");
       }
-      // check second parameter if is WILDCARD
+      // check second parameter if is WILDCARD 
+      // TODO check after u erase.
       if (token_chain[0].type == QueryToken::WILDCARD) {
         wild = true;
         // if first element is WILDCARD token, last element must be WILDCARD for
@@ -380,22 +381,42 @@ void PatternRelRefValidator::parseParameterPattern(
       std::vector<QueryToken> temp_token_chain_2;
 
       if (token_chain.size() != 0) {
-        if (token_chain[0].type == QueryToken::QUOTATION_OPEN) {
-          token_chain.erase(token_chain.begin());
-
-          for (int i = 0; i < token_chain.size(); i++) {
-            if (token_chain[0].type != QueryToken::QUOTATION_CLOSE) {
-              temp_token_chain_2.push_back(token_chain[0]);
+        //one or more token
+          if (token_chain[0].type == QueryToken::QUOTATION_OPEN) {
               token_chain.erase(token_chain.begin());
-            } else {
-              break;
-            }
+
+
+              // run thru all until quotation_close
+              for (int i = 0; i < token_chain.size(); i++) {
+                  if (token_chain[i].type != QueryToken::QUOTATION_CLOSE) {
+                      temp_token_chain_2.push_back(token_chain[i]);
+                  }
+                  else {
+                      token_chain.erase(token_chain.begin(), token_chain.begin() + i + 1);
+                      // if is wild need remove the last wildcard
+                      if (wild && token_chain[0].type == QueryToken::WILDCARD) {
+                          token_chain.erase(token_chain.begin());
+                      }
+
+                      // go out of loop once hit quotation close
+                      break;
+                  }
+              }
           }
-        } else if (wild && token_chain[0].type == QueryToken::WILDCARD) {
-          // 2 WILDCARDS in a row
-          throw std::runtime_error("Unexpected parameters for Pattern");
-        }
+
+        //} else if (wild && token_chain[0].type == QueryToken::WILDCARD) {
+        //  // 2 WILDCARDS in a row
+        //  throw std::runtime_error("Unexpected parameters for Pattern");
+        //}
+
+        // if still got things means wrong params
+           if (token_chain.size() != 0) {
+
+               throw std::runtime_error("Unexpected parameters for Pattern");
+           }
+
       }
+
       if (temp_token_chain.size() == 0) {
           throw std::invalid_argument("Invalid argument, no entRef found");
       }
