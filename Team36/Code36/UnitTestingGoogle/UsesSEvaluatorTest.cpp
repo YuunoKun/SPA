@@ -28,6 +28,15 @@ namespace UnitTesting {
 		}
 		catch (std::invalid_argument ex) {
 		}
+
+		PKB::getInstance().addUsesS(1, x);
+
+		try {
+			evaluator.haveRelation();
+			FAIL();
+		}
+		catch (std::invalid_argument ex) {
+		}
 	}
 
 	TEST_F(UsesSEvaluatorTest, isRelation) {
@@ -214,7 +223,6 @@ namespace UnitTesting {
 		PKB::getInstance().addVariable(z);
 		PKB::getInstance().addUsesS(1, x);
 		PKB::getInstance().addUsesS(3, y);
-
 
 		try {
 			Entity header = { VARIABLE, Synonym{"a"} };

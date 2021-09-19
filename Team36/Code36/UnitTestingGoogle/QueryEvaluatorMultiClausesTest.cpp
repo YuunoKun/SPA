@@ -1183,7 +1183,6 @@ namespace UnitTesting {
 		selected = assignCommon;
 		result = { MODIFIES_LEFT4 };
 		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation }, { pattern }, selected)), result);
-
 	}
 
 	TEST_F(QueryEvaluatorMultiClausesTest, evaluateQueryPatternRelationJoinSingleCommonSynonyms) {

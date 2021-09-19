@@ -1906,18 +1906,15 @@ namespace UnitTesting {
 		selected.push_back(assignCommon);
 		results.push_back({ left1, left2 });
 
-
 		//Handle result for Select a pattern a(_, "x")
 		patterns.push_back(Pattern(assignCommon, WILD_CARD, x, false));
 		selected.push_back(assignCommon);
 		results.push_back({ left1 });
 
-
 		//Handle result for Select a pattern a(_, _"x"_)
 		patterns.push_back(Pattern(assignCommon, WILD_CARD, x, true));
 		selected.push_back(assignCommon);
 		results.push_back({ left1, left2 });
-
 
 		//Handle result for Select a pattern a(_, "y")
 		patterns.push_back(Pattern(assignCommon, WILD_CARD, y, false));
@@ -1937,7 +1934,6 @@ namespace UnitTesting {
 		selected.push_back(lhsCommon);
 		results.push_back({ right1 });
 
-
 		//Handle result for Select a pattern a(v, _"x"_)
 		patterns.push_back(Pattern(assignCommon, lhsCommon, x, true));
 		selected.push_back(assignCommon);
@@ -1945,7 +1941,6 @@ namespace UnitTesting {
 		patterns.push_back(Pattern(assignCommon, lhsCommon, x, true));
 		selected.push_back(lhsCommon);
 		results.push_back({ right1, right2 });
-
 
 		//Handle result for Select a pattern a(v, "y")
 		patterns.push_back(Pattern(assignCommon, lhsCommon, y, false));
@@ -1962,7 +1957,6 @@ namespace UnitTesting {
 		patterns.push_back(Pattern(assignCommon, lhsCommon, y, true));
 		selected.push_back(lhsCommon);
 		results.push_back({ right2 });
-			
 
 		//Handle result for Select a pattern a("x", "x")
 		patterns.push_back(Pattern(assignCommon, lhsX, x, false));
@@ -2021,7 +2015,6 @@ namespace UnitTesting {
 		patterns.push_back(Pattern(assignCommon, lhsCommon, EXPRESSION_CONSTANT, true));
 		selected.push_back(lhsCommon);
 		results.push_back({ right2 });
-
 
 		for (unsigned int i = 0; i < patterns.size(); i++) {
 			Query q = initQuery(patterns[i], selected[i]);

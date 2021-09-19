@@ -395,7 +395,6 @@ bool PKBAdapter::isUsesS(stmt_index index) {
 	return a.containsKey(s1);
 }
 
-
 std::vector<std::pair<StmtInfo, var_name>> PKBAdapter::getUsesSRelation() {
 	auto a = PKB::getInstance().PKB::getUsesS();
 	return a.getPairs();

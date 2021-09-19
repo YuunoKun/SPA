@@ -27,6 +27,15 @@ namespace UnitTesting {
 		}
 		catch (std::invalid_argument ex) {
 		}
+
+		PKB::getInstance().addModifiesS(1, x);
+
+		try {
+			evaluator.haveRelation();
+			FAIL();
+		}
+		catch (std::invalid_argument ex) {
+		}
 	}
 
 	TEST_F(ModifiesSEvaluatorTest, isRelation) {

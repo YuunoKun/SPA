@@ -1017,7 +1017,6 @@ namespace UnitTesting {
 		PKB::getInstance().addModifiesP(main2, x);
 		PKB::getInstance().addModifiesP(main2, y);
 
-
 		std::vector<var_name> v1 = { x };
 		std::vector<var_name> v2 = pkb.getModifiedP(main1);
 		std::sort(v2.begin(), v2.end());
@@ -1066,7 +1065,6 @@ namespace UnitTesting {
 		EXPECT_FALSE(pkb.isModifiesS(2));
 		EXPECT_TRUE(pkb.isModifiesS(3));
 		EXPECT_FALSE(pkb.isModifiesS(4));
-
 	}
 	TEST_F(PKBAdapterTest, getModifiesSRelation) {
 		StmtInfo p1{ 1, STMT_READ };
@@ -1147,7 +1145,6 @@ namespace UnitTesting {
 		PKB::getInstance().addVariable(y);
 		PKB::getInstance().addModifiesS(2, x);
 		PKB::getInstance().addModifiesS(2, y);
-
 
 		std::vector<var_name> v1 = { x };
 		std::vector<var_name> v2 = pkb.getModifiedS(1);
@@ -1280,7 +1277,6 @@ namespace UnitTesting {
 		PKB::getInstance().addUsesP(main2, x);
 		PKB::getInstance().addUsesP(main2, y);
 
-
 		std::vector<var_name> v1 = { x };
 		std::vector<var_name> v2 = pkb.getUsedP(main1);
 		std::sort(v2.begin(), v2.end());
@@ -1329,7 +1325,6 @@ namespace UnitTesting {
 		EXPECT_FALSE(pkb.isUsesS(2));
 		EXPECT_TRUE(pkb.isUsesS(3));
 		EXPECT_FALSE(pkb.isUsesS(4));
-
 	}
 
 	TEST_F(PKBAdapterTest, getUsesSRelation) {
@@ -1409,7 +1404,6 @@ namespace UnitTesting {
 		PKB::getInstance().addVariable(y);
 		PKB::getInstance().addUsesS(2, x);
 		PKB::getInstance().addUsesS(2, y);
-
 
 		std::vector<var_name> v1 = { x };
 		std::vector<var_name> v2 = pkb.getUsedS(1);
