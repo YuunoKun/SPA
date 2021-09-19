@@ -5,12 +5,12 @@ main
 5000
 2 - select constant
 constant c;
-Select c;
+Select c
 0, 12, 6, 3, 1, 2
 5000
 3 - select variable
 variable v;
-Select v;
+Select v
 a, b, c, d, e, f, g, h, i, j, k
 5000
 4 - select stmt
@@ -390,7 +390,7 @@ none
 5000
 79 - modifies, 1 such that and 1 pattern, no common synonyms
 assign a, a1;
-Select a such that Modifies(a, "e") pattern a1("b", _"i"_);
+Select a such that Modifies(a, "e") pattern a1("b", _"i"_)
 none
 5000
 80 - modifies, 1 such that and 1 pattern, no common synonyms
@@ -400,7 +400,7 @@ Select a such that Modifies(a, "e") pattern a1("b", _"d"_)
 5000
 81 - modifies, 1 such that and 1 pattern, no common synonyms
 assign a; variable v;
-Select a such that Modifies(6, "d") pattern a(v, _);
+Select a such that Modifies(6, "d") pattern a(v, _)
 1, 2, 3, 6, 7, 10, 12, 14, 15, 18, 19, 20, 25, 27, 28, 39, 41, 42, 46, 47, 48
 5000
 83 - modifies, 1 such that and 1 pattern, no common synonyms
@@ -410,7 +410,7 @@ Select a such that Modifies(15, "a") pattern a(v, _"c"_)
 5000
 84 - modifies, 1 such that and 1 pattern, no common synonyms
 assign a; variable v, v1;
-Select v such that Modifies(25, v) pattern a(v1, _);
+Select v such that Modifies(25, v) pattern a(v1, _)
 h
 5000
 85 - modifies, 1 such that and 1 pattern, no common synonyms
@@ -420,7 +420,7 @@ a, e, g, c, b
 5000
 86 - modifies, 1 such that and 1 pattern, no common synonyms
 assign a, a1; variable v;
-Select a such that Modifies(a, v) pattern a1(_, _);
+Select a such that Modifies(a, v) pattern a1(_, _)
 1, 2, 3, 6, 7, 10, 12, 14, 15, 18, 19, 20, 25, 27, 28, 39, 41, 42, 46, 47, 48
 5000
 87 - modifies, 1 such that and 1 pattern, no common synonyms
@@ -465,7 +465,7 @@ f
 5000
 95 - uses, 1 such that and 1 pattern, no common synonyms
 assign a, a1; variable v;
-Select a such that Uses(a, v) pattern a1(_, _);
+Select a such that Uses(a, v) pattern a1(_, _)
 6, 7, 10, 12, 14, 15, 18, 19, 20, 25, 27, 28, 39, 41, 42, 46, 47, 48
 5000
 96 - uses, 1 such that and 1 pattern, no common synonyms

@@ -209,8 +209,14 @@ void QueryTokenizer::parse_into_query_tokens(std::string input) {
 				}
 			}
 			else if (isalpha(c)) {
-				curr_query_token.type = QueryToken::IDENTIFIER;
-				curr_query_token.token_value.push_back(c);
+				if (curr_query_token.type == QueryToken::IDENTIFIER || curr_query_token.type == QueryToken::WHITESPACE) {
+					curr_query_token.type = QueryToken::IDENTIFIER;
+					curr_query_token.token_value.push_back(c);
+				}
+				else {
+					throw std::runtime_error("Invalid Name present");
+				}
+				
 			}
 			else {
 				throw std::runtime_error("Unknown symbol present");
