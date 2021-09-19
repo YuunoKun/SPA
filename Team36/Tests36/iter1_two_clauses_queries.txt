@@ -88,7 +88,7 @@ assign a, a1; variable v, v1;
 Select v such that Uses(a, v) pattern a1(v1, _"x"_)
 z, p, y, x, q, j, i
 5000
-19 -  uses, 1 such that and 1 pattern, no common synonyms
+19 - uses, 1 such that and 1 pattern, no common synonyms
 assign a, a1; variable v, v1;
 Select a1 such that Uses(a, v) pattern a1(v1, _"10"_)
 15, 16, 21, 22
@@ -140,7 +140,7 @@ none
 5000
 29 - parent, 1 such that and 1 pattern, no common synonyms
 stmt s; assign a; variable v;
-Select v such  that Parent(s, 25) pattern a(v, _"5"_)
+Select v such that Parent(s, 25) pattern a(v, _"5"_)
 y, a, q
 5000
 30 - parent, 1 such that and 1 pattern, no common synonyms
@@ -158,7 +158,7 @@ assign a, a1;
 Select a such that Parent*(5, a) pattern a1("z", _"24"_)
 6, 9, 10, 11
 5000
-33 -  parentT, 1 such that and 1 pattern. no common synonyms
+33 - parentT, 1 such that and 1 pattern. no common synonyms
 assign a, a1;
 Select a such that Parent*(8, a) pattern a1("y", _)
 9, 10
@@ -195,7 +195,7 @@ Select a such that Parent*(s, 12) pattern a("q", _"p"_)
 5000
 40 - parentT, 1 such that and 1 pattern. no common synonyms
 stmt s; assign a; variable v;
-Select v such  that Parent*(s, 25) pattern a(v, _"5"_)
+Select v such that Parent*(s, 25) pattern a(v, _"5"_)
 y, a, q
 5000
 41 - parentT, 1 such that and 1 pattern. no common synonyms
@@ -255,7 +255,7 @@ none
 5000
 53 - follows, 1 such that and 1 pattern, no common synonyms
 stmt s; assign a; variable v;
-Select v such  that Follows(s, 25) pattern a(v, _"5"_)
+Select v such that Follows(s, 25) pattern a(v, _"5"_)
 y, a, q
 5000
 54 - follows, 1 such that and 1 pattern, no common synonyms
@@ -315,7 +315,7 @@ none
 5000
 65 - followsT, 1 such that and 1 pattern, no common synonyms
 stmt s; assign a; variable v;
-Select v such  that Follows*(s, 25) pattern a(v, _"5"_)
+Select v such that Follows*(s, 25) pattern a(v, _"5"_)
 y, a, q
 5000
 66 - followsT, 1 such that and 1 pattern, no common synonyms
@@ -370,27 +370,27 @@ Select a such that Modifies(a, v) pattern a(v1, _"q"_)
 5000
 76- modifies, 1 such that and 1 pattern, 1 common synonynm
 assign a; variable v, v1;
-Select v such that  Modifies(a, v) pattern a(v1, _"q"_)
+Select v such that Modifies(a, v) pattern a(v1, _"q"_)
 y, q
 5000
 77 - modifies, 1 such that and 1 pattern, 1 common synonynm
 assign a, a1; variable v;
-Select v such that  Modifies(a, v) pattern a1(v, _"q"_)
+Select v such that Modifies(a, v) pattern a1(v, _"q"_)
 y, q
 5000
 78 - modifies, 1 such that and 1 pattern, 1 common synonynm
 assign a, a1; variable v;
-Select v such that  Modifies(a, v) pattern a1(v, _)
+Select v such that Modifies(a, v) pattern a1(v, _)
 y, z, i, p, q, j, a
 5000
 79 - modifies, 1 such that and 1 pattern, 1 common synonynm
 assign a, a1; variable v;
-Select v such that  Modifies(10, v) pattern a1(v, _)
+Select v such that Modifies(10, v) pattern a1(v, _)
 z
 5000
 80 - modifies, 1 such that and 1 pattern, 1 common synonynm
 assign a; variable v, v1;
-Select a such that  Modifies(a, "x") pattern a(v1, _)
+Select a such that Modifies(a, "x") pattern a(v1, _)
 none
 5000
 81 - uses, 1 such that and 1 pattern, 1 common synonynm
@@ -435,27 +435,27 @@ Select a such that Uses(a, v) pattern a(v1, _"q"_)
 5000
 89 - uses, 1 such that and 1 pattern, 1 common synonynm
 assign a; variable v, v1;
-Select v such that  Uses(a, v) pattern a(v1, _"q"_)
+Select v such that Uses(a, v) pattern a(v1, _"q"_)
 x, y, z, p, q, i, j
 5000
 90 - uses, 1 such that and 1 pattern, 1 common synonynm
 assign a, a1; variable v;
-Select v such that  Uses(a, v) pattern a1(v, _"q"_)
+Select v such that Uses(a, v) pattern a1(v, _"q"_)
 y, q
 5000
 91 - uses, 1 such that and 1 pattern, 1 common synonynm
 assign a, a1; variable v;
-Select v such that  Uses(a, v) pattern a1(v, _)
+Select v such that Uses(a, v) pattern a1(v, _)
 y, z, i, p, q, j
 5000
 92 - uses, 1 such that and 1 pattern, 1 common synonynm
 assign a, a1; variable v;
-Select v such that  Uses(11, v) pattern a1(v, _)
+Select v such that Uses(11, v) pattern a1(v, _)
 y, z, p, q
 5000
 93 - uses, 1 such that and 1 pattern, 1 common synonynm
 assign a; variable v, v1;
-Select a such that  Uses(a, "x") pattern a(v1, _)
+Select a such that Uses(a, "x") pattern a(v1, _)
 6, 9, 11, 13, 15, 21, 22, 26, 27
 5000
 94 - parent, 1 such that and 1 pattern, 1 common synonym
