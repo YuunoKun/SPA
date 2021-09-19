@@ -84,6 +84,9 @@ Query QueryPreprocessor::parse(std::string str) {
 						haveNextDeclaration = false;
 					}
 				}
+				else {
+					throw std::runtime_error("Invalid declaration");
+				}
 			}
 			else if (!haveNextDeclaration && !endOfCurrentDeclaration && token.type == QueryToken::QueryTokenType::TERMINATOR) {
 				endOfCurrentDeclaration = true;

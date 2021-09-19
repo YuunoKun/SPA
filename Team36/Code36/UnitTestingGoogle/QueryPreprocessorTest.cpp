@@ -872,6 +872,7 @@ namespace UnitTesting {
 			}
 		}
 
+
 		queries.clear();
 		queries.push_back("assign a; stmt s; Select s Such that Follows(s,a)");
 		queries.push_back("assign a; stmt s; Select s such That Follows(s,a)");
@@ -880,14 +881,28 @@ namespace UnitTesting {
 		queries.push_back("assign a; stmt s; Select s such that such that Follows(s,a)");
 		queries.push_back("assign a; stmt s; Select s such that Follows(1,2) Follows(s,a)");
 		queries.push_back("assign a; stmt s; Select s such that Follows(1,2) such That Follows(s,a)");
-		queries.push_back("procedure _p, Select _p");
 		for (std::string s : queries) {
 			try {
 				Query test1 = qp.parse(s);
 				FAIL() << s <<", synonym: " <<test1.getSelected()[0].getSynonym();
 			}
 			catch (std::runtime_error const& err) {
-				EXPECT_EQ(err.what(), std::string("Invalid query"));
+				EXPECT_EQ(err.what(), std::string("Invalid query")) << s;
+			}
+			catch (...) {
+				FAIL();
+			}
+		}
+
+		queries.clear();
+		queries.push_back("procedure _p; Select _p");
+		for (std::string s : queries) {
+			try {
+				Query test1 = qp.parse(s);
+				FAIL() << s << ", synonym: " << test1.getSelected()[0].getSynonym();
+			}
+			catch (std::runtime_error const& err) {
+				EXPECT_EQ(err.what(), std::string("Invalid declaration"));
 			}
 			catch (...) {
 				FAIL();

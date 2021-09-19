@@ -17,6 +17,7 @@ void QueryTokenizer::parse_into_query_tokens(std::string input) {
 	bool quotation_validation = false;
 	bool is_such = false;
 	bool is_such_temp = false;
+	bool may_be_wild = false;
 
 	for (char c : input) {
 		if (is_such) {
@@ -111,6 +112,7 @@ void QueryTokenizer::parse_into_query_tokens(std::string input) {
 			add_query_token(curr_query_token);
 			break;
 		case '_':
+			may_be_wild = true;
 			add_query_token(curr_query_token);
 			curr_query_token.type = QueryToken::WILDCARD;
 			add_query_token(curr_query_token);
