@@ -35,7 +35,12 @@ Query QueryPreprocessor::parse(std::string str) {
 	QueryToken prevToken = QueryToken();
 
 	// To keep track of previous important declaration token, excludes COMMA and SEMICOLON
-	QueryToken temp = QueryToken();
+	QueryToken declarationType = QueryToken();
+
+	// To keep track if there another declaration
+	bool haveNextDeclaration = false;
+	// Keep track if it the end of current declaration by terminator
+	bool endOfCurrentDeclaration = true;;
 
 	// To keep track of previous token during Selection
 	QueryToken prevTokenSelect = QueryToken();
@@ -61,20 +66,33 @@ Query QueryPreprocessor::parse(std::string str) {
 		// First iteration, set identifier to correct type
 		// Check what is my previous token
 		if (!isSelect) {
-			// temp holds the casted version (can be non-identifier)
-			temp = setIdentifierToQueryTokenType(prevToken, temp, token);
-			validateDeclarationQuery(prevToken, token);
-
-			Entity ent;
-			if (prevToken.type != QueryToken::QueryTokenType::WHITESPACE &&
-				prevToken.type != QueryToken::QueryTokenType::TERMINATOR &&
-				token.type == QueryToken::QueryTokenType::IDENTIFIER) {
-				if (temp.type == QueryToken::QueryTokenType::SELECT) {
-					addSelectedToQuery(query, ent, output, selected, token, isSelect);
+			if (endOfCurrentDeclaration) {
+				declarationType = setIdentifierToQueryTokenType(prevToken, declarationType, token);
+				validateDeclarationQuery(prevToken, token);
+				haveNextDeclaration = true;
+				endOfCurrentDeclaration = false;
+			}
+			else if (haveNextDeclaration) {
+				Entity ent;
+				if (token.type == QueryToken::QueryTokenType::IDENTIFIER) {
+					if (declarationType.type == QueryToken::QueryTokenType::SELECT) {
+						addSelectedToQuery(query, ent, output, selected, token, isSelect);
+						haveNextDeclaration = false;
+					}
+					else {
+						addEntityToQuery(query, ent, output, declarationType, token);
+						haveNextDeclaration = false;
+					}
 				}
-				else {
-					addEntityToQuery(query, ent, output, temp, token);
-				}
+			}
+			else if (!haveNextDeclaration && !endOfCurrentDeclaration && token.type == QueryToken::QueryTokenType::TERMINATOR) {
+				endOfCurrentDeclaration = true;
+			}
+			else if (!haveNextDeclaration && !endOfCurrentDeclaration && token.type == QueryToken::QueryTokenType::COMMA) {
+				haveNextDeclaration = true;
+			}
+			else {
+				throw std::runtime_error("Invalid declaration");
 			}
 			prevToken = token;
 		}
@@ -193,7 +211,7 @@ void QueryPreprocessor::validateDeclarationQuery(QueryToken& prevToken, QueryTok
 	}
 }
 
-void QueryPreprocessor::addEntityToQuery(Query& query, Entity& ent, std::vector<QueryToken>& output, QueryToken& temp, QueryToken& token) {
+void QueryPreprocessor::addEntityToQuery(Query& query, Entity& ent, std::vector<QueryToken>& output, QueryToken& type, QueryToken& token) {
 	// Check if entity name is already used, exists in output, should return error
 	for (QueryToken each : output) {
 		if (token.token_value == each.token_value) {
@@ -202,10 +220,10 @@ void QueryPreprocessor::addEntityToQuery(Query& query, Entity& ent, std::vector<
 	}
 
 	// Declaring goes into output
-	output.push_back({ temp.type, { token.token_value } });
+	output.push_back({ type.type, { token.token_value } });
 	Synonym synonym;
 	synonym.name = token.token_value;
-	EntityType entityType = Utility::queryTokenTypeToEntityType(temp.type);
+	EntityType entityType = Utility::queryTokenTypeToEntityType(type.type);
 	ent = { entityType, synonym };
 	query.addEntity(ent);
 }
