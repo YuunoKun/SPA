@@ -30,7 +30,7 @@ bool PatternRelRefValidator::isStmtRef(Query& query, std::vector<QueryToken> tok
     if (token.type == QueryToken::IDENTIFIER) {
         std::unordered_map<std::string, Entity> ent_chain = query.getEntities();
         if (ent_chain.find(token.token_value) != ent_chain.end()) {
-            return ent_chain.at(token.token_value).getType() == EntityType::ASSIGN;
+            return ent_chain.at(token.token_value).getType() != EntityType::PROCEDURE;
         }
     }
 
@@ -264,7 +264,7 @@ void PatternRelRefValidator::parseParameterSuchThat(
         if (token_chain.size() != 0) {
             throw std::runtime_error("Unexpected parameters for Follows*");
         }
-        query.addRelation(RelRef(RelType::PARENT,
+        query.addRelation(RelRef(RelType::FOLLOWS_T,
             setStmtRef(query, stmt),
             setStmtRef(query, stmt2)));
         break;

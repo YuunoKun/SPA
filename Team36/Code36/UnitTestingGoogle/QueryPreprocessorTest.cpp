@@ -373,7 +373,8 @@ namespace UnitTesting {
 
 		EXPECT_EQ(test3, q3);
 
-		Query test4 = qp.parse("variable v; procedure p; Select p such that Modifies (p, \"x\")");
+		//iteration 2
+		/*Query test4 = qp.parse("variable v; procedure p; Select p such that Modifies (p, \"x\")");
 
 		Query q4 = Query();
 		q4.addEntity(Entity(EntityType::VARIABLE, Synonym{ "v" }));
@@ -381,7 +382,7 @@ namespace UnitTesting {
 		q4.addSelected(Entity(EntityType::PROCEDURE, Synonym{ "p" }));
 		q4.addRelation(RelRef(RelType::MODIFIES_S, Entity(EntityType::PROCEDURE, Synonym{ "p" }), Entity(EntityType::VARIABLE, "x")));
 
-		EXPECT_EQ(test4, q4);
+		EXPECT_EQ(test4, q4);*/
 
 		Query test5 = qp.parse("assign a; while w; Select a such that Parent* (w, a)");
 
