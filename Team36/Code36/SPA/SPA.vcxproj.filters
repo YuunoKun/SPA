@@ -165,6 +165,12 @@
     <ClCompile Include="..\source\RelationsEvaluator.cpp">
       <Filter>Source Files\PQL\QueryEvaluator</Filter>
     </ClCompile>
+    <ClCompile Include="..\source\QueryOptimizer.cpp">
+      <Filter>Source Files\PQL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\ResultProjector.cpp">
+      <Filter>Source Files\PQL</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\source\Parser.h">
@@ -280,6 +286,15 @@
     </ClInclude>
     <ClInclude Include="..\source\RelationsEvaluator.h">
       <Filter>Header Files\PQL\QueryEvaluator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\QueryOptimizer.h">
+      <Filter>Header Files\PQL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\ResultProjector.h">
+      <Filter>Header Files\PQL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\Clause.h">
+      <Filter>Header Files\PQL\QueryObject</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

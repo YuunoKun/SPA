@@ -2,10 +2,11 @@
 
 #include <string>
 
+#include "Clause.h"
 #include "Entity.h"
 #include "TNode.h"
 
-class Pattern {
+class Pattern : public Clause {
 public:
 	Pattern(Entity, Entity, expr, bool);
 

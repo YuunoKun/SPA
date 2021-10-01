@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 
+#include "Clause.h"
 #include "Entity.h"
 
 enum RelType {
@@ -16,7 +17,7 @@ enum RelType {
 	FOLLOWS_T
 };
 
-class RelRef {
+class RelRef : public Clause{
 public:
 	RelRef(RelType, Entity, Entity);
 

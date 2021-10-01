@@ -5,7 +5,12 @@ std::list<std::string> QuerySystem::processQuery(std::string input) {
 	QueryEvaluator evaluator;
 	try {
 		Query query = preprocessor.parse(input);
-		std::list<std::string> result = evaluator.evaluateQuery(query);
+		query.setClause(QueryOptimizer::optimizeClauses(query.getClauses()));
+
+		std::list<std::list<std::string>> results = evaluator.evaluateQuery(query);
+		
+		std::list<std::string> result = ResultProjector::projectResult(results);
+
 		return result;
 	}
 	catch (std::exception& e)
