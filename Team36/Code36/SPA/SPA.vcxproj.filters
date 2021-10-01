@@ -34,75 +34,39 @@
     <Filter Include="Header Files\PKB">
       <UniqueIdentifier>{93d5b8fd-c47f-4c67-af92-aa1bef18c9ef}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\PQL\QueryPreprocessor">
+      <UniqueIdentifier>{f9004a73-c2b1-411e-bd26-05b9988b7679}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\PQL\QueryPreprocessor">
+      <UniqueIdentifier>{274a1470-2177-42c9-8351-e4dc064e4e14}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\PQL\QueryEvaluator">
+      <UniqueIdentifier>{869b9f83-19af-415d-8e88-4809d90af670}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\PQL\Helper">
+      <UniqueIdentifier>{1d9d86ac-3eba-483b-9f71-95a582cd91f7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\PQL\QueryObject">
+      <UniqueIdentifier>{68d43cbf-77cf-4ba4-98b7-3415d920e923}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\PQL\QueryEvaluator\RelationEvaluator">
+      <UniqueIdentifier>{c25711b4-12ef-49b2-a273-01893fdc508a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\PQL\QueryObject">
+      <UniqueIdentifier>{033ad1a5-4db2-4789-917d-e090717eeff1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\PQL\Helper">
+      <UniqueIdentifier>{bc023e21-f25a-495c-986c-91800839c3ab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\PQL\QueryEvaluator">
+      <UniqueIdentifier>{355e6d9e-04f2-4a09-adc5-1a47efe1c42d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\PQL\QueryEvaluator\RelationEvaluator">
+      <UniqueIdentifier>{1ea08201-45db-4358-a6ac-6fb079daeeae}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\source\Entity.cpp">
-      <Filter>Source Files\PQL</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\Pattern.cpp">
-      <Filter>Source Files\PQL</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\PKBAdapter.cpp">
-      <Filter>Source Files\PQL</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\Query.cpp">
-      <Filter>Source Files\PQL</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\QueryEvaluator.cpp">
-      <Filter>Source Files\PQL</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\QueryPreprocessor.cpp">
-      <Filter>Source Files\PQL</Filter>
-    </ClCompile>
     <ClCompile Include="..\source\QuerySystem.cpp">
-      <Filter>Source Files\PQL</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\RelRef.cpp">
-      <Filter>Source Files\PQL</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\QueryResult.cpp">
-      <Filter>Source Files\PQL</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\PatternEvaluator.cpp">
-      <Filter>Source Files\PQL</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\RelationsEvaluator.cpp">
-      <Filter>Source Files\PQL</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\Utility.cpp">
-      <Filter>Source Files\PQL</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\ResultTable.cpp">
-      <Filter>Source Files\PQL</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\FollowsEvaluator.cpp">
-      <Filter>Source Files\PQL</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\FollowsTEvaluator.cpp">
-      <Filter>Source Files\PQL</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\QueryTokenizer.cpp">
-      <Filter>Source Files\PQL</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\QueryToken.cpp">
-      <Filter>Source Files\PQL</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\ParentEvaluator.cpp">
-      <Filter>Source Files\PQL</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\ParentTEvaluator.cpp">
-      <Filter>Source Files\PQL</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\ModifiesSEvaluator.cpp">
-      <Filter>Source Files\PQL</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\ModifiesPEvaluator.cpp">
-      <Filter>Source Files\PQL</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\UsesSEvaluator.cpp">
-      <Filter>Source Files\PQL</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\UsesPEvaluator.cpp">
       <Filter>Source Files\PQL</Filter>
     </ClCompile>
     <ClCompile Include="..\source\RelationTable.cpp">
@@ -132,8 +96,74 @@
     <ClCompile Include="..\source\Statement.cpp">
       <Filter>Source Files\SP</Filter>
     </ClCompile>
+    <ClCompile Include="..\source\QueryTokenizer.cpp">
+      <Filter>Source Files\PQL\QueryPreprocessor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\QueryToken.cpp">
+      <Filter>Source Files\PQL\QueryPreprocessor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\QueryPreprocessor.cpp">
+      <Filter>Source Files\PQL\QueryPreprocessor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\Pattern.cpp">
+      <Filter>Source Files\PQL\QueryObject</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\Entity.cpp">
+      <Filter>Source Files\PQL\QueryObject</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\RelRef.cpp">
+      <Filter>Source Files\PQL\QueryObject</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\Query.cpp">
+      <Filter>Source Files\PQL\QueryObject</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\Utility.cpp">
+      <Filter>Source Files\PQL\Helper</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\FollowsEvaluator.cpp">
+      <Filter>Source Files\PQL\QueryEvaluator\RelationEvaluator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\FollowsTEvaluator.cpp">
+      <Filter>Source Files\PQL\QueryEvaluator\RelationEvaluator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\ModifiesPEvaluator.cpp">
+      <Filter>Source Files\PQL\QueryEvaluator\RelationEvaluator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\ModifiesSEvaluator.cpp">
+      <Filter>Source Files\PQL\QueryEvaluator\RelationEvaluator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\ParentEvaluator.cpp">
+      <Filter>Source Files\PQL\QueryEvaluator\RelationEvaluator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\ParentTEvaluator.cpp">
+      <Filter>Source Files\PQL\QueryEvaluator\RelationEvaluator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\PatternEvaluator.cpp">
+      <Filter>Source Files\PQL\QueryEvaluator</Filter>
+    </ClCompile>
     <ClCompile Include="..\source\PatternRelRefValidator.cpp">
-      <Filter>Source Files\PQL</Filter>
+      <Filter>Source Files\PQL\QueryPreprocessor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\QueryResult.cpp">
+      <Filter>Source Files\PQL\QueryEvaluator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\QueryEvaluator.cpp">
+      <Filter>Source Files\PQL\QueryEvaluator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\ResultTable.cpp">
+      <Filter>Source Files\PQL\QueryEvaluator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\UsesPEvaluator.cpp">
+      <Filter>Source Files\PQL\QueryEvaluator\RelationEvaluator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\UsesSEvaluator.cpp">
+      <Filter>Source Files\PQL\QueryEvaluator\RelationEvaluator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\PKBAdapter.cpp">
+      <Filter>Source Files\PKB</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\RelationsEvaluator.cpp">
+      <Filter>Source Files\PQL\QueryEvaluator</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -161,79 +191,13 @@
     <ClInclude Include="..\source\Statement.h">
       <Filter>Header Files\SP</Filter>
     </ClInclude>
-    <ClInclude Include="..\source\PatternEvaluator.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\Entity.h">
-      <Filter>Header Files\PQL</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\Pattern.h">
-      <Filter>Header Files\PQL</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\PKBAdapter.h">
-      <Filter>Header Files\PQL</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\Query.h">
-      <Filter>Header Files\PQL</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\QueryEvaluator.h">
-      <Filter>Header Files\PQL</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\QueryPreprocessor.h">
-      <Filter>Header Files\PQL</Filter>
-    </ClInclude>
     <ClInclude Include="..\source\QuerySystem.h">
-      <Filter>Header Files\PQL</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\RelRef.h">
       <Filter>Header Files\PQL</Filter>
     </ClInclude>
     <ClInclude Include="..\source\Common.h">
       <Filter>Header Files\Common</Filter>
     </ClInclude>
-    <ClInclude Include="..\source\QueryToken.h">
-      <Filter>Header Files\PQL</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\QueryTokenizer.h">
-      <Filter>Header Files\PQL</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\RelationEvaluatorInterface.h">
-      <Filter>Header Files\PQL</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\RelationsEvaluator.h">
-      <Filter>Header Files\PQL</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\FollowsEvaluator.h">
-      <Filter>Header Files\PQL</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\FollowsTEvaluator.h">
-      <Filter>Header Files\PQL</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\ResultTable.h">
-      <Filter>Header Files\PQL</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\Utility.h">
-      <Filter>Header Files\PQL</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\ParentTEvaluator.h">
-      <Filter>Header Files\PQL</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\ParentEvaluator.h">
-      <Filter>Header Files\PQL</Filter>
-    </ClInclude>
     <ClInclude Include="..\source\PatternEvaluator.h">
-      <Filter>Header Files\PQL</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\ModifiesSEvaluator.h">
-      <Filter>Header Files\PQL</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\ModifiesPEvaluator.h">
-      <Filter>Header Files\PQL</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\UsesSEvaluator.h">
-      <Filter>Header Files\PQL</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\UsesPEvaluator.h">
       <Filter>Header Files\PQL</Filter>
     </ClInclude>
     <ClInclude Include="..\source\PKB.h">
@@ -242,14 +206,80 @@
     <ClInclude Include="..\source\RelationTable.h">
       <Filter>Header Files\PKB</Filter>
     </ClInclude>
-    <ClInclude Include="..\source\QueryResult.h">
-      <Filter>Header Files\PQL</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\PatternRelRefValidator.h">
-      <Filter>Header Files\PQL</Filter>
-    </ClInclude>
     <ClInclude Include="..\source\KnowledgeBase.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\QueryPreprocessor.h">
+      <Filter>Header Files\PQL\QueryPreprocessor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\QueryTokenizer.h">
+      <Filter>Header Files\PQL\QueryPreprocessor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\QueryToken.h">
+      <Filter>Header Files\PQL\QueryPreprocessor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\QueryResult.h">
+      <Filter>Header Files\PQL\QueryEvaluator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\ResultTable.h">
+      <Filter>Header Files\PQL\QueryEvaluator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\Utility.h">
+      <Filter>Header Files\PQL\Helper</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\PKBAdapter.h">
+      <Filter>Header Files\PKB</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\Entity.h">
+      <Filter>Header Files\PQL\QueryObject</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\Pattern.h">
+      <Filter>Header Files\PQL\QueryObject</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\Query.h">
+      <Filter>Header Files\PQL\QueryObject</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\RelRef.h">
+      <Filter>Header Files\PQL\QueryObject</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\PatternRelRefValidator.h">
+      <Filter>Header Files\PQL\QueryPreprocessor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\QueryEvaluator.h">
+      <Filter>Header Files\PQL\QueryEvaluator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\FollowsEvaluator.h">
+      <Filter>Header Files\PQL\QueryEvaluator\RelationEvaluator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\FollowsTEvaluator.h">
+      <Filter>Header Files\PQL\QueryEvaluator\RelationEvaluator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\ModifiesPEvaluator.h">
+      <Filter>Header Files\PQL\QueryEvaluator\RelationEvaluator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\ModifiesSEvaluator.h">
+      <Filter>Header Files\PQL\QueryEvaluator\RelationEvaluator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\ParentEvaluator.h">
+      <Filter>Header Files\PQL\QueryEvaluator\RelationEvaluator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\ParentTEvaluator.h">
+      <Filter>Header Files\PQL\QueryEvaluator\RelationEvaluator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\RelationEvaluatorInterface.h">
+      <Filter>Header Files\PQL\QueryEvaluator\RelationEvaluator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\UsesSEvaluator.h">
+      <Filter>Header Files\PQL\QueryEvaluator\RelationEvaluator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\UsesPEvaluator.h">
+      <Filter>Header Files\PQL\QueryEvaluator\RelationEvaluator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\PatternEvaluator.h">
+      <Filter>Header Files\PQL\QueryEvaluator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\RelationsEvaluator.h">
+      <Filter>Header Files\PQL\QueryEvaluator</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
