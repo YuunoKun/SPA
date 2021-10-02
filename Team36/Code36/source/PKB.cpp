@@ -159,6 +159,26 @@ void PKB::addUsesP(proc_name proc, var_name used)
 	usesP_table.insert(proc, used);
 }
 
+void PKB::addCallsP(proc_name caller_proc_name, proc_name callee_proc_name)
+{
+}
+
+void PKB::addCallsS(stmt_index caller_stmt_index, proc_name callee_proc_name)
+{
+}
+
+void PKB::addIf(stmt_index if_stmt_index, var_name control_var)
+{
+}
+
+void PKB::addWhile(stmt_index while_stmt_index, var_name control_var)
+{
+}
+
+void PKB::addNext(prog_line prog_line1, prog_line prog_line2)
+{
+}
+
 void PKB::generateParentT()
 {
 	parentT_table = parent_table.findTransitiveClosure();
@@ -310,4 +330,44 @@ const RelationTable<proc_name, var_name>& PKB::getUsesP()
 const RelationTable<proc_name, var_name>& PKB::getModifiesP()
 {
 	return modifiesP_table;
+}
+
+const RelationTable<proc_name, proc_name>& PKB::getCallsP()
+{
+	return callsP_table;
+}
+
+const RelationTable<proc_name, proc_name>& PKB::getCallsPT()
+{
+	return callsPT_table;
+}
+
+const UniqueRelationTable<stmt_index, var_name>& PKB::getRead()
+{
+	return read_table;
+}
+
+const UniqueRelationTable<stmt_index, var_name>& PKB::getPrint()
+{
+	return print_table;
+}
+
+const RelationTable<stmt_index, proc_name>& PKB::getCallsS()
+{
+	return callsS_table;
+}
+
+const RelationTable<stmt_index, var_name>& PKB::getIf()
+{
+	return if_table;
+}
+
+const RelationTable<stmt_index, var_name>& PKB::getWhile()
+{
+	return while_table;
+}
+
+const RelationTable<StmtInfo, StmtInfo>& PKB::getNext()
+{
+	return next_table;
 }

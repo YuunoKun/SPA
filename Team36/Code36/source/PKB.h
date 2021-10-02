@@ -30,6 +30,11 @@ public:
 	void addModifiesS(stmt_index modifier, var_name modified) override;
 	void addModifiesP(proc_name proc, var_name modified) override;
 	void addUsesP(proc_name proc, var_name used) override;
+	void addCallsP(proc_name caller_proc_name, proc_name callee_proc_name) override;
+	void addCallsS(stmt_index caller_stmt_index, proc_name callee_proc_name) override;
+	void addIf(stmt_index if_stmt_index, var_name control_var) override;
+	void addWhile(stmt_index while_stmt_index, var_name control_var) override;
+	void addNext(prog_line prog_line1, prog_line prog_line2) override;
 
 	void generateParentT() override;
 	void generateFollowsT() override;
@@ -51,6 +56,14 @@ public:
 	const RelationTable<StmtInfo, var_name>& getModifiesS() override;
 	const RelationTable<proc_name, var_name>& getUsesP() override;
 	const RelationTable<proc_name, var_name>& getModifiesP() override;
+	const RelationTable<proc_name, proc_name>& getCallsP() override;
+	const RelationTable<proc_name, proc_name>& getCallsPT() override;
+	const UniqueRelationTable<stmt_index, var_name>& getRead() override;
+	const UniqueRelationTable<stmt_index, var_name>& getPrint() override;
+	const RelationTable<stmt_index, proc_name>& getCallsS() override;
+	const RelationTable<stmt_index, var_name>& getIf() override;
+	const RelationTable<stmt_index, var_name>& getWhile() override;
+	const RelationTable<StmtInfo, StmtInfo>& getNext() override;
 
 	void resetCache() override;
 	void resetEntities() override;
@@ -70,6 +83,14 @@ private:
 	RelationTable<StmtInfo, var_name> modifiesS_table;
 	RelationTable<proc_name, var_name> usesP_table;
 	RelationTable<proc_name, var_name> modifiesP_table;
+	RelationTable<proc_name, proc_name> callsP_table;
+	RelationTable<proc_name, proc_name> callsPT_table;
+	UniqueRelationTable<stmt_index, var_name> read_table;
+	UniqueRelationTable<stmt_index, var_name> print_table;
+	RelationTable<stmt_index, proc_name> callsS_table;
+	RelationTable<stmt_index, var_name> while_table;
+	RelationTable<stmt_index, var_name> if_table;
+	RelationTable<StmtInfo, StmtInfo> next_table;
 
 	PKB() {};
 };
