@@ -76,14 +76,11 @@ public:
 	std::vector<var_name> getModifiedP(proc_name);
 
 	//ModifiesS relation Function
-	bool isModifiesSEmpty();
 	bool isModifiesS(stmt_index, var_name);
 	bool isModifiesS(stmt_index);
-	bool isModifiesS(var_name);
 	std::vector<std::pair<StmtInfo, var_name>> getModifiesSRelation();
 	std::vector<StmtInfo> getModifiesS();
 	std::vector<StmtInfo> getModifiesS(var_name);
-	std::vector<var_name> getModifiedS();
 	std::vector<var_name> getModifiedS(stmt_index);
 
 	//UsesP relation Function
@@ -95,13 +92,10 @@ public:
 	std::vector<var_name> getUsedP(proc_name);
 
 	//UsesS relation Function
-	bool isUsesSEmpty();
 	bool isUsesS(stmt_index, var_name);
 	bool isUsesS(stmt_index);
-	bool isUsesS(var_name);
 	std::vector<std::pair<StmtInfo, var_name>> getUsesSRelation();
 	std::vector<StmtInfo> getUsesS();
 	std::vector<StmtInfo> getUsesS(var_name);
-	std::vector<var_name> getUsedS();
 	std::vector<var_name> getUsedS(stmt_index);
 };

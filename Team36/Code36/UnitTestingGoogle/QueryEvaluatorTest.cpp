@@ -43,6 +43,10 @@ namespace UnitTesting {
 			PKB::getInstance().addModifiesS(std::stoi(MODIFIES_LEFT4), MODIFIES_RIGHT4);
 			PKB::getInstance().addUsesS(std::stoi(USES_LEFT1), USES_RIGHT1);
 			PKB::getInstance().addUsesS(std::stoi(USES_LEFT2), USES_RIGHT2);
+			PKB::getInstance().addModifiesP(MODIFIESP_LEFT1, MODIFIESP_RIGHT1);
+			PKB::getInstance().addModifiesP(MODIFIESP_LEFT2, MODIFIESP_RIGHT2);
+			PKB::getInstance().addUsesP(USESP_LEFT1, USESP_RIGHT1);
+			PKB::getInstance().addUsesP(USESP_LEFT2, USESP_RIGHT2);
 			PKB::getInstance().addExprTree(std::stoi(MODIFIES_LEFT3), EXPRESSION1);
 			PKB::getInstance().addExprTree(std::stoi(MODIFIES_LEFT4), EXPRESSION2);
 			PKB::getInstance().generateFollowsT();
@@ -199,6 +203,22 @@ namespace UnitTesting {
 
 		const std::vector<std::string> USES_LEFTS = { USES_LEFT1, USES_LEFT2 };
 		const std::vector<std::string> USES_RIGHTS = { USES_RIGHT1, USES_RIGHT2 };
+
+		const std::string USESP_LEFT1 = p1;
+		const std::string USESP_LEFT2 = p2;
+		const std::string USESP_RIGHT1 = y;
+		const std::string USESP_RIGHT2 = x;
+
+		const std::vector<std::string> USESP_LEFTS = { USESP_LEFT1, USESP_LEFT2 };
+		const std::vector<std::string> USESP_RIGHTS = { USESP_RIGHT1, USESP_RIGHT2 };
+
+		const std::string MODIFIESP_LEFT1 = p1;
+		const std::string MODIFIESP_LEFT2 = p2;
+		const std::string MODIFIESP_RIGHT1 = y;
+		const std::string MODIFIESP_RIGHT2 = x;
+
+		const std::vector<std::string> MODIFIESP_LEFTS = { MODIFIESP_LEFT1, MODIFIESP_LEFT2 };
+		const std::vector<std::string> MODIFIESP_RIGHTS = { MODIFIESP_RIGHT1, MODIFIESP_RIGHT2 };
 
 		const std::list<std::string> STMTS = { IF1, IF2, WHILE1, WHILE2, READ1, READ2,
 			PRINT1, PRINT2, ASSIGN1, ASSIGN2, CALL1, CALL2 };
@@ -1396,13 +1416,10 @@ namespace UnitTesting {
 
 		std::vector<RelRef> relations;
 		//Test true boolean equation
-		relations.push_back(RelRef(type, WILD_CARD, WILD_CARD));
 		relations.push_back(RelRef(type, { STMT, left1 }, { VARIABLE, right1 }));
 		relations.push_back(RelRef(type, { STMT, left2 }, { VARIABLE, right2 }));
 		relations.push_back(RelRef(type, { STMT, left1 }, WILD_CARD));
 		relations.push_back(RelRef(type, { STMT, left2 }, WILD_CARD));
-		relations.push_back(RelRef(type, WILD_CARD, { VARIABLE, right1 }));
-		relations.push_back(RelRef(type, WILD_CARD, { VARIABLE, right2 }));
 
 		validateRelations(relations);
 	}
@@ -1460,7 +1477,6 @@ namespace UnitTesting {
 		relations.push_back(RelRef(type, { STMT, Synonym{"a"} }, { VARIABLE, Synonym{"a"} }));
 		relations.push_back(RelRef(type, { IF, Synonym{"a"} }, { VARIABLE, Synonym{"a"} }));
 		relations.push_back(RelRef(type, { WHILE, Synonym{"a"} }, { VARIABLE, Synonym{"a"} }));
-		relations.push_back(RelRef(type, WILD_CARD, { VARIABLE, Synonym{"a"} }));
 		relations.push_back(RelRef(type, { STMT, Synonym{"a"} }, WILD_CARD));
 		relations.push_back(RelRef(type, { IF, Synonym{"a"} }, WILD_CARD));
 		relations.push_back(RelRef(type, { WHILE, Synonym{"a"} }, WILD_CARD));
@@ -1585,18 +1601,12 @@ namespace UnitTesting {
 			EXPECT_EQ(evaluator.evaluateQuery(q), resultList[i]);
 		}
 
-		resultList[0] = { right1, right2 };
-		//Test case for Select a such that Modifies_S(_, selected)
-		RelRef relation(type, WILD_CARD, selected);
-		Query q = initQuery(relation, selected);
-		EXPECT_EQ(evaluator.evaluateQuery(q), resultList[0]);
-
 		//Test case for Select a such that Modifies_S("1", selected)
 		resultList[0] = { right1 };
 		resultList[1] = { };
 		resultList[2] = { };
-		relation = RelRef(type, { STMT, left1 }, selected);
-		q = initQuery(relation, selected);
+		RelRef relation(type, { STMT, left1 }, selected);
+		Query q = initQuery(relation, selected);
 		EXPECT_EQ(evaluator.evaluateQuery(q), resultList[0]);
 
 		//Test case for Select a such that Modifies_S("3", selected)
@@ -1637,13 +1647,10 @@ namespace UnitTesting {
 
 		std::vector<RelRef> relations;
 		//Test true boolean equation
-		relations.push_back(RelRef(type, WILD_CARD, WILD_CARD));
 		relations.push_back(RelRef(type, { STMT, left1 }, { VARIABLE, right1 }));
 		relations.push_back(RelRef(type, { STMT, left2 }, { VARIABLE, right2 }));
 		relations.push_back(RelRef(type, { STMT, left1 }, WILD_CARD));
 		relations.push_back(RelRef(type, { STMT, left2 }, WILD_CARD));
-		relations.push_back(RelRef(type, WILD_CARD, { VARIABLE, right1 }));
-		relations.push_back(RelRef(type, WILD_CARD, { VARIABLE, right2 }));
 
 		validateRelations(relations);
 	}
@@ -1700,7 +1707,6 @@ namespace UnitTesting {
 		relations.push_back(RelRef(type, { STMT, Synonym{"a"} }, { VARIABLE, Synonym{"a"} }));
 		relations.push_back(RelRef(type, { IF, Synonym{"a"} }, { VARIABLE, Synonym{"a"} }));
 		relations.push_back(RelRef(type, { WHILE, Synonym{"a"} }, { VARIABLE, Synonym{"a"} }));
-		relations.push_back(RelRef(type, WILD_CARD, { VARIABLE, Synonym{"a"} }));
 		relations.push_back(RelRef(type, { STMT, Synonym{"a"} }, WILD_CARD));
 		relations.push_back(RelRef(type, { IF, Synonym{"a"} }, WILD_CARD));
 		relations.push_back(RelRef(type, { WHILE, Synonym{"a"} }, WILD_CARD));
@@ -1813,18 +1819,12 @@ namespace UnitTesting {
 			EXPECT_EQ(evaluator.evaluateQuery(q), resultList[i]);
 		}
 
-		resultList[0] = { right1, right2 };
-		//Test case for Select a such that USES_S(_, selected)
-		RelRef relation(type, WILD_CARD, selected);
-		Query q = initQuery(relation, selected);
-		EXPECT_EQ(evaluator.evaluateQuery(q), resultList[0]);
-
 		//Test case for Select a such that USES_S("1", selected)
 		resultList[0] = { right1 };
 		resultList[1] = { };
 		resultList[2] = { };
-		relation = RelRef(type, { STMT, left1 }, selected);
-		q = initQuery(relation, selected);
+		RelRef relation(type, { STMT, left1 }, selected);
+		Query q = initQuery(relation, selected);
 		EXPECT_EQ(evaluator.evaluateQuery(q), resultList[0]);
 
 		//Test case for Select a such that USES_S("3", selected)
@@ -1842,6 +1842,252 @@ namespace UnitTesting {
 			EXPECT_EQ(evaluator.evaluateQuery(q), EMPTY_RESULT) << "Error at results : " << j + 1;
 		}
 	}
+
+	//MODIFIES_P Relation Test ----------------------------------------------------------------------------------------------------
+	TEST_F(QueryEvaluatorTest, evaluateQueryModifiesPBooleanTrue) {
+		RelType type = MODIFIES_P;
+		std::string left1 = MODIFIESP_LEFT1;
+		std::string left2 = MODIFIESP_LEFT2;
+		std::string right1 = MODIFIESP_RIGHT1;
+		std::string right2 = MODIFIESP_RIGHT2;
+
+		std::vector<RelRef> relations;
+		//Test true boolean equation
+		relations.push_back(RelRef(type, { PROCEDURE, left1 }, { VARIABLE, right1 }));
+		relations.push_back(RelRef(type, { PROCEDURE, left2 }, { VARIABLE, right2 }));
+		relations.push_back(RelRef(type, { PROCEDURE, left1 }, WILD_CARD));
+		relations.push_back(RelRef(type, { PROCEDURE, left2 }, WILD_CARD));
+
+		validateRelations(relations);
+	}
+
+	TEST_F(QueryEvaluatorTest, evaluateQueryModifiesPBooleanFalse) {
+		RelType type = MODIFIES_P;
+		std::string left1 = MODIFIESP_LEFT1;
+		std::string left2 = MODIFIESP_LEFT2;
+		std::string right1 = MODIFIESP_RIGHT1;
+		std::string right2 = MODIFIESP_RIGHT2;
+		//Test false boolean equation
+		std::vector<std::string> lefts = MODIFIESP_LEFTS;
+
+		std::vector<RelRef> relations;
+		relations.push_back(RelRef(type, { PROCEDURE, p3 }, WILD_CARD));
+		relations.push_back(RelRef(type, { PROCEDURE, p3 }, { VARIABLE, right1 }));
+		relations.push_back(RelRef(type, { PROCEDURE, p3 }, { VARIABLE, right2 }));
+		relations.push_back(RelRef(type, { PROCEDURE, left1 }, { VARIABLE, z }));
+		relations.push_back(RelRef(type, { PROCEDURE, left2 }, { VARIABLE, z }));
+
+		validateEmptyRelations(relations);
+	}
+	TEST_F(QueryEvaluatorTest, evaluateQueryModifiesPFilterNoCommonSynonymTrue) {
+		RelType type = MODIFIES_P;
+		std::string left1 = MODIFIESP_LEFT1;
+		std::string left2 = MODIFIESP_LEFT2;
+		std::string right1 = MODIFIESP_RIGHT1;
+		std::string right2 = MODIFIESP_RIGHT2;
+
+		std::vector<RelRef> relations;
+		//Have Result for matching header
+		relations.push_back(RelRef(type, { PROCEDURE, Synonym{"a"} }, { VARIABLE, Synonym{"a"} }));
+		relations.push_back(RelRef(type, { PROCEDURE, Synonym{"a"} }, WILD_CARD));
+		relations.push_back(RelRef(type, { PROCEDURE, left1 }, { VARIABLE, Synonym{"a"} }));
+		relations.push_back(RelRef(type, { PROCEDURE, left2 }, { VARIABLE, Synonym{"a"} }));
+		relations.push_back(RelRef(type, { PROCEDURE, Synonym{"a"} }, { VARIABLE, right1 }));
+		relations.push_back(RelRef(type, { PROCEDURE, Synonym{"a"} }, { VARIABLE, right2 }));
+
+		validateRelations(relations);
+	}
+
+	TEST_F(QueryEvaluatorTest, evaluateQueryModifiesPFilterCommonSynonym) {
+		RelType type = MODIFIES_P;
+
+		std::vector<std::string> lefts = MODIFIESP_LEFTS;
+		std::string left1 = MODIFIESP_LEFT1;
+		std::string left2 = MODIFIESP_LEFT2;
+		std::string right1 = MODIFIESP_RIGHT1;
+		std::string right2 = MODIFIESP_RIGHT2;
+
+		Entity selected = { PROCEDURE, COMMON_SYNONYM1 };
+
+		std::list<std::string> result = { left1, left2 };
+
+		//Test case for Select a such that MODIFIES_P(selected, _)
+		RelRef relation(type, selected, WILD_CARD);
+		Query q = initQuery(relation, selected);
+		EXPECT_EQ(evaluator.evaluateQuery(q), result);
+
+		//Test case for Select a such that MODIFIES_P(selected, "x")
+		result = { left1 };
+		relation = { type, selected, { VARIABLE, right1 } };
+		q = initQuery(relation, selected);
+		EXPECT_EQ(evaluator.evaluateQuery(q), result);
+
+		//Test case for Select a such that MODIFIES_P(VARIABLE, "y")
+		result = { left2 };
+		relation = { type, selected, { VARIABLE, right2 } };
+		q = initQuery(relation, selected);
+		EXPECT_EQ(evaluator.evaluateQuery(q), result);
+
+
+		//Test case for Select a such that MODIFIES_P(VARIABLE, "z")
+		result = {  };
+		relation = { type, selected, { VARIABLE, z } };
+		q = initQuery(relation, selected);
+		EXPECT_EQ(evaluator.evaluateQuery(q), result);
+
+
+		//Test case for Select a such that MODIFIES_P(a, selected)
+		result = { right1, right2 };
+		selected = { VARIABLE, COMMON_SYNONYM1 };
+		relation = { type, { PROCEDURE, COMMON_SYNONYM2 }, selected };
+		q = initQuery(relation, selected);
+		EXPECT_EQ(evaluator.evaluateQuery(q), result);
+
+
+		//Test case for Select a such that MODIFIES_P("main1", selected)
+		result = { right1 };
+		relation = { type, { PROCEDURE, left1 }, selected };
+		q = initQuery(relation, selected);
+		EXPECT_EQ(evaluator.evaluateQuery(q), result);
+
+		//Test case for Select a such that MODIFIES_P("sub1", selected)
+		result = { right2 };
+		selected = { VARIABLE, COMMON_SYNONYM1 };
+		relation = { type, { PROCEDURE, left2 }, selected };
+		q = initQuery(relation, selected);
+		EXPECT_EQ(evaluator.evaluateQuery(q), result);
+
+		//Test case for Select a such that MODIFIES_P("sub2", selected)
+		result = { };
+		relation = { type, { PROCEDURE, p3 }, selected };
+		q = initQuery(relation, selected);
+		EXPECT_EQ(evaluator.evaluateQuery(q), result);
+
+	}
+
+
+	//USES_P Relation Test ----------------------------------------------------------------------------------------------------
+	TEST_F(QueryEvaluatorTest, evaluateQueryUsesPBooleanTrue) {
+		RelType type = USES_P;
+		std::string left1 = USESP_LEFT1;
+		std::string left2 = USESP_LEFT2;
+		std::string right1 = USESP_RIGHT1;
+		std::string right2 = USESP_RIGHT2;
+
+		std::vector<RelRef> relations;
+		//Test true boolean equation
+		relations.push_back(RelRef(type, { PROCEDURE, left1 }, { VARIABLE, right1 }));
+		relations.push_back(RelRef(type, { PROCEDURE, left2 }, { VARIABLE, right2 }));
+		relations.push_back(RelRef(type, { PROCEDURE, left1 }, WILD_CARD));
+		relations.push_back(RelRef(type, { PROCEDURE, left2 }, WILD_CARD));
+
+		validateRelations(relations);
+	}
+
+	TEST_F(QueryEvaluatorTest, evaluateQueryUsesPPBooleanFalse) {
+		RelType type = USES_P;
+		std::string left1 = USESP_LEFT1;
+		std::string left2 = USESP_LEFT2;
+		std::string right1 = USESP_RIGHT1;
+		std::string right2 = USESP_RIGHT2;
+		//Test false boolean equation
+		std::vector<std::string> lefts = USESP_LEFTS;
+
+		std::vector<RelRef> relations;
+		relations.push_back(RelRef(type, { PROCEDURE, p3 }, WILD_CARD));
+		relations.push_back(RelRef(type, { PROCEDURE, p3 }, { VARIABLE, right1 }));
+		relations.push_back(RelRef(type, { PROCEDURE, p3 }, { VARIABLE, right2 }));
+		relations.push_back(RelRef(type, { PROCEDURE, left1 }, { VARIABLE, z }));
+		relations.push_back(RelRef(type, { PROCEDURE, left2 }, { VARIABLE, z }));
+
+		validateEmptyRelations(relations);
+	}
+	TEST_F(QueryEvaluatorTest, evaluateQueryUsesPPFilterNoCommonSynonymTrue) {
+		RelType type = USES_P;
+		std::string left1 = USESP_LEFT1;
+		std::string left2 = USESP_LEFT2;
+		std::string right1 = USESP_RIGHT1;
+		std::string right2 = USESP_RIGHT2;
+
+		std::vector<RelRef> relations;
+		//Have Result for matching header
+		relations.push_back(RelRef(type, { PROCEDURE, Synonym{"a"} }, { VARIABLE, Synonym{"a"} }));
+		relations.push_back(RelRef(type, { PROCEDURE, Synonym{"a"} }, WILD_CARD));
+		relations.push_back(RelRef(type, { PROCEDURE, left1 }, { VARIABLE, Synonym{"a"} }));
+		relations.push_back(RelRef(type, { PROCEDURE, left2 }, { VARIABLE, Synonym{"a"} }));
+		relations.push_back(RelRef(type, { PROCEDURE, Synonym{"a"} }, { VARIABLE, right1 }));
+		relations.push_back(RelRef(type, { PROCEDURE, Synonym{"a"} }, { VARIABLE, right2 }));
+
+		validateRelations(relations);
+	}
+
+	TEST_F(QueryEvaluatorTest, evaluateQueryUsesPFilterCommonSynonym) {
+		RelType type = USES_P;
+
+		std::vector<std::string> lefts = USESP_LEFTS;
+		std::string left1 = USESP_LEFT1;
+		std::string left2 = USESP_LEFT2;
+		std::string right1 = USESP_RIGHT1;
+		std::string right2 = USESP_RIGHT2;
+
+		Entity selected = { PROCEDURE, COMMON_SYNONYM1 };
+
+		std::list<std::string> result = { left1, left2 };
+
+		//Test case for Select a such that MODIFIES_P(selected, _)
+		RelRef relation(type, selected, WILD_CARD);
+		Query q = initQuery(relation, selected);
+		EXPECT_EQ(evaluator.evaluateQuery(q), result);
+
+		//Test case for Select a such that MODIFIES_P(selected, "x")
+		result = { left1 };
+		relation = { type, selected, { VARIABLE, right1 } };
+		q = initQuery(relation, selected);
+		EXPECT_EQ(evaluator.evaluateQuery(q), result);
+
+		//Test case for Select a such that MODIFIES_P(VARIABLE, "y")
+		result = { left2 };
+		relation = { type, selected, { VARIABLE, right2 } };
+		q = initQuery(relation, selected);
+		EXPECT_EQ(evaluator.evaluateQuery(q), result);
+
+
+		//Test case for Select a such that MODIFIES_P(VARIABLE, "z")
+		result = {  };
+		relation = { type, selected, { VARIABLE, z } };
+		q = initQuery(relation, selected);
+		EXPECT_EQ(evaluator.evaluateQuery(q), result);
+
+
+		//Test case for Select a such that MODIFIES_P(a, selected)
+		result = { right1, right2 };
+		selected = { VARIABLE, COMMON_SYNONYM1 };
+		relation = { type, { PROCEDURE, COMMON_SYNONYM2 }, selected };
+		q = initQuery(relation, selected);
+		EXPECT_EQ(evaluator.evaluateQuery(q), result);
+
+
+		//Test case for Select a such that MODIFIES_P("main1", selected)
+		result = { right1 };
+		relation = { type, { PROCEDURE, left1 }, selected };
+		q = initQuery(relation, selected);
+		EXPECT_EQ(evaluator.evaluateQuery(q), result);
+
+		//Test case for Select a such that MODIFIES_P("sub1", selected)
+		result = { right2 };
+		selected = { VARIABLE, COMMON_SYNONYM1 };
+		relation = { type, { PROCEDURE, left2 }, selected };
+		q = initQuery(relation, selected);
+		EXPECT_EQ(evaluator.evaluateQuery(q), result);
+
+		//Test case for Select a such that MODIFIES_P("sub2", selected)
+		result = { };
+		relation = { type, { PROCEDURE, p3 }, selected };
+		q = initQuery(relation, selected);
+		EXPECT_EQ(evaluator.evaluateQuery(q), result);
+
+	}
+
 
 	//Pattern Test ----------------------------------------------------------------------------------------------------
 	TEST_F(QueryEvaluatorTest, evaluateQueryPatternFilterNoCommonSynonymTrue) {
@@ -1926,18 +2172,15 @@ namespace UnitTesting {
 		selected.push_back(assignCommon);
 		results.push_back({ left1, left2 });
 
-
 		//Handle result for Select a pattern a(_, "x")
 		patterns.push_back(Pattern(assignCommon, WILD_CARD, x, false));
 		selected.push_back(assignCommon);
 		results.push_back({ left1 });
 
-
 		//Handle result for Select a pattern a(_, _"x"_)
 		patterns.push_back(Pattern(assignCommon, WILD_CARD, x, true));
 		selected.push_back(assignCommon);
 		results.push_back({ left1, left2 });
-
 
 		//Handle result for Select a pattern a(_, "y")
 		patterns.push_back(Pattern(assignCommon, WILD_CARD, y, false));
@@ -1957,7 +2200,6 @@ namespace UnitTesting {
 		selected.push_back(lhsCommon);
 		results.push_back({ right1 });
 
-
 		//Handle result for Select a pattern a(v, _"x"_)
 		patterns.push_back(Pattern(assignCommon, lhsCommon, x, true));
 		selected.push_back(assignCommon);
@@ -1965,7 +2207,6 @@ namespace UnitTesting {
 		patterns.push_back(Pattern(assignCommon, lhsCommon, x, true));
 		selected.push_back(lhsCommon);
 		results.push_back({ right1, right2 });
-
 
 		//Handle result for Select a pattern a(v, "y")
 		patterns.push_back(Pattern(assignCommon, lhsCommon, y, false));
@@ -1982,7 +2223,6 @@ namespace UnitTesting {
 		patterns.push_back(Pattern(assignCommon, lhsCommon, y, true));
 		selected.push_back(lhsCommon);
 		results.push_back({ right2 });
-			
 
 		//Handle result for Select a pattern a("x", "x")
 		patterns.push_back(Pattern(assignCommon, lhsX, x, false));
@@ -2041,7 +2281,6 @@ namespace UnitTesting {
 		patterns.push_back(Pattern(assignCommon, lhsCommon, EXPRESSION_CONSTANT, true));
 		selected.push_back(lhsCommon);
 		results.push_back({ right2 });
-
 
 		for (unsigned int i = 0; i < patterns.size(); i++) {
 			Query q = initQuery(patterns[i], selected[i]);
