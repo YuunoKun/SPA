@@ -22,12 +22,7 @@ namespace UnitTesting {
 		PKB::getInstance().addProcedure(main1);
 		PKB::getInstance().addVariable(x);
 
-		try {
-			evaluator.haveRelation();
-			FAIL();
-		}
-		catch (std::invalid_argument ex) {
-		}
+		EXPECT_THROW(evaluator.haveRelation(), std::invalid_argument);
 
 		PKB::getInstance().addModifiesP(main1, x);
 
