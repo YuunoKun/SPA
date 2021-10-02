@@ -33,6 +33,42 @@ namespace UnitTesting {
 		}
 	}
 
+	TEST(Entity, attribute) {
+		std::vector<Entity> e;
+		std::vector<AttrRef> r;
+		e.push_back({ STMT, Synonym("a") });
+		r.push_back(STMT_INDEX);
+		e.push_back({ READ, Synonym("a") });
+		r.push_back(STMT_INDEX);
+		e.push_back({ PRINT, Synonym("a") });
+		r.push_back(STMT_INDEX);
+		e.push_back({ CALL, Synonym("a") });
+		r.push_back(STMT_INDEX);
+		e.push_back({ WHILE, Synonym("a") });
+		r.push_back(STMT_INDEX);
+		e.push_back({ IF, Synonym("a") });
+		r.push_back(STMT_INDEX);
+		e.push_back({ ASSIGN, Synonym("a") });
+		r.push_back(STMT_INDEX);
+		e.push_back({ VARIABLE, Synonym("a") });
+		r.push_back(VAR_NAME);
+		e.push_back({ PROCEDURE, Synonym("a") });
+		r.push_back(PROC_NAME);
+		e.push_back({ CONSTANT, Synonym("a") });
+		r.push_back(VALUE);
+
+		e.push_back({ READ, Synonym("a"), VAR_NAME });
+		r.push_back(VAR_NAME);
+		e.push_back({ PRINT, Synonym("a"), VAR_NAME });
+		r.push_back(VAR_NAME);
+		e.push_back({ CALL, Synonym("a"), PROC_NAME });
+		r.push_back(PROC_NAME);
+
+		for (int i = 0; i < e.size(); i++) {
+			EXPECT_EQ(e[i].getAttribute(), r[i]);
+		}
+	}
+
 	TEST(Entity, isDeclartion) {
 		Synonym s = { "test" };
 		Entity testEntity(STMT, s);
