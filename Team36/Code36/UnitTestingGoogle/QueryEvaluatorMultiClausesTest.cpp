@@ -1183,18 +1183,6 @@ namespace UnitTesting {
 		selected = assignCommon;
 		result = { MODIFIES_LEFT4 };
 		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation }, { pattern }, selected)).front(), result);
-
-		//Handle result for Select a pattern a(v, _) such that Uses(_,v)
-		pattern = Pattern(assignCommon, lhsCommon, "", true);
-		relation = RelRef(USES_S, WILD_CARD, lhsCommon);
-
-		selected = assignCommon;
-		result = { MODIFIES_LEFT4, MODIFIES_LEFT3 };
-		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation }, { pattern }, selected)).front(), result);
-
-		selected = lhsCommon;
-		result = { MODIFIES_RIGHT3, MODIFIES_RIGHT4 };
-		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation }, { pattern }, selected)).front(), result);
 	}
 
 	TEST_F(QueryEvaluatorMultiClausesTest, evaluateQueryPatternRelationJoinSingleCommonSynonyms) {

@@ -51,7 +51,7 @@ namespace UnitTesting {
 
 		EXPECT_EQ(q.getClauses(), o);
 
-		RelRef e({ MODIFIES_P, {ASSIGN,Synonym{"test4"}}, {ASSIGN,Synonym{"test4"}} });
+		RelRef e({ MODIFIES_P, {PROCEDURE,Synonym{"test4"}}, {VARIABLE,Synonym{"test4"}} });
 		q.addRelation(e);
 		EXPECT_NE(q.getClauses(), o);
 		o.push_back({ e });
