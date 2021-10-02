@@ -25,6 +25,7 @@ void RelationTable<T, S>::clear()
 {
 	forward_table.clear();
 	backward_table.clear();
+	lookup_table.clear();
 	return;
 }
 
