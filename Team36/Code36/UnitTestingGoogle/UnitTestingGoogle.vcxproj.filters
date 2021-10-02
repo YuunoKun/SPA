@@ -93,6 +93,9 @@
     <ClCompile Include="PatternRelRefValidatorTest.cpp">
       <Filter>PQL\QueryPreprocessor</Filter>
     </ClCompile>
+    <ClCompile Include="ClauseTest.cpp">
+      <Filter>PQL\QueryObject</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />

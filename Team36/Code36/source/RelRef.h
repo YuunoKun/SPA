@@ -13,7 +13,14 @@ enum RelType {
 	PARENT,
 	PARENT_T,
 	FOLLOWS,
-	FOLLOWS_T
+	FOLLOWS_T,
+	CALL,
+	CALL_T,
+	NEXT,
+	NEXT_T,
+	AFFECT,
+	AFFECT_T,
+	WITH
 };
 
 class RelRef {

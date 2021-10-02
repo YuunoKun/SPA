@@ -15,7 +15,8 @@ enum EntityType {
 	VARIABLE,
 	CONSTANT,
 	PROCEDURE,
-	WILD
+	WILD,
+	BOOLEAN
 };
 
 enum AttrRef {
