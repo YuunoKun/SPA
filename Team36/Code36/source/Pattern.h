@@ -7,6 +7,7 @@
 class Pattern {
 public:
 	Pattern(Entity, Entity, expr, bool);
+	Pattern();
 
 	Entity getPatternType();
 	Entity getLeftExpression();

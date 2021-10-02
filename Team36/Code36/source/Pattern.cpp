@@ -18,6 +18,9 @@ Pattern::Pattern(Entity pattern_type, Entity left_expression, expr expression, b
 	this->is_wild = is_wild;
 }
 
+Pattern::Pattern() {
+}
+
 Entity Pattern::getPatternType() {
 	return pattern_type;
 }
