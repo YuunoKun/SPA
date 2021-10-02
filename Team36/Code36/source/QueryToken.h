@@ -13,38 +13,25 @@ public:
 		IDENTIFIER,
 		WHITESPACE,
 
-		//PQL Punctuation
-		COMMA,
-
 		// PQL Keywords
 		SELECT,
 		STMT,
 		READ,
 		PRINT,
 		CALL,
-		IF,
-		WHILE,
-		ASSIGN,
 		VARIABLE,
 		CONSTANT,
 		PROCEDURE,
 		AND,
 		PATTERN,
 		SUCH_THAT,
-
-		// PQL Variable Operators
-		WILDCARD,
-		QUOTATION_OPEN,
-		QUOTATION_CLOSE,
-
-		PLUS,
-		MINUS,
-		MUL,
-		DIV,
-		MOD,
+		ATTR_NAME,
+		PROC_NAME,
+		VAR_NAME,
+		VALUE,
+		STMT_INDEX,
 
 		//Relationships
-		// need parent type? cause will pass straight to relref class
 		MODIFIES_P,
 		MODIFIES_S,
 		USES_P,
@@ -60,25 +47,28 @@ public:
 		AFFECTS,
 		AFFECTS_T,
 
-		//  PQL Conditional Operators
-	/*	BOOL_AND,
-		BOOL_OR,
-		BOOL_NEGATE,
-		BIT_AND,
-		BIT_OR,*/
-
-		// PQL Relational Operators
-	/*	BOOL_EQUIV,
-		BOOL_NEQUIV,
-		BOOL_LT,
-		BOOL_LTEQ,
-		BOOL_GT,
-		BOOL_GTEQ,*/
-
-		// PQL Separators
+		//Pattern
+		ASSIGN,
+		IF,
+		WHILE,
+		
+		// PQL symbols
+		WILDCARD,
+		QUOTATION_OPEN,
+		QUOTATION_CLOSE,
+		COMMA,
 		PARENTHESIS_OPEN,
 		PARENTHESIS_CLOSE,
-		TERMINATOR
+		HASH,
+		DOT,
+		TERMINATOR,
+
+		// PQL expr opertators
+		PLUS,
+		MINUS,
+		MUL,
+		DIV,
+		MOD
 	};
 
 	//Constructors
