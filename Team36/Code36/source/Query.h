@@ -5,16 +5,14 @@
 #include <vector>
 
 #include "Entity.h"
-#include "RelRef.h"
-#include "Pattern.h"
+#include "Clause.h"
 
 class Query {
 public:
 	Query();
 
 	std::unordered_map<std::string, Entity> getEntities();
-	std::vector<RelRef> getRelations();
-	std::vector<Pattern> getPatterns();
+	std::vector<Clause> getClauses();
 	std::vector<Entity> getSelected();
 	void addSelected(Entity&);
 	void addEntity(Entity&);
@@ -25,7 +23,6 @@ public:
 private:
 	//Member Variable
 	std::unordered_map<std::string, Entity> entities;
-	std::vector<RelRef> relations;
-	std::vector<Pattern> patterns;
+	std::vector<Clause> clauses;
 	std::vector<Entity> selected;
 };

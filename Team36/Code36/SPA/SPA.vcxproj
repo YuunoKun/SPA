@@ -44,6 +44,7 @@
     <ClCompile Include="..\source\ResultTable.cpp" />
     <ClCompile Include="..\source\Utility.cpp" />
     <ClCompile Include="..\source\PatternRelRefValidator.cpp" />
+    <ClCompile Include="..\source\Clause.cpp" />
     <ClCompile Include="..\source\QueryOptimizer.cpp" />
     <ClCompile Include="..\source\ResultProjector.cpp" />
   </ItemGroup>

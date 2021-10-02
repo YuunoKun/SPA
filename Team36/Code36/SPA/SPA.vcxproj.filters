@@ -171,6 +171,9 @@
     <ClCompile Include="..\source\ResultProjector.cpp">
       <Filter>Source Files\PQL</Filter>
     </ClCompile>
+    <ClCompile Include="..\source\Clause.cpp">
+      <Filter>Source Files\PQL\QueryObject</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\source\Parser.h">

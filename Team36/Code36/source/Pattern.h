@@ -2,13 +2,13 @@
 
 #include <string>
 
-#include "Clause.h"
 #include "Entity.h"
 #include "TNode.h"
 
-class Pattern : public Clause {
+class Pattern {
 public:
 	Pattern(Entity, Entity, expr, bool);
+	Pattern();
 
 	Entity getPatternType();
 	Entity getLeftExpression();

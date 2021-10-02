@@ -40,6 +40,9 @@ RelRef::RelRef(RelType rel_type, Entity first_clause, Entity second_clause) {
 	this->second_clause = second_clause;
 }
 
+RelRef::RelRef() {
+}
+
 RelType RelRef::getType() {
 	return rel_type;
 }

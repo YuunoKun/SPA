@@ -47,47 +47,47 @@ namespace UnitTesting {
 
 	TEST(Query, relations) {
 		Query q;
-		std::vector<RelRef> o;
+		std::vector<Clause> o;
 
-		EXPECT_EQ(q.getRelations(), o);
+		EXPECT_EQ(q.getClauses(), o);
 
 		RelRef e({ MODIFIES_P, {ASSIGN,Synonym{"test4"}}, {ASSIGN,Synonym{"test4"}} });
 		q.addRelation(e);
-		EXPECT_NE(q.getRelations(), o);
-		o.push_back(e);
-		EXPECT_EQ(q.getRelations(), o);
+		EXPECT_NE(q.getClauses(), o);
+		o.push_back({ e });
+		EXPECT_EQ(q.getClauses(), o);
 
 		e = RelRef({ FOLLOWS, {STMT,Synonym{"test1"}}, {STMT,Synonym{"test1"}} });
 		q.addRelation(e);
-		EXPECT_NE(q.getRelations(), o);
-		o.push_back(e);
-		EXPECT_EQ(q.getRelations(), o);
+		EXPECT_NE(q.getClauses(), o);
+		o.push_back({ e });
+		EXPECT_EQ(q.getClauses(), o);
 
 		e = RelRef({ FOLLOWS, {STMT,Synonym{"test1"}},{READ, Synonym{"test2"}} });
 		q.addRelation(e);
-		EXPECT_NE(q.getRelations(), o);
-		o.push_back(e);
-		EXPECT_EQ(q.getRelations(), o);
+		EXPECT_NE(q.getClauses(), o);
+		o.push_back({ e });
+		EXPECT_EQ(q.getClauses(), o);
 
 		e = RelRef({ FOLLOWS, {STMT,Synonym{"test1"}},{READ, Synonym{"test2"}} });
 		q.addRelation(e);
-		EXPECT_NE(q.getRelations(), o);
+		EXPECT_NE(q.getClauses(), o);
 		e = RelRef({ FOLLOWS_T, {STMT,Synonym{"test1"}},{READ, Synonym{"test2"}} });
-		o.push_back(e);
-		EXPECT_NE(q.getRelations(), o);
+		o.push_back({ e });
+		EXPECT_NE(q.getClauses(), o);
 	}
 
 	TEST(Query, pattern) {
 		Query q;
-		std::vector<Pattern> o;
+		std::vector<Clause> o;
 
-		EXPECT_EQ(q.getPatterns(), o);
+		EXPECT_EQ(q.getClauses(), o);
 
 		Pattern e({ { ASSIGN, Synonym{"patternType"} }, { VARIABLE, Synonym{"leftExpr"}}, {}, true });
 		q.addPattern(e);
-		EXPECT_NE(q.getPatterns(), o);
-		o.push_back(e);
-		EXPECT_EQ(q.getPatterns(), o);
+		EXPECT_NE(q.getClauses(), o);
+		o.push_back({ e });
+		EXPECT_EQ(q.getClauses(), o);
 	}
 
 	TEST(Query, selected) {
