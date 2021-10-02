@@ -46,6 +46,7 @@ public:
 		NEXT_T,
 		AFFECTS,
 		AFFECTS_T,
+		WITH,
 
 		//Pattern
 		ASSIGN,
