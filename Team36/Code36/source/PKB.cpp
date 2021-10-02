@@ -4,7 +4,6 @@
 #include <string>
 
 #include "PKB.h"
-#include "TNode.h"
 #include "Common.h"
 #include "RelationTable.h"
 // need to include this .cpp for template classes
@@ -15,14 +14,12 @@ PKB& PKB::getInstance() {
 	return pkb;
 }
 
-void PKB::addConstant(constant constant)
-{
+void PKB::addConstant(constant constant) {
 	const_table.emplace(constant);
 	return;
 }
 
-void PKB::addProcedure(proc_name proc_name)
-{
+void PKB::addProcedure(proc_name proc_name) {
 	for (auto const& element : proc_table) {
 		if (element == proc_name) {
 			return;
@@ -31,8 +28,7 @@ void PKB::addProcedure(proc_name proc_name)
 	proc_table.push_back(proc_name);
 }
 
-void PKB::addVariable(var_name var_name)
-{
+void PKB::addVariable(var_name var_name) {
 	for (auto const& element : var_table) {
 		if (element == var_name) {
 			return;
@@ -41,15 +37,13 @@ void PKB::addVariable(var_name var_name)
 	var_table.push_back(var_name);
 }
 
-void PKB::addStmt(StmtType stmt_type)
-{
+void PKB::addStmt(StmtType stmt_type) {
 	stmt_index stmt_index = stmt_table.size() + 1;
 	StmtInfo new_stmt_info{ stmt_index, stmt_type };
 	stmt_table.push_back(new_stmt_info);
 }
 
-void PKB::addExprTree(stmt_index stmt_index, expr expr)
-{
+void PKB::addExprTree(stmt_index stmt_index, expr expr) {
 	if (stmt_index <= 0) {
 		throw std::invalid_argument("Stmt index must be greater than zero: " + std::to_string(stmt_index));
 	}
@@ -62,8 +56,7 @@ void PKB::addExprTree(stmt_index stmt_index, expr expr)
 	expr_table.insert(stmt_index, expr);
 }
 
-void PKB::addParent(stmt_index parent, stmt_index child)
-{
+void PKB::addParent(stmt_index parent, stmt_index child) {
 	try {
 		StmtInfo parent_stmt_info{ parent, stmt_table.at(parent - 1).stmt_type };
 		StmtInfo child_stmt_info{ child, stmt_table.at(child - 1).stmt_type };
@@ -79,8 +72,7 @@ void PKB::addParent(stmt_index parent, stmt_index child)
 	}
 }
 
-void PKB::addFollows(stmt_index first, stmt_index second)
-{
+void PKB::addFollows(stmt_index first, stmt_index second) {
 	try {
 		StmtInfo first_stmt_info{ first, stmt_table.at(first - 1).stmt_type };
 		StmtInfo second_stmt_info{ second, stmt_table.at(second - 1).stmt_type };
@@ -92,8 +84,7 @@ void PKB::addFollows(stmt_index first, stmt_index second)
 	}
 }
 
-void PKB::addUsesS(stmt_index user, var_name used)
-{
+void PKB::addUsesS(stmt_index user, var_name used) {
 	try {
 		StmtInfo user_stmt_info{ user, stmt_table.at(user - 1).stmt_type };
 		std::vector<var_name>::iterator it = std::find(var_table.begin(), var_table.end(), used);
@@ -109,8 +100,7 @@ void PKB::addUsesS(stmt_index user, var_name used)
 	}
 }
 
-void PKB::addModifiesS(stmt_index modifier, var_name modified)
-{
+void PKB::addModifiesS(stmt_index modifier, var_name modified) {
 	try {
 		StmtInfo modifier_stmt_info{ modifier, stmt_table.at(modifier - 1).stmt_type };
 		std::vector<var_name>::iterator it = std::find(var_table.begin(), var_table.end(), modified);
@@ -131,8 +121,7 @@ void PKB::addModifiesS(stmt_index modifier, var_name modified)
 	}
 }
 
-void PKB::addModifiesP(proc_name proc, var_name modified)
-{
+void PKB::addModifiesP(proc_name proc, var_name modified) {
 	std::vector<var_name>::iterator it_var = std::find(var_table.begin(), var_table.end(), modified);
 	std::vector<proc_name>::iterator it_proc = std::find(proc_table.begin(), proc_table.end(), proc);
 
@@ -145,8 +134,7 @@ void PKB::addModifiesP(proc_name proc, var_name modified)
 	modifiesP_table.insert(proc, modified);
 }
 
-void PKB::addUsesP(proc_name proc, var_name used)
-{
+void PKB::addUsesP(proc_name proc, var_name used) {
 	std::vector<var_name>::iterator it_var = std::find(var_table.begin(), var_table.end(), used);
 	std::vector<proc_name>::iterator it_proc = std::find(proc_table.begin(), proc_table.end(), proc);
 
@@ -159,8 +147,7 @@ void PKB::addUsesP(proc_name proc, var_name used)
 	usesP_table.insert(proc, used);
 }
 
-void PKB::addCallsP(proc_name caller_proc_name, proc_name callee_proc_name)
-{
+void PKB::addCallsP(proc_name caller_proc_name, proc_name callee_proc_name) {
 	std::vector<proc_name>::iterator it_proc_caller = std::find(proc_table.begin(), proc_table.end(), caller_proc_name);
 	std::vector<proc_name>::iterator it_proc_callee = std::find(proc_table.begin(), proc_table.end(), callee_proc_name);
 
@@ -173,39 +160,35 @@ void PKB::addCallsP(proc_name caller_proc_name, proc_name callee_proc_name)
 	callsP_table.insert(caller_proc_name, callee_proc_name);
 }
 
-void PKB::addCallsS(stmt_index caller_stmt_index, proc_name callee_proc_name)
-{
+void PKB::addCallsS(stmt_index caller_stmt_index, proc_name callee_proc_name) {
+	//TODO(Kelvin): Implement addition
 }
 
-void PKB::addIf(stmt_index if_stmt_index, var_name control_var)
-{
+void PKB::addIf(stmt_index if_stmt_index, var_name control_var) {
+	//TODO(Kelvin): Implement addition
 }
 
-void PKB::addWhile(stmt_index while_stmt_index, var_name control_var)
-{
+void PKB::addWhile(stmt_index while_stmt_index, var_name control_var) {
+	//TODO(Kelvin): Implement addition
 }
 
-void PKB::addNext(prog_line prog_line1, prog_line prog_line2)
-{
+void PKB::addNext(prog_line prog_line1, prog_line prog_line2) {
+	//TODO(Kelvin): Implement addition
 }
 
-void PKB::generateParentT()
-{
+void PKB::generateParentT() {
 	parentT_table = parent_table.findTransitiveClosure();
 }
 
-void PKB::generateFollowsT()
-{
+void PKB::generateFollowsT() {
 	followsT_table = follows_table.findTransitiveClosure();
 }
 
-void PKB::generateCallsPT()
-{
+void PKB::generateCallsPT() {
 	callsPT_table = callsP_table.findTransitiveClosure();
 }
 
-void PKB::resetCache()
-{
+void PKB::resetCache() {
 	const_table.clear();
 	proc_table.clear();
 	var_table.clear();
@@ -224,31 +207,26 @@ void PKB::resetCache()
 	callsPT_table.clear();
 }
 
-void PKB::resetEntities()
-{
+void PKB::resetEntities() {
 	const_table.clear();
 	proc_table.clear();
 	stmt_table.clear();
 	const_table.clear();
 }
 
-const std::vector<proc_name>& PKB::getProcedures()
-{
+const std::vector<proc_name>& PKB::getProcedures() {
 	return proc_table;
 }
 
-const std::vector<var_name>& PKB::getVariables()
-{
+const std::vector<var_name>& PKB::getVariables() {
 	return var_table;
 }
 
-const std::vector<StmtInfo>& PKB::getStmts()
-{
+const std::vector<StmtInfo>& PKB::getStmts() {
 	return stmt_table;
 }
 
-const StmtInfo PKB::getStmt(stmt_index stmt_index)
-{
+const StmtInfo PKB::getStmt(stmt_index stmt_index) {
 	if (stmt_index <= 0) {
 		throw std::invalid_argument("Stmt index must be greater than zero. ");
 	}
@@ -258,8 +236,7 @@ const StmtInfo PKB::getStmt(stmt_index stmt_index)
 	return stmt_table[stmt_index - 1];
 }
 
-const var_name PKB::getAssignment(stmt_index stmt_index)
-{
+const var_name PKB::getAssignment(stmt_index stmt_index) {
 	if (stmt_index <= 0) {
 		throw std::invalid_argument("Stmt index must be greater than zero: " + std::to_string(stmt_index));
 	}
@@ -275,8 +252,7 @@ const var_name PKB::getAssignment(stmt_index stmt_index)
 	return assignment_table.getValues(stmt_index)[0];
 }
 
-const expr PKB::getExpression(stmt_index stmt_index)
-{
+const expr PKB::getExpression(stmt_index stmt_index) {
 	if (stmt_index <= 0) {
 		throw std::invalid_argument("Stmt index must be greater than zero: " + std::to_string(stmt_index));
 	}
@@ -292,98 +268,79 @@ const expr PKB::getExpression(stmt_index stmt_index)
 	return expr_table.getValues(stmt_index)[0];
 }
 
-const std::vector<constant> PKB::getConstants()
-{
+const std::vector<constant> PKB::getConstants() {
 	std::vector<constant> v(const_table.begin(), const_table.end());
 	return v;
 }
 
-const UniqueRelationTable<stmt_index, var_name>& PKB::getAssigns()
-{
+const UniqueRelationTable<stmt_index, var_name>& PKB::getAssigns() {
 	return assignment_table;
 }
 
-const UniqueRelationTable<stmt_index, expr>& PKB::getExpr()
-{
+const UniqueRelationTable<stmt_index, expr>& PKB::getExpr() {
 	return expr_table;
 }
 
-const UniqueRelationTable<StmtInfo, StmtInfo>& PKB::getFollows()
-{
+const UniqueRelationTable<StmtInfo, StmtInfo>& PKB::getFollows() {
 	return follows_table;
 }
 
-const RelationTable<StmtInfo, StmtInfo>& PKB::getParent()
-{
+const RelationTable<StmtInfo, StmtInfo>& PKB::getParent() {
 	return parent_table;
 }
 
-const RelationTable<StmtInfo, StmtInfo>& PKB::getFollowsT()
-{
+const RelationTable<StmtInfo, StmtInfo>& PKB::getFollowsT() {
 	return followsT_table;
 }
 
-const RelationTable<StmtInfo, StmtInfo>& PKB::getParentT()
-{
+const RelationTable<StmtInfo, StmtInfo>& PKB::getParentT() {
 	return parentT_table;
 }
 
-const RelationTable<StmtInfo, var_name>& PKB::getUsesS()
-{
+const RelationTable<StmtInfo, var_name>& PKB::getUsesS() {
 	return usesS_table;
 }
 
-const RelationTable<StmtInfo, var_name>& PKB::getModifiesS()
-{
+const RelationTable<StmtInfo, var_name>& PKB::getModifiesS() {
 	return modifiesS_table;
 }
 
-const RelationTable<proc_name, var_name>& PKB::getUsesP()
-{
+const RelationTable<proc_name, var_name>& PKB::getUsesP() {
 	return usesP_table;
 }
 
-const RelationTable<proc_name, var_name>& PKB::getModifiesP()
-{
+const RelationTable<proc_name, var_name>& PKB::getModifiesP() {
 	return modifiesP_table;
 }
 
-const RelationTable<proc_name, proc_name>& PKB::getCallsP()
-{
+const RelationTable<proc_name, proc_name>& PKB::getCallsP() {
 	return callsP_table;
 }
 
-const RelationTable<proc_name, proc_name>& PKB::getCallsPT()
-{
+const RelationTable<proc_name, proc_name>& PKB::getCallsPT() {
 	return callsPT_table;
 }
 
-const UniqueRelationTable<stmt_index, var_name>& PKB::getRead()
-{
+const UniqueRelationTable<stmt_index, var_name>& PKB::getRead() {
 	return read_table;
 }
 
-const UniqueRelationTable<stmt_index, var_name>& PKB::getPrint()
-{
+const UniqueRelationTable<stmt_index, var_name>& PKB::getPrint() {
 	return print_table;
 }
 
-const RelationTable<stmt_index, proc_name>& PKB::getCallsS()
-{
+const RelationTable<stmt_index, proc_name>& PKB::getCallsS() {
 	return callsS_table;
 }
 
-const RelationTable<stmt_index, var_name>& PKB::getIf()
-{
+const RelationTable<stmt_index, var_name>& PKB::getIf() {
 	return if_table;
 }
 
-const RelationTable<stmt_index, var_name>& PKB::getWhile()
-{
+const RelationTable<stmt_index, var_name>& PKB::getWhile() {
 	return while_table;
 }
 
-const RelationTable<StmtInfo, StmtInfo>& PKB::getNext()
-{
+const RelationTable<StmtInfo, StmtInfo>& PKB::getNext() {
 	return next_table;
 }
