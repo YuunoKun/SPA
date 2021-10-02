@@ -34,6 +34,7 @@ public:
 
 	virtual void generateParentT() = 0;
 	virtual void generateFollowsT() = 0;
+	virtual void generateCallsPT() = 0;
 
 	virtual const std::vector<proc_name>& getProcedures() = 0;
 	virtual const std::vector<var_name>& getVariables() = 0;

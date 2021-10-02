@@ -161,6 +161,16 @@ void PKB::addUsesP(proc_name proc, var_name used)
 
 void PKB::addCallsP(proc_name caller_proc_name, proc_name callee_proc_name)
 {
+	std::vector<proc_name>::iterator it_proc_caller = std::find(proc_table.begin(), proc_table.end(), caller_proc_name);
+	std::vector<proc_name>::iterator it_proc_callee = std::find(proc_table.begin(), proc_table.end(), callee_proc_name);
+
+	if (it_proc_caller == proc_table.end()) {
+		throw std::invalid_argument("addCallsP: Invalid caller proc: " + caller_proc_name);
+	}
+	else if (it_proc_callee == proc_table.end()) {
+		throw std::invalid_argument("addCallsP: Invalid callee proc: " + callee_proc_name);
+	}
+	callsP_table.insert(caller_proc_name, callee_proc_name);
 }
 
 void PKB::addCallsS(stmt_index caller_stmt_index, proc_name callee_proc_name)
@@ -189,13 +199,17 @@ void PKB::generateFollowsT()
 	followsT_table = follows_table.findTransitiveClosure();
 }
 
+void PKB::generateCallsPT()
+{
+	callsPT_table = callsP_table.findTransitiveClosure();
+}
+
 void PKB::resetCache()
 {
 	const_table.clear();
 	proc_table.clear();
 	var_table.clear();
 	stmt_table.clear();
-	const_table.clear();
 	assignment_table.clear();
 	expr_table.clear();
 	follows_table.clear();
@@ -206,6 +220,8 @@ void PKB::resetCache()
 	modifiesS_table.clear();
 	usesP_table.clear();
 	modifiesP_table.clear();
+	callsP_table.clear();
+	callsPT_table.clear();
 }
 
 void PKB::resetEntities()

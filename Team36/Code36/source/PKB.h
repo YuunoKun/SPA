@@ -38,6 +38,7 @@ public:
 
 	void generateParentT() override;
 	void generateFollowsT() override;
+	void generateCallsPT() override;
 
 	const std::vector<proc_name>& getProcedures() override;
 	const std::vector<var_name>& getVariables() override;
