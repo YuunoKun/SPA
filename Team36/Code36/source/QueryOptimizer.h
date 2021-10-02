@@ -4,5 +4,5 @@
 
 class QueryOptimizer {
 public:
-	static std::list<Clause> optimizeClauses(std::list<Clause>&);
+	static std::vector<Clause> optimizeClauses(std::vector<Clause>&);
 };

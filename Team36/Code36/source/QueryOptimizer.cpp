@@ -1,7 +1,7 @@
 #include "QueryOptimizer.h"
 #pragma once
 
-std::list<Clause> QueryOptimizer::optimizeClauses(std::list<Clause>& clauses) {
+std::vector<Clause> QueryOptimizer::optimizeClauses(std::vector<Clause>& clauses) {
 	//TODO
 	return clauses;
 }

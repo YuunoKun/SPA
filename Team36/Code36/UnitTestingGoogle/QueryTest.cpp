@@ -90,6 +90,16 @@ namespace UnitTesting {
 		EXPECT_EQ(q.getClauses(), o);
 	}
 
+	TEST(Query, setClauses) {
+		Query q;
+		std::vector<Clause> o;
+
+		Pattern e({ { ASSIGN, Synonym{"patternType"} }, { VARIABLE, Synonym{"leftExpr"}}, {}, true });
+		o.push_back({ e });
+		q.setClauses(o);
+		EXPECT_EQ(q.getClauses(), o);
+	}
+
 	TEST(Query, selected) {
 		Query q;
 		std::vector<Entity> v;

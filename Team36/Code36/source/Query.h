@@ -18,6 +18,8 @@ public:
 	void addEntity(Entity&);
 	void addRelation(RelRef&);
 	void addPattern(Pattern&);
+
+	void setClauses(std::vector<Clause>);
 	bool operator==(const Query&) const;
 
 private:

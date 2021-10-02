@@ -33,6 +33,10 @@ void Query::addPattern(Pattern& pattern) {
 	clauses.push_back({ pattern });
 }
 
+void Query::setClauses(std::vector<Clause> clauses) {
+	this->clauses = clauses;
+}
+
 bool Query::operator==(const Query& query) const {
 	return entities == query.entities &&
 		clauses == query.clauses &&
