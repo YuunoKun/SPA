@@ -814,8 +814,8 @@ namespace UnitTesting {
 		q.addEntity(Entity(EntityType::ASSIGN, Synonym{ "a" }));
 		q.addEntity(Entity(EntityType::ASSIGN, Synonym{ "a1" }));
 		q.addSelected(Entity(EntityType::ASSIGN, Synonym{ "a" }));
-		q.addRelation(RelRef(RelType::MODIFIES_S, Entity(EntityType::ASSIGN, Synonym{ "a" }), Entity(EntityType::VARIABLE, "x")));
 		q.addPattern(Pattern(Entity(EntityType::ASSIGN, Synonym{ "a1" }), Entity(EntityType::VARIABLE, "y"), "x", true));
+		q.addRelation(RelRef(RelType::MODIFIES_S, Entity(EntityType::ASSIGN, Synonym{ "a" }), Entity(EntityType::VARIABLE, "x")));
 
 		EXPECT_EQ(test, q);
 	}

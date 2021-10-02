@@ -168,7 +168,7 @@ namespace UnitTesting {
 		//Result
 		validator.parseParameterSuchThat(query, QueryToken::MODIFIES_S, temp_token_chain);
 
-		EXPECT_TRUE(query.getRelations()[0] == expected_rel);
+		EXPECT_TRUE(query.getClauses()[0].getRelation() == expected_rel);
 	}
 
 	// Test PARENT
@@ -194,7 +194,7 @@ namespace UnitTesting {
 		//Result
 		validator.parseParameterSuchThat(query, QueryToken::PARENT, temp_token_chain);
 
-		EXPECT_TRUE(query.getRelations()[0] == expected_rel);
+		EXPECT_TRUE(query.getClauses()[0].getRelation() == expected_rel);
 	}
 
 	// Test parseParameterPattern
@@ -234,7 +234,7 @@ namespace UnitTesting {
 		//Result
 		validator.parseParameterPattern(query, expected_declared_assign, temp_token_chain);
 
-		EXPECT_TRUE(query.getPatterns()[0] == expected_pat);
+		EXPECT_TRUE(query.getClauses()[0].getPattern() == expected_pat);
 	}
 
 	TEST(PatternRelRefValidatorTest, parseParameterPatternAssignWildCardTest) {
@@ -276,7 +276,7 @@ namespace UnitTesting {
 		//Result
 		validator.parseParameterPattern(query, expected_declared_assign, temp_token_chain);
 
-		EXPECT_TRUE(query.getPatterns()[0] == expected_pat);
+		EXPECT_TRUE(query.getClauses()[0].getPattern() == expected_pat);
 	}
 
 	TEST(PatternRelRefValidatorTest, parseParameterPatternAssignSingleWildCardTest) {
@@ -313,7 +313,7 @@ namespace UnitTesting {
 		//Result
 		validator.parseParameterPattern(query, expected_declared_assign, temp_token_chain);
 
-		EXPECT_TRUE(query.getPatterns()[0] == expected_pat);
+		EXPECT_TRUE(query.getClauses()[0].getPattern() == expected_pat);
 	}
 
 	// Invalid tests -------------------------------------------------------------------------------------------------------------------------------

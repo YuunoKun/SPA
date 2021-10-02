@@ -4,44 +4,40 @@
 #include "ResultTable.h"
 #include "RelationsEvaluator.h"
 #include "PatternEvaluator.h"
+#include "Clause.h"
 
 QueryEvaluator::QueryEvaluator() {
 }
 
-std::list<std::string> QueryEvaluator::evaluateQuery(Query query) {
+std::list<std::list<std::string>> QueryEvaluator::evaluateQuery(Query query) {
 	try {
 		QueryResult result;
 
-		evaluateRelations(query, result);
-		evaluatePatterns(query, result);
+		evaluateClauses(query, result);
 
-		return getResult(query, result);;
+		return { getResult(query, result) };
 	}
 	catch (...) {
 		//Some error occur, return empty list
-		return {};
+		return { { } };
 	}
 }
 
-void QueryEvaluator::evaluateRelations(Query& query, QueryResult& queryResult) {
-	RelationsEvaluator evaluator;
-	for (auto& it : query.getRelations()) {
+void QueryEvaluator::evaluateClauses(Query& query, QueryResult& queryResult) {
+	RelationsEvaluator relationEvaluator;
+	PatternEvaluator patternEvaluator;
+	for (auto& it : query.getClauses()) {
 		if (!queryResult.haveResult()) {
 			break;
 		}
-		evaluator.evaluateRelation(queryResult, it);
+		if (it.getType() == RELATION) {
+			relationEvaluator.evaluateRelation(queryResult, it.getRelation());
+		} else {
+			patternEvaluator.evaluatePattern(queryResult, it.getPattern());
+		}
 	}
 }
 
-void QueryEvaluator::evaluatePatterns(Query& query, QueryResult& queryResult) {
-	PatternEvaluator evaluator;
-	for (auto& it : query.getPatterns()) {
-		if (!queryResult.haveResult()) {
-			break;
-		}
-		evaluator.evaluatePattern(queryResult, it);
-	}
-}
 
 std::list<std::string> QueryEvaluator::getRawResult(Entity selected) {
 	std::list<std::string> result;

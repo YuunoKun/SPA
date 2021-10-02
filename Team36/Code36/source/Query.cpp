@@ -9,12 +9,8 @@ std::unordered_map<std::string, Entity> Query::getEntities() {
 	return entities;
 }
 
-std::vector<RelRef> Query::getRelations() {
-	return relations;
-}
-
-std::vector<Pattern> Query::getPatterns() {
-	return patterns;
+std::vector<Clause> Query::getClauses() {
+	return clauses;
 }
 
 std::vector<Entity> Query::getSelected() {
@@ -30,16 +26,19 @@ void Query::addEntity(Entity& entity) {
 }
 
 void Query::addRelation(RelRef& relation) {
-	relations.push_back(relation);
+	clauses.push_back({ relation });
 }
 
 void Query::addPattern(Pattern& pattern) {
-	patterns.push_back(pattern);
+	clauses.push_back({ pattern });
+}
+
+void Query::setClauses(std::vector<Clause> clauses) {
+	this->clauses = clauses;
 }
 
 bool Query::operator==(const Query& query) const {
 	return entities == query.entities &&
-		relations == query.relations &&
-		patterns == query.patterns &&
+		clauses == query.clauses &&
 		selected == query.selected;
 }
