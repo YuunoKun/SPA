@@ -18,9 +18,28 @@ Query QueryPreprocessor::parse(std::string str) {
 	QueryTokenizer query_tokenizer;
 	PatternRelRefValidator validator;
 
-	query_tokenizer.parse_into_query_tokens(str);
+	//query_tokenizer.parse_into_query_tokens(str);
 
-	std::vector<QueryToken> v = query_tokenizer.get_query_token_chain();
+	//std::vector<QueryToken> v = query_tokenizer.get_query_token_chain();
+
+	std::vector<QueryToken> v;
+	v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "stmt" });
+	v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "s" });
+	v.push_back({ QueryToken::QueryTokenType::TERMINATOR, "" });
+	v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "constant" });
+	v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "c" });
+	v.push_back({ QueryToken::QueryTokenType::TERMINATOR, "" });
+	v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "Select" });
+	v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "s" });
+	v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "with" });
+	v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "s" });
+	v.push_back({ QueryToken::QueryTokenType::DOT, "" });
+	v.push_back({ QueryToken::QueryTokenType::STMT_INDEX, "" });
+	v.push_back({ QueryToken::QueryTokenType::EQUAL, "" });
+	v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "c" });
+	v.push_back({ QueryToken::QueryTokenType::DOT, "" });
+	v.push_back({ QueryToken::QueryTokenType::VALUE, "" });
+	v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "and" });
 
 	// Collection of declared query tokens
 	std::vector<QueryToken> output;
@@ -39,8 +58,9 @@ Query QueryPreprocessor::parse(std::string str) {
 
 	// To keep track if there another declaration
 	bool haveNextDeclaration = false;
+
 	// Keep track if it the end of current declaration by terminator
-	bool endOfCurrentDeclaration = true;;
+	bool endOfCurrentDeclaration = true;
 
 	// To keep track of previous token during Selection
 	QueryToken prevTokenSelect = QueryToken();
@@ -115,19 +135,33 @@ Query QueryPreprocessor::parse(std::string str) {
 					patternOrSuchThat = { QueryToken::QueryTokenType::PATTERN, "pattern" };
 					endOfCurrentClauses = false;
 				}
+				else if (token.type == QueryToken::QueryTokenType::IDENTIFIER &&
+					token.token_value == "with") {
+					patternOrSuchThat = { QueryToken::QueryTokenType::WITH, "" };
+					isParameter = true;
+					endOfCurrentClauses = false;
+				}
 				else {
 					throw std::runtime_error("Invalid query");
 				}
-
 			}
 			else {
 				if (token.type == QueryToken::QueryTokenType::SUCH_THAT) {
 					throw std::runtime_error("Invalid query");
 				}
-				// pattern only valid when previous token is either identifier or )
-				else if (isParameter && token.type != QueryToken::QueryTokenType::PARENTHESIS_CLOSE) {
+				// pattern and such that will have parameter inside brackets
+				// with will have parameter as long as the token is not "and", "pattern" or "such that"
+				else if (isParameter && (((patternOrSuchThat.type == QueryToken::QueryTokenType::PATTERN ||
+					patternOrSuchThat.type == QueryToken::QueryTokenType::SUCH_THAT) &&
+					token.type != QueryToken::QueryTokenType::PARENTHESIS_CLOSE) ||
+					(patternOrSuchThat.type == QueryToken::QueryTokenType::WITH &&
+						token.token_value != "and" &&
+						token.token_value != "with" &&
+						token.token_value != "pattern" &&
+						token.type != QueryToken::QueryTokenType::SUCH_THAT))) {
 					parameterClause.push_back(token);
-				}else if (patternOrSuchThat.type == QueryToken::QueryTokenType::SUCH_THAT) {
+				}
+				else if (patternOrSuchThat.type == QueryToken::QueryTokenType::SUCH_THAT) {
 					if (!isParameter && token.type == QueryToken::QueryTokenType::PARENTHESIS_OPEN) {
 						isParameter = true;
 						setQueryParameter(prevTokenSelect, queryParameter);
@@ -159,11 +193,23 @@ Query QueryPreprocessor::parse(std::string str) {
 							throw std::runtime_error("Invalid pattern type");
 						}
 					}
-				}else {
+				}
+				else if (patternOrSuchThat.type == QueryToken::QueryTokenType::WITH) {
+					if (isParameter && (token.token_value == "and" ||
+						token.token_value == "pattern" ||
+						token.token_value == "with" ||
+						token.type == QueryToken::QueryTokenType::SUCH_THAT)) {
+						isParameter = false;
+						endOfCurrentClauses = true;
+						// TODO: call jiyu's method
+						parameterClause.clear();
+					}
+				}
+				else {
 					throw std::runtime_error("Invalid query");
 				}
 			}
-			
+
 			prevTokenSelect = token;
 		}
 	}
