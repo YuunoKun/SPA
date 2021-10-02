@@ -21,21 +21,11 @@ namespace UnitTesting {
 		PKB::getInstance().addStmt(STMT_READ);
 		PKB::getInstance().addVariable(x);
 
-		try {
-			evaluator.haveRelation();
-			FAIL();
-		}
-		catch (std::invalid_argument ex) {
-		}
+		EXPECT_THROW(evaluator.haveRelation(), std::invalid_argument);
 
 		PKB::getInstance().addModifiesS(1, x);
 
-		try {
-			evaluator.haveRelation();
-			FAIL();
-		}
-		catch (std::invalid_argument ex) {
-		}
+		EXPECT_THROW(evaluator.haveRelation(), std::invalid_argument);
 	}
 
 	TEST_F(ModifiesSEvaluatorTest, isRelation) {
@@ -124,24 +114,10 @@ namespace UnitTesting {
 		PKB::getInstance().addModifiesS(1, x);
 		PKB::getInstance().addModifiesS(3, y);
 
-		try {
-			evaluator.haveRelationAtLeft(v1);
-			FAIL();
-		}
-		catch (std::invalid_argument ex) {
-		}
-		try {
-			evaluator.haveRelationAtLeft(v2);
-			FAIL();
-		}
-		catch (std::invalid_argument ex) {
-		}
-		try {
-			evaluator.haveRelationAtLeft(v3);
-			FAIL();
-		}
-		catch (std::invalid_argument ex) {
-		}
+
+		EXPECT_THROW(evaluator.haveRelationAtLeft(v1), std::invalid_argument);
+		EXPECT_THROW(evaluator.haveRelationAtLeft(v2), std::invalid_argument);
+		EXPECT_THROW(evaluator.haveRelationAtLeft(v3), std::invalid_argument);
 	}
 
 	TEST_F(ModifiesSEvaluatorTest, getRelations) {
@@ -223,13 +199,9 @@ namespace UnitTesting {
 		PKB::getInstance().addModifiesS(1, x);
 		PKB::getInstance().addModifiesS(3, y);
 
-		try {
-			Entity header = { VARIABLE, Synonym{"a"} };
-			evaluator.getRightRelations(header);
-			FAIL();
-		}
-		catch (std::invalid_argument ex) {
-		}
+
+		Entity header = { VARIABLE, Synonym{"a"} };
+		EXPECT_THROW(evaluator.getRightRelations(header), std::invalid_argument);
 	}
 
 	TEST_F(ModifiesSEvaluatorTest, getLeftRelations) {
