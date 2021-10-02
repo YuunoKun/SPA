@@ -258,6 +258,38 @@ namespace IntegrationTesting {
 		EXPECT_EQ(v, expected_modifiesS_stmt);
 	}
 
+	TEST_F(ParserPKBTest, Sample5Test_CallsP) {
+		SourceProcessor::Parser parser;
+		parser.load_file("../UnitTestingGoogle/SPTest/TestSource/Sample5.txt");
+		parser.parse();
+
+		std::vector<std::pair<proc_name, proc_name>> expected_callsP = {
+			{"main", "computeCentroid"}, {"main", "printResults"}, {"computeCentroid", "readPoint"}
+		};
+		std::sort(expected_callsP.begin(), expected_callsP.end());
+
+		RelationTable<proc_name, proc_name> table = PKB::getInstance().getCallsP();
+		auto v = table.getPairs();
+		std::sort(v.begin(), v.end());
+		EXPECT_EQ(v, expected_callsP);
+	}
+
+	TEST_F(ParserPKBTest, Sample5Test_CallsPT) {
+		SourceProcessor::Parser parser;
+		parser.load_file("../UnitTestingGoogle/SPTest/TestSource/Sample5.txt");
+		parser.parse();
+
+		std::vector<std::pair<proc_name, proc_name>> expected_callsPT = {
+			{"main", "computeCentroid"}, {"main", "printResults"}, {"computeCentroid", "readPoint"}, {"main", "readPoint"}
+		};
+		std::sort(expected_callsPT.begin(), expected_callsPT.end());
+
+		RelationTable<proc_name, proc_name> table = PKB::getInstance().getCallsPT();
+		auto v = table.getPairs();
+		std::sort(v.begin(), v.end());
+		EXPECT_EQ(v, expected_callsPT);
+	}
+
 	TEST_F(ParserPKBTest, NoProcedureCallsTest_UsesP) {
 		SourceProcessor::Parser parser;
 		parser.load_file("../IntegrationTestingGoogle/Tests/no_procedure_call_source.txt");
