@@ -7,35 +7,36 @@
 
 //Handle both wild : e.g Relation(_, _)
 bool AffectTEvaluator::haveRelation() {
-	//Todo
-	throw std::invalid_argument("haveRelation(): Wild is not allowed for first argument of Uses_S");
+	//Todo Evaluator
+	return !pkb.isFollowEmpty();
 }
 
 //Handle both constant : e.g Relation(1, 2)
 bool AffectTEvaluator::isRelation(Entity e1, Entity e2) {
-	//Todo
-	stmt_index s = stoi(e1.getValue());
-	var_name v = e2.getValue();
-	return pkb.isUsesS(s, v);
+	//Todo Evaluator
+	stmt_index c1 = stoi(e1.getValue());
+	stmt_index c2 = stoi(e2.getValue());
+	return pkb.isFollow(c1, c2);;
 }
 
 //Handle left constant, right wild: e.g Relation(1, _)
 bool AffectTEvaluator::haveRelationAtRight(Entity e) {
-	//Todo
-	stmt_index s = stoi(e.getValue());
-	return pkb.isUsesS(s);
+	//Todo Evaluator
+	stmt_index c = stoi(e.getValue());
+	return pkb.isFollowed(c);
 }
 
-//Handle right wild, left constant: e.g Relation(_, "x")
+//Handle right wild, left constant: e.g Relation(_, 1)
 bool AffectTEvaluator::haveRelationAtLeft(Entity e) {
-	//Todo
-	throw std::invalid_argument("haveRelationAtLeft(): Wild is not allowed for first argument of Uses_S");
+	//Todo Evaluator
+	stmt_index c = stoi(e.getValue());
+	return pkb.isFollowing(c);
 }
 
 //If both side is declartion: e.g Relation(a, b)
 ResultTable AffectTEvaluator::getRelations(Entity left, Entity right) {
-	//Todo
-	std::vector<std::pair<StmtInfo, std::string>> results = pkb.getUsesSRelation();
+	//Todo Evaluator
+	std::vector<std::pair<StmtInfo, StmtInfo>> results = pkb.getFollows();
 	std::pair<Entity, Entity> header{ left, right };
 	ResultTable result = ResultTable(header, results);
 	return result;
@@ -43,26 +44,26 @@ ResultTable AffectTEvaluator::getRelations(Entity left, Entity right) {
 
 //If left side is WILD and right side is declartion: e.g Relation(_, a)
 ResultTable AffectTEvaluator::getRightRelations(Entity header) {
-	//Todo
-	throw std::invalid_argument("getRightRelations(): Wild is not allowed for first argument of Uses_S");
+	//Todo Evaluator
+	return ResultTable(header, pkb.getFollowing());
 }
 
 //Handle right declartion, left constant: e.g Relation(a, _)
 ResultTable AffectTEvaluator::getLeftRelations(Entity header) {
-	//Todo
-	return ResultTable(header, pkb.getUsesS());
+	//Todo Evaluator
+	return ResultTable(header, pkb.getFollowed());
 }
 
 //Handle left constant, right declartion: e.g Relation(1, a)
 ResultTable AffectTEvaluator::getRelationMatchLeft(Entity constant, Entity header) {
-	//Todo
-	stmt_index s = stoi(constant.getValue());
-	return ResultTable(header, pkb.getUsedS(s));
+	//Todo Evaluator
+	stmt_index c = stoi(constant.getValue());
+	return ResultTable(header, pkb.getFollowing(c));
 }
 
 //Handle right declartion, left constant: e.g Relation(a, 1)
 ResultTable AffectTEvaluator::getRelationMatchRight(Entity header, Entity constant) {
-	//Todo
-	var_name v = constant.getValue();
-	return ResultTable(header, pkb.getUsesS(v));
+	//Todo Evaluator
+	stmt_index c = stoi(constant.getValue());
+	return ResultTable(header, pkb.getFollowed(c));
 }

@@ -3,66 +3,58 @@
 #include "Query.h"
 #include "QueryResult.h"
 #include "PKBAdapter.h"
-#include "UsesSEvaluator.h"
+#include "CallsEvaluator.h"
 
 //Handle both wild : e.g Relation(_, _)
-bool UsesSEvaluator::haveRelation() {
-	//Todo
-	throw std::invalid_argument("haveRelation(): Wild is not allowed for first argument of Uses_S");
+bool CallsEvaluator::haveRelation() {
+	return !pkb.isCallsPEmpty();;
 }
 
 //Handle both constant : e.g Relation(1, 2)
-bool UsesSEvaluator::isRelation(Entity e1, Entity e2) {
-	//Todo
-	stmt_index s = stoi(e1.getValue());
-	var_name v = e2.getValue();
-	return pkb.isUsesS(s, v);
+bool CallsEvaluator::isRelation(Entity e1, Entity e2) {
+	proc_name caller = e1.getValue();
+	proc_name callee = e2.getValue();
+	return pkb.isCallsP(caller, callee);
 }
 
 //Handle left constant, right wild: e.g Relation(1, _)
-bool UsesSEvaluator::haveRelationAtRight(Entity e) {
-	//Todo
-	stmt_index s = stoi(e.getValue());
-	return pkb.isUsesS(s);
+bool CallsEvaluator::haveRelationAtRight(Entity e) {
+	proc_name caller = e.getValue();
+	return pkb.isCallerP(caller);
 }
 
 //Handle right wild, left constant: e.g Relation(_, "x")
-bool UsesSEvaluator::haveRelationAtLeft(Entity e) {
-	//Todo
-	throw std::invalid_argument("haveRelationAtLeft(): Wild is not allowed for first argument of Uses_S");
+bool CallsEvaluator::haveRelationAtLeft(Entity e) {
+	proc_name caller = e.getValue();
+	return pkb.isCalleeP(caller);
 }
 
 //If both side is declartion: e.g Relation(a, b)
-ResultTable UsesSEvaluator::getRelations(Entity left, Entity right) {
-	//Todo
-	std::vector<std::pair<StmtInfo, std::string>> results = pkb.getUsesSRelation();
+ResultTable CallsEvaluator::getRelations(Entity left, Entity right) {
+	std::vector<std::pair<std::string, std::string>> results = pkb.getCallsPRelation();
 	std::pair<Entity, Entity> header{ left, right };
 	ResultTable result = ResultTable(header, results);
 	return result;
 }
 
 //If left side is WILD and right side is declartion: e.g Relation(_, a)
-ResultTable UsesSEvaluator::getRightRelations(Entity header) {
-	//Todo
-	throw std::invalid_argument("getRightRelations(): Wild is not allowed for first argument of Uses_S");
+ResultTable CallsEvaluator::getRightRelations(Entity header) {
+	return ResultTable(header, pkb.getCalleeP());
 }
 
 //Handle right declartion, left constant: e.g Relation(a, _)
-ResultTable UsesSEvaluator::getLeftRelations(Entity header) {
-	//Todo
-	return ResultTable(header, pkb.getUsesS());
+ResultTable CallsEvaluator::getLeftRelations(Entity header) {
+	return ResultTable(header, pkb.getCallerP());
 }
 
 //Handle left constant, right declartion: e.g Relation(1, a)
-ResultTable UsesSEvaluator::getRelationMatchLeft(Entity constant, Entity header) {
-	//Todo
-	stmt_index s = stoi(constant.getValue());
-	return ResultTable(header, pkb.getUsedS(s));
+ResultTable CallsEvaluator::getRelationMatchLeft(Entity constant, Entity header) {
+	proc_name p = constant.getValue();
+	return ResultTable(header, pkb.getCalleeP(p));
 }
 
 //Handle right declartion, left constant: e.g Relation(a, 1)
-ResultTable UsesSEvaluator::getRelationMatchRight(Entity header, Entity constant) {
-	//Todo
-	var_name v = constant.getValue();
-	return ResultTable(header, pkb.getUsesS(v));
+ResultTable CallsEvaluator::getRelationMatchRight(Entity header, Entity constant) {
+	proc_name p = constant.getValue();
+	return ResultTable(header, pkb.getCallerP(p));
 }
