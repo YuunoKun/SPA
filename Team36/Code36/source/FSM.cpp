@@ -17,7 +17,7 @@ FSM::FSM(Tokenizer& t, Extractor *extractor) {
 
 
 FSM::~FSM() {
-	delete design_extractor;
+	if (design_extractor) design_extractor->~Extractor();
 }
 
 

@@ -18,7 +18,7 @@ namespace SourceProcessor {
 
 		DesignExtractor();
 
-		~DesignExtractor() override;
+		~DesignExtractor();
 
 		void startNesting() override;
 

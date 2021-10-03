@@ -9,7 +9,7 @@ namespace SourceProcessor {
 
 	class Extractor {
 	public:
-		virtual ~Extractor() {}
+		virtual ~Extractor() {};
 
 		virtual void startNesting() = 0;
 
