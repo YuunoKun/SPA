@@ -22,7 +22,6 @@ bool PatternRelRefValidator::isStmtRef(Query& query, std::vector<QueryToken> tok
 
     // more than 1 args found. possible entref
     if (token_chain.size() > 1) {
-        // more than 1 args found. possible entref
         return false;
     }
 
@@ -66,7 +65,7 @@ bool PatternRelRefValidator::isStmtRef(Query& query, std::vector<QueryToken> tok
 
 //expect entref
 bool PatternRelRefValidator::isEntRef(Query& query, std::vector<QueryToken> token_chain) {
-    // can just throw error, no need return bool
+    // entRef : synonym | ‘_’ | ‘"’ IDENT ‘"’
 
     // no args found, throw syntax errors
     if (token_chain.size() == 0) {
@@ -77,27 +76,33 @@ bool PatternRelRefValidator::isEntRef(Query& query, std::vector<QueryToken> toke
     if (token_chain.size() == 1) {
         QueryToken token = token_chain[0];
 
-        // remove this?
-        if (token.type == QueryToken::CONSTANT) {
-            return false;
-        }
+        //// remove this?
+        //if (token.type == QueryToken::CONSTANT) {
+        //    return false;
+        //}
 
         if (token.type == QueryToken::WILDCARD) {
             return true;
-        }
-
-        // check synonym if is EntRef
-        else if (token.type == QueryToken::IDENTIFIER) {
+        } else if (token.type == QueryToken::IDENTIFIER) {
+            // check synonym if is EntRef
             std::unordered_map<std::string, Entity> ent_chain = query.getEntities();
+
             if (ent_chain.find(token.token_value) != ent_chain.end()) {
-                return ent_chain.at(token.token_value).getType() == EntityType::VARIABLE;
+                return ent_chain.at(token.token_value).getType() == EntityType::VARIABLE ||
+                    ent_chain.at(token.token_value).getType() == EntityType::PROCEDURE;
             }
         } else {
+            //TODO throw semantic error instead?
             return false;
         }
+    } else if (token_chain.size() == 3) {
+        //checking for " IDENT " 
+        return token_chain[0].type == QueryToken::QUOTATION_OPEN &&
+            token_chain[1].type == QueryToken::IDENTIFIER &&
+            token_chain[2].type == QueryToken::QUOTATION_CLOSE;
     } else {
-        // TODO do checking for " IDENT " ?
-        return true;
+        // throw syntax error?
+        throw std::invalid_argument("Invalid EntRef arguments");
     }
 }
 
@@ -155,11 +160,7 @@ Entity PatternRelRefValidator::setEntRef(Query& query,
   // is " "IDENT" "
   // IDENT : LETTER ( LETTER | DIGIT )*
   if (token_chain.size() == 3) {
-      if (token_chain[0].type == QueryToken::QUOTATION_OPEN &&
-          token_chain[1].type == QueryToken::IDENTIFIER &&
-          token_chain[2].type == QueryToken::QUOTATION_CLOSE) {
-          return Entity(EntityType::VARIABLE, token_chain[1].token_value);
-      }
+      return Entity(EntityType::VARIABLE, token_chain[1].token_value);
   }
   
 

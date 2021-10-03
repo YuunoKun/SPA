@@ -145,27 +145,306 @@ namespace UnitTesting {
 
 	// Test parseParameterSuchThat -------------------------------------------------------------------------------------------------------------------
 	//MODIFIES_S
-	TEST(PatternRelRefValidatorTest, parseParameterSuchThatModifiesSTest) {
-		PatternRelRefValidator validator;
 
+	TEST(PatternRelRefValidatorTest, ModifiesSSynSynTest) {
 		Query query;
+
+		//Expected
+		Synonym synonym;
+		synonym.name = "s";
+		Entity expected_stmt_1 = Entity(EntityType::STMT, synonym);
+		query.addEntity(expected_stmt_1);
+
+		Synonym synonym2;
+		synonym2.name = "v";
+		Entity expected_stmt_2 = Entity(EntityType::VARIABLE, synonym2);
+		query.addEntity(expected_stmt_2);
+
+		RelRef expected_rel = RelRef(RelType::MODIFIES_S, expected_stmt_1, expected_stmt_2);
+
+		//Result
+		PatternRelRefValidator validator;
+		std::vector<QueryToken> temp_token_chain;
+		temp_token_chain.push_back({ QueryToken::IDENTIFIER, "s" });
+		temp_token_chain.push_back({ QueryToken::COMMA, "" });
+		temp_token_chain.push_back({ QueryToken::IDENTIFIER, "v" });
+		validator.parseParameterSuchThat(query, QueryToken::MODIFIES_S, temp_token_chain);
+
+		EXPECT_TRUE(query.getClauses()[0].getRelation() == expected_rel);
+	}
+
+	TEST(PatternRelRefValidatorTest, ModifiesSSynWildTest) {
+		Query query;
+
+		//Expected
+		Synonym synonym;
+		synonym.name = "s";
+		Entity expected_stmt_1 = Entity(EntityType::STMT, synonym);
+		query.addEntity(expected_stmt_1);
+
+		Entity expected_stmt_2 = Entity(EntityType::WILD);
+		
+
+		RelRef expected_rel = RelRef(RelType::MODIFIES_S, expected_stmt_1, expected_stmt_2);
+
+		//Result
+		PatternRelRefValidator validator;
 		std::vector<QueryToken> temp_token_chain;
 		temp_token_chain.push_back({ QueryToken::IDENTIFIER, "s" });
 		temp_token_chain.push_back({ QueryToken::COMMA, "" });
 		temp_token_chain.push_back({ QueryToken::WILDCARD, "" });
+		validator.parseParameterSuchThat(query, QueryToken::MODIFIES_S, temp_token_chain);
 
-		//Synonym
+		EXPECT_TRUE(query.getClauses()[0].getRelation() == expected_rel);
+	}
+
+	TEST(PatternRelRefValidatorTest, ModifiesSSynIdentTest) {
+		Query query;
+
 		//Expected
 		Synonym synonym;
 		synonym.name = "s";
-		Entity expected_declared_stmt = Entity(EntityType::STMT, synonym);
-		query.addEntity(expected_declared_stmt);
+		Entity expected_1 = Entity(EntityType::STMT, synonym);
+		query.addEntity(expected_1);
 
-		Entity expected_ent_wildcard = Entity(EntityType::WILD);
 
-		RelRef expected_rel = RelRef(RelType::MODIFIES_S, expected_declared_stmt, expected_ent_wildcard);
+		Entity expected_2 = Entity(EntityType::VARIABLE, "program");
+
+
+		RelRef expected_rel = RelRef(RelType::MODIFIES_S, expected_1, expected_2);
 
 		//Result
+		PatternRelRefValidator validator;
+		std::vector<QueryToken> temp_token_chain;
+		temp_token_chain.push_back({ QueryToken::IDENTIFIER, "s" });
+		temp_token_chain.push_back({ QueryToken::COMMA, "" });
+		temp_token_chain.push_back({ QueryToken::QUOTATION_OPEN, "" });
+		temp_token_chain.push_back({ QueryToken::IDENTIFIER, "program" });
+		temp_token_chain.push_back({ QueryToken::QUOTATION_CLOSE, "" });
+
+		validator.parseParameterSuchThat(query, QueryToken::MODIFIES_S, temp_token_chain);
+
+		EXPECT_TRUE(query.getClauses()[0].getRelation() == expected_rel);
+	}
+
+	TEST(PatternRelRefValidatorTest, ModifiesSIntSynTest) {
+		Query query;
+
+		//Expected
+		Entity expected_stmt_1 = Entity(EntityType::CONSTANT, "5");
+
+		Synonym synonym2;
+		synonym2.name = "v";
+		Entity expected_stmt_2 = Entity(EntityType::VARIABLE, synonym2);
+		query.addEntity(expected_stmt_2);
+
+		RelRef expected_rel = RelRef(RelType::MODIFIES_S, expected_stmt_1, expected_stmt_2);
+
+		//Result
+		PatternRelRefValidator validator;
+		std::vector<QueryToken> temp_token_chain;
+		temp_token_chain.push_back({ QueryToken::CONSTANT, "5" });
+		temp_token_chain.push_back({ QueryToken::COMMA, "" });
+		temp_token_chain.push_back({ QueryToken::IDENTIFIER, "v" });
+		validator.parseParameterSuchThat(query, QueryToken::MODIFIES_S, temp_token_chain);
+
+		EXPECT_TRUE(query.getClauses()[0].getRelation() == expected_rel);
+	}
+
+	TEST(PatternRelRefValidatorTest, ModifiesSIntWildTest) {
+		Query query;
+
+		//Expected
+		Entity expected_stmt_1 = Entity(EntityType::CONSTANT, "5");
+
+		Entity expected_stmt_2 = Entity(EntityType::WILD);
+
+		RelRef expected_rel = RelRef(RelType::MODIFIES_S, expected_stmt_1, expected_stmt_2);
+
+		//Result
+		PatternRelRefValidator validator;
+		std::vector<QueryToken> temp_token_chain;
+		temp_token_chain.push_back({ QueryToken::CONSTANT, "5" });
+		temp_token_chain.push_back({ QueryToken::COMMA, "" });
+		temp_token_chain.push_back({ QueryToken::WILDCARD, "" });
+		validator.parseParameterSuchThat(query, QueryToken::MODIFIES_S, temp_token_chain);
+
+		EXPECT_TRUE(query.getClauses()[0].getRelation() == expected_rel);
+	}
+
+	TEST(PatternRelRefValidatorTest, ModifiesSIntIdentTest) {
+		Query query;
+
+		//Expected
+		Entity expected_1 = Entity(EntityType::CONSTANT, "5");
+
+		Entity expected_2 = Entity(EntityType::VARIABLE, "var");
+
+		RelRef expected_rel = RelRef(RelType::MODIFIES_S, expected_1, expected_2);
+
+		//Result
+		PatternRelRefValidator validator;
+		std::vector<QueryToken> temp_token_chain;
+		temp_token_chain.push_back({ QueryToken::CONSTANT, "5" });
+		temp_token_chain.push_back({ QueryToken::COMMA, "" });
+		temp_token_chain.push_back({ QueryToken::QUOTATION_OPEN, "" });
+		temp_token_chain.push_back({ QueryToken::IDENTIFIER, "var" });
+		temp_token_chain.push_back({ QueryToken::QUOTATION_CLOSE, "" });
+
+		validator.parseParameterSuchThat(query, QueryToken::MODIFIES_S, temp_token_chain);
+
+		EXPECT_TRUE(query.getClauses()[0].getRelation() == expected_rel);
+	}
+
+
+	//MODIFIES_P
+	TEST(PatternRelRefValidatorTest, ModifiesPSynSynTest) {
+		Query query;
+
+		//Expected
+		Synonym synonym;
+		synonym.name = "p";
+		Entity expected_1 = Entity(EntityType::PROCEDURE, synonym);
+		query.addEntity(expected_1);
+
+		Synonym synonym2;
+		synonym2.name = "v";
+		Entity expected_2 = Entity(EntityType::VARIABLE, synonym2);
+		query.addEntity(expected_2);
+
+		RelRef expected_rel = RelRef(RelType::MODIFIES_P, expected_1, expected_2);
+
+		//Result
+		PatternRelRefValidator validator;
+		std::vector<QueryToken> temp_token_chain;
+		temp_token_chain.push_back({ QueryToken::IDENTIFIER, "p" });
+		temp_token_chain.push_back({ QueryToken::COMMA, "" });
+		temp_token_chain.push_back({ QueryToken::IDENTIFIER, "v" });
+		validator.parseParameterSuchThat(query, QueryToken::MODIFIES_S, temp_token_chain);
+
+		EXPECT_TRUE(query.getClauses()[0].getRelation() == expected_rel);
+	}
+
+	TEST(PatternRelRefValidatorTest, ModifiesPSynWildTest) {
+		Query query;
+
+		//Expected
+		Synonym synonym;
+		synonym.name = "p";
+		Entity expected_1 = Entity(EntityType::PROCEDURE, synonym);
+		query.addEntity(expected_1);
+
+		Entity expected_2 = Entity(EntityType::WILD);
+
+		RelRef expected_rel = RelRef(RelType::MODIFIES_P, expected_1, expected_2);
+
+		//Result
+		PatternRelRefValidator validator;
+		std::vector<QueryToken> temp_token_chain;
+		temp_token_chain.push_back({ QueryToken::IDENTIFIER, "p" });
+		temp_token_chain.push_back({ QueryToken::COMMA, "" });
+		temp_token_chain.push_back({ QueryToken::WILDCARD, "" });
+		validator.parseParameterSuchThat(query, QueryToken::MODIFIES_S, temp_token_chain);
+
+		EXPECT_TRUE(query.getClauses()[0].getRelation() == expected_rel);
+	}
+
+	TEST(PatternRelRefValidatorTest, ModifiesPSynIdentTest) {
+		Query query;
+
+		//Expected
+		Synonym synonym;
+		synonym.name = "p";
+		Entity expected_1 = Entity(EntityType::PROCEDURE, synonym);
+		query.addEntity(expected_1);
+
+		Entity expected_2 = Entity(EntityType::VARIABLE, "var");
+
+		RelRef expected_rel = RelRef(RelType::MODIFIES_P, expected_1, expected_2);
+
+		//Result
+		PatternRelRefValidator validator;
+		std::vector<QueryToken> temp_token_chain;
+		temp_token_chain.push_back({ QueryToken::IDENTIFIER, "p" });
+		temp_token_chain.push_back({ QueryToken::COMMA, "" });
+		temp_token_chain.push_back({ QueryToken::QUOTATION_OPEN, "" });
+		temp_token_chain.push_back({ QueryToken::IDENTIFIER, "var" });
+		temp_token_chain.push_back({ QueryToken::QUOTATION_CLOSE, "" });
+		validator.parseParameterSuchThat(query, QueryToken::MODIFIES_S, temp_token_chain);
+
+		EXPECT_TRUE(query.getClauses()[0].getRelation() == expected_rel);
+	}
+
+	TEST(PatternRelRefValidatorTest, ModifiesPIdentSynTest) {
+		Query query;
+
+		//Expected
+		Entity expected_1 = Entity(EntityType::VARIABLE, "main");
+
+		Synonym synonym;
+		synonym.name = "v";
+		Entity expected_2 = Entity(EntityType::VARIABLE, synonym);
+		query.addEntity(expected_2);
+
+		RelRef expected_rel = RelRef(RelType::MODIFIES_P, expected_1, expected_2);
+
+		//Result
+		PatternRelRefValidator validator;
+		std::vector<QueryToken> temp_token_chain;
+		temp_token_chain.push_back({ QueryToken::QUOTATION_OPEN, "" });
+		temp_token_chain.push_back({ QueryToken::IDENTIFIER, "main" });
+		temp_token_chain.push_back({ QueryToken::QUOTATION_CLOSE, "" });
+		temp_token_chain.push_back({ QueryToken::COMMA, "" });
+		temp_token_chain.push_back({ QueryToken::IDENTIFIER, "v" });
+		validator.parseParameterSuchThat(query, QueryToken::MODIFIES_S, temp_token_chain);
+
+		EXPECT_TRUE(query.getClauses()[0].getRelation() == expected_rel);
+	}
+
+	TEST(PatternRelRefValidatorTest, ModifiesPIdentWildTest) {
+		Query query;
+
+		//Expected
+		Entity expected_1 = Entity(EntityType::VARIABLE, "main");
+
+		Entity expected_2 = Entity(EntityType::WILD);
+
+		RelRef expected_rel = RelRef(RelType::MODIFIES_P, expected_1, expected_2);
+
+		//Result
+		PatternRelRefValidator validator;
+		std::vector<QueryToken> temp_token_chain;
+		temp_token_chain.push_back({ QueryToken::QUOTATION_OPEN, "" });
+		temp_token_chain.push_back({ QueryToken::IDENTIFIER, "main" });
+		temp_token_chain.push_back({ QueryToken::QUOTATION_CLOSE, "" });
+		temp_token_chain.push_back({ QueryToken::COMMA, "" });
+		temp_token_chain.push_back({ QueryToken::WILDCARD, "" });
+		validator.parseParameterSuchThat(query, QueryToken::MODIFIES_S, temp_token_chain);
+
+		EXPECT_TRUE(query.getClauses()[0].getRelation() == expected_rel);
+	}
+
+	TEST(PatternRelRefValidatorTest, ModifiesPIdentIdentTest) {
+		Query query;
+
+		//Expected
+
+		Entity expected_1 = Entity(EntityType::VARIABLE, "main");
+
+		Entity expected_2 = Entity(EntityType::VARIABLE, "var");
+
+		RelRef expected_rel = RelRef(RelType::MODIFIES_P, expected_1, expected_2);
+
+		//Result
+		PatternRelRefValidator validator;
+		std::vector<QueryToken> temp_token_chain;
+		temp_token_chain.push_back({ QueryToken::QUOTATION_OPEN, "" });
+		temp_token_chain.push_back({ QueryToken::IDENTIFIER, "main" });
+		temp_token_chain.push_back({ QueryToken::QUOTATION_CLOSE, "" });
+		temp_token_chain.push_back({ QueryToken::COMMA, "" });
+		temp_token_chain.push_back({ QueryToken::QUOTATION_OPEN, "" });
+		temp_token_chain.push_back({ QueryToken::IDENTIFIER, "var" });
+		temp_token_chain.push_back({ QueryToken::QUOTATION_CLOSE, "" });
 		validator.parseParameterSuchThat(query, QueryToken::MODIFIES_S, temp_token_chain);
 
 		EXPECT_TRUE(query.getClauses()[0].getRelation() == expected_rel);
@@ -1133,8 +1412,109 @@ namespace UnitTesting {
 	}
 
 	// Invalid tests -------------------------------------------------------------------------------------------------------------------------------
+
+	// Invalid ModifiesS Test
+	// test invalid Modiefies with 1st param as WILDCARD
+
+	TEST(PatternRelRefValidatorTest, invalidModifiesSWildSynTest) {
+		PatternRelRefValidator validator;
+
+		Query query;
+
+		//Expected
+		Synonym synonym;
+		synonym.name = "s";
+		Entity expected_stmt_1 = Entity(EntityType::STMT, synonym);
+		query.addEntity(expected_stmt_1);
+
+		std::vector<QueryToken> temp_token_chain;
+		temp_token_chain.push_back({ QueryToken::WILDCARD, "" });
+		temp_token_chain.push_back({ QueryToken::COMMA, "" });
+		temp_token_chain.push_back({ QueryToken::IDENTIFIER, "s" });
+
+		try {
+			validator.parseParameterSuchThat(query, QueryToken::MODIFIES_S, temp_token_chain);
+			FAIL();
+		}
+		catch (std::invalid_argument const& err) {
+			EXPECT_EQ(err.what(), std::string("Invalid parameters for Modifies"));
+		}
+		catch (...) {
+			// Test case should fail if not caught as runtime_error 
+			FAIL();
+		}
+	}
 	
-	// Invalid Follows tests------------------------------------------------------------------------------------------------------------------------
+	TEST(PatternRelRefValidatorTest, invalidModifiesSWildWildTest) {
+		PatternRelRefValidator validator;
+
+		Query query;
+		std::vector<QueryToken> temp_token_chain;
+		temp_token_chain.push_back({ QueryToken::WILDCARD, "" });
+		temp_token_chain.push_back({ QueryToken::COMMA, "" });
+		temp_token_chain.push_back({ QueryToken::WILDCARD, "" });
+
+		try {
+			validator.parseParameterSuchThat(query, QueryToken::MODIFIES_S, temp_token_chain);
+			FAIL();
+		}
+		catch (std::invalid_argument const& err) {
+			EXPECT_EQ(err.what(), std::string("Invalid parameters for Modifies"));
+		}
+		catch (...) {
+			// Test case should fail if not caught as runtime_error 
+			FAIL();
+		}
+	}
+
+	TEST(PatternRelRefValidatorTest, invalidModifiesSWildIntTest) {
+		PatternRelRefValidator validator;
+
+		Query query;
+		std::vector<QueryToken> temp_token_chain;
+		temp_token_chain.push_back({ QueryToken::WILDCARD, "" });
+		temp_token_chain.push_back({ QueryToken::COMMA, "" });
+		temp_token_chain.push_back({ QueryToken::CONSTANT, "5" });
+
+		try {
+			validator.parseParameterSuchThat(query, QueryToken::MODIFIES_S, temp_token_chain);
+			FAIL();
+		}
+		catch (std::invalid_argument const& err) {
+			EXPECT_EQ(err.what(), std::string("Invalid parameters for Modifies"));
+		}
+		catch (...) {
+			// Test case should fail if not caught as runtime_error 
+			FAIL();
+		}
+	}
+	
+	TEST(PatternRelRefValidatorTest, invalidModifiesSWildIdentTest) {
+		PatternRelRefValidator validator;
+
+		Query query;
+		std::vector<QueryToken> temp_token_chain;
+		temp_token_chain.push_back({ QueryToken::WILDCARD, "" });
+		temp_token_chain.push_back({ QueryToken::COMMA, "" });
+		temp_token_chain.push_back({ QueryToken::QUOTATION_OPEN, "" });
+		temp_token_chain.push_back({ QueryToken::IDENTIFIER, "program" });
+		temp_token_chain.push_back({ QueryToken::QUOTATION_CLOSE, "" });
+
+		try {
+			validator.parseParameterSuchThat(query, QueryToken::MODIFIES_S, temp_token_chain);
+			FAIL();
+		}
+		catch (std::invalid_argument const& err) {
+			EXPECT_EQ(err.what(), std::string("Invalid parameters for Modifies"));
+		}
+		catch (...) {
+			// Test case should fail if not caught as runtime_error 
+			FAIL();
+		}
+	}
+
+	
+	// Invalid Follows tests
 	TEST(PatternRelRefValidatorTest, invalidUndeclaredSynonymFollowsTest) {
 		PatternRelRefValidator validator;
 
@@ -1194,30 +1574,6 @@ namespace UnitTesting {
 		}
 		catch (std::invalid_argument const& err) {
 			EXPECT_EQ(err.what(), std::string("Invalid parameters for Uses"));
-		}
-		catch (...) {
-			// Test case should fail if not caught as runtime_error 
-			FAIL();
-		}
-	}
-
-	// Invalid Modifies tests
-	// test invalid Modiefies with 1st param as WILDCARD
-	TEST(PatternRelRefValidatorTest, invalidWildcardModifiesSTest) {
-		PatternRelRefValidator validator;
-
-		Query query;
-		std::vector<QueryToken> temp_token_chain;
-		temp_token_chain.push_back({ QueryToken::WILDCARD, "" });
-		temp_token_chain.push_back({ QueryToken::COMMA, "" });
-		temp_token_chain.push_back({ QueryToken::WILDCARD, "" });
-
-		try {
-			validator.parseParameterSuchThat(query, QueryToken::MODIFIES_S, temp_token_chain);
-			FAIL();
-		}
-		catch (std::invalid_argument const& err) {
-			EXPECT_EQ(err.what(), std::string("Invalid parameters for Modifies"));
 		}
 		catch (...) {
 			// Test case should fail if not caught as runtime_error 
