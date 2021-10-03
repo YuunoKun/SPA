@@ -40,6 +40,13 @@
     <ClCompile Include="..\source\ModifiesPEvaluator.cpp" />
     <ClCompile Include="..\source\UsesSEvaluator.cpp" />
     <ClCompile Include="..\source\UsesPEvaluator.cpp" />
+    <ClCompile Include="..\source\CallsEvaluator.cpp" />
+    <ClCompile Include="..\source\CallsTEvaluator.cpp" />
+    <ClCompile Include="..\source\NextEvaluator.cpp" />
+    <ClCompile Include="..\source\NextTEvaluator.cpp" />
+    <ClCompile Include="..\source\AffectEvaluator.cpp" />
+    <ClCompile Include="..\source\AffectTEvaluator.cpp" />
+    <ClCompile Include="..\source\WithEvaluator.cpp" />
     <ClCompile Include="..\source\PatternEvaluator.cpp" />
     <ClCompile Include="..\source\ResultTable.cpp" />
     <ClCompile Include="..\source\Utility.cpp" />
@@ -83,6 +90,13 @@
     <ClInclude Include="..\source\ModifiesPEvaluator.h" />
     <ClInclude Include="..\source\UsesSEvaluator.h" />
     <ClInclude Include="..\source\UsesPEvaluator.h" />
+    <ClInclude Include="..\source\CallsEvaluator.h" />
+    <ClInclude Include="..\source\CallsTEvaluator.h" />
+    <ClInclude Include="..\source\NextEvaluator.h" />
+    <ClInclude Include="..\source\NextTEvaluator.h" />
+    <ClInclude Include="..\source\AffectEvaluator.h" />
+    <ClInclude Include="..\source\AffectTEvaluator.h" />
+    <ClInclude Include="..\source\WithEvaluator.h" />
     <ClInclude Include="..\source\ResultTable.h" />
     <ClInclude Include="..\source\Utility.h" />
     <ClInclude Include="..\source\PatternRelRefValidator.h" />
