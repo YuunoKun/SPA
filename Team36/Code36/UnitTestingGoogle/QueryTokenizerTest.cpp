@@ -1,7 +1,6 @@
 #include "pch.h"
 
 #include "QueryTokenizer.h"
-#include "QueryTokenizer.cpp"
 #include "Common.h"
 #include <iostream>
 
@@ -597,110 +596,54 @@ namespace UnitTesting {
 	// Test catch if parenthesis still open 
 	TEST(QueryTokenizer, InvalidParenthesisOpenTest) {
 
-		try {
-			QueryTokenizer query_tokenizer;
-			std::string input = "(procName";
-			query_tokenizer.parse_into_query_tokens(input);
-			std::vector<QueryToken> output = query_tokenizer.get_query_token_chain();
-		}
-		catch (std::runtime_error const& err) {
-			EXPECT_EQ(err.what(), std::string("expected \')\'"));
-		}
-		catch (...) {
-			// Test case should fail if not caught as runtime_error 
-			FAIL();
-		}
+		QueryTokenizer query_tokenizer;
+		std::string input = "(procName";
+		
+		EXPECT_THROW(query_tokenizer.parse_into_query_tokens(input), SyntacticErrorException);
 	}
 
 	// Test catch if parenthesis no opening
 	TEST(QueryTokenizer, InvalidParenthesisCloseTest) {
 
-		try {
-			QueryTokenizer query_tokenizer;
-			std::string input = "procName)";
-			query_tokenizer.parse_into_query_tokens(input);
-			std::vector<QueryToken> output = query_tokenizer.get_query_token_chain();
-		}
-		catch (std::runtime_error const& err) {
-			EXPECT_EQ(err.what(), std::string("Unexpected symbol : \')\'"));
-		}
-		catch (...) {
-			// Test case should fail if not caught as runtime_error 
-			FAIL();
-		}
+		QueryTokenizer query_tokenizer;
+		std::string input = "procName)";
+
+		EXPECT_THROW(query_tokenizer.parse_into_query_tokens(input), SyntacticErrorException);
+
 	}
 
 	// Test catch if quotation marks missing
 	TEST(QueryTokenizer, InvalidQuotationTest1) {
 
-		try {
-			QueryTokenizer query_tokenizer;
-			std::string input = "\"procName";
-			query_tokenizer.parse_into_query_tokens(input);
-			std::vector<QueryToken> output = query_tokenizer.get_query_token_chain();
-		}
-		catch (std::runtime_error const& err) {
-			EXPECT_EQ(err.what(), std::string("missing terminating \" character"));
-		}
-		catch (...) {
-			// Test case should fail if not caught as runtime_error 
-			FAIL();
-		}
+		QueryTokenizer query_tokenizer;
+		std::string input = "\"procName";
+		
+		EXPECT_THROW(query_tokenizer.parse_into_query_tokens(input), SyntacticErrorException);
 	}
 
 	// Test catch if quotation marks missing
 	TEST(QueryTokenizer, InvalidQuotationTest2) {
 
-		try {
-			QueryTokenizer query_tokenizer;
-			std::string input = "procName\"";
-			query_tokenizer.parse_into_query_tokens(input);
-			std::vector<QueryToken> output = query_tokenizer.get_query_token_chain();
-		}
-		catch (std::runtime_error const& err) {
-			EXPECT_EQ(err.what(), std::string("missing terminating \" character"));
-		}
-		catch (...) {
-			// Test case should fail if not caught as runtime_error 
-			FAIL();
-		}
+		QueryTokenizer query_tokenizer;
+		std::string input = "procName\"";
+		
+		EXPECT_THROW(query_tokenizer.parse_into_query_tokens(input), SyntacticErrorException);
 	}
 
 	TEST(QueryTokenizer, InvalidSingleQuotationTest) {
 
-		try {
-			QueryTokenizer query_tokenizer;
-			std::string input = "\'procName\'";
-			query_tokenizer.parse_into_query_tokens(input);
-			std::vector<QueryToken> output = query_tokenizer.get_query_token_chain();
-			FAIL();
-		}
-		catch (std::runtime_error const& err) {
-			EXPECT_EQ(err.what(), std::string("Unknown symbol present"));
-		}
-		catch (...) {
-			// Test case should fail if not caught as runtime_error 
-			FAIL();
-		}
+		QueryTokenizer query_tokenizer;
+		std::string input = "\'procName\'";
+		EXPECT_THROW(query_tokenizer.parse_into_query_tokens(input), SyntacticErrorException);
+
 	}
 
 	TEST(QueryTokenizer, InvalidIdentTest) {
 
-		try {
-			QueryTokenizer query_tokenizer;
-			std::string input = "1procName";
-			query_tokenizer.parse_into_query_tokens(input);
-			std::vector<QueryToken> output = query_tokenizer.get_query_token_chain();
-			FAIL();
-		}
-		catch (std::runtime_error const& err) {
-			EXPECT_EQ(err.what(), std::string("Invalid Name present"));
-		}
-		catch (...) {
-			// Test case should fail if not caught as runtime_error 
-			FAIL();
-		}
+		QueryTokenizer query_tokenizer;
+		std::string input = "1procName";
+		EXPECT_THROW(query_tokenizer.parse_into_query_tokens(input), SyntacticErrorException);
+
 	}
 
-	
 }

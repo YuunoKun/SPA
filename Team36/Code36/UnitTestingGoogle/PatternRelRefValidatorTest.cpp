@@ -3,8 +3,6 @@
 #include "PatternRelRefValidator.h"
 #include "Common.h"
 #include <iostream>
-#include "SemanticErrorException.h"
-#include "SyntacticErrorException.h"
 
 namespace UnitTesting {
 	class PatternRelRefValidatorTest : public ::testing::Test {

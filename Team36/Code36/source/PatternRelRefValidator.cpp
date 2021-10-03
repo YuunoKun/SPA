@@ -1,16 +1,9 @@
-#include "PatternRelRefValidator.h"
-
 #include <iostream>
 #include <string>
 #include <vector>
 #include <stdexcept>
-#include "Entity.h"
-#include "QueryToken.h"
-#include "QueryTokenizer.h"
-#include "Query.h"
-#include "Utility.h"
-#include "SemanticErrorException.h"
-#include "SyntacticErrorException.h"
+#include "PatternRelRefValidator.h"
+
 
 // isStmtRef and isEntRef token_chain params need to br broken up first
 
