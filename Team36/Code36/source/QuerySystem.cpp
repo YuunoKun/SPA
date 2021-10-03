@@ -17,20 +17,17 @@ std::list<std::string> QuerySystem::processQuery(std::string input) {
 
 		return result;
 	}
-	catch (SyntacticErrorException& e)
+	catch (SyntacticErrorException&)
 	{
-		std::cout << "Syntactic error exists!" << std::endl;
 		return {};
 	}
-	catch (SemanticErrorException& e)
+	catch (SemanticErrorException&)
 	{
-		std::cout << "Semantic error exists!" << std::endl;
 		// TODO: Return false here instead of empty query
 		return {};
 	}
 	catch (std::exception& e)
 	{
-		std::cout << "Standard exception: " << e.what() << std::endl;
 		return {};
 	}
 }

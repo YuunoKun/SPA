@@ -4,8 +4,9 @@
 #include <string>
 
 SyntacticErrorException::SyntacticErrorException() {
+	std::cout << "Syntactic Error" << std::endl;
 };
 
 SyntacticErrorException::SyntacticErrorException(std::string str) {
-	std::cout << str << std::endl;
+	std::cout << "Syntactic Error: " << str << std::endl;
 };
