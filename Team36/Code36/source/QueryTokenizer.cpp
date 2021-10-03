@@ -15,6 +15,7 @@ void QueryTokenizer::parse_into_query_tokens(std::string input) {
 	std::stack<char> separator_validation_stk;
 
 	bool quotation_validation = false;
+	bool is_attr_name = false;
 
 	for (char c : input) {
 
@@ -75,6 +76,29 @@ void QueryTokenizer::parse_into_query_tokens(std::string input) {
 			add_query_token(curr_query_token);
 			break;
 		case ' ':
+			// check for is_attr_name
+			if (is_attr_name && curr_query_token.type == QueryToken::IDENTIFIER) {
+				
+				if (curr_query_token.token_value == "procName") {
+					curr_query_token.type = QueryToken::PROC_NAME;
+					curr_query_token.token_value = "";
+					add_query_token(curr_query_token);
+				} else if (curr_query_token.token_value == "varName") {
+					curr_query_token.type = QueryToken::VAR_NAME;
+					curr_query_token.token_value = "";
+					add_query_token(curr_query_token);
+				} else if (curr_query_token.token_value == "value") {
+					curr_query_token.type = QueryToken::VALUE;
+					curr_query_token.token_value = "";
+					add_query_token(curr_query_token);
+				} else if (curr_query_token.token_value == "stmt#") {
+					curr_query_token.type = QueryToken::STMT_INDEX;
+					curr_query_token.token_value = "";
+					add_query_token(curr_query_token);
+				}
+				is_attr_name = false;
+			}
+
 			// check for "such" in such that
 			if (curr_query_token.type == QueryToken::IDENTIFIER
 				&& curr_query_token.token_value == "such") {
@@ -100,27 +124,7 @@ void QueryTokenizer::parse_into_query_tokens(std::string input) {
 			curr_query_token.type = QueryToken::WHITESPACE;
 			break;
 		case '*':
-			// if got whitespace infront -> then is MUL
-			// IF got IDENT infront then is -> asterisk. then parser check if is fully asterisk(parrent/uses infront) or else is MUL
-			//if (curr_query_token.type == QueryToken::CONSTANT) {
-			//	//check before if CONSTANT
-			//	//part of term/expr
-			//	add_query_token(curr_query_token);
-			//	curr_query_token.type = QueryToken::MUL;
-			//	add_query_token(curr_query_token);
-			//} else 
-				
-			//if (curr_query_token.type == QueryToken::IDENTIFIER) {
-			//	// if in front is IDENT, can be for expr/term or for or MUL
-			//	add_query_token(curr_query_token);
-			//	curr_query_token.type = QueryToken::MUL;
-			//	add_query_token(curr_query_token);
-			//}
-			//else {
-			//	std::runtime_error("Unexpected symbol : \'" + c + '\'');
-			//}
-
-			// must not be in quotation brackets
+			// must NOT be in quotation brackets
 			if (!quotation_validation && curr_query_token.type == QueryToken::IDENTIFIER) {
 				if (curr_query_token.token_value == "Follows") {
 					curr_query_token.type = QueryToken::FOLLOWS_T;
@@ -130,7 +134,19 @@ void QueryTokenizer::parse_into_query_tokens(std::string input) {
 					curr_query_token.type = QueryToken::PARENT_T;
 					curr_query_token.token_value = "";
 					add_query_token(curr_query_token);
-				}
+				} else if (curr_query_token.token_value == "Calls") {
+					curr_query_token.type = QueryToken::CALLS_T;
+					curr_query_token.token_value = "";
+					add_query_token(curr_query_token);
+				} else if (curr_query_token.token_value == "Next") {
+					curr_query_token.type = QueryToken::NEXT_T;
+					curr_query_token.token_value = "";
+					add_query_token(curr_query_token);
+				} else if (curr_query_token.token_value == "Affects") {
+					curr_query_token.type = QueryToken::AFFECTS_T;
+					curr_query_token.token_value = "";
+					add_query_token(curr_query_token);
+				} 
 				break;
 			}
 			else {
@@ -158,6 +174,20 @@ void QueryTokenizer::parse_into_query_tokens(std::string input) {
 			add_query_token(curr_query_token);
 			curr_query_token.type = QueryToken::MOD;
 			add_query_token(curr_query_token);
+			break;
+		case '=':
+			add_query_token(curr_query_token);
+			curr_query_token.type = QueryToken::EQUAL;
+			add_query_token(curr_query_token);
+			break;
+		case '.':
+			add_query_token(curr_query_token);
+			curr_query_token.type = QueryToken::DOT;
+			add_query_token(curr_query_token);
+			is_attr_name = true;
+			break;
+		case '#':
+			curr_query_token.token_value.push_back(c);
 			break;
 		default:
 			if (isdigit(c)) {

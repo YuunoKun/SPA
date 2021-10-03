@@ -85,7 +85,7 @@ namespace UnitTesting {
 		expected.push_back({ QueryToken::IDENTIFIER, "s" });
 
 
-		for (int i = 0; i < expected.size(); i++) {
+		for (size_t i = 0; i < expected.size(); i++) {
 			EXPECT_TRUE(output[i].token_value == expected[i].token_value);
 			EXPECT_TRUE(output[i].type == expected[i].type);
 		}
@@ -330,7 +330,7 @@ namespace UnitTesting {
 		expected.push_back({ QueryToken::WILDCARD, "" });
 		expected.push_back({ QueryToken::PARENTHESIS_CLOSE, "" });
 
-		for (int i = 0; i<expected.size(); i++) {
+		for (size_t i = 0; i<expected.size(); i++) {
 			EXPECT_TRUE(output[i].token_value == expected[i].token_value);
 			EXPECT_TRUE(output[i].type == expected[i].type);
 
@@ -362,7 +362,7 @@ namespace UnitTesting {
 		expected.push_back({ QueryToken::WILDCARD, "" });
 		expected.push_back({ QueryToken::PARENTHESIS_CLOSE, "" });
 
-		for (int i = 0; i < expected.size(); i++) {
+		for (size_t i = 0; i < expected.size(); i++) {
 			EXPECT_TRUE(output[i].token_value == expected[i].token_value);
 			EXPECT_TRUE(output[i].type == expected[i].type);
 
@@ -392,7 +392,7 @@ namespace UnitTesting {
 		expected.push_back({ QueryToken::QUOTATION_CLOSE, "" });
 		expected.push_back({ QueryToken::PARENTHESIS_CLOSE, "" });
 
-		for (int i = 0; i < expected.size(); i++) {
+		for (size_t i = 0; i < expected.size(); i++) {
 			EXPECT_TRUE(output[i].token_value == expected[i].token_value);
 			EXPECT_TRUE(output[i].type == expected[i].type);
 		}
@@ -437,7 +437,7 @@ namespace UnitTesting {
 		expected.push_back({ QueryToken::WILDCARD, "" });
 		expected.push_back({ QueryToken::PARENTHESIS_CLOSE, "" });
 
-		for (int i = 0; i < expected.size(); i++) {
+		for (size_t i = 0; i < expected.size(); i++) {
 			EXPECT_TRUE(output[i].token_value == expected[i].token_value);
 			EXPECT_TRUE(output[i].type == expected[i].type);
 
@@ -446,7 +446,153 @@ namespace UnitTesting {
 		}
 	}
 	
-	// Invalid tests
+	// Test for attribute_names ---------------------------------------------------------------------------------------------
+	
+	// Test for procName
+	TEST(QueryTokenizer, procNameTest) {
+
+		//Result
+		QueryTokenizer query_tokenizer;
+		std::string input = "Select p such that Calls (p, q) with q.procName = \"Third\"";
+
+		query_tokenizer.parse_into_query_tokens(input);
+		std::vector<QueryToken> output = query_tokenizer.get_query_token_chain();
+
+		//Expected
+		std::vector<QueryToken> expected;
+		expected.push_back({ QueryToken::IDENTIFIER, "Select" });
+		expected.push_back({ QueryToken::IDENTIFIER, "p" });
+		expected.push_back({ QueryToken::SUCH_THAT, "" });
+		expected.push_back({ QueryToken::IDENTIFIER, "Calls" });
+		expected.push_back({ QueryToken::PARENTHESIS_OPEN, "" });
+		expected.push_back({ QueryToken::IDENTIFIER, "p" });
+		expected.push_back({ QueryToken::COMMA, "" });
+		expected.push_back({ QueryToken::IDENTIFIER, "q" });
+		expected.push_back({ QueryToken::PARENTHESIS_CLOSE, "" });
+		expected.push_back({ QueryToken::IDENTIFIER, "with" });
+		expected.push_back({ QueryToken::IDENTIFIER, "q" });
+		expected.push_back({ QueryToken::DOT, "" });
+		expected.push_back({ QueryToken::PROC_NAME, "" });
+		expected.push_back({ QueryToken::EQUAL, "" });
+		expected.push_back({ QueryToken::QUOTATION_OPEN, "" });
+		expected.push_back({ QueryToken::IDENTIFIER, "Third" });
+		expected.push_back({ QueryToken::QUOTATION_CLOSE, "" });
+
+		for (size_t i = 0; i < expected.size(); i++) {
+			EXPECT_TRUE(output[i].token_value == expected[i].token_value);
+			EXPECT_TRUE(output[i].type == expected[i].type);
+		}
+	}
+
+	// test for varName
+	TEST(QueryTokenizer, varNameTest) {
+
+		//Result
+		QueryTokenizer query_tokenizer;
+		std::string input = "Select p such that Calls (p, q) with q.varName = \"Third\"";
+
+		query_tokenizer.parse_into_query_tokens(input);
+		std::vector<QueryToken> output = query_tokenizer.get_query_token_chain();
+
+		//Expected
+		std::vector<QueryToken> expected;
+		expected.push_back({ QueryToken::IDENTIFIER, "Select" });
+		expected.push_back({ QueryToken::IDENTIFIER, "p" });
+		expected.push_back({ QueryToken::SUCH_THAT, "" });
+		expected.push_back({ QueryToken::IDENTIFIER, "Calls" });
+		expected.push_back({ QueryToken::PARENTHESIS_OPEN, "" });
+		expected.push_back({ QueryToken::IDENTIFIER, "p" });
+		expected.push_back({ QueryToken::COMMA, "" });
+		expected.push_back({ QueryToken::IDENTIFIER, "q" });
+		expected.push_back({ QueryToken::PARENTHESIS_CLOSE, "" });
+		expected.push_back({ QueryToken::IDENTIFIER, "with" });
+		expected.push_back({ QueryToken::IDENTIFIER, "q" });
+		expected.push_back({ QueryToken::DOT, "" });
+		expected.push_back({ QueryToken::VAR_NAME, "" });
+		expected.push_back({ QueryToken::EQUAL, "" });
+		expected.push_back({ QueryToken::QUOTATION_OPEN, "" });
+		expected.push_back({ QueryToken::IDENTIFIER, "Third" });
+		expected.push_back({ QueryToken::QUOTATION_CLOSE, "" });
+
+		for (size_t i = 0; i < expected.size(); i++) {
+			EXPECT_TRUE(output[i].token_value == expected[i].token_value);
+			EXPECT_TRUE(output[i].type == expected[i].type);
+		}
+	}
+
+	// test for values
+	TEST(QueryTokenizer, valueTest) {
+
+		//Result
+		QueryTokenizer query_tokenizer;
+		std::string input = "Select p such that Follows (p, q) with q.value = \"Third\"";
+
+		query_tokenizer.parse_into_query_tokens(input);
+		std::vector<QueryToken> output = query_tokenizer.get_query_token_chain();
+
+		//Expected
+		std::vector<QueryToken> expected;
+		expected.push_back({ QueryToken::IDENTIFIER, "Select" });
+		expected.push_back({ QueryToken::IDENTIFIER, "p" });
+		expected.push_back({ QueryToken::SUCH_THAT, "" });
+		expected.push_back({ QueryToken::IDENTIFIER, "Follows" });
+		expected.push_back({ QueryToken::PARENTHESIS_OPEN, "" });
+		expected.push_back({ QueryToken::IDENTIFIER, "p" });
+		expected.push_back({ QueryToken::COMMA, "" });
+		expected.push_back({ QueryToken::IDENTIFIER, "q" });
+		expected.push_back({ QueryToken::PARENTHESIS_CLOSE, "" });
+		expected.push_back({ QueryToken::IDENTIFIER, "with" });
+		expected.push_back({ QueryToken::IDENTIFIER, "q" });
+		expected.push_back({ QueryToken::DOT, "" });
+		expected.push_back({ QueryToken::VALUE, "" });
+		expected.push_back({ QueryToken::EQUAL, "" });
+		expected.push_back({ QueryToken::QUOTATION_OPEN, "" });
+		expected.push_back({ QueryToken::IDENTIFIER, "Third" });
+		expected.push_back({ QueryToken::QUOTATION_CLOSE, "" });
+
+		for (size_t i = 0; i < expected.size(); i++) {
+			EXPECT_TRUE(output[i].token_value == expected[i].token_value);
+			EXPECT_TRUE(output[i].type == expected[i].type);
+		}
+	}
+
+	// test for stmt#
+	TEST(QueryTokenizer, stmtIndexTest) {
+
+		//Result
+		QueryTokenizer query_tokenizer;
+		std::string input = "Select p such that Follows (p, q) with q.stmt# = \"Third\"";
+
+		query_tokenizer.parse_into_query_tokens(input);
+		std::vector<QueryToken> output = query_tokenizer.get_query_token_chain();
+
+		//Expected
+		std::vector<QueryToken> expected;
+		expected.push_back({ QueryToken::IDENTIFIER, "Select" });
+		expected.push_back({ QueryToken::IDENTIFIER, "p" });
+		expected.push_back({ QueryToken::SUCH_THAT, "" });
+		expected.push_back({ QueryToken::IDENTIFIER, "Follows" });
+		expected.push_back({ QueryToken::PARENTHESIS_OPEN, "" });
+		expected.push_back({ QueryToken::IDENTIFIER, "p" });
+		expected.push_back({ QueryToken::COMMA, "" });
+		expected.push_back({ QueryToken::IDENTIFIER, "q" });
+		expected.push_back({ QueryToken::PARENTHESIS_CLOSE, "" });
+		expected.push_back({ QueryToken::IDENTIFIER, "with" });
+		expected.push_back({ QueryToken::IDENTIFIER, "q" });
+		expected.push_back({ QueryToken::DOT, "" });
+		expected.push_back({ QueryToken::STMT_INDEX, "" });
+		expected.push_back({ QueryToken::EQUAL, "" });
+		expected.push_back({ QueryToken::QUOTATION_OPEN, "" });
+		expected.push_back({ QueryToken::IDENTIFIER, "Third" });
+		expected.push_back({ QueryToken::QUOTATION_CLOSE, "" });
+
+		for (size_t i = 0; i < expected.size(); i++) {
+			EXPECT_TRUE(output[i].token_value == expected[i].token_value);
+			EXPECT_TRUE(output[i].type == expected[i].type);
+		}
+	}
+	
+	// Invalid tests---------------------------------------------------------------------------------------------------------
 
 	// Test catch if parenthesis still open 
 	TEST(QueryTokenizer, InvalidParenthesisOpenTest) {
