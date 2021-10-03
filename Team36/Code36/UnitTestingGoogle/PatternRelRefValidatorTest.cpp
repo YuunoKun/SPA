@@ -296,7 +296,6 @@ namespace UnitTesting {
 		EXPECT_TRUE(query.getClauses()[0].getRelation() == expected_rel);
 	}
 
-
 	//MODIFIES_P
 	TEST(PatternRelRefValidatorTest, ModifiesPSynSynTest) {
 		Query query;
