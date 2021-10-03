@@ -25,11 +25,13 @@ public:
 		AND,
 		PATTERN,
 		SUCH_THAT,
+		PROG_LINE,
 		ATTR_NAME,
 		PROC_NAME,
 		VAR_NAME,
 		VALUE,
 		STMT_INDEX,
+		WITH,
 
 		//Relationships
 		MODIFIES_P,
@@ -46,13 +48,12 @@ public:
 		NEXT_T,
 		AFFECTS,
 		AFFECTS_T,
-		WITH,
 
 		//Pattern
 		ASSIGN,
 		IF,
 		WHILE,
-		
+
 		// PQL symbols
 		WILDCARD,
 		QUOTATION_OPEN,
@@ -60,6 +61,8 @@ public:
 		COMMA,
 		PARENTHESIS_OPEN,
 		PARENTHESIS_CLOSE,
+		TUPLE_OPEN,
+		TUPLE_CLOSE,
 		EQUAL,
 		HASH,
 		DOT,

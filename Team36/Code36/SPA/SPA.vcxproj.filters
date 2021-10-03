@@ -174,6 +174,12 @@
     <ClCompile Include="..\source\Clause.cpp">
       <Filter>Source Files\PQL\QueryObject</Filter>
     </ClCompile>
+    <ClCompile Include="..\source\SemanticErrorException.cpp">
+      <Filter>Source Files\PQL\Helper</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\SyntacticErrorException.cpp">
+      <Filter>Source Files\PQL\Helper</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\source\Parser.h">
@@ -298,6 +304,12 @@
     </ClInclude>
     <ClInclude Include="..\source\Clause.h">
       <Filter>Header Files\PQL\QueryObject</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\SyntacticErrorException.h">
+      <Filter>Header Files\PQL\Helper</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\SemanticErrorException.h">
+      <Filter>Header Files\PQL\Helper</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
