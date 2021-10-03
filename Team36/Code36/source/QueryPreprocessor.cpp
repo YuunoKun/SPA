@@ -20,18 +20,18 @@ Query QueryPreprocessor::parse(std::string str) {
 	QueryTokenizer query_tokenizer;
 	PatternRelRefValidator validator;
 
-	//query_tokenizer.parse_into_query_tokens(str);
+	query_tokenizer.parse_into_query_tokens(str);
 
-	//std::vector<QueryToken> v = query_tokenizer.get_query_token_chain();
+	std::vector<QueryToken> v = query_tokenizer.get_query_token_chain();
 
-	std::vector<QueryToken> v;
-	v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "procedure" });
-	v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "p" });
-	v.push_back({ QueryToken::QueryTokenType::TERMINATOR, "" });
-	v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "Select" });
-	v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "p" });
-	v.push_back({ QueryToken::QueryTokenType::DOT, "" });
-	v.push_back({ QueryToken::QueryTokenType::VAR_NAME, "" });
+	//std::vector<QueryToken> v;
+	//v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "procedure" });
+	//v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "p" });
+	//v.push_back({ QueryToken::QueryTokenType::TERMINATOR, "" });
+	//v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "Select" });
+	//v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "p" });
+	//v.push_back({ QueryToken::QueryTokenType::DOT, "" });
+	//v.push_back({ QueryToken::QueryTokenType::VAR_NAME, "" });
 
 	//v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "stmt" });
 	//v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "s" });
