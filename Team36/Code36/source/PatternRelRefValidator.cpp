@@ -14,12 +14,20 @@
 
 //expect stmtref for first element
 bool PatternRelRefValidator::isStmtRef(Query& query, std::vector<QueryToken> token_chain) {
-    // can just throw error, no need return bool
-    if (token_chain.size() ==0) {
+    
+    // no args found, throw syntax errors
+    if (token_chain.size() == 0) {
         throw std::invalid_argument("Invalid StmtRef arguments");
     }
-    
+
+    // more than 1 args found. possible entref
+    if (token_chain.size() > 1) {
+        // more than 1 args found. possible entref
+        return false;
+    }
+
     QueryToken token = token_chain[0];
+    
     //if integer, return true
     if (token.type == QueryToken::CONSTANT) {
         return true;
@@ -40,14 +48,18 @@ bool PatternRelRefValidator::isStmtRef(Query& query, std::vector<QueryToken> tok
                 ent_chain.at(token.token_value).getType() == EntityType::WHILE || 
                 ent_chain.at(token.token_value).getType() == EntityType::IF || 
                 ent_chain.at(token.token_value).getType() == EntityType::ASSIGN;
+        } else {
+            // Undeclared Syn, Cannot find Entity in Query
+            throw std::runtime_error("Unknown stmtRef");
         }
     }
 
     //if got quotation?
     // return false
-    if (token.type == QueryToken::QUOTATION_OPEN) {
+    //TODO remove this?
+  /*  if (token.type == QueryToken::QUOTATION_OPEN) {
         return false;
-    }
+    }*/
 
 
 }
@@ -56,13 +68,16 @@ bool PatternRelRefValidator::isStmtRef(Query& query, std::vector<QueryToken> tok
 bool PatternRelRefValidator::isEntRef(Query& query, std::vector<QueryToken> token_chain) {
     // can just throw error, no need return bool
 
+    // no args found, throw syntax errors
     if (token_chain.size() == 0) {
         throw std::invalid_argument("Invalid EntRef arguments");
     }
 
+    // if only 1 arg found
     if (token_chain.size() == 1) {
         QueryToken token = token_chain[0];
 
+        // remove this?
         if (token.type == QueryToken::CONSTANT) {
             return false;
         }
@@ -72,17 +87,18 @@ bool PatternRelRefValidator::isEntRef(Query& query, std::vector<QueryToken> toke
         }
 
         // check synonym if is EntRef
-        if (token.type == QueryToken::IDENTIFIER) {
+        else if (token.type == QueryToken::IDENTIFIER) {
             std::unordered_map<std::string, Entity> ent_chain = query.getEntities();
             if (ent_chain.find(token.token_value) != ent_chain.end()) {
                 return ent_chain.at(token.token_value).getType() == EntityType::VARIABLE;
             }
+        } else {
+            return false;
         }
+    } else {
+        // TODO do checking for " IDENT " ?
+        return true;
     }
-
-    return true;
-
-
 }
 
 //expectcomma
@@ -172,31 +188,59 @@ expr PatternRelRefValidator::setExpr(std::vector<QueryToken> token_chain) {
 void PatternRelRefValidator::parseParameterSuchThat(
     Query& query, QueryToken::QueryTokenType token_type,
     std::vector<QueryToken> token_chain) {
-  switch (token_type) {
+    switch (token_type) {
     //TODO
     case QueryToken::MODIFIES_S: {
-      // stmtRef , entRef
+        // stmtRef , entRef
+        // entRef, entRef
+        std::vector<QueryToken> temp_token_chain_1;
+        std::vector<QueryToken> temp_token_chain_2;
+        bool comma_found = false;
+        for (int i = 0; i < token_chain.size(); i++) {
+            if (token_chain[0].type == QueryToken::COMMA) {
+                token_chain.erase(token_chain.begin());
+                comma_found = true;
+            }
+            else if (!comma_found) {
+                // 1st param
+                temp_token_chain_1.push_back(token_chain[0]);
+                token_chain.erase(token_chain.begin());
+            }
+            else {
+                // 2nd param
+                temp_token_chain_2.push_back(token_chain[0]);
+                token_chain.erase(token_chain.begin());
+            }
+        }
+        
+        bool is_1_stmt_ref = isStmtRef(query, temp_token_chain_1);
+        if (!is_1_stmt_ref) {
+            if (isEntRef(query, temp_token_chain_1)) {
+                
+            }
+        }
+
+        /*if (!isStmtRef(query, temp_token_chain_1)) {
+            throw std::invalid_argument("Invalid parameters for Modifies");
+        }*/
+        QueryToken stmt = token_chain[0];
+        if (stmt.type == QueryToken::WILDCARD) {
+            //Throw semantic erros
+            throw std::invalid_argument("Invalid parameters for Modifies");
+        }
+        token_chain.erase(token_chain.begin(), token_chain.begin() + 1);
       
-      if (!isStmtRef(query, token_chain)) {
-          throw std::invalid_argument("Invalid parameters for Modifies");
-      }
-      QueryToken stmt = token_chain[0];
-      if (stmt.type == QueryToken::WILDCARD) {
-          throw std::invalid_argument("Invalid parameters for Modifies");
-      }
-      token_chain.erase(token_chain.begin(), token_chain.begin() + 1);
-      
-      isCommaRef(token_chain);
-      token_chain.erase(token_chain.begin(), token_chain.begin() + 1);
+        isCommaRef(token_chain);
+        token_chain.erase(token_chain.begin(), token_chain.begin() + 1);
 
       
-      if (!isEntRef(query, token_chain)) {
-          throw std::invalid_argument("Invalid parameters for Modifies");
-      }
-      query.addRelation(RelRef(RelType::MODIFIES_S, setStmtRef(query, stmt),
-          setEntRef(query, token_chain)));
+        if (!isEntRef(query, token_chain)) {
+            throw std::invalid_argument("Invalid parameters for Modifies");
+        }
+        query.addRelation(RelRef(RelType::MODIFIES_S, setStmtRef(query, stmt),
+            setEntRef(query, token_chain)));
 
-      break;
+        break;
     }
     //TODO
     case QueryToken::USES_S: {
@@ -225,24 +269,36 @@ void PatternRelRefValidator::parseParameterSuchThat(
 
     case QueryToken::PARENT: {
         // stmtRef , stmtRef
-        if (!isStmtRef(query, token_chain)) {
+
+        std::vector<QueryToken> temp_token_chain_1;
+        std::vector<QueryToken> temp_token_chain_2;
+        bool comma_found = false;
+        size_t token_chain_size = token_chain.size();
+        for (size_t i = 0; i < token_chain_size; i++) {
+            if (token_chain[0].type == QueryToken::COMMA) {
+                token_chain.erase(token_chain.begin());
+                comma_found = true;
+            }
+            else if (!comma_found) {
+                // 1st param
+                temp_token_chain_1.push_back(token_chain[0]);
+                token_chain.erase(token_chain.begin());
+            }
+            else {
+                // 2nd param
+                temp_token_chain_2.push_back(token_chain[0]);
+                token_chain.erase(token_chain.begin());
+            }
+        }
+
+        if (!isStmtRef(query, temp_token_chain_1) || !isStmtRef(query, temp_token_chain_2)) {
             throw std::invalid_argument("Invalid parameters for Parent");
         }
 
-        QueryToken stmt = token_chain[0];
-        token_chain.erase(token_chain.begin(), token_chain.begin() + 1);
+        QueryToken stmt = temp_token_chain_1[0];
 
-        isCommaRef(token_chain);
-        token_chain.erase(token_chain.begin(), token_chain.begin() + 1);
+        QueryToken stmt2 = temp_token_chain_2[0];
 
-        if (!isStmtRef(query, token_chain)) {
-            throw std::invalid_argument("Invalid parameters for Parent");
-        }
-        QueryToken stmt2 = token_chain[0];
-        token_chain.erase(token_chain.begin(), token_chain.begin() + 1);
-        if (token_chain.size() != 0) {
-            throw std::invalid_argument("Unexpected parameters for Parent");
-        }
         query.addRelation(RelRef(RelType::PARENT,
             setStmtRef(query, stmt),
             setStmtRef(query, stmt2)));
@@ -251,23 +307,36 @@ void PatternRelRefValidator::parseParameterSuchThat(
       
     case QueryToken::PARENT_T: {
         // stmtRef , stmtRef
-        if (!isStmtRef(query, token_chain)) {
-            throw std::invalid_argument("Invalid parameters for Parent*");
-        }        
-        QueryToken stmt = token_chain[0];
-        token_chain.erase(token_chain.begin(), token_chain.begin() + 1);
 
-        isCommaRef(token_chain);
-        token_chain.erase(token_chain.begin(), token_chain.begin() + 1);
+        std::vector<QueryToken> temp_token_chain_1;
+        std::vector<QueryToken> temp_token_chain_2;
+        bool comma_found = false;
+        size_t token_chain_size = token_chain.size();
+        for (size_t i = 0; i < token_chain_size; i++) {
+            if (token_chain[0].type == QueryToken::COMMA) {
+                token_chain.erase(token_chain.begin());
+                comma_found = true;
+            }
+            else if (!comma_found) {
+                // 1st param
+                temp_token_chain_1.push_back(token_chain[0]);
+                token_chain.erase(token_chain.begin());
+            }
+            else {
+                // 2nd param
+                temp_token_chain_2.push_back(token_chain[0]);
+                token_chain.erase(token_chain.begin());
+            }
+        }
 
-        if (!isStmtRef(query, token_chain)) {
+        if (!isStmtRef(query, temp_token_chain_1) || !isStmtRef(query, temp_token_chain_2)) {
             throw std::invalid_argument("Invalid parameters for Parent*");
         }
-        QueryToken stmt2 = token_chain[0];
-        token_chain.erase(token_chain.begin(), token_chain.begin() + 1);
-        if (token_chain.size() != 0) {
-            throw std::invalid_argument("Unexpected parameters for Parent*");
-        }
+
+        QueryToken stmt = temp_token_chain_1[0];
+
+        QueryToken stmt2 = temp_token_chain_2[0];
+
         query.addRelation(RelRef(RelType::PARENT_T,
             setStmtRef(query, stmt),
             setStmtRef(query, stmt2)));
@@ -276,23 +345,36 @@ void PatternRelRefValidator::parseParameterSuchThat(
     
     case QueryToken::FOLLOWS: {
         // stmtRef , stmtRef
-        if (!isStmtRef(query, token_chain)) {
-            throw std::invalid_argument("Invalid parameters for Follows");
-        }        
-        QueryToken stmt = token_chain[0];
-        token_chain.erase(token_chain.begin(), token_chain.begin() + 1);
 
-        isCommaRef(token_chain);
-        token_chain.erase(token_chain.begin(), token_chain.begin() + 1);
+        std::vector<QueryToken> temp_token_chain_1;
+        std::vector<QueryToken> temp_token_chain_2;
+        bool comma_found = false;
+        size_t token_chain_size = token_chain.size();
+        for (size_t i = 0; i < token_chain_size; i++) {
+            if (token_chain[0].type == QueryToken::COMMA) {
+                token_chain.erase(token_chain.begin());
+                comma_found = true;
+            }
+            else if (!comma_found) {
+                // 1st param
+                temp_token_chain_1.push_back(token_chain[0]);
+                token_chain.erase(token_chain.begin());
+            }
+            else {
+                // 2nd param
+                temp_token_chain_2.push_back(token_chain[0]);
+                token_chain.erase(token_chain.begin());
+            }
+        }
 
-        if (!isStmtRef(query, token_chain)) {
+        if (!isStmtRef(query, temp_token_chain_1) || !isStmtRef(query, temp_token_chain_2)) {
             throw std::invalid_argument("Invalid parameters for Follows");
         }
-        QueryToken stmt2 = token_chain[0];
-        token_chain.erase(token_chain.begin(), token_chain.begin() + 1);
-        if (token_chain.size() != 0) {
-            throw std::invalid_argument("Unexpected parameters for Follows");
-        }
+
+        QueryToken stmt = temp_token_chain_1[0];
+
+        QueryToken stmt2 = temp_token_chain_2[0];
+
         query.addRelation(RelRef(RelType::FOLLOWS,
             setStmtRef(query, stmt),
             setStmtRef(query, stmt2)));
@@ -301,23 +383,36 @@ void PatternRelRefValidator::parseParameterSuchThat(
     
     case QueryToken::FOLLOWS_T: {
         // stmtRef , stmtRef
-        if (!isStmtRef(query, token_chain)) {
+
+        std::vector<QueryToken> temp_token_chain_1;
+        std::vector<QueryToken> temp_token_chain_2;
+        bool comma_found = false;
+        size_t token_chain_size = token_chain.size();
+        for (size_t i = 0; i < token_chain_size; i++) {
+            if (token_chain[0].type == QueryToken::COMMA) {
+                token_chain.erase(token_chain.begin());
+                comma_found = true;
+            }
+            else if (!comma_found) {
+                // 1st param
+                temp_token_chain_1.push_back(token_chain[0]);
+                token_chain.erase(token_chain.begin());
+            }
+            else {
+                // 2nd param
+                temp_token_chain_2.push_back(token_chain[0]);
+                token_chain.erase(token_chain.begin());
+            }
+        }
+
+        if (!isStmtRef(query, temp_token_chain_1) || !isStmtRef(query, temp_token_chain_2)) {
             throw std::invalid_argument("Invalid parameters for Follows*");
         }
-        QueryToken stmt = token_chain[0];
-        token_chain.erase(token_chain.begin(), token_chain.begin() + 1);
 
-        isCommaRef(token_chain);
-        token_chain.erase(token_chain.begin(), token_chain.begin() + 1);
+        QueryToken stmt = temp_token_chain_1[0];
 
-        if (!isStmtRef(query, token_chain)) {
-            throw std::invalid_argument("Invalid parameters for Follows*");
-        }
-        QueryToken stmt2 = token_chain[0];
-        token_chain.erase(token_chain.begin(), token_chain.begin() + 1);
-        if (token_chain.size() != 0) {
-            throw std::invalid_argument("Unexpected parameters for Follows*");
-        }
+        QueryToken stmt2 = temp_token_chain_2[0];
+
         query.addRelation(RelRef(RelType::FOLLOWS_T,
             setStmtRef(query, stmt),
             setStmtRef(query, stmt2)));
@@ -477,9 +572,9 @@ void PatternRelRefValidator::parseParameterSuchThat(
     }
 
     default:
-      throw std::runtime_error("Unknown RelRef query token type : \'" + token_type +
-                         '\'');
-  }
+        throw std::runtime_error("Unknown RelRef query token type : \'" + token_type +
+                            '\'');
+    }
 }
 
 void PatternRelRefValidator::parseParameterPattern(
