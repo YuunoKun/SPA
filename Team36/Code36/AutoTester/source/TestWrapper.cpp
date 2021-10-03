@@ -24,9 +24,14 @@ TestWrapper::TestWrapper() {
 void TestWrapper::parse(std::string filename) {
 	// call your parser to do the parsing
   // ...rest of your code...
-	SourceProcessor::Parser parser;
-	parser.load_file(filename);
-	parser.parse();
+	try {
+		SourceProcessor::Parser parser;
+		parser.load_file(filename);
+		parser.parse();
+	}
+	catch (std::exception e) {
+		std::cout << e.what();
+	}
 }
 
 // method to evaluating a query

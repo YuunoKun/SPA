@@ -80,13 +80,6 @@ namespace UnitTesting {
 		EXPECT_EQ(Utility::unorderedSetToStringList(d), e);
 	}
 
-	//TEST(Utility, stmtToStmtInfoVector) {
-	//	std::vector<Stmt> a = { { STMT_ASSIGN, 1 }, { STMT_CALL, 2} , { STMT_WHILE, 3 }, { STMT_IF, 4} };
-	//	std::vector<StmtInfo> b = { { 1, STMT_ASSIGN }, { 2, STMT_CALL} , { 3, STMT_WHILE }, { 4, STMT_IF} };
-
-	//	EXPECT_EQ(Utility::stmtToStmtInfoVector(a), b);
-	//}
-
 	TEST(Utility, stmtInfoToStringVector) {
 		std::vector<StmtInfo> a = { { 1, STMT_ASSIGN }, { 2, STMT_CALL} , { 3, STMT_WHILE }, { 4, STMT_IF} };
 		std::vector<std::string> b{ "1", "2", "3", "4" };

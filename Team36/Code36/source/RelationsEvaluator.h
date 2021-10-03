@@ -5,7 +5,6 @@
 #include "PKBAdapter.h"
 #include "RelationEvaluatorInterface.h"
 
-
 class RelationsEvaluator {
 public:
 	void evaluateRelation(QueryResult&, RelRef&);

@@ -25,6 +25,7 @@ void RelationTable<T, S>::clear()
 {
 	forward_table.clear();
 	backward_table.clear();
+	lookup_table.clear();
 	return;
 }
 
@@ -52,11 +53,15 @@ bool RelationTable<T, S>::insert(T key, S value)
 
 	if (keyExistsForward) {
 		forward_table[key].push_back(value);
+		lookup_table[key].emplace(value);
 	}
 	else {
 		std::vector<S> new_forward_v;
 		new_forward_v.push_back(value);
 		forward_table.emplace(key, new_forward_v);
+
+		std::unordered_set<S> new_set({ value });;
+		lookup_table.emplace(key, new_set);
 	}
 
 	if (valueExistsBackward) {
@@ -145,9 +150,8 @@ bool RelationTable<T, S>::containsValue(S value)
 template <class T, class S>
 bool RelationTable<T, S>::containsPair(T key, S value)
 {
-	auto iter = forward_table.find(key);
-	auto v = getValues(key);
-	return containsKey(key) && std::find(v.begin(), v.end(), value) != v.end();
+	auto s = lookup_table[key];
+	return containsKey(key) && s.find(value) != s.end();
 }
 
 template <class T, class S>
@@ -225,6 +229,10 @@ bool UniqueRelationTable<T, S>::insert(T key, S value) {
 		std::vector<S> newV;
 		newV.push_back(value);
 		forward_table.emplace(key, newV);
+
+		std::unordered_set<S> new_set({ value });;
+		lookup_table.emplace(key, new_set);
+
 		if (valueExistsBackward) {
 			backward_table[value].push_back(key);
 		}

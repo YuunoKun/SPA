@@ -14,84 +14,87 @@
     <ClCompile Include="DesignExtractorTest.cpp">
       <Filter>SP</Filter>
     </ClCompile>
-    <ClCompile Include="EntityTest.cpp">
-      <Filter>PQL</Filter>
-    </ClCompile>
-    <ClCompile Include="PatternTest.cpp">
-      <Filter>PQL</Filter>
-    </ClCompile>
-    <ClCompile Include="RelRefTest.cpp">
-      <Filter>PQL</Filter>
-    </ClCompile>
-    <ClCompile Include="QueryTest.cpp">
-      <Filter>PQL</Filter>
-    </ClCompile>
-    <ClCompile Include="QueryEvaluatorTest.cpp">
-      <Filter>PQL</Filter>
-    </ClCompile>
-    <ClCompile Include="QueryPreprocessorTest.cpp">
-      <Filter>PQL</Filter>
-    </ClCompile>
-    <ClCompile Include="UtilityTest.cpp">
-      <Filter>PQL</Filter>
-    </ClCompile>
-    <ClCompile Include="ResultTableTest.cpp">
-      <Filter>PQL</Filter>
-    </ClCompile>
-    <ClCompile Include="QueryResultTest.cpp">
-      <Filter>PQL</Filter>
-    </ClCompile>
-    <ClCompile Include="RelationsEvaluatorTest.cpp">
-      <Filter>PQL</Filter>
-    </ClCompile>
-    <ClCompile Include="FollowsEvaluatorTest.cpp">
-      <Filter>PQL</Filter>
-    </ClCompile>
-    <ClCompile Include="FollowsTEvaluatorTest.cpp">
-      <Filter>PQL</Filter>
-    </ClCompile>
-    <ClCompile Include="ParentEvaluatorTest.cpp">
-      <Filter>PQL</Filter>
-    </ClCompile>
     <ClCompile Include="PKBTest.cpp" />
-    <ClCompile Include="ParentTEvaluatorTest.cpp">
-      <Filter>PQL</Filter>
-    </ClCompile>
-    <ClCompile Include="ModifiesSEvaluatorTest.cpp">
-      <Filter>PQL</Filter>
-    </ClCompile>
-    <ClCompile Include="ModifiesPEvaluatorTest.cpp">
-      <Filter>PQL</Filter>
-    </ClCompile>
-    <ClCompile Include="UsesSEvaluatorTest.cpp">
-      <Filter>PQL</Filter>
-    </ClCompile>
-    <ClCompile Include="UsesPEvaluatorTest.cpp">
-      <Filter>PQL</Filter>
-    </ClCompile>
-    <ClCompile Include="PKBAdapterTest.cpp">
-      <Filter>PQL</Filter>
-    </ClCompile>
     <ClCompile Include="RelationTableTest.cpp">
       <Filter>PKB</Filter>
     </ClCompile>
     <ClCompile Include="PKBTest.cpp">
       <Filter>PKB</Filter>
     </ClCompile>
-    <ClCompile Include="PatternEvaluatorTest.cpp">
-      <Filter>PQL</Filter>
-    </ClCompile>
     <ClCompile Include="UtilityTest.cpp">
       <Filter>PQL</Filter>
     </ClCompile>
-    <ClCompile Include="QueryTokenizerTest.cpp">
-      <Filter>PQL</Filter>
+    <ClCompile Include="QueryPreprocessorTest.cpp">
+      <Filter>PQL\QueryPreprocessor</Filter>
     </ClCompile>
-    <ClCompile Include="PatternRelRefValidatorTest.cpp">
-      <Filter>PQL</Filter>
+    <ClCompile Include="QueryTokenizerTest.cpp">
+      <Filter>PQL\QueryPreprocessor</Filter>
+    </ClCompile>
+    <ClCompile Include="EntityTest.cpp">
+      <Filter>PQL\QueryObject</Filter>
+    </ClCompile>
+    <ClCompile Include="PatternTest.cpp">
+      <Filter>PQL\QueryObject</Filter>
+    </ClCompile>
+    <ClCompile Include="QueryTest.cpp">
+      <Filter>PQL\QueryObject</Filter>
+    </ClCompile>
+    <ClCompile Include="UtilityTest.cpp">
+      <Filter>PQL\Helper</Filter>
+    </ClCompile>
+    <ClCompile Include="RelRefTest.cpp">
+      <Filter>PQL\QueryObject</Filter>
+    </ClCompile>
+    <ClCompile Include="PatternEvaluatorTest.cpp">
+      <Filter>PQL\QueryEvaluator</Filter>
     </ClCompile>
     <ClCompile Include="QueryEvaluatorMultiClausesTest.cpp">
-      <Filter>PQL</Filter>
+      <Filter>PQL\QueryEvaluator</Filter>
+    </ClCompile>
+    <ClCompile Include="QueryEvaluatorTest.cpp">
+      <Filter>PQL\QueryEvaluator</Filter>
+    </ClCompile>
+    <ClCompile Include="QueryResultTest.cpp">
+      <Filter>PQL\QueryEvaluator</Filter>
+    </ClCompile>
+    <ClCompile Include="ResultTableTest.cpp">
+      <Filter>PQL\QueryEvaluator</Filter>
+    </ClCompile>
+    <ClCompile Include="ParentTEvaluatorTest.cpp">
+      <Filter>PQL\QueryEvaluator\RelationEvaluator</Filter>
+    </ClCompile>
+    <ClCompile Include="FollowsEvaluatorTest.cpp">
+      <Filter>PQL\QueryEvaluator\RelationEvaluator</Filter>
+    </ClCompile>
+    <ClCompile Include="FollowsTEvaluatorTest.cpp">
+      <Filter>PQL\QueryEvaluator\RelationEvaluator</Filter>
+    </ClCompile>
+    <ClCompile Include="ModifiesPEvaluatorTest.cpp">
+      <Filter>PQL\QueryEvaluator\RelationEvaluator</Filter>
+    </ClCompile>
+    <ClCompile Include="ModifiesSEvaluatorTest.cpp">
+      <Filter>PQL\QueryEvaluator\RelationEvaluator</Filter>
+    </ClCompile>
+    <ClCompile Include="ParentEvaluatorTest.cpp">
+      <Filter>PQL\QueryEvaluator\RelationEvaluator</Filter>
+    </ClCompile>
+    <ClCompile Include="RelationsEvaluatorTest.cpp">
+      <Filter>PQL\QueryEvaluator</Filter>
+    </ClCompile>
+    <ClCompile Include="UsesPEvaluatorTest.cpp">
+      <Filter>PQL\QueryEvaluator\RelationEvaluator</Filter>
+    </ClCompile>
+    <ClCompile Include="UsesSEvaluatorTest.cpp">
+      <Filter>PQL\QueryEvaluator\RelationEvaluator</Filter>
+    </ClCompile>
+    <ClCompile Include="PKBAdapterTest.cpp">
+      <Filter>PKB</Filter>
+    </ClCompile>
+    <ClCompile Include="PatternRelRefValidatorTest.cpp">
+      <Filter>PQL\QueryPreprocessor</Filter>
+    </ClCompile>
+    <ClCompile Include="ClauseTest.cpp">
+      <Filter>PQL\QueryObject</Filter>
     </ClCompile>
     <ClCompile Include="ExprNodeTest.cpp" />
     <ClCompile Include="ExprParserTest.cpp" />
@@ -111,6 +114,21 @@
     </Filter>
     <Filter Include="PKB">
       <UniqueIdentifier>{0c892737-035d-4044-b2b3-1acbb580b746}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PQL\QueryPreprocessor">
+      <UniqueIdentifier>{44fe042e-fe0a-4c7f-8670-ff583ed8fd3d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PQL\QueryObject">
+      <UniqueIdentifier>{74cb9896-f529-4b11-94ca-af45453f26fa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PQL\Helper">
+      <UniqueIdentifier>{f2d84d9e-7da2-456b-8a5c-0396d660abd4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PQL\QueryEvaluator">
+      <UniqueIdentifier>{df28b561-4d79-4ae0-a8c1-1a12187f630f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PQL\QueryEvaluator\RelationEvaluator">
+      <UniqueIdentifier>{8d71c6f7-e4d6-40f0-8ac3-2623568af69c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

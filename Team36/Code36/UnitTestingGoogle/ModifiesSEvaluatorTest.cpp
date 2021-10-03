@@ -21,9 +21,11 @@ namespace UnitTesting {
 		PKB::getInstance().addStmt(STMT_READ);
 		PKB::getInstance().addVariable(x);
 
-		EXPECT_FALSE(evaluator.haveRelation());
+		EXPECT_THROW(evaluator.haveRelation(), std::invalid_argument);
+
 		PKB::getInstance().addModifiesS(1, x);
-		EXPECT_TRUE(evaluator.haveRelation());
+
+		EXPECT_THROW(evaluator.haveRelation(), std::invalid_argument);
 	}
 
 	TEST_F(ModifiesSEvaluatorTest, isRelation) {
@@ -112,9 +114,10 @@ namespace UnitTesting {
 		PKB::getInstance().addModifiesS(1, x);
 		PKB::getInstance().addModifiesS(3, y);
 
-		EXPECT_TRUE(evaluator.haveRelationAtLeft(v1));
-		EXPECT_TRUE(evaluator.haveRelationAtLeft(v2));
-		EXPECT_FALSE(evaluator.haveRelationAtLeft(v3));
+
+		EXPECT_THROW(evaluator.haveRelationAtLeft(v1), std::invalid_argument);
+		EXPECT_THROW(evaluator.haveRelationAtLeft(v2), std::invalid_argument);
+		EXPECT_THROW(evaluator.haveRelationAtLeft(v3), std::invalid_argument);
 	}
 
 	TEST_F(ModifiesSEvaluatorTest, getRelations) {
@@ -196,10 +199,9 @@ namespace UnitTesting {
 		PKB::getInstance().addModifiesS(1, x);
 		PKB::getInstance().addModifiesS(3, y);
 
-		std::vector<var_name> v = pkb.getModifiedS();
+
 		Entity header = { VARIABLE, Synonym{"a"} };
-		ResultTable t(header, v);
-		EXPECT_EQ(evaluator.getRightRelations(header), t);
+		EXPECT_THROW(evaluator.getRightRelations(header), std::invalid_argument);
 	}
 
 	TEST_F(ModifiesSEvaluatorTest, getLeftRelations) {

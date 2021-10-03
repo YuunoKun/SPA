@@ -3,11 +3,11 @@
 #include <string>
 
 #include "Entity.h"
-#include "TNode.h"
 
 class Pattern {
 public:
 	Pattern(Entity, Entity, expr, bool);
+	Pattern();
 
 	Entity getPatternType();
 	Entity getLeftExpression();
