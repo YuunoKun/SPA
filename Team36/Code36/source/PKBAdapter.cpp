@@ -415,3 +415,93 @@ std::vector<var_name> PKBAdapter::getUsedS(stmt_index index) {
 	StmtInfo s1 = PKB::getInstance().PKB::getStmts().at(index - 1);
 	return a.getValues(s1);
 }
+
+bool PKBAdapter::isCallsPEmpty() {
+	auto a = PKB::getInstance().PKB::getCallsP();
+	return a.isEmpty();
+}
+
+bool PKBAdapter::isCallsP(proc_name proc1, proc_name proc2) {
+	auto a = PKB::getInstance().PKB::getCallsP();
+	return a.containsPair(proc1, proc2);
+}
+
+bool PKBAdapter::isCallerP(proc_name proc) {
+	auto a = PKB::getInstance().PKB::getCallsP();
+	return a.containsKey(proc);
+}
+
+bool PKBAdapter::isCalleeP(proc_name proc) {
+	auto a = PKB::getInstance().PKB::getCallsP();
+	return a.containsValue(proc);
+}
+
+std::vector<proc_name> PKBAdapter::getCallerP() {
+	auto a = PKB::getInstance().PKB::getCallsP();
+	return a.getKeys();
+}
+
+std::vector<proc_name> PKBAdapter::getCalleeP() {
+	auto a = PKB::getInstance().PKB::getCallsP();
+	return a.getValues();
+}
+
+std::vector<proc_name> PKBAdapter::getCallerP(proc_name proc) {
+	auto a = PKB::getInstance().PKB::getCallsP();
+	return a.getKeys(proc);
+}
+
+std::vector<proc_name> PKBAdapter::getCalleeP(proc_name proc) {
+	auto a = PKB::getInstance().PKB::getCallsP();
+	return a.getValues(proc);
+}
+
+std::vector<std::pair<proc_name, proc_name>> PKBAdapter::getCallsPRelation() {
+	auto a = PKB::getInstance().PKB::getCallsP();
+	return a.getPairs();
+}
+
+bool PKBAdapter::isCallsPTEmpty() {
+	auto a = PKB::getInstance().PKB::getCallsPT();
+	return a.isEmpty();
+}
+
+bool PKBAdapter::isCallsPT(proc_name proc1, proc_name proc2) {
+	auto a = PKB::getInstance().PKB::getCallsPT();
+	return a.containsPair(proc1, proc2);
+}
+
+bool PKBAdapter::isCallerPT(proc_name proc) {
+	auto a = PKB::getInstance().PKB::getCallsPT();
+	return a.containsKey(proc);
+}
+
+bool PKBAdapter::isCalleePT(proc_name proc) {
+	auto a = PKB::getInstance().PKB::getCallsPT();
+	return a.containsValue(proc);
+}
+
+std::vector<proc_name> PKBAdapter::getCallerPT() {
+	auto a = PKB::getInstance().PKB::getCallsPT();
+	return a.getKeys();
+}
+
+std::vector<proc_name> PKBAdapter::getCalleePT() {
+	auto a = PKB::getInstance().PKB::getCallsPT();
+	return a.getValues();
+}
+
+std::vector<proc_name> PKBAdapter::getCallerPT(proc_name proc) {
+	auto a = PKB::getInstance().PKB::getCallsPT();
+	return a.getKeys(proc);
+}
+
+std::vector<proc_name> PKBAdapter::getCalleePT(proc_name proc) {
+	auto a = PKB::getInstance().PKB::getCallsPT();
+	return a.getValues(proc);
+}
+
+std::vector<std::pair<proc_name, proc_name>> PKBAdapter::getCallsPTRelation() {
+	auto a = PKB::getInstance().PKB::getCallsPT();
+	return a.getPairs();
+}

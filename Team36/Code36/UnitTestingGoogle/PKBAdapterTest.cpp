@@ -1422,4 +1422,355 @@ namespace UnitTesting {
 		v2 = pkb.getUsedS(4);
 		EXPECT_EQ(v1, v2);
 	}
+
+	TEST_F(PKBAdapterTest, isCallsPEmpty) {
+		proc_name first = "first";
+		proc_name second = "second";
+		proc_name third = "third";
+		PKB::getInstance().addProcedure(first);
+		PKB::getInstance().addProcedure(second);
+		PKB::getInstance().addProcedure(third);
+
+		EXPECT_TRUE(pkb.isCallsPEmpty());
+		PKB::getInstance().addCallsP(first, second);
+		EXPECT_FALSE(pkb.isCallsPEmpty());
+		PKB::getInstance().addCallsP(second, third);
+		EXPECT_FALSE(pkb.isCallsPEmpty());
+	}
+
+	TEST_F(PKBAdapterTest, isCallsP) {
+		proc_name first = "first";
+		proc_name second = "second";
+		proc_name third = "third";
+		proc_name fourth = "fourth";
+
+		PKB::getInstance().addProcedure(first);
+		PKB::getInstance().addProcedure(second);
+		PKB::getInstance().addProcedure(third);
+
+		PKB::getInstance().addCallsP(first, second);
+		PKB::getInstance().addCallsP(second, third);
+		EXPECT_TRUE(pkb.isCallsP(first, second));
+		EXPECT_TRUE(pkb.isCallsP(second, third));
+
+		EXPECT_FALSE(pkb.isCallsP(first, third));
+		EXPECT_FALSE(pkb.isCallsP(first, fourth));
+		EXPECT_FALSE(pkb.isCallsP(second, first));
+		EXPECT_FALSE(pkb.isCallsP(second, fourth));
+		EXPECT_FALSE(pkb.isCallsP(third, first));
+		EXPECT_FALSE(pkb.isCallsP(third, fourth));
+
+		EXPECT_FALSE(pkb.isCallsP(first, first));
+		EXPECT_FALSE(pkb.isCallsP(second, second));
+		EXPECT_FALSE(pkb.isCallsP(third, third));
+		EXPECT_FALSE(pkb.isCallsP(fourth, fourth));
+	}
+
+	TEST_F(PKBAdapterTest, isCallerP) {
+		proc_name first = "first";
+		proc_name second = "second";
+		proc_name third = "third";
+		proc_name fourth = "fourth";
+
+		PKB::getInstance().addProcedure(first);
+		PKB::getInstance().addProcedure(second);
+		PKB::getInstance().addProcedure(third);
+
+		PKB::getInstance().addCallsP(first, second);
+		PKB::getInstance().addCallsP(second, third);
+
+		EXPECT_TRUE(pkb.isCallerP(first));
+		EXPECT_TRUE(pkb.isCallerP(second));
+		EXPECT_FALSE(pkb.isCallerP(third));
+		EXPECT_FALSE(pkb.isCallerP(fourth));
+	}
+
+	TEST_F(PKBAdapterTest, isCalleeP) {
+		proc_name first = "first";
+		proc_name second = "second";
+		proc_name third = "third";
+		proc_name fourth = "fourth";
+
+		PKB::getInstance().addProcedure(first);
+		PKB::getInstance().addProcedure(second);
+		PKB::getInstance().addProcedure(third);
+
+		PKB::getInstance().addCallsP(first, second);
+		PKB::getInstance().addCallsP(second, third);
+
+		EXPECT_FALSE(pkb.isCalleeP(first));
+		EXPECT_TRUE(pkb.isCalleeP(second));
+		EXPECT_TRUE(pkb.isCalleeP(third));
+		EXPECT_FALSE(pkb.isCalleeP(fourth));
+	}
+
+	TEST_F(PKBAdapterTest, getCallerP) {
+		proc_name first = "first";
+		proc_name second = "second";
+		proc_name third = "third";
+		proc_name fourth = "fourth";
+
+		PKB::getInstance().addProcedure(first);
+		PKB::getInstance().addProcedure(second);
+		PKB::getInstance().addProcedure(third);
+
+		PKB::getInstance().addCallsP(first, second);
+		PKB::getInstance().addCallsP(second, third);
+
+		std::vector<proc_name> v1 = { first, second };
+		std::vector<proc_name> v2 = pkb.getCallerP();
+		std::sort(v1.begin(), v1.end());
+		std::sort(v2.begin(), v2.end());
+		EXPECT_EQ(v1, v2);
+
+		v1 = { };
+		v2 = pkb.getCallerP(first);
+		EXPECT_EQ(v1, v2);
+		v2 = pkb.getCallerP(fourth);
+		EXPECT_EQ(v1, v2);
+
+		v1 = { first };
+		v2 = pkb.getCallerP(second);
+		EXPECT_EQ(v1, v2);
+
+		v1 = { second };
+		v2 = pkb.getCallerP(third);
+		EXPECT_EQ(v1, v2);
+	}
+
+	TEST_F(PKBAdapterTest, getCalleeP) {
+		proc_name first = "first";
+		proc_name second = "second";
+		proc_name third = "third";
+		proc_name fourth = "fourth";
+
+		PKB::getInstance().addProcedure(first);
+		PKB::getInstance().addProcedure(second);
+		PKB::getInstance().addProcedure(third);
+
+		PKB::getInstance().addCallsP(first, second);
+		PKB::getInstance().addCallsP(second, third);
+
+		std::vector<proc_name> v1 = { second, third };
+		std::vector<proc_name> v2 = pkb.getCalleeP();
+		std::sort(v1.begin(), v1.end());
+		std::sort(v2.begin(), v2.end());
+		EXPECT_EQ(v1, v2);
+
+		v1 = { };
+		v2 = pkb.getCalleeP(third);
+		EXPECT_EQ(v1, v2);
+		v2 = pkb.getCalleeP(fourth);
+		EXPECT_EQ(v1, v2);
+
+		v1 = { second };
+		v2 = pkb.getCalleeP(first);
+		EXPECT_EQ(v1, v2);
+
+		v1 = { third };
+		v2 = pkb.getCalleeP(second);
+		EXPECT_EQ(v1, v2);
+	}
+
+	TEST_F(PKBAdapterTest, getCallsPRelation) {
+		proc_name first = "first";
+		proc_name second = "second";
+		proc_name third = "third";
+
+		PKB::getInstance().addProcedure(first);
+		PKB::getInstance().addProcedure(second);
+		PKB::getInstance().addProcedure(third);
+
+		PKB::getInstance().addCallsP(first, second);
+		PKB::getInstance().addCallsP(second, third);
+		std::vector<std::pair<proc_name, proc_name>> v = { {first, second}, {second, third} };
+		EXPECT_EQ(pkb.getCallsPRelation(), v);
+	}
+
+	TEST_F(PKBAdapterTest, isCallsPTEmpty) {
+		proc_name first = "first";
+		proc_name second = "second";
+		proc_name third = "third";
+		PKB::getInstance().addProcedure(first);
+		PKB::getInstance().addProcedure(second);
+		PKB::getInstance().addProcedure(third);
+		PKB::getInstance().generateCallsPT();
+
+		EXPECT_TRUE(pkb.isCallsPTEmpty());
+
+		PKB::getInstance().addCallsP(first, second);
+		PKB::getInstance().generateCallsPT();
+		EXPECT_FALSE(pkb.isCallsPTEmpty());
+
+		PKB::getInstance().addCallsP(second, third);
+		PKB::getInstance().generateCallsPT();
+		EXPECT_FALSE(pkb.isCallsPTEmpty());
+	}
+
+	TEST_F(PKBAdapterTest, isCallsPT) {
+		proc_name first = "first";
+		proc_name second = "second";
+		proc_name third = "third";
+		proc_name fourth = "fourth";
+		proc_name fifth = "fifth";
+
+		PKB::getInstance().addProcedure(first);
+		PKB::getInstance().addProcedure(second);
+		PKB::getInstance().addProcedure(third);
+		PKB::getInstance().addProcedure(fourth);
+
+		PKB::getInstance().addCallsP(first, second);
+		PKB::getInstance().addCallsP(second, third);
+		PKB::getInstance().addCallsP(third, fourth);
+		PKB::getInstance().generateCallsPT();
+
+		EXPECT_TRUE(pkb.isCallsPT(first, second));
+		EXPECT_TRUE(pkb.isCallsPT(first, third));
+		EXPECT_TRUE(pkb.isCallsPT(first, fourth));
+		EXPECT_TRUE(pkb.isCallsPT(second, third));
+		EXPECT_TRUE(pkb.isCallsPT(second, fourth));
+		EXPECT_TRUE(pkb.isCallsPT(third, fourth));
+
+		EXPECT_FALSE(pkb.isCallsPT(first, fifth));
+		EXPECT_FALSE(pkb.isCallsPT(second, fifth));
+		EXPECT_FALSE(pkb.isCallsPT(third, fifth));
+		EXPECT_FALSE(pkb.isCallsPT(fourth, fifth));
+
+		EXPECT_FALSE(pkb.isCallsPT(first, first));
+		EXPECT_FALSE(pkb.isCallsPT(second, second));
+		EXPECT_FALSE(pkb.isCallsPT(third, third));
+		EXPECT_FALSE(pkb.isCallsPT(fourth, fourth));
+		EXPECT_FALSE(pkb.isCallsPT(fifth, fifth));
+	}
+
+	TEST_F(PKBAdapterTest, isCallerPT) {
+		proc_name first = "first";
+		proc_name second = "second";
+		proc_name third = "third";
+		proc_name fourth = "fourth";
+
+		PKB::getInstance().addProcedure(first);
+		PKB::getInstance().addProcedure(second);
+		PKB::getInstance().addProcedure(third);
+
+		PKB::getInstance().addCallsP(first, second);
+		PKB::getInstance().addCallsP(second, third);
+		PKB::getInstance().generateCallsPT();
+
+		EXPECT_TRUE(pkb.isCallerPT(first));
+		EXPECT_TRUE(pkb.isCallerPT(second));
+		EXPECT_FALSE(pkb.isCallerPT(third));
+		EXPECT_FALSE(pkb.isCallerPT(fourth));
+	}
+
+	TEST_F(PKBAdapterTest, isCalleePT) {
+		proc_name first = "first";
+		proc_name second = "second";
+		proc_name third = "third";
+		proc_name fourth = "fourth";
+
+		PKB::getInstance().addProcedure(first);
+		PKB::getInstance().addProcedure(second);
+		PKB::getInstance().addProcedure(third);
+
+		PKB::getInstance().addCallsP(first, second);
+		PKB::getInstance().addCallsP(second, third);
+		PKB::getInstance().generateCallsPT();
+
+		EXPECT_FALSE(pkb.isCalleePT(first));
+		EXPECT_TRUE(pkb.isCalleePT(second));
+		EXPECT_TRUE(pkb.isCalleePT(third));
+		EXPECT_FALSE(pkb.isCalleePT(fourth));
+	}
+
+	TEST_F(PKBAdapterTest, getCallerPT) {
+		proc_name first = "first";
+		proc_name second = "second";
+		proc_name third = "third";
+		proc_name fourth = "fourth";
+
+		PKB::getInstance().addProcedure(first);
+		PKB::getInstance().addProcedure(second);
+		PKB::getInstance().addProcedure(third);
+
+		PKB::getInstance().addCallsP(first, second);
+		PKB::getInstance().addCallsP(second, third);
+		PKB::getInstance().generateCallsPT();
+
+		std::vector<proc_name> v1 = { first, second };
+		std::vector<proc_name> v2 = pkb.getCallerPT();
+		std::sort(v1.begin(), v1.end());
+		std::sort(v2.begin(), v2.end());
+		EXPECT_EQ(v1, v2);
+
+		v1 = { };
+		v2 = pkb.getCallerPT(first);
+		EXPECT_EQ(v1, v2);
+		v2 = pkb.getCallerPT(fourth);
+		EXPECT_EQ(v1, v2);
+
+		v1 = { first };
+		v2 = pkb.getCallerPT(second);
+		EXPECT_EQ(v1, v2);
+
+		v1 = { second, first };
+		v2 = pkb.getCallerPT(third);
+		std::sort(v1.begin(), v1.end());
+		std::sort(v2.begin(), v2.end());
+		EXPECT_EQ(v1, v2);
+	}
+
+	TEST_F(PKBAdapterTest, getCalleePT) {
+		proc_name first = "first";
+		proc_name second = "second";
+		proc_name third = "third";
+		proc_name fourth = "fourth";
+
+		PKB::getInstance().addProcedure(first);
+		PKB::getInstance().addProcedure(second);
+		PKB::getInstance().addProcedure(third);
+
+		PKB::getInstance().addCallsP(first, second);
+		PKB::getInstance().addCallsP(second, third);
+		PKB::getInstance().generateCallsPT();
+
+		std::vector<proc_name> v1 = { second, third };
+		std::vector<proc_name> v2 = pkb.getCalleePT();
+		std::sort(v1.begin(), v1.end());
+		std::sort(v2.begin(), v2.end());
+		EXPECT_EQ(v1, v2);
+
+		v1 = { };
+		v2 = pkb.getCalleePT(third);
+		EXPECT_EQ(v1, v2);
+		v2 = pkb.getCalleePT(fourth);
+		EXPECT_EQ(v1, v2);
+
+		v1 = { second, third };
+		v2 = pkb.getCalleePT(first);
+		std::sort(v1.begin(), v1.end());
+		std::sort(v2.begin(), v2.end());
+		EXPECT_EQ(v1, v2);
+
+		v1 = { third };
+		v2 = pkb.getCalleePT(second);
+		EXPECT_EQ(v1, v2);
+	}
+
+	TEST_F(PKBAdapterTest, getCallsPTRelation) {
+		proc_name first = "first";
+		proc_name second = "second";
+		proc_name third = "third";
+
+		PKB::getInstance().addProcedure(first);
+		PKB::getInstance().addProcedure(second);
+		PKB::getInstance().addProcedure(third);
+
+		PKB::getInstance().addCallsP(first, second);
+		PKB::getInstance().addCallsP(second, third);
+		PKB::getInstance().generateCallsPT();
+
+		std::vector<std::pair<proc_name, proc_name>> v = { {first, second}, {first, third}, {second, third} };
+		EXPECT_EQ(pkb.getCallsPTRelation(), v);
+	}
 }
