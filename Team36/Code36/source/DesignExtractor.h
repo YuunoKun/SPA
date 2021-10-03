@@ -7,6 +7,7 @@
 #include "Extractor.h"
 #include "Procedure.h"
 #include "Statement.h"
+#include "ExprParser.h"
 
 
 
@@ -84,7 +85,7 @@ namespace SourceProcessor {
 		void populateParent(PKB&);
 		void populateUses(PKB&);
 		void populateModifies(PKB&);
-
+		void populateCalls(PKB&);
 	};
 
 } // namespace SourceProcessor

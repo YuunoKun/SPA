@@ -290,6 +290,8 @@ void DesignExtractor::populateRelations(PKB& pkb) {
 	pkb.generateParentT();
 	populateUses(pkb);
 	populateModifies(pkb);
+	populateCalls(pkb);
+	pkb.generateCallsPT();
 }
 
 
@@ -373,6 +375,16 @@ void DesignExtractor::populateModifies(PKB& pkb) {
 	for (Procedure* p : de_procedures) {
 		for (var_name modified_var : p->getModifiedVariable()) {
 			pkb.addModifiesP(p->getName(), modified_var);
+		}
+	}
+}
+
+
+void DesignExtractor::populateCalls(PKB& pkb) {
+	for (Statement* s : de_statements) {
+		if (s->getType() == StmtType::STMT_CALL) {
+			pkb.addCallsS(s->getIndex(), s->getCallee());
+			pkb.addCallsP(s->getProcName(), s->getCallee());
 		}
 	}
 }
