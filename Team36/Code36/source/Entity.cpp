@@ -46,6 +46,10 @@ AttrRef Entity::getAttribute() {
 	return attribute;
 }
 
+void Entity::setAttribute(AttrRef& attrRef) {
+	this->attribute = attrRef;
+}
+
 bool Entity::isSynonym() {
 	return is_synonym;
 }

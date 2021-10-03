@@ -20,11 +20,19 @@ Query QueryPreprocessor::parse(std::string str) {
 	QueryTokenizer query_tokenizer;
 	PatternRelRefValidator validator;
 
-	query_tokenizer.parse_into_query_tokens(str);
+	//query_tokenizer.parse_into_query_tokens(str);
 
-	std::vector<QueryToken> v = query_tokenizer.get_query_token_chain();
+	//std::vector<QueryToken> v = query_tokenizer.get_query_token_chain();
 
-	//std::vector<QueryToken> v;
+	std::vector<QueryToken> v;
+	v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "procedure" });
+	v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "p" });
+	v.push_back({ QueryToken::QueryTokenType::TERMINATOR, "" });
+	v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "Select" });
+	v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "p" });
+	v.push_back({ QueryToken::QueryTokenType::DOT, "" });
+	v.push_back({ QueryToken::QueryTokenType::VAR_NAME, "" });
+
 	//v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "stmt" });
 	//v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "s" });
 	//v.push_back({ QueryToken::QueryTokenType::TERMINATOR, "" });
@@ -100,6 +108,8 @@ Query QueryPreprocessor::parse(std::string str) {
 
 	bool isExpectingPatternType = false;
 
+	bool isExpectingAttribute = false;
+
 	bool endOfCurrentClauses = true;
 
 	for (QueryToken token : v) {
@@ -173,6 +183,17 @@ Query QueryPreprocessor::parse(std::string str) {
 						isParameter = true;
 					}
 					endOfCurrentClauses = false;
+				}
+				// special case: if Select has attribute ie. Select p.procName
+				else if (token.type == QueryToken::QueryTokenType::DOT &&
+					prevToken.type == QueryToken::QueryTokenType::IDENTIFIER &&
+					declarationType.type == QueryToken::QueryTokenType::SELECT) {
+					isExpectingAttribute = true;
+				}
+				else if (isExpectingAttribute && prevTokenSelect.type == QueryToken::QueryTokenType::DOT) {
+					AttrRef attrRef = Utility::queryTokenTypeToAttrRef(token.type);
+					query.setSelectedAttribute(attrRef);
+					isExpectingAttribute = false;
 				}
 				else {
 					throw SyntacticErrorException("Invalid query");
