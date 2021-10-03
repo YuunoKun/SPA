@@ -302,6 +302,8 @@ void DesignExtractor::populateRelations(PKB& pkb) {
 	populateModifies(pkb);
 	populateCalls(pkb);
 	pkb.generateCallsPT();
+	populateIfs(pkb);
+	populateWhiles(pkb);
 }
 
 

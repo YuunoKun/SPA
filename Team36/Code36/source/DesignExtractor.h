@@ -91,7 +91,7 @@ namespace SourceProcessor {
 		void populateCalls(PKB&);
 
 		void populateIfs(PKB&);
-		void populateWhiles(PKB&)
+		void populateWhiles(PKB&);
 	};
 
 } // namespace SourceProcessor
