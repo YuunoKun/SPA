@@ -16,6 +16,11 @@ FSM::FSM(Tokenizer& t, Extractor *extractor) {
 }
 
 
+FSM::~FSM() {
+	delete design_extractor;
+}
+
+
 Tokenizer& FSM::getTokenizer() {
 	return tokenizer;
 }
@@ -141,7 +146,9 @@ void FSM::expectStatementTypeWhile() {
 	expectTokenAndPop(TokenType::WHILE);
 
 	expectTokenAndPop(TokenType::PARENTHESIS_OPEN);
+	design_extractor->setCondExpr(true);
 	expectConditionalExpression();
+	design_extractor->setCondExpr(false);
 	expectTokenAndPop(TokenType::PARENTHESIS_CLOSE);
 
 	design_extractor->startNesting();
@@ -157,7 +164,9 @@ void FSM::expectStatementTypeIf() {
 	expectTokenAndPop(TokenType::IF);
 
 	expectTokenAndPop(TokenType::PARENTHESIS_OPEN);
+	design_extractor->setCondExpr(true);
 	expectConditionalExpression();
+	design_extractor->setCondExpr(false);
 	expectTokenAndPop(TokenType::PARENTHESIS_CLOSE);
 
 	expectTokenAndPop(TokenType::THEN);

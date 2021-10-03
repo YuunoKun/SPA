@@ -26,6 +26,8 @@ namespace SourceProcessor {
 
 		void endNesting() override;
 
+		void setCondExpr(bool) override;
+
 		void addProcedure(proc_name) override;
 
 		const std::vector<Procedure*>& getProcedures();
@@ -75,6 +77,7 @@ namespace SourceProcessor {
 		std::string expr_builder;
 		int curr_stmt_list_id;
 		std::vector<proc_index> call_sequence;
+		bool is_cond_expr;
 
 		void populateProcedures(PKB&);
 		void populateStatements(PKB&);
@@ -86,6 +89,9 @@ namespace SourceProcessor {
 		void populateUses(PKB&);
 		void populateModifies(PKB&);
 		void populateCalls(PKB&);
+
+		void populateIfs(PKB&);
+		void populateWhiles(PKB&)
 	};
 
 } // namespace SourceProcessor

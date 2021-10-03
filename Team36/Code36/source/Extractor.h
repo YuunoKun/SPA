@@ -17,6 +17,8 @@ namespace SourceProcessor {
 
 		virtual void endNesting() = 0;
 
+		virtual void setCondExpr(bool) = 0;
+
 		virtual void addProcedure(proc_name) = 0;
 
 		virtual void addStatement(TokenType) = 0;
