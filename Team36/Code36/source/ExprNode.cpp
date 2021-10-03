@@ -13,8 +13,8 @@ ExprNode::ExprNode(std::string val) {
 
 
 ExprNode::~ExprNode() {
-	lhs->~ExprNode();
-	rhs->~ExprNode();
+	if(lhs) lhs->~ExprNode();
+	if(rhs) rhs->~ExprNode();
 }
 
 
@@ -59,29 +59,22 @@ ExprNode* ExprNode::getRHS() {
 
 
 bool ExprNode::contains(ExprNode* expr) {
-	if (expr && symbol == expr->getSymbol() && value == expr->getValue()) {
-		if (lhs == expr->getLHS() && rhs == expr->getLHS()) {
-			return true;
-		}
-
-		if ((lhs && !expr->getLHS()) || (!lhs && expr->getLHS()) || (rhs && !expr->getRHS()) || (!rhs && expr->getRHS())) {
-			return false;
-		}
-		else if (lhs->equals(expr->getLHS()) && rhs->equals(expr->getRHS())) {
-			return true;
-		}
-		else {
-			return lhs->contains(expr) || rhs->contains(expr);
-		}
+	if (!expr) {
+		return false;
 	}
 
-	return false;
+	if (this->equals(expr)) {
+		return true;
+	}
+	else {
+		return (lhs && lhs->contains(expr)) || (rhs && rhs->contains(expr));
+	}
 }
 
 
 bool ExprNode::equals(ExprNode* expr) {
 	if (expr && symbol == expr->getSymbol() && value == expr->getValue()) {
-		if (lhs == expr->getLHS() && rhs == expr->getLHS()) {
+		if (lhs == expr->getLHS() && rhs == expr->getRHS()) {
 			return true;
 		}
 
@@ -89,7 +82,15 @@ bool ExprNode::equals(ExprNode* expr) {
 			return false;
 		}
 		else {
-			return lhs->equals(expr->getLHS()) && rhs->equals(expr->getRHS());
+			if (lhs == expr->getLHS()) {
+				return rhs->equals(expr->getRHS());
+			}
+			else if(rhs == expr->getRHS()) {
+				return lhs->equals(expr->getLHS());
+			}
+			else {
+				return lhs->equals(expr->getLHS()) && rhs->equals(expr->getRHS());
+			}
 		}
 	}
 

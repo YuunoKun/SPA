@@ -1,6 +1,7 @@
-#include "ExprParser.h"
 #include <stdexcept>
-#include <deque>
+#include <cassert>
+#include "ExprParser.h"
+
 
 ExprNode* ExprParser::parse(std::string str) {
 	if (str.size() == 0) {
@@ -8,11 +9,22 @@ ExprNode* ExprParser::parse(std::string str) {
 	}
 
 	std::deque<std::string> strs = sliceString(str);
-	return parseExpression(strs);
+	if (strs.size() == 0) {
+		return nullptr;
+	}
+	else {
+		ExprNode* res = parseExpression(strs);
+		if (strs.size() == 0) {
+			return res;
+		}
+		else {
+			throw std::runtime_error("Syntax error while parsing expression.");
+		}
+	}
 }
 
 
-std::deque<std::string>& ExprParser::sliceString(const std::string str) {
+std::deque<std::string> ExprParser::sliceString(const std::string str) {
 	std::deque<std::string> segments;
 	segments.push_back(std::string());
 
@@ -25,7 +37,10 @@ std::deque<std::string>& ExprParser::sliceString(const std::string str) {
 		case '%':
 		case '(':
 		case ')':
-			segments.push_back(std::string(c, 1));
+			if (segments.rbegin()->size() == 0) {
+				segments.pop_back();
+			}
+			segments.push_back(std::string(1, c));
 			segments.push_back(std::string());
 			break;
 		case ' ':
@@ -43,7 +58,7 @@ std::deque<std::string>& ExprParser::sliceString(const std::string str) {
 		}
 	}
 
-	if (segments.rend()->size() == 0) {
+	if (segments.rbegin()->size() == 0) {
 		segments.pop_back();
 	}
 
@@ -56,16 +71,25 @@ ExprNode* ExprParser::parseExpression(std::deque<std::string>& dq) {
 
 	while (!dq.empty()) {
 		ExprNode* parent;
-		if (*dq.begin()->begin() == '+') {
+		if (*dq.begin() == "+") {
 			parent = new ExprNode(ExprSymbol::EXPR_PLUS);
 		}
-		else if (*dq.begin()->begin() == '-') {
+		else if (*dq.begin() == "-") {
 			parent = new ExprNode(ExprSymbol::EXPR_MINUS);
 		}
-		else {
-			throw std::runtime_error("Syntax error.");
+		else if (*dq.begin() == "(") {
+			protectedPopFront(dq);
+			ExprNode* node = parseExpression(dq);
+			protectedPopFront(dq, ")");
+			parent->setLHS(lhs);
+			parent->setRHS(node);
+			lhs = parent;
+			continue;
 		}
-		dq.pop_front();
+		else {
+			break;
+		}
+		protectedPopFront(dq);
 		parent->setLHS(lhs);
 		parent->setRHS(parseTerm(dq));
 		lhs = parent;
@@ -80,19 +104,28 @@ ExprNode* ExprParser::parseTerm(std::deque<std::string>& dq) {
 
 	while (!dq.empty()) {
 		ExprNode* parent;
-		if (*dq.begin()->begin() == '*') {
+		if (*dq.begin() == "*") {
 			parent = new ExprNode(ExprSymbol::EXPR_MUL);
 		}
-		else if (*dq.begin()->begin() == '/') {
+		else if (*dq.begin() == "/") {
 			parent = new ExprNode(ExprSymbol::EXPR_DIV);
 		}
-		else if (*dq.begin()->begin() == '%') {
+		else if (*dq.begin() == "%") {
 			parent = new ExprNode(ExprSymbol::EXPR_MOD);
 		}
-		else {
-			throw std::runtime_error("Syntax error.");
+		else if (*dq.begin() == "(") {
+			protectedPopFront(dq);
+			ExprNode* node = parseExpression(dq);
+			protectedPopFront(dq, ")");
+			parent->setLHS(lhs);
+			parent->setRHS(node);
+			lhs = parent;
+			continue;
 		}
-		dq.pop_front();
+		else {
+			break;
+		}
+		protectedPopFront(dq);
 		parent->setLHS(lhs);
 		parent->setRHS(parseFactor(dq));
 		lhs = parent;
@@ -103,21 +136,45 @@ ExprNode* ExprParser::parseTerm(std::deque<std::string>& dq) {
 
 
 ExprNode* ExprParser::parseFactor(std::deque<std::string>& dq) {
-	if (!dq.empty() && *dq.begin() == "(") {
-		dq.pop_front();
-		ExprNode* node = parseExpression(dq);
-		if (!dq.empty() && *dq.begin() != ")") {
-			throw std::runtime_error("Expression missing close parenthesis.");
-		}
-		dq.pop_front();
+	if (dq.empty()) {
+		throw std::runtime_error("Unexpected end of expression.");
+	}
+
+	if (!dq.begin()->empty() && isalnum(*dq.begin()->begin())) {
+		ExprNode* node = new ExprNode(*dq.begin());
+		protectedPopFront(dq);
 		return node;
 	}
-	else if (!dq.begin()->empty() && isalnum(*dq.begin()->begin())) {
-		ExprNode* node = new ExprNode(*dq.begin());
-		dq.pop_front();
+	else if (*dq.begin() == "(") {
+		protectedPopFront(dq);
+		ExprNode* node = parseExpression(dq);
+		protectedPopFront(dq, ")");
 		return node;
 	}
 	else {
 		throw std::runtime_error("Possible syntax error while parsing expression.");
+	}
+}
+
+
+void ExprParser::protectedPopFront(std::deque<std::string>& dq) {
+	if (dq.empty()) {
+		throw std::runtime_error("Unexpected end of expression.");
+	}
+	else {
+		dq.pop_front();
+	}
+}
+
+
+void ExprParser::protectedPopFront(std::deque<std::string>& dq, std::string str) {
+	if (dq.empty()) {
+		throw std::runtime_error("Unexpected end of expression.");
+	}
+	else if(*dq.begin() != str) {
+		throw std::runtime_error("Invalid expression.");
+	}
+	else {
+		dq.pop_front();
 	}
 }

@@ -35,6 +35,8 @@ public:
 	bool equals(ExprNode*);
 
 private:
+	ExprNode();
+
 	ExprSymbol symbol;
 	std::string value{""};
 	ExprNode* lhs{nullptr};

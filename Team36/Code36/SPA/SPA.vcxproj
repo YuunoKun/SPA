@@ -12,6 +12,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\source\DesignExtractor.cpp" />
+    <ClCompile Include="..\source\ExprNode.cpp" />
+    <ClCompile Include="..\source\ExprParser.cpp" />
     <ClCompile Include="..\source\FSM.cpp" />
     <ClCompile Include="..\source\Parser.cpp" />
     <ClCompile Include="..\source\Procedure.cpp" />
@@ -47,6 +49,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\source\DesignExtractor.h" />
+    <ClInclude Include="..\source\ExprNode.h" />
+    <ClInclude Include="..\source\ExprParser.h" />
     <ClInclude Include="..\source\Extractor.h" />
     <ClInclude Include="..\source\FSM.h" />
     <ClInclude Include="..\source\PKB.h" />
