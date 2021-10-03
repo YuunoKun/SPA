@@ -18,28 +18,31 @@ Query QueryPreprocessor::parse(std::string str) {
 	QueryTokenizer query_tokenizer;
 	PatternRelRefValidator validator;
 
-	query_tokenizer.parse_into_query_tokens(str);
+	//query_tokenizer.parse_into_query_tokens(str);
 
-	std::vector<QueryToken> v = query_tokenizer.get_query_token_chain();
+	//std::vector<QueryToken> v = query_tokenizer.get_query_token_chain();
 
-	//std::vector<QueryToken> v;
-	//v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "stmt" });
-	//v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "s" });
-	//v.push_back({ QueryToken::QueryTokenType::TERMINATOR, "" });
-	//v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "constant" });
-	//v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "c" });
-	//v.push_back({ QueryToken::QueryTokenType::TERMINATOR, "" });
-	//v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "Select" });
-	//v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "s" });
-	//v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "with" });
-	//v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "s" });
-	//v.push_back({ QueryToken::QueryTokenType::DOT, "" });
-	//v.push_back({ QueryToken::QueryTokenType::STMT_INDEX, "" });
-	//v.push_back({ QueryToken::QueryTokenType::EQUAL, "" });
-	//v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "c" });
-	//v.push_back({ QueryToken::QueryTokenType::DOT, "" });
-	//v.push_back({ QueryToken::QueryTokenType::VALUE, "" });
-	//v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "and" });
+	std::vector<QueryToken> v;
+	v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "stmt" });
+	v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "s" });
+	v.push_back({ QueryToken::QueryTokenType::TERMINATOR, "" });
+	v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "constant" });
+	v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "c" });
+	v.push_back({ QueryToken::QueryTokenType::TERMINATOR, "" });
+	v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "Select" });
+	v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "s" });
+	v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "with" });
+	v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "s" });
+	v.push_back({ QueryToken::QueryTokenType::DOT, "" });
+	v.push_back({ QueryToken::QueryTokenType::STMT_INDEX, "" });
+	v.push_back({ QueryToken::QueryTokenType::EQUAL, "" });
+	v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "c" });
+	v.push_back({ QueryToken::QueryTokenType::DOT, "" });
+	v.push_back({ QueryToken::QueryTokenType::VALUE, "" });
+	v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "and" });
+	v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "s" });
+	v.push_back({ QueryToken::QueryTokenType::EQUAL, "" });
+	v.push_back({ QueryToken::QueryTokenType::CONSTANT, "10" });
 
 	//v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "assign" });
 	//v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "a" });
@@ -157,11 +160,15 @@ Query QueryPreprocessor::parse(std::string str) {
 				else if (token.type == QueryToken::QueryTokenType::IDENTIFIER &&
 					token.token_value == "and") {
 					if (patternOrSuchThat.type != QueryToken::QueryTokenType::PATTERN &&
-						patternOrSuchThat.type != QueryToken::QueryTokenType::SUCH_THAT) {
+						patternOrSuchThat.type != QueryToken::QueryTokenType::SUCH_THAT &&
+						patternOrSuchThat.type != QueryToken::QueryTokenType::WITH) {
 						throw std::runtime_error("The keyword 'and' should come after pattern/ relations have been initalized previously");
 					}
 					if (patternOrSuchThat.type == QueryToken::QueryTokenType::PATTERN) {
 						isExpectingPatternType = true;
+					}
+					else if (patternOrSuchThat.type == QueryToken::QueryTokenType::WITH) {
+						isParameter = true;
 					}
 					endOfCurrentClauses = false;
 				}
