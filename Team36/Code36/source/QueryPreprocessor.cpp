@@ -185,7 +185,9 @@ Query QueryPreprocessor::parse(std::string str) {
 					else if (isParameter && token.type == QueryToken::QueryTokenType::PARENTHESIS_CLOSE) {
 						isParameter = false;
 						endOfCurrentClauses = true;
-						if (patternTypeEntity.getType() == EntityType::ASSIGN) {
+						if (patternTypeEntity.getType() == EntityType::ASSIGN ||
+							patternTypeEntity.getType() == EntityType::WHILE ||
+							patternTypeEntity.getType() == EntityType::IF) {
 							validator.parseParameterPattern(query, patternTypeEntity, parameterClause);
 							parameterClause.clear();
 						}
@@ -202,6 +204,7 @@ Query QueryPreprocessor::parse(std::string str) {
 						isParameter = false;
 						endOfCurrentClauses = true;
 						// TODO: call jiyu's method
+						// validator.parseWith(query, parameterClause);
 						parameterClause.clear();
 					}
 				}
@@ -252,6 +255,9 @@ QueryToken QueryPreprocessor::setIdentifierToQueryTokenType(QueryToken& prevToke
 		}
 		else if (token.token_value == "constant") {
 			temp = { QueryToken::QueryTokenType::CONSTANT, "constant" };
+		}
+		else if (token.token_value == "prog_line") {
+			temp = { QueryToken::QueryTokenType::PROG_LINE, "prog_line" };
 		}
 		// Need to enforce that Select must only come after a terminator
 		else if (prevToken.type == QueryToken::QueryTokenType::TERMINATOR && token.token_value == "Select") {
@@ -332,23 +338,37 @@ void QueryPreprocessor::addSelectedToQuery(Query& query, Entity& ent, std::vecto
 }
 
 void QueryPreprocessor::setQueryParameter(QueryToken& prevTokenSelect, QueryToken& queryParameter) {
+	// USES_P to be handled in PatternRelRefValidator
 	if (prevTokenSelect.token_value == "Uses" && prevTokenSelect.type == QueryToken::QueryTokenType::IDENTIFIER) {
 		queryParameter = { QueryToken::QueryTokenType::USES_S, "Uses" };
 	}
+	// MODIFIES_P to be handled in PatternRelRefValidator
 	else if (prevTokenSelect.token_value == "Modifies" && prevTokenSelect.type == QueryToken::QueryTokenType::IDENTIFIER) {
 		queryParameter = { QueryToken::QueryTokenType::MODIFIES_S, "Modifies" };
 	}
 	else if (prevTokenSelect.token_value == "Parent" && prevTokenSelect.type == QueryToken::QueryTokenType::IDENTIFIER) {
 		queryParameter = { QueryToken::QueryTokenType::PARENT, "Parent" };
 	}
-	else if (prevTokenSelect.token_value == "Follows" && prevTokenSelect.type == QueryToken::QueryTokenType::IDENTIFIER) {
-		queryParameter = { QueryToken::QueryTokenType::FOLLOWS, "Follows" };
-	}
 	else if (prevTokenSelect.token_value == "" && prevTokenSelect.type == QueryToken::QueryTokenType::PARENT_T) {
 		queryParameter = { QueryToken::QueryTokenType::PARENT_T, "" };
 	}
+	else if (prevTokenSelect.token_value == "Follows" && prevTokenSelect.type == QueryToken::QueryTokenType::IDENTIFIER) {
+		queryParameter = { QueryToken::QueryTokenType::FOLLOWS, "Follows" };
+	}
 	else if (prevTokenSelect.token_value == "" && prevTokenSelect.type == QueryToken::QueryTokenType::FOLLOWS_T) {
 		queryParameter = { QueryToken::QueryTokenType::FOLLOWS_T, "" };
+	}
+	else if (prevTokenSelect.token_value == "Next" && prevTokenSelect.type == QueryToken::QueryTokenType::IDENTIFIER) {
+		queryParameter = { QueryToken::QueryTokenType::NEXT, "Next" };
+	}
+	else if (prevTokenSelect.token_value == "" && prevTokenSelect.type == QueryToken::QueryTokenType::NEXT_T) {
+		queryParameter = { QueryToken::QueryTokenType::NEXT_T, "" };
+	}
+	else if (prevTokenSelect.token_value == "Affects" && prevTokenSelect.type == QueryToken::QueryTokenType::IDENTIFIER) {
+		queryParameter = { QueryToken::QueryTokenType::AFFECTS, "Affects" };
+	}
+	else if (prevTokenSelect.token_value == "" && prevTokenSelect.type == QueryToken::QueryTokenType::AFFECTS_T) {
+		queryParameter = { QueryToken::QueryTokenType::AFFECTS_T, "" };
 	}
 }
 
@@ -373,6 +393,7 @@ void QueryPreprocessor::validateQuery(Query& query) {
 			ent.second.getType() != EntityType::WHILE &&
 			ent.second.getType() != EntityType::VARIABLE &&
 			ent.second.getType() != EntityType::CONSTANT &&
+			ent.second.getType() != EntityType::PROG_LINE &&
 			ent.second.getType() != EntityType::ASSIGN) {
 			throw std::runtime_error("Declaration fails!");
 		}

@@ -25,6 +25,7 @@ public:
 		AND,
 		PATTERN,
 		SUCH_THAT,
+		PROG_LINE,
 		ATTR_NAME,
 		PROC_NAME,
 		VAR_NAME,

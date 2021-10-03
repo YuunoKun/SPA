@@ -16,7 +16,8 @@ enum EntityType {
 	CONSTANT,
 	PROCEDURE,
 	WILD,
-	BOOLEAN
+	BOOLEAN,
+	PROG_LINE,
 };
 
 enum AttrRef {
