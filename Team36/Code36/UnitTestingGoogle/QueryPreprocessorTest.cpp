@@ -3,6 +3,8 @@
 #include "QueryPreprocessor.h"
 #include "Entity.h"
 #include "RelRef.h"
+#include "SyntacticErrorException.h"
+#include "SemanticErrorException.h"
 
 namespace UnitTesting {
 	TEST(QueryPreprocessor, addSingleStatement) {
@@ -824,21 +826,8 @@ namespace UnitTesting {
 		QueryPreprocessor qp;
 		Query q = Query();
 		std::vector<std::string> queries;
-		queries.push_back("asg a;");
-		queries.push_back("la;skdjf lkasdfj laks;fdj");
 
-		for (std::string s : queries) {
-			try {
-				Query test1 = qp.parse(s);
-				FAIL();
-			}
-			catch (std::runtime_error const& err) {
-				EXPECT_EQ(err.what(), std::string("Invalid syntax for declaration or select"));
-			}
-			catch (...) {
-				FAIL();
-			}
-		}
+		EXPECT_THROW(qp.parse("asg a; Select a"), SyntacticErrorException);
 
 		queries.clear();
 		queries.push_back("assign a; Select s");
@@ -919,7 +908,7 @@ namespace UnitTesting {
 		for (std::string s : queries) {
 			try {
 				Query test1 = qp.parse(s);
-				FAIL() << s <<", synonym: " <<test1.getSelected()[0].getSynonym();
+				FAIL() << s << ", synonym: " << test1.getSelected()[0].getSynonym();
 			}
 			catch (std::runtime_error const& err) {
 				EXPECT_EQ(err.what(), std::string("Invalid query")) << s;
