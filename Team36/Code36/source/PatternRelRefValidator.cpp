@@ -190,7 +190,6 @@ void PatternRelRefValidator::parseParameterSuchThat(
     Query& query, QueryToken::QueryTokenType token_type,
     std::vector<QueryToken> token_chain) {
     switch (token_type) {
-    //TODO
     case QueryToken::MODIFIES_S: {
         // stmtRef , entRef
         // entRef, entRef
@@ -250,29 +249,68 @@ void PatternRelRefValidator::parseParameterSuchThat(
             break;
         }
     }
-    //TODO
+    
     case QueryToken::USES_S: {
         // stmtRef , entRef
+        // entRef, entRef
+        std::vector<QueryToken> temp_token_chain_1;
+        std::vector<QueryToken> temp_token_chain_2;
+        bool comma_found = false;
+        bool is_USES_S = true;
+        size_t token_chain_size = token_chain.size();
+        for (size_t i = 0; i < token_chain_size; i++) {
+            if (token_chain[0].type == QueryToken::COMMA) {
+                token_chain.erase(token_chain.begin());
+                comma_found = true;
+            }
+            else if (!comma_found) {
+                // 1st param
+                temp_token_chain_1.push_back(token_chain[0]);
+                token_chain.erase(token_chain.begin());
+            }
+            else {
+                // 2nd param
+                temp_token_chain_2.push_back(token_chain[0]);
+                token_chain.erase(token_chain.begin());
+            }
+        }
 
-        if (!isStmtRef(query, token_chain)) {
+        //Validate first param
+        if (isStmtRef(query, temp_token_chain_1)) {
+            //is stmRef (WILDCARD incld)
+            if (temp_token_chain_1[0].type == QueryToken::WILDCARD) {
+                //Throw semantic erros
+                throw std::invalid_argument("Invalid parameters for Uses");
+            }
+        }
+        else {
+            // Not stmtRef
+            if (isEntRef(query, temp_token_chain_1)) {
+                is_USES_S = false;
+            }
+            else {
+                throw std::invalid_argument("Invalid parameters for Uses");
+            }
+        }
+
+        //Validate second param
+        if (!isEntRef(query, temp_token_chain_2)) {
             throw std::invalid_argument("Invalid parameters for Uses");
         }
-        QueryToken stmt = token_chain[0];
-        if (stmt.type == QueryToken::WILDCARD) {
-            throw std::invalid_argument("Invalid parameters for Uses");
+
+        if (is_USES_S) {
+            QueryToken stmt = temp_token_chain_1[0];
+
+            query.addRelation(RelRef(RelType::USES_S, setStmtRef(query, stmt),
+                setEntRef(query, temp_token_chain_2)));
+
+            break;
         }
-        token_chain.erase(token_chain.begin(), token_chain.begin() + 1);
-
-        isCommaRef(token_chain);
-        token_chain.erase(token_chain.begin(), token_chain.begin() + 1);
-
-        if (!isEntRef(query, token_chain)) {
-            throw std::invalid_argument("Invalid parameters for Uses");
+        else {
+            query.addRelation(RelRef(RelType::USES_P, setEntRef(query, temp_token_chain_1),
+                setEntRef(query, temp_token_chain_2)));
+            break;
         }
-        query.addRelation(RelRef(RelType::USES_S, setStmtRef(query, stmt),
-            setEntRef(query, token_chain)));
-
-        break;
     }
 
     case QueryToken::PARENT: {
