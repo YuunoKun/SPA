@@ -9,6 +9,8 @@
 #include "Query.h"
 #include "PatternRelRefValidator.h"
 #include "Utility.h"
+#include "SemanticErrorException.h"
+#include "SyntacticErrorException.h"
 
 QueryPreprocessor::QueryPreprocessor() {
 }
@@ -295,7 +297,8 @@ QueryToken QueryPreprocessor::setIdentifierToQueryTokenType(QueryToken& prevToke
 			temp = { QueryToken::QueryTokenType::SELECT, "Select" };
 		}
 		else {
-			throw std::runtime_error("Invalid syntax for declaration or select");
+			//throw std::runtime_error("Invalid syntax for declaration or select");
+			throw SyntacticErrorException("Invalid syntax for declaration or select");
 		}
 	}
 	return temp;
