@@ -1,0 +1,290 @@
+1 - modifiesp, LHS ident, RHS ident
+procedure p; variable v;
+Select p such that Modifies("Gandulf", "ring")
+Gandulf, Frodo, Aragon
+5000
+2 - modifiesp, LHS ident, RHS ident
+procedure p; variable v;
+Select v such that Modifies("Gandulf", "ring")
+shine, ring, f, lost, d, g, a, w
+5000
+3 - modifiesp, LHS ident, RHS synonym
+procedure p; variabe v;
+Select v such that Modifies("Gandulf", v)
+ring, f, d, shine, lost, g
+5000
+4 - modifiesp, LHS synonym, RHS ident
+procedure p; variabe v;
+Select p such that Modifies(p, "f")
+Gandulf, Frodo
+5000
+5 - modifiesp, LHS synonym, RHS synonym
+procedure p; variabe v;
+Select p such that Modifies(p, v)
+Gandulf, Frodo, Aragon
+5000
+6 - modifiesp, LHS synonym, RHS synonym
+procedure p; variabe v;
+Select v such that Modifies(p, v)
+shine, ring, f, lost, d, g, a, w
+5000
+7 - modifiesp, LHS ident, RHS wildcard
+procedure p; variabe v;
+Select p such that Modifies("Frodo", _)
+Gandulf, Frodo, Aragon
+5000
+8 - modifiesp, LHS synonym, RHS wildcard
+procedure p; variabe v;
+Select p such that Modifies(p, _)
+Gandulf, Frodo, Aragon
+5000
+9 - select call
+call c;
+Select c
+5, 7, 12, 17
+5000
+10 - modifiesp, LHS integer, RHS ident
+call c; variable v;
+Select c such that Modifies(5, "f")
+5, 7, 12, 17
+5000
+11 - modifiesp, LHS integer, RHS synonym
+call c; variable v;
+Select v such that Modifies(5, v)
+a, f
+5000
+12 - modifiesp, LHS synonym, RHS ident
+call c; variable v;
+Select c such that Modifies(c, "f")
+5, 12
+5000
+13 - modifiesp, LHS synonym, RHS synonym
+call c; variable v;
+Select c such that Modifies(c, v)
+5, 7, 12, 17
+5000
+14 - modifiesp, LHS synonym, RHS synonym
+call c; variable v;
+Select v such that Modifies(c, v)
+shine, ring, f, lost, d, g, a, w
+5000
+15 - modifiesp, LHS synonym, RHS wildcard
+call c; variable v;
+Select c such that Modifies(c, _)
+5, 7, 12, 17
+5000
+16 - modifiesp, LHS ident, RHS wildcard
+call c; variable v;
+Select c such that Modifies(17, _)
+5, 7, 12, 17
+5000
+17 - usesp, LHS ident, RHS ident
+procedure p; variable v;
+Select p such that Uses("Gandulf", "ring")
+Gandulf, Frodo, Aragon
+5000
+18 - usesp, LHS ident, RHS ident
+procedure p; variable v;
+Select v such that Uses("Gandulf", "ring")
+shine, ring, f, lost, g, a
+5000
+19 - usesp, LHS ident, RHS synonym
+procedure p; variabe v;
+Select v such that Uses("Gandulf", v)
+ring, f, shine, lost, g, a
+5000
+20 - Usesp, LHS synonym, RHS ident
+procedure p; variabe v;
+Select p such that Uses(p, "f")
+Gandulf, Frodo, Aragon
+5000
+21 - Usesp, LHS synonym, RHS synonym
+procedure p; variabe v;
+Select p such that Uses(p, v)
+Gandulf, Frodo, Aragon
+5000
+22 - usesp, LHS synonym, RHS synonym
+procedure p; variabe v;
+Select v such that Uses(p, v)
+shine, ring, f, lost, g, a
+5000
+23 - Usesp, LHS ident, RHS wildcard
+procedure p; variabe v;
+Select p such that Uses("Frodo", _)
+Gandulf, Frodo, Aragon
+5000
+24 - Usesp, LHS synonym, RHS wildcard
+procedure p; variabe v;
+Select p such that Uses(p, _)
+Gandulf, Frodo, Aragon
+5000
+25 - Usesp, LHS integer, RHS ident
+call c; variable v;
+Select c such that Uses(5, "f")
+5, 7, 12, 17
+5000
+26 - usesp, LHS integer, RHS synonym
+call c; variable v;
+Select v such that Uses(5, v)
+a, f, shine
+5000
+27 - usesp, LHS synonym, RHS ident
+call c; variable v;
+Select c such that Uses(c, "a")
+7, 17
+5000
+28 - usesp, LHS synonym, RHS synonym
+call c; variable v;
+Select c such that Uses(c, v)
+5, 7, 12, 17
+5000
+29 - usesp, LHS synonym, RHS synonym
+call c; variable v;
+Select v such that Uses(c, v)
+shine, ring, f, lost, g, a
+5000
+30 - usesp, LHS synonym, RHS wildcard
+call c; variable v;
+Select c such that Uses(c, _)
+5, 7, 12, 17
+5000
+31 - usesp, LHS ident, RHS wildcard
+call c; variable v;
+Select v such that Uses(17, _)
+shine, ring, f, lost, g, a
+5000
+32 - calls, LHS ident, RHS ident
+procedure p, q;
+Select p such that Calls("Gandulf", "Frodo")
+Gandulf, Frodo, Aragon
+5000
+33 - calls, LHS ident, RHS synonym
+procedure p, q;
+Select q such that Calls("Gandulf", q)
+Frodo
+5000
+34 - calls, LHS synonym, RHS ident
+procedure p, q;
+Select p such that Calls(p, "Frodo")
+Gandulf
+5000
+35 - calls, LHS synonym, RHS synonym
+procedure p, q;
+Select p such that Calls(p, q)
+Gandulf, Frodo
+5000
+36 - calls, LHS synonym, RHS synonym
+procedure p, q;
+Select q such that Calls(p, q)
+Frodo, Aragon
+5000
+37 - calls, LHS wildcard, RHS ident
+procedure p, q;
+Select p such that Calls(_, "Frodo")
+Gandulf, Frodo, Aragon
+5000
+38 - calls, LHS wildcard, RHS synonym
+procedure p, q;
+Select q such that Calls(_, q)
+Frodo, Aragon
+5000
+39 - calls, LHS ident, RHS wildcard
+procedure p, q;
+Select p such that Calls("Aragon", _)
+none
+5000
+40 - calls, LHS synonym, RHS wildcard
+procedure p, q;
+Select p such that Calls(p, _)
+Gandulf, Frodo
+5000
+41 - calls, LHS wildcard, RHS wildcard
+procedure p, q;
+Select p such that Calls(_, _)
+Gandulf, Frodo, Aragon
+5000 
+42 - callsT, LHS ident, RHS ident
+procedure p, q;
+Select p such that Calls*("Gandulf", "Frodo")
+Gandulf, Frodo, Aragon
+5000
+43 - callsT, LHS ident, RHS synonym
+procedure p, q;
+Select q such that Calls*("Gandulf", q)
+Frodo, Aragon
+5000
+44 - callsT, LHS synonym, RHS ident
+procedure p, q;
+Select p such that Calls*(p, "Aragon")
+Gandulf, Frodo
+5000
+45 - callsT, LHS synonym, RHS synonym
+procedure p, q;
+Select p such that Calls*(p, q)
+Gandulf, Frodo
+5000
+46 - callsT, LHS synonym, RHS synonym
+procedure p, q;
+Select q such that Calls*(p, q)
+Frodo, Aragon
+5000
+47 - callsT, LHS wildcard, RHS ident
+procedure p, q;
+Select p such that Calls*(_, "Aragon")
+Gandulf, Frodo
+5000
+48 - callsT, LHS wildcard, RHS synonym
+procedure p, q;
+Select q such that Calls*(_, q)
+Frodo, Aragon
+5000
+49 - callsT, LHS ident, RHS wildcard
+procedure p, q;
+Select p such that Calls*("Aragon", _)
+none
+5000
+50 - callsT, LHS synonym, RHS wildcard
+procedure p, q;
+Select p such that Calls*(p, _)
+Gandulf, Frodo
+5000
+51 - callsT, LHS wildcard, RHS wildcard
+procedure p, q;
+Select p such that Calls*(_, _)
+Gandulf, Frodo, Aragon
+5000
+53 - pattern, exact pattern match
+assign a;
+Select pattern a(_, "ring + 4 + g * a * 2 * 1 + shine")
+11
+5000
+54 - pattern, RHS ident, invalid
+assign a;
+Select a pattern a(_ "g")
+none
+5000
+55 - pattern, RHS single ident expression
+assign a;
+Select a pattern a(_, _"g"_)
+11
+5000
+56 - pattern RHS sub-expression, valid
+assign a;
+Select a pattern a(_, _"g * a"_)
+11
+5000
+57 - pattern RHS sub-expression, invalid
+assign a;
+Select a pattern a(_, _"1 + shine"_)
+none
+5000
+58 - pattern, RHS subexpression, valid
+assign a;
+Select a pattern a(_, _"g * a * 2 * 1"_)
+11
+5000
+59 - pattern, RHS subexpression, invalid
+assign a;
+Select a pattern a(_, _"2 * 1 + shine"_)
+none
+5000
