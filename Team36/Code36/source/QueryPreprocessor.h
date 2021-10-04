@@ -6,6 +6,12 @@
 #include "Query.h"
 #include "QueryToken.h"
 
+enum ParseStatus {
+	NEUTRAL,
+	IS_SELECTING,
+	IS_SELECTING_MULTIPLE_CLAUSE,
+};
+
 class QueryPreprocessor {
 public:
 
@@ -16,7 +22,7 @@ public:
 
 private:
 
-	QueryToken setIdentifierToQueryTokenType(QueryToken&, QueryToken&, QueryToken&);
+	QueryToken setIdentifierToQueryTokenType(QueryToken&, QueryToken&, QueryToken&, ParseStatus&, bool&);
 
 	void validateDeclarationQuery(QueryToken&, QueryToken&);
 

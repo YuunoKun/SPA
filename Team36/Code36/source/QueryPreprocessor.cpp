@@ -20,16 +20,24 @@ Query QueryPreprocessor::parse(std::string str) {
 	QueryTokenizer query_tokenizer;
 	PatternRelRefValidator validator;
 
-	//query_tokenizer.parse_into_query_tokens(str);
+	query_tokenizer.parse_into_query_tokens(str);
 
-	//std::vector<QueryToken> v = query_tokenizer.get_query_token_chain();
+	std::vector<QueryToken> v = query_tokenizer.get_query_token_chain();
 
-	std::vector<QueryToken> v;
-	v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "procedure" });
-	v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "p" });
-	v.push_back({ QueryToken::QueryTokenType::TERMINATOR, "" });
-	v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "Select" });
-	v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "BOOLEAN" });
+	//std::vector<QueryToken> v;
+	//v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "assign" });
+	//v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "a1" });
+	//v.push_back({ QueryToken::QueryTokenType::COMMA, "" });
+	//v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "assign" });
+	//v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "a2" });
+	//v.push_back({ QueryToken::QueryTokenType::TERMINATOR, "" });
+	//v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "Select" });
+	//v.push_back({ QueryToken::QueryTokenType::TUPLE_OPEN, "" });
+	//v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "a1" });
+	//v.push_back({ QueryToken::QueryTokenType::COMMA, "" });
+	//v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "a2" });
+	//v.push_back({ QueryToken::QueryTokenType::TUPLE_CLOSE, "" });
+
 	//v.push_back({ QueryToken::QueryTokenType::DOT, "" });
 	//v.push_back({ QueryToken::QueryTokenType::VAR_NAME, "" });
 
@@ -100,6 +108,8 @@ Query QueryPreprocessor::parse(std::string str) {
 	// To keep track of pattern type entity, eg: ASSIGN
 	Entity patternTypeEntity;
 
+	ParseStatus status;
+
 	// True when parsing is in selection, false when parsing is in declaration
 	bool isSelect = false;
 
@@ -117,7 +127,7 @@ Query QueryPreprocessor::parse(std::string str) {
 		// Check what is my previous token
 		if (!isSelect) {
 			if (endOfCurrentDeclaration) {
-				declarationType = setIdentifierToQueryTokenType(prevToken, declarationType, token);
+				declarationType = setIdentifierToQueryTokenType(prevToken, declarationType, token, status, isSelect);
 				validateDeclarationQuery(prevToken, token);
 				haveNextDeclaration = true;
 				endOfCurrentDeclaration = false;
@@ -125,14 +135,15 @@ Query QueryPreprocessor::parse(std::string str) {
 			else if (haveNextDeclaration) {
 				Entity ent;
 				if (token.type == QueryToken::QueryTokenType::IDENTIFIER) {
-					if (declarationType.type == QueryToken::QueryTokenType::SELECT) {
-						addSelectedToQuery(query, ent, output, selected, token, isSelect);
-						haveNextDeclaration = false;
-					}
-					else {
-						addEntityToQuery(query, ent, output, declarationType, token);
-						haveNextDeclaration = false;
-					}
+					//if (declarationType.type == QueryToken::QueryTokenType::SELECT) {
+					//if (status == ParseStatus::IS_SELECTING) {
+					//	addSelectedToQuery(query, ent, output, selected, token, isSelect);
+					//	haveNextDeclaration = false;
+					//}
+					//else {
+					addEntityToQuery(query, ent, output, declarationType, token);
+					haveNextDeclaration = false;
+					//}
 				}
 				else {
 					throw SyntacticErrorException("Invalid declaration");
@@ -184,17 +195,34 @@ Query QueryPreprocessor::parse(std::string str) {
 					}
 					endOfCurrentClauses = false;
 				}
-				// special case: if Select has attribute ie. Select p.procName
-				else if (token.type == QueryToken::QueryTokenType::DOT &&
-					prevToken.type == QueryToken::QueryTokenType::IDENTIFIER &&
-					declarationType.type == QueryToken::QueryTokenType::SELECT) {
-					isExpectingAttribute = true;
+				// Select content
+				//else if (declarationType.type == QueryToken::QueryTokenType::SELECT) {
+				else if (status == ParseStatus::IS_SELECTING) {
+					// if Select has attribute ie. Select p.procName
+					if (token.type == QueryToken::QueryTokenType::DOT &&
+						prevToken.type == QueryToken::QueryTokenType::IDENTIFIER) {
+						isExpectingAttribute = true;
+					}
+					else if (isExpectingAttribute && prevTokenSelect.type == QueryToken::QueryTokenType::DOT) {
+						AttrRef attrRef = Utility::queryTokenTypeToAttrRef(token.type);
+						query.setSelectedAttribute(attrRef);
+						isExpectingAttribute = false;
+					}
+					else if (prevToken.token_value == "Select" && token.type == QueryToken::QueryTokenType::TUPLE_OPEN) {
+						status = ParseStatus::IS_SELECTING_MULTIPLE_CLAUSE;
+					}
+					else if (token.type == QueryToken::QueryTokenType::TUPLE_CLOSE) {
+						status = ParseStatus::NEUTRAL;
+					}
+					else if (status != ParseStatus::IS_SELECTING_MULTIPLE_CLAUSE &&
+						prevToken.token_value == "Select" &&
+						token.type == QueryToken::QueryTokenType::IDENTIFIER) {
+						Entity ent;
+						addSelectedToQuery(query, ent, output, selected, token, isSelect);
+						haveNextDeclaration = false;
+					}
 				}
-				else if (isExpectingAttribute && prevTokenSelect.type == QueryToken::QueryTokenType::DOT) {
-					AttrRef attrRef = Utility::queryTokenTypeToAttrRef(token.type);
-					query.setSelectedAttribute(attrRef);
-					isExpectingAttribute = false;
-				}
+
 				else {
 					throw SyntacticErrorException("Invalid query");
 				}
@@ -277,7 +305,7 @@ Query QueryPreprocessor::parse(std::string str) {
 	return query;
 }
 
-QueryToken QueryPreprocessor::setIdentifierToQueryTokenType(QueryToken& prevToken, QueryToken& temp, QueryToken& token) {
+QueryToken QueryPreprocessor::setIdentifierToQueryTokenType(QueryToken& prevToken, QueryToken& temp, QueryToken& token, ParseStatus& status, bool& isSelect) {
 	if (prevToken.type == QueryToken::QueryTokenType::WHITESPACE ||
 		prevToken.type == QueryToken::QueryTokenType::TERMINATOR) {
 		if (token.token_value == "stmt") {
@@ -315,7 +343,9 @@ QueryToken QueryPreprocessor::setIdentifierToQueryTokenType(QueryToken& prevToke
 		}
 		// Need to enforce that Select must only come after a terminator
 		else if (prevToken.type == QueryToken::QueryTokenType::TERMINATOR && token.token_value == "Select") {
-			temp = { QueryToken::QueryTokenType::SELECT, "Select" };
+			/*temp = { QueryToken::QueryTokenType::SELECT, "Select" };*/
+			isSelect = true;
+			status = ParseStatus::IS_SELECTING;
 		}
 		else {
 			//throw std::runtime_error("Invalid syntax for declaration or select");
@@ -375,7 +405,7 @@ void QueryPreprocessor::addPatternToQuery(Entity& patternTypeEntity, std::vector
 
 void QueryPreprocessor::addSelectedToQuery(Query& query, Entity& ent, std::vector<QueryToken>& output, std::vector<QueryToken> selected, QueryToken& token, bool& isSelect) {
 	bool isValid = false;
-	if (token.token_value == "BOOLEAN") {
+	if (token.token_value == "BOOLEAN" && query.getSelected().size() == 0) {
 		ent = { EntityType::BOOLEAN };
 		isValid = true;
 	}
@@ -395,7 +425,7 @@ void QueryPreprocessor::addSelectedToQuery(Query& query, Entity& ent, std::vecto
 	if (!isValid) {
 		throw SemanticErrorException("Select variable content has not been declared");
 	}
-	isSelect = true;
+	//isSelect = true;
 	query.addSelected(ent);
 }
 
