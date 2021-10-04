@@ -346,6 +346,13 @@ namespace UnitTesting {
 		EXPECT_EQ(test, q);
 	}
 
+	TEST(QueryPreprocessor, selectBOOLEAN) {
+		QueryPreprocessor qp;
+		Query test = qp.parse("procedure p; Select BOOLEAN");
+
+		EXPECT_EQ(test.getSelected()[0], Entity(EntityType::BOOLEAN));
+	}
+
 	TEST(QueryPreprocessor, oneSuchThatClause) {
 		QueryPreprocessor qp;
 		Query test = qp.parse("stmt s; Select s such that Follows* (6, s)");
