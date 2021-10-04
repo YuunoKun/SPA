@@ -78,6 +78,7 @@ namespace UnitTesting {
 
 
 	TEST(DesignExtractor, full_behavior_test) {
+		PKB::getInstance().resetCache();
 		DesignExtractor* extractor = new DesignExtractor();
 
 
