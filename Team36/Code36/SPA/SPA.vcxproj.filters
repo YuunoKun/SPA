@@ -46,6 +46,9 @@
     <Filter Include="Header Files\PQL\Helper">
       <UniqueIdentifier>{1d9d86ac-3eba-483b-9f71-95a582cd91f7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\PQL\QueryObject">
+      <UniqueIdentifier>{68d43cbf-77cf-4ba4-98b7-3415d920e923}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Header Files\PQL\QueryEvaluator\RelationEvaluator">
       <UniqueIdentifier>{c25711b4-12ef-49b2-a273-01893fdc508a}</UniqueIdentifier>
     </Filter>
@@ -63,6 +66,8 @@
     </Filter>
     <Filter Include="Header Files\PQL\QueryEvaluator\QueryObject">
       <UniqueIdentifier>{68d43cbf-77cf-4ba4-98b7-3415d920e923}</UniqueIdentifier>
+    <Filter Include="Source Files\Common">
+      <UniqueIdentifier>{84871b21-c6ae-45ec-95a3-0ddc3888a41d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -194,6 +199,11 @@
     </ClCompile>
     <ClCompile Include="..\source\WithEvaluator.cpp">
       <Filter>Source Files\PQL\QueryEvaluator\RelationEvaluator</Filter>
+    <ClCompile Include="..\source\ExprParser.cpp">
+      <Filter>Source Files\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\ExprNode.cpp">
+      <Filter>Source Files\Common</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -271,6 +281,16 @@
     </ClInclude>
     <ClInclude Include="..\source\RelRef.h">
       <Filter>Header Files\PQL\QueryEvaluator\QueryObject</Filter>
+      <Filter>Header Files\PQL\QueryObject</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\Pattern.h">
+      <Filter>Header Files\PQL\QueryObject</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\Query.h">
+      <Filter>Header Files\PQL\QueryObject</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\RelRef.h">
+      <Filter>Header Files\PQL\QueryObject</Filter>
     </ClInclude>
     <ClInclude Include="..\source\PatternRelRefValidator.h">
       <Filter>Header Files\PQL\QueryPreprocessor</Filter>
@@ -343,6 +363,13 @@
     </ClInclude>
     <ClInclude Include="..\source\WithEvaluator.h">
       <Filter>Header Files\PQL\QueryEvaluator\RelationEvaluator</Filter>
+      <Filter>Header Files\PQL\QueryObject</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\ExprNode.h">
+      <Filter>Header Files\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\ExprParser.h">
+      <Filter>Header Files\Common</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -104,6 +104,11 @@
     </ClCompile>
     <ClCompile Include="QueryOptimizerTest.cpp">
       <Filter>PQL</Filter>
+    <ClCompile Include="ExprNodeTest.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="ExprParserTest.cpp">
+      <Filter>Common</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -136,6 +141,9 @@
     </Filter>
     <Filter Include="PQL\QueryEvaluator\RelationEvaluator">
       <UniqueIdentifier>{8d71c6f7-e4d6-40f0-8ac3-2623568af69c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Common">
+      <UniqueIdentifier>{06725a9a-7be9-46a8-ae6c-cf15393301f0}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

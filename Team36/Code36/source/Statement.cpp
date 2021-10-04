@@ -73,6 +73,16 @@ std::vector<var_name> Statement::getModifiedVariable() {
 }
 
 
+void Statement::addUsesCondVariable(var_name var) {
+	statement_uses_cond.insert(var);
+}
+
+
+std::vector<var_name> Statement::getUsedCondVariable() {
+	return std::vector<var_name>(statement_uses_cond.begin(), statement_uses_cond.end());
+}
+
+
 void Statement::setExprStr(std::string expr) {
 	statement_expr = expr;
 }
