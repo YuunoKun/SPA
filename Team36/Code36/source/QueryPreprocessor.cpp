@@ -20,16 +20,16 @@ Query QueryPreprocessor::parse(std::string str) {
 	QueryTokenizer query_tokenizer;
 	PatternRelRefValidator validator;
 
-	query_tokenizer.parse_into_query_tokens(str);
+	//query_tokenizer.parse_into_query_tokens(str);
 
-	std::vector<QueryToken> v = query_tokenizer.get_query_token_chain();
+	//std::vector<QueryToken> v = query_tokenizer.get_query_token_chain();
 
-	//std::vector<QueryToken> v;
-	//v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "procedure" });
-	//v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "p" });
-	//v.push_back({ QueryToken::QueryTokenType::TERMINATOR, "" });
-	//v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "Select" });
-	//v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "p" });
+	std::vector<QueryToken> v;
+	v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "procedure" });
+	v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "p" });
+	v.push_back({ QueryToken::QueryTokenType::TERMINATOR, "" });
+	v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "Select" });
+	v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "BOOLEAN" });
 	//v.push_back({ QueryToken::QueryTokenType::DOT, "" });
 	//v.push_back({ QueryToken::QueryTokenType::VAR_NAME, "" });
 
@@ -375,16 +375,23 @@ void QueryPreprocessor::addPatternToQuery(Entity& patternTypeEntity, std::vector
 
 void QueryPreprocessor::addSelectedToQuery(Query& query, Entity& ent, std::vector<QueryToken>& output, std::vector<QueryToken> selected, QueryToken& token, bool& isSelect) {
 	bool isValid = false;
-	for (QueryToken each : output) {
-		if (token.token_value == each.token_value) {
-			selected.push_back({ each.type, token.token_value });
-			Synonym synonym;
-			synonym.name = token.token_value;
-			EntityType entityType = Utility::queryTokenTypeToEntityType(each.type);
-			ent = { entityType, synonym };
-			isValid = true;
+	if (token.token_value == "BOOLEAN") {
+		ent = { EntityType::BOOLEAN };
+		isValid = true;
+	}
+	else {
+		for (QueryToken each : output) {
+			if (token.token_value == each.token_value) {
+				selected.push_back({ each.type, token.token_value });
+				Synonym synonym;
+				synonym.name = token.token_value;
+				EntityType entityType = Utility::queryTokenTypeToEntityType(each.type);
+				ent = { entityType, synonym };
+				isValid = true;
+			}
 		}
 	}
+
 	if (!isValid) {
 		throw SemanticErrorException("Select variable content has not been declared");
 	}

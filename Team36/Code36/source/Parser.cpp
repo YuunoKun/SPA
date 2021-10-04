@@ -56,7 +56,7 @@ std::string Parser::getSourceProgram() {
 void Parser::parse() {
 	// Actual parsing workflow
 
-	/* 
+	/*
 	TODO:
 	If source_program = "";
 	An error message should be pushed
