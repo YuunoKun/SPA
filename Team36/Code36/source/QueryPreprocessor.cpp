@@ -20,23 +20,24 @@ Query QueryPreprocessor::parse(std::string str) {
 	QueryTokenizer query_tokenizer;
 	PatternRelRefValidator validator;
 
-	query_tokenizer.parse_into_query_tokens(str);
+	//query_tokenizer.parse_into_query_tokens(str);
 
-	std::vector<QueryToken> v = query_tokenizer.get_query_token_chain();
+	//std::vector<QueryToken> v = query_tokenizer.get_query_token_chain();
 
-	//std::vector<QueryToken> v;
-	//v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "assign" });
-	//v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "a1" });
-	//v.push_back({ QueryToken::QueryTokenType::COMMA, "" });
-	//v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "assign" });
-	//v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "a2" });
-	//v.push_back({ QueryToken::QueryTokenType::TERMINATOR, "" });
-	//v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "Select" });
-	//v.push_back({ QueryToken::QueryTokenType::TUPLE_OPEN, "" });
-	//v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "a1" });
-	//v.push_back({ QueryToken::QueryTokenType::COMMA, "" });
-	//v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "a2" });
-	//v.push_back({ QueryToken::QueryTokenType::TUPLE_CLOSE, "" });
+	std::vector<QueryToken> v;
+	v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "assign" });
+	v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "a1" });
+	v.push_back({ QueryToken::QueryTokenType::COMMA, "" });
+	v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "a2" });
+	v.push_back({ QueryToken::QueryTokenType::TERMINATOR, "" });
+	v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "Select" });
+	v.push_back({ QueryToken::QueryTokenType::TUPLE_OPEN, "" });
+	v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "a1" });
+	v.push_back({ QueryToken::QueryTokenType::DOT, "" });
+	v.push_back({ QueryToken::QueryTokenType::PROC_NAME, "" });
+	v.push_back({ QueryToken::QueryTokenType::COMMA, "" });
+	v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "a2" });
+	v.push_back({ QueryToken::QueryTokenType::TUPLE_CLOSE, "" });
 
 	//v.push_back({ QueryToken::QueryTokenType::DOT, "" });
 	//v.push_back({ QueryToken::QueryTokenType::VAR_NAME, "" });
@@ -211,15 +212,62 @@ Query QueryPreprocessor::parse(std::string str) {
 					else if (prevToken.token_value == "Select" && token.type == QueryToken::QueryTokenType::TUPLE_OPEN) {
 						status = ParseStatus::IS_SELECTING_MULTIPLE_CLAUSE;
 					}
-					else if (token.type == QueryToken::QueryTokenType::TUPLE_CLOSE) {
-						status = ParseStatus::NEUTRAL;
-					}
 					else if (status != ParseStatus::IS_SELECTING_MULTIPLE_CLAUSE &&
 						prevToken.token_value == "Select" &&
 						token.type == QueryToken::QueryTokenType::IDENTIFIER) {
 						Entity ent;
 						addSelectedToQuery(query, ent, output, selected, token, isSelect);
 						haveNextDeclaration = false;
+					}
+				}
+				else if (status == ParseStatus::IS_SELECTING_MULTIPLE_CLAUSE) {
+					if (token.type == QueryToken::QueryTokenType::IDENTIFIER &&
+						prevTokenSelect.type != QueryToken::QueryTokenType::TUPLE_OPEN &&
+						prevTokenSelect.type != QueryToken::QueryTokenType::COMMA) {
+						throw SyntacticErrorException("During multiple selects, identifier can only come after '<' or ','");
+					}
+					else if (token.type == QueryToken::QueryTokenType::DOT &&
+						prevTokenSelect.type != QueryToken::QueryTokenType::IDENTIFIER) {
+						throw SyntacticErrorException("During multiple selects, '.' can only come after identifier");
+					}
+					else if ((token.type == QueryToken::QueryTokenType::PROC_NAME ||
+						token.type == QueryToken::QueryTokenType::VAR_NAME ||
+						token.type == QueryToken::QueryTokenType::VALUE ||
+						token.type == QueryToken::QueryTokenType::STMT_INDEX) &&
+						prevTokenSelect.type != QueryToken::QueryTokenType::DOT) {
+						throw SyntacticErrorException("During multiple selects, attributes can only come after '.'");
+					}
+					else if (token.type == QueryToken::QueryTokenType::COMMA &&
+						(prevTokenSelect.type != QueryToken::QueryTokenType::PROC_NAME &&
+							prevTokenSelect.type != QueryToken::QueryTokenType::VAR_NAME &&
+							prevTokenSelect.type != QueryToken::QueryTokenType::VALUE &&
+							prevTokenSelect.type != QueryToken::QueryTokenType::IDENTIFIER &&
+							prevTokenSelect.type != QueryToken::QueryTokenType::STMT_INDEX)) {
+						throw SyntacticErrorException("During multiple selects, comma can only come after attributes");
+					}
+					else if (token.type == QueryToken::QueryTokenType::TUPLE_CLOSE &&
+						prevTokenSelect.type != QueryToken::QueryTokenType::PROC_NAME &&
+						prevTokenSelect.type != QueryToken::QueryTokenType::VAR_NAME &&
+						prevTokenSelect.type != QueryToken::QueryTokenType::VALUE &&
+						prevTokenSelect.type != QueryToken::QueryTokenType::IDENTIFIER &&
+						prevTokenSelect.type != QueryToken::QueryTokenType::STMT_INDEX) {
+						throw SyntacticErrorException("During multiple selects, '>' can only come after identifier or attributes");
+					}
+					if (token.type == QueryToken::QueryTokenType::DOT) {
+						isExpectingAttribute = true;
+					}
+					else if (isExpectingAttribute) {
+						AttrRef attrRef = Utility::queryTokenTypeToAttrRef(token.type);
+						query.setSelectedAttribute(attrRef);
+						isExpectingAttribute = false;
+					}
+					else if (token.type == QueryToken::QueryTokenType::IDENTIFIER) {
+						Entity ent;
+						addSelectedToQuery(query, ent, output, selected, token, isSelect);
+						haveNextDeclaration = false;
+					}
+					else if (token.type == QueryToken::QueryTokenType::TUPLE_CLOSE) {
+						status = ParseStatus::NEUTRAL;
 					}
 				}
 
