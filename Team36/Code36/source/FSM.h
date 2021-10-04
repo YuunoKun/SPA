@@ -16,9 +16,12 @@ namespace SourceProcessor {
 
 		FSM(Tokenizer&, Extractor*);
 
+		~FSM();
+
 		Tokenizer& getTokenizer();
 
 		// Build data structure with the given tokenizer
+		// TODO: Dependency injection of KnowledgeBase, done on parser side
 		void build();
 
 		// Expects a procedure.

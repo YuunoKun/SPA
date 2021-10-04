@@ -266,6 +266,56 @@ namespace UnitTesting {
 		EXPECT_NE(expected_table, PKB::getInstance().getModifiesP());
 	}
 
+	TEST(PKB, getCallsP) {
+		PKB::getInstance().resetCache();
+
+		proc_name first = "first";
+		proc_name second = "second";
+		proc_name invalid = "invalid";
+		RelationTable<proc_name, proc_name> expected_table;
+		expected_table.insert(first, second);
+
+		PKB::getInstance().addProcedure(first);
+		PKB::getInstance().addProcedure(second);
+		PKB::getInstance().addCallsP(first, second);
+
+		EXPECT_THROW(PKB::getInstance().addCallsP(first, invalid), std::invalid_argument);
+		EXPECT_THROW(PKB::getInstance().addCallsP(invalid, first), std::invalid_argument);
+
+		EXPECT_EQ(expected_table, PKB::getInstance().getCallsP());
+		PKB::getInstance().resetCache();
+		EXPECT_NE(expected_table, PKB::getInstance().getCallsP());
+	}
+
+	TEST(PKB, getCallsPT) {
+		PKB::getInstance().resetCache();
+
+		proc_name first = "first";
+		proc_name second = "second";
+		proc_name third = "third";
+		proc_name fourth = "fourth";
+		RelationTable<proc_name, proc_name> expected_table;
+		expected_table.insert(first, fourth);
+		expected_table.insert(first, second);
+		expected_table.insert(first, third);
+		expected_table.insert(second, fourth);
+		expected_table.insert(second, third);
+		expected_table.insert(third, fourth);
+
+		PKB::getInstance().addProcedure(first);
+		PKB::getInstance().addProcedure(second);
+		PKB::getInstance().addProcedure(third);
+		PKB::getInstance().addProcedure(fourth);
+		PKB::getInstance().addCallsP(first, second);
+		PKB::getInstance().addCallsP(second, third);
+		PKB::getInstance().addCallsP(third, fourth);
+		PKB::getInstance().generateCallsPT();
+
+		EXPECT_EQ(expected_table, PKB::getInstance().getCallsPT());
+		PKB::getInstance().resetCache();
+		EXPECT_NE(expected_table, PKB::getInstance().getCallsPT());
+	}
+
 	TEST(PKB, getAssigns) {
 		PKB::getInstance().resetCache();
 

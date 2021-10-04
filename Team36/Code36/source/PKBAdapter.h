@@ -98,4 +98,26 @@ public:
 	std::vector<StmtInfo> getUsesS();
 	std::vector<StmtInfo> getUsesS(var_name);
 	std::vector<var_name> getUsedS(stmt_index);
+
+	//CallsP relation Function
+	bool isCallsPEmpty();
+	bool isCallsP(proc_name, proc_name);
+	bool isCallerP(proc_name);
+	bool isCalleeP(proc_name);
+	std::vector<proc_name> getCallerP();
+	std::vector<proc_name> getCalleeP();
+	std::vector<proc_name> getCallerP(proc_name);
+	std::vector<proc_name> getCalleeP(proc_name);
+	std::vector<std::pair<proc_name, proc_name>> getCallsPRelation();
+
+	//CallsPT relation Function
+	bool isCallsPTEmpty();
+	bool isCallsPT(proc_name, proc_name);
+	bool isCallerPT(proc_name);
+	bool isCalleePT(proc_name);
+	std::vector<std::pair<proc_name, proc_name>> getCallsPTRelation();
+	std::vector<proc_name> getCallerPT();
+	std::vector<proc_name> getCalleePT();
+	std::vector<proc_name> getCallerPT(proc_name);
+	std::vector<proc_name> getCalleePT(proc_name);
 };

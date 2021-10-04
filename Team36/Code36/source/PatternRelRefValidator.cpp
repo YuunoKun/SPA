@@ -1,14 +1,9 @@
-#include "PatternRelRefValidator.h"
-
 #include <iostream>
 #include <string>
 #include <vector>
 #include <stdexcept>
-#include "Entity.h"
-#include "QueryToken.h"
-#include "QueryTokenizer.h"
-#include "Query.h"
-#include "Utility.h"
+#include "PatternRelRefValidator.h"
+
 
 // isStmtRef and isEntRef token_chain params need to br broken up first
 
@@ -17,7 +12,7 @@ bool PatternRelRefValidator::isStmtRef(Query& query, std::vector<QueryToken> tok
     
     // no args found, throw syntax errors
     if (token_chain.size() == 0) {
-        throw std::invalid_argument("Invalid StmtRef arguments");
+        throw SyntacticErrorException("Invalid stmtRef arguments");
     }
 
     // more than 1 args found. possible entref
@@ -49,18 +44,12 @@ bool PatternRelRefValidator::isStmtRef(Query& query, std::vector<QueryToken> tok
                 ent_chain.at(token.token_value).getType() == EntityType::ASSIGN;
         } else {
             // Undeclared Syn, Cannot find Entity in Query
-            throw std::runtime_error("Unknown stmtRef");
+            throw SyntacticErrorException("Undeclared stmtRef");
         }
     }
 
-    //if got quotation?
-    // return false
-    //TODO remove this?
-  /*  if (token.type == QueryToken::QUOTATION_OPEN) {
-        return false;
-    }*/
-
-
+    // false will either be semantic errors OR will go to entRef(for Modifies and Uses)
+    return false;
 }
 
 //expect entref
@@ -69,17 +58,12 @@ bool PatternRelRefValidator::isEntRef(Query& query, std::vector<QueryToken> toke
 
     // no args found, throw syntax errors
     if (token_chain.size() == 0) {
-        throw std::invalid_argument("Invalid EntRef arguments");
+        throw SyntacticErrorException("Invalid entRef arguments");
     }
 
     // if only 1 arg found
     if (token_chain.size() == 1) {
         QueryToken token = token_chain[0];
-
-        //// remove this?
-        //if (token.type == QueryToken::CONSTANT) {
-        //    return false;
-        //}
 
         if (token.type == QueryToken::WILDCARD) {
             return true;
@@ -90,21 +74,46 @@ bool PatternRelRefValidator::isEntRef(Query& query, std::vector<QueryToken> toke
             if (ent_chain.find(token.token_value) != ent_chain.end()) {
                 return ent_chain.at(token.token_value).getType() == EntityType::VARIABLE ||
                     ent_chain.at(token.token_value).getType() == EntityType::PROCEDURE;
+            } else {
+                // Undeclared Syn, Cannot find Entity in Query
+                throw SyntacticErrorException("Undeclared entRef");
             }
         } else {
-            //TODO throw semantic error instead?
             return false;
         }
+
     } else if (token_chain.size() == 3) {
         //checking for " IDENT " 
-        return token_chain[0].type == QueryToken::QUOTATION_OPEN &&
+        if (token_chain[0].type == QueryToken::QUOTATION_OPEN &&
             token_chain[1].type == QueryToken::IDENTIFIER &&
-            token_chain[2].type == QueryToken::QUOTATION_CLOSE;
+            token_chain[2].type == QueryToken::QUOTATION_CLOSE) {
+            return true;
+        } else {
+            throw SyntacticErrorException("Invalid EntRef arguments");
+        }
     } else {
         // throw syntax error?
-        throw std::invalid_argument("Invalid EntRef arguments");
+        throw SyntacticErrorException("Invalid EntRef arguments");
     }
 }
+
+bool PatternRelRefValidator::isCorrectSynEntRef(Query& query, std::vector<QueryToken> token_chain, 
+    EntityType expected_ent_type) {
+    
+    std::unordered_map<std::string, Entity> ent_chain = query.getEntities();
+
+    if (token_chain.size() == 1 && token_chain[0].type == QueryToken::IDENTIFIER) {
+
+        QueryToken token = token_chain[0];
+        if (ent_chain.find(token.token_value) != ent_chain.end()) {
+            return ent_chain.at(token.token_value).getType() == expected_ent_type;
+        }
+
+    } else {
+        return true;
+    }
+}
+
 
 //expectcomma
 bool PatternRelRefValidator::isCommaRef(std::vector<QueryToken> token_chain) {
@@ -137,7 +146,7 @@ Entity PatternRelRefValidator::setStmtRef(Query& query, QueryToken token) {
     return ent_chain.at(token.token_value);
   }
 
-  throw std::runtime_error("Unknown stmtRef");
+  throw SemanticErrorException("Unknown stmtRef");
 }
 
 Entity PatternRelRefValidator::setEntRef(Query& query,
@@ -151,6 +160,7 @@ Entity PatternRelRefValidator::setEntRef(Query& query,
     }
 
     // synonym check
+    // Can remove?
     std::unordered_map<std::string, Entity> ent_chain = query.getEntities();
     if (ent_chain.find(token_chain[0].token_value) != ent_chain.end()) {
       return ent_chain.at(token_chain[0].token_value);
@@ -164,7 +174,35 @@ Entity PatternRelRefValidator::setEntRef(Query& query,
   }
   
 
-  throw std::runtime_error("Unknown entRef");
+  throw SemanticErrorException("Unknown entRef");
+}
+
+Entity PatternRelRefValidator::setCallEntRef(Query& query,
+    std::vector<QueryToken> token_chain) {
+    // entRef : synonym | ‘_’ | ‘"’ IDENT ‘"’
+
+    if (token_chain.size() == 1) {
+        // wild card check
+        if (token_chain[0].type == QueryToken::WILDCARD) {
+            return Entity(EntityType::WILD);
+        }
+
+        // synonym check
+        // Can remove?
+        std::unordered_map<std::string, Entity> ent_chain = query.getEntities();
+        if (ent_chain.find(token_chain[0].token_value) != ent_chain.end()) {
+            return ent_chain.at(token_chain[0].token_value);
+        }
+    }
+
+    // is " "IDENT" "
+    // IDENT : LETTER ( LETTER | DIGIT )*
+    if (token_chain.size() == 3) {
+        return Entity(EntityType::PROCEDURE, token_chain[1].token_value);
+    }
+
+
+    throw SemanticErrorException("Unknown entRef");
 }
 
 // takes in a token_chain with only IDENT* (no QUOTATION_OPEN/CLOSE or WILDCARD)
@@ -193,6 +231,7 @@ void PatternRelRefValidator::parseParameterSuchThat(
     case QueryToken::MODIFIES_S: {
         // stmtRef , entRef
         // entRef, entRef
+
         std::vector<QueryToken> temp_token_chain_1;
         std::vector<QueryToken> temp_token_chain_2;
         bool comma_found = false;
@@ -220,20 +259,30 @@ void PatternRelRefValidator::parseParameterSuchThat(
             //is stmRef (WILDCARD incld)
             if (temp_token_chain_1[0].type == QueryToken::WILDCARD) {
                 //Throw semantic erros
-                throw std::invalid_argument("Invalid parameters for Modifies");
+                throw SemanticErrorException("Invalid parameters for Modifies");
             }
         } else {
             // Not stmtRef
             if (isEntRef(query, temp_token_chain_1)) {
                 is_MODIFIES_S = false;
             } else {
-                throw std::invalid_argument("Invalid parameters for Modifies");
+                //Not stmtRef or entRef
+                throw SemanticErrorException("Invalid parameters for Modifies");
+            }
+
+            //check if is PROCEDURE only
+            if (!isCorrectSynEntRef(query, temp_token_chain_1, EntityType::PROCEDURE)) {
+                throw SemanticErrorException("Invalid parameters for Modifies");
             }
         }
 
         //Validate second param
         if (!isEntRef(query, temp_token_chain_2)) {
-            throw std::invalid_argument("Invalid parameters for Modifies");
+            throw SemanticErrorException("Invalid parameters for Modifies");
+        }
+        // check if VARIABLE only
+        if (!isCorrectSynEntRef(query, temp_token_chain_2, EntityType::VARIABLE)) {
+            throw SemanticErrorException("Invalid parameters for Modifies");
         }
 
         if (is_MODIFIES_S) {
@@ -280,7 +329,7 @@ void PatternRelRefValidator::parseParameterSuchThat(
             //is stmRef (WILDCARD incld)
             if (temp_token_chain_1[0].type == QueryToken::WILDCARD) {
                 //Throw semantic erros
-                throw std::invalid_argument("Invalid parameters for Uses");
+                throw SemanticErrorException("Invalid parameters for Uses");
             }
         }
         else {
@@ -289,13 +338,23 @@ void PatternRelRefValidator::parseParameterSuchThat(
                 is_USES_S = false;
             }
             else {
-                throw std::invalid_argument("Invalid parameters for Uses");
+                throw SemanticErrorException("Invalid parameters for Uses");
             }
+
+            //check if is PROCEDURE only
+            if (!isCorrectSynEntRef(query, temp_token_chain_1, EntityType::PROCEDURE)) {
+                throw SemanticErrorException("Invalid parameters for Modifies");
+            }
+
         }
 
         //Validate second param
         if (!isEntRef(query, temp_token_chain_2)) {
-            throw std::invalid_argument("Invalid parameters for Uses");
+            throw SemanticErrorException("Invalid parameters for Uses");
+        }
+        // check if VARIABLE only
+        if (!isCorrectSynEntRef(query, temp_token_chain_2, EntityType::VARIABLE)) {
+            throw SemanticErrorException("Invalid parameters for Modifies");
         }
 
         if (is_USES_S) {
@@ -338,7 +397,7 @@ void PatternRelRefValidator::parseParameterSuchThat(
         }
 
         if (!isStmtRef(query, temp_token_chain_1) || !isStmtRef(query, temp_token_chain_2)) {
-            throw std::invalid_argument("Invalid parameters for Parent");
+            throw SemanticErrorException("Invalid parameters for Parent");
         }
 
         QueryToken stmt = temp_token_chain_1[0];
@@ -376,7 +435,7 @@ void PatternRelRefValidator::parseParameterSuchThat(
         }
 
         if (!isStmtRef(query, temp_token_chain_1) || !isStmtRef(query, temp_token_chain_2)) {
-            throw std::invalid_argument("Invalid parameters for Parent*");
+            throw SemanticErrorException("Invalid parameters for Parent*");
         }
 
         QueryToken stmt = temp_token_chain_1[0];
@@ -414,7 +473,7 @@ void PatternRelRefValidator::parseParameterSuchThat(
         }
 
         if (!isStmtRef(query, temp_token_chain_1) || !isStmtRef(query, temp_token_chain_2)) {
-            throw std::invalid_argument("Invalid parameters for Follows");
+            throw SemanticErrorException("Invalid parameters for Follows");
         }
 
         QueryToken stmt = temp_token_chain_1[0];
@@ -452,7 +511,7 @@ void PatternRelRefValidator::parseParameterSuchThat(
         }
 
         if (!isStmtRef(query, temp_token_chain_1) || !isStmtRef(query, temp_token_chain_2)) {
-            throw std::invalid_argument("Invalid parameters for Follows*");
+            throw SemanticErrorException("Invalid parameters for Follows*");
         }
 
         QueryToken stmt = temp_token_chain_1[0];
@@ -464,54 +523,82 @@ void PatternRelRefValidator::parseParameterSuchThat(
             setStmtRef(query, stmt2)));
         break;
     }
-    //TODO
+   
     case QueryToken::CALLS: {
-        // stmtRef , stmtRef
-        if (!isStmtRef(query, token_chain)) {
-            throw std::invalid_argument("Invalid parameters for Follows");
-        }
-        QueryToken stmt = token_chain[0];
-        token_chain.erase(token_chain.begin(), token_chain.begin() + 1);
+        // entRef , entRef
 
-        isCommaRef(token_chain);
-        token_chain.erase(token_chain.begin(), token_chain.begin() + 1);
+        std::vector<QueryToken> temp_token_chain_1;
+        std::vector<QueryToken> temp_token_chain_2;
+        bool comma_found = false;
+        size_t token_chain_size = token_chain.size();
+        for (size_t i = 0; i < token_chain_size; i++) {
+            if (token_chain[0].type == QueryToken::COMMA) {
+                token_chain.erase(token_chain.begin());
+                comma_found = true;
+            }
+            else if (!comma_found) {
+                // 1st param
+                temp_token_chain_1.push_back(token_chain[0]);
+                token_chain.erase(token_chain.begin());
+            }
+            else {
+                // 2nd param
+                temp_token_chain_2.push_back(token_chain[0]);
+                token_chain.erase(token_chain.begin());
+            }
+        }
 
-        if (!isStmtRef(query, token_chain)) {
-            throw std::invalid_argument("Invalid parameters for Follows");
+        if (!isEntRef(query, temp_token_chain_1) || !isEntRef(query, temp_token_chain_2)) {
+            throw SemanticErrorException("Invalid parameters for Calls");
         }
-        QueryToken stmt2 = token_chain[0];
-        token_chain.erase(token_chain.begin(), token_chain.begin() + 1);
-        if (token_chain.size() != 0) {
-            throw std::invalid_argument("Unexpected parameters for Follows");
+        // Check if both args are PROCEDUREs
+        if (!isCorrectSynEntRef(query, temp_token_chain_1, EntityType::PROCEDURE) || 
+            !isCorrectSynEntRef(query, temp_token_chain_2, EntityType::PROCEDURE)) {
+            throw SemanticErrorException("Invalid parameters for Calls");
         }
-        query.addRelation(RelRef(RelType::FOLLOWS,
-            setStmtRef(query, stmt),
-            setStmtRef(query, stmt2)));
+
+        query.addRelation(RelRef(RelType::CALLS,
+            setCallEntRef(query, temp_token_chain_1),
+            setCallEntRef(query, temp_token_chain_2)));
         break;
     }
-    //TODO
+    
     case QueryToken::CALLS_T: {
-        // stmtRef , stmtRef
-        if (!isStmtRef(query, token_chain)) {
-            throw std::invalid_argument("Invalid parameters for Follows");
-        }
-        QueryToken stmt = token_chain[0];
-        token_chain.erase(token_chain.begin(), token_chain.begin() + 1);
+        // entRef , entRef
 
-        isCommaRef(token_chain);
-        token_chain.erase(token_chain.begin(), token_chain.begin() + 1);
+        std::vector<QueryToken> temp_token_chain_1;
+        std::vector<QueryToken> temp_token_chain_2;
+        bool comma_found = false;
+        size_t token_chain_size = token_chain.size();
+        for (size_t i = 0; i < token_chain_size; i++) {
+            if (token_chain[0].type == QueryToken::COMMA) {
+                token_chain.erase(token_chain.begin());
+                comma_found = true;
+            }
+            else if (!comma_found) {
+                // 1st param
+                temp_token_chain_1.push_back(token_chain[0]);
+                token_chain.erase(token_chain.begin());
+            }
+            else {
+                // 2nd param
+                temp_token_chain_2.push_back(token_chain[0]);
+                token_chain.erase(token_chain.begin());
+            }
+        }
 
-        if (!isStmtRef(query, token_chain)) {
-            throw std::invalid_argument("Invalid parameters for Follows");
+        if (!isEntRef(query, temp_token_chain_1) || !isEntRef(query, temp_token_chain_2)) {
+            throw SemanticErrorException("Invalid parameters for Calls*");
         }
-        QueryToken stmt2 = token_chain[0];
-        token_chain.erase(token_chain.begin(), token_chain.begin() + 1);
-        if (token_chain.size() != 0) {
-            throw std::invalid_argument("Unexpected parameters for Follows");
+        // Check if both args are PROCEDUREs
+        if (!isCorrectSynEntRef(query, temp_token_chain_1, EntityType::PROCEDURE) ||
+            !isCorrectSynEntRef(query, temp_token_chain_2, EntityType::PROCEDURE)) {
+            throw SemanticErrorException("Invalid parameters for Calls*");
         }
-        query.addRelation(RelRef(RelType::FOLLOWS,
-            setStmtRef(query, stmt),
-            setStmtRef(query, stmt2)));
+
+        query.addRelation(RelRef(RelType::CALLS_T,
+            setCallEntRef(query, temp_token_chain_1),
+            setCallEntRef(query, temp_token_chain_2)));
         break;
     }
 

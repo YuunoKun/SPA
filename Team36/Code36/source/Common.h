@@ -7,6 +7,7 @@ typedef std::string var_name;
 typedef std::string expr;
 typedef unsigned int constant;
 typedef unsigned int stmt_index;
+typedef unsigned int prog_line;
 typedef unsigned int var_index;
 typedef unsigned int proc_index;
 

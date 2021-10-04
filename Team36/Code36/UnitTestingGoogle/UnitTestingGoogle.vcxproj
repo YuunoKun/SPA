@@ -42,6 +42,8 @@
     <ClCompile Include="ClauseTest.cpp" />
     <ClCompile Include="DesignExtractorTest.cpp" />
     <ClCompile Include="EntityTest.cpp" />
+    <ClCompile Include="ExprNodeTest.cpp" />
+    <ClCompile Include="ExprParserTest.cpp" />
     <ClCompile Include="FSMTest.cpp" />
     <ClCompile Include="ParserTest.cpp" />
     <ClCompile Include="PatternEvaluatorTest.cpp" />

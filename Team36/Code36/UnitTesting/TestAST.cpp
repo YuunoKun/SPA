@@ -1,6 +1,5 @@
 #include "stdafx.h"
 #include "CppUnitTest.h"
-#include "../source/TNode.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
@@ -9,7 +8,6 @@ namespace UnitTesting {
 public:
 
 	TEST_METHOD(TestMethod1) {
-		TNode T;
 		// TODO: Your test code here
 	}
 	};

@@ -39,7 +39,9 @@ void QueryTokenizer::parse_into_query_tokens(std::string input) {
 				separator_validation_stk.pop();
 			}
 			else {
-				throw std::runtime_error( std::string("Unexpected symbol : \')\'"));
+				throw SyntacticErrorException("Unexpected symbol : \')\'");
+
+				//throw std::runtime_error( std::string("Unexpected symbol : \')\'"));
 			}
 			add_query_token(curr_query_token);
 			curr_query_token.type = QueryToken::PARENTHESIS_CLOSE;
@@ -205,12 +207,12 @@ void QueryTokenizer::parse_into_query_tokens(std::string input) {
 					curr_query_token.token_value.push_back(c);
 				}
 				else {
-					throw std::runtime_error("Invalid Name present");
+					throw SyntacticErrorException("Invalid Name present");
 				}
 				
 			}
 			else {
-				throw std::runtime_error("Unknown symbol present");
+				throw SyntacticErrorException("Unknown symbol present");
 			}
 			break;
 		}
@@ -219,10 +221,10 @@ void QueryTokenizer::parse_into_query_tokens(std::string input) {
 
 	// Check for open brackets, open quotation marks, temp token active
 	if (!separator_validation_stk.empty()) {
-		throw std::runtime_error("expected \')\'");
+		throw SyntacticErrorException("expected \')\'");
 	}
 	if (quotation_validation) {
-		throw std::runtime_error("missing terminating \" character");
+		throw SyntacticErrorException("missing terminating \" character");
 	}
 	
 }
