@@ -15,13 +15,13 @@
 class PatternRelRefValidator {
 private:
 
-	bool PatternRelRefValidator::isStmtRef(Query&, std::vector<QueryToken>);
+	bool isStmtRef(Query&, std::vector<QueryToken>);
 
-	bool PatternRelRefValidator::isCommaRef(std::vector<QueryToken>);
+	bool isCommaRef(std::vector<QueryToken>);
 
-	bool PatternRelRefValidator::isEntRef(Query&, std::vector<QueryToken>);
+	bool isEntRef(Query&, std::vector<QueryToken>);
 
-	bool PatternRelRefValidator::isCorrectSynEntRef(Query&, std::vector<QueryToken>, EntityType);
+	bool isCorrectSynEntRef(Query&, std::vector<QueryToken>, EntityType);
 
 public: 
 
@@ -34,6 +34,8 @@ public:
 	Entity setStmtRef(Query&, QueryToken);
 
 	Entity setEntRef(Query&, std::vector<QueryToken>);
+
+	Entity setCallEntRef(Query&, std::vector<QueryToken>);
 
 	expr setExpr(std::vector<QueryToken>);
 };

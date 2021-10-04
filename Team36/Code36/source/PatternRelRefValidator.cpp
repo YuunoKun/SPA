@@ -146,7 +146,7 @@ Entity PatternRelRefValidator::setStmtRef(Query& query, QueryToken token) {
     return ent_chain.at(token.token_value);
   }
 
-  throw std::runtime_error("Unknown stmtRef");
+  throw SemanticErrorException("Unknown stmtRef");
 }
 
 Entity PatternRelRefValidator::setEntRef(Query& query,
@@ -160,6 +160,7 @@ Entity PatternRelRefValidator::setEntRef(Query& query,
     }
 
     // synonym check
+    // Can remove?
     std::unordered_map<std::string, Entity> ent_chain = query.getEntities();
     if (ent_chain.find(token_chain[0].token_value) != ent_chain.end()) {
       return ent_chain.at(token_chain[0].token_value);
@@ -173,7 +174,35 @@ Entity PatternRelRefValidator::setEntRef(Query& query,
   }
   
 
-  throw std::runtime_error("Unknown entRef");
+  throw SemanticErrorException("Unknown entRef");
+}
+
+Entity PatternRelRefValidator::setCallEntRef(Query& query,
+    std::vector<QueryToken> token_chain) {
+    // entRef : synonym | ‘_’ | ‘"’ IDENT ‘"’
+
+    if (token_chain.size() == 1) {
+        // wild card check
+        if (token_chain[0].type == QueryToken::WILDCARD) {
+            return Entity(EntityType::WILD);
+        }
+
+        // synonym check
+        // Can remove?
+        std::unordered_map<std::string, Entity> ent_chain = query.getEntities();
+        if (ent_chain.find(token_chain[0].token_value) != ent_chain.end()) {
+            return ent_chain.at(token_chain[0].token_value);
+        }
+    }
+
+    // is " "IDENT" "
+    // IDENT : LETTER ( LETTER | DIGIT )*
+    if (token_chain.size() == 3) {
+        return Entity(EntityType::PROCEDURE, token_chain[1].token_value);
+    }
+
+
+    throw SemanticErrorException("Unknown entRef");
 }
 
 // takes in a token_chain with only IDENT* (no QUOTATION_OPEN/CLOSE or WILDCARD)
@@ -494,7 +523,7 @@ void PatternRelRefValidator::parseParameterSuchThat(
             setStmtRef(query, stmt2)));
         break;
     }
-    //TODO
+   
     case QueryToken::CALLS: {
         // entRef , entRef
 
@@ -529,11 +558,11 @@ void PatternRelRefValidator::parseParameterSuchThat(
         }
 
         query.addRelation(RelRef(RelType::CALLS,
-            setEntRef(query, temp_token_chain_1),
-            setEntRef(query, temp_token_chain_2)));
+            setCallEntRef(query, temp_token_chain_1),
+            setCallEntRef(query, temp_token_chain_2)));
         break;
     }
-    //TODO
+    
     case QueryToken::CALLS_T: {
         // entRef , entRef
 
@@ -568,8 +597,8 @@ void PatternRelRefValidator::parseParameterSuchThat(
         }
 
         query.addRelation(RelRef(RelType::CALLS_T,
-            setEntRef(query, temp_token_chain_1),
-            setEntRef(query, temp_token_chain_2)));
+            setCallEntRef(query, temp_token_chain_1),
+            setCallEntRef(query, temp_token_chain_2)));
         break;
     }
 
