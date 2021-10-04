@@ -102,6 +102,9 @@
     <ClCompile Include="CallsTEvaluatorTest.cpp">
       <Filter>PQL\QueryEvaluator\RelationEvaluator</Filter>
     </ClCompile>
+    <ClCompile Include="QueryOptimizerTest.cpp">
+      <Filter>PQL</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />

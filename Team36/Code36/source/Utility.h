@@ -37,7 +37,6 @@ public:
 	static std::vector<std::string> mergeColumnEqual(std::vector<std::vector<std::string>>&);
 
 	static std::vector<std::vector<std::string>> joinTable(std::vector<std::vector<std::string>>&, int, std::unordered_multimap<std::string, std::vector<std::string>>&, int);
-	static std::vector<std::vector<std::string>> joinTable(std::vector<std::vector<std::string>>&, int, int, std::unordered_map<std::string, std::unordered_multimap<std::string, std::vector<std::string>>>&, int, int);
 
 	static EntityType queryTokenTypeToEntityType(QueryToken::QueryTokenType&);
 };

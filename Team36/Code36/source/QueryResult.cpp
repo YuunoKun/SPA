@@ -48,13 +48,11 @@ void QueryResult::addResult(ResultTable t) {
 	while (!results.empty()) {
 		ResultTable r = results.back();
 		results.pop_back();
-		if (t.merge(r)) {
-			if (t.isEmpty()) {
-				have_result = false;
-				return;
-			}
-		}
-		else {
+		bool merged = t.merge(r);
+		if (merged && t.isEmpty()) {
+			have_result = false;
+			return;
+		}else if(!merged) {
 			newResults.push_back(r);
 		}
 	}
