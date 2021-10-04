@@ -9,6 +9,8 @@
 #include "Query.h"
 #include "PatternRelRefValidator.h"
 #include "Utility.h"
+#include "SemanticErrorException.h"
+#include "SyntacticErrorException.h"
 
 QueryPreprocessor::QueryPreprocessor() {
 }
@@ -21,6 +23,41 @@ Query QueryPreprocessor::parse(std::string str) {
 	query_tokenizer.parse_into_query_tokens(str);
 
 	std::vector<QueryToken> v = query_tokenizer.get_query_token_chain();
+
+	//std::vector<QueryToken> v;
+	//v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "stmt" });
+	//v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "s" });
+	//v.push_back({ QueryToken::QueryTokenType::TERMINATOR, "" });
+	//v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "constant" });
+	//v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "c" });
+	//v.push_back({ QueryToken::QueryTokenType::TERMINATOR, "" });
+	//v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "Select" });
+	//v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "s" });
+	//v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "with" });
+	//v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "s" });
+	//v.push_back({ QueryToken::QueryTokenType::DOT, "" });
+	//v.push_back({ QueryToken::QueryTokenType::STMT_INDEX, "" });
+	//v.push_back({ QueryToken::QueryTokenType::EQUAL, "" });
+	//v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "c" });
+	//v.push_back({ QueryToken::QueryTokenType::DOT, "" });
+	//v.push_back({ QueryToken::QueryTokenType::VALUE, "" });
+	//v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "and" });
+	//v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "s" });
+	//v.push_back({ QueryToken::QueryTokenType::EQUAL, "" });
+	//v.push_back({ QueryToken::QueryTokenType::CONSTANT, "10" });
+
+	//v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "assign" });
+	//v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "a" });
+	//v.push_back({ QueryToken::QueryTokenType::TERMINATOR, "" });
+	//v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "Select" });
+	//v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "a" });
+	//v.push_back({ QueryToken::QueryTokenType::SUCH_THAT, "" });
+	//v.push_back({ QueryToken::QueryTokenType::AFFECTS_T, "" });
+	//v.push_back({ QueryToken::QueryTokenType::PARENTHESIS_OPEN, "" });
+	//v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "a" });
+	//v.push_back({ QueryToken::QueryTokenType::COMMA, "" });
+	//v.push_back({ QueryToken::QueryTokenType::CONSTANT, "10" });
+	//v.push_back({ QueryToken::QueryTokenType::PARENTHESIS_CLOSE, "" });
 
 	// Collection of declared query tokens
 	std::vector<QueryToken> output;
@@ -39,8 +76,9 @@ Query QueryPreprocessor::parse(std::string str) {
 
 	// To keep track if there another declaration
 	bool haveNextDeclaration = false;
+
 	// Keep track if it the end of current declaration by terminator
-	bool endOfCurrentDeclaration = true;;
+	bool endOfCurrentDeclaration = true;
 
 	// To keep track of previous token during Selection
 	QueryToken prevTokenSelect = QueryToken();
@@ -87,7 +125,7 @@ Query QueryPreprocessor::parse(std::string str) {
 					}
 				}
 				else {
-					throw std::runtime_error("Invalid declaration");
+					throw SyntacticErrorException("Invalid declaration");
 				}
 			}
 			else if (!haveNextDeclaration && !endOfCurrentDeclaration && token.type == QueryToken::QueryTokenType::TERMINATOR) {
@@ -97,7 +135,7 @@ Query QueryPreprocessor::parse(std::string str) {
 				haveNextDeclaration = true;
 			}
 			else {
-				throw std::runtime_error("Invalid declaration");
+				throw SyntacticErrorException("Invalid declaration");
 			}
 			prevToken = token;
 		}
@@ -115,19 +153,48 @@ Query QueryPreprocessor::parse(std::string str) {
 					patternOrSuchThat = { QueryToken::QueryTokenType::PATTERN, "pattern" };
 					endOfCurrentClauses = false;
 				}
-				else {
-					throw std::runtime_error("Invalid query");
+				else if (token.type == QueryToken::QueryTokenType::IDENTIFIER &&
+					token.token_value == "with") {
+					patternOrSuchThat = { QueryToken::QueryTokenType::WITH, "" };
+					isParameter = true;
+					endOfCurrentClauses = false;
 				}
-
+				else if (token.type == QueryToken::QueryTokenType::IDENTIFIER &&
+					token.token_value == "and") {
+					if (patternOrSuchThat.type != QueryToken::QueryTokenType::PATTERN &&
+						patternOrSuchThat.type != QueryToken::QueryTokenType::SUCH_THAT &&
+						patternOrSuchThat.type != QueryToken::QueryTokenType::WITH) {
+						throw SyntacticErrorException("The keyword 'and' should come after pattern/ relations have been initalized previously");
+					}
+					if (patternOrSuchThat.type == QueryToken::QueryTokenType::PATTERN) {
+						isExpectingPatternType = true;
+					}
+					else if (patternOrSuchThat.type == QueryToken::QueryTokenType::WITH) {
+						isParameter = true;
+					}
+					endOfCurrentClauses = false;
+				}
+				else {
+					throw SyntacticErrorException("Invalid query");
+				}
 			}
 			else {
 				if (token.type == QueryToken::QueryTokenType::SUCH_THAT) {
-					throw std::runtime_error("Invalid query");
+					throw SyntacticErrorException("Invalid query");
 				}
-				// pattern only valid when previous token is either identifier or )
-				else if (isParameter && token.type != QueryToken::QueryTokenType::PARENTHESIS_CLOSE) {
+				// pattern and such that will have parameter inside brackets
+				// with will have parameter as long as the token is not "and", "pattern" or "such that"
+				else if (isParameter && (((patternOrSuchThat.type == QueryToken::QueryTokenType::PATTERN ||
+					patternOrSuchThat.type == QueryToken::QueryTokenType::SUCH_THAT) &&
+					token.type != QueryToken::QueryTokenType::PARENTHESIS_CLOSE) ||
+					(patternOrSuchThat.type == QueryToken::QueryTokenType::WITH &&
+						token.token_value != "and" &&
+						token.token_value != "with" &&
+						token.token_value != "pattern" &&
+						token.type != QueryToken::QueryTokenType::SUCH_THAT))) {
 					parameterClause.push_back(token);
-				}else if (patternOrSuchThat.type == QueryToken::QueryTokenType::SUCH_THAT) {
+				}
+				else if (patternOrSuchThat.type == QueryToken::QueryTokenType::SUCH_THAT) {
 					if (!isParameter && token.type == QueryToken::QueryTokenType::PARENTHESIS_OPEN) {
 						isParameter = true;
 						setQueryParameter(prevTokenSelect, queryParameter);
@@ -151,24 +218,39 @@ Query QueryPreprocessor::parse(std::string str) {
 					else if (isParameter && token.type == QueryToken::QueryTokenType::PARENTHESIS_CLOSE) {
 						isParameter = false;
 						endOfCurrentClauses = true;
-						if (patternTypeEntity.getType() == EntityType::ASSIGN) {
+						if (patternTypeEntity.getType() == EntityType::ASSIGN ||
+							patternTypeEntity.getType() == EntityType::WHILE ||
+							patternTypeEntity.getType() == EntityType::IF) {
 							validator.parseParameterPattern(query, patternTypeEntity, parameterClause);
 							parameterClause.clear();
 						}
 						else {
-							throw std::runtime_error("Invalid pattern type");
+							throw SemanticErrorException("Invalid pattern type");
 						}
 					}
-				}else {
-					throw std::runtime_error("Invalid query");
+				}
+				else if (patternOrSuchThat.type == QueryToken::QueryTokenType::WITH) {
+					if (isParameter && (token.token_value == "and" ||
+						token.token_value == "pattern" ||
+						token.token_value == "with" ||
+						token.type == QueryToken::QueryTokenType::SUCH_THAT)) {
+						isParameter = false;
+						endOfCurrentClauses = true;
+						// TODO: call jiyu's method
+						// validator.parseWith(query, parameterClause);
+						parameterClause.clear();
+					}
+				}
+				else {
+					throw SyntacticErrorException("Invalid query");
 				}
 			}
-			
+
 			prevTokenSelect = token;
 		}
 	}
 	if (!endOfCurrentClauses) {
-		throw std::runtime_error("Invalid query");
+		throw SyntacticErrorException("Invalid query");
 	}
 	QueryPreprocessor::validateQuery(query);
 	return query;
@@ -207,12 +289,16 @@ QueryToken QueryPreprocessor::setIdentifierToQueryTokenType(QueryToken& prevToke
 		else if (token.token_value == "constant") {
 			temp = { QueryToken::QueryTokenType::CONSTANT, "constant" };
 		}
+		else if (token.token_value == "prog_line") {
+			temp = { QueryToken::QueryTokenType::PROG_LINE, "prog_line" };
+		}
 		// Need to enforce that Select must only come after a terminator
 		else if (prevToken.type == QueryToken::QueryTokenType::TERMINATOR && token.token_value == "Select") {
 			temp = { QueryToken::QueryTokenType::SELECT, "Select" };
 		}
 		else {
-			throw std::runtime_error("Invalid syntax for declaration or select");
+			//throw std::runtime_error("Invalid syntax for declaration or select");
+			throw SyntacticErrorException("Invalid syntax for declaration or select");
 		}
 	}
 	return temp;
@@ -225,11 +311,11 @@ void QueryPreprocessor::validateDeclarationQuery(QueryToken& prevToken, QueryTok
 			prevToken.type != QueryToken::QueryTokenType::TERMINATOR &&
 			prevToken.type != QueryToken::QueryTokenType::COMMA &&
 			prevToken.type != QueryToken::QueryTokenType::WHITESPACE)) {
-		throw std::runtime_error("During declaration, only identifier can exists excluding terminator and whitespace");
+		throw SyntacticErrorException("During declaration, only identifier can exists excluding terminator and whitespace");
 	}
 	if (prevToken.type == QueryToken::QueryTokenType::COMMA &&
 		token.type != QueryToken::QueryTokenType::IDENTIFIER) {
-		throw std::runtime_error("During declaration, only identifier is accepted after comma.");
+		throw SyntacticErrorException("During declaration, only identifier is accepted after comma.");
 	}
 }
 
@@ -237,7 +323,7 @@ void QueryPreprocessor::addEntityToQuery(Query& query, Entity& ent, std::vector<
 	// Check if entity name is already used, exists in output, should return error
 	for (QueryToken each : output) {
 		if (token.token_value == each.token_value) {
-			throw std::runtime_error("Name is already used!");
+			throw SemanticErrorException("Name is already used!");
 		}
 	}
 
@@ -262,7 +348,7 @@ void QueryPreprocessor::addPatternToQuery(Entity& patternTypeEntity, std::vector
 		}
 	}
 	if (!isValid) {
-		throw std::runtime_error("Pattern type has not been declared");
+		throw SemanticErrorException("Pattern type has not been declared");
 	}
 }
 
@@ -279,40 +365,53 @@ void QueryPreprocessor::addSelectedToQuery(Query& query, Entity& ent, std::vecto
 		}
 	}
 	if (!isValid) {
-		throw std::runtime_error("Select variable content has not been declared");
+		throw SemanticErrorException("Select variable content has not been declared");
 	}
 	isSelect = true;
 	query.addSelected(ent);
 }
 
 void QueryPreprocessor::setQueryParameter(QueryToken& prevTokenSelect, QueryToken& queryParameter) {
+	// USES_P to be handled in PatternRelRefValidator
 	if (prevTokenSelect.token_value == "Uses" && prevTokenSelect.type == QueryToken::QueryTokenType::IDENTIFIER) {
 		queryParameter = { QueryToken::QueryTokenType::USES_S, "Uses" };
 	}
+	// MODIFIES_P to be handled in PatternRelRefValidator
 	else if (prevTokenSelect.token_value == "Modifies" && prevTokenSelect.type == QueryToken::QueryTokenType::IDENTIFIER) {
 		queryParameter = { QueryToken::QueryTokenType::MODIFIES_S, "Modifies" };
 	}
 	else if (prevTokenSelect.token_value == "Parent" && prevTokenSelect.type == QueryToken::QueryTokenType::IDENTIFIER) {
 		queryParameter = { QueryToken::QueryTokenType::PARENT, "Parent" };
 	}
-	else if (prevTokenSelect.token_value == "Follows" && prevTokenSelect.type == QueryToken::QueryTokenType::IDENTIFIER) {
-		queryParameter = { QueryToken::QueryTokenType::FOLLOWS, "Follows" };
-	}
 	else if (prevTokenSelect.token_value == "" && prevTokenSelect.type == QueryToken::QueryTokenType::PARENT_T) {
 		queryParameter = { QueryToken::QueryTokenType::PARENT_T, "" };
 	}
+	else if (prevTokenSelect.token_value == "Follows" && prevTokenSelect.type == QueryToken::QueryTokenType::IDENTIFIER) {
+		queryParameter = { QueryToken::QueryTokenType::FOLLOWS, "Follows" };
+	}
 	else if (prevTokenSelect.token_value == "" && prevTokenSelect.type == QueryToken::QueryTokenType::FOLLOWS_T) {
 		queryParameter = { QueryToken::QueryTokenType::FOLLOWS_T, "" };
+	}
+	else if (prevTokenSelect.token_value == "Next" && prevTokenSelect.type == QueryToken::QueryTokenType::IDENTIFIER) {
+		queryParameter = { QueryToken::QueryTokenType::NEXT, "Next" };
+	}
+	else if (prevTokenSelect.token_value == "" && prevTokenSelect.type == QueryToken::QueryTokenType::NEXT_T) {
+		queryParameter = { QueryToken::QueryTokenType::NEXT_T, "" };
+	}
+	else if (prevTokenSelect.token_value == "Affects" && prevTokenSelect.type == QueryToken::QueryTokenType::IDENTIFIER) {
+		queryParameter = { QueryToken::QueryTokenType::AFFECTS, "Affects" };
+	}
+	else if (prevTokenSelect.token_value == "" && prevTokenSelect.type == QueryToken::QueryTokenType::AFFECTS_T) {
+		queryParameter = { QueryToken::QueryTokenType::AFFECTS_T, "" };
 	}
 }
 
 void QueryPreprocessor::validateQuery(Query& query) {
 	if (query.getEntities().size() == 0) {
-		throw std::runtime_error("No declaration has been made in your query");
+		throw SyntacticErrorException("No declaration has been made in your query");
 	}
-	// TODO: only size 1 is allowed for iteration 1, would allow multiple selects in future iterations
-	if (query.getSelected().size() != 1) {
-		throw std::runtime_error("There is no selected variable in your query");
+	if (query.getSelected().size() == 0) {
+		throw SyntacticErrorException("There is no selected variable in your query");
 	}
 
 	// Final check
@@ -327,8 +426,9 @@ void QueryPreprocessor::validateQuery(Query& query) {
 			ent.second.getType() != EntityType::WHILE &&
 			ent.second.getType() != EntityType::VARIABLE &&
 			ent.second.getType() != EntityType::CONSTANT &&
+			ent.second.getType() != EntityType::PROG_LINE &&
 			ent.second.getType() != EntityType::ASSIGN) {
-			throw std::runtime_error("Declaration fails!");
+			throw SyntacticErrorException("Declaration fails!");
 		}
 	}
 }

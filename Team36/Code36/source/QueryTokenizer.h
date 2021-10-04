@@ -2,6 +2,8 @@
 #include <string>
 #include <vector>
 #include "QueryToken.h"
+#include "SemanticErrorException.h"
+#include "SyntacticErrorException.h"
 
 class QueryTokenizer
 {
