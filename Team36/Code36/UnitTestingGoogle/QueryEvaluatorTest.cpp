@@ -97,6 +97,8 @@ namespace UnitTesting {
 				for (unsigned int j = 0; j < ALL_SELECT.size(); j++) {
 					Query q = initQuery(patterns[i], ALL_SELECT[j]);
 					EXPECT_EQ(evaluator.evaluateQuery(q).front(), ALL_RESULT[j]) << "Error at results : " << i + 1 << " : " << j + 1;
+					q = initQuery(patterns[i], SELECT_BOOLEAN);
+					EXPECT_EQ(evaluator.evaluateQuery(q).front(), BOOLEAN_TRUE_RESULT) << "Error at results : " << i + 1 << " : " << j + 1;
 				}
 			}
 		}
@@ -106,6 +108,8 @@ namespace UnitTesting {
 				for (unsigned int j = 0; j < ALL_SELECT.size(); j++) {
 					Query q = initQuery(patterns[i], ALL_SELECT[j]);
 					EXPECT_EQ(evaluator.evaluateQuery(q).front(), EMPTY_RESULT) << "Error at results : " << i + 1 << " : " << j + 1;
+					q = initQuery(patterns[i], SELECT_BOOLEAN);
+					EXPECT_EQ(evaluator.evaluateQuery(q).front(), BOOLEAN_FALSE_RESULT) << "Error at results : " << i + 1 << " : " << j + 1;
 				}
 			}
 		}
@@ -115,6 +119,8 @@ namespace UnitTesting {
 				for (unsigned int j = 0; j < ALL_SELECT.size(); j++) {
 					Query q = initQuery(relations[i], ALL_SELECT[j]);
 					EXPECT_EQ(evaluator.evaluateQuery(q).front(), ALL_RESULT[j]) << "Error at results : " << i + 1 << " : " << j + 1;
+					q = initQuery(relations[i], SELECT_BOOLEAN);
+					EXPECT_EQ(evaluator.evaluateQuery(q).front(), BOOLEAN_TRUE_RESULT) << "Error at results : " << i + 1 << " : " << j + 1;
 				}
 			}
 		}
@@ -124,6 +130,8 @@ namespace UnitTesting {
 				for (unsigned int j = 0; j < ALL_SELECT.size(); j++) {
 					Query q = initQuery(relations[i], ALL_SELECT[j]);
 					EXPECT_EQ(evaluator.evaluateQuery(q).front(), EMPTY_RESULT) << "Error at results : " << i + 1 << " : " << j + 1;
+					q = initQuery(relations[i], SELECT_BOOLEAN);
+					EXPECT_EQ(evaluator.evaluateQuery(q).front(), BOOLEAN_FALSE_RESULT) << "Error at results : " << i + 1 << " : " << j + 1;
 				}
 			}
 		}
@@ -133,6 +141,8 @@ namespace UnitTesting {
 				for (unsigned int j = 0; j < selected.size(); j++) {
 					Query q = initQuery(relations[i], ALL_SELECT[j]);
 					EXPECT_EQ(evaluator.evaluateQuery(q).front(), results[j]) << "Error at results : " << i + 1 << " : " << j + 1;
+					q = initQuery(relations[i], SELECT_BOOLEAN);
+					EXPECT_EQ(evaluator.evaluateQuery(q).front(), BOOLEAN_TRUE_RESULT) << "Error at results : " << i + 1 << " : " << j + 1;
 				}
 			}
 		}
@@ -270,6 +280,9 @@ namespace UnitTesting {
 		const std::list<std::string> ALL_CALL = { CALL1, CALL2 };
 		const Entity SELECT_CALL = { CALL, COMMON_SYNONYM1 };
 
+		// select Boolean
+		const Entity SELECT_BOOLEAN = { BOOLEAN };
+
 		const std::vector<std::list<std::string>> ALL_RESULT = {
 			ALL_VARIABLE , ALL_CONSTANT , ALL_PROCEDURE, ALL_STMT, ALL_IF,
 			ALL_WHILE, ALL_READ, ALL_PRINT, ALL_ASSIGN, ALL_CALL };
@@ -279,6 +292,8 @@ namespace UnitTesting {
 			SELECT_WHILE, SELECT_READ, SELECT_PRINT, SELECT_ASSIGN, SELECT_CALL };
 
 		const std::list<std::string> EMPTY_RESULT = {};
+		const std::list<std::string> BOOLEAN_TRUE_RESULT = { BOOLEAN_TRUE };
+		const std::list<std::string> BOOLEAN_FALSE_RESULT = { BOOLEAN_FALSE };
 
 		const Entity WILD_CARD = { WILD };
 
@@ -1454,7 +1469,7 @@ namespace UnitTesting {
 		invalidRight.push_back({ VARIABLE, z });
 
 		for (unsigned int k = 0; k < invalidRight.size(); k++) {
-			for (unsigned int i = 0; i < VALID_CONSTANT_STMT_ENTITY.size(); i++) {
+			for (unsigned int i = 1; i < VALID_CONSTANT_STMT_ENTITY.size(); i++) {
 				relations.push_back(RelRef(type, VALID_CONSTANT_STMT_ENTITY[i], invalidRight[k]));
 			}
 		}
@@ -1685,7 +1700,7 @@ namespace UnitTesting {
 		invalidRight.push_back({ VARIABLE, z });
 
 		for (unsigned int k = 0; k < invalidRight.size(); k++) {
-			for (unsigned int i = 0; i < VALID_CONSTANT_STMT_ENTITY.size(); i++) {
+			for (unsigned int i = 1; i < VALID_CONSTANT_STMT_ENTITY.size(); i++) {
 				relations.push_back(RelRef(type, VALID_CONSTANT_STMT_ENTITY[i], invalidRight[k]));
 			}
 		}
