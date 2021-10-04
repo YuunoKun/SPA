@@ -18,8 +18,8 @@ namespace UnitTesting {
 			PKB::getInstance().addConstant({ c2 });
 			PKB::getInstance().addConstant({ c3 });
 			PKB::getInstance().addProcedure(p1);
-			//PKB::getInstance().addProcedure(p2);
-			//PKB::getInstance().addProcedure(p3);
+			PKB::getInstance().addProcedure(p2);
+			PKB::getInstance().addProcedure(p3);
 			PKB::getInstance().addStmt(STMT_IF);
 			PKB::getInstance().addStmt(STMT_IF);
 			PKB::getInstance().addStmt(STMT_WHILE);
@@ -42,8 +42,12 @@ namespace UnitTesting {
 			PKB::getInstance().addModifiesS(std::stoi(MODIFIES_LEFT2), MODIFIES_RIGHT2);
 			PKB::getInstance().addModifiesS(std::stoi(MODIFIES_LEFT3), MODIFIES_RIGHT3);
 			PKB::getInstance().addModifiesS(std::stoi(MODIFIES_LEFT4), MODIFIES_RIGHT4);
+			PKB::getInstance().addModifiesP(MODIFIES_P_LEFT1, MODIFIES_RIGHT1);
+			PKB::getInstance().addModifiesP(MODIFIES_P_LEFT1, MODIFIES_RIGHT2);
 			PKB::getInstance().addUsesS(std::stoi(USES_LEFT1), USES_RIGHT1);
 			PKB::getInstance().addUsesS(std::stoi(USES_LEFT2), USES_RIGHT2);
+			PKB::getInstance().addUsesP(USES_P_LEFT1, USES_RIGHT1);
+			PKB::getInstance().addUsesP(USES_P_LEFT1, USES_RIGHT2);
 			PKB::getInstance().addExprTree(std::stoi(MODIFIES_LEFT3), EXPRESSION1);
 			PKB::getInstance().addExprTree(std::stoi(MODIFIES_LEFT4), EXPRESSION2);
 			PKB::getInstance().generateFollowsT();
@@ -89,9 +93,9 @@ namespace UnitTesting {
 
 
 		const proc_name p1 = "main";
-		const std::list<std::string> PROCEDURES = { p1 };
-		//const proc_name p2 = "sub";
-		//const proc_name p3 = "sub1";
+		const proc_name p2 = "sub";
+		const proc_name p3 = "sub1";
+		const std::list<std::string> PROCEDURES = { p1, p2, p3 };
 
 		const std::string IF1 = "1";
 		const std::string IF2 = "2";
@@ -169,11 +173,15 @@ namespace UnitTesting {
 		const std::string MODIFIES_RIGHT2 = y;
 		const std::list<std::string> EXPECTED_MODIFIES1 = { x };
 		const std::list<std::string> EXPECTED_MODIFIES2 = { y };
+		const std::list<std::string> EXPECTED_MODIFIES3 = { x, y };
 
 		const std::string MODIFIES_LEFT3 = ASSIGN1;
 		const std::string MODIFIES_LEFT4 = ASSIGN2;
 		const std::string MODIFIES_RIGHT3 = x;
 		const std::string MODIFIES_RIGHT4 = y;
+
+		const std::string MODIFIES_P_LEFT1 = p1;
+
 
 		const std::string EXPRESSION1 = "x";
 		const std::string EXPRESSION2 = "x + (y * 5)";
@@ -194,8 +202,14 @@ namespace UnitTesting {
 		const std::string USES_LEFT2 = "3";
 		const std::string USES_RIGHT1 = y;
 		const std::string USES_RIGHT2 = x;
+		const std::string USES_P_LEFT1 = p1;
+
+
 		const std::list<std::string> EXPECTED_USES1 = { y };
 		const std::list<std::string> EXPECTED_USES2 = { x };
+		const std::list<std::string> EXPECTED_USES3 = { y, x };
+
+
 
 
 		const std::vector<std::string> USES_LEFTS = { USES_LEFT1, USES_LEFT2 };
@@ -296,6 +310,12 @@ namespace UnitTesting {
 		validateAnswer(EXPECTED_MODIFIES2, ans);
 	}
 
+	TEST_F(PQLPKBTest, SuchThatModifiesPTest) {
+		std::list<std::string> ans = qs.processQuery("procedure p; variable v; Select v such that Modifies(p, v)");
+
+		validateAnswer(EXPECTED_MODIFIES3, ans);
+	}
+
 	TEST_F(PQLPKBTest, SuchThatUsesSTest1) {
 		std::list<std::string> ans = qs.processQuery("variable v; Select v such that Uses(1,v)");
 
@@ -307,6 +327,13 @@ namespace UnitTesting {
 
 		validateAnswer(EXPECTED_USES2, ans);
 	}
+
+	TEST_F(PQLPKBTest, SuchThatUsesPTest) {
+		std::list<std::string> ans = qs.processQuery("procedure p; variable v; Select v such that Uses(p,v)");
+
+		validateAnswer(EXPECTED_USES3, ans);
+	}
+
 	
 	TEST_F(PQLPKBTest, SuchThatParentTest1) {
 		std::list<std::string> ans = qs.processQuery("stmt s; Select s such that Parent(1,s)");
