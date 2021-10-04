@@ -79,7 +79,7 @@ bool PatternRelRefValidator::isEntRef(Query& query, std::vector<QueryToken> toke
                 throw SyntacticErrorException("Undeclared entRef");
             }
         } else {
-            throw SyntacticErrorException("Invalid EntRef arguments");
+            return false;
         }
 
     } else if (token_chain.size() == 3) {
