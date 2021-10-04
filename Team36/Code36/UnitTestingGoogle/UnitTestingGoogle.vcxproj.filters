@@ -104,6 +104,7 @@
     </ClCompile>
     <ClCompile Include="QueryOptimizerTest.cpp">
       <Filter>PQL</Filter>
+	</ClCompile>
     <ClCompile Include="ExprNodeTest.cpp">
       <Filter>Common</Filter>
     </ClCompile>
