@@ -37,6 +37,10 @@ namespace SourceProcessor {
 
 		std::vector<var_name> getModifiedVariable();
 
+		void addUsesCondVariable(var_name);
+
+		std::vector<var_name> getUsedCondVariable();
+
 		void setExprStr(std::string);
 
 		std::string getExprStr();
@@ -55,6 +59,7 @@ namespace SourceProcessor {
 		int statement_list_no{ 0 };
 		std::unordered_set<var_name> statement_uses;
 		std::unordered_set<var_name> statement_modifies;
+		std::unordered_set<var_name> statement_uses_cond;
 		std::string statement_expr;
 		proc_name statement_callee;
 	};

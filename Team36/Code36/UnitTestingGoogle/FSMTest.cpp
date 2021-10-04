@@ -22,6 +22,8 @@ namespace UnitTesting {
 
 		void endNesting() {}
 
+		void setCondExpr(bool flag) {}
+
 		void addProcedure(proc_name name) {
 			std::cout << "Adds procedure : " << name << std::endl;
 		}
