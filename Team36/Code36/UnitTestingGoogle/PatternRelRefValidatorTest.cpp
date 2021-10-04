@@ -1810,6 +1810,58 @@ namespace UnitTesting {
 
 		EXPECT_THROW(validator.parseParameterSuchThat(query, QueryToken::MODIFIES_S, temp_token_chain), SemanticErrorException);
 	}
+	
+	TEST(PatternRelRefValidatorTest, semanticInvalidModifiesSVarVarTest) {
+		Query query;
+
+		//Expected
+		Synonym synonym;
+		synonym.name = "v";
+		Entity expected_1 = Entity(EntityType::VARIABLE, synonym);
+		query.addEntity(expected_1);
+
+		Synonym synonym2;
+		synonym2.name = "v1";
+		Entity expected_2 = Entity(EntityType::VARIABLE, synonym2);
+		query.addEntity(expected_2);
+
+		//RelRef expected_rel = RelRef(RelType::MODIFIES_P, expected_1, expected_2);
+
+		//Result
+		PatternRelRefValidator validator;
+		std::vector<QueryToken> temp_token_chain;
+		temp_token_chain.push_back({ QueryToken::IDENTIFIER, "v" });
+		temp_token_chain.push_back({ QueryToken::COMMA, "" });
+		temp_token_chain.push_back({ QueryToken::IDENTIFIER, "v1" });
+
+		EXPECT_THROW(validator.parseParameterSuchThat(query, QueryToken::MODIFIES_S, temp_token_chain), SemanticErrorException);
+	}
+
+	TEST(PatternRelRefValidatorTest, semanticInvalidModifiesPProcProcTest) {
+		Query query;
+
+		//Expected
+		Synonym synonym;
+		synonym.name = "p";
+		Entity expected_1 = Entity(EntityType::VARIABLE, synonym);
+		query.addEntity(expected_1);
+
+		Synonym synonym2;
+		synonym2.name = "p1";
+		Entity expected_2 = Entity(EntityType::VARIABLE, synonym2);
+		query.addEntity(expected_2);
+
+		//RelRef expected_rel = RelRef(RelType::MODIFIES_P, expected_1, expected_2);
+
+		//Result
+		PatternRelRefValidator validator;
+		std::vector<QueryToken> temp_token_chain;
+		temp_token_chain.push_back({ QueryToken::IDENTIFIER, "p" });
+		temp_token_chain.push_back({ QueryToken::COMMA, "" });
+		temp_token_chain.push_back({ QueryToken::IDENTIFIER, "v" });
+
+		EXPECT_THROW(validator.parseParameterSuchThat(query, QueryToken::MODIFIES_S, temp_token_chain), SemanticErrorException);
+	}
 
 	// UsesS, UsesP Test
 	// test semantically invalid Uses with 1st param as WILDCARD

@@ -21,6 +21,8 @@ private:
 
 	bool PatternRelRefValidator::isEntRef(Query&, std::vector<QueryToken>);
 
+	bool PatternRelRefValidator::isCorrectSynEntRef(Query&, std::vector<QueryToken>, EntityType);
+
 public: 
 
 	PatternRelRefValidator();
