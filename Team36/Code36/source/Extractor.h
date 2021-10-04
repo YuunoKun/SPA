@@ -9,13 +9,15 @@ namespace SourceProcessor {
 
 	class Extractor {
 	public:
-		virtual ~Extractor() {}
+		virtual ~Extractor() {};
 
 		virtual void startNesting() = 0;
 
 		virtual void chopNesting() = 0;
 
 		virtual void endNesting() = 0;
+
+		virtual void setCondExpr(bool) = 0;
 
 		virtual void addProcedure(proc_name) = 0;
 

@@ -7,6 +7,7 @@
 #include "Extractor.h"
 #include "Procedure.h"
 #include "Statement.h"
+#include "ExprParser.h"
 
 
 
@@ -17,13 +18,15 @@ namespace SourceProcessor {
 
 		DesignExtractor();
 
-		~DesignExtractor() override;
+		~DesignExtractor();
 
 		void startNesting() override;
 
 		void chopNesting() override;
 
 		void endNesting() override;
+
+		void setCondExpr(bool) override;
 
 		void addProcedure(proc_name) override;
 
@@ -74,6 +77,7 @@ namespace SourceProcessor {
 		std::string expr_builder;
 		int curr_stmt_list_id;
 		std::vector<proc_index> call_sequence;
+		bool is_cond_expr;
 
 		void populateProcedures(PKB&);
 		void populateStatements(PKB&);
@@ -84,7 +88,10 @@ namespace SourceProcessor {
 		void populateParent(PKB&);
 		void populateUses(PKB&);
 		void populateModifies(PKB&);
+		void populateCalls(PKB&);
 
+		void populateIfs(PKB&);
+		void populateWhiles(PKB&);
 	};
 
 } // namespace SourceProcessor

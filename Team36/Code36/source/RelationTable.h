@@ -5,6 +5,7 @@
 #include <iostream>
 #include <string>
 #include <unordered_map>
+#include <unordered_set>
 #include <vector>
 #include "Common.h"
 
@@ -38,6 +39,7 @@ public:
 protected:
 	std::unordered_map<T, std::vector<S>> forward_table;
 	std::unordered_map<S, std::vector<T>> backward_table;
+	std::unordered_map<T, std::unordered_set<S>> lookup_table;
 	bool uniqueKey;
 };
 

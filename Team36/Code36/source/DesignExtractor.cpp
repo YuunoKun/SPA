@@ -11,6 +11,7 @@ DesignExtractor::DesignExtractor() {
 	curr_proc_id = 0;
 	curr_stmt_id = 0;
 	curr_stmt_list_id = 1;
+	is_cond_expr = false;
 }
 
 
@@ -43,6 +44,11 @@ void DesignExtractor::endNesting() {
 	
 	curr_stmt_list_id = de_statements[curr_nesting_stk.top() - 1]->getStmtList();
 	curr_nesting_stk.pop();
+}
+
+
+void DesignExtractor::setCondExpr(bool flag) {
+	is_cond_expr = flag;
 }
 
 
@@ -129,6 +135,10 @@ const std::unordered_set<constant>& DesignExtractor::getConstants() {
 
 void DesignExtractor::addStatementUses(var_name name) {
 	de_statements[curr_stmt_id - 1]->addUsesVariable(name);
+
+	if (is_cond_expr) {
+		de_statements[curr_stmt_id - 1]->addUsesCondVariable(name);
+	}
 
 	stmt_index curr = curr_stmt_id;
 	stmt_index parent = de_statements[curr - 1]->getDirectParent();
@@ -290,6 +300,10 @@ void DesignExtractor::populateRelations(PKB& pkb) {
 	pkb.generateParentT();
 	populateUses(pkb);
 	populateModifies(pkb);
+	populateCalls(pkb);
+	pkb.generateCallsPT();
+	populateIfs(pkb);
+	populateWhiles(pkb);
 }
 
 
@@ -373,6 +387,38 @@ void DesignExtractor::populateModifies(PKB& pkb) {
 	for (Procedure* p : de_procedures) {
 		for (var_name modified_var : p->getModifiedVariable()) {
 			pkb.addModifiesP(p->getName(), modified_var);
+		}
+	}
+}
+
+
+void DesignExtractor::populateCalls(PKB& pkb) {
+	for (Statement* s : de_statements) {
+		if (s->getType() == StmtType::STMT_CALL) {
+			pkb.addCallsS(s->getIndex(), s->getCallee());
+			pkb.addCallsP(s->getProcName(), s->getCallee());
+		}
+	}
+}
+
+
+void DesignExtractor::populateIfs(PKB& pkb) {
+	for (Statement* s : de_statements) {
+		if (s->getType() == StmtType::STMT_IF) {
+			for (var_name v : s->getUsedCondVariable()) {
+				pkb.addIf(s->getIndex(), v);
+			}
+		}
+	}
+}
+
+
+void DesignExtractor::populateWhiles(PKB& pkb) {
+	for (Statement* s : de_statements) {
+		if (s->getType() == StmtType::STMT_WHILE) {
+			for (var_name v : s->getUsedCondVariable()) {
+				pkb.addWhile(s->getIndex(), v);
+			}
 		}
 	}
 }
