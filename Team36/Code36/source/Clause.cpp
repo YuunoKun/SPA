@@ -1,11 +1,11 @@
 #include "Clause.h"
 
-Clause::Clause(RelRef rel) {
+Clause::Clause(RelRef& rel) {
 	this->rel = rel;
 	this->type = RELATION;
 }
 
-Clause::Clause(Pattern pattern) {
+Clause::Clause(Pattern& pattern) {
 	this->pattern = pattern;
 	this->type = PATTERN;
 }

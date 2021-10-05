@@ -35,6 +35,8 @@ public:
 	bool contains(ExprNode*);
 	bool equals(ExprNode*);
 
+
+	bool operator==(const ExprNode&);
 	ExprNode& operator=(const ExprNode&);
 
 private:

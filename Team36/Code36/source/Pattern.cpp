@@ -27,7 +27,7 @@ Pattern::Pattern() {
 }
 
 Pattern::~Pattern() {
-	//delete this->expression;
+	delete this->expression;
 }
 
 Entity Pattern::getPatternType() {

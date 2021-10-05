@@ -279,16 +279,16 @@
       <Filter>Header Files\PKB</Filter>
     </ClInclude>
     <ClInclude Include="..\source\Entity.h">
-      <Filter>Header Files\PQL\QueryEvaluator\QueryObject</Filter>
+      <Filter>Header Files\PQL\QueryObject</Filter>
     </ClInclude>
     <ClInclude Include="..\source\Pattern.h">
-      <Filter>Header Files\PQL\QueryEvaluator\QueryObject</Filter>
+      <Filter>Header Files\PQL\QueryObject</Filter>
     </ClInclude>
     <ClInclude Include="..\source\Query.h">
-      <Filter>Header Files\PQL\QueryEvaluator\QueryObject</Filter>
+      <Filter>Header Files\PQL\QueryObject</Filter>
     </ClInclude>
     <ClInclude Include="..\source\RelRef.h">
-      <Filter>Header Files\PQL\QueryEvaluator\QueryObject</Filter>
+      <Filter>Header Files\PQL\QueryObject</Filter>
     </ClInclude>
     <ClInclude Include="..\source\Pattern.h">
       <Filter>Header Files\PQL\QueryObject</Filter>
@@ -348,7 +348,7 @@
       <Filter>Header Files\PKB</Filter>
     </ClInclude>
     <ClInclude Include="..\source\Clause.h">
-      <Filter>Header Files\PQL\QueryEvaluator\QueryObject</Filter>
+      <Filter>Header Files\PQL\QueryObject</Filter>
     </ClInclude>
     <ClInclude Include="..\source\NextTEvaluator.h">
       <Filter>Header Files\PQL\QueryEvaluator\RelationEvaluator</Filter>

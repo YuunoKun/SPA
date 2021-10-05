@@ -10,8 +10,8 @@ enum ClauseType {
 
 class Clause {
 public:
-	Clause(RelRef);
-	Clause(Pattern);
+	Clause(RelRef&);
+	Clause(Pattern&);
 
 	ClauseType getType();
 	RelRef getRelation();

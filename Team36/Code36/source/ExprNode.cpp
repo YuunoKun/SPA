@@ -104,6 +104,13 @@ bool ExprNode::equals(ExprNode* expr) {
 }
 
 
+bool ExprNode::operator==(const ExprNode& other) {
+	if (symbol == other.symbol && value == other.value) {
+		return ((!lhs && !other.lhs) || (lhs == rhs));
+	}
+	return false;
+}
+
 ExprNode& ExprNode::operator=(const ExprNode& to_copy) {
 	return ExprNode(to_copy);
 }
