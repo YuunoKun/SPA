@@ -1,7 +1,8 @@
 #include "Pattern.h"
 #include <iostream>
+#include "ExprParser.h"
 
-Pattern::Pattern(Entity pattern_type, Entity left_expression, expr expression, bool is_wild) {
+Pattern::Pattern(Entity pattern_type, Entity left_expression, std::string expr, bool is_wild) {
 	// Checks that pattern types are valid
 	if (pattern_type.getType() != static_cast<EntityType>(ASSIGN)) {
 		throw std::invalid_argument("Pattern Type is invalid");
@@ -14,11 +15,12 @@ Pattern::Pattern(Entity pattern_type, Entity left_expression, expr expression, b
 
 	this->pattern_type = pattern_type;
 	this->left_expression = left_expression;
-	this->expression = expression;
+	this->expression = expr_parser.parse(expr);
 	this->is_wild = is_wild;
 }
 
 Pattern::Pattern() {
+	this->expression = expr_parser.parse("");
 }
 
 Entity Pattern::getPatternType() {
@@ -29,7 +31,7 @@ Entity Pattern::getLeftExpression() {
 	return left_expression;
 }
 
-std::string Pattern::getExpression() {
+expr* Pattern::getExpression() {
 	return expression;
 }
 
@@ -41,6 +43,6 @@ bool Pattern::isWild() {
 bool Pattern::operator==(const Pattern& pattern) const {
 	return pattern_type == pattern.pattern_type
 		&& left_expression == pattern.left_expression
-		&& expression == pattern.expression
+		&& expression->equals(pattern.expression)
 		&& is_wild == pattern.is_wild;
 }

@@ -6,14 +6,12 @@
 
 using namespace SourceProcessor;
 
-
 DesignExtractor::DesignExtractor() {
 	curr_proc_id = 0;
 	curr_stmt_id = 0;
 	curr_stmt_list_id = 1;
 	is_cond_expr = false;
 }
-
 
 DesignExtractor::~DesignExtractor() {
 	for (Procedure* p : de_procedures) {
@@ -25,41 +23,35 @@ DesignExtractor::~DesignExtractor() {
 	}
 }
 
-
 void DesignExtractor::startNesting() {
 	curr_nesting_stk.push(curr_stmt_id);
 	curr_stmt_list_id = curr_stmt_id + 1;
 }
 
-
 void DesignExtractor::chopNesting() {
 	curr_stmt_list_id = curr_stmt_id + 1;
 }
-
 
 void DesignExtractor::endNesting() {
 	if (curr_nesting_stk.empty()) {
 		throw std::runtime_error("Failed to end nesting. Current stmt : " + curr_stmt_id);
 	}
-	
+
 	curr_stmt_list_id = de_statements[curr_nesting_stk.top() - 1]->getStmtList();
 	curr_nesting_stk.pop();
 }
-
 
 void DesignExtractor::setCondExpr(bool flag) {
 	is_cond_expr = flag;
 }
 
-
 void DesignExtractor::addProcedure(proc_name name) {
 	curr_proc_id++;
 
-	Procedure *proc = new Procedure(name, curr_proc_id);
+	Procedure* proc = new Procedure(name, curr_proc_id);
 	curr_stmt_list_id = curr_stmt_id + 1;
 	de_procedures.push_back(proc);
 }
-
 
 void DesignExtractor::addStatement(TokenType token_type) {
 	StmtType stmt_type;
@@ -88,10 +80,9 @@ void DesignExtractor::addStatement(TokenType token_type) {
 		break;
 	}
 
-
 	curr_stmt_id++;
-	Statement *stmt = new Statement(curr_stmt_id, stmt_type, de_procedures[curr_proc_id - 1]->getName(), curr_stmt_list_id);
-	
+	Statement* stmt = new Statement(curr_stmt_id, stmt_type, de_procedures[curr_proc_id - 1]->getName(), curr_stmt_list_id);
+
 	if (!curr_nesting_stk.empty() && curr_nesting_stk.top() != curr_stmt_id) {
 		stmt->setDirectParent(curr_nesting_stk.top());
 		de_statements[curr_nesting_stk.top() - 1]->addDirectChild(stmt->getIndex());
@@ -101,37 +92,29 @@ void DesignExtractor::addStatement(TokenType token_type) {
 	de_procedures[curr_proc_id - 1]->addChild(curr_stmt_id);
 }
 
-
 void DesignExtractor::addVariable(var_name name) {
 	de_variables.insert(name);
 }
-
 
 void DesignExtractor::addConstant(constant val) {
 	de_constants.insert(val);
 }
 
-
 const std::vector<Procedure*>& DesignExtractor::getProcedures() {
 	return de_procedures;
 }
-
 
 const std::vector<Statement*>& DesignExtractor::getStatements() {
 	return de_statements;
 }
 
-
 const std::unordered_set<var_name>& DesignExtractor::getVariables() {
 	return de_variables;
 }
 
-
 const std::unordered_set<constant>& DesignExtractor::getConstants() {
 	return de_constants;
 }
-
-
 
 void DesignExtractor::addStatementUses(var_name name) {
 	de_statements[curr_stmt_id - 1]->addUsesVariable(name);
@@ -151,7 +134,6 @@ void DesignExtractor::addStatementUses(var_name name) {
 	de_procedures[curr_proc_id - 1]->addUsesVariable(name);
 }
 
-
 void DesignExtractor::addStatementModifies(var_name name) {
 	de_statements[curr_stmt_id - 1]->addModifiesVariable(name);
 
@@ -166,11 +148,9 @@ void DesignExtractor::addStatementModifies(var_name name) {
 	de_procedures[curr_proc_id - 1]->addModifiesVariable(name);
 }
 
-
 void DesignExtractor::startExpr() {
 	expr_builder = "";
 }
-
 
 void DesignExtractor::addExprSegment(std::string segment) {
 	if (de_statements[curr_stmt_id - 1]->getType() == StmtType::STMT_ASSIGN) {
@@ -178,22 +158,19 @@ void DesignExtractor::addExprSegment(std::string segment) {
 	}
 }
 
-
 void DesignExtractor::endExpr() {
 	de_statements[curr_stmt_id - 1]->setExprStr(expr_builder);
 	expr_builder.erase();
 }
 
-
 void DesignExtractor::addCallee(proc_name name) {
 	de_statements[curr_stmt_id - 1]->setCallee(name);
 }
 
-
 void DesignExtractor::validate() {
 	// Validate procedure names
-	for (Procedure *p: de_procedures) {
-		auto result = proc_name_to_id.insert({p->getName(), p->getIndex()});
+	for (Procedure* p : de_procedures) {
+		auto result = proc_name_to_id.insert({ p->getName(), p->getIndex() });
 		if (!result.second) {
 			throw std::runtime_error("Duplicate procedure names detected.");
 		}
@@ -205,7 +182,7 @@ void DesignExtractor::validate() {
 		if (s->getType() == StmtType::STMT_CALL) {
 			proc_name callee = s->getCallee();
 			if (proc_name_to_id.find(callee) != proc_name_to_id.end()) {
-				call_cache.push_back({ proc_name_to_id[s->getProcName()], proc_name_to_id [callee]});
+				call_cache.push_back({ proc_name_to_id[s->getProcName()], proc_name_to_id[callee] });
 			}
 			else {
 				throw std::runtime_error("Call statement calls undefined procedure.");
@@ -264,7 +241,7 @@ void DesignExtractor::populatePostValidation() {
 				}
 			}
 
-			if(s->getDirectParent() != 0) {
+			if (s->getDirectParent() != 0) {
 				Statement* parent = de_statements[s->getDirectParent() - 1];
 				for (auto used_var : s->getUsedVariable()) {
 					parent->addUsesVariable(used_var);
@@ -284,14 +261,12 @@ void DesignExtractor::populatePostValidation() {
 	}
 }
 
-
 void DesignExtractor::populateEntities(PKB& pkb) {
 	populateProcedures(pkb);
 	populateStatements(pkb);
 	populateVariables(pkb);
 	populateConstants(pkb);
 }
-
 
 void DesignExtractor::populateRelations(PKB& pkb) {
 	populateFollows(pkb);
@@ -306,24 +281,22 @@ void DesignExtractor::populateRelations(PKB& pkb) {
 	populateWhiles(pkb);
 }
 
-
 void DesignExtractor::populateProcedures(PKB& pkb) {
 	for (Procedure* p : de_procedures) {
 		pkb.addProcedure(p->getName());
 	}
 }
 
-
 void DesignExtractor::populateStatements(PKB& pkb) {
+	ExprParser expr_parser;
 	for (Statement* s : de_statements) {
 		pkb.addStmt(s->getType());
 
 		if (s->getType() == StmtType::STMT_ASSIGN) {
-			pkb.addExprTree(s->getIndex(), s->getExprStr());
+			pkb.addExprTree(s->getIndex(), expr_parser.parse(s->getExprStr()));
 		}
 	}
 }
-
 
 void DesignExtractor::populateVariables(PKB& pkb) {
 	for (var_name v : de_variables) {
@@ -331,14 +304,11 @@ void DesignExtractor::populateVariables(PKB& pkb) {
 	}
 }
 
-
 void DesignExtractor::populateConstants(PKB& pkb) {
 	for (constant c : de_constants) {
 		pkb.addConstant(c);
 	}
 }
-
-
 
 void DesignExtractor::populateFollows(PKB& pkb) {
 	std::unordered_map<int, stmt_index> um;
@@ -352,7 +322,6 @@ void DesignExtractor::populateFollows(PKB& pkb) {
 	}
 }
 
-
 void DesignExtractor::populateParent(PKB& pkb) {
 	for (Statement* s : de_statements) {
 		for (stmt_index id : s->getDirectChild()) {
@@ -360,7 +329,6 @@ void DesignExtractor::populateParent(PKB& pkb) {
 		}
 	}
 }
-
 
 void DesignExtractor::populateUses(PKB& pkb) {
 	for (Statement* s : de_statements) {
@@ -376,7 +344,6 @@ void DesignExtractor::populateUses(PKB& pkb) {
 	}
 }
 
-
 void DesignExtractor::populateModifies(PKB& pkb) {
 	for (Statement* s : de_statements) {
 		for (var_name modified_var : s->getModifiedVariable()) {
@@ -391,7 +358,6 @@ void DesignExtractor::populateModifies(PKB& pkb) {
 	}
 }
 
-
 void DesignExtractor::populateCalls(PKB& pkb) {
 	for (Statement* s : de_statements) {
 		if (s->getType() == StmtType::STMT_CALL) {
@@ -400,7 +366,6 @@ void DesignExtractor::populateCalls(PKB& pkb) {
 		}
 	}
 }
-
 
 void DesignExtractor::populateIfs(PKB& pkb) {
 	for (Statement* s : de_statements) {
@@ -411,7 +376,6 @@ void DesignExtractor::populateIfs(PKB& pkb) {
 		}
 	}
 }
-
 
 void DesignExtractor::populateWhiles(PKB& pkb) {
 	for (Statement* s : de_statements) {

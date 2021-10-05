@@ -5,8 +5,7 @@
 
 namespace UnitTesting {
 	TEST(Clause, PatternClause) {
-
-		Pattern pattern({ ASSIGN, Synonym{ "a" } }, { VARIABLE, Synonym{ "v" } }, {}, true);
+		Pattern pattern({ ASSIGN, Synonym{ "a" } }, { VARIABLE, Synonym{ "v" } }, "", true);
 		Clause clause(pattern);
 		EXPECT_EQ(clause.getPattern(), pattern);
 		EXPECT_EQ(clause.getType(), PATTERN);

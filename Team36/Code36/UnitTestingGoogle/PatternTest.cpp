@@ -4,12 +4,17 @@
 #include "Common.h"
 
 namespace UnitTesting {
+	ExprParser expr_parser;
 	Entity validLeftExpressionType1(VARIABLE, Synonym{ "variableType" });
 	Entity validLeftExpressionType2(WILD, Synonym{ "wildType" });
 	Entity validPatternType(ASSIGN, Synonym{ "assignType" });
 	Entity invalidType1(STMT, Synonym{ "assignType" });
 	Entity invalidType2(IF, Synonym{ "assignType" });
 	Entity invalidType3(CALL, Synonym{ "assignType" });
+	std::string validExpression = "x+y / 3";
+	std::string emptyExpression = "";
+	expr* validExprNode = expr_parser.parse(validExpression);
+	expr* emptyExprNode = expr_parser.parse(emptyExpression);
 
 	TEST(Pattern, patternTypeInvalid) {
 		try {
@@ -49,12 +54,12 @@ namespace UnitTesting {
 		EXPECT_EQ(pattern.getPatternType(), validPatternType);
 	}
 
-	//TODO: test case to be update with expression parser
 	TEST(Pattern, getExpression) {
-		//entity testentity(stmt, "test");
-		//tnode tnode;
-		//pattern pattern(testentity, tnode, true);
-		//expct_eq(pattern.getexpression(), tnode);
+		Pattern pattern1(validPatternType, validLeftExpressionType2, validExpression, true);
+		EXPECT_TRUE(pattern1.getExpression()->equals(validExprNode));
+
+		Pattern pattern2(validPatternType, validLeftExpressionType2, emptyExpression, true);
+		EXPECT_TRUE(pattern2.getExpression()->equals(emptyExprNode));
 	}
 
 	TEST(Pattern, isWild) {
@@ -66,8 +71,8 @@ namespace UnitTesting {
 	}
 
 	TEST(Pattern, equal) {
-		Pattern e1(validPatternType, validLeftExpressionType1, {}, true);
-		Pattern e2(validPatternType, validLeftExpressionType1, {}, true);
+		Pattern e1(validPatternType, validLeftExpressionType1, validExpression, true);
+		Pattern e2(validPatternType, validLeftExpressionType1, validExpression, true);
 		EXPECT_EQ(e1, e2);
 
 		Pattern e3(validPatternType, validLeftExpressionType1, {}, false);

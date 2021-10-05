@@ -43,8 +43,8 @@ namespace UnitTesting {
 			PKB::getInstance().addModifiesS(std::stoi(MODIFIES_LEFT4), MODIFIES_RIGHT4);
 			PKB::getInstance().addUsesS(std::stoi(USES_LEFT1), USES_RIGHT1);
 			PKB::getInstance().addUsesS(std::stoi(USES_LEFT2), USES_RIGHT2);
-			PKB::getInstance().addExprTree(std::stoi(MODIFIES_LEFT3), EXPRESSION1);
-			PKB::getInstance().addExprTree(std::stoi(MODIFIES_LEFT4), EXPRESSION2);
+			PKB::getInstance().addExprTree(std::stoi(MODIFIES_LEFT3), EXPRESSIONNODE_1);
+			PKB::getInstance().addExprTree(std::stoi(MODIFIES_LEFT4), EXPRESSIONNODE_2);
 			PKB::getInstance().generateFollowsT();
 			PKB::getInstance().generateParentT();
 		}
@@ -762,6 +762,10 @@ namespace UnitTesting {
 			return patterns;
 		}
 
+		PKBAdapter pkb;
+		QueryEvaluator evaluator;
+		ExprParser expr_parser;
+
 		const var_name x = "x";
 		const var_name y = "y";
 		const var_name z = "z";
@@ -818,6 +822,8 @@ namespace UnitTesting {
 
 		const std::string EXPRESSION1 = "x";
 		const std::string EXPRESSION2 = "x + y";
+		expr* EXPRESSIONNODE_1 = expr_parser.parse(EXPRESSION1);
+		expr* EXPRESSIONNODE_2 = expr_parser.parse(EXPRESSION2);
 
 		const std::vector<std::string> MODIFIES_LEFTS = { MODIFIES_LEFT1, MODIFIES_LEFT2, MODIFIES_LEFT3, MODIFIES_LEFT4 };
 		const std::vector<std::string> MODIFIES_RIGHTS = { MODIFIES_RIGHT1, MODIFIES_RIGHT2, MODIFIES_RIGHT3, MODIFIES_RIGHT4 };
@@ -833,8 +839,6 @@ namespace UnitTesting {
 
 		const std::list<std::string> STMTS = { IF1, IF2, WHILE1, WHILE2, READ1, READ2,
 			PRINT1, PRINT2, ASSIGN1, ASSIGN2, CALL1, CALL2 };
-		PKBAdapter pkb;
-		QueryEvaluator evaluator;
 
 		const Synonym COMMON_SYNONYM1 = { "cs1" };
 		const Synonym COMMON_SYNONYM2 = { "cs2" };

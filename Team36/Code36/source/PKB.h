@@ -22,7 +22,7 @@ public:
 	void addProcedure(proc_name proc_name) override;
 	void addVariable(var_name var_name) override;
 	void addStmt(StmtType stmt_type) override;
-	void addExprTree(stmt_index stmt_index, expr expr) override;
+	void addExprTree(stmt_index stmt_index, expr* expr) override;
 
 	void addParent(stmt_index parent, stmt_index child) override;
 	void addFollows(stmt_index first, stmt_index second) override;
@@ -45,10 +45,10 @@ public:
 	const std::vector<StmtInfo>& getStmts() override;
 	const StmtInfo getStmt(stmt_index stmt_index) override;
 	const var_name getAssignment(stmt_index stmt_index) override;
-	const expr getExpression(stmt_index stmt_index) override;
+	expr getExpression(stmt_index stmt_index) override;
 	const std::vector<constant> getConstants() override;
 	const UniqueRelationTable<stmt_index, var_name>& getAssigns();
-	const UniqueRelationTable<stmt_index, expr>& getExpr() override;
+	const UniqueRelationTable<stmt_index, expr*>& getExpr() override;
 	const UniqueRelationTable<StmtInfo, StmtInfo>& getFollows() override;
 	const RelationTable<StmtInfo, StmtInfo>& getParent() override;
 	const RelationTable<StmtInfo, StmtInfo>& getFollowsT() override;
@@ -75,7 +75,7 @@ private:
 	std::vector<StmtInfo> stmt_table;
 	std::unordered_set<constant> const_table;
 	UniqueRelationTable<stmt_index, var_name> assignment_table;
-	UniqueRelationTable<stmt_index, expr> expr_table;
+	UniqueRelationTable<stmt_index, expr*> expr_table;
 	UniqueRelationTable<StmtInfo, StmtInfo> follows_table;
 	RelationTable<StmtInfo, StmtInfo> parent_table;
 	RelationTable<StmtInfo, StmtInfo> followsT_table;

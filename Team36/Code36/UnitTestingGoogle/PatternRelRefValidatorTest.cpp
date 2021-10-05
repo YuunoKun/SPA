@@ -133,12 +133,12 @@ namespace UnitTesting {
 		std::vector<QueryToken> temp_token_chain;
 
 		//Expected
-		expr expect_expr = "s";
+		std::string expect_expr = "s";
 
 		//Result
 		QueryToken stmt_s_token = QueryToken(QueryToken::IDENTIFIER, "s");
 		temp_token_chain.push_back(stmt_s_token);
-		expr result_expr = validator.setExpr(temp_token_chain);
+		std::string result_expr = validator.setExpr(temp_token_chain);
 
 		EXPECT_TRUE(expect_expr == result_expr);
 	}
@@ -317,7 +317,7 @@ namespace UnitTesting {
 	}
 
 	// Invalid tests -------------------------------------------------------------------------------------------------------------------------------
-	
+
 	// Invalid Follows tests------------------------------------------------------------------------------------------------------------------------
 	TEST(PatternRelRefValidatorTest, invalidUndeclaredSynonymFollowsTest) {
 		PatternRelRefValidator validator;
@@ -369,7 +369,6 @@ namespace UnitTesting {
 
 		//Result
 
-
 		//EXPECT_TRUE(query.getRelations()[0] == expected_rel);
 
 		try {
@@ -380,7 +379,7 @@ namespace UnitTesting {
 			EXPECT_EQ(err.what(), std::string("Invalid parameters for Uses"));
 		}
 		catch (...) {
-			// Test case should fail if not caught as runtime_error 
+			// Test case should fail if not caught as runtime_error
 			FAIL();
 		}
 	}
@@ -404,7 +403,7 @@ namespace UnitTesting {
 			EXPECT_EQ(err.what(), std::string("Invalid parameters for Modifies"));
 		}
 		catch (...) {
-			// Test case should fail if not caught as runtime_error 
+			// Test case should fail if not caught as runtime_error
 			FAIL();
 		}
 	}
@@ -520,7 +519,7 @@ namespace UnitTesting {
 			FAIL();
 		}
 	}
-	
+
 	TEST(PatternRelRefValidatorTest, invalidUndeclaredSynonymParamModifiesSTest2) {
 		PatternRelRefValidator validator;
 
@@ -631,7 +630,6 @@ namespace UnitTesting {
 		temp_token_chain.push_back({ QueryToken::QUOTATION_OPEN, "" });
 		temp_token_chain.push_back({ QueryToken::QUOTATION_CLOSE, "" });
 
-
 		try {
 			validator.parseParameterSuchThat(query, QueryToken::MODIFIES_S, temp_token_chain);
 			FAIL();
@@ -656,8 +654,6 @@ namespace UnitTesting {
 		temp_token_chain.push_back({ QueryToken::COMMA, "" });
 		temp_token_chain.push_back({ QueryToken::CONSTANT, "1" });
 
-
-
 		try {
 			validator.parseParameterSuchThat(query, QueryToken::MODIFIES_S, temp_token_chain);
 			FAIL();
@@ -681,7 +677,6 @@ namespace UnitTesting {
 		temp_token_chain.push_back({ QueryToken::COMMA, "" });
 		temp_token_chain.push_back({ QueryToken::QUOTATION_OPEN, "" });
 
-
 		try {
 			validator.parseParameterSuchThat(query, QueryToken::MODIFIES_S, temp_token_chain);
 			FAIL();
@@ -704,7 +699,6 @@ namespace UnitTesting {
 		temp_token_chain.push_back({ QueryToken::QUOTATION_OPEN, "" });
 		temp_token_chain.push_back({ QueryToken::COMMA, "" });
 		temp_token_chain.push_back({ QueryToken::CONSTANT, "1" });
-
 
 		try {
 			validator.parseParameterSuchThat(query, QueryToken::MODIFIES_S, temp_token_chain);
@@ -754,7 +748,7 @@ namespace UnitTesting {
 		temp_token_chain.push_back({ QueryToken::QUOTATION_CLOSE, "" });
 		temp_token_chain.push_back({ QueryToken::QUOTATION_OPEN, "" });
 		temp_token_chain.push_back({ QueryToken::COMMA, "" });
-		temp_token_chain.push_back({ QueryToken::CONSTANT, "1" });	
+		temp_token_chain.push_back({ QueryToken::CONSTANT, "1" });
 
 		try {
 			validator.parseParameterSuchThat(query, QueryToken::MODIFIES_S, temp_token_chain);
@@ -781,7 +775,6 @@ namespace UnitTesting {
 		temp_token_chain.push_back({ QueryToken::COMMA, "" });
 		temp_token_chain.push_back({ QueryToken::IDENTIFIER, "v" });
 
-
 		try {
 			validator.parseParameterSuchThat(query, QueryToken::MODIFIES_S, temp_token_chain);
 			FAIL();
@@ -795,5 +788,4 @@ namespace UnitTesting {
 			FAIL();
 		}
 	}
-
 }

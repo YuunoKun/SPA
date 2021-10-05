@@ -3,6 +3,7 @@
 #include "PKB.h"
 #include "PKB.cpp"
 #include "Common.h"
+#include "ExprParser.h"
 #include <iostream>
 
 namespace UnitTesting {
@@ -23,7 +24,6 @@ namespace UnitTesting {
 			// Code here will be called immediately after each test (right
 			// before the destructor).
 		}
-
 		// Class members declared here can be used by all tests in the test suite
 		// for Foo.
 	};
@@ -83,18 +83,19 @@ namespace UnitTesting {
 
 	TEST(PKB, getExpr) {
 		PKB::getInstance().resetCache();
+		ExprParser expr_parser;
 
-		auto one = std::make_pair(1, "x");
-		auto two = std::make_pair(2, "x+y");
-		auto three = std::make_pair(3, "x");
-		auto four = std::make_pair(4, "");
-		auto zero = std::make_pair(0, "");
+		auto one = std::make_pair(1, expr_parser.parse("x"));
+		auto two = std::make_pair(2, expr_parser.parse("x+y"));
+		auto three = std::make_pair(3, expr_parser.parse("x"));
+		auto four = std::make_pair(4, expr_parser.parse(""));
+		auto zero = std::make_pair(0, expr_parser.parse(""));
 
 		PKB::getInstance().addStmt(STMT_ASSIGN);
 		PKB::getInstance().addStmt(STMT_ASSIGN);
 		PKB::getInstance().addStmt(STMT_READ);
 
-		UniqueRelationTable<stmt_index, expr> expr_table;
+		UniqueRelationTable<stmt_index, expr*> expr_table;
 		expr_table.insert(one.first, one.second);
 		expr_table.insert(two.first, two.second);
 

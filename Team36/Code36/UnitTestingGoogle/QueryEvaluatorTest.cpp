@@ -47,8 +47,8 @@ namespace UnitTesting {
 			PKB::getInstance().addModifiesP(MODIFIESP_LEFT2, MODIFIESP_RIGHT2);
 			PKB::getInstance().addUsesP(USESP_LEFT1, USESP_RIGHT1);
 			PKB::getInstance().addUsesP(USESP_LEFT2, USESP_RIGHT2);
-			PKB::getInstance().addExprTree(std::stoi(MODIFIES_LEFT3), EXPRESSION1);
-			PKB::getInstance().addExprTree(std::stoi(MODIFIES_LEFT4), EXPRESSION2);
+			PKB::getInstance().addExprTree(std::stoi(MODIFIES_LEFT3), EXPRESSIONNODE_1);
+			PKB::getInstance().addExprTree(std::stoi(MODIFIES_LEFT4), EXPRESSIONNODE_2);
 			PKB::getInstance().generateFollowsT();
 			PKB::getInstance().generateParentT();
 		}
@@ -134,6 +134,10 @@ namespace UnitTesting {
 			}
 		}
 
+		PKBAdapter pkb;
+		QueryEvaluator evaluator;
+		ExprParser expr_parser;
+
 		const var_name x = "x";
 		const var_name y = "y";
 		const var_name z = "z";
@@ -189,8 +193,11 @@ namespace UnitTesting {
 		const std::string MODIFIES_RIGHT4 = y;
 
 		const std::string EXPRESSION1 = "x";
-		const std::string EXPRESSION2 = "x + (y * 5)";
+		const std::string EXPRESSION2 = "x + y";
 		const std::string EXPRESSION_CONSTANT = "5";
+		expr* EXPRESSIONNODE_1 = expr_parser.parse(EXPRESSION1);
+		expr* EXPRESSIONNODE_2 = expr_parser.parse(EXPRESSION2);
+		expr* EXPRESSIONNODE_CONSTANT = expr_parser.parse(EXPRESSION_CONSTANT);
 
 		const std::vector<std::string> MODIFIES_LEFTS = { MODIFIES_LEFT1, MODIFIES_LEFT2, MODIFIES_LEFT3, MODIFIES_LEFT4 };
 		const std::vector<std::string> MODIFIES_RIGHTS = { MODIFIES_RIGHT1, MODIFIES_RIGHT2, MODIFIES_RIGHT3, MODIFIES_RIGHT4 };
@@ -222,8 +229,6 @@ namespace UnitTesting {
 
 		const std::list<std::string> STMTS = { IF1, IF2, WHILE1, WHILE2, READ1, READ2,
 			PRINT1, PRINT2, ASSIGN1, ASSIGN2, CALL1, CALL2 };
-		PKBAdapter pkb;
-		QueryEvaluator evaluator;
 
 		const Synonym COMMON_SYNONYM1 = { "cs1" };
 		const Synonym COMMON_SYNONYM2 = { "cs2" };
@@ -1928,13 +1933,11 @@ namespace UnitTesting {
 		q = initQuery(relation, selected);
 		EXPECT_EQ(evaluator.evaluateQuery(q).front(), result);
 
-
 		//Test case for Select a such that MODIFIES_P(VARIABLE, "z")
 		result = {  };
 		relation = { type, selected, { VARIABLE, z } };
 		q = initQuery(relation, selected);
 		EXPECT_EQ(evaluator.evaluateQuery(q).front(), result);
-
 
 		//Test case for Select a such that MODIFIES_P(a, selected)
 		result = { right1, right2 };
@@ -1942,7 +1945,6 @@ namespace UnitTesting {
 		relation = { type, { PROCEDURE, COMMON_SYNONYM2 }, selected };
 		q = initQuery(relation, selected);
 		EXPECT_EQ(evaluator.evaluateQuery(q).front(), result);
-
 
 		//Test case for Select a such that MODIFIES_P("main1", selected)
 		result = { right1 };
@@ -1962,9 +1964,7 @@ namespace UnitTesting {
 		relation = { type, { PROCEDURE, p3 }, selected };
 		q = initQuery(relation, selected);
 		EXPECT_EQ(evaluator.evaluateQuery(q).front(), result);
-
 	}
-
 
 	//USES_P Relation Test ----------------------------------------------------------------------------------------------------
 	TEST_F(QueryEvaluatorTest, evaluateQueryUsesPBooleanTrue) {
@@ -2051,13 +2051,11 @@ namespace UnitTesting {
 		q = initQuery(relation, selected);
 		EXPECT_EQ(evaluator.evaluateQuery(q).front(), result);
 
-
 		//Test case for Select a such that MODIFIES_P(VARIABLE, "z")
 		result = {  };
 		relation = { type, selected, { VARIABLE, z } };
 		q = initQuery(relation, selected);
 		EXPECT_EQ(evaluator.evaluateQuery(q).front(), result);
-
 
 		//Test case for Select a such that MODIFIES_P(a, selected)
 		result = { right1, right2 };
@@ -2065,7 +2063,6 @@ namespace UnitTesting {
 		relation = { type, { PROCEDURE, COMMON_SYNONYM2 }, selected };
 		q = initQuery(relation, selected);
 		EXPECT_EQ(evaluator.evaluateQuery(q).front(), result);
-
 
 		//Test case for Select a such that MODIFIES_P("main1", selected)
 		result = { right1 };
@@ -2085,9 +2082,7 @@ namespace UnitTesting {
 		relation = { type, { PROCEDURE, p3 }, selected };
 		q = initQuery(relation, selected);
 		EXPECT_EQ(evaluator.evaluateQuery(q).front(), result);
-
 	}
-
 
 	//Pattern Test ----------------------------------------------------------------------------------------------------
 	TEST_F(QueryEvaluatorTest, evaluateQueryPatternFilterNoCommonSynonymTrue) {

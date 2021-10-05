@@ -11,7 +11,6 @@ typedef enum EXPR_SYMBOL {
 	EXPR_IDENTIFIER
 } ExprSymbol;
 
-
 class ExprNode {
 public:
 
@@ -26,10 +25,10 @@ public:
 	void setLHS(ExprNode*);
 	void setRHS(ExprNode*);
 
-	ExprSymbol getSymbol();
-	std::string getValue();
-	ExprNode* getLHS();
-	ExprNode* getRHS();
+	ExprSymbol getSymbol() const;
+	std::string getValue() const;
+	ExprNode* getLHS() const;
+	ExprNode* getRHS() const;
 
 	bool contains(ExprNode*);
 	bool equals(ExprNode*);
@@ -38,7 +37,7 @@ private:
 	ExprNode();
 
 	ExprSymbol symbol;
-	std::string value{""};
-	ExprNode* lhs{nullptr};
-	ExprNode* rhs{nullptr};
+	std::string value{ "" };
+	ExprNode* lhs{ nullptr };
+	ExprNode* rhs{ nullptr };
 };

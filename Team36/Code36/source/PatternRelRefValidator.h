@@ -6,9 +6,9 @@
 #include "Query.h"
 #include "QueryToken.h"
 
-
 class PatternRelRefValidator {
 private:
+	static ExprParser expr_parser;
 
 	bool PatternRelRefValidator::isStmtRef(Query&, std::vector<QueryToken>);
 
@@ -16,7 +16,7 @@ private:
 
 	bool PatternRelRefValidator::isEntRef(Query&, std::vector<QueryToken>);
 
-public: 
+public:
 
 	PatternRelRefValidator();
 
@@ -28,5 +28,5 @@ public:
 
 	Entity setEntRef(Query&, std::vector<QueryToken>);
 
-	expr setExpr(std::vector<QueryToken>);
+	std::string setExpr(std::vector<QueryToken>);
 };
