@@ -900,6 +900,18 @@ namespace UnitTesting {
 		EXPECT_THROW(qp.parse("assign a; variable v; Select a pattern pattern a(v, _)"), SemanticErrorException);
 		queries.clear();
 
+		EXPECT_THROW(qp.parse("assign a;; stmt s; Select s"), SyntacticErrorException);
+		queries.clear();
+
+		EXPECT_THROW(qp.parse("assign a; stmt; s; Select s"), SyntacticErrorException);
+		queries.clear();
+
+		EXPECT_THROW(qp.parse("assign a a1; stmt s; Select s"), SyntacticErrorException);
+		queries.clear();
+
+		EXPECT_THROW(qp.parse("assign a; a1; stmt s; Select s"), SyntacticErrorException);
+		queries.clear();
+
 		EXPECT_THROW(qp.parse("assign a; stmt s; Select s Such that Follows(s,a)"), SyntacticErrorException);
 		queries.clear();
 

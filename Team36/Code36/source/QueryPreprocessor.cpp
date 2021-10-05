@@ -136,15 +136,8 @@ Query QueryPreprocessor::parse(std::string str) {
 			else if (haveNextDeclaration) {
 				Entity ent;
 				if (token.type == QueryToken::QueryTokenType::IDENTIFIER) {
-					//if (declarationType.type == QueryToken::QueryTokenType::SELECT) {
-					//if (status == ParseStatus::IS_SELECTING) {
-					//	addSelectedToQuery(query, ent, output, selected, token, isSelect);
-					//	haveNextDeclaration = false;
-					//}
-					//else {
 					addEntityToQuery(query, ent, output, declarationType, token);
 					haveNextDeclaration = false;
-					//}
 				}
 				else {
 					throw SyntacticErrorException("Invalid declaration");
@@ -199,6 +192,19 @@ Query QueryPreprocessor::parse(std::string str) {
 				// Select content
 				//else if (declarationType.type == QueryToken::QueryTokenType::SELECT) {
 				else if (status == ParseStatus::IS_SELECTING) {
+					// Validation
+					if (prevTokenSelect.type == QueryToken::QueryTokenType::IDENTIFIER ||
+						prevTokenSelect.type == QueryToken::QueryTokenType::PARENTHESIS_CLOSE ||
+						prevTokenSelect.type == QueryToken::QueryTokenType::PROC_NAME ||
+						prevTokenSelect.type == QueryToken::QueryTokenType::VAR_NAME ||
+						prevTokenSelect.type == QueryToken::QueryTokenType::STMT_INDEX ||
+						prevTokenSelect.type == QueryToken::QueryTokenType::VALUE &&
+						token.type != QueryToken::QueryTokenType::SUCH_THAT &&
+						token.type != QueryToken::QueryTokenType::PATTERN &&
+						token.type != QueryToken::QueryTokenType::WITH) {
+						throw SyntacticErrorException("After selection needs to have such that or pattern clause");
+					}
+
 					// if Select has attribute ie. Select p.procName
 					if (token.type == QueryToken::QueryTokenType::DOT &&
 						prevToken.type == QueryToken::QueryTokenType::IDENTIFIER) {
