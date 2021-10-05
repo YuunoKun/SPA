@@ -1,4 +1,7 @@
 #pragma once
+#include "QueryToken.h"
+#include "SemanticErrorException.h"
+#include "SyntacticErrorException.h"
 
 class QueryValidator {
 public:
@@ -6,5 +9,6 @@ public:
 	// Constructor
 	QueryValidator();
 
-private:
+	// Methods
+	void validateSelectMultipleClauses(QueryToken&, QueryToken&);
 };

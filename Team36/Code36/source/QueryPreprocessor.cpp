@@ -6,6 +6,7 @@
 #include "Entity.h"
 #include "QueryToken.h"
 #include "QueryTokenizer.h"
+#include "QueryValidator.h"
 #include "Query.h"
 #include "PatternRelRefValidator.h"
 #include "Utility.h"
@@ -66,6 +67,7 @@ QueryPreprocessor::QueryPreprocessor() {
 Query QueryPreprocessor::parse(std::string str) {
 	QueryTokenizer query_tokenizer;
 	PatternRelRefValidator validator;
+	QueryValidator queryValidator = QueryValidator();
 
 	query_tokenizer.parse_into_query_tokens(str);
 
@@ -128,7 +130,7 @@ Query QueryPreprocessor::parse(std::string str) {
 		// Check what is my previous token
 		if (!isSelect) {
 			if (endOfCurrentDeclaration) {
-				setIdentifierToQueryTokenType(token, status);
+				setIdentifierToQueryTokenType(token);
 				haveNextDeclaration = true;
 				endOfCurrentDeclaration = false;
 			}
@@ -215,44 +217,12 @@ Query QueryPreprocessor::parse(std::string str) {
 					else if (status != ParseStatus::IS_SELECTING_MULTIPLE_CLAUSE &&
 						prevToken.token_value == "Select" &&
 						token.type == QueryToken::QueryTokenType::IDENTIFIER) {
-						Entity ent;
-						addSelectedToQuery(ent, token);
+						addSelectedToQuery(token);
 						haveNextDeclaration = false;
 					}
 				}
 				else if (status == ParseStatus::IS_SELECTING_MULTIPLE_CLAUSE) {
-					if (token.type == QueryToken::QueryTokenType::IDENTIFIER &&
-						prevTokenSelect.type != QueryToken::QueryTokenType::TUPLE_OPEN &&
-						prevTokenSelect.type != QueryToken::QueryTokenType::COMMA) {
-						throw SyntacticErrorException("During multiple selects, identifier can only come after '<' or ','");
-					}
-					else if (token.type == QueryToken::QueryTokenType::DOT &&
-						prevTokenSelect.type != QueryToken::QueryTokenType::IDENTIFIER) {
-						throw SyntacticErrorException("During multiple selects, '.' can only come after identifier");
-					}
-					else if ((token.type == QueryToken::QueryTokenType::PROC_NAME ||
-						token.type == QueryToken::QueryTokenType::VAR_NAME ||
-						token.type == QueryToken::QueryTokenType::VALUE ||
-						token.type == QueryToken::QueryTokenType::STMT_INDEX) &&
-						prevTokenSelect.type != QueryToken::QueryTokenType::DOT) {
-						throw SyntacticErrorException("During multiple selects, attributes can only come after '.'");
-					}
-					else if (token.type == QueryToken::QueryTokenType::COMMA &&
-						(prevTokenSelect.type != QueryToken::QueryTokenType::PROC_NAME &&
-							prevTokenSelect.type != QueryToken::QueryTokenType::VAR_NAME &&
-							prevTokenSelect.type != QueryToken::QueryTokenType::VALUE &&
-							prevTokenSelect.type != QueryToken::QueryTokenType::IDENTIFIER &&
-							prevTokenSelect.type != QueryToken::QueryTokenType::STMT_INDEX)) {
-						throw SyntacticErrorException("During multiple selects, comma can only come after attributes");
-					}
-					else if (token.type == QueryToken::QueryTokenType::TUPLE_CLOSE &&
-						prevTokenSelect.type != QueryToken::QueryTokenType::PROC_NAME &&
-						prevTokenSelect.type != QueryToken::QueryTokenType::VAR_NAME &&
-						prevTokenSelect.type != QueryToken::QueryTokenType::VALUE &&
-						prevTokenSelect.type != QueryToken::QueryTokenType::IDENTIFIER &&
-						prevTokenSelect.type != QueryToken::QueryTokenType::STMT_INDEX) {
-						throw SyntacticErrorException("During multiple selects, '>' can only come after identifier or attributes");
-					}
+					queryValidator.validateSelectMultipleClauses(token, prevTokenSelect);
 					if (token.type == QueryToken::QueryTokenType::DOT) {
 						isExpectingAttribute = true;
 					}
@@ -262,8 +232,7 @@ Query QueryPreprocessor::parse(std::string str) {
 						isExpectingAttribute = false;
 					}
 					else if (token.type == QueryToken::QueryTokenType::IDENTIFIER) {
-						Entity ent;
-						addSelectedToQuery(ent, token);
+						addSelectedToQuery(token);
 						haveNextDeclaration = false;
 					}
 					else if (token.type == QueryToken::QueryTokenType::TUPLE_CLOSE) {
@@ -354,7 +323,7 @@ Query QueryPreprocessor::parse(std::string str) {
 	return QueryPreprocessor::returnAndResetQuery();
 }
 
-void QueryPreprocessor::setIdentifierToQueryTokenType(QueryToken& token, ParseStatus& status) {
+void QueryPreprocessor::setIdentifierToQueryTokenType(QueryToken& token) {
 	if (prevToken.type == QueryToken::QueryTokenType::WHITESPACE ||
 		prevToken.type == QueryToken::QueryTokenType::TERMINATOR) {
 		if (token.token_value == "stmt") {
@@ -437,7 +406,8 @@ void QueryPreprocessor::addPatternToQuery(QueryToken& token) {
 	}
 }
 
-void QueryPreprocessor::addSelectedToQuery(Entity& ent, QueryToken& token) {
+void QueryPreprocessor::addSelectedToQuery(QueryToken& token) {
+	Entity ent;
 	bool isValid = false;
 	if (token.token_value == "BOOLEAN" && this->query.getSelected().size() == 0) {
 		ent = { EntityType::BOOLEAN };

@@ -47,11 +47,11 @@ private:
 
 	// Methods
 
-	void setIdentifierToQueryTokenType(QueryToken&, ParseStatus&);
+	void setIdentifierToQueryTokenType(QueryToken&);
 
 	void addEntityToQuery(QueryToken&);
 
-	void addSelectedToQuery(Entity&, QueryToken&);
+	void addSelectedToQuery(QueryToken&);
 
 	void addPatternToQuery(QueryToken&);
 
