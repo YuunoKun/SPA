@@ -46,6 +46,7 @@ void PatternEvaluator::evaluatePattern(QueryResult& queryResult, Pattern& patter
 				}
 			}
 			ResultTable resultTable(patternType, table);
+			delete pattern.getExpression();
 			queryResult.addResult(resultTable);
 		}
 	}
