@@ -382,16 +382,15 @@ namespace UnitTesting {
 
 		EXPECT_EQ(test3, q3);
 
-		//iteration 2
-		/*Query test4 = qp.parse("variable v; procedure p; Select p such that Modifies (p, \"x\")");
+		Query test4 = qp.parse("variable v; procedure p; Select p such that Modifies (p, \"x\")");
 
 		Query q4 = Query();
 		q4.addEntity(Entity(EntityType::VARIABLE, Synonym{ "v" }));
 		q4.addEntity(Entity(EntityType::PROCEDURE, Synonym{ "p" }));
 		q4.addSelected(Entity(EntityType::PROCEDURE, Synonym{ "p" }));
-		q4.addRelation(RelRef(RelType::MODIFIES_S, Entity(EntityType::PROCEDURE, Synonym{ "p" }), Entity(EntityType::VARIABLE, "x")));
+		q4.addRelation(RelRef(RelType::MODIFIES_P, Entity(EntityType::PROCEDURE, Synonym{ "p" }), Entity(EntityType::VARIABLE, "x")));
 
-		EXPECT_EQ(test4, q4);*/
+		EXPECT_EQ(test4, q4);
 
 		Query test5 = qp.parse("assign a; while w; Select a such that Parent* (w, a)");
 
@@ -459,45 +458,51 @@ namespace UnitTesting {
 		EXPECT_EQ(test11, q11);
 	}
 
-	// TODO: uncomment once tokenizer able to handle variables
-	//TEST(QueryPreprocessor, selectWithAttribute) {
-	//	QueryPreprocessor qp;
-	//	Query test1 = qp.parse("stmt s; Select s.stmt#");
-	//	EXPECT_EQ(test1.getSelected()[0].getAttribute(), AttrRef{ STMT_INDEX });
+	TEST(QueryPreprocessor, selectWithAttribute) {
+		QueryPreprocessor qp;
+		Query test1 = qp.parse("stmt s; Select s.stmt#");
+		EXPECT_EQ(test1.getSelected()[0].getAttribute(), AttrRef{ STMT_INDEX });
 
-	//	Query test2 = qp.parse("procedure p; Select p.procName");
-	//	EXPECT_EQ(test2.getSelected()[0].getAttribute(), AttrRef{ PROC_NAME });
+		Query test2 = qp.parse("procedure p; Select p.procName");
+		EXPECT_EQ(test2.getSelected()[0].getAttribute(), AttrRef{ PROC_NAME });
 
-	//	Query test3 = qp.parse("variable v; Select v.varName");
-	//	EXPECT_EQ(test3.getSelected()[0].getAttribute(), AttrRef{ VAR_NAME });
+		Query test3 = qp.parse("variable v; Select v.varName");
+		EXPECT_EQ(test3.getSelected()[0].getAttribute(), AttrRef{ VAR_NAME });
 
-	//	Query test4 = qp.parse("read r; Select r.varName");
-	//	EXPECT_EQ(test4.getSelected()[0].getAttribute(), AttrRef{ VAR_NAME });
+		Query test4 = qp.parse("read r; Select r.varName");
+		EXPECT_EQ(test4.getSelected()[0].getAttribute(), AttrRef{ VAR_NAME });
 
-	//	Query test5 = qp.parse("print pr; Select pr.varName");
-	//	EXPECT_EQ(test5.getSelected()[0].getAttribute(), AttrRef{ VAR_NAME });
+		Query test5 = qp.parse("print pr; Select pr.varName");
+		EXPECT_EQ(test5.getSelected()[0].getAttribute(), AttrRef{ VAR_NAME });
 
-	//	Query test6 = qp.parse("constant c; Select c.value");
-	//	EXPECT_EQ(test6.getSelected()[0].getAttribute(), AttrRef{ VALUE });
+		Query test6 = qp.parse("constant c; Select c.value");
+		EXPECT_EQ(test6.getSelected()[0].getAttribute(), AttrRef{ VALUE });
 
-	//	Query test7 = qp.parse("read r; Select r.stmt#");
-	//	EXPECT_EQ(test7.getSelected()[0].getAttribute(), AttrRef{ STMT_INDEX });
+		Query test7 = qp.parse("read r; Select r.stmt#");
+		EXPECT_EQ(test7.getSelected()[0].getAttribute(), AttrRef{ STMT_INDEX });
 
-	//	Query test8 = qp.parse("print pr; Select pr.stmt#");
-	//	EXPECT_EQ(test8.getSelected()[0].getAttribute(), AttrRef{ STMT_INDEX });
+		Query test8 = qp.parse("print pr; Select pr.stmt#");
+		EXPECT_EQ(test8.getSelected()[0].getAttribute(), AttrRef{ STMT_INDEX });
 
-	//	Query test9 = qp.parse("call c; Select c.stmt#");
-	//	EXPECT_EQ(test9.getSelected()[0].getAttribute(), AttrRef{ STMT_INDEX });
+		Query test9 = qp.parse("call c; Select c.stmt#");
+		EXPECT_EQ(test9.getSelected()[0].getAttribute(), AttrRef{ STMT_INDEX });
 
-	//	Query test10 = qp.parse("while w; Select w.stmt#");
-	//	EXPECT_EQ(test10.getSelected()[0].getAttribute(), AttrRef{ STMT_INDEX });
+		Query test10 = qp.parse("while w; Select w.stmt#");
+		EXPECT_EQ(test10.getSelected()[0].getAttribute(), AttrRef{ STMT_INDEX });
 
-	//	Query test11 = qp.parse("if ifs; Select ifs.stmt#");
-	//	EXPECT_EQ(test11.getSelected()[0].getAttribute(), AttrRef{ STMT_INDEX });
+		Query test11 = qp.parse("if ifs; Select ifs.stmt#");
+		EXPECT_EQ(test11.getSelected()[0].getAttribute(), AttrRef{ STMT_INDEX });
 
-	//	Query test12 = qp.parse("assign a; Select a.stmt#");
-	//	EXPECT_EQ(test12.getSelected()[0].getAttribute(), AttrRef{ STMT_INDEX });
-	//}
+		Query test12 = qp.parse("assign a; Select a.stmt#");
+		EXPECT_EQ(test12.getSelected()[0].getAttribute(), AttrRef{ STMT_INDEX });
+	}
+
+	TEST(QueryPreprocessor, selectMultipleClauses) {
+		QueryPreprocessor qp;
+		Query test1 = qp.parse("assign a1, a2; Select <a1.procName, a2>");
+		EXPECT_EQ(test1.getSelected()[0].getAttribute(), AttrRef{ PROC_NAME });
+		EXPECT_EQ(test1.getSelected()[1].getAttribute(), AttrRef{ STMT_INDEX });
+	}
 
 	TEST(QueryPreprocessor, onePatternClause) {
 		QueryPreprocessor qp;
