@@ -182,9 +182,9 @@ namespace UnitTesting {
 		const std::string EXPRESSION1 = "x";
 		const std::string EXPRESSION2 = "x + (y * 5)";
 		const std::string EXPRESSION_CONSTANT = "5";
-		expr* EXPRESSIONNODE_1 = expr_parser.parse(EXPRESSION1);
-		expr* EXPRESSIONNODE_2 = expr_parser.parse(EXPRESSION2);
-		expr* EXPRESSIONNODE_CONSTANT = expr_parser.parse(EXPRESSION_CONSTANT);
+		expr EXPRESSIONNODE_1 = expr_parser.parse(EXPRESSION1);
+		expr EXPRESSIONNODE_2 = expr_parser.parse(EXPRESSION2);
+		expr EXPRESSIONNODE_CONSTANT = expr_parser.parse(EXPRESSION_CONSTANT);
 
 		const std::list<std::string> EXPECTED_ASSIGN_PATTERN1 = { ASSIGN1 };
 		const std::list<std::string> EXPECTED_ASSIGN_PATTERN2 = { ASSIGN2, ASSIGN1 };

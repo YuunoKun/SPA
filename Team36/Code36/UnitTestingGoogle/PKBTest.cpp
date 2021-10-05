@@ -81,6 +81,8 @@ namespace UnitTesting {
 		EXPECT_NE(s, PKB::getInstance().getStmts());
 	}
 
+
+	/*
 	TEST(PKB, getExpr) {
 		PKB::getInstance().resetCache();
 		ExprParser expr_parser;
@@ -95,9 +97,9 @@ namespace UnitTesting {
 		PKB::getInstance().addStmt(STMT_ASSIGN);
 		PKB::getInstance().addStmt(STMT_READ);
 
-		UniqueRelationTable<stmt_index, expr*> expr_table;
-		expr_table.insert(one.first, one.second);
-		expr_table.insert(two.first, two.second);
+		std::unordered_map<stmt_index, expr> expr_table;
+		expr_table.insert(one);
+		expr_table.insert(two);
 
 		PKB::getInstance().addExprTree(one.first, one.second);
 		PKB::getInstance().addExprTree(two.first, two.second);
@@ -109,6 +111,7 @@ namespace UnitTesting {
 		PKB::getInstance().resetCache();
 		EXPECT_NE(expr_table, PKB::getInstance().getExpr());
 	}
+	*/
 	TEST(PKB, getParent) {
 		PKB::getInstance().resetCache();
 

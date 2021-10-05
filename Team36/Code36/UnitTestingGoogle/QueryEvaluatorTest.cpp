@@ -209,9 +209,9 @@ namespace UnitTesting {
 		const std::string EXPRESSION1 = "x";
 		const std::string EXPRESSION2 = "x + (y * 5)";
 		const std::string EXPRESSION_CONSTANT = "5";
-		expr* EXPRESSIONNODE_1 = expr_parser.parse(EXPRESSION1);
-		expr* EXPRESSIONNODE_2 = expr_parser.parse(EXPRESSION2);
-		expr* EXPRESSIONNODE_CONSTANT = expr_parser.parse(EXPRESSION_CONSTANT);
+		expr EXPRESSIONNODE_1 = expr_parser.parse(EXPRESSION1);
+		expr EXPRESSIONNODE_2 = expr_parser.parse(EXPRESSION2);
+		expr EXPRESSIONNODE_CONSTANT = expr_parser.parse(EXPRESSION_CONSTANT);
 
 		const std::vector<std::string> MODIFIES_LEFTS = { MODIFIES_LEFT1, MODIFIES_LEFT2, MODIFIES_LEFT3, MODIFIES_LEFT4 };
 		const std::vector<std::string> MODIFIES_RIGHTS = { MODIFIES_RIGHT1, MODIFIES_RIGHT2, MODIFIES_RIGHT3, MODIFIES_RIGHT4 };

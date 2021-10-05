@@ -8,7 +8,8 @@ typedef enum EXPR_SYMBOL {
 	EXPR_MUL,
 	EXPR_DIV,
 	EXPR_MOD,
-	EXPR_IDENTIFIER
+	EXPR_IDENTIFIER,
+	EXPR_NULL
 } ExprSymbol;
 
 class ExprNode {
@@ -20,12 +21,14 @@ public:
 
 	ExprNode(const ExprNode&);
 
+	ExprNode();
+
 	~ExprNode();
 
 	void setSymbol(ExprSymbol);
 	void setValue(std::string);
-	void setLHS(ExprNode*);
-	void setRHS(ExprNode*);
+	void setLHS(ExprNode&);
+	void setRHS(ExprNode&);
 
 	ExprSymbol getSymbol() const;
 	std::string getValue() const;
@@ -40,7 +43,6 @@ public:
 	ExprNode& operator=(const ExprNode&);
 
 private:
-	ExprNode();
 
 	ExprSymbol symbol;
 	std::string value{ "" };

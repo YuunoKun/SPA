@@ -20,6 +20,10 @@ ExprNode::ExprNode(const ExprNode& to_copy) {
 	}
 }
 
+ExprNode::ExprNode() {
+	symbol = ExprSymbol::EXPR_NULL;
+}
+
 
 ExprNode::~ExprNode() {
 	delete lhs;
@@ -34,12 +38,12 @@ void ExprNode::setValue(std::string val) {
 	value = val;
 }
 
-void ExprNode::setLHS(ExprNode* node) {
-	lhs = node;
+void ExprNode::setLHS(ExprNode& node) {
+	lhs = new ExprNode(node);
 }
 
-void ExprNode::setRHS(ExprNode* node) {
-	rhs = node;
+void ExprNode::setRHS(ExprNode& node) {
+	rhs = new ExprNode(node);
 }
 
 ExprSymbol ExprNode::getSymbol() const {

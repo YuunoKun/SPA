@@ -21,7 +21,7 @@ public:
 	std::vector<StmtInfo> getWhiles();
 	std::vector<StmtInfo> getIfs();
 	std::vector<assign_info> getAssignInfo();
-	std::vector<assign_info> getAssignInfo(expr*, bool);
+	std::vector<assign_info> getAssignInfo(expr, bool);
 
 	//Follow relation function
 	bool isFollowEmpty();

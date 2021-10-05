@@ -7,7 +7,7 @@ void PatternEvaluator::evaluatePattern(QueryResult& queryResult, Pattern& patter
 	}
 
 	std::vector<assign_info> assignInfos;
-	if (pattern.getExpression() == nullptr && pattern.isWild()) {
+	if (pattern.getExpression() == EXPR_NULL && pattern.isWild()) {
 		assignInfos = pkb.getAssignInfo();
 	}
 	else {

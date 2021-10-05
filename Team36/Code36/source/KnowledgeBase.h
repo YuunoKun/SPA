@@ -17,7 +17,7 @@ public:
 	virtual void addProcedure(proc_name proc_name) = 0;
 	virtual void addVariable(var_name var_name) = 0;
 	virtual void addStmt(StmtType stmt_type) = 0;
-	virtual void addExprTree(stmt_index stmt_index, expr* expr) = 0;
+	virtual void addExprTree(stmt_index stmt_index, expr expr) = 0;
 
 	virtual void addParent(stmt_index parent, stmt_index child) = 0;
 	virtual void addFollows(stmt_index first, stmt_index second) = 0;
@@ -39,12 +39,12 @@ public:
 	virtual const std::vector<proc_name>& getProcedures() = 0;
 	virtual const std::vector<var_name>& getVariables() = 0;
 	virtual const std::vector<StmtInfo>& getStmts() = 0;
+	virtual const std::unordered_map<stmt_index, expr>& getExpr() = 0;
 	virtual const StmtInfo getStmt(stmt_index stmt_index) = 0;
 	virtual const var_name getAssignment(stmt_index stmt_index) = 0;
-	virtual expr* getExpression(stmt_index stmt_index) = 0;
+	virtual expr getExpression(stmt_index stmt_index) = 0;
 	virtual const std::vector<constant> getConstants() = 0;
 	virtual const UniqueRelationTable<stmt_index, var_name>& getAssigns() = 0;
-	virtual const UniqueRelationTable<stmt_index, expr*>& getExpr() = 0;
 	virtual const UniqueRelationTable<StmtInfo, StmtInfo>& getFollows() = 0;
 	virtual const RelationTable<StmtInfo, StmtInfo>& getParent() = 0;
 	virtual const RelationTable<StmtInfo, StmtInfo>& getFollowsT() = 0;

@@ -14,9 +14,9 @@ namespace UnitTesting {
 	std::string validExpression1 = "x+y / 3";
 	std::string validExpression2 = "x";
 	std::string emptyExpression = "";
-	expr* validExprNode1 = expr_parser.parse(validExpression1);
-	expr* validExprNode2 = expr_parser.parse(validExpression2);
-	expr* emptyExprNode = expr_parser.parse(emptyExpression);
+	expr validExprNode1 = expr_parser.parse(validExpression1);
+	expr validExprNode2 = expr_parser.parse(validExpression2);
+	expr emptyExprNode = expr_parser.parse(emptyExpression);
 
 	TEST(Pattern, patternTypeInvalid) {
 		try {
@@ -62,9 +62,9 @@ namespace UnitTesting {
 		Pattern pattern2(validPatternType, validLeftExpressionType2, validExpression2, true);
 
 		Pattern pattern3(validPatternType, validLeftExpressionType2, emptyExpression, true);
-		EXPECT_TRUE(pattern3.getExpression()->equals(emptyExprNode));
-		EXPECT_FALSE(pattern3.getExpression()->equals(validExprNode1));
-		EXPECT_FALSE(pattern3.getExpression()->equals(validExprNode2));
+		EXPECT_TRUE(pattern3.getExpression().equals(&emptyExprNode));
+		EXPECT_FALSE(pattern3.getExpression().equals(&validExprNode1));
+		EXPECT_FALSE(pattern3.getExpression().equals(&validExprNode2));
 	}
 
 	TEST(Pattern, isWild) {

@@ -14,13 +14,6 @@ PKB& PKB::getInstance() {
 	return pkb;
 }
 
-PKB::~PKB() {
-	auto v = expr_table.getValues();
-	expr_table.clear();
-	for (auto expr : expr_table.getValues()) {
-		delete expr;
-	}
-}
 
 void PKB::addConstant(constant constant) {
 	const_table.emplace(constant);
@@ -51,7 +44,7 @@ void PKB::addStmt(StmtType stmt_type) {
 	stmt_table.push_back(new_stmt_info);
 }
 
-void PKB::addExprTree(stmt_index stmt_index, expr* expr) {
+void PKB::addExprTree(stmt_index stmt_index, expr expr) {
 	if (stmt_index <= 0) {
 		throw std::invalid_argument("Stmt index must be greater than zero: " + std::to_string(stmt_index));
 	}
@@ -61,7 +54,7 @@ void PKB::addExprTree(stmt_index stmt_index, expr* expr) {
 	else if (stmt_table[stmt_index - 1].stmt_type != STMT_ASSIGN) {
 		throw std::invalid_argument("Stmt index does not belong to an assignment statement: " + std::to_string(stmt_index));
 	}
-	expr_table.insert(stmt_index, expr);
+	expr_table.insert({ stmt_index, expr });
 }
 
 void PKB::addParent(stmt_index parent, stmt_index child) {
@@ -212,11 +205,7 @@ void PKB::resetCache() {
 	modifiesP_table.clear();
 	callsP_table.clear();
 	callsPT_table.clear();
-	auto v = expr_table.getValues();
 	expr_table.clear();
-	for (auto expr : expr_table.getValues()) {
-		delete expr;
-	}
 }
 
 void PKB::resetEntities() {
@@ -264,7 +253,7 @@ const var_name PKB::getAssignment(stmt_index stmt_index) {
 	return assignment_table.getValues(stmt_index)[0];
 }
 
-expr* PKB::getExpression(stmt_index stmt_index) {
+expr PKB::getExpression(stmt_index stmt_index) {
 	if (stmt_index <= 0) {
 		throw std::invalid_argument("Stmt index must be greater than zero: " + std::to_string(stmt_index));
 	}
@@ -274,10 +263,10 @@ expr* PKB::getExpression(stmt_index stmt_index) {
 	else if (stmt_table[stmt_index - 1].stmt_type != STMT_ASSIGN) {
 		throw std::invalid_argument("Stmt index does not belong to an assignment statement: " + std::to_string(stmt_index));
 	}
-	else if (!expr_table.containsKey(stmt_index)) {
+	else if (expr_table.find(stmt_index) == expr_table.end()) {
 		throw std::invalid_argument("Stmt-related expression has not been initiated: " + std::to_string(stmt_index));
 	}
-	return expr_table.getValues(stmt_index)[0];
+	return expr_table.at(stmt_index);
 }
 
 const std::vector<constant> PKB::getConstants() {
@@ -289,7 +278,7 @@ const UniqueRelationTable<stmt_index, var_name>& PKB::getAssigns() {
 	return assignment_table;
 }
 
-const UniqueRelationTable<stmt_index, expr*>& PKB::getExpr() {
+const std::unordered_map<stmt_index, expr>& PKB::getExpr() {
 	return expr_table;
 }
 
