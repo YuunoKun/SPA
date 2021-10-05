@@ -42,10 +42,6 @@ bool ResultTable::merge(ResultTable t) {
 		//If table a and b have more than 1 column and there is 1 common header, join table
 		joinTable(t, commonHeaders[0]);
 	}
-	else if (commonHeaders.size() == 2) {
-		//If table a and b have more than 2 column and there is 2 common header, join table
-		joinTable(t, commonHeaders[0], commonHeaders[1]);
-	}
 	else {
 		throw std::exception("Error: table merging scenario is not handled!!!");
 	}
@@ -214,25 +210,5 @@ void ResultTable::joinTable(ResultTable t, Entity commonHeader) {
 	}
 
 	table = Utility::joinTable(table, headerIndex, toJoin, toJoinIndex);
-	addHeader(t.header);
-}
-
-void ResultTable::joinTable(ResultTable t, Entity commonHeader1, Entity commonHeader2) {
-	int headerIndex1 = getHeaderIndex(commonHeader1);
-	int headerIndex2 = getHeaderIndex(commonHeader2);
-	int toJoinIndex1 = t.getHeaderIndex(commonHeader1);
-	int toJoinIndex2 = t.getHeaderIndex(commonHeader2);
-
-	std::unordered_map<std::string, std::unordered_multimap<std::string, std::vector<std::string>>> toJoin;
-
-	for (auto& it : t.table) {
-		if (toJoin.find(it[toJoinIndex1]) == toJoin.end()) {
-			toJoin.insert({ it[toJoinIndex1], {} });
-		}
-		auto container = toJoin.find(it[toJoinIndex1]);
-		container->second.insert({ it[toJoinIndex2], it });
-	}
-
-	table = Utility::joinTable(table, headerIndex1, headerIndex2, toJoin, toJoinIndex1, toJoinIndex2);
 	addHeader(t.header);
 }

@@ -12,6 +12,10 @@ typedef unsigned int prog_line;
 typedef unsigned int var_index;
 typedef unsigned int proc_index;
 
+
+static const std::string BOOLEAN_TRUE = "TRUE";
+static const std::string BOOLEAN_FALSE = "FALSE";
+
 enum StmtType {
 	STMT_READ,
 	STMT_PRINT,

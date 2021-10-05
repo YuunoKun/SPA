@@ -1,7 +1,6 @@
 #include "pch.h"
 
 #include "QueryTokenizer.h"
-#include "QueryTokenizer.cpp"
 #include "Common.h"
 #include <iostream>
 
@@ -85,7 +84,7 @@ namespace UnitTesting {
 		expected.push_back({ QueryToken::IDENTIFIER, "s" });
 
 
-		for (int i = 0; i < expected.size(); i++) {
+		for (size_t i = 0; i < expected.size(); i++) {
 			EXPECT_TRUE(output[i].token_value == expected[i].token_value);
 			EXPECT_TRUE(output[i].type == expected[i].type);
 		}
@@ -180,6 +179,28 @@ namespace UnitTesting {
 		EXPECT_TRUE(output[1].type == QueryToken::IDENTIFIER);
 
 		EXPECT_TRUE(output[2].type == QueryToken::PARENTHESIS_CLOSE);
+	}
+
+	//Test for Tuple Open Close
+	TEST(QueryTokenizer, TupleOpenCloseTest) {
+
+		//Result
+		QueryTokenizer query_tokenizer;
+		query_tokenizer.parse_into_query_tokens("<p.stmt#>");
+		std::vector<QueryToken> output = query_tokenizer.get_query_token_chain();
+
+		//Expected
+		std::vector<QueryToken> expected;
+		expected.push_back({ QueryToken::TUPLE_OPEN, "" });
+		expected.push_back({ QueryToken::IDENTIFIER, "p" });
+		expected.push_back({ QueryToken::DOT, "" });
+		expected.push_back({ QueryToken::STMT_INDEX, "" });
+		expected.push_back({ QueryToken::TUPLE_CLOSE, "" });
+
+		for (size_t i = 0; i < expected.size(); i++) {
+			EXPECT_TRUE(output[i].token_value == expected[i].token_value);
+			EXPECT_TRUE(output[i].type == expected[i].type);
+		}
 	}
 
 	// Test for open and close quotation marks
@@ -330,7 +351,7 @@ namespace UnitTesting {
 		expected.push_back({ QueryToken::WILDCARD, "" });
 		expected.push_back({ QueryToken::PARENTHESIS_CLOSE, "" });
 
-		for (int i = 0; i<expected.size(); i++) {
+		for (size_t i = 0; i<expected.size(); i++) {
 			EXPECT_TRUE(output[i].token_value == expected[i].token_value);
 			EXPECT_TRUE(output[i].type == expected[i].type);
 
@@ -362,7 +383,7 @@ namespace UnitTesting {
 		expected.push_back({ QueryToken::WILDCARD, "" });
 		expected.push_back({ QueryToken::PARENTHESIS_CLOSE, "" });
 
-		for (int i = 0; i < expected.size(); i++) {
+		for (size_t i = 0; i < expected.size(); i++) {
 			EXPECT_TRUE(output[i].token_value == expected[i].token_value);
 			EXPECT_TRUE(output[i].type == expected[i].type);
 
@@ -392,7 +413,7 @@ namespace UnitTesting {
 		expected.push_back({ QueryToken::QUOTATION_CLOSE, "" });
 		expected.push_back({ QueryToken::PARENTHESIS_CLOSE, "" });
 
-		for (int i = 0; i < expected.size(); i++) {
+		for (size_t i = 0; i < expected.size(); i++) {
 			EXPECT_TRUE(output[i].token_value == expected[i].token_value);
 			EXPECT_TRUE(output[i].type == expected[i].type);
 		}
@@ -437,7 +458,7 @@ namespace UnitTesting {
 		expected.push_back({ QueryToken::WILDCARD, "" });
 		expected.push_back({ QueryToken::PARENTHESIS_CLOSE, "" });
 
-		for (int i = 0; i < expected.size(); i++) {
+		for (size_t i = 0; i < expected.size(); i++) {
 			EXPECT_TRUE(output[i].token_value == expected[i].token_value);
 			EXPECT_TRUE(output[i].type == expected[i].type);
 
@@ -446,115 +467,264 @@ namespace UnitTesting {
 		}
 	}
 	
-	// Invalid tests
+	// Test for attribute_names ---------------------------------------------------------------------------------------------
+	
+	// Test for procName
+	TEST(QueryTokenizer, procNameTest) {
+
+		//Result
+		QueryTokenizer query_tokenizer;
+		std::string input = "Select p such that Calls (p, q) with q.procName = \"Third\"";
+
+		query_tokenizer.parse_into_query_tokens(input);
+		std::vector<QueryToken> output = query_tokenizer.get_query_token_chain();
+
+		//Expected
+		std::vector<QueryToken> expected;
+		expected.push_back({ QueryToken::IDENTIFIER, "Select" });
+		expected.push_back({ QueryToken::IDENTIFIER, "p" });
+		expected.push_back({ QueryToken::SUCH_THAT, "" });
+		expected.push_back({ QueryToken::IDENTIFIER, "Calls" });
+		expected.push_back({ QueryToken::PARENTHESIS_OPEN, "" });
+		expected.push_back({ QueryToken::IDENTIFIER, "p" });
+		expected.push_back({ QueryToken::COMMA, "" });
+		expected.push_back({ QueryToken::IDENTIFIER, "q" });
+		expected.push_back({ QueryToken::PARENTHESIS_CLOSE, "" });
+		expected.push_back({ QueryToken::IDENTIFIER, "with" });
+		expected.push_back({ QueryToken::IDENTIFIER, "q" });
+		expected.push_back({ QueryToken::DOT, "" });
+		expected.push_back({ QueryToken::PROC_NAME, "" });
+		expected.push_back({ QueryToken::EQUAL, "" });
+		expected.push_back({ QueryToken::QUOTATION_OPEN, "" });
+		expected.push_back({ QueryToken::IDENTIFIER, "Third" });
+		expected.push_back({ QueryToken::QUOTATION_CLOSE, "" });
+
+		for (size_t i = 0; i < expected.size(); i++) {
+			EXPECT_TRUE(output[i].token_value == expected[i].token_value);
+			EXPECT_TRUE(output[i].type == expected[i].type);
+		}
+	}
+
+	TEST(QueryTokenizer, multipleprocNameTest) {
+
+		//Result
+		QueryTokenizer query_tokenizer;
+		std::string input = "Select p.procName such that Calls (p, q) with q.procName = \"Third\"";
+
+		query_tokenizer.parse_into_query_tokens(input);
+		std::vector<QueryToken> output = query_tokenizer.get_query_token_chain();
+
+		//Expected
+		std::vector<QueryToken> expected;
+		expected.push_back({ QueryToken::IDENTIFIER, "Select" });
+		expected.push_back({ QueryToken::IDENTIFIER, "p" });
+		expected.push_back({ QueryToken::DOT, "" });
+		expected.push_back({ QueryToken::PROC_NAME, "" });
+		expected.push_back({ QueryToken::SUCH_THAT, "" });
+		expected.push_back({ QueryToken::IDENTIFIER, "Calls" });
+		expected.push_back({ QueryToken::PARENTHESIS_OPEN, "" });
+		expected.push_back({ QueryToken::IDENTIFIER, "p" });
+		expected.push_back({ QueryToken::COMMA, "" });
+		expected.push_back({ QueryToken::IDENTIFIER, "q" });
+		expected.push_back({ QueryToken::PARENTHESIS_CLOSE, "" });
+		expected.push_back({ QueryToken::IDENTIFIER, "with" });
+		expected.push_back({ QueryToken::IDENTIFIER, "q" });
+		expected.push_back({ QueryToken::DOT, "" });
+		expected.push_back({ QueryToken::PROC_NAME, "" });
+		expected.push_back({ QueryToken::EQUAL, "" });
+		expected.push_back({ QueryToken::QUOTATION_OPEN, "" });
+		expected.push_back({ QueryToken::IDENTIFIER, "Third" });
+		expected.push_back({ QueryToken::QUOTATION_CLOSE, "" });
+
+		for (size_t i = 0; i < expected.size(); i++) {
+			EXPECT_TRUE(output[i].token_value == expected[i].token_value);
+			EXPECT_TRUE(output[i].type == expected[i].type);
+		}
+	}
+
+	// test for varName
+	TEST(QueryTokenizer, varNameTest) {
+
+		//Result
+		QueryTokenizer query_tokenizer;
+		std::string input = "Select p such that Calls (p, q) with q.varName = \"Third\"";
+
+		query_tokenizer.parse_into_query_tokens(input);
+		std::vector<QueryToken> output = query_tokenizer.get_query_token_chain();
+
+		//Expected
+		std::vector<QueryToken> expected;
+		expected.push_back({ QueryToken::IDENTIFIER, "Select" });
+		expected.push_back({ QueryToken::IDENTIFIER, "p" });
+		expected.push_back({ QueryToken::SUCH_THAT, "" });
+		expected.push_back({ QueryToken::IDENTIFIER, "Calls" });
+		expected.push_back({ QueryToken::PARENTHESIS_OPEN, "" });
+		expected.push_back({ QueryToken::IDENTIFIER, "p" });
+		expected.push_back({ QueryToken::COMMA, "" });
+		expected.push_back({ QueryToken::IDENTIFIER, "q" });
+		expected.push_back({ QueryToken::PARENTHESIS_CLOSE, "" });
+		expected.push_back({ QueryToken::IDENTIFIER, "with" });
+		expected.push_back({ QueryToken::IDENTIFIER, "q" });
+		expected.push_back({ QueryToken::DOT, "" });
+		expected.push_back({ QueryToken::VAR_NAME, "" });
+		expected.push_back({ QueryToken::EQUAL, "" });
+		expected.push_back({ QueryToken::QUOTATION_OPEN, "" });
+		expected.push_back({ QueryToken::IDENTIFIER, "Third" });
+		expected.push_back({ QueryToken::QUOTATION_CLOSE, "" });
+
+		for (size_t i = 0; i < expected.size(); i++) {
+			EXPECT_TRUE(output[i].token_value == expected[i].token_value);
+			EXPECT_TRUE(output[i].type == expected[i].type);
+		}
+	}
+
+	// test for values
+	TEST(QueryTokenizer, valueTest) {
+
+		//Result
+		QueryTokenizer query_tokenizer;
+		std::string input = "Select p such that Follows (p, q) with q.value = \"Third\"";
+
+		query_tokenizer.parse_into_query_tokens(input);
+		std::vector<QueryToken> output = query_tokenizer.get_query_token_chain();
+
+		//Expected
+		std::vector<QueryToken> expected;
+		expected.push_back({ QueryToken::IDENTIFIER, "Select" });
+		expected.push_back({ QueryToken::IDENTIFIER, "p" });
+		expected.push_back({ QueryToken::SUCH_THAT, "" });
+		expected.push_back({ QueryToken::IDENTIFIER, "Follows" });
+		expected.push_back({ QueryToken::PARENTHESIS_OPEN, "" });
+		expected.push_back({ QueryToken::IDENTIFIER, "p" });
+		expected.push_back({ QueryToken::COMMA, "" });
+		expected.push_back({ QueryToken::IDENTIFIER, "q" });
+		expected.push_back({ QueryToken::PARENTHESIS_CLOSE, "" });
+		expected.push_back({ QueryToken::IDENTIFIER, "with" });
+		expected.push_back({ QueryToken::IDENTIFIER, "q" });
+		expected.push_back({ QueryToken::DOT, "" });
+		expected.push_back({ QueryToken::VALUE, "" });
+		expected.push_back({ QueryToken::EQUAL, "" });
+		expected.push_back({ QueryToken::QUOTATION_OPEN, "" });
+		expected.push_back({ QueryToken::IDENTIFIER, "Third" });
+		expected.push_back({ QueryToken::QUOTATION_CLOSE, "" });
+
+		for (size_t i = 0; i < expected.size(); i++) {
+			EXPECT_TRUE(output[i].token_value == expected[i].token_value);
+			EXPECT_TRUE(output[i].type == expected[i].type);
+		}
+	}
+
+	// test for stmt#
+	TEST(QueryTokenizer, stmtIndexTest) {
+
+		//Result
+		QueryTokenizer query_tokenizer;
+		std::string input = "Select p such that Follows (p, q) with q.stmt# = \"Third\"";
+
+		query_tokenizer.parse_into_query_tokens(input);
+		std::vector<QueryToken> output = query_tokenizer.get_query_token_chain();
+
+		//Expected
+		std::vector<QueryToken> expected;
+		expected.push_back({ QueryToken::IDENTIFIER, "Select" });
+		expected.push_back({ QueryToken::IDENTIFIER, "p" });
+		expected.push_back({ QueryToken::SUCH_THAT, "" });
+		expected.push_back({ QueryToken::IDENTIFIER, "Follows" });
+		expected.push_back({ QueryToken::PARENTHESIS_OPEN, "" });
+		expected.push_back({ QueryToken::IDENTIFIER, "p" });
+		expected.push_back({ QueryToken::COMMA, "" });
+		expected.push_back({ QueryToken::IDENTIFIER, "q" });
+		expected.push_back({ QueryToken::PARENTHESIS_CLOSE, "" });
+		expected.push_back({ QueryToken::IDENTIFIER, "with" });
+		expected.push_back({ QueryToken::IDENTIFIER, "q" });
+		expected.push_back({ QueryToken::DOT, "" });
+		expected.push_back({ QueryToken::STMT_INDEX, "" });
+		expected.push_back({ QueryToken::EQUAL, "" });
+		expected.push_back({ QueryToken::QUOTATION_OPEN, "" });
+		expected.push_back({ QueryToken::IDENTIFIER, "Third" });
+		expected.push_back({ QueryToken::QUOTATION_CLOSE, "" });
+
+		for (size_t i = 0; i < expected.size(); i++) {
+			EXPECT_TRUE(output[i].token_value == expected[i].token_value);
+			EXPECT_TRUE(output[i].type == expected[i].type);
+		}
+	}
+	
+	// Invalid tests---------------------------------------------------------------------------------------------------------
 
 	// Test catch if parenthesis still open 
 	TEST(QueryTokenizer, InvalidParenthesisOpenTest) {
 
-		try {
-			QueryTokenizer query_tokenizer;
-			std::string input = "(procName";
-			query_tokenizer.parse_into_query_tokens(input);
-			std::vector<QueryToken> output = query_tokenizer.get_query_token_chain();
-		}
-		catch (std::runtime_error const& err) {
-			EXPECT_EQ(err.what(), std::string("expected \')\'"));
-		}
-		catch (...) {
-			// Test case should fail if not caught as runtime_error 
-			FAIL();
-		}
+		QueryTokenizer query_tokenizer;
+		std::string input = "(procName";
+		
+		EXPECT_THROW(query_tokenizer.parse_into_query_tokens(input), SyntacticErrorException);
 	}
 
 	// Test catch if parenthesis no opening
 	TEST(QueryTokenizer, InvalidParenthesisCloseTest) {
 
-		try {
-			QueryTokenizer query_tokenizer;
-			std::string input = "procName)";
-			query_tokenizer.parse_into_query_tokens(input);
-			std::vector<QueryToken> output = query_tokenizer.get_query_token_chain();
-		}
-		catch (std::runtime_error const& err) {
-			EXPECT_EQ(err.what(), std::string("Unexpected symbol : \')\'"));
-		}
-		catch (...) {
-			// Test case should fail if not caught as runtime_error 
-			FAIL();
-		}
+		QueryTokenizer query_tokenizer;
+		std::string input = "procName)";
+
+		EXPECT_THROW(query_tokenizer.parse_into_query_tokens(input), SyntacticErrorException);
+
+	}
+
+	//Test for Tuple still Open
+	TEST(QueryTokenizer, InvalidTupleOpenTest) {
+
+		//Result
+		QueryTokenizer query_tokenizer;
+		std::string input = "<p.stmt#";
+		
+		EXPECT_THROW(query_tokenizer.parse_into_query_tokens(input), SyntacticErrorException);
+
+	}
+
+	//Test for Tuple no Open
+	TEST(QueryTokenizer, InvalidTupleCloseTest) {
+
+		//Result
+		QueryTokenizer query_tokenizer;
+		std::string input = "p.stmt#>";
+
+		EXPECT_THROW(query_tokenizer.parse_into_query_tokens(input), SyntacticErrorException);
+
 	}
 
 	// Test catch if quotation marks missing
 	TEST(QueryTokenizer, InvalidQuotationTest1) {
 
-		try {
-			QueryTokenizer query_tokenizer;
-			std::string input = "\"procName";
-			query_tokenizer.parse_into_query_tokens(input);
-			std::vector<QueryToken> output = query_tokenizer.get_query_token_chain();
-		}
-		catch (std::runtime_error const& err) {
-			EXPECT_EQ(err.what(), std::string("missing terminating \" character"));
-		}
-		catch (...) {
-			// Test case should fail if not caught as runtime_error 
-			FAIL();
-		}
+		QueryTokenizer query_tokenizer;
+		std::string input = "\"procName";
+		
+		EXPECT_THROW(query_tokenizer.parse_into_query_tokens(input), SyntacticErrorException);
 	}
 
 	// Test catch if quotation marks missing
 	TEST(QueryTokenizer, InvalidQuotationTest2) {
 
-		try {
-			QueryTokenizer query_tokenizer;
-			std::string input = "procName\"";
-			query_tokenizer.parse_into_query_tokens(input);
-			std::vector<QueryToken> output = query_tokenizer.get_query_token_chain();
-		}
-		catch (std::runtime_error const& err) {
-			EXPECT_EQ(err.what(), std::string("missing terminating \" character"));
-		}
-		catch (...) {
-			// Test case should fail if not caught as runtime_error 
-			FAIL();
-		}
+		QueryTokenizer query_tokenizer;
+		std::string input = "procName\"";
+		
+		EXPECT_THROW(query_tokenizer.parse_into_query_tokens(input), SyntacticErrorException);
 	}
 
 	TEST(QueryTokenizer, InvalidSingleQuotationTest) {
 
-		try {
-			QueryTokenizer query_tokenizer;
-			std::string input = "\'procName\'";
-			query_tokenizer.parse_into_query_tokens(input);
-			std::vector<QueryToken> output = query_tokenizer.get_query_token_chain();
-			FAIL();
-		}
-		catch (std::runtime_error const& err) {
-			EXPECT_EQ(err.what(), std::string("Unknown symbol present"));
-		}
-		catch (...) {
-			// Test case should fail if not caught as runtime_error 
-			FAIL();
-		}
+		QueryTokenizer query_tokenizer;
+		std::string input = "\'procName\'";
+		EXPECT_THROW(query_tokenizer.parse_into_query_tokens(input), SyntacticErrorException);
+
 	}
 
 	TEST(QueryTokenizer, InvalidIdentTest) {
 
-		try {
-			QueryTokenizer query_tokenizer;
-			std::string input = "1procName";
-			query_tokenizer.parse_into_query_tokens(input);
-			std::vector<QueryToken> output = query_tokenizer.get_query_token_chain();
-			FAIL();
-		}
-		catch (std::runtime_error const& err) {
-			EXPECT_EQ(err.what(), std::string("Invalid Name present"));
-		}
-		catch (...) {
-			// Test case should fail if not caught as runtime_error 
-			FAIL();
-		}
+		QueryTokenizer query_tokenizer;
+		std::string input = "1procName";
+		EXPECT_THROW(query_tokenizer.parse_into_query_tokens(input), SyntacticErrorException);
+
 	}
 
-	
 }

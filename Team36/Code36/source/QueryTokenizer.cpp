@@ -12,7 +12,8 @@ void QueryTokenizer::parse_into_query_tokens(std::string input) {
 	QueryToken curr_query_token;
 	QueryToken temp_query_token;
 
-	std::stack<char> separator_validation_stk;
+	std::stack<char> parenthesis_validation_stk;
+	std::stack<char> tuple_validation_stk;
 
 	bool quotation_validation = false;
 
@@ -31,17 +32,36 @@ void QueryTokenizer::parse_into_query_tokens(std::string input) {
 			add_query_token(curr_query_token);
 			curr_query_token.type = QueryToken::PARENTHESIS_OPEN;
 			add_query_token(curr_query_token);
-			separator_validation_stk.push('(');
+			parenthesis_validation_stk.push('(');
 			break;
 		case ')':
-			if (!separator_validation_stk.empty() && separator_validation_stk.top() == '(') {
-				separator_validation_stk.pop();
+			if (!parenthesis_validation_stk.empty() && parenthesis_validation_stk.top() == '(') {
+				parenthesis_validation_stk.pop();
 			}
 			else {
-				throw std::runtime_error( std::string("Unexpected symbol : \')\'"));
+				throw SyntacticErrorException("Unexpected symbol : \')\'");
+
+				//throw std::runtime_error( std::string("Unexpected symbol : \')\'"));
 			}
 			add_query_token(curr_query_token);
 			curr_query_token.type = QueryToken::PARENTHESIS_CLOSE;
+			add_query_token(curr_query_token);
+			break;
+		case '<':
+			add_query_token(curr_query_token);
+			curr_query_token.type = QueryToken::TUPLE_OPEN;
+			add_query_token(curr_query_token);
+			parenthesis_validation_stk.push('<');
+			break;
+		case '>':
+			if (!parenthesis_validation_stk.empty() && parenthesis_validation_stk.top() == '<') {
+				parenthesis_validation_stk.pop();
+			}
+			else {
+				throw SyntacticErrorException("Unexpected symbol : \'>\'");
+			}
+			add_query_token(curr_query_token);
+			curr_query_token.type = QueryToken::TUPLE_CLOSE;
 			add_query_token(curr_query_token);
 			break;
 		case '"':
@@ -75,6 +95,29 @@ void QueryTokenizer::parse_into_query_tokens(std::string input) {
 			add_query_token(curr_query_token);
 			break;
 		case ' ':
+			//// check for is_attr_name
+			//if (is_attr_name && curr_query_token.type == QueryToken::IDENTIFIER) {
+			//	
+			//	if (curr_query_token.token_value == "procName") {
+			//		curr_query_token.type = QueryToken::PROC_NAME;
+			//		curr_query_token.token_value = "";
+			//		add_query_token(curr_query_token);
+			//	} else if (curr_query_token.token_value == "varName") {
+			//		curr_query_token.type = QueryToken::VAR_NAME;
+			//		curr_query_token.token_value = "";
+			//		add_query_token(curr_query_token);
+			//	} else if (curr_query_token.token_value == "value") {
+			//		curr_query_token.type = QueryToken::VALUE;
+			//		curr_query_token.token_value = "";
+			//		add_query_token(curr_query_token);
+			//	} else if (curr_query_token.token_value == "stmt#") {
+			//		curr_query_token.type = QueryToken::STMT_INDEX;
+			//		curr_query_token.token_value = "";
+			//		add_query_token(curr_query_token);
+			//	}
+			//	is_attr_name = false;
+			//}
+
 			// check for "such" in such that
 			if (curr_query_token.type == QueryToken::IDENTIFIER
 				&& curr_query_token.token_value == "such") {
@@ -100,27 +143,7 @@ void QueryTokenizer::parse_into_query_tokens(std::string input) {
 			curr_query_token.type = QueryToken::WHITESPACE;
 			break;
 		case '*':
-			// if got whitespace infront -> then is MUL
-			// IF got IDENT infront then is -> asterisk. then parser check if is fully asterisk(parrent/uses infront) or else is MUL
-			//if (curr_query_token.type == QueryToken::CONSTANT) {
-			//	//check before if CONSTANT
-			//	//part of term/expr
-			//	add_query_token(curr_query_token);
-			//	curr_query_token.type = QueryToken::MUL;
-			//	add_query_token(curr_query_token);
-			//} else 
-				
-			//if (curr_query_token.type == QueryToken::IDENTIFIER) {
-			//	// if in front is IDENT, can be for expr/term or for or MUL
-			//	add_query_token(curr_query_token);
-			//	curr_query_token.type = QueryToken::MUL;
-			//	add_query_token(curr_query_token);
-			//}
-			//else {
-			//	std::runtime_error("Unexpected symbol : \'" + c + '\'');
-			//}
-
-			// must not be in quotation brackets
+			// must NOT be in quotation brackets
 			if (!quotation_validation && curr_query_token.type == QueryToken::IDENTIFIER) {
 				if (curr_query_token.token_value == "Follows") {
 					curr_query_token.type = QueryToken::FOLLOWS_T;
@@ -130,7 +153,19 @@ void QueryTokenizer::parse_into_query_tokens(std::string input) {
 					curr_query_token.type = QueryToken::PARENT_T;
 					curr_query_token.token_value = "";
 					add_query_token(curr_query_token);
-				}
+				} else if (curr_query_token.token_value == "Calls") {
+					curr_query_token.type = QueryToken::CALLS_T;
+					curr_query_token.token_value = "";
+					add_query_token(curr_query_token);
+				} else if (curr_query_token.token_value == "Next") {
+					curr_query_token.type = QueryToken::NEXT_T;
+					curr_query_token.token_value = "";
+					add_query_token(curr_query_token);
+				} else if (curr_query_token.token_value == "Affects") {
+					curr_query_token.type = QueryToken::AFFECTS_T;
+					curr_query_token.token_value = "";
+					add_query_token(curr_query_token);
+				} 
 				break;
 			}
 			else {
@@ -159,6 +194,25 @@ void QueryTokenizer::parse_into_query_tokens(std::string input) {
 			curr_query_token.type = QueryToken::MOD;
 			add_query_token(curr_query_token);
 			break;
+		case '=':
+			add_query_token(curr_query_token);
+			curr_query_token.type = QueryToken::EQUAL;
+			add_query_token(curr_query_token);
+			break;
+		case '.':
+			add_query_token(curr_query_token);
+			curr_query_token.token_value.push_back(c);
+			//curr_query_token.type = QueryToken::DOT;
+			//add_query_token(curr_query_token);
+			//is_attr_name = true;
+			break;
+		case '#':
+			if (curr_query_token.token_value == ".stmt") {
+				curr_query_token.token_value.push_back(c);
+			} else {
+				throw SyntacticErrorException("Unexpected symbol : \'#\'");
+			}
+			break;
 		default:
 			if (isdigit(c)) {
 				if (curr_query_token.type == QueryToken::IDENTIFIER) {
@@ -175,12 +229,12 @@ void QueryTokenizer::parse_into_query_tokens(std::string input) {
 					curr_query_token.token_value.push_back(c);
 				}
 				else {
-					throw std::runtime_error("Invalid Name present");
+					throw SyntacticErrorException("Invalid Name present");
 				}
 				
 			}
 			else {
-				throw std::runtime_error("Unknown symbol present");
+				throw SyntacticErrorException("Unknown symbol present");
 			}
 			break;
 		}
@@ -188,11 +242,11 @@ void QueryTokenizer::parse_into_query_tokens(std::string input) {
 	add_query_token(curr_query_token);
 
 	// Check for open brackets, open quotation marks, temp token active
-	if (!separator_validation_stk.empty()) {
-		throw std::runtime_error("expected \')\'");
+	if (!parenthesis_validation_stk.empty()) {
+		throw SyntacticErrorException("expected \')\'");
 	}
 	if (quotation_validation) {
-		throw std::runtime_error("missing terminating \" character");
+		throw SyntacticErrorException("missing terminating \" character");
 	}
 	
 }
@@ -205,6 +259,38 @@ void QueryTokenizer::add_query_token(QueryToken& query_token) {
 	if (query_token.type == QueryToken::WHITESPACE) {
 		//discard whitespace
 		return;
+	}
+
+	if (query_token.type == QueryToken::IDENTIFIER) {
+
+		if (query_token.token_value == ".procName") {
+			query_token.type = QueryToken::DOT;
+			query_token.token_value = "";
+			query_token_cache.push_back(query_token);
+			query_token.type = QueryToken::PROC_NAME;
+			query_token.token_value = "";
+		}
+		else if (query_token.token_value == ".varName") {
+			query_token.type = QueryToken::DOT;
+			query_token.token_value = "";
+			query_token_cache.push_back(query_token);
+			query_token.type = QueryToken::VAR_NAME;
+			query_token.token_value = "";
+		}
+		else if (query_token.token_value == ".value") {
+			query_token.type = QueryToken::DOT;
+			query_token.token_value = "";
+			query_token_cache.push_back(query_token);
+			query_token.type = QueryToken::VALUE;
+			query_token.token_value = "";
+		}
+		else if (query_token.token_value == ".stmt#") {
+			query_token.type = QueryToken::DOT;
+			query_token.token_value = "";
+			query_token_cache.push_back(query_token);
+			query_token.type = QueryToken::STMT_INDEX;
+			query_token.token_value = "";
+		}
 	}
 
 	query_token_cache.push_back(query_token);

@@ -39,6 +39,8 @@
     <ClInclude Include="pch.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="CallsEvaluatorTest.cpp" />
+    <ClCompile Include="CallsTEvaluatorTest.cpp" />
     <ClCompile Include="ClauseTest.cpp" />
     <ClCompile Include="DesignExtractorTest.cpp" />
     <ClCompile Include="EntityTest.cpp" />
@@ -62,6 +64,7 @@
     <ClCompile Include="ModifiesSEvaluatorTest.cpp" />
     <ClCompile Include="ModifiesPEvaluatorTest.cpp" />
     <ClCompile Include="PatternRelRefValidatorTest.cpp" />
+    <ClCompile Include="QueryOptimizerTest.cpp" />
     <ClCompile Include="UsesSEvaluatorTest.cpp" />
     <ClCompile Include="UsesPEvaluatorTest.cpp" />
     <ClCompile Include="RelRefTest.cpp" />

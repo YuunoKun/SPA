@@ -91,6 +91,8 @@ namespace UnitTesting {
 					for (unsigned int j = 0; j < ALL_SELECT.size(); j++) {
 						Query q = initQuery({ relations[k] }, { patterns[i] }, ALL_SELECT[j]);
 						EXPECT_EQ(evaluator.evaluateQuery(q).front(), ALL_RESULT[j]) << "Error at results : " << i + 1 << " : " << j + 1;
+						q = initQuery({ relations[k] }, { patterns[i] }, SELECT_BOOLEAN);
+						EXPECT_EQ(evaluator.evaluateQuery(q).front(), BOOLEAN_TRUE_RESULT) << "Error at results : " << i + 1 << " : " << j + 1;
 					}
 				}
 			}
@@ -100,6 +102,8 @@ namespace UnitTesting {
 			for (unsigned int i = 0; i < patterns.size(); i++) {
 				Query q = initQuery({ relations[i] }, { patterns[i] }, selected[i]);
 				EXPECT_EQ(evaluator.evaluateQuery(q).front(), results[i]) << "Error at results : " << i + 1;
+				q = initQuery({ relations[i] }, { patterns[i] }, SELECT_BOOLEAN);
+				EXPECT_EQ(evaluator.evaluateQuery(q).front(), BOOLEAN_TRUE_RESULT) << "Error at results : " << i + 1;
 			}
 		}
 
@@ -109,6 +113,8 @@ namespace UnitTesting {
 					for (unsigned int j = 0; j < ALL_SELECT.size(); j++) {
 						Query q = initQuery({ }, { patterns1[k], patterns2[i] }, ALL_SELECT[j]);
 						EXPECT_EQ(evaluator.evaluateQuery(q).front(), ALL_RESULT[j]) << "Error at results : " << i + 1 << " : " << j + 1;
+						q = initQuery({ }, { patterns1[k], patterns2[i] }, SELECT_BOOLEAN);
+						EXPECT_EQ(evaluator.evaluateQuery(q).front(), BOOLEAN_TRUE_RESULT) << "Error at results : " << i + 1 << " : " << j + 1;
 					}
 				}
 			}
@@ -120,6 +126,8 @@ namespace UnitTesting {
 					for (unsigned int j = 0; j < ALL_SELECT.size(); j++) {
 						Query q = initQuery({ relations1[k], relations2[i] }, {  }, ALL_SELECT[j]);
 						EXPECT_EQ(evaluator.evaluateQuery(q).front(), ALL_RESULT[j]) << "Error at results : " << i + 1 << " : " << j + 1;
+						q = initQuery({ relations1[k], relations2[i] }, {  }, SELECT_BOOLEAN);
+						EXPECT_EQ(evaluator.evaluateQuery(q).front(), BOOLEAN_TRUE_RESULT) << "Error at results : " << i + 1 << " : " << j + 1;
 					}
 				}
 			}
@@ -131,6 +139,9 @@ namespace UnitTesting {
 					for (unsigned int j = 0; j < ALL_SELECT.size(); j++) {
 						Query q = initQuery({ relations[k] }, { patterns[i] }, ALL_SELECT[j]);
 						EXPECT_EQ(evaluator.evaluateQuery(q).front(), EMPTY_RESULT) << "Error at results : " << i + 1 << " : " << j + 1;
+						q = initQuery({ relations[k] }, { patterns[i] }, SELECT_BOOLEAN);
+						EXPECT_EQ(evaluator.evaluateQuery(q).front(), BOOLEAN_FALSE_RESULT) << "Error at results : " << i + 1 << " : " << j + 1;
+
 					}
 				}
 			}
@@ -142,6 +153,8 @@ namespace UnitTesting {
 					for (unsigned int j = 0; j < ALL_SELECT.size(); j++) {
 						Query q = initQuery({ }, { patterns1[k], patterns2[i] }, ALL_SELECT[j]);
 						EXPECT_EQ(evaluator.evaluateQuery(q).front(), EMPTY_RESULT) << "Error at results : " << i + 1 << " : " << j + 1;
+						q = initQuery({ }, { patterns1[k], patterns2[i] }, SELECT_BOOLEAN);
+						EXPECT_EQ(evaluator.evaluateQuery(q).front(), BOOLEAN_FALSE_RESULT) << "Error at results : " << i + 1 << " : " << j + 1;
 					}
 				}
 			}
@@ -153,6 +166,8 @@ namespace UnitTesting {
 					for (unsigned int j = 0; j < ALL_SELECT.size(); j++) {
 						Query q = initQuery({ relations1[k], relations2[i] }, {  }, ALL_SELECT[j]);
 						EXPECT_EQ(evaluator.evaluateQuery(q).front(), EMPTY_RESULT) << "Error at results : " << i + 1 << " : " << j + 1;
+						q = initQuery({ relations1[k], relations2[i] }, {  }, BOOLEAN);
+						EXPECT_EQ(evaluator.evaluateQuery(q).front(), BOOLEAN_FALSE_RESULT) << "Error at results : " << i + 1 << " : " << j + 1;
 					}
 				}
 			}
@@ -821,7 +836,7 @@ namespace UnitTesting {
 		const std::string MODIFIES_RIGHT4 = y;
 
 		const std::string EXPRESSION1 = "x";
-		const std::string EXPRESSION2 = "x + y";
+		const std::string EXPRESSION2 = "x + (y * 5)";
 		expr* EXPRESSIONNODE_1 = expr_parser.parse(EXPRESSION1);
 		expr* EXPRESSIONNODE_2 = expr_parser.parse(EXPRESSION2);
 
@@ -877,6 +892,8 @@ namespace UnitTesting {
 		// select call
 		const std::list<std::string> ALL_CALL = { CALL1, CALL2 };
 		const Entity SELECT_CALL = { CALL, COMMON_SYNONYM1 };
+		// select Boolean
+		const Entity SELECT_BOOLEAN = { BOOLEAN };
 
 		const std::vector<std::list<std::string>> ALL_RESULT = {
 			ALL_VARIABLE , ALL_CONSTANT , ALL_PROCEDURE, ALL_STMT, ALL_IF,
@@ -887,6 +904,8 @@ namespace UnitTesting {
 			SELECT_WHILE, SELECT_READ, SELECT_PRINT, SELECT_ASSIGN, SELECT_CALL };
 
 		const std::list<std::string> EMPTY_RESULT = {};
+		const std::list<std::string> BOOLEAN_TRUE_RESULT = { BOOLEAN_TRUE };
+		const std::list<std::string> BOOLEAN_FALSE_RESULT = { BOOLEAN_FALSE };
 
 		const Entity WILD_CARD = { WILD };
 

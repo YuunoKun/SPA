@@ -10,17 +10,11 @@ QueryEvaluator::QueryEvaluator() {
 }
 
 std::list<std::list<std::string>> QueryEvaluator::evaluateQuery(Query& query) {
-	try {
-		QueryResult result;
+	QueryResult result;
 
-		evaluateClauses(query, result);
+	evaluateClauses(query, result);
 
-		return { getResult(query, result) };
-	}
-	catch (...) {
-		//Some error occur, return empty list
-		return { { } };
-	}
+	return { getResult(query, result) };
 }
 
 void QueryEvaluator::evaluateClauses(Query& query, QueryResult& queryResult) {
@@ -58,6 +52,16 @@ std::list<std::string> QueryEvaluator::getRawResult(Entity selected) {
 }
 
 std::list<std::string> QueryEvaluator::getResult(Query& query, QueryResult& result) {
+	//Return boolean value if select is BOOLEAN
+	if (query.getSelected()[0].getType() == BOOLEAN) {
+		if (result.haveResult()) {
+			return { BOOLEAN_TRUE };
+		}
+		else {
+			return { BOOLEAN_FALSE };
+		}
+	}
+
 	//If some of the relation/pattern return empty list / false
 	if (!result.haveResult()) {
 		return {};

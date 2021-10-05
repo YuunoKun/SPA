@@ -37,5 +37,4 @@ private:
 	void filterTable(ResultTable, Entity, Entity);
 
 	void joinTable(ResultTable, Entity);
-	void joinTable(ResultTable, Entity, Entity);
 };

@@ -9,9 +9,21 @@ ExprNode::ExprNode(std::string val) {
 	value = val;
 }
 
+ExprNode::ExprNode(const ExprNode& to_copy) {
+	symbol = to_copy.symbol;
+	value = to_copy.value;
+	if (to_copy.lhs) {
+		lhs = new ExprNode(*to_copy.lhs);
+	}
+	if (to_copy.rhs) {
+		rhs = new ExprNode(*to_copy.rhs);
+	}
+}
+
+
 ExprNode::~ExprNode() {
-	delete this->lhs;
-	delete this->rhs;
+	delete lhs;
+	delete rhs;
 }
 
 void ExprNode::setSymbol(ExprSymbol sym) {
@@ -89,4 +101,9 @@ bool ExprNode::equals(ExprNode* expr) {
 	}
 
 	return false;
+}
+
+
+ExprNode& ExprNode::operator=(const ExprNode& to_copy) {
+	return ExprNode(to_copy);
 }

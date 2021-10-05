@@ -12,7 +12,7 @@ namespace UnitTesting {
 		RelationsEvaluator evaluator;
 		QueryResult result;
 
-		std::vector<RelType> types = { FOLLOWS, PARENT /*FOLLOWS_T, PARENT_T*/ };
+		std::vector<RelType> types = { FOLLOWS, PARENT, FOLLOWS_T, PARENT_T };
 
 		//Negative Test Case
 		for (auto type : types) {
@@ -36,6 +36,8 @@ namespace UnitTesting {
 		}
 		PKB::getInstance().addFollows(1, 2);
 		PKB::getInstance().addParent(1, 2);
+		PKB::getInstance().generateFollowsT();
+		PKB::getInstance().generateParentT();
 
 		//Positive Test Case
 		for (auto type : types) {
@@ -202,6 +204,80 @@ namespace UnitTesting {
 			RelRef relation4(type, { PROCEDURE, Synonym{"a"} }, { VARIABLE, "y" });
 
 			std::vector<RelRef> relations{ relation1, relation2, relation3, relation4 };
+			for (unsigned int i = 0; i < relations.size(); i++) {
+				QueryResult result;
+				evaluator.evaluateRelation(result, relations[i]);
+				EXPECT_FALSE(result.haveResult()) << "ERROR AT RELATION : " << i + 1;
+			}
+		}
+	}
+
+
+	TEST(RelationsEvaluatorTest, evaluateRelationType4) {
+		PKB::getInstance().resetCache();
+		proc_name main1 = "main1";
+		proc_name main2 = "main2";
+		PKB::getInstance().addProcedure(main1);
+		PKB::getInstance().addProcedure(main2);
+
+		RelationsEvaluator evaluator;
+		QueryResult result;
+
+		std::vector<RelType> types = { CALLS, CALLS_T };
+
+		//Negative Test Case
+		for (auto type : types) {
+			RelRef relation1(type, { WILD }, { WILD });
+			RelRef relation2(type, { PROCEDURE, main1 }, { PROCEDURE, main2 });
+			RelRef relation3(type, { PROCEDURE, main1 }, { WILD });
+			RelRef relation4(type, { WILD }, { PROCEDURE, main2 });
+			RelRef relation5(type, { STMT, Synonym{"a"} }, { PROCEDURE, Synonym{"b"} });
+			RelRef relation6(type, { WILD }, { PROCEDURE, Synonym{"a"} });
+			RelRef relation7(type, { PROCEDURE, Synonym{"a"} }, { WILD });
+			RelRef relation8(type, { PROCEDURE, main1 }, { PROCEDURE, Synonym{"a"} });
+			RelRef relation9(type, { PROCEDURE, Synonym{"a"} }, { PROCEDURE, main2 });
+
+			std::vector<RelRef> relations{ relation1, relation2, relation3, relation4,
+				relation5,relation6,relation7 ,relation8,relation9 };
+			for (unsigned int i = 0; i < relations.size(); i++) {
+				QueryResult result;
+				evaluator.evaluateRelation(result, relations[i]);
+				EXPECT_FALSE(result.haveResult()) << "ERROR AT RELATION : " << i + 1;
+			}
+		}
+		PKB::getInstance().addCallsP(main1, main2);
+		PKB::getInstance().generateCallsPT();
+
+		//Positive Test Case
+		for (auto type : types) {
+			RelRef relation1(type, { WILD }, { WILD });
+			RelRef relation2(type, { PROCEDURE, main1 }, { PROCEDURE, main2 });
+			RelRef relation3(type, { PROCEDURE, main1 }, { WILD });
+			RelRef relation4(type, { WILD }, { PROCEDURE, main2 });
+			RelRef relation5(type, { PROCEDURE, Synonym{"a"} }, { PROCEDURE, Synonym{"b"} });
+			RelRef relation6(type, { WILD }, { PROCEDURE, Synonym{"a"} });
+			RelRef relation7(type, { PROCEDURE, Synonym{"a"} }, { WILD });
+			RelRef relation8(type, { PROCEDURE, main1 }, { PROCEDURE, Synonym{"a"} });
+			RelRef relation9(type, { PROCEDURE, Synonym{"a"} }, { PROCEDURE, main2 });
+
+			std::vector<RelRef> relations{ relation1, relation2, relation3, relation4,
+				relation5,relation6,relation7 ,relation8,relation9 };
+			for (unsigned int i = 0; i < relations.size(); i++) {
+				QueryResult result;
+				evaluator.evaluateRelation(result, relations[i]);
+				EXPECT_TRUE(result.haveResult()) << "ERROR AT RELATION : " << i + 1;
+			}
+		}
+
+		//Negative Test Case
+		for (auto type : types) {
+			RelRef relation1(type, { PROCEDURE, main2 }, { PROCEDURE, main1 });
+			RelRef relation2(type, { PROCEDURE, main2 }, { WILD });
+			RelRef relation3(type, { WILD }, { PROCEDURE, main1 });
+			RelRef relation4(type, { PROCEDURE, main2 }, { PROCEDURE, Synonym{"a"} });
+			RelRef relation5(type, { PROCEDURE, Synonym{"a"} }, { PROCEDURE, main1 });
+
+			std::vector<RelRef> relations{ relation1, relation2, relation3, relation4, relation5 };
 			for (unsigned int i = 0; i < relations.size(); i++) {
 				QueryResult result;
 				evaluator.evaluateRelation(result, relations[i]);

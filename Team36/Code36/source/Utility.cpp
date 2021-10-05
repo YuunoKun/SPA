@@ -223,36 +223,6 @@ std::vector<std::vector<std::string>> Utility::joinTable(std::vector<std::vector
 			results.push_back(to);
 		}
 	}
-
-	return results;
-}
-
-std::vector<std::vector<std::string>> Utility::joinTable(std::vector<std::vector<std::string>>& main, int mainIndex1, int mainIndex2,
-	std::unordered_map<std::string, std::unordered_multimap<std::string, std::vector<std::string>>>& toJoin, int toJoinIndex1, int toJoinIndex2) {
-	std::vector<std::vector<std::string>> results;
-
-	for (auto& it : main) {
-		auto it1 = toJoin.find(it[mainIndex1]);
-		if (it1 == toJoin.end()) {
-			continue;
-		}
-
-		std::pair<std::unordered_multimap<std::string, std::vector<std::string>>::iterator, std::unordered_multimap<std::string, std::vector<std::string>>::iterator> ret;
-
-		ret = it1->second.equal_range(it[mainIndex2]);
-
-		for (std::unordered_multimap<std::string, std::vector<std::string>>::iterator itr1 = ret.first; itr1 != ret.second; ++itr1) {
-			std::vector<std::string> to(it);
-			for (unsigned int i = 0; i < itr1->second.size(); i++) {
-				if (i == toJoinIndex1 || i == toJoinIndex2) {
-					continue;
-				}
-				to.push_back(itr1->second[i]);
-			}
-			results.push_back(to);
-		}
-	}
-
 	return results;
 }
 
