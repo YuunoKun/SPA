@@ -181,6 +181,28 @@ namespace UnitTesting {
 		EXPECT_TRUE(output[2].type == QueryToken::PARENTHESIS_CLOSE);
 	}
 
+	//Test for Tuple Open Close
+	TEST(QueryTokenizer, TupleOpenCloseTest) {
+
+		//Result
+		QueryTokenizer query_tokenizer;
+		query_tokenizer.parse_into_query_tokens("<p.stmt#>");
+		std::vector<QueryToken> output = query_tokenizer.get_query_token_chain();
+
+		//Expected
+		std::vector<QueryToken> expected;
+		expected.push_back({ QueryToken::TUPLE_OPEN, "" });
+		expected.push_back({ QueryToken::IDENTIFIER, "p" });
+		expected.push_back({ QueryToken::DOT, "" });
+		expected.push_back({ QueryToken::STMT_INDEX, "" });
+		expected.push_back({ QueryToken::TUPLE_CLOSE, "" });
+
+		for (size_t i = 0; i < expected.size(); i++) {
+			EXPECT_TRUE(output[i].token_value == expected[i].token_value);
+			EXPECT_TRUE(output[i].type == expected[i].type);
+		}
+	}
+
 	// Test for open and close quotation marks
 	TEST(QueryTokenizer, QuotationOpenCloseTest) {
 		
@@ -483,6 +505,43 @@ namespace UnitTesting {
 		}
 	}
 
+	TEST(QueryTokenizer, multipleprocNameTest) {
+
+		//Result
+		QueryTokenizer query_tokenizer;
+		std::string input = "Select p.procName such that Calls (p, q) with q.procName = \"Third\"";
+
+		query_tokenizer.parse_into_query_tokens(input);
+		std::vector<QueryToken> output = query_tokenizer.get_query_token_chain();
+
+		//Expected
+		std::vector<QueryToken> expected;
+		expected.push_back({ QueryToken::IDENTIFIER, "Select" });
+		expected.push_back({ QueryToken::IDENTIFIER, "p" });
+		expected.push_back({ QueryToken::DOT, "" });
+		expected.push_back({ QueryToken::PROC_NAME, "" });
+		expected.push_back({ QueryToken::SUCH_THAT, "" });
+		expected.push_back({ QueryToken::IDENTIFIER, "Calls" });
+		expected.push_back({ QueryToken::PARENTHESIS_OPEN, "" });
+		expected.push_back({ QueryToken::IDENTIFIER, "p" });
+		expected.push_back({ QueryToken::COMMA, "" });
+		expected.push_back({ QueryToken::IDENTIFIER, "q" });
+		expected.push_back({ QueryToken::PARENTHESIS_CLOSE, "" });
+		expected.push_back({ QueryToken::IDENTIFIER, "with" });
+		expected.push_back({ QueryToken::IDENTIFIER, "q" });
+		expected.push_back({ QueryToken::DOT, "" });
+		expected.push_back({ QueryToken::PROC_NAME, "" });
+		expected.push_back({ QueryToken::EQUAL, "" });
+		expected.push_back({ QueryToken::QUOTATION_OPEN, "" });
+		expected.push_back({ QueryToken::IDENTIFIER, "Third" });
+		expected.push_back({ QueryToken::QUOTATION_CLOSE, "" });
+
+		for (size_t i = 0; i < expected.size(); i++) {
+			EXPECT_TRUE(output[i].token_value == expected[i].token_value);
+			EXPECT_TRUE(output[i].type == expected[i].type);
+		}
+	}
+
 	// test for varName
 	TEST(QueryTokenizer, varNameTest) {
 
@@ -607,6 +666,28 @@ namespace UnitTesting {
 
 		QueryTokenizer query_tokenizer;
 		std::string input = "procName)";
+
+		EXPECT_THROW(query_tokenizer.parse_into_query_tokens(input), SyntacticErrorException);
+
+	}
+
+	//Test for Tuple still Open
+	TEST(QueryTokenizer, InvalidTupleOpenTest) {
+
+		//Result
+		QueryTokenizer query_tokenizer;
+		std::string input = "<p.stmt#";
+		
+		EXPECT_THROW(query_tokenizer.parse_into_query_tokens(input), SyntacticErrorException);
+
+	}
+
+	//Test for Tuple no Open
+	TEST(QueryTokenizer, InvalidTupleCloseTest) {
+
+		//Result
+		QueryTokenizer query_tokenizer;
+		std::string input = "p.stmt#>";
 
 		EXPECT_THROW(query_tokenizer.parse_into_query_tokens(input), SyntacticErrorException);
 
