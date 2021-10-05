@@ -10,16 +10,15 @@ namespace UnitTesting {
 		ExprNode node = ExprNode(ExprSymbol::EXPR_MINUS);
 		ASSERT_EQ(node.getSymbol(), ExprSymbol::EXPR_MINUS);
 		ASSERT_EQ(node.getValue(), "");
-		ASSERT_EQ(node.getLHS(), ExprNode());
-		ASSERT_EQ(node.getRHS(), ExprNode());
-
+		ASSERT_EQ(node.getLHS(), nullptr);
+		ASSERT_EQ(node.getRHS(), nullptr);
 
 		node = ExprNode("x");
 
 		ASSERT_EQ(node.getSymbol(), ExprSymbol::EXPR_IDENTIFIER);
 		ASSERT_EQ(node.getValue(), "x");
-		ASSERT_EQ(node.getLHS(), ExprNode());
-		ASSERT_EQ(node.getRHS(), ExprNode());
+		ASSERT_EQ(node.getLHS(), nullptr);
+		ASSERT_EQ(node.getRHS(), nullptr);
 
 		ExprNode child = ExprNode(ExprSymbol::EXPR_MOD);
 		ExprNode child_l = ExprNode(ExprSymbol::EXPR_MOD);
@@ -31,8 +30,8 @@ namespace UnitTesting {
 
 		ASSERT_EQ(node.getSymbol(), ExprSymbol::EXPR_PLUS);
 		ASSERT_EQ(node.getValue(), "1234");
-		ASSERT_EQ(node.getLHS(), child_l);
-		ASSERT_EQ(node.getRHS(), child_r);
+		ASSERT_EQ(*node.getLHS(), child_l);
+		ASSERT_EQ(*node.getRHS(), child_r);
 
 	}
 
@@ -100,7 +99,7 @@ namespace UnitTesting {
 		ASSERT_TRUE(target.contains(&target));
 		ASSERT_TRUE(target.contains(&l_target));
 		ASSERT_TRUE(target.contains(&r_target));
-		ASSERT_FALSE(target.contains(new ExprNode()));
+		ASSERT_FALSE(target.contains(nullptr));
 		ASSERT_FALSE(l_target.contains(&target));
 		ASSERT_FALSE(r_target.contains(&target));
 		ASSERT_FALSE(l_target.contains(&r_target));
@@ -117,11 +116,13 @@ namespace UnitTesting {
 		target.setRHS(r_target);
 
 		ExprNode a_copy(target);
-		ASSERT_NE(target, &a_copy);
+		ASSERT_FALSE(target.getLHS() == a_copy.getLHS());
+		ASSERT_FALSE(target.getRHS() == a_copy.getRHS());
 		ASSERT_TRUE(target.equals(&a_copy));
 
 		ExprNode b_copy = target;
-		ASSERT_NE(target, &b_copy);
+		ASSERT_FALSE(target.getLHS() == b_copy.getLHS());
+		ASSERT_FALSE(target.getRHS() == b_copy.getRHS());
 		ASSERT_TRUE(target.equals(&b_copy));
 
 	}

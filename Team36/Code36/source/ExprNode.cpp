@@ -10,13 +10,13 @@ ExprNode::ExprNode(std::string val) {
 }
 
 ExprNode::ExprNode(const ExprNode& to_copy) {
-	symbol = to_copy.symbol;
-	value = to_copy.value;
+	this->symbol = to_copy.symbol;
+	this->value = to_copy.value;
 	if (to_copy.lhs) {
-		lhs = new ExprNode(*to_copy.lhs);
+		this->lhs = new ExprNode(*to_copy.lhs);
 	}
 	if (to_copy.rhs) {
-		rhs = new ExprNode(*to_copy.rhs);
+		this->rhs = new ExprNode(*to_copy.rhs);
 	}
 }
 
@@ -110,11 +110,20 @@ bool ExprNode::equals(ExprNode* expr) {
 
 bool ExprNode::operator==(const ExprNode& other) const {
 	if (symbol == other.symbol && value == other.value) {
-		return ((!lhs && !other.lhs) || (lhs == other.lhs && other.rhs));
+		return ((!lhs && !other.lhs) ||
+			(lhs && (*lhs == *other.lhs) && rhs && (*rhs == *other.rhs)));
 	}
 	return false;
 }
 
 ExprNode& ExprNode::operator=(const ExprNode& to_copy) {
-	return ExprNode(to_copy);
+	symbol = to_copy.symbol;
+	value = to_copy.value;
+	if (to_copy.lhs) {
+		lhs = new ExprNode(*to_copy.lhs);
+	}
+	if (to_copy.rhs) {
+		rhs = new ExprNode(*to_copy.rhs);
+	}
+	return *this;
 }

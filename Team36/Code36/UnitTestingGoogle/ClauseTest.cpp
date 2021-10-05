@@ -16,13 +16,13 @@ namespace UnitTesting {
 
 		EXPECT_EQ(clause.getPattern().getPatternType(), Entity( ASSIGN, Synonym{ "a" } ) );
 		EXPECT_EQ(clause.getPattern().getLeftExpression(), Entity(VARIABLE, Synonym{ "v" }));
-		EXPECT_EQ(clause.getPattern().getExpression(), nullptr);
+		EXPECT_EQ(clause.getPattern().getExpression(), ExprNode());
 		EXPECT_EQ(clause.getPattern().isWild(), true);
 
 
 		EXPECT_EQ(pattern.getPatternType(), Entity(ASSIGN, Synonym{ "a" }));
 		EXPECT_EQ(pattern.getLeftExpression(), Entity(VARIABLE, Synonym{ "v" }));
-		EXPECT_EQ(pattern.getExpression(), nullptr);
+		EXPECT_EQ(pattern.getExpression(), ExprNode());
 		EXPECT_EQ(pattern.isWild(), true);
 
 		EXPECT_EQ(clause.getType(), PATTERN);
