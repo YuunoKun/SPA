@@ -403,21 +403,6 @@ QueryToken QueryPreprocessor::setIdentifierToQueryTokenType(QueryToken& prevToke
 	return temp;
 }
 
-void QueryPreprocessor::validateDeclarationQuery(QueryToken& prevToken, QueryToken& token) {
-	// Guard clauses to catch semantically wrong input, all usage of token should be temp
-	if (token.type == QueryToken::QueryTokenType::IDENTIFIER &&
-		(prevToken.type != QueryToken::QueryTokenType::IDENTIFIER &&
-			prevToken.type != QueryToken::QueryTokenType::TERMINATOR &&
-			prevToken.type != QueryToken::QueryTokenType::COMMA &&
-			prevToken.type != QueryToken::QueryTokenType::WHITESPACE)) {
-		throw SyntacticErrorException("During declaration, only identifier can exists excluding terminator and whitespace");
-	}
-	if (prevToken.type == QueryToken::QueryTokenType::COMMA &&
-		token.type != QueryToken::QueryTokenType::IDENTIFIER) {
-		throw SyntacticErrorException("During declaration, only identifier is accepted after comma.");
-	}
-}
-
 void QueryPreprocessor::addEntityToQuery(Query& query, std::vector<QueryToken>& output, QueryToken& type, QueryToken& token) {
 	// Check if entity name is already used, exists in output, should return error
 	Entity ent;
@@ -474,7 +459,6 @@ void QueryPreprocessor::addSelectedToQuery(Query& query, Entity& ent, std::vecto
 	if (!isValid) {
 		throw SemanticErrorException("Select variable content has not been declared");
 	}
-	//isSelect = true;
 	query.addSelected(ent);
 }
 
