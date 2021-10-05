@@ -134,9 +134,8 @@ Query QueryPreprocessor::parse(std::string str) {
 				endOfCurrentDeclaration = false;
 			}
 			else if (haveNextDeclaration) {
-				Entity ent;
 				if (token.type == QueryToken::QueryTokenType::IDENTIFIER) {
-					addEntityToQuery(query, ent, output, declarationType, token);
+					addEntityToQuery(query, output, declarationType, token);
 					haveNextDeclaration = false;
 				}
 				else {
@@ -193,15 +192,16 @@ Query QueryPreprocessor::parse(std::string str) {
 				//else if (declarationType.type == QueryToken::QueryTokenType::SELECT) {
 				else if (status == ParseStatus::IS_SELECTING) {
 					// Validation
-					if (prevTokenSelect.type == QueryToken::QueryTokenType::IDENTIFIER ||
+					if ((prevTokenSelect.type == QueryToken::QueryTokenType::IDENTIFIER ||
 						prevTokenSelect.type == QueryToken::QueryTokenType::PARENTHESIS_CLOSE ||
 						prevTokenSelect.type == QueryToken::QueryTokenType::PROC_NAME ||
 						prevTokenSelect.type == QueryToken::QueryTokenType::VAR_NAME ||
 						prevTokenSelect.type == QueryToken::QueryTokenType::STMT_INDEX ||
-						prevTokenSelect.type == QueryToken::QueryTokenType::VALUE &&
-						token.type != QueryToken::QueryTokenType::SUCH_THAT &&
-						token.type != QueryToken::QueryTokenType::PATTERN &&
-						token.type != QueryToken::QueryTokenType::WITH) {
+						prevTokenSelect.type == QueryToken::QueryTokenType::VALUE) &&
+						(token.type != QueryToken::QueryTokenType::DOT &&
+							token.type != QueryToken::QueryTokenType::SUCH_THAT &&
+							token.type != QueryToken::QueryTokenType::PATTERN &&
+							token.type != QueryToken::QueryTokenType::WITH)) {
 						throw SyntacticErrorException("After selection needs to have such that or pattern clause");
 					}
 
@@ -424,8 +424,9 @@ void QueryPreprocessor::validateDeclarationQuery(QueryToken& prevToken, QueryTok
 	}
 }
 
-void QueryPreprocessor::addEntityToQuery(Query& query, Entity& ent, std::vector<QueryToken>& output, QueryToken& type, QueryToken& token) {
+void QueryPreprocessor::addEntityToQuery(Query& query, std::vector<QueryToken>& output, QueryToken& type, QueryToken& token) {
 	// Check if entity name is already used, exists in output, should return error
+	Entity ent;
 	for (QueryToken each : output) {
 		if (token.token_value == each.token_value) {
 			throw SemanticErrorException("Name is already used!");
