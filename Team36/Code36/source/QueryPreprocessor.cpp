@@ -129,18 +129,12 @@ Query QueryPreprocessor::parse(std::string str) {
 		if (!isSelect) {
 			if (endOfCurrentDeclaration) {
 				declarationType = setIdentifierToQueryTokenType(prevToken, declarationType, token, status, isSelect);
-				validateDeclarationQuery(prevToken, token);
 				haveNextDeclaration = true;
 				endOfCurrentDeclaration = false;
 			}
-			else if (haveNextDeclaration) {
-				if (token.type == QueryToken::QueryTokenType::IDENTIFIER) {
-					addEntityToQuery(query, output, declarationType, token);
-					haveNextDeclaration = false;
-				}
-				else {
-					throw SyntacticErrorException("Invalid declaration");
-				}
+			else if (haveNextDeclaration && token.type == QueryToken::QueryTokenType::IDENTIFIER) {
+				addEntityToQuery(query, output, declarationType, token);
+				haveNextDeclaration = false;
 			}
 			else if (!haveNextDeclaration && !endOfCurrentDeclaration && token.type == QueryToken::QueryTokenType::TERMINATOR) {
 				endOfCurrentDeclaration = true;
