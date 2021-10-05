@@ -16,16 +16,51 @@ QueryPreprocessor::QueryPreprocessor() {
 	this->query = Query();
 
 	// True when parsing is in selection, false when parsing is in declaration
-	bool isSelect = false;
+	this->isSelect = false;
 
 	// True when iterating inside the such that or pattern parameter, false otherwise
-	bool isParameter = false;
+	this->isParameter = false;
 
-	bool isExpectingPatternType = false;
+	this->isExpectingPatternType = false;
 
-	bool isExpectingAttribute = false;
+	this->isExpectingAttribute = false;
 
-	bool endOfCurrentClauses = true;
+	this->endOfCurrentClauses = true;
+
+	// Collection of declared query tokens
+	this->output.clear();
+
+	// Collection of selected query tokens
+	this->selected.clear();
+
+	// To keep track of parameter content in such that and pattern clauses
+	this->parameterClause.clear();
+
+	// To keep track of previous token during declaration, includes COMMA and SEMICOLON
+	this->prevToken = QueryToken();
+
+	// To keep track of previous important declaration token, excludes COMMA and SEMICOLON
+	this->declarationType = QueryToken();
+
+	// To keep track if there another declaration
+	this->haveNextDeclaration = false;
+
+	// Keep track if it the end of current declaration by terminator
+	this->endOfCurrentDeclaration = true;
+
+	// To keep track of previous token during Selection
+	this->prevTokenSelect = QueryToken();
+
+	// To keep track of valid such that clause type, eg: Uses, Modifies, Parent, ParentT
+	this->queryParameter = QueryToken();
+
+	// To keep track if selection is in pattern or such that
+	this->patternOrSuchThat = QueryToken();
+
+	// To keep track of pattern type entity, eg: ASSIGN
+	this->patternTypeEntity = Entity();
+
+	this->status = ParseStatus::NEUTRAL;
 }
 
 Query QueryPreprocessor::parse(std::string str) {
@@ -88,52 +123,17 @@ Query QueryPreprocessor::parse(std::string str) {
 	//v.push_back({ QueryToken::QueryTokenType::CONSTANT, "10" });
 	//v.push_back({ QueryToken::QueryTokenType::PARENTHESIS_CLOSE, "" });
 
-	// Collection of declared query tokens
-	std::vector<QueryToken> output;
-
-	// Collection of selected query tokens
-	std::vector<QueryToken> selected;
-
-	// To keep track of parameter content in such that and pattern clauses
-	std::vector<QueryToken> parameterClause;
-
-	// To keep track of previous token during declaration, includes COMMA and SEMICOLON
-	QueryToken prevToken = QueryToken();
-
-	// To keep track of previous important declaration token, excludes COMMA and SEMICOLON
-	QueryToken declarationType = QueryToken();
-
-	// To keep track if there another declaration
-	bool haveNextDeclaration = false;
-
-	// Keep track if it the end of current declaration by terminator
-	bool endOfCurrentDeclaration = true;
-
-	// To keep track of previous token during Selection
-	QueryToken prevTokenSelect = QueryToken();
-
-	// To keep track of valid such that clause type, eg: Uses, Modifies, Parent, ParentT
-	QueryToken queryParameter = QueryToken();
-
-	// To keep track if selection is in pattern or such that
-	QueryToken patternOrSuchThat = QueryToken();
-
-	// To keep track of pattern type entity, eg: ASSIGN
-	Entity patternTypeEntity;
-
-	ParseStatus status;
-
 	for (QueryToken token : v) {
 		// First iteration, set identifier to correct type
 		// Check what is my previous token
 		if (!isSelect) {
 			if (endOfCurrentDeclaration) {
-				declarationType = setIdentifierToQueryTokenType(prevToken, declarationType, token, status);
+				setIdentifierToQueryTokenType(token, status);
 				haveNextDeclaration = true;
 				endOfCurrentDeclaration = false;
 			}
 			else if (haveNextDeclaration && token.type == QueryToken::QueryTokenType::IDENTIFIER) {
-				addEntityToQuery(output, declarationType, token);
+				addEntityToQuery(token);
 				haveNextDeclaration = false;
 			}
 			else if (!haveNextDeclaration && !endOfCurrentDeclaration && token.type == QueryToken::QueryTokenType::TERMINATOR) {
@@ -216,7 +216,7 @@ Query QueryPreprocessor::parse(std::string str) {
 						prevToken.token_value == "Select" &&
 						token.type == QueryToken::QueryTokenType::IDENTIFIER) {
 						Entity ent;
-						addSelectedToQuery(ent, output, selected, token);
+						addSelectedToQuery(ent, token);
 						haveNextDeclaration = false;
 					}
 				}
@@ -263,7 +263,7 @@ Query QueryPreprocessor::parse(std::string str) {
 					}
 					else if (token.type == QueryToken::QueryTokenType::IDENTIFIER) {
 						Entity ent;
-						addSelectedToQuery(ent, output, selected, token);
+						addSelectedToQuery(ent, token);
 						haveNextDeclaration = false;
 					}
 					else if (token.type == QueryToken::QueryTokenType::TUPLE_CLOSE) {
@@ -294,7 +294,7 @@ Query QueryPreprocessor::parse(std::string str) {
 				else if (patternOrSuchThat.type == QueryToken::QueryTokenType::SUCH_THAT) {
 					if (!isParameter && token.type == QueryToken::QueryTokenType::PARENTHESIS_OPEN) {
 						isParameter = true;
-						setQueryParameter(prevTokenSelect, queryParameter);
+						setQueryParameter();
 					}
 					else if (token.type == QueryToken::QueryTokenType::PARENTHESIS_CLOSE) {
 						isParameter = false;
@@ -306,7 +306,7 @@ Query QueryPreprocessor::parse(std::string str) {
 				else if (patternOrSuchThat.type == QueryToken::QueryTokenType::PATTERN) {
 					if (prevTokenSelect.token_value == "pattern" && token.type == QueryToken::QueryTokenType::IDENTIFIER
 						&& isExpectingPatternType) {
-						QueryPreprocessor::addPatternToQuery(patternTypeEntity, output, token);
+						QueryPreprocessor::addPatternToQuery(token);
 						isExpectingPatternType = false;
 					}
 					else if (!isParameter && token.type == QueryToken::QueryTokenType::PARENTHESIS_OPEN) {
@@ -354,41 +354,41 @@ Query QueryPreprocessor::parse(std::string str) {
 	return QueryPreprocessor::returnAndResetQuery();
 }
 
-QueryToken QueryPreprocessor::setIdentifierToQueryTokenType(QueryToken& prevToken, QueryToken& temp, QueryToken& token, ParseStatus& status) {
+void QueryPreprocessor::setIdentifierToQueryTokenType(QueryToken& token, ParseStatus& status) {
 	if (prevToken.type == QueryToken::QueryTokenType::WHITESPACE ||
 		prevToken.type == QueryToken::QueryTokenType::TERMINATOR) {
 		if (token.token_value == "stmt") {
-			temp = { QueryToken::QueryTokenType::STMT, "stmt" };
+			declarationType = { QueryToken::QueryTokenType::STMT, "stmt" };
 		}
 		else if (token.token_value == "procedure") {
-			temp = { QueryToken::QueryTokenType::PROCEDURE, "procedure" };
+			declarationType = { QueryToken::QueryTokenType::PROCEDURE, "procedure" };
 		}
 		else if (token.token_value == "read") {
-			temp = { QueryToken::QueryTokenType::READ, "read" };
+			declarationType = { QueryToken::QueryTokenType::READ, "read" };
 		}
 		else if (token.token_value == "print") {
-			temp = { QueryToken::QueryTokenType::PRINT, "print" };
+			declarationType = { QueryToken::QueryTokenType::PRINT, "print" };
 		}
 		else if (token.token_value == "call") {
-			temp = { QueryToken::QueryTokenType::CALL, "call" };
+			declarationType = { QueryToken::QueryTokenType::CALL, "call" };
 		}
 		else if (token.token_value == "if") {
-			temp = { QueryToken::QueryTokenType::IF, "if" };
+			declarationType = { QueryToken::QueryTokenType::IF, "if" };
 		}
 		else if (token.token_value == "while") {
-			temp = { QueryToken::QueryTokenType::WHILE, "while" };
+			declarationType = { QueryToken::QueryTokenType::WHILE, "while" };
 		}
 		else if (token.token_value == "assign") {
-			temp = { QueryToken::QueryTokenType::ASSIGN, "assign" };
+			declarationType = { QueryToken::QueryTokenType::ASSIGN, "assign" };
 		}
 		else if (token.token_value == "variable") {
-			temp = { QueryToken::QueryTokenType::VARIABLE, "variable" };
+			declarationType = { QueryToken::QueryTokenType::VARIABLE, "variable" };
 		}
 		else if (token.token_value == "constant") {
-			temp = { QueryToken::QueryTokenType::CONSTANT, "constant" };
+			declarationType = { QueryToken::QueryTokenType::CONSTANT, "constant" };
 		}
 		else if (token.token_value == "prog_line") {
-			temp = { QueryToken::QueryTokenType::PROG_LINE, "prog_line" };
+			declarationType = { QueryToken::QueryTokenType::PROG_LINE, "prog_line" };
 		}
 		// Need to enforce that Select must only come after a terminator
 		else if (prevToken.type == QueryToken::QueryTokenType::TERMINATOR && token.token_value == "Select") {
@@ -401,28 +401,27 @@ QueryToken QueryPreprocessor::setIdentifierToQueryTokenType(QueryToken& prevToke
 			throw SyntacticErrorException("Invalid syntax for declaration or select");
 		}
 	}
-	return temp;
 }
 
-void QueryPreprocessor::addEntityToQuery(std::vector<QueryToken>& output, QueryToken& type, QueryToken& token) {
+void QueryPreprocessor::addEntityToQuery(QueryToken& token) {
 	// Check if entity name is already used, exists in output, should return error
 	Entity ent;
-	for (QueryToken each : output) {
+	for (QueryToken each : this->output) {
 		if (token.token_value == each.token_value) {
 			throw SemanticErrorException("Name is already used!");
 		}
 	}
 
 	// Declaring goes into output
-	output.push_back({ type.type, { token.token_value } });
+	this->output.push_back({ declarationType.type, { token.token_value } });
 	Synonym synonym;
 	synonym.name = token.token_value;
-	EntityType entityType = Utility::queryTokenTypeToEntityType(type.type);
+	EntityType entityType = Utility::queryTokenTypeToEntityType(declarationType.type);
 	ent = { entityType, synonym };
 	this->query.addEntity(ent);
 }
 
-void QueryPreprocessor::addPatternToQuery(Entity& patternTypeEntity, std::vector<QueryToken>& output, QueryToken& token) {
+void QueryPreprocessor::addPatternToQuery(QueryToken& token) {
 	bool isValid = false;
 	for (QueryToken each : output) {
 		if (token.token_value == each.token_value) {
@@ -438,14 +437,14 @@ void QueryPreprocessor::addPatternToQuery(Entity& patternTypeEntity, std::vector
 	}
 }
 
-void QueryPreprocessor::addSelectedToQuery(Entity& ent, std::vector<QueryToken>& output, std::vector<QueryToken> selected, QueryToken& token) {
+void QueryPreprocessor::addSelectedToQuery(Entity& ent, QueryToken& token) {
 	bool isValid = false;
-	if (token.token_value == "BOOLEAN" && query.getSelected().size() == 0) {
+	if (token.token_value == "BOOLEAN" && this->query.getSelected().size() == 0) {
 		ent = { EntityType::BOOLEAN };
 		isValid = true;
 	}
 	else {
-		for (QueryToken each : output) {
+		for (QueryToken each : this->output) {
 			if (token.token_value == each.token_value) {
 				selected.push_back({ each.type, token.token_value });
 				Synonym synonym;
@@ -463,7 +462,7 @@ void QueryPreprocessor::addSelectedToQuery(Entity& ent, std::vector<QueryToken>&
 	this->query.addSelected(ent);
 }
 
-void QueryPreprocessor::setQueryParameter(QueryToken& prevTokenSelect, QueryToken& queryParameter) {
+void QueryPreprocessor::setQueryParameter() {
 	// USES_P to be handled in PatternRelRefValidator
 	if (prevTokenSelect.token_value == "Uses" && prevTokenSelect.type == QueryToken::QueryTokenType::IDENTIFIER) {
 		queryParameter = { QueryToken::QueryTokenType::USES_S, "Uses" };
@@ -530,11 +529,45 @@ Query QueryPreprocessor::returnAndResetQuery() {
 
 	// Reset variables
 	this->query = Query();
-	bool isSelect = false;
-	bool isParameter = false;
-	bool isExpectingPatternType = false;
-	bool isExpectingAttribute = false;
-	bool endOfCurrentClauses = true;
+	this->isSelect = false;
+	this->isParameter = false;
+	this->isExpectingPatternType = false;
+	this->isExpectingAttribute = false;
+	this->endOfCurrentClauses = true;
+	output.clear();
+	selected.clear();
+	parameterClause.clear();
+	this->prevToken = QueryToken();
+	this->declarationType = QueryToken();
+	this->haveNextDeclaration = false;
+	this->endOfCurrentDeclaration = true;
+	this->prevTokenSelect = QueryToken();
+	this->queryParameter = QueryToken();
+	this->patternOrSuchThat = QueryToken();
+	this->patternTypeEntity = Entity();
+	this->status = ParseStatus::NEUTRAL;
 
 	return queryResult;
+}
+
+void QueryPreprocessor::resetQuery() {
+	// Reset variables
+	this->query = Query();
+	this->isSelect = false;
+	this->isParameter = false;
+	this->isExpectingPatternType = false;
+	this->isExpectingAttribute = false;
+	this->endOfCurrentClauses = true;
+	output.clear();
+	selected.clear();
+	parameterClause.clear();
+	this->prevToken = QueryToken();
+	this->declarationType = QueryToken();
+	this->haveNextDeclaration = false;
+	this->endOfCurrentDeclaration = true;
+	this->prevTokenSelect = QueryToken();
+	this->queryParameter = QueryToken();
+	this->patternOrSuchThat = QueryToken();
+	this->patternTypeEntity = Entity();
+	this->status = ParseStatus::NEUTRAL;
 }

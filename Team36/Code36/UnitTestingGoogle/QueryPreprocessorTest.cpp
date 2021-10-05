@@ -876,76 +876,74 @@ namespace UnitTesting {
 
 	TEST(QueryPreprocessor, invalidQueries) {
 		QueryPreprocessor qp;
-		Query q = Query();
-		std::vector<std::string> queries;
 
 		EXPECT_THROW(qp.parse("asg a; Select a"), SyntacticErrorException);
-		queries.clear();
+		qp.resetQuery();
 
 		EXPECT_THROW(qp.parse("assign a; Select s"), SemanticErrorException);
-		queries.clear();
+		qp.resetQuery();
 
 		EXPECT_THROW(qp.parse("assign a; stmt s; procedure p; Select a pattern p(s, _)"), SemanticErrorException);
-		queries.clear();
+		qp.resetQuery();
 
 		EXPECT_THROW(qp.parse("assign a; stmt s; call c; Select a pattern c(s, _)"), SemanticErrorException);
-		queries.clear();
+		qp.resetQuery();
 
 		EXPECT_THROW(qp.parse("assign a; stmt s; Select a pattern s(s, _)"), SemanticErrorException);
-		queries.clear();
+		qp.resetQuery();
 
 		EXPECT_THROW(qp.parse("assign a; variable v; Select a pattern pattern(v, _)"), SemanticErrorException);
-		queries.clear();
+		qp.resetQuery();
 
 		EXPECT_THROW(qp.parse("assign a; variable v; Select a pattern pattern a(v, _)"), SemanticErrorException);
-		queries.clear();
+		qp.resetQuery();
 
 		EXPECT_THROW(qp.parse("assign a;; stmt s; Select s"), SyntacticErrorException);
-		queries.clear();
+		qp.resetQuery();
 
 		EXPECT_THROW(qp.parse("assign a; stmt; s; Select s"), SyntacticErrorException);
-		queries.clear();
+		qp.resetQuery();
 
 		EXPECT_THROW(qp.parse("assign a a1; stmt s; Select s"), SyntacticErrorException);
-		queries.clear();
+		qp.resetQuery();
 
 		EXPECT_THROW(qp.parse("assign a; a1; stmt s; Select s"), SyntacticErrorException);
-		queries.clear();
+		qp.resetQuery();
 
 		EXPECT_THROW(qp.parse("assign a; stmt s; Select s Such that Follows(s,a)"), SyntacticErrorException);
-		queries.clear();
+		qp.resetQuery();
 
 		EXPECT_THROW(qp.parse("assign a; stmt s; Select s such That Follows(s,a)"), SyntacticErrorException);
-		queries.clear();
+		qp.resetQuery();
 
 		EXPECT_THROW(qp.parse("assign a; stmt s; Select s suchthat Follows(s,a)"), SyntacticErrorException);
-		queries.clear();
+		qp.resetQuery();
 
 		EXPECT_THROW(qp.parse("assign a; stmt s; Select s such   that Follows(s,a)"), SyntacticErrorException);
-		queries.clear();
+		qp.resetQuery();
 
 		EXPECT_THROW(qp.parse("assign a; stmt s; Select s such that such that Follows(s,a)"), SyntacticErrorException);
-		queries.clear();
+		qp.resetQuery();
 
 		EXPECT_THROW(qp.parse("assign a; stmt s; Select s such that Follows(s,a) such Follows(s,a)"), SyntacticErrorException);
-		queries.clear();
+		qp.resetQuery();
 
 		EXPECT_THROW(qp.parse("assign a; stmt s; Select s such that Follows(s,a) that Follows(s,a)"), SyntacticErrorException);
-		queries.clear();
+		qp.resetQuery();
 
 		EXPECT_THROW(qp.parse("assign a; stmt s; Select s such that Follows(s,a) such That Follows(s,a)"), SyntacticErrorException);
-		queries.clear();
+		qp.resetQuery();
 
 		EXPECT_THROW(qp.parse("assign a; stmt s; Select s such that Follows(s,a) Such that Follows(s,a)"), SyntacticErrorException);
-		queries.clear();
+		qp.resetQuery();
 
 		EXPECT_THROW(qp.parse("assign a; stmt s; Select s such that Follows(1,2) Follows(s,a)"), SyntacticErrorException);
-		queries.clear();
+		qp.resetQuery();
 
 		EXPECT_THROW(qp.parse("assign a; stmt s; Select s such that Follows(1,2) such That Follows(s,a)"), SyntacticErrorException);
-		queries.clear();
+		qp.resetQuery();
 
 		EXPECT_THROW(qp.parse("procedure _p; Select _p"), SyntacticErrorException);
-		queries.clear();
+		qp.resetQuery();
 	}
 }

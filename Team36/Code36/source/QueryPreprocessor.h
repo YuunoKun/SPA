@@ -20,6 +20,9 @@ public:
 
 	Query parse(std::string);
 
+	// For Query System to reset query for invalid queries
+	void resetQuery();
+
 private:
 
 	// Class variables
@@ -29,18 +32,30 @@ private:
 	bool isExpectingPatternType;
 	bool isExpectingAttribute;
 	bool endOfCurrentClauses;
+	std::vector<QueryToken> output;
+	std::vector<QueryToken> selected;
+	std::vector<QueryToken> parameterClause;
+	QueryToken prevToken;
+	QueryToken declarationType;
+	bool haveNextDeclaration;
+	bool endOfCurrentDeclaration = true;
+	QueryToken prevTokenSelect;
+	QueryToken queryParameter;
+	QueryToken patternOrSuchThat;
+	Entity patternTypeEntity;
+	ParseStatus status;
 
 	// Methods
 
-	QueryToken setIdentifierToQueryTokenType(QueryToken&, QueryToken&, QueryToken&, ParseStatus&);
+	void setIdentifierToQueryTokenType(QueryToken&, ParseStatus&);
 
-	void addEntityToQuery(std::vector<QueryToken>&, QueryToken&, QueryToken&);
+	void addEntityToQuery(QueryToken&);
 
-	void addSelectedToQuery(Entity&, std::vector<QueryToken>&, std::vector<QueryToken>, QueryToken&);
+	void addSelectedToQuery(Entity&, QueryToken&);
 
-	void addPatternToQuery(Entity&, std::vector<QueryToken>&, QueryToken&);
+	void addPatternToQuery(QueryToken&);
 
-	void setQueryParameter(QueryToken&, QueryToken&);
+	void setQueryParameter();
 
 	void setPatternTypeEntity(std::vector<QueryToken>&, QueryToken&, Entity&);
 
