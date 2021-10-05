@@ -20,24 +20,24 @@ Query QueryPreprocessor::parse(std::string str) {
 	QueryTokenizer query_tokenizer;
 	PatternRelRefValidator validator;
 
-	//query_tokenizer.parse_into_query_tokens(str);
+	query_tokenizer.parse_into_query_tokens(str);
 
-	//std::vector<QueryToken> v = query_tokenizer.get_query_token_chain();
+	std::vector<QueryToken> v = query_tokenizer.get_query_token_chain();
 
-	std::vector<QueryToken> v;
-	v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "assign" });
-	v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "a1" });
-	v.push_back({ QueryToken::QueryTokenType::COMMA, "" });
-	v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "a2" });
-	v.push_back({ QueryToken::QueryTokenType::TERMINATOR, "" });
-	v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "Select" });
-	v.push_back({ QueryToken::QueryTokenType::TUPLE_OPEN, "" });
-	v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "a1" });
-	v.push_back({ QueryToken::QueryTokenType::DOT, "" });
-	v.push_back({ QueryToken::QueryTokenType::PROC_NAME, "" });
-	v.push_back({ QueryToken::QueryTokenType::COMMA, "" });
-	v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "a2" });
-	v.push_back({ QueryToken::QueryTokenType::TUPLE_CLOSE, "" });
+	//std::vector<QueryToken> v;
+	//v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "assign" });
+	//v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "a1" });
+	//v.push_back({ QueryToken::QueryTokenType::COMMA, "" });
+	//v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "a2" });
+	//v.push_back({ QueryToken::QueryTokenType::TERMINATOR, "" });
+	//v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "Select" });
+	//v.push_back({ QueryToken::QueryTokenType::TUPLE_OPEN, "" });
+	//v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "a1" });
+	//v.push_back({ QueryToken::QueryTokenType::DOT, "" });
+	//v.push_back({ QueryToken::QueryTokenType::PROC_NAME, "" });
+	//v.push_back({ QueryToken::QueryTokenType::COMMA, "" });
+	//v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "a2" });
+	//v.push_back({ QueryToken::QueryTokenType::TUPLE_CLOSE, "" });
 
 	//v.push_back({ QueryToken::QueryTokenType::DOT, "" });
 	//v.push_back({ QueryToken::QueryTokenType::VAR_NAME, "" });
