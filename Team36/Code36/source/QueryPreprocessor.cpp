@@ -13,10 +13,10 @@
 #include "SyntacticErrorException.h"
 
 QueryPreprocessor::QueryPreprocessor() {
+	this->query = Query();
 }
 
 Query QueryPreprocessor::parse(std::string str) {
-	Query query = Query();
 	QueryTokenizer query_tokenizer;
 	PatternRelRefValidator validator;
 
@@ -133,7 +133,7 @@ Query QueryPreprocessor::parse(std::string str) {
 				endOfCurrentDeclaration = false;
 			}
 			else if (haveNextDeclaration && token.type == QueryToken::QueryTokenType::IDENTIFIER) {
-				addEntityToQuery(query, output, declarationType, token);
+				addEntityToQuery(output, declarationType, token);
 				haveNextDeclaration = false;
 			}
 			else if (!haveNextDeclaration && !endOfCurrentDeclaration && token.type == QueryToken::QueryTokenType::TERMINATOR) {
@@ -206,7 +206,7 @@ Query QueryPreprocessor::parse(std::string str) {
 					}
 					else if (isExpectingAttribute && prevTokenSelect.type == QueryToken::QueryTokenType::DOT) {
 						AttrRef attrRef = Utility::queryTokenTypeToAttrRef(token.type);
-						query.setSelectedAttribute(attrRef);
+						this->query.setSelectedAttribute(attrRef);
 						isExpectingAttribute = false;
 					}
 					else if (prevToken.token_value == "Select" && token.type == QueryToken::QueryTokenType::TUPLE_OPEN) {
@@ -216,7 +216,7 @@ Query QueryPreprocessor::parse(std::string str) {
 						prevToken.token_value == "Select" &&
 						token.type == QueryToken::QueryTokenType::IDENTIFIER) {
 						Entity ent;
-						addSelectedToQuery(query, ent, output, selected, token, isSelect);
+						addSelectedToQuery(ent, output, selected, token, isSelect);
 						haveNextDeclaration = false;
 					}
 				}
@@ -258,12 +258,12 @@ Query QueryPreprocessor::parse(std::string str) {
 					}
 					else if (isExpectingAttribute) {
 						AttrRef attrRef = Utility::queryTokenTypeToAttrRef(token.type);
-						query.setSelectedAttribute(attrRef);
+						this->query.setSelectedAttribute(attrRef);
 						isExpectingAttribute = false;
 					}
 					else if (token.type == QueryToken::QueryTokenType::IDENTIFIER) {
 						Entity ent;
-						addSelectedToQuery(query, ent, output, selected, token, isSelect);
+						addSelectedToQuery(ent, output, selected, token, isSelect);
 						haveNextDeclaration = false;
 					}
 					else if (token.type == QueryToken::QueryTokenType::TUPLE_CLOSE) {
@@ -298,7 +298,7 @@ Query QueryPreprocessor::parse(std::string str) {
 					}
 					else if (token.type == QueryToken::QueryTokenType::PARENTHESIS_CLOSE) {
 						isParameter = false;
-						validator.parseParameterSuchThat(query, queryParameter.type, parameterClause);
+						validator.parseParameterSuchThat(this->query, queryParameter.type, parameterClause);
 						parameterClause.clear();
 						endOfCurrentClauses = true;
 					}
@@ -318,7 +318,7 @@ Query QueryPreprocessor::parse(std::string str) {
 						if (patternTypeEntity.getType() == EntityType::ASSIGN ||
 							patternTypeEntity.getType() == EntityType::WHILE ||
 							patternTypeEntity.getType() == EntityType::IF) {
-							validator.parseParameterPattern(query, patternTypeEntity, parameterClause);
+							validator.parseParameterPattern(this->query, patternTypeEntity, parameterClause);
 							parameterClause.clear();
 						}
 						else {
@@ -349,8 +349,9 @@ Query QueryPreprocessor::parse(std::string str) {
 	if (!endOfCurrentClauses) {
 		throw SyntacticErrorException("Invalid query");
 	}
-	QueryPreprocessor::validateQuery(query);
-	return query;
+	QueryPreprocessor::validateQuery();
+
+	return QueryPreprocessor::returnAndResetQuery();
 }
 
 QueryToken QueryPreprocessor::setIdentifierToQueryTokenType(QueryToken& prevToken, QueryToken& temp, QueryToken& token, ParseStatus& status, bool& isSelect) {
@@ -403,7 +404,7 @@ QueryToken QueryPreprocessor::setIdentifierToQueryTokenType(QueryToken& prevToke
 	return temp;
 }
 
-void QueryPreprocessor::addEntityToQuery(Query& query, std::vector<QueryToken>& output, QueryToken& type, QueryToken& token) {
+void QueryPreprocessor::addEntityToQuery(std::vector<QueryToken>& output, QueryToken& type, QueryToken& token) {
 	// Check if entity name is already used, exists in output, should return error
 	Entity ent;
 	for (QueryToken each : output) {
@@ -418,7 +419,7 @@ void QueryPreprocessor::addEntityToQuery(Query& query, std::vector<QueryToken>& 
 	synonym.name = token.token_value;
 	EntityType entityType = Utility::queryTokenTypeToEntityType(type.type);
 	ent = { entityType, synonym };
-	query.addEntity(ent);
+	this->query.addEntity(ent);
 }
 
 void QueryPreprocessor::addPatternToQuery(Entity& patternTypeEntity, std::vector<QueryToken>& output, QueryToken& token) {
@@ -437,7 +438,7 @@ void QueryPreprocessor::addPatternToQuery(Entity& patternTypeEntity, std::vector
 	}
 }
 
-void QueryPreprocessor::addSelectedToQuery(Query& query, Entity& ent, std::vector<QueryToken>& output, std::vector<QueryToken> selected, QueryToken& token, bool& isSelect) {
+void QueryPreprocessor::addSelectedToQuery(Entity& ent, std::vector<QueryToken>& output, std::vector<QueryToken> selected, QueryToken& token, bool& isSelect) {
 	bool isValid = false;
 	if (token.token_value == "BOOLEAN" && query.getSelected().size() == 0) {
 		ent = { EntityType::BOOLEAN };
@@ -459,7 +460,7 @@ void QueryPreprocessor::addSelectedToQuery(Query& query, Entity& ent, std::vecto
 	if (!isValid) {
 		throw SemanticErrorException("Select variable content has not been declared");
 	}
-	query.addSelected(ent);
+	this->query.addSelected(ent);
 }
 
 void QueryPreprocessor::setQueryParameter(QueryToken& prevTokenSelect, QueryToken& queryParameter) {
@@ -497,17 +498,17 @@ void QueryPreprocessor::setQueryParameter(QueryToken& prevTokenSelect, QueryToke
 	}
 }
 
-void QueryPreprocessor::validateQuery(Query& query) {
-	if (query.getEntities().size() == 0) {
+void QueryPreprocessor::validateQuery() {
+	if (this->query.getEntities().size() == 0) {
 		throw SyntacticErrorException("No declaration has been made in your query");
 	}
-	if (query.getSelected().size() == 0) {
+	if (this->query.getSelected().size() == 0) {
 		throw SyntacticErrorException("There is no selected variable in your query");
 	}
 
 	// Final check
 
-	for (std::pair<std::string, Entity> ent : query.getEntities()) {
+	for (std::pair<std::string, Entity> ent : this->query.getEntities()) {
 		if (ent.second.getType() != EntityType::STMT &&
 			ent.second.getType() != EntityType::PROCEDURE &&
 			ent.second.getType() != EntityType::READ &&
@@ -522,4 +523,13 @@ void QueryPreprocessor::validateQuery(Query& query) {
 			throw SyntacticErrorException("Declaration fails!");
 		}
 	}
+}
+
+Query QueryPreprocessor::returnAndResetQuery() {
+	Query queryResult = this->query;
+
+	// Reset variables
+	this->query = Query();
+
+	return queryResult;
 }

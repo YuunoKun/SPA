@@ -22,11 +22,14 @@ public:
 
 private:
 
+	// Class variables
+	Query query;
+
 	QueryToken setIdentifierToQueryTokenType(QueryToken&, QueryToken&, QueryToken&, ParseStatus&, bool&);
 
-	void addEntityToQuery(Query&, std::vector<QueryToken>&, QueryToken&, QueryToken&);
+	void addEntityToQuery(std::vector<QueryToken>&, QueryToken&, QueryToken&);
 
-	void addSelectedToQuery(Query&, Entity&, std::vector<QueryToken>&, std::vector<QueryToken>, QueryToken&, bool&);
+	void addSelectedToQuery(Entity&, std::vector<QueryToken>&, std::vector<QueryToken>, QueryToken&, bool&);
 
 	void addPatternToQuery(Entity&, std::vector<QueryToken>&, QueryToken&);
 
@@ -34,5 +37,7 @@ private:
 
 	void setPatternTypeEntity(std::vector<QueryToken>&, QueryToken&, Entity&);
 
-	void validateQuery(Query&);
+	void validateQuery();
+
+	Query returnAndResetQuery();
 };
