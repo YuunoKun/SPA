@@ -19,6 +19,8 @@ public:
 
 	ExprNode(std::string);
 
+	ExprNode(const ExprNode&);
+
 	~ExprNode();
 
 	void setSymbol(ExprSymbol);
@@ -33,6 +35,8 @@ public:
 
 	bool contains(ExprNode*);
 	bool equals(ExprNode*);
+
+	ExprNode& operator=(const ExprNode&);
 
 private:
 	ExprNode();
