@@ -12,30 +12,20 @@
 #include "Utility.h"
 
 
-class PatternRelRefValidator {
-private:
-
-	bool isStmtRef(Query&, std::vector<QueryToken>);
-
-	bool isCommaRef(std::vector<QueryToken>);
-
-	bool isEntRef(Query&, std::vector<QueryToken>);
-
-	bool isCorrectSynEntRef(Query&, std::vector<QueryToken>, EntityType);
-
+class QueryPatternRelRefParser {
 public: 
-
-	PatternRelRefValidator();
-
+	QueryPatternRelRefParser();
+	
 	void parseParameterSuchThat(Query&, QueryToken::QueryTokenType, std::vector<QueryToken>);
-
 	void parseParameterPattern(Query&, Entity&, std::vector<QueryToken>);
-
 	Entity setStmtRef(Query&, QueryToken);
-
 	Entity setEntRef(Query&, std::vector<QueryToken>);
-
 	Entity setCallEntRef(Query&, std::vector<QueryToken>);
-
 	expr setExpr(std::vector<QueryToken>);
+
+private:
+	bool isStmtRef(Query&, std::vector<QueryToken>);
+	bool isCommaRef(std::vector<QueryToken>);
+	bool isEntRef(Query&, std::vector<QueryToken>);
+	bool isCorrectSynEntRef(Query&, std::vector<QueryToken>, EntityType);
 };

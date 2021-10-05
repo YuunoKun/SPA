@@ -52,7 +52,7 @@
     <ClCompile Include="..\source\PatternEvaluator.cpp" />
     <ClCompile Include="..\source\ResultTable.cpp" />
     <ClCompile Include="..\source\Utility.cpp" />
-    <ClCompile Include="..\source\PatternRelRefValidator.cpp" />
+    <ClCompile Include="..\source\QueryPatternRelRefParser.cpp" />
     <ClCompile Include="..\source\Clause.cpp" />
     <ClCompile Include="..\source\QueryOptimizer.cpp" />
     <ClCompile Include="..\source\ResultProjector.cpp" />
@@ -106,7 +106,7 @@
     <ClInclude Include="..\source\WithEvaluator.h" />
     <ClInclude Include="..\source\ResultTable.h" />
     <ClInclude Include="..\source\Utility.h" />
-    <ClInclude Include="..\source\PatternRelRefValidator.h" />
+    <ClInclude Include="..\source\QueryPatternRelRefParser.h" />
     <ClInclude Include="..\source\Clause.h" />
     <ClInclude Include="..\source\QueryOptimizer.h" />
     <ClInclude Include="..\source\ResultProjector.h" />
