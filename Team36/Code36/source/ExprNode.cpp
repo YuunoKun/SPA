@@ -60,8 +60,11 @@ bool ExprNode::contains(ExprNode* expr) {
 }
 
 bool ExprNode::equals(ExprNode* expr) {
-	if (this == nullptr && expr == nullptr) {
+	if (!this && !expr) {
 		return true;
+	}
+	else if (!this) {
+		return false;
 	}
 
 	if (expr && symbol == expr->getSymbol() && value == expr->getValue()) {
