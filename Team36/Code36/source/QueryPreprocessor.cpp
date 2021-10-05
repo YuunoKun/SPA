@@ -7,7 +7,7 @@
 #include "QueryToken.h"
 #include "QueryTokenizer.h"
 #include "Query.h"
-#include "PatternRelRefValidator.h"
+#include "QueryPatternRelRefParser.h"
 #include "Utility.h"
 #include "SemanticErrorException.h"
 #include "SyntacticErrorException.h"
@@ -18,7 +18,7 @@ QueryPreprocessor::QueryPreprocessor() {
 Query QueryPreprocessor::parse(std::string str) {
 	Query query = Query();
 	QueryTokenizer query_tokenizer;
-	PatternRelRefValidator validator;
+	QueryPatternRelRefParser validator;
 
 	query_tokenizer.parse_into_query_tokens(str);
 

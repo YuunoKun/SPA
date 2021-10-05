@@ -2,13 +2,13 @@
 #include <string>
 #include <vector>
 #include <stdexcept>
-#include "PatternRelRefValidator.h"
+#include "QueryPatternRelRefParser.h"
 
 
 // isStmtRef and isEntRef token_chain params need to br broken up first
 
 //expect stmtref for first element
-bool PatternRelRefValidator::isStmtRef(Query& query, std::vector<QueryToken> token_chain) {
+bool QueryPatternRelRefParser::isStmtRef(Query& query, std::vector<QueryToken> token_chain) {
     
     // no args found, throw syntax errors
     if (token_chain.size() == 0) {
@@ -53,7 +53,7 @@ bool PatternRelRefValidator::isStmtRef(Query& query, std::vector<QueryToken> tok
 }
 
 //expect entref
-bool PatternRelRefValidator::isEntRef(Query& query, std::vector<QueryToken> token_chain) {
+bool QueryPatternRelRefParser::isEntRef(Query& query, std::vector<QueryToken> token_chain) {
     // entRef : synonym | ‘_’ | ‘"’ IDENT ‘"’
 
     // no args found, throw syntax errors
@@ -97,7 +97,7 @@ bool PatternRelRefValidator::isEntRef(Query& query, std::vector<QueryToken> toke
     }
 }
 
-bool PatternRelRefValidator::isCorrectSynEntRef(Query& query, std::vector<QueryToken> token_chain, 
+bool QueryPatternRelRefParser::isCorrectSynEntRef(Query& query, std::vector<QueryToken> token_chain, 
     EntityType expected_ent_type) {
     
     std::unordered_map<std::string, Entity> ent_chain = query.getEntities();
@@ -116,7 +116,7 @@ bool PatternRelRefValidator::isCorrectSynEntRef(Query& query, std::vector<QueryT
 
 
 //expectcomma
-bool PatternRelRefValidator::isCommaRef(std::vector<QueryToken> token_chain) {
+bool QueryPatternRelRefParser::isCommaRef(std::vector<QueryToken> token_chain) {
     if (token_chain.size() == 0) {
         throw std::invalid_argument("Invalid argument, no comma found");
     }
@@ -125,9 +125,9 @@ bool PatternRelRefValidator::isCommaRef(std::vector<QueryToken> token_chain) {
     }
 }
 
-PatternRelRefValidator::PatternRelRefValidator() {}
+QueryPatternRelRefParser::QueryPatternRelRefParser() {}
 
-Entity PatternRelRefValidator::setStmtRef(Query& query, QueryToken token) {
+Entity QueryPatternRelRefParser::setStmtRef(Query& query, QueryToken token) {
   // synonym | ‘_’ | INTEGER
 
   // wild card check
@@ -149,7 +149,7 @@ Entity PatternRelRefValidator::setStmtRef(Query& query, QueryToken token) {
   throw SemanticErrorException("Unknown stmtRef");
 }
 
-Entity PatternRelRefValidator::setEntRef(Query& query,
+Entity QueryPatternRelRefParser::setEntRef(Query& query,
                                     std::vector<QueryToken> token_chain) {
   // entRef : synonym | ‘_’ | ‘"’ IDENT ‘"’
 
@@ -177,7 +177,7 @@ Entity PatternRelRefValidator::setEntRef(Query& query,
   throw SemanticErrorException("Unknown entRef");
 }
 
-Entity PatternRelRefValidator::setCallEntRef(Query& query,
+Entity QueryPatternRelRefParser::setCallEntRef(Query& query,
     std::vector<QueryToken> token_chain) {
     // entRef : synonym | ‘_’ | ‘"’ IDENT ‘"’
 
@@ -206,7 +206,7 @@ Entity PatternRelRefValidator::setCallEntRef(Query& query,
 }
 
 // takes in a token_chain with only IDENT* (no QUOTATION_OPEN/CLOSE or WILDCARD)
-expr PatternRelRefValidator::setExpr(std::vector<QueryToken> token_chain) {
+expr QueryPatternRelRefParser::setExpr(std::vector<QueryToken> token_chain) {
   // expression-spec : ‘"‘ expr’"’ | ‘_’ ‘"’ expr ‘"’ ‘_’ | ‘_’
 
   // TODO
@@ -224,7 +224,7 @@ expr PatternRelRefValidator::setExpr(std::vector<QueryToken> token_chain) {
   throw std::runtime_error("Unknown expr");
 }
 
-void PatternRelRefValidator::parseParameterSuchThat(
+void QueryPatternRelRefParser::parseParameterSuchThat(
     Query& query, QueryToken::QueryTokenType token_type,
     std::vector<QueryToken> token_chain) {
     switch (token_type) {
@@ -710,7 +710,7 @@ void PatternRelRefValidator::parseParameterSuchThat(
     }
 }
 
-void PatternRelRefValidator::parseParameterPattern(
+void QueryPatternRelRefParser::parseParameterPattern(
     Query& query, Entity& synonym_ent, std::vector<QueryToken> token_chain) {
     bool wild = false;
     switch (synonym_ent.getType()) {

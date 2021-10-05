@@ -70,11 +70,11 @@
     <Filter Include="Source Files\Common">
       <UniqueIdentifier>{84871b21-c6ae-45ec-95a3-0ddc3888a41d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\PQL\QueryPreprocessor\PatternRelRefValidator">
-      <UniqueIdentifier>{0b43ebb4-4723-4313-96d9-6b867e945c5f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\PQL\QueryPreprocessor\PatternRelRefValidator">
+    <Filter Include="Header Files\PQL\QueryPreprocessor\QueryPatternRelRefParser">
       <UniqueIdentifier>{73cdd88a-7544-4f46-8e9c-819a2411cc78}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\PQL\QueryPreprocessor\QueryPatternRelRefParser">
+      <UniqueIdentifier>{0b43ebb4-4723-4313-96d9-6b867e945c5f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -217,13 +217,13 @@
       <Filter>Source Files\Common</Filter>
     </ClCompile>
     <ClCompile Include="..\source\QueryPatternRelRefParser.cpp">
-      <Filter>Source Files\PQL\QueryPreprocessor\PatternRelRefValidator</Filter>
+      <Filter>Source Files\PQL\QueryPreprocessor\QueryPatternRelRefParser</Filter>
     </ClCompile>
     <ClCompile Include="..\source\AssignPatternParser.cpp">
-      <Filter>Source Files\PQL\QueryPreprocessor\PatternRelRefValidator</Filter>
+      <Filter>Source Files\PQL\QueryPreprocessor\QueryPatternRelRefParser</Filter>
     </ClCompile>
     <ClCompile Include="..\source\AssignPatternParser.h">
-      <Filter>Header Files\PQL\QueryPreprocessor\PatternRelRefValidator</Filter>
+      <Filter>Header Files\PQL\QueryPreprocessor\QueryPatternRelRefParser</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -392,8 +392,8 @@
     <ClInclude Include="..\source\ExprParser.h">
       <Filter>Header Files\Common</Filter>
     </ClInclude>
-    <ClInclude Include="..\source\PatternRelRefValidator.h">
-      <Filter>Header Files\PQL\QueryPreprocessor\PatternRelRefValidator</Filter>
+    <ClInclude Include="..\source\QueryPatternRelRefParser.h">
+      <Filter>Header Files\PQL\QueryPreprocessor\QueryPatternRelRefParser</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
