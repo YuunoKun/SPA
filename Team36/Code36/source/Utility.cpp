@@ -183,14 +183,6 @@ std::vector<std::vector<std::string>> Utility::filterResults(std::vector<std::ve
 	return results;
 }
 
-bool Utility::patternMatch(expr a, expr* b) {
-	return a.equals(b);
-}
-
-bool Utility::patternContain(expr original, expr* match) {
-	return original.contains(match);
-}
-
 std::vector<std::string> Utility::mergeColumnEqual(std::vector<std::vector<std::string>>& v) {
 	std::vector<std::string> to;
 	for (unsigned int i = 0; i < v.size(); i++) {
