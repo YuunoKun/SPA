@@ -36,7 +36,7 @@ public:
 	bool equals(ExprNode*);
 
 
-	bool operator==(const ExprNode&);
+	bool operator==(const ExprNode&) const;
 	ExprNode& operator=(const ExprNode&);
 
 private:

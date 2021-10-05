@@ -26,6 +26,16 @@ Pattern::Pattern(Entity pattern_type, Entity left_expression, std::string expr, 
 Pattern::Pattern() {
 }
 
+Pattern::Pattern(const Pattern& other) {
+	this->pattern_type = other.pattern_type;
+	this->left_expression = other.left_expression;
+	this->is_wild = other.is_wild;
+	if (other.expression) {
+		this->expression = new ExprNode(*other.expression);
+	}
+
+}
+
 Pattern::~Pattern() {
 	delete this->expression;
 }
@@ -46,10 +56,14 @@ bool Pattern::isWild() {
 	return is_wild;
 }
 
+Pattern& Pattern::operator=(const Pattern& other) {
+	return Pattern(other);
+}
+
 //TODO: compare expression when == TNode is updated
 bool Pattern::operator==(const Pattern& pattern) const {
 	return pattern_type == pattern.pattern_type
 		&& left_expression == pattern.left_expression
-		&& ((!expression && !pattern.expression) || (expression)->equals(pattern.expression))
+		//&& ((!expression && !pattern.expression) || (expression)->equals(pattern.expression))
 		&& is_wild == pattern.is_wild;
 }

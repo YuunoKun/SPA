@@ -10,6 +10,7 @@ class Pattern {
 public:
 	Pattern(Entity, Entity, std::string, bool);
 	Pattern();
+	Pattern(const Pattern&);
 	~Pattern();
 
 	Entity getPatternType();
@@ -18,6 +19,7 @@ public:
 	bool isWild();
 
 	bool operator==(const Pattern&) const;
+	Pattern& operator=(const Pattern&);
 
 private:
 	ExprParser expr_parser;

@@ -104,9 +104,9 @@ bool ExprNode::equals(ExprNode* expr) {
 }
 
 
-bool ExprNode::operator==(const ExprNode& other) {
+bool ExprNode::operator==(const ExprNode& other) const {
 	if (symbol == other.symbol && value == other.value) {
-		return ((!lhs && !other.lhs) || (lhs == rhs));
+		return ((!lhs && !other.lhs) || (lhs == other.lhs && other.rhs));
 	}
 	return false;
 }
