@@ -16,7 +16,6 @@ void PatternEvaluator::evaluatePattern(QueryResult& queryResult, Pattern& patter
 
 	Entity patternType = pattern.getPatternType();
 	Entity lhsEntity = pattern.getLeftExpression();
-	expr* expression = pattern.getExpression();
 
 	//If left side is wild and right side is WILD: e.g a(v, _"x"_)
 	//if lhs side is at least is declaration, return 2 column table
@@ -46,7 +45,6 @@ void PatternEvaluator::evaluatePattern(QueryResult& queryResult, Pattern& patter
 				}
 			}
 			ResultTable resultTable(patternType, table);
-			delete pattern.getExpression();
 			queryResult.addResult(resultTable);
 		}
 	}

@@ -14,6 +14,14 @@ PKB& PKB::getInstance() {
 	return pkb;
 }
 
+PKB::~PKB() {
+	auto v = expr_table.getValues();
+	expr_table.clear();
+	for (auto expr : expr_table.getValues()) {
+		delete expr;
+	}
+}
+
 void PKB::addConstant(constant constant) {
 	const_table.emplace(constant);
 	return;
@@ -194,7 +202,6 @@ void PKB::resetCache() {
 	var_table.clear();
 	stmt_table.clear();
 	assignment_table.clear();
-	expr_table.clear();
 	follows_table.clear();
 	parent_table.clear();
 	followsT_table.clear();
@@ -205,6 +212,11 @@ void PKB::resetCache() {
 	modifiesP_table.clear();
 	callsP_table.clear();
 	callsPT_table.clear();
+	auto v = expr_table.getValues();
+	expr_table.clear();
+	for (auto expr : expr_table.getValues()) {
+		delete expr;
+	}
 }
 
 void PKB::resetEntities() {
@@ -252,7 +264,7 @@ const var_name PKB::getAssignment(stmt_index stmt_index) {
 	return assignment_table.getValues(stmt_index)[0];
 }
 
-expr PKB::getExpression(stmt_index stmt_index) {
+expr* PKB::getExpression(stmt_index stmt_index) {
 	if (stmt_index <= 0) {
 		throw std::invalid_argument("Stmt index must be greater than zero: " + std::to_string(stmt_index));
 	}
@@ -265,7 +277,7 @@ expr PKB::getExpression(stmt_index stmt_index) {
 	else if (!expr_table.containsKey(stmt_index)) {
 		throw std::invalid_argument("Stmt-related expression has not been initiated: " + std::to_string(stmt_index));
 	}
-	return *expr_table.getValues(stmt_index)[0];
+	return expr_table.getValues(stmt_index)[0];
 }
 
 const std::vector<constant> PKB::getConstants() {

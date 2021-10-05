@@ -69,12 +69,12 @@ std::vector<assign_info> PKBAdapter::getAssignInfo(expr* matchExpression, bool i
 	std::vector<StmtInfo> s = getAssigns();
 	std::vector<assign_info> a;
 	for (auto s : s) {
-		expr expression = PKB::getInstance().PKB::getExpression(s.stmt_index);
-		if (isWild && expression.contains(matchExpression)) {
+		expr* expression = PKB::getInstance().PKB::getExpression(s.stmt_index);
+		if (isWild && expression->contains(matchExpression)) {
 			assign_info i = std::make_pair(s, PKB::getInstance().PKB::getAssignment(s.stmt_index));
 			a.push_back(i);
 		}
-		else if (!isWild && expression.equals(matchExpression)) {
+		else if (!isWild && expression->equals(matchExpression)) {
 			assign_info i = std::make_pair(s, PKB::getInstance().PKB::getAssignment(s.stmt_index));
 			a.push_back(i);
 		}

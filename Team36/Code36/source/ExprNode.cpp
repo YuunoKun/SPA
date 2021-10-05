@@ -10,8 +10,8 @@ ExprNode::ExprNode(std::string val) {
 }
 
 ExprNode::~ExprNode() {
-	if (lhs) lhs->~ExprNode();
-	if (rhs) rhs->~ExprNode();
+	delete this->lhs;
+	delete this->rhs;
 }
 
 void ExprNode::setSymbol(ExprSymbol sym) {

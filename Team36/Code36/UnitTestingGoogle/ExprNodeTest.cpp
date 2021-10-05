@@ -14,7 +14,6 @@ namespace UnitTesting {
 		ASSERT_EQ(node->getLHS(), nullptr);
 		ASSERT_EQ(node->getRHS(), nullptr);
 
-		delete node;
 
 		node = new ExprNode("x");
 
@@ -23,19 +22,19 @@ namespace UnitTesting {
 		ASSERT_EQ(node->getLHS(), nullptr);
 		ASSERT_EQ(node->getRHS(), nullptr);
 
-		ExprNode* child = new ExprNode(ExprSymbol::EXPR_MOD);
+		ExprNode* child1 = new ExprNode(ExprSymbol::EXPR_MOD);
+		ExprNode* child2 = new ExprNode(ExprSymbol::EXPR_MOD);
 		node->setSymbol(ExprSymbol::EXPR_PLUS);
 		node->setValue("1234");
-		node->setLHS(child);
-		node->setRHS(child);
+		node->setLHS(child1);
+		node->setRHS(child2);
 
 		ASSERT_EQ(node->getSymbol(), ExprSymbol::EXPR_PLUS);
 		ASSERT_EQ(node->getValue(), "1234");
-		ASSERT_EQ(node->getLHS(), child);
-		ASSERT_EQ(node->getRHS(), child);
+		ASSERT_EQ(node->getLHS(), child1);
+		ASSERT_EQ(node->getRHS(), child2);
 
 		delete node;
-		delete child;
 	}
 
 	TEST(ExprNode, equals) {

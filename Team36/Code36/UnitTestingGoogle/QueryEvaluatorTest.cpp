@@ -76,7 +76,7 @@ namespace UnitTesting {
 			return invalid;
 		}
 
-		Query initQuery(Pattern pattern, Entity selected) {
+		Query initQuery(Pattern& pattern, Entity selected) {
 			Query q;
 			q.addPattern(pattern);
 			q.addSelected(selected);
@@ -99,10 +99,11 @@ namespace UnitTesting {
 		}
 
 		void validateEmptyPatterns(std::vector<Pattern> patterns) {
+			std::list<Query> querys;
 			for (unsigned int i = 0; i < patterns.size(); i++) {
 				for (unsigned int j = 0; j < ALL_SELECT.size(); j++) {
-					Query q = initQuery(patterns[i], ALL_SELECT[j]);
-					EXPECT_EQ(evaluator.evaluateQuery(q).front(), EMPTY_RESULT) << "Error at results : " << i + 1 << " : " << j + 1;
+					querys.emplace_back(initQuery(patterns[i], ALL_SELECT[j]));
+					EXPECT_EQ(evaluator.evaluateQuery(querys.back()).front(), EMPTY_RESULT) << "Error at results : " << i + 1 << " : " << j + 1;
 				}
 			}
 		}
@@ -2157,37 +2158,37 @@ namespace UnitTesting {
 		std::vector<std::list<std::string>> results;
 		std::vector<Entity> selected;
 
-		//Handle result for Select a pattern a(_, _)
+		//Handle result for Select a pattern a(_, _) - 1
 		patterns.push_back(Pattern(assignCommon, WILD_CARD, "", true));
 		selected.push_back(assignCommon);
 		results.push_back({ left1, left2 });
 
-		//Handle result for Select a pattern a(v, _)
+		//Handle result for Select a pattern a(v, _) - 2
 		patterns.push_back(Pattern(assignCommon, WILD_CARD, "", true));
 		selected.push_back(assignCommon);
 		results.push_back({ left1, left2 });
 
-		//Handle result for Select a pattern a(_, "x")
+		//Handle result for Select a pattern a(_, "x") - 3
 		patterns.push_back(Pattern(assignCommon, WILD_CARD, x, false));
 		selected.push_back(assignCommon);
 		results.push_back({ left1 });
 
-		//Handle result for Select a pattern a(_, _"x"_)
+		//Handle result for Select a pattern a(_, _"x"_) - 4
 		patterns.push_back(Pattern(assignCommon, WILD_CARD, x, true));
 		selected.push_back(assignCommon);
 		results.push_back({ left1, left2 });
 
-		//Handle result for Select a pattern a(_, "y")
+		//Handle result for Select a pattern a(_, "y") - 5
 		patterns.push_back(Pattern(assignCommon, WILD_CARD, y, false));
 		selected.push_back(assignCommon);
 		results.push_back({ });
 
-		//Handle result for Select a pattern a(_, _"y"_)
+		//Handle result for Select a pattern a(_, _"y"_) - 6
 		patterns.push_back(Pattern(assignCommon, WILD_CARD, y, true));
 		selected.push_back(assignCommon);
 		results.push_back({ left2 });
 
-		//Handle result for Select a pattern a(v, "x")
+		//Handle result for Select a pattern a(v, "x") - 7 8
 		patterns.push_back(Pattern(assignCommon, lhsCommon, x, false));
 		selected.push_back(assignCommon);
 		results.push_back({ left1 });
@@ -2195,7 +2196,7 @@ namespace UnitTesting {
 		selected.push_back(lhsCommon);
 		results.push_back({ right1 });
 
-		//Handle result for Select a pattern a(v, _"x"_)
+		//Handle result for Select a pattern a(v, _"x"_) - 9 10
 		patterns.push_back(Pattern(assignCommon, lhsCommon, x, true));
 		selected.push_back(assignCommon);
 		results.push_back({ left1, left2 });
@@ -2203,7 +2204,7 @@ namespace UnitTesting {
 		selected.push_back(lhsCommon);
 		results.push_back({ right1, right2 });
 
-		//Handle result for Select a pattern a(v, "y")
+		//Handle result for Select a pattern a(v, "y") - 11 12
 		patterns.push_back(Pattern(assignCommon, lhsCommon, y, false));
 		selected.push_back(assignCommon);
 		results.push_back({ });
@@ -2211,7 +2212,7 @@ namespace UnitTesting {
 		selected.push_back(lhsCommon);
 		results.push_back({ });
 
-		//Handle result for Select a pattern a(v, _"y"_)
+		//Handle result for Select a pattern a(v, _"y"_) - 13 14
 		patterns.push_back(Pattern(assignCommon, lhsCommon, y, true));
 		selected.push_back(assignCommon);
 		results.push_back({ left2 });
@@ -2219,57 +2220,57 @@ namespace UnitTesting {
 		selected.push_back(lhsCommon);
 		results.push_back({ right2 });
 
-		//Handle result for Select a pattern a("x", "x")
+		//Handle result for Select a pattern a("x", "x") - 15
 		patterns.push_back(Pattern(assignCommon, lhsX, x, false));
 		selected.push_back(assignCommon);
 		results.push_back({ left1 });
 
-		//Handle result for Select a pattern a("x", _"x"_)
+		//Handle result for Select a pattern a("x", _"x"_) - 16
 		patterns.push_back(Pattern(assignCommon, lhsX, x, true));
 		selected.push_back(assignCommon);
 		results.push_back({ left1 });
 
-		//Handle result for Select a pattern a("x", "y")
+		//Handle result for Select a pattern a("x", "y") - 17
 		patterns.push_back(Pattern(assignCommon, lhsX, y, false));
 		selected.push_back(assignCommon);
 		results.push_back({ });
 
-		//Handle result for Select a pattern a("x", _"y"_)
+		//Handle result for Select a pattern a("x", _"y"_) - 18
 		patterns.push_back(Pattern(assignCommon, lhsX, y, true));
 		selected.push_back(assignCommon);
 		results.push_back({ });
 
-		//Handle result for Select a pattern a("y", "x")
+		//Handle result for Select a pattern a("y", "x") - 19
 		patterns.push_back(Pattern(assignCommon, lhsY, x, false));
 		selected.push_back(assignCommon);
 		results.push_back({ });
 
-		//Handle result for Select a pattern a("y", _"x"_)
+		//Handle result for Select a pattern a("y", _"x"_) - 20
 		patterns.push_back(Pattern(assignCommon, lhsY, x, true));
 		selected.push_back(assignCommon);
 		results.push_back({ left2 });
 
-		//Handle result for Select a pattern a("y", _"y"_)
+		//Handle result for Select a pattern a("y", _"y"_) - 21
 		patterns.push_back(Pattern(assignCommon, lhsY, y, true));
 		selected.push_back(assignCommon);
 		results.push_back({ left2 });
 
-		//Handle result for Select a pattern a("y", "5")
+		//Handle result for Select a pattern a("y", "5") - 22
 		patterns.push_back(Pattern(assignCommon, lhsY, EXPRESSION_CONSTANT, false));
 		selected.push_back(assignCommon);
 		results.push_back({ });
 
-		//Handle result for Select a pattern a("y", _"5"_)
+		//Handle result for Select a pattern a("y", _"5"_) - 23
 		patterns.push_back(Pattern(assignCommon, lhsY, EXPRESSION_CONSTANT, true));
 		selected.push_back(assignCommon);
 		results.push_back({ left2 });
 
-		//Handle result for Select a pattern a(_, _"5"_)
+		//Handle result for Select a pattern a(_, _"5"_) - 24
 		patterns.push_back(Pattern(assignCommon, WILD_CARD, EXPRESSION_CONSTANT, true));
 		selected.push_back(assignCommon);
 		results.push_back({ left2 });
 
-		//Handle result for Select a pattern a(v, _"5"_)
+		//Handle result for Select a pattern a(v, _"5"_) - 25 26
 		patterns.push_back(Pattern(assignCommon, lhsCommon, EXPRESSION_CONSTANT, true));
 		selected.push_back(assignCommon);
 		results.push_back({ left2 });

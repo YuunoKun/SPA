@@ -125,7 +125,7 @@ namespace UnitTesting {
 			}
 		}
 
-		void validateEmpty(std::vector<Pattern> patterns, std::vector<RelRef> relations) {
+		void validateEmpty(std::vector<Pattern>& patterns, std::vector<RelRef> relations) {
 			for (unsigned int k = 0; k < patterns.size(); k++) {
 				for (unsigned int i = 0; i < patterns.size(); i++) {
 					for (unsigned int j = 0; j < ALL_SELECT.size(); j++) {

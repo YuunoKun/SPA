@@ -16,6 +16,7 @@ class PKB : public KnowledgeBase {
 public:
 	static PKB& PKB::getInstance();
 	PKB(PKB const&) = delete;
+	~PKB();
 	void operator=(PKB const&) = delete;
 
 	void addConstant(constant constant) override;
@@ -45,7 +46,7 @@ public:
 	const std::vector<StmtInfo>& getStmts() override;
 	const StmtInfo getStmt(stmt_index stmt_index) override;
 	const var_name getAssignment(stmt_index stmt_index) override;
-	expr getExpression(stmt_index stmt_index) override;
+	expr* getExpression(stmt_index stmt_index) override;
 	const std::vector<constant> getConstants() override;
 	const UniqueRelationTable<stmt_index, var_name>& getAssigns();
 	const UniqueRelationTable<stmt_index, expr*>& getExpr() override;

@@ -10,6 +10,7 @@ class Pattern {
 public:
 	Pattern(Entity, Entity, std::string, bool);
 	Pattern();
+	~Pattern();
 
 	Entity getPatternType();
 	Entity getLeftExpression();
@@ -20,10 +21,9 @@ public:
 
 private:
 	ExprParser expr_parser;
-
 	//Member Variable
 	Entity pattern_type;
 	Entity left_expression;
-	expr* expression;
+	expr* expression{ nullptr };
 	bool is_wild;
 };

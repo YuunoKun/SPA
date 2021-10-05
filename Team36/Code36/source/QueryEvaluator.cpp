@@ -9,7 +9,7 @@
 QueryEvaluator::QueryEvaluator() {
 }
 
-std::list<std::list<std::string>> QueryEvaluator::evaluateQuery(Query query) {
+std::list<std::list<std::string>> QueryEvaluator::evaluateQuery(Query& query) {
 	try {
 		QueryResult result;
 
