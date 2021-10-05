@@ -14,6 +14,18 @@
 
 QueryPreprocessor::QueryPreprocessor() {
 	this->query = Query();
+
+	// True when parsing is in selection, false when parsing is in declaration
+	bool isSelect = false;
+
+	// True when iterating inside the such that or pattern parameter, false otherwise
+	bool isParameter = false;
+
+	bool isExpectingPatternType = false;
+
+	bool isExpectingAttribute = false;
+
+	bool endOfCurrentClauses = true;
 }
 
 Query QueryPreprocessor::parse(std::string str) {
@@ -111,24 +123,12 @@ Query QueryPreprocessor::parse(std::string str) {
 
 	ParseStatus status;
 
-	// True when parsing is in selection, false when parsing is in declaration
-	bool isSelect = false;
-
-	// True when iterating inside the such that or pattern parameter, false otherwise
-	bool isParameter = false;
-
-	bool isExpectingPatternType = false;
-
-	bool isExpectingAttribute = false;
-
-	bool endOfCurrentClauses = true;
-
 	for (QueryToken token : v) {
 		// First iteration, set identifier to correct type
 		// Check what is my previous token
 		if (!isSelect) {
 			if (endOfCurrentDeclaration) {
-				declarationType = setIdentifierToQueryTokenType(prevToken, declarationType, token, status, isSelect);
+				declarationType = setIdentifierToQueryTokenType(prevToken, declarationType, token, status);
 				haveNextDeclaration = true;
 				endOfCurrentDeclaration = false;
 			}
@@ -216,7 +216,7 @@ Query QueryPreprocessor::parse(std::string str) {
 						prevToken.token_value == "Select" &&
 						token.type == QueryToken::QueryTokenType::IDENTIFIER) {
 						Entity ent;
-						addSelectedToQuery(ent, output, selected, token, isSelect);
+						addSelectedToQuery(ent, output, selected, token);
 						haveNextDeclaration = false;
 					}
 				}
@@ -263,7 +263,7 @@ Query QueryPreprocessor::parse(std::string str) {
 					}
 					else if (token.type == QueryToken::QueryTokenType::IDENTIFIER) {
 						Entity ent;
-						addSelectedToQuery(ent, output, selected, token, isSelect);
+						addSelectedToQuery(ent, output, selected, token);
 						haveNextDeclaration = false;
 					}
 					else if (token.type == QueryToken::QueryTokenType::TUPLE_CLOSE) {
@@ -354,7 +354,7 @@ Query QueryPreprocessor::parse(std::string str) {
 	return QueryPreprocessor::returnAndResetQuery();
 }
 
-QueryToken QueryPreprocessor::setIdentifierToQueryTokenType(QueryToken& prevToken, QueryToken& temp, QueryToken& token, ParseStatus& status, bool& isSelect) {
+QueryToken QueryPreprocessor::setIdentifierToQueryTokenType(QueryToken& prevToken, QueryToken& temp, QueryToken& token, ParseStatus& status) {
 	if (prevToken.type == QueryToken::QueryTokenType::WHITESPACE ||
 		prevToken.type == QueryToken::QueryTokenType::TERMINATOR) {
 		if (token.token_value == "stmt") {
@@ -438,7 +438,7 @@ void QueryPreprocessor::addPatternToQuery(Entity& patternTypeEntity, std::vector
 	}
 }
 
-void QueryPreprocessor::addSelectedToQuery(Entity& ent, std::vector<QueryToken>& output, std::vector<QueryToken> selected, QueryToken& token, bool& isSelect) {
+void QueryPreprocessor::addSelectedToQuery(Entity& ent, std::vector<QueryToken>& output, std::vector<QueryToken> selected, QueryToken& token) {
 	bool isValid = false;
 	if (token.token_value == "BOOLEAN" && query.getSelected().size() == 0) {
 		ent = { EntityType::BOOLEAN };
@@ -530,6 +530,11 @@ Query QueryPreprocessor::returnAndResetQuery() {
 
 	// Reset variables
 	this->query = Query();
+	bool isSelect = false;
+	bool isParameter = false;
+	bool isExpectingPatternType = false;
+	bool isExpectingAttribute = false;
+	bool endOfCurrentClauses = true;
 
 	return queryResult;
 }

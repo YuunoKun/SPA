@@ -24,12 +24,19 @@ private:
 
 	// Class variables
 	Query query;
+	bool isSelect;
+	bool isParameter;
+	bool isExpectingPatternType;
+	bool isExpectingAttribute;
+	bool endOfCurrentClauses;
 
-	QueryToken setIdentifierToQueryTokenType(QueryToken&, QueryToken&, QueryToken&, ParseStatus&, bool&);
+	// Methods
+
+	QueryToken setIdentifierToQueryTokenType(QueryToken&, QueryToken&, QueryToken&, ParseStatus&);
 
 	void addEntityToQuery(std::vector<QueryToken>&, QueryToken&, QueryToken&);
 
-	void addSelectedToQuery(Entity&, std::vector<QueryToken>&, std::vector<QueryToken>, QueryToken&, bool&);
+	void addSelectedToQuery(Entity&, std::vector<QueryToken>&, std::vector<QueryToken>, QueryToken&);
 
 	void addPatternToQuery(Entity&, std::vector<QueryToken>&, QueryToken&);
 
