@@ -12,7 +12,7 @@ public:
 	// Methods
 	void validateSelectMultipleClauses(QueryToken&, QueryToken&);
 
-	void validateQuery(Query&);
+	void validateQuery(Query&, bool&);
 
 	void validateSelecting(QueryToken&, QueryToken&);
 };

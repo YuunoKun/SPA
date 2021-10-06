@@ -57,12 +57,15 @@ void QueryValidator::validateSelecting(QueryToken& token, QueryToken& prevTokenS
 	}
 }
 
-void QueryValidator::validateQuery(Query& query) {
+void QueryValidator::validateQuery(Query& query, bool& endOfCurrentClauses) {
 	if (query.getEntities().size() == 0) {
 		throw SyntacticErrorException("No declaration has been made in your query");
 	}
 	if (query.getSelected().size() == 0) {
 		throw SyntacticErrorException("There is no selected variable in your query");
+	}
+	if (!endOfCurrentClauses) {
+		throw SyntacticErrorException("Invalid query");
 	}
 
 	// Final check

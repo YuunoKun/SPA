@@ -309,10 +309,7 @@ Query QueryPreprocessor::parse(std::string str) {
 			prevTokenSelect = token;
 		}
 	}
-	if (!endOfCurrentClauses) {
-		throw SyntacticErrorException("Invalid query");
-	}
-	queryValidator.validateQuery(query);
+	queryValidator.validateQuery(query, endOfCurrentClauses);
 
 	return QueryPreprocessor::returnAndResetQuery();
 }
