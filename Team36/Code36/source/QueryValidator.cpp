@@ -43,6 +43,20 @@ void QueryValidator::validateSelectMultipleClauses(QueryToken& token, QueryToken
 	}
 }
 
+void QueryValidator::validateSelecting(QueryToken& token, QueryToken& prevTokenSelect) {
+	if ((prevTokenSelect.type == QueryToken::QueryTokenType::IDENTIFIER ||
+		prevTokenSelect.type == QueryToken::QueryTokenType::PROC_NAME ||
+		prevTokenSelect.type == QueryToken::QueryTokenType::VAR_NAME ||
+		prevTokenSelect.type == QueryToken::QueryTokenType::STMT_INDEX ||
+		prevTokenSelect.type == QueryToken::QueryTokenType::VALUE) &&
+		(token.type != QueryToken::QueryTokenType::DOT &&
+			token.type != QueryToken::QueryTokenType::SUCH_THAT &&
+			token.type != QueryToken::QueryTokenType::PATTERN &&
+			token.type != QueryToken::QueryTokenType::WITH)) {
+		throw SyntacticErrorException("After selection needs to have such that or pattern clause");
+	}
+}
+
 void QueryValidator::validateQuery(Query& query) {
 	if (query.getEntities().size() == 0) {
 		throw SyntacticErrorException("No declaration has been made in your query");

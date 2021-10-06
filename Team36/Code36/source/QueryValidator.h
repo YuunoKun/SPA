@@ -13,4 +13,6 @@ public:
 	void validateSelectMultipleClauses(QueryToken&, QueryToken&);
 
 	void validateQuery(Query&);
+
+	void validateSelecting(QueryToken&, QueryToken&);
 };

@@ -191,17 +191,7 @@ Query QueryPreprocessor::parse(std::string str) {
 				//else if (declarationType.type == QueryToken::QueryTokenType::SELECT) {
 				else if (status == ParseStatus::IS_SELECTING) {
 					// Validation
-					if ((prevTokenSelect.type == QueryToken::QueryTokenType::IDENTIFIER ||
-						prevTokenSelect.type == QueryToken::QueryTokenType::PROC_NAME ||
-						prevTokenSelect.type == QueryToken::QueryTokenType::VAR_NAME ||
-						prevTokenSelect.type == QueryToken::QueryTokenType::STMT_INDEX ||
-						prevTokenSelect.type == QueryToken::QueryTokenType::VALUE) &&
-						(token.type != QueryToken::QueryTokenType::DOT &&
-							token.type != QueryToken::QueryTokenType::SUCH_THAT &&
-							token.type != QueryToken::QueryTokenType::PATTERN &&
-							token.type != QueryToken::QueryTokenType::WITH)) {
-						throw SyntacticErrorException("After selection needs to have such that or pattern clause");
-					}
+					queryValidator.validateSelecting(token, prevTokenSelect);
 
 					// if Select has attribute ie. Select p.procName
 					if (token.type == QueryToken::QueryTokenType::DOT &&
@@ -254,7 +244,7 @@ Query QueryPreprocessor::parse(std::string str) {
 				}
 				// pattern and such that will have parameter inside brackets
 				// with will have parameter as long as the token is not "and", "pattern" or "such that"
-				else if (isParameter && (((patternOrSuchThat.type == QueryToken::QueryTokenType::PATTERN ||
+				if (isParameter && (((patternOrSuchThat.type == QueryToken::QueryTokenType::PATTERN ||
 					patternOrSuchThat.type == QueryToken::QueryTokenType::SUCH_THAT) &&
 					token.type != QueryToken::QueryTokenType::PARENTHESIS_CLOSE) ||
 					(patternOrSuchThat.type == QueryToken::QueryTokenType::WITH &&
