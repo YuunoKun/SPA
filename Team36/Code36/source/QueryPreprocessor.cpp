@@ -22,10 +22,13 @@ QueryPreprocessor::QueryPreprocessor() {
 	// True when iterating inside the such that or pattern parameter, false otherwise
 	this->isParameter = false;
 
+	// True when the next token must be a pattern type
 	this->isExpectingPatternType = false;
 
+	// True after current token is a '.', next one must be an attribute
 	this->isExpectingAttribute = false;
 
+	// Anything in between a clause eg. such that ..A.. pattern -> A is not endOfCurrentClause
 	this->endOfCurrentClauses = true;
 
 	// Collection of declared query tokens
@@ -61,6 +64,7 @@ QueryPreprocessor::QueryPreprocessor() {
 	// To keep track of pattern type entity, eg: ASSIGN
 	this->patternTypeEntity = Entity();
 
+	// To keep track of selection, NEUTRAL -> IS_SELECTING -> IS_SELECTING_MULTIPLE_CLAUSE
 	this->status = ParseStatus::NEUTRAL;
 }
 
@@ -72,58 +76,6 @@ Query QueryPreprocessor::parse(std::string str) {
 	query_tokenizer.parse_into_query_tokens(str);
 
 	std::vector<QueryToken> v = query_tokenizer.get_query_token_chain();
-
-	//std::vector<QueryToken> v;
-	//v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "assign" });
-	//v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "a1" });
-	//v.push_back({ QueryToken::QueryTokenType::COMMA, "" });
-	//v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "a2" });
-	//v.push_back({ QueryToken::QueryTokenType::TERMINATOR, "" });
-	//v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "Select" });
-	//v.push_back({ QueryToken::QueryTokenType::TUPLE_OPEN, "" });
-	//v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "a1" });
-	//v.push_back({ QueryToken::QueryTokenType::DOT, "" });
-	//v.push_back({ QueryToken::QueryTokenType::PROC_NAME, "" });
-	//v.push_back({ QueryToken::QueryTokenType::COMMA, "" });
-	//v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "a2" });
-	//v.push_back({ QueryToken::QueryTokenType::TUPLE_CLOSE, "" });
-
-	//v.push_back({ QueryToken::QueryTokenType::DOT, "" });
-	//v.push_back({ QueryToken::QueryTokenType::VAR_NAME, "" });
-
-	//v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "stmt" });
-	//v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "s" });
-	//v.push_back({ QueryToken::QueryTokenType::TERMINATOR, "" });
-	//v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "constant" });
-	//v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "c" });
-	//v.push_back({ QueryToken::QueryTokenType::TERMINATOR, "" });
-	//v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "Select" });
-	//v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "s" });
-	//v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "with" });
-	//v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "s" });
-	//v.push_back({ QueryToken::QueryTokenType::DOT, "" });
-	//v.push_back({ QueryToken::QueryTokenType::STMT_INDEX, "" });
-	//v.push_back({ QueryToken::QueryTokenType::EQUAL, "" });
-	//v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "c" });
-	//v.push_back({ QueryToken::QueryTokenType::DOT, "" });
-	//v.push_back({ QueryToken::QueryTokenType::VALUE, "" });
-	//v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "and" });
-	//v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "s" });
-	//v.push_back({ QueryToken::QueryTokenType::EQUAL, "" });
-	//v.push_back({ QueryToken::QueryTokenType::CONSTANT, "10" });
-
-	//v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "assign" });
-	//v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "a" });
-	//v.push_back({ QueryToken::QueryTokenType::TERMINATOR, "" });
-	//v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "Select" });
-	//v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "a" });
-	//v.push_back({ QueryToken::QueryTokenType::SUCH_THAT, "" });
-	//v.push_back({ QueryToken::QueryTokenType::AFFECTS_T, "" });
-	//v.push_back({ QueryToken::QueryTokenType::PARENTHESIS_OPEN, "" });
-	//v.push_back({ QueryToken::QueryTokenType::IDENTIFIER, "a" });
-	//v.push_back({ QueryToken::QueryTokenType::COMMA, "" });
-	//v.push_back({ QueryToken::QueryTokenType::CONSTANT, "10" });
-	//v.push_back({ QueryToken::QueryTokenType::PARENTHESIS_CLOSE, "" });
 
 	for (QueryToken token : v) {
 		// First iteration, set identifier to correct type
