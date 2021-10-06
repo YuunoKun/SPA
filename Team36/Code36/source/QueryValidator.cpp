@@ -1,3 +1,4 @@
+#include "Query.h"
 #include "QueryToken.h"
 #include "QueryValidator.h"
 #include "QueryPreprocessor.h"
@@ -39,5 +40,32 @@ void QueryValidator::validateSelectMultipleClauses(QueryToken& token, QueryToken
 		prevTokenSelect.type != QueryToken::QueryTokenType::IDENTIFIER &&
 		prevTokenSelect.type != QueryToken::QueryTokenType::STMT_INDEX) {
 		throw SyntacticErrorException("During multiple selects, '>' can only come after identifier or attributes");
+	}
+}
+
+void QueryValidator::validateQuery(Query& query) {
+	if (query.getEntities().size() == 0) {
+		throw SyntacticErrorException("No declaration has been made in your query");
+	}
+	if (query.getSelected().size() == 0) {
+		throw SyntacticErrorException("There is no selected variable in your query");
+	}
+
+	// Final check
+
+	for (std::pair<std::string, Entity> ent : query.getEntities()) {
+		if (ent.second.getType() != EntityType::STMT &&
+			ent.second.getType() != EntityType::PROCEDURE &&
+			ent.second.getType() != EntityType::READ &&
+			ent.second.getType() != EntityType::PRINT &&
+			ent.second.getType() != EntityType::CALL &&
+			ent.second.getType() != EntityType::IF &&
+			ent.second.getType() != EntityType::WHILE &&
+			ent.second.getType() != EntityType::VARIABLE &&
+			ent.second.getType() != EntityType::CONSTANT &&
+			ent.second.getType() != EntityType::PROG_LINE &&
+			ent.second.getType() != EntityType::ASSIGN) {
+			throw SyntacticErrorException("Declaration fails!");
+		}
 	}
 }
