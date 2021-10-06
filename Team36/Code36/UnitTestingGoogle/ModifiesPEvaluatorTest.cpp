@@ -80,9 +80,6 @@ namespace UnitTesting {
 		var_name x = "x";
 		var_name y = "y";
 		var_name z = "z";
-		Entity v1 = { VARIABLE, "x" };
-		Entity v2 = { VARIABLE, "y" };
-		Entity v3 = { VARIABLE, "z" };
 
 		PKB::getInstance().addProcedure(main1);
 		PKB::getInstance().addProcedure(main2);
@@ -104,10 +101,6 @@ namespace UnitTesting {
 		proc_name sub1 = "sub1";
 		proc_name main2 = "main2";
 		proc_name sub2 = "sub2";
-		Entity e1 = { PROCEDURE, main1 };
-		Entity e2 = { PROCEDURE, sub1 };
-		Entity e3 = { PROCEDURE, main2 };
-		Entity e4 = { PROCEDURE, sub2 };
 		var_name x = "x";
 		var_name y = "y";
 		var_name z = "z";
@@ -134,16 +127,9 @@ namespace UnitTesting {
 		proc_name sub1 = "sub1";
 		proc_name main2 = "main2";
 		proc_name sub2 = "sub2";
-		Entity e1 = { PROCEDURE, main1 };
-		Entity e2 = { PROCEDURE, sub1 };
-		Entity e3 = { PROCEDURE, main2 };
-		Entity e4 = { PROCEDURE, sub2 };
 		var_name x = "x";
 		var_name y = "y";
 		var_name z = "z";
-		Entity v1 = { VARIABLE, "x" };
-		Entity v2 = { VARIABLE, "y" };
-		Entity v3 = { VARIABLE, "z" };
 
 		PKB::getInstance().addProcedure(main1);
 		PKB::getInstance().addProcedure(main2);
@@ -167,16 +153,9 @@ namespace UnitTesting {
 		proc_name sub1 = "sub1";
 		proc_name main2 = "main2";
 		proc_name sub2 = "sub2";
-		Entity e1 = { PROCEDURE, main1 };
-		Entity e2 = { PROCEDURE, sub1 };
-		Entity e3 = { PROCEDURE, main2 };
-		Entity e4 = { PROCEDURE, sub2 };
 		var_name x = "x";
 		var_name y = "y";
 		var_name z = "z";
-		Entity v1 = { VARIABLE, "x" };
-		Entity v2 = { VARIABLE, "y" };
-		Entity v3 = { VARIABLE, "z" };
 
 		PKB::getInstance().addProcedure(main1);
 		PKB::getInstance().addProcedure(main2);
@@ -197,16 +176,9 @@ namespace UnitTesting {
 		proc_name sub1 = "sub1";
 		proc_name main2 = "main2";
 		proc_name sub2 = "sub2";
-		Entity e1 = { PROCEDURE, main1 };
-		Entity e2 = { PROCEDURE, sub1 };
-		Entity e3 = { PROCEDURE, main2 };
-		Entity e4 = { PROCEDURE, sub2 };
 		var_name x = "x";
 		var_name y = "y";
 		var_name z = "z";
-		Entity v1 = { VARIABLE, "x" };
-		Entity v2 = { VARIABLE, "y" };
-		Entity v3 = { VARIABLE, "z" };
 
 		PKB::getInstance().addProcedure(main1);
 		PKB::getInstance().addProcedure(main2);
@@ -250,22 +222,22 @@ namespace UnitTesting {
 
 		std::vector<var_name> v = { x };
 		Entity header = { VARIABLE, Synonym{"a"} };
-		Entity match = { PROCEDURE, main1 };
+		Entity match = e1;
 		ResultTable t(header, v);
 		EXPECT_EQ(evaluator.getRelationMatchLeft(match, header), t);
 
 		v = { y };
-		match = { PROCEDURE, main2 };
+		match = e3;
 		t = ResultTable(header, v);
 		EXPECT_EQ(evaluator.getRelationMatchLeft(match, header), t);
 
 		v = { };
-		match = { PROCEDURE, sub1 };
+		match = e2;
 		t = ResultTable(header, v);
 		EXPECT_EQ(evaluator.getRelationMatchLeft(match, header), t);
 
 		v = { };
-		match = { PROCEDURE, sub2 };
+		match = e4;
 		t = ResultTable(header, v);
 		EXPECT_EQ(evaluator.getRelationMatchLeft(match, header), t);
 	}
@@ -297,17 +269,17 @@ namespace UnitTesting {
 
 		std::vector<proc_name> v = { main2 };
 		Entity header = { PROCEDURE, Synonym{"a"} };
-		Entity match = { VARIABLE, y };
+		Entity match = v2;
 		ResultTable t(header, v);
 		EXPECT_EQ(evaluator.getRelationMatchRight(header, match), t);
 
 		v = { main1 };
-		match = { VARIABLE, x };
+		match = v1;
 		t = ResultTable(header, v);
 		EXPECT_EQ(evaluator.getRelationMatchRight(header, match), t);
 
 		v = {};
-		match = { VARIABLE, z };
+		match = v3;
 		t = ResultTable(header, v);
 		EXPECT_EQ(evaluator.getRelationMatchRight(header, match), t);
 	}

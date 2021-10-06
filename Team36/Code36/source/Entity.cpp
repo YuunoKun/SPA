@@ -76,9 +76,8 @@ void Entity::defaultAttribute(EntityType type) {
 		break;
 	case PROCEDURE: attribute = PROC_NAME;
 		break;
+	case BOOLEAN:
 	case WILD: attribute = NONE;
-		break;
-	case BOOLEAN: attribute = NONE;
 		break;
 	default: throw std::domain_error("Some default attribute value is not being handle!!!!");
 		break;

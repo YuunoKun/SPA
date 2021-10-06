@@ -96,6 +96,15 @@
     <ClCompile Include="ClauseTest.cpp">
       <Filter>PQL\QueryObject</Filter>
     </ClCompile>
+    <ClCompile Include="CallsEvaluatorTest.cpp">
+      <Filter>PQL\QueryEvaluator\RelationEvaluator</Filter>
+    </ClCompile>
+    <ClCompile Include="CallsTEvaluatorTest.cpp">
+      <Filter>PQL\QueryEvaluator\RelationEvaluator</Filter>
+    </ClCompile>
+    <ClCompile Include="QueryOptimizerTest.cpp">
+      <Filter>PQL</Filter>
+	</ClCompile>
     <ClCompile Include="ExprNodeTest.cpp">
       <Filter>Common</Filter>
     </ClCompile>

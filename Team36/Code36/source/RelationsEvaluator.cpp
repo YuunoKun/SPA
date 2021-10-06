@@ -9,6 +9,13 @@
 #include "ModifiesSEvaluator.h"
 #include "UsesPEvaluator.h"
 #include "UsesSEvaluator.h"
+#include "WithEvaluator.h"
+#include "CallsEvaluator.h"
+#include "CallsTEvaluator.h"
+#include "NextEvaluator.h"
+#include "NextTEvaluator.h"
+#include "AffectEvaluator.h"
+#include "AffectTEvaluator.h"
 
 void RelationsEvaluator::evaluateRelation(QueryResult& result, RelRef& relation) {
 	switch (relation.getType()) {
@@ -20,6 +27,13 @@ void RelationsEvaluator::evaluateRelation(QueryResult& result, RelRef& relation)
 	case MODIFIES_S: evaluateRelation(result, relation, ModifiesSEvaluator()); break;
 	case USES_P: evaluateRelation(result, relation, UsesPEvaluator()); break;
 	case USES_S: evaluateRelation(result, relation, UsesSEvaluator()); break;
+	case WITH: evaluateRelation(result, relation, WithEvaluator()); break;
+	case CALLS: evaluateRelation(result, relation, CallsEvaluator()); break;
+	case CALLS_T: evaluateRelation(result, relation, CallsTEvaluator()); break;
+	case NEXT: evaluateRelation(result, relation, NextEvaluator()); break;
+	case NEXT_T: evaluateRelation(result, relation, NextTEvaluator()); break;
+	case AFFECT: evaluateRelation(result, relation, AffectEvaluator()); break;
+	case AFFECT_T: evaluateRelation(result, relation, AffectTEvaluator()); break;
 	default: throw std::domain_error("Some Relation is not being handle!!!!");
 	}
 }
