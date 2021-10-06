@@ -10,22 +10,25 @@
 #include "SemanticErrorException.h"
 #include "SyntacticErrorException.h"
 #include "Utility.h"
+#include "AssignPatternParser.h"
 
 
 class QueryPatternRelRefParser {
 public: 
 	QueryPatternRelRefParser();
 	
-	void parseParameterSuchThat(Query&, QueryToken::QueryTokenType, std::vector<QueryToken>);
-	void parseParameterPattern(Query&, Entity&, std::vector<QueryToken>);
+	bool isStmtRef(Query&, std::vector<QueryToken>);
+	bool isEntRef(Query&, std::vector<QueryToken>);
+	bool isExpr(std::vector<QueryToken>);
+	bool isCorrectSynEntRef(Query&, std::vector<QueryToken>, EntityType);
 	Entity setStmtRef(Query&, QueryToken);
 	Entity setEntRef(Query&, std::vector<QueryToken>);
 	Entity setCallEntRef(Query&, std::vector<QueryToken>);
 	expr setExpr(std::vector<QueryToken>);
+	void parseParameterSuchThat(Query&, QueryToken::QueryTokenType, std::vector<QueryToken>);
+	void parseParameterPattern(Query&, Entity&, std::vector<QueryToken>);
 
 private:
-	bool isStmtRef(Query&, std::vector<QueryToken>);
 	bool isCommaRef(std::vector<QueryToken>);
-	bool isEntRef(Query&, std::vector<QueryToken>);
-	bool isCorrectSynEntRef(Query&, std::vector<QueryToken>, EntityType);
+
 };

@@ -2073,8 +2073,11 @@ namespace UnitTesting {
 		left_expr_token_chain.push_back({ QueryToken::QUOTATION_CLOSE, "" });
 
 		std::vector<QueryToken> right_expr_token_chain;
+		right_expr_token_chain.push_back({ QueryToken::WILDCARD, "" });
+		right_expr_token_chain.push_back({ QueryToken::QUOTATION_OPEN, "" });
 		right_expr_token_chain.push_back({ QueryToken::IDENTIFIER, "s" });
-
+		right_expr_token_chain.push_back({ QueryToken::QUOTATION_CLOSE, "" });
+		right_expr_token_chain.push_back({ QueryToken::WILDCARD, "" });
 		//Synonym
 		//Expected
 		Synonym synonym;
@@ -2115,8 +2118,11 @@ namespace UnitTesting {
 		left_expr_token_chain.push_back({ QueryToken::QUOTATION_CLOSE, "" });
 
 		std::vector<QueryToken> right_expr_token_chain;
+		right_expr_token_chain.push_back({ QueryToken::WILDCARD, "" });
+		right_expr_token_chain.push_back({ QueryToken::QUOTATION_OPEN, "" });
 		right_expr_token_chain.push_back({ QueryToken::IDENTIFIER, "s" });
-
+		right_expr_token_chain.push_back({ QueryToken::QUOTATION_CLOSE, "" });
+		right_expr_token_chain.push_back({ QueryToken::WILDCARD, "" });
 		//Synonym
 		//Expected
 		Synonym synonym;
@@ -2153,6 +2159,7 @@ namespace UnitTesting {
 		left_expr_token_chain.push_back({ QueryToken::QUOTATION_CLOSE, "" });
 
 		std::vector<QueryToken> right_expr_token_chain;
+		right_expr_token_chain.push_back({ QueryToken::WILDCARD, "" });
 
 		//Synonym
 		//Expected

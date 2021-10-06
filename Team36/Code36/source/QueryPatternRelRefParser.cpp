@@ -4,10 +4,8 @@
 #include <stdexcept>
 #include "QueryPatternRelRefParser.h"
 
+QueryPatternRelRefParser::QueryPatternRelRefParser() {}
 
-// isStmtRef and isEntRef token_chain params need to br broken up first
-
-//expect stmtref for first element
 bool QueryPatternRelRefParser::isStmtRef(Query& query, std::vector<QueryToken> token_chain) {
     
     // no args found, throw syntax errors
@@ -52,17 +50,12 @@ bool QueryPatternRelRefParser::isStmtRef(Query& query, std::vector<QueryToken> t
     return false;
 }
 
-//expect entref
 bool QueryPatternRelRefParser::isEntRef(Query& query, std::vector<QueryToken> token_chain) {
     // entRef : synonym | ‘_’ | ‘"’ IDENT ‘"’
 
-    // no args found, throw syntax errors
     if (token_chain.size() == 0) {
         throw SyntacticErrorException("Invalid entRef arguments");
-    }
-
-    // if only 1 arg found
-    if (token_chain.size() == 1) {
+    } else if (token_chain.size() == 1) {
         QueryToken token = token_chain[0];
 
         if (token.type == QueryToken::WILDCARD) {
@@ -92,8 +85,37 @@ bool QueryPatternRelRefParser::isEntRef(Query& query, std::vector<QueryToken> to
             throw SyntacticErrorException("Invalid EntRef arguments");
         }
     } else {
-        // throw syntax error?
         throw SyntacticErrorException("Invalid EntRef arguments");
+    }
+}
+
+bool QueryPatternRelRefParser::isExpr(std::vector<QueryToken> token_chain) {
+    
+    size_t token_chain_size = token_chain.size();
+
+    if (token_chain_size == 0) {
+        throw SyntacticErrorException("Invalid entRef arguments");
+
+    } else if (token_chain_size == 1) {
+
+        return token_chain[0].type == QueryToken::WILDCARD;
+
+    } else if (token_chain_size != 2 && 
+        token_chain[0].type == QueryToken::QUOTATION_OPEN &&
+            token_chain[token_chain_size - 1].type == QueryToken::QUOTATION_CLOSE) {
+            
+        return true;
+
+    } else if (token_chain_size != 4 && 
+        token_chain[0].type == QueryToken::WILDCARD &&
+        token_chain[1].type == QueryToken::QUOTATION_OPEN &&
+        token_chain[token_chain_size - 2].type == QueryToken::QUOTATION_CLOSE &&
+        token_chain[token_chain_size - 1].type == QueryToken::WILDCARD) {
+
+        return true;
+
+    } else {
+        return false;
     }
 }
 
@@ -114,8 +136,6 @@ bool QueryPatternRelRefParser::isCorrectSynEntRef(Query& query, std::vector<Quer
     }
 }
 
-
-//expectcomma
 bool QueryPatternRelRefParser::isCommaRef(std::vector<QueryToken> token_chain) {
     if (token_chain.size() == 0) {
         throw std::invalid_argument("Invalid argument, no comma found");
@@ -124,8 +144,6 @@ bool QueryPatternRelRefParser::isCommaRef(std::vector<QueryToken> token_chain) {
         throw std::invalid_argument("Invalid argument, expected a comma");
     }
 }
-
-QueryPatternRelRefParser::QueryPatternRelRefParser() {}
 
 Entity QueryPatternRelRefParser::setStmtRef(Query& query, QueryToken token) {
   // synonym | ‘_’ | INTEGER
@@ -205,23 +223,22 @@ Entity QueryPatternRelRefParser::setCallEntRef(Query& query,
     throw SemanticErrorException("Unknown entRef");
 }
 
-// takes in a token_chain with only IDENT* (no QUOTATION_OPEN/CLOSE or WILDCARD)
 expr QueryPatternRelRefParser::setExpr(std::vector<QueryToken> token_chain) {
   // expression-spec : ‘"‘ expr’"’ | ‘_’ ‘"’ expr ‘"’ ‘_’ | ‘_’
-
-  // TODO
-  // send to expression parser
-  if (token_chain.empty()) {
-    return "";
-  } else if (token_chain.size() == 1 &&
-             token_chain[0].type == QueryToken::IDENTIFIER) {
-    return token_chain[0].token_value;
-  } else if (token_chain.size() == 1 &&
-      token_chain[0].type == QueryToken::CONSTANT) {
-      return token_chain[0].token_value;
-  }
-
-  throw std::runtime_error("Unknown expr");
+    std::string result = "";
+    if (token_chain.size() == 1 && token_chain[0].type == QueryToken::WILDCARD) {
+        return result;
+    } else {
+        for (size_t i = 0; i < token_chain.size(); i++) {
+            if (token_chain[i].type != QueryToken::WILDCARD &&
+                token_chain[i].type != QueryToken::QUOTATION_OPEN &&
+                token_chain[i].type != QueryToken::QUOTATION_CLOSE) {
+                result += token_chain[i].token_value;
+            }
+        }
+        return result;
+    }
+    
 }
 
 void QueryPatternRelRefParser::parseParameterSuchThat(
@@ -256,9 +273,7 @@ void QueryPatternRelRefParser::parseParameterSuchThat(
         
         //Validate first param
         if (isStmtRef(query, temp_token_chain_1)) {
-            //is stmRef (WILDCARD incld)
             if (temp_token_chain_1[0].type == QueryToken::WILDCARD) {
-                //Throw semantic erros
                 throw SemanticErrorException("Invalid parameters for Modifies");
             }
         } else {
@@ -551,7 +566,7 @@ void QueryPatternRelRefParser::parseParameterSuchThat(
         if (!isEntRef(query, temp_token_chain_1) || !isEntRef(query, temp_token_chain_2)) {
             throw SemanticErrorException("Invalid parameters for Calls");
         }
-        // Check if both args are PROCEDUREs
+        // Check if both args are PROCEDURE
         if (!isCorrectSynEntRef(query, temp_token_chain_1, EntityType::PROCEDURE) || 
             !isCorrectSynEntRef(query, temp_token_chain_2, EntityType::PROCEDURE)) {
             throw SemanticErrorException("Invalid parameters for Calls");
@@ -715,101 +730,9 @@ void QueryPatternRelRefParser::parseParameterPattern(
     bool wild = false;
     switch (synonym_ent.getType()) {
     case ASSIGN: {
-        // find comma
-        // every QueryToken before comma token is sent to temp_token_chain
-        // Expect entRef token_chain
-        if (token_chain.size() == 0) {
-            throw std::invalid_argument("Invalid argument, no entRef found");
+        AssignPatternParser parser;
+        parser.parseParameterAssign(query, synonym_ent, token_chain);
         }
-        std::vector<QueryToken> temp_token_chain;
-        for (int i = 0; i < token_chain.size(); i++) {
-            if (token_chain[0].type != QueryToken::COMMA) {
-                temp_token_chain.push_back(token_chain[0]);
-                token_chain.erase(token_chain.begin());
-            }
-            else {
-                break;
-            }
-        }
-        if (temp_token_chain.size() == 0) {
-            throw std::invalid_argument("Invalid argument, no entRef found");
-        }
-        if (token_chain.size() == 0) {
-            throw std::invalid_argument("Invalid argument, no comma found");
-        }
-
-        // check if the curr token_chain starts with comma
-        if (token_chain[0].type == QueryToken::COMMA) {
-            token_chain.erase(token_chain.begin());
-        }
-        else {
-            // if no comma found means invalid parameters
-            throw std::runtime_error("Unexpected parameters for Pattern");
-        }
-        if (token_chain.size() == 0) {
-            throw std::invalid_argument("Invalid argument, no expr found");
-        }
-        // check second parameter if is WILDCARD 
-        // TODO check after u erase.
-        if (token_chain[0].type == QueryToken::WILDCARD) {
-            wild = true;
-            // if first element is WILDCARD token, last element must be WILDCARD for
-            // last 2 cases below expression-spec : ‘"‘ expr’"’ | ‘_’ ‘"’ expr ‘"’
-            // ‘_’ | ‘_’
-            if (token_chain[token_chain.size() - 1].type != QueryToken::WILDCARD) {
-                throw std::runtime_error("Unexpected parameters for Pattern");
-            }
-            // remove first WILDCARD token
-            token_chain.erase(token_chain.begin());
-        }
-
-        std::vector<QueryToken> temp_token_chain_2;
-
-        if (token_chain.size() != 0) {
-            //one or more token
-            if (token_chain[0].type == QueryToken::QUOTATION_OPEN) {
-                token_chain.erase(token_chain.begin());
-
-
-                // run thru all until quotation_close
-                for (int i = 0; i < token_chain.size(); i++) {
-                    if (token_chain[i].type != QueryToken::QUOTATION_CLOSE) {
-                        temp_token_chain_2.push_back(token_chain[i]);
-                    }
-                    else {
-                        token_chain.erase(token_chain.begin(), token_chain.begin() + i + 1);
-                        // if is wild need remove the last wildcard
-                        if (wild && token_chain[0].type == QueryToken::WILDCARD) {
-                            token_chain.erase(token_chain.begin());
-                        }
-
-                        // go out of loop once hit quotation close
-                        break;
-                    }
-                }
-            }
-
-            //} else if (wild && token_chain[0].type == QueryToken::WILDCARD) {
-            //  // 2 WILDCARDS in a row
-            //  throw std::runtime_error("Unexpected parameters for Pattern");
-            //}
-
-            // if still got things means wrong params
-            if (token_chain.size() != 0) {
-
-                throw std::runtime_error("Unexpected parameters for Pattern");
-            }
-
-        }
-
-        if (temp_token_chain.size() == 0) {
-            throw std::invalid_argument("Invalid argument, no entRef found");
-        }
-
-        query.addPattern(Pattern(synonym_ent, setEntRef(query, temp_token_chain),
-            setExpr(temp_token_chain_2), wild));
-        }
-
     }
 
 }

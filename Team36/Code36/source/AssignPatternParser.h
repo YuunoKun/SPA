@@ -16,4 +16,7 @@ public:
     AssignPatternParser();
 
     void parseParameterAssign(Query&, Entity&, std::vector<QueryToken>);
+
+private:
+    bool isWild(std::vector<QueryToken>);
 };
