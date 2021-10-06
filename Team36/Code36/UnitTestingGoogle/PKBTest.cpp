@@ -81,9 +81,8 @@ namespace UnitTesting {
 		EXPECT_NE(s, PKB::getInstance().getStmts());
 	}
 
-
 	//Todo change to unordered map
-	/*TEST(PKB, getExpr) {
+	TEST(PKB, getExpr) {
 		PKB::getInstance().resetCache();
 		ExprParser expr_parser;
 
@@ -110,8 +109,8 @@ namespace UnitTesting {
 		EXPECT_EQ(expr_table, PKB::getInstance().getExpr());
 		PKB::getInstance().resetCache();
 		EXPECT_NE(expr_table, PKB::getInstance().getExpr());
-	}*/
-	
+	}
+
 	TEST(PKB, getParent) {
 		PKB::getInstance().resetCache();
 
