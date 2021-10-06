@@ -396,6 +396,12 @@ void QueryPreprocessor::setQueryParameter() {
 	else if (prevTokenSelect.token_value == "" && prevTokenSelect.type == QueryToken::QueryTokenType::FOLLOWS_T) {
 		queryParameter = { QueryToken::QueryTokenType::FOLLOWS_T, "" };
 	}
+	else if (prevTokenSelect.token_value == "Calls" && prevTokenSelect.type == QueryToken::QueryTokenType::IDENTIFIER) {
+		queryParameter = { QueryToken::QueryTokenType::CALLS, "Calls" };
+	}
+	else if (prevTokenSelect.token_value == "" && prevTokenSelect.type == QueryToken::QueryTokenType::CALLS_T) {
+		queryParameter = { QueryToken::QueryTokenType::CALLS_T, "" };
+	}
 	else if (prevTokenSelect.token_value == "Next" && prevTokenSelect.type == QueryToken::QueryTokenType::IDENTIFIER) {
 		queryParameter = { QueryToken::QueryTokenType::NEXT, "Next" };
 	}
