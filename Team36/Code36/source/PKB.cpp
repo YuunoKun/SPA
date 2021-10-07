@@ -205,6 +205,8 @@ void PKB::resetCache() {
 	modifiesP_table.clear();
 	callsP_table.clear();
 	callsPT_table.clear();
+	if_table.clear();
+	while_table.clear();
 }
 
 void PKB::resetEntities() {

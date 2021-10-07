@@ -120,4 +120,26 @@ public:
 	std::vector<proc_name> getCalleePT();
 	std::vector<proc_name> getCallerPT(proc_name);
 	std::vector<proc_name> getCalleePT(proc_name);
+
+	//If stmt-controlvar relation Function
+	bool isIfEmpty();
+	bool isIfUses(stmt_index, var_name);
+	bool isIfUses(stmt_index);
+	bool isIfUsed(var_name);
+	std::vector<std::pair<stmt_index, var_name>> getAllIfUses();
+	std::vector<stmt_index> getIfUses();
+	std::vector<var_name> getIfUsed();
+	std::vector<stmt_index> getIfUses(var_name);
+	std::vector<var_name> getIfUsed(stmt_index);
+
+	//While stmt-controlvar relation Function
+	bool isWhileEmpty();
+	bool isWhileUses(stmt_index, var_name);
+	bool isWhileUses(stmt_index);
+	bool isWhileUsed(var_name);
+	std::vector<std::pair<stmt_index, var_name>> getAllWhileUses();
+	std::vector<stmt_index> getWhileUses();
+	std::vector<var_name> getWhileUsed();
+	std::vector<stmt_index> getWhileUses(var_name);
+	std::vector<var_name> getWhileUsed(stmt_index);
 };
