@@ -9,32 +9,32 @@ Select v such that Modifies("Gandulf", "ring")
 shine, ring, f, lost, d, g, a, w
 5000
 3 - modifiesp, LHS ident, RHS synonym
-procedure p; variabe v;
+procedure p; variale v;
 Select v such that Modifies("Gandulf", v)
-ring, f, d, shine, lost, g
+shine, ring, f, lost, d, g, a, w
 5000
 4 - modifiesp, LHS synonym, RHS ident
-procedure p; variabe v;
+procedure p; variable v;
 Select p such that Modifies(p, "f")
 Gandulf, Frodo
 5000
 5 - modifiesp, LHS synonym, RHS synonym
-procedure p; variabe v;
+procedure p; variable v;
 Select p such that Modifies(p, v)
 Gandulf, Frodo, Aragon
 5000
 6 - modifiesp, LHS synonym, RHS synonym
-procedure p; variabe v;
+procedure p; variable v;
 Select v such that Modifies(p, v)
 shine, ring, f, lost, d, g, a, w
 5000
 7 - modifiesp, LHS ident, RHS wildcard
-procedure p; variabe v;
+procedure p; variable v;
 Select p such that Modifies("Frodo", _)
 Gandulf, Frodo, Aragon
 5000
 8 - modifiesp, LHS synonym, RHS wildcard
-procedure p; variabe v;
+procedure p; variable v;
 Select p such that Modifies(p, _)
 Gandulf, Frodo, Aragon
 5000
@@ -51,7 +51,7 @@ Select c such that Modifies(5, "f")
 11 - modifiesp, LHS integer, RHS synonym
 call c; variable v;
 Select v such that Modifies(5, v)
-a, f
+a, f, lost, w, shine
 5000
 12 - modifiesp, LHS synonym, RHS ident
 call c; variable v;
@@ -89,32 +89,32 @@ Select v such that Uses("Gandulf", "ring")
 shine, ring, f, lost, g, a
 5000
 19 - usesp, LHS ident, RHS synonym
-procedure p; variabe v;
+procedure p; variable v;
 Select v such that Uses("Gandulf", v)
 ring, f, shine, lost, g, a
 5000
 20 - Usesp, LHS synonym, RHS ident
-procedure p; variabe v;
+procedure p; variable v;
 Select p such that Uses(p, "f")
 Gandulf, Frodo, Aragon
 5000
 21 - Usesp, LHS synonym, RHS synonym
-procedure p; variabe v;
+procedure p; variable v;
 Select p such that Uses(p, v)
 Gandulf, Frodo, Aragon
 5000
 22 - usesp, LHS synonym, RHS synonym
-procedure p; variabe v;
+procedure p; variable v;
 Select v such that Uses(p, v)
 shine, ring, f, lost, g, a
 5000
 23 - Usesp, LHS ident, RHS wildcard
-procedure p; variabe v;
+procedure p; variable v;
 Select p such that Uses("Frodo", _)
 Gandulf, Frodo, Aragon
 5000
 24 - Usesp, LHS synonym, RHS wildcard
-procedure p; variabe v;
+procedure p; variable v;
 Select p such that Uses(p, _)
 Gandulf, Frodo, Aragon
 5000
@@ -253,38 +253,423 @@ procedure p, q;
 Select p such that Calls*(_, _)
 Gandulf, Frodo, Aragon
 5000
-53 - pattern, exact pattern match
+52 - pattern, exact pattern match
 assign a;
 Select pattern a(_, "ring + 4 + g * a * 2 * 1 + shine")
 11
 5000
-54 - pattern, RHS ident, invalid
+53 - pattern, RHS ident, no match
 assign a;
 Select a pattern a(_ "g")
 none
 5000
-55 - pattern, RHS single ident expression
+54 - pattern, RHS single ident expression
 assign a;
 Select a pattern a(_, _"g"_)
 11
 5000
-56 - pattern RHS sub-expression, valid
+55 - pattern RHS sub-expression, valid
 assign a;
 Select a pattern a(_, _"g * a"_)
 11
 5000
-57 - pattern RHS sub-expression, invalid
+56 - pattern RHS sub-expression, no match
 assign a;
 Select a pattern a(_, _"1 + shine"_)
 none
 5000
-58 - pattern, RHS subexpression, valid
+57 - pattern, RHS subexpression, valid
 assign a;
 Select a pattern a(_, _"g * a * 2 * 1"_)
 11
 5000
-59 - pattern, RHS subexpression, invalid
+58 - pattern, RHS subexpression, no match
 assign a;
 Select a pattern a(_, _"2 * 1 + shine"_)
+none
+5000
+59 - pattern, syntax error
+assign a; stmt s;
+Select a pattern a(s, _)
+none
+5000
+60 - pattern, syntax error
+assign a;
+Select a pattern a("a * 2", _)
+none
+5000
+61 - pattern, syntax error
+assign a;
+Select a pattern a(_, "2 * ")
+none
+5000
+62 - pattern, syntax error
+assign a; variable v;
+Select a pattern a(v, _"g * a")
+none
+5000
+63 - pattern, syntax error
+assign a; variable v;
+Select a pattern a(v, "g * a"_)
+none
+5000
+64 - invalid calls, wrong param variable
+procedure p, q; variable v;
+Select p such that Calls(p, v)
+none
+5000
+65 - invalid calls, wrong param variable
+procedure p, q; variable v;
+Select q such that Calls(v, q)
+none
+5000
+66 - invalid calls, wrong param assign
+procedure p, q; assign a;
+Select p such that Calls(p, a)
+none
+5000
+67 - invalid calls, wrong param assign
+procedure p, q; assign a;
+Select q such that Calls(a, q)
+none
+5000
+68 - invalid calls, wrong param stmt
+procedure p, q; stmt s;
+Select p such that Calls(p, s)
+none
+5000
+69 - invalid calls, wrong param stmt
+procedure p, q; stmt s;
+Select q such that Calls(s, q)
+none
+5000
+70 - invalid calls, wrong param read
+procedure p, q; read r;
+Select p such that Calls(p, r)
+none
+5000
+71 - invalid calls, wrong param read
+procedure p, q; read r;
+Select q such that Calls(r, q)
+none
+5000
+72 - invalid calls, wrong param print
+procedure p, q; print pn;
+Select p such that Calls(p, pn)
+none
+5000
+73 - invalid calls, wrong param print
+procedure p, q; print pn;
+Select q such that Calls(pn, q)
+none
+5000
+74 - invalid calls, wrong param if
+procedure p, q; if ifs;
+Select p such that Calls(p, ifs)
+none
+5000
+75 - invalid calls, wrong param if
+procedure p, q; if ifs;
+Select q such that Calls(ifs, q)
+none
+5000
+76 - invalid calls, wrong param while
+procedure p, q; while w;
+Select p such that Calls(p, w)
+none
+5000
+77 - invalid calls, wrong param while
+procedure p, q; while w;
+Select q such that Calls(w, q)
+none
+5000
+78 - invalid calls, wrong param call
+procedure p, q; call c;
+Select p such that Calls(p, c)
+none
+5000
+79 - invalid calls, wrong param call
+procedure p, q; call c;
+Select q such that Calls(c, q)
+none
+5000
+80 - invalid calls, wrong param constant
+procedure p, q; constant c;
+Select p such that Calls(p, c)
+none
+5000
+81 - invalid calls, wrong param constant
+procedure p, q; constant c;
+Select q such that Calls(c, q)
+none
+5000
+82 - invalid ModifiesP, wrong param assign
+procedure p; assign a;
+Select p such that Modifies(p, a)
+none
+5000
+83 - invalid ModifiesP, wrong param procedure
+procedure p, q;
+Select p such that Modifies(p, q)
+none
+5000
+84 - invalid ModifiesP, wrong param call
+procedure p; call c;
+Select p such that Modifies(p, c)
+none
+5000
+85 - invalid ModifiesP, wrong param stmt
+procedure p; stmt s;
+Select p such that Modifies(p, s)
+none
+5000
+86 - invalid ModifiesP, wrong param read
+procedure p; read r;
+Select p such that Modifies(p, r)
+none
+5000
+87 -  invalid ModifiesP, wrong param print
+procedure p; print pn;
+Select p such that Modifies(p, pn)
+none
+5000
+88 - invalid ModifiesP, wrong param if
+procedure p; if ifs;
+Select p such that Modifies(p, ifs)
+none
+5000
+89 - invalid ModifiesP, wrong param while
+procedure p; while w;
+Select p such that Modifies(p, w)
+none
+5000
+90 - invalid ModifiesP, wrong param constant
+procedure p; constant c;
+Select p such that Modifies(p, c)
+none
+5000
+91 - invalid ModifiesP, wrong param assign
+call c; assign a;
+Select c such that Modifies(c, a)
+none
+5000
+92 - invalid ModifiesP, wrong param procedure
+call c; procedure p;
+Select c such that Modifies(c, p)
+none
+5000
+93 - invalid ModifiesP, wrong param stmt
+call c; stmt s;
+Select c such that Modifies(c, s)
+none
+5000
+94 - invalid ModifiesP, wrong param call
+call c, c1;
+Select c such that Modifies(c, c1)
+none
+5000
+95 - invalid ModifiesP, wrong param read
+call c; read r;
+Select c such that Modifies(c, r)
+none
+5000
+96 - invalid ModifiesP, wrong param print
+call c; print pn;
+Select c such that Modifies(c, pn)
+none
+5000
+97 - invalid ModifiesP, wrong param if
+call c; if ifs;
+Select c such that Modifies(c, ifs)
+none
+5000
+98 - invalid ModifiesP, wrong param while
+call c; while w;
+Select c such that Modifies(c, w)
+none
+5000
+99 - invalid ModifiesP, wrong param constant
+call c; constant c1;
+Select c such that Modifies(c, c1)
+none
+5000
+100 - invalid UsesP, wrong param assign
+procedure p; assign a;
+Select p such that Uses(p, a)
+none
+5000
+101 - invalid UsesP, wrong param procedure
+procedure p, q;
+Select p such that Uses(p, q)
+none
+5000
+102- invalid UsesP, wrong param call
+procedure p; call c;
+Select p such that Uses(p, c)
+none
+5000
+103 - invalid UsesP, wrong param stmt
+procedure p; stmt s;
+Select p such that Uses(p, s)
+none
+5000
+104 - invalid UsesP, wrong param read
+procedure p; read r;
+Select p such that Uses(p, r)
+none
+5000
+105 - invalid UsesP, wrong param print
+procedure p; print pn;
+Select p such that Uses(p, pn)
+none
+5000
+106 - invalid UsesP, wrong param if
+procedure p; if ifs;
+Select p such that Uses(p, ifs)
+none
+5000
+107 - invalid UsesP, wrong param while
+procedure p; while w;
+Select p such that Uses(p, w)
+none
+5000
+108 - invalid UsesP, wrong param constant
+procedure p; constant c;
+Select p such that Uses(p, c)
+none
+5000
+109 - invalid UsesP, wrong param assign
+call c; assign a;
+Select c such that Uses(c, a)
+none
+5000
+110 - invalid UsesP, wrong param procedure
+call c; procedure q;
+Select c such that Uses(c, q)
+none
+5000
+111- invalid UsesP, wrong param call
+call c, c1;
+Select c such that Uses(c, c1)
+none
+5000
+112 - invalid UsesP, wrong param stmt
+call c; stmt s;
+Select c such that Uses(c, s)
+none
+5000
+113 - invalid UsesP, wrong param read
+call c; read r;
+Select c such that Uses(c, r)
+none
+5000
+114 - invalid UsesP, wrong param print
+call c; print pn;
+Select c such that Uses(c, pn)
+none
+5000
+115 - invalid UsesP, wrong param if
+call c; if ifs;
+Select c such that Uses(c, ifs)
+none
+5000
+116 - invalid UsesP, wrong param while
+call c; while w;
+Select c such that Uses(c, w)
+none
+5000
+117 - invalid UsesP, wrong param constant
+call c; constant c1;
+Select c such that Uses(c, c1)
+none
+5000
+118 - invalid calls, wrong param variable
+procedure p, q; variable v;
+Select p such that Calls*(p, v)
+none
+5000
+119 - invalid calls, wrong param variable
+procedure p, q; variable v;
+Select q such that Calls*(v, q)
+none
+5000
+120 - invalid calls, wrong param assign
+procedure p, q; assign a;
+Select p such that Calls*(p, a)
+none
+5000
+121 - invalid calls, wrong param assign
+procedure p, q; assign a;
+Select q such that Calls*(a, q)
+none
+5000
+122 - invalid calls, wrong param stmt
+procedure p, q; stmt s;
+Select p such that Calls*(p, s)
+none
+5000
+123 - invalid calls, wrong param stmt
+procedure p, q; stmt s;
+Select q such that Calls*(s, q)
+none
+5000
+124 - invalid calls, wrong param read
+procedure p, q; read r;
+Select p such that Calls*(p, r)
+none
+5000
+125 - invalid calls, wrong param read
+procedure p, q; read r;
+Select q such that Calls*(r, q)
+none
+5000
+126 - invalid calls, wrong param print
+procedure p, q; print pn;
+Select p such that Calls*(p, pn)
+none
+5000
+127 - invalid calls, wrong param print
+procedure p, q; print pn;
+Select q such that Calls*(pn, q)
+none
+5000
+128 - invalid calls, wrong param if
+procedure p, q; if ifs;
+Select p such that Calls*(p, ifs)
+none
+5000
+129 - invalid calls, wrong param if
+procedure p, q; if ifs;
+Select q such that Calls*(ifs, q)
+none
+5000
+130 - invalid calls, wrong param while
+procedure p, q; while w;
+Select p such that Calls*(p, w)
+none
+5000
+131 - invalid calls, wrong param while
+procedure p, q; while w;
+Select q such that Calls*(w, q)
+none
+5000
+132 - invalid calls, wrong param call
+procedure p, q; call c;
+Select p such that Calls*(p, c)
+none
+5000
+133 - invalid calls, wrong param call
+procedure p, q; call c;
+Select q such that Calls*(c, q)
+none
+5000
+134 - invalid calls, wrong param constant
+procedure p, q; constant c;
+Select p such that Calls*(p, c)
+none
+5000
+135 - invalid calls, wrong param constant
+procedure p, q; constant c;
+Select q such that Calls*(c, q)
 none
 5000

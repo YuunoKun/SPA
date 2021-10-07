@@ -37,7 +37,7 @@ procedure Aragon {
       a = lost + 1;
       w = shine * 2;
     } else {
-      w = 1
+      w = 1;
     }
   }
 }

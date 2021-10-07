@@ -98,3 +98,18 @@ procedure p, q;
 Select p such that Calls*(_, _)
 first, second, third, fourth, fifth
 5000
+21 - calls, wrong procedure
+procedure p, q;
+Select p such that Calls("firstProcedure", "secondProcedure")
+none
+5000
+22 - calls, wrong procedure
+procedure p, q;
+Select p such that Calls(p, "secondProcedure")
+none
+5000
+23 - calls, wrong procedure
+procedure p, q;
+Select q such that Calls("firstProcedure", q)
+none
+5000
