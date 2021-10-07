@@ -17,6 +17,11 @@ std::vector<Entity> Query::getSelected() {
 	return selected;
 }
 
+void Query::setSelectedAttribute(AttrRef& attrRef) {
+	int last_index = selected.size() - 1;
+	selected[last_index].setAttribute(attrRef);
+}
+
 void Query::addSelected(Entity& addSelect) {
 	selected.push_back(addSelect);
 }

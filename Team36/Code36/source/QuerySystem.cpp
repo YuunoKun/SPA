@@ -19,15 +19,18 @@ std::list<std::string> QuerySystem::processQuery(std::string input) {
 	}
 	catch (SyntacticErrorException&)
 	{
+		preprocessor.resetQuery();
 		return {};
 	}
 	catch (SemanticErrorException&)
 	{
 		// TODO: Return false here instead of empty query
+		preprocessor.resetQuery();
 		return {};
 	}
 	catch (std::exception& e)
 	{
+		preprocessor.resetQuery();
 		return {};
 	}
 }

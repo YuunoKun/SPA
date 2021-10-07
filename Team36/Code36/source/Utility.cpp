@@ -289,3 +289,18 @@ EntityType Utility::queryTokenTypeToEntityType(QueryToken::QueryTokenType& query
 		return EntityType::CONSTANT;
 	}
 }
+
+AttrRef Utility::queryTokenTypeToAttrRef(QueryToken::QueryTokenType& queryTokenType) {
+	if (queryTokenType == QueryToken::QueryTokenType::PROC_NAME) {
+		return AttrRef::PROC_NAME;
+	}
+	else if (queryTokenType == QueryToken::QueryTokenType::VAR_NAME) {
+		return AttrRef::VAR_NAME;
+	}
+	else if (queryTokenType == QueryToken::QueryTokenType::VALUE) {
+		return AttrRef::VALUE;
+	}
+	else if (queryTokenType == QueryToken::QueryTokenType::STMT_INDEX) {
+		return AttrRef::STMT_INDEX;
+	}
+}
