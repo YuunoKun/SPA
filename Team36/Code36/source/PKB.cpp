@@ -189,7 +189,7 @@ void PKB::addWhile(stmt_index while_stmt_index, var_name control_var) {
 		if (it == var_table.end()) {
 			throw std::invalid_argument("addWhile: Invalid var name: " + control_var);
 		}
-		if_table.insert(while_stmt_index, control_var);
+		while_table.insert(while_stmt_index, control_var);
 	}
 	catch (std::out_of_range&) {
 		throw std::invalid_argument("addWhile: Invalid stmt index:" + std::to_string(while_stmt_index));
@@ -239,6 +239,9 @@ void PKB::resetCache() {
 	callsPT_table.clear();
 	if_table.clear();
 	while_table.clear();
+	next_table.clear();
+	read_table.clear();
+	print_table.clear();
 }
 
 void PKB::resetEntities() {

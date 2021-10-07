@@ -121,6 +121,17 @@ public:
 	std::vector<proc_name> getCallerPT(proc_name);
 	std::vector<proc_name> getCalleePT(proc_name);
 
+	//Next relation function
+	bool isNextEmpty();
+	bool isNext(prog_line index1, prog_line index2);
+	bool isPrevious(prog_line index);
+	bool isNext(prog_line index);
+	std::vector<std::pair<StmtInfo, StmtInfo>> getAllNextRelation();
+	std::vector<StmtInfo> getPrevious();
+	std::vector<StmtInfo> getNext();
+	std::vector<StmtInfo> getPrevious(prog_line index);
+	std::vector<StmtInfo> getNext(prog_line index);
+
 	//If stmt-controlvar relation Function
 	bool isIfEmpty();
 	bool isIfUses(stmt_index, var_name);

@@ -506,6 +506,57 @@ std::vector<std::pair<proc_name, proc_name>> PKBAdapter::getCallsPTRelation() {
 	return a.getPairs();
 }
 
+bool PKBAdapter::isNextEmpty() {
+	auto a = PKB::getInstance().PKB::getNext();
+	return a.isEmpty();
+}
+
+bool PKBAdapter::isNext(prog_line index1, prog_line index2) {
+	auto a = PKB::getInstance().PKB::getNext();
+	StmtInfo s1 = PKB::getInstance().PKB::getStmts().at(index1 - 1);
+	StmtInfo s2 = PKB::getInstance().PKB::getStmts().at(index2 - 1);
+	return a.containsPair(s1, s2);
+}
+
+bool PKBAdapter::isPrevious(prog_line index) {
+	auto a = PKB::getInstance().PKB::getNext();
+	StmtInfo s1 = PKB::getInstance().PKB::getStmts().at(index - 1);
+	return a.containsKey(s1);
+}
+
+bool PKBAdapter::isNext(prog_line index) {
+	auto a = PKB::getInstance().PKB::getNext();
+	StmtInfo s1 = PKB::getInstance().PKB::getStmts().at(index - 1);
+	return a.containsValue(s1);
+}
+
+std::vector<std::pair<StmtInfo, StmtInfo>> PKBAdapter::getAllNextRelation() {
+	auto a = PKB::getInstance().PKB::getNext();
+	return a.getPairs();
+}
+
+std::vector<StmtInfo> PKBAdapter::getPrevious() {
+	auto a = PKB::getInstance().PKB::getNext();
+	return a.getKeys();
+}
+
+std::vector<StmtInfo> PKBAdapter::getNext() {
+	auto a = PKB::getInstance().PKB::getNext();
+	return a.getValues();
+}
+
+std::vector<StmtInfo> PKBAdapter::getPrevious(prog_line index) {
+	auto a = PKB::getInstance().PKB::getNext();
+	StmtInfo s1 = PKB::getInstance().PKB::getStmts().at(index - 1);
+	return a.getKeys(s1);
+}
+
+std::vector<StmtInfo> PKBAdapter::getNext(prog_line index) {
+	auto a = PKB::getInstance().PKB::getNext();
+	StmtInfo s1 = PKB::getInstance().PKB::getStmts().at(index - 1);
+	return a.getValues(s1);
+}
+
 bool PKBAdapter::isIfEmpty() {
 	auto a = PKB::getInstance().PKB::getIf();
 	return a.isEmpty();
