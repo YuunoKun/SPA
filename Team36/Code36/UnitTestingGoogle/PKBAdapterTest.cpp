@@ -1774,6 +1774,223 @@ namespace UnitTesting {
 		EXPECT_EQ(pkb.getCallsPTRelation(), v);
 	}
 
+	TEST_F(PKBAdapterTest, isNextEmpty) {
+		PKB::getInstance().addStmt(STMT_READ);
+		PKB::getInstance().addStmt(STMT_PRINT);
+		PKB::getInstance().addStmt(STMT_READ);
+		EXPECT_TRUE(pkb.isNextEmpty());
+		PKB::getInstance().addNext(1, 2);
+		EXPECT_FALSE(pkb.isNextEmpty());
+		PKB::getInstance().addNext(2, 3);
+		EXPECT_FALSE(pkb.isNextEmpty());
+	}
+
+	TEST_F(PKBAdapterTest, isNext) {
+		PKB::getInstance().addStmt(STMT_READ);
+		PKB::getInstance().addStmt(STMT_WHILE);
+		PKB::getInstance().addStmt(STMT_IF);
+		PKB::getInstance().addStmt(STMT_PRINT);
+		PKB::getInstance().addStmt(STMT_READ);
+		PKB::getInstance().addNext(1, 2);
+		PKB::getInstance().addNext(2, 3);
+		PKB::getInstance().addNext(3, 4);
+		PKB::getInstance().addNext(3, 5);
+		PKB::getInstance().addNext(4, 2);
+		PKB::getInstance().addNext(5, 2);
+
+		EXPECT_FALSE(pkb.isNext(1, 1));
+		EXPECT_TRUE(pkb.isNext(1, 2));
+		EXPECT_FALSE(pkb.isNext(1, 3));
+		EXPECT_FALSE(pkb.isNext(1, 4));
+		EXPECT_FALSE(pkb.isNext(1, 5));
+
+		EXPECT_FALSE(pkb.isNext(2, 1));
+		EXPECT_FALSE(pkb.isNext(2, 2));
+		EXPECT_TRUE(pkb.isNext(2, 3));
+		EXPECT_FALSE(pkb.isNext(2, 4));
+		EXPECT_FALSE(pkb.isNext(2, 5));
+
+		EXPECT_FALSE(pkb.isNext(3, 1));
+		EXPECT_FALSE(pkb.isNext(3, 2));
+		EXPECT_FALSE(pkb.isNext(3, 3));
+		EXPECT_TRUE(pkb.isNext(3, 4));
+		EXPECT_TRUE(pkb.isNext(3, 5));
+
+		EXPECT_FALSE(pkb.isNext(4, 1));
+		EXPECT_TRUE(pkb.isNext(4, 2));
+		EXPECT_FALSE(pkb.isNext(4, 3));
+		EXPECT_FALSE(pkb.isNext(4, 4));
+		EXPECT_FALSE(pkb.isNext(4, 5));
+
+		EXPECT_FALSE(pkb.isNext(5, 1));
+		EXPECT_TRUE(pkb.isNext(5, 2));
+		EXPECT_FALSE(pkb.isNext(5, 3));
+		EXPECT_FALSE(pkb.isNext(5, 4));
+		EXPECT_FALSE(pkb.isNext(5, 5));
+
+		EXPECT_FALSE(pkb.isNext(1));
+		EXPECT_TRUE(pkb.isNext(2));
+		EXPECT_TRUE(pkb.isNext(3));
+		EXPECT_TRUE(pkb.isNext(4));
+		EXPECT_TRUE(pkb.isNext(5));
+	}
+
+	TEST_F(PKBAdapterTest, isPrevious) {
+		PKB::getInstance().addStmt(STMT_READ);
+		PKB::getInstance().addStmt(STMT_WHILE);
+		PKB::getInstance().addStmt(STMT_IF);
+		PKB::getInstance().addStmt(STMT_PRINT);
+		PKB::getInstance().addStmt(STMT_READ);
+		PKB::getInstance().addStmt(STMT_READ);
+		PKB::getInstance().addNext(1, 2);
+		PKB::getInstance().addNext(2, 3);
+		PKB::getInstance().addNext(3, 4);
+		PKB::getInstance().addNext(3, 5);
+		PKB::getInstance().addNext(4, 2);
+		PKB::getInstance().addNext(5, 2);
+		EXPECT_TRUE(pkb.isPrevious(1));
+		EXPECT_TRUE(pkb.isPrevious(2));
+		EXPECT_TRUE(pkb.isPrevious(3));
+		EXPECT_TRUE(pkb.isPrevious(4));
+		EXPECT_TRUE(pkb.isPrevious(5));
+		EXPECT_FALSE(pkb.isPrevious(6));
+	}
+
+	TEST_F(PKBAdapterTest, getNext) {
+		StmtInfo s1{ 1, STMT_READ };
+		StmtInfo s2{ 2, STMT_WHILE };
+		StmtInfo s3{ 3, STMT_IF };
+		StmtInfo s4{ 4, STMT_PRINT };
+		StmtInfo s5{ 5, STMT_READ };
+		StmtInfo s6{ 6, STMT_READ };
+
+		PKB::getInstance().addStmt(STMT_READ);
+		PKB::getInstance().addStmt(STMT_WHILE);
+		PKB::getInstance().addStmt(STMT_IF);
+		PKB::getInstance().addStmt(STMT_PRINT);
+		PKB::getInstance().addStmt(STMT_READ);
+		PKB::getInstance().addStmt(STMT_READ);
+
+		PKB::getInstance().addNext(1, 2);
+		PKB::getInstance().addNext(2, 3);
+		PKB::getInstance().addNext(3, 4);
+		PKB::getInstance().addNext(3, 5);
+		PKB::getInstance().addNext(4, 2);
+		PKB::getInstance().addNext(5, 2);
+		PKB::getInstance().addNext(2, 6);
+
+		std::vector<StmtInfo> v1 = { s2, s3, s4, s5, s6 };
+		std::vector<StmtInfo> v2 = pkb.getNext();
+		std::sort(v1.begin(), v1.end());
+		std::sort(v2.begin(), v2.end());
+		EXPECT_EQ(v1, v2);
+
+		v1 = { };
+		v2 = pkb.getNext(6);
+		EXPECT_EQ(v1, v2);
+
+		v1 = { s2 };
+		v2 = pkb.getNext(1);
+		EXPECT_EQ(v1, v2);
+		v2 = pkb.getNext(4);
+		EXPECT_EQ(v1, v2);
+		v2 = pkb.getNext(5);
+		EXPECT_EQ(v1, v2);
+
+		v1 = { s3, s6 };
+		v2 = pkb.getNext(2);
+		std::sort(v1.begin(), v1.end());
+		std::sort(v2.begin(), v2.end());
+		EXPECT_EQ(v1, v2);
+
+		v1 = { s4, s5 };
+		v2 = pkb.getNext(3);
+		std::sort(v1.begin(), v1.end());
+		std::sort(v2.begin(), v2.end());
+		EXPECT_EQ(v1, v2);
+	}
+
+	TEST_F(PKBAdapterTest, getPrevious) {
+		StmtInfo s1{ 1, STMT_READ };
+		StmtInfo s2{ 2, STMT_WHILE };
+		StmtInfo s3{ 3, STMT_IF };
+		StmtInfo s4{ 4, STMT_PRINT };
+		StmtInfo s5{ 5, STMT_READ };
+		StmtInfo s6{ 6, STMT_READ };
+
+		PKB::getInstance().addStmt(STMT_READ);
+		PKB::getInstance().addStmt(STMT_WHILE);
+		PKB::getInstance().addStmt(STMT_IF);
+		PKB::getInstance().addStmt(STMT_PRINT);
+		PKB::getInstance().addStmt(STMT_READ);
+		PKB::getInstance().addStmt(STMT_READ);
+
+		PKB::getInstance().addNext(1, 2);
+		PKB::getInstance().addNext(2, 3);
+		PKB::getInstance().addNext(3, 4);
+		PKB::getInstance().addNext(3, 5);
+		PKB::getInstance().addNext(4, 2);
+		PKB::getInstance().addNext(5, 2);
+		PKB::getInstance().addNext(2, 6);
+
+		std::vector<StmtInfo> v1 = { s2, s3, s4, s5, s6 };
+		std::vector<StmtInfo> v2 = pkb.getNext();
+		std::sort(v1.begin(), v1.end());
+		std::sort(v2.begin(), v2.end());
+		EXPECT_EQ(v1, v2);
+
+		v1 = { };
+		v2 = pkb.getPrevious(1);
+		EXPECT_EQ(v1, v2);
+
+		v1 = { s3 };
+		v2 = pkb.getPrevious(4);
+		EXPECT_EQ(v1, v2);
+		v2 = pkb.getPrevious(5);
+		EXPECT_EQ(v1, v2);
+
+		v1 = { s2 };
+		v2 = pkb.getPrevious(3);
+		EXPECT_EQ(v1, v2);
+		v2 = pkb.getPrevious(6);
+		EXPECT_EQ(v1, v2);
+
+		v1 = { s1, s4, s5 };
+		v2 = pkb.getPrevious(2);
+		std::sort(v1.begin(), v1.end());
+		std::sort(v2.begin(), v2.end());
+		EXPECT_EQ(v1, v2);
+	}
+
+	TEST_F(PKBAdapterTest, getAllNextRelation) {
+		StmtInfo s1{ 1, STMT_READ };
+		StmtInfo s2{ 2, STMT_WHILE };
+		StmtInfo s3{ 3, STMT_IF };
+		StmtInfo s4{ 4, STMT_PRINT };
+		StmtInfo s5{ 5, STMT_READ };
+		StmtInfo s6{ 6, STMT_READ };
+
+		PKB::getInstance().addStmt(STMT_READ);
+		PKB::getInstance().addStmt(STMT_WHILE);
+		PKB::getInstance().addStmt(STMT_IF);
+		PKB::getInstance().addStmt(STMT_PRINT);
+		PKB::getInstance().addStmt(STMT_READ);
+		PKB::getInstance().addStmt(STMT_READ);
+
+		PKB::getInstance().addNext(1, 2);
+		PKB::getInstance().addNext(2, 3);
+		PKB::getInstance().addNext(3, 4);
+		PKB::getInstance().addNext(3, 5);
+		PKB::getInstance().addNext(4, 2);
+		PKB::getInstance().addNext(5, 2);
+		PKB::getInstance().addNext(2, 6);
+		std::vector<std::pair<StmtInfo, StmtInfo>> v1 = { {s1, s2}, {s2, s3}, {s3, s4}, {s3, s5}, {s4, s2}, {s5, s2}, {s2, s6} };
+		std::vector<std::pair<StmtInfo, StmtInfo>> v2 = pkb.getAllNextRelation();
+		std::sort(v1.begin(), v1.end());
+		std::sort(v2.begin(), v2.end());
+		EXPECT_EQ(v1, v2);
+	}
+
 	TEST_F(PKBAdapterTest, isIfEmpty) {
 		var_name x = "x";
 		var_name y = "y";
