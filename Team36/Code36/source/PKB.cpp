@@ -165,15 +165,47 @@ void PKB::addCallsS(stmt_index caller_stmt_index, proc_name callee_proc_name) {
 }
 
 void PKB::addIf(stmt_index if_stmt_index, var_name control_var) {
-	//TODO(Kelvin): Implement addition
+	try {
+		if (stmt_table.at(if_stmt_index - 1).stmt_type != STMT_IF) {
+			throw std::invalid_argument("addIf: Stmt index does not belong to an if statement: " + std::to_string(if_stmt_index));
+		}
+		std::vector<var_name>::iterator it = std::find(var_table.begin(), var_table.end(), control_var);
+		if (it == var_table.end()) {
+			throw std::invalid_argument("addIf: Invalid var name: " + control_var);
+		}
+		if_table.insert(if_stmt_index, control_var);
+	}
+	catch (std::out_of_range&) {
+		throw std::invalid_argument("addIf: Invalid stmt index:" + std::to_string(if_stmt_index));
+	}
 }
 
 void PKB::addWhile(stmt_index while_stmt_index, var_name control_var) {
-	//TODO(Kelvin): Implement addition
+	try {
+		if (stmt_table.at(while_stmt_index - 1).stmt_type != STMT_WHILE) {
+			throw std::invalid_argument("addWhile: Stmt index does not belong to an while statement: " + std::to_string(while_stmt_index));
+		}
+		std::vector<var_name>::iterator it = std::find(var_table.begin(), var_table.end(), control_var);
+		if (it == var_table.end()) {
+			throw std::invalid_argument("addWhile: Invalid var name: " + control_var);
+		}
+		if_table.insert(while_stmt_index, control_var);
+	}
+	catch (std::out_of_range&) {
+		throw std::invalid_argument("addWhile: Invalid stmt index:" + std::to_string(while_stmt_index));
+	}
 }
 
 void PKB::addNext(prog_line prog_line1, prog_line prog_line2) {
-	//TODO(Kelvin): Implement addition
+	try {
+		StmtInfo first_stmt_info{ prog_line1, stmt_table.at(prog_line1 - 1).stmt_type };
+		StmtInfo second_stmt_info{ prog_line2, stmt_table.at(prog_line2 - 1).stmt_type };
+		next_table.insert(first_stmt_info, second_stmt_info);
+	}
+	catch (std::out_of_range&) {
+		throw std::invalid_argument("addNext: Invalid prog line: [" + std::to_string(prog_line1)
+			+ "," + std::to_string(prog_line2) + "]");
+	}
 }
 
 void PKB::generateParentT() {
