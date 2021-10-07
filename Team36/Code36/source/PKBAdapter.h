@@ -153,4 +153,7 @@ public:
 	std::vector<var_name> getWhileUsed();
 	std::vector<stmt_index> getWhileUses(var_name);
 	std::vector<var_name> getWhileUsed(stmt_index);
+
+private:
+	StmtInfo getStmt(stmt_index);
 };
