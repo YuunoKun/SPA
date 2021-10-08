@@ -94,3 +94,11 @@ void QueryValidator::validatePatternType(Entity& patternTypeEntity) {
 		throw SemanticErrorException("Pattern Type is invalid");
 	}
 }
+
+void QueryValidator::validateAnd(QueryToken& patternOrSuchThat) {
+	if (patternOrSuchThat.type != QueryToken::QueryTokenType::PATTERN &&
+		patternOrSuchThat.type != QueryToken::QueryTokenType::SUCH_THAT &&
+		patternOrSuchThat.type != QueryToken::QueryTokenType::WITH) {
+		throw SyntacticErrorException("The keyword 'and' should come after pattern/ relations have been initalized previously");
+	}
+}

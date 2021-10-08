@@ -126,11 +126,7 @@ Query QueryPreprocessor::parse(std::string str) {
 				}
 				else if (token.type == QueryToken::QueryTokenType::IDENTIFIER &&
 					token.token_value == "and") {
-					if (patternOrSuchThat.type != QueryToken::QueryTokenType::PATTERN &&
-						patternOrSuchThat.type != QueryToken::QueryTokenType::SUCH_THAT &&
-						patternOrSuchThat.type != QueryToken::QueryTokenType::WITH) {
-						throw SyntacticErrorException("The keyword 'and' should come after pattern/ relations have been initalized previously");
-					}
+					queryValidator.validateAnd(patternOrSuchThat);
 					if (patternOrSuchThat.type == QueryToken::QueryTokenType::PATTERN) {
 						isExpectingPatternType = true;
 					}
