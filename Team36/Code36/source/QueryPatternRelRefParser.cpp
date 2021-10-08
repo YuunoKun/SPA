@@ -223,7 +223,7 @@ Entity QueryPatternRelRefParser::setCallEntRef(Query& query,
     throw SemanticErrorException("Unknown entRef");
 }
 
-expr QueryPatternRelRefParser::setExpr(std::vector<QueryToken> token_chain) {
+std::string QueryPatternRelRefParser::setExpr(std::vector<QueryToken> token_chain) {
   // expression-spec : ‘"‘ expr’"’ | ‘_’ ‘"’ expr ‘"’ ‘_’ | ‘_’
     std::string result = "";
     if (token_chain.size() == 1 && token_chain[0].type == QueryToken::WILDCARD) {
