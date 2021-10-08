@@ -63,7 +63,7 @@
     <ClCompile Include="ParentTEvaluatorTest.cpp" />
     <ClCompile Include="ModifiesSEvaluatorTest.cpp" />
     <ClCompile Include="ModifiesPEvaluatorTest.cpp" />
-    <ClCompile Include="PatternRelRefValidatorTest.cpp" />
+    <ClCompile Include="QueryPatternRelRefParserTest.cpp" />
     <ClCompile Include="QueryOptimizerTest.cpp" />
     <ClCompile Include="UsesSEvaluatorTest.cpp" />
     <ClCompile Include="UsesPEvaluatorTest.cpp" />

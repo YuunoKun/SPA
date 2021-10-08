@@ -46,6 +46,10 @@ AttrRef Entity::getAttribute() {
 	return attribute;
 }
 
+void Entity::setAttribute(AttrRef& attrRef) {
+	this->attribute = attrRef;
+}
+
 bool Entity::isSynonym() {
 	return is_synonym;
 }
@@ -72,7 +76,7 @@ void Entity::defaultAttribute(EntityType type) {
 		break;
 	case PROCEDURE: attribute = PROC_NAME;
 		break;
-	case BOOLEAN: 
+	case BOOLEAN:
 	case WILD: attribute = NONE;
 		break;
 	default: throw std::domain_error("Some default attribute value is not being handle!!!!");

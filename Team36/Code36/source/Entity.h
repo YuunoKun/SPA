@@ -41,6 +41,7 @@ public:
 	std::string getSynonym();
 	std::string getValue();
 	AttrRef getAttribute();
+	void setAttribute(AttrRef&);
 	bool isSynonym();
 
 	bool operator==(const Entity&) const;
