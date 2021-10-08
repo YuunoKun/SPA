@@ -1,9 +1,9 @@
 #include "QueryPatternRelRefParser.h"
 #include "NextParser.h"
 
-NextParser::NextParser() {};
+NextParser::NextParser() {}
 
-void parseNext(Query& query, std::vector<QueryToken> token_chain) {
+void NextParser::parseNext(Query& query, std::vector<QueryToken> token_chain) {
     QueryPatternRelRefParser parser;
     std::vector<QueryToken> temp_token_chain_1;
     std::vector<QueryToken> temp_token_chain_2;
