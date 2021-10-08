@@ -6,6 +6,12 @@
 #include "Query.h"
 #include "QueryToken.h"
 
+enum ParseStatus {
+	NEUTRAL,
+	IS_SELECTING,
+	IS_SELECTING_MULTIPLE_CLAUSE,
+};
+
 class QueryPreprocessor {
 public:
 
@@ -14,21 +20,46 @@ public:
 
 	Query parse(std::string);
 
+	// For Query System to reset query for invalid queries
+	void resetQuery();
+
 private:
 
-	QueryToken setIdentifierToQueryTokenType(QueryToken&, QueryToken&, QueryToken&);
+	// Class variables
+	Query query;
+	bool isSelect;
+	bool isParameter;
+	bool isExpectingPatternType;
+	bool isExpectingAttribute;
+	bool endOfCurrentClauses;
+	std::vector<QueryToken> output;
+	std::vector<QueryToken> selected;
+	std::vector<QueryToken> parameterClause;
+	QueryToken prevToken;
+	QueryToken declarationType;
+	bool haveNextDeclaration;
+	bool endOfCurrentDeclaration = true;
+	QueryToken prevTokenSelect;
+	QueryToken queryParameter;
+	QueryToken patternOrSuchThat;
+	Entity patternTypeEntity;
+	ParseStatus status;
 
-	void validateDeclarationQuery(QueryToken&, QueryToken&);
+	// Methods
 
-	void addEntityToQuery(Query&, Entity&, std::vector<QueryToken>&, QueryToken&, QueryToken&);
+	void setIdentifierToQueryTokenType(QueryToken&);
 
-	void addSelectedToQuery(Query&, Entity&, std::vector<QueryToken>&, std::vector<QueryToken>, QueryToken&, bool&);
+	void addEntityToQuery(QueryToken&);
 
-	void addPatternToQuery(Entity&, std::vector<QueryToken>&, QueryToken&);
+	void addSelectedToQuery(QueryToken&);
 
-	void setQueryParameter(QueryToken&, QueryToken&);
+	void addPatternToQuery(QueryToken&);
+
+	void setQueryParameter();
 
 	void setPatternTypeEntity(std::vector<QueryToken>&, QueryToken&, Entity&);
 
-	void validateQuery(Query&);
+	void validateQuery();
+
+	Query returnAndResetQuery();
 };

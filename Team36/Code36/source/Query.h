@@ -14,6 +14,7 @@ public:
 	std::unordered_map<std::string, Entity> getEntities();
 	std::vector<Clause> getClauses();
 	std::vector<Entity> getSelected();
+	void setSelectedAttribute(AttrRef&);
 	void addSelected(Entity&);
 	void addEntity(Entity&);
 	void addRelation(RelRef&);

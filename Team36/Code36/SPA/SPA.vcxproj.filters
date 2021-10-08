@@ -159,6 +159,9 @@
     <ClCompile Include="..\source\QueryEvaluator.cpp">
       <Filter>Source Files\PQL\QueryEvaluator</Filter>
     </ClCompile>
+	<ClCompile Include="..\source\QueryValidator.cpp">
+		<Filter>Source Files\PQL\QueryPreprocessor</Filter>
+	</ClCompile>
     <ClCompile Include="..\source\ResultTable.cpp">
       <Filter>Source Files\PQL\QueryEvaluator</Filter>
     </ClCompile>
@@ -278,6 +281,9 @@
     <ClInclude Include="..\source\QueryToken.h">
       <Filter>Header Files\PQL\QueryPreprocessor</Filter>
     </ClInclude>
+	<ClInclude Include="..\source\QueryValidator.h">
+		<Filter>Header Files\PQL\QueryPreprocessor</Filter>
+	</ClInclude>
     <ClInclude Include="..\source\QueryResult.h">
       <Filter>Header Files\PQL\QueryEvaluator</Filter>
     </ClInclude>
