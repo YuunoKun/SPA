@@ -15,4 +15,6 @@ public:
 	void validateQuery(Query&, bool&);
 
 	void validateSelecting(QueryToken&, QueryToken&);
+
+	void validatePatternType(Entity&);
 };

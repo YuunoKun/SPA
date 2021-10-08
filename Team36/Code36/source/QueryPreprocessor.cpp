@@ -228,17 +228,11 @@ Query QueryPreprocessor::parse(std::string str) {
 						isParameter = true;
 					}
 					else if (isParameter && token.type == QueryToken::QueryTokenType::PARENTHESIS_CLOSE) {
+						queryValidator.validatePatternType(patternTypeEntity);
 						isParameter = false;
 						endOfCurrentClauses = true;
-						if (patternTypeEntity.getType() == EntityType::ASSIGN ||
-							patternTypeEntity.getType() == EntityType::WHILE ||
-							patternTypeEntity.getType() == EntityType::IF) {
-							validator.parseParameterPattern(this->query, patternTypeEntity, parameterClause);
-							parameterClause.clear();
-						}
-						else {
-							throw SemanticErrorException("Invalid pattern type");
-						}
+						validator.parseParameterPattern(this->query, patternTypeEntity, parameterClause);
+						parameterClause.clear();
 					}
 				}
 				else if (patternOrSuchThat.type == QueryToken::QueryTokenType::WITH) {
