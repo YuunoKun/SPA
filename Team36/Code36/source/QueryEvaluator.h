@@ -8,7 +8,7 @@ class QueryEvaluator {
 public:
 	QueryEvaluator();
 
-	std::list<std::list<std::string>> evaluateQuery(Query);
+	std::list<std::list<std::string>> evaluateQuery(Query&);
 
 private:
 	void evaluateClauses(Query&, QueryResult&);

@@ -3,11 +3,13 @@
 #include "RelationsEvaluator.h"
 #include "pkb.h"
 #include <PatternEvaluator.h>
+#include <ExprParser.h>
 
 namespace UnitTesting {
 	TEST(PatternEvaluator, evaluatePattern) {
 		PKB::getInstance().resetCache();
 		PatternEvaluator evaluator;
+		ExprParser expr_parser;
 
 		Entity assign = { ASSIGN, "a" };
 		Entity lhsSynonym = { VARIABLE, Synonym{"a"} };
@@ -25,14 +27,14 @@ namespace UnitTesting {
 		}
 
 		std::vector<var_name> variableList = { "x", "y", "z", "y", "z", "z" };
-		std::vector<expr> expressionList = { "x", "y*x", "x+y", "z%x", "x-x", "x+y-z" };
+		std::vector<std::string> expressionList = { "x", "y*x", "x+y", "z%x", "x-x", "x+y-z" };
 		std::vector<stmt_index> stmtList = { 1, 2, 3, 4, 5, 6 };
 
 		for (unsigned int i = 0; i < variableList.size(); i++) {
 			PKB::getInstance().addStmt(STMT_ASSIGN);
 			PKB::getInstance().addVariable(variableList[i]);
 			PKB::getInstance().addModifiesS(stmtList[i], variableList[i]);
-			PKB::getInstance().addExprTree(stmtList[i], expressionList[i]);
+			PKB::getInstance().addExprTree(stmtList[i], expr_parser.parse(expressionList[i]));
 		}
 
 		//Test for pattern a(x, _)

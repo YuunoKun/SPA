@@ -3,17 +3,17 @@
 #include "ExprParser.h"
 
 
-ExprNode* ExprParser::parse(std::string str) {
+ExprNode ExprParser::parse(std::string str) {
 	if (str.size() == 0) {
-		return nullptr;
+		return ExprNode(EXPR_NULL);
 	}
 
 	std::deque<std::string> strs = sliceString(str);
 	if (strs.size() == 0) {
-		return nullptr;
+		return ExprNode(EXPR_NULL);
 	}
 	else {
-		ExprNode* res = parseExpression(strs);
+		ExprNode res = parseExpression(strs);
 		if (strs.size() == 0) {
 			return res;
 		}
@@ -66,23 +66,23 @@ std::deque<std::string> ExprParser::sliceString(const std::string str) {
 }
 
 
-ExprNode* ExprParser::parseExpression(std::deque<std::string>& dq) {
-	ExprNode* lhs = parseTerm(dq);
+ExprNode ExprParser::parseExpression(std::deque<std::string>& dq) {
+	ExprNode lhs = parseTerm(dq);
 
 	while (!dq.empty()) {
-		ExprNode* parent;
+		ExprNode parent;
 		if (*dq.begin() == "+") {
-			parent = new ExprNode(ExprSymbol::EXPR_PLUS);
+			parent = ExprNode(ExprSymbol::EXPR_PLUS);
 		}
 		else if (*dq.begin() == "-") {
-			parent = new ExprNode(ExprSymbol::EXPR_MINUS);
+			parent = ExprNode(ExprSymbol::EXPR_MINUS);
 		}
 		else if (*dq.begin() == "(") {
 			protectedPopFront(dq);
-			ExprNode* node = parseExpression(dq);
+			ExprNode node = parseExpression(dq);
 			protectedPopFront(dq, ")");
-			parent->setLHS(lhs);
-			parent->setRHS(node);
+			parent.setLHS(lhs);
+			parent.setRHS(node);
 			lhs = parent;
 			continue;
 		}
@@ -90,8 +90,8 @@ ExprNode* ExprParser::parseExpression(std::deque<std::string>& dq) {
 			break;
 		}
 		protectedPopFront(dq);
-		parent->setLHS(lhs);
-		parent->setRHS(parseTerm(dq));
+		parent.setLHS(lhs);
+		parent.setRHS(parseTerm(dq));
 		lhs = parent;
 	}
 
@@ -99,35 +99,36 @@ ExprNode* ExprParser::parseExpression(std::deque<std::string>& dq) {
 }
 
 
-ExprNode* ExprParser::parseTerm(std::deque<std::string>& dq) {
-	ExprNode* lhs = parseFactor(dq);
+ExprNode ExprParser::parseTerm(std::deque<std::string>& dq) {
+	ExprNode lhs = parseFactor(dq);
 
 	while (!dq.empty()) {
-		ExprNode* parent;
+		ExprNode parent;
 		if (*dq.begin() == "*") {
-			parent = new ExprNode(ExprSymbol::EXPR_MUL);
+			parent = ExprNode(ExprSymbol::EXPR_MUL);
 		}
 		else if (*dq.begin() == "/") {
-			parent = new ExprNode(ExprSymbol::EXPR_DIV);
+			parent = ExprNode(ExprSymbol::EXPR_DIV);
 		}
 		else if (*dq.begin() == "%") {
-			parent = new ExprNode(ExprSymbol::EXPR_MOD);
+			parent = ExprNode(ExprSymbol::EXPR_MOD);
 		}
 		else if (*dq.begin() == "(") {
 			protectedPopFront(dq);
-			ExprNode* node = parseExpression(dq);
+			ExprNode node = parseExpression(dq);
 			protectedPopFront(dq, ")");
-			parent->setLHS(lhs);
-			parent->setRHS(node);
+			parent.setLHS(lhs);
+			parent.setRHS(node);
 			lhs = parent;
+
 			continue;
 		}
 		else {
 			break;
 		}
 		protectedPopFront(dq);
-		parent->setLHS(lhs);
-		parent->setRHS(parseFactor(dq));
+		parent.setLHS(lhs);
+		parent.setRHS(parseFactor(dq));
 		lhs = parent;
 	}
 
@@ -135,19 +136,19 @@ ExprNode* ExprParser::parseTerm(std::deque<std::string>& dq) {
 }
 
 
-ExprNode* ExprParser::parseFactor(std::deque<std::string>& dq) {
+ExprNode ExprParser::parseFactor(std::deque<std::string>& dq) {
 	if (dq.empty()) {
 		throw std::runtime_error("Unexpected end of expression.");
 	}
 
 	if (!dq.begin()->empty() && isalnum(*dq.begin()->begin())) {
-		ExprNode* node = new ExprNode(*dq.begin());
+		ExprNode node = ExprNode(*dq.begin());
 		protectedPopFront(dq);
 		return node;
 	}
 	else if (*dq.begin() == "(") {
 		protectedPopFront(dq);
-		ExprNode* node = parseExpression(dq);
+		ExprNode node = parseExpression(dq);
 		protectedPopFront(dq, ")");
 		return node;
 	}

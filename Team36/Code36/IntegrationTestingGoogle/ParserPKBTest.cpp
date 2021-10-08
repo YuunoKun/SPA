@@ -5,6 +5,7 @@
 #include "PKB.h"
 #include "RelationTable.h"
 #include "RelationTable.cpp"
+#include <ExprParser.h>
 
 namespace IntegrationTesting {
 	class ParserPKBTest : public testing::Test {
@@ -112,20 +113,25 @@ namespace IntegrationTesting {
 		std::sort(v.begin(), v.end());
 		EXPECT_EQ(v, expected_assign);
 	}
-
 	TEST_F(ParserPKBTest, Sample5Test_Expr) {
 		SourceProcessor::Parser parser;
+		ExprParser expr_parser;
 		parser.load_file("../UnitTestingGoogle/SPTest/TestSource/Sample5.txt");
 		parser.parse();
 
-		std::vector<std::pair<stmt_index, expr>> expected_expr = { {1, "0"}, {7, "0" }, {10, "count+1"},
-			{13, "1"}, {14, "cenX/count"}, {15, "cenX*cenX+cenY*cenY"} };
-		std::sort(expected_expr.begin(), expected_expr.end());
+		std::vector<std::pair<stmt_index, expr>> expected_expr = { {1, expr_parser.parse("0")},
+			{7, expr_parser.parse("0") },
+			{10, expr_parser.parse("count+1")},
+			{13, expr_parser.parse("1")},
+			{14, expr_parser.parse("cenX/count")  },
+			{15, expr_parser.parse("cenX*cenX+cenY*cenY")} };
+		std::unordered_map<stmt_index, expr> expected_table;
+		for (auto const& pair : expected_expr) {
+			expected_table.insert({ pair.first, pair.second });
+		};
+		std::unordered_map<stmt_index, expr> table = PKB::getInstance().getExpr();
 
-		UniqueRelationTable<stmt_index, expr> table = PKB::getInstance().getExpr();
-		std::vector<std::pair<stmt_index, expr>> v = table.getPairs();
-		std::sort(v.begin(), v.end());
-		EXPECT_EQ(v, expected_expr);
+		EXPECT_EQ(table, expected_table);
 	}
 
 	TEST_F(ParserPKBTest, Sample5Test_Follows) {
