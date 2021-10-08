@@ -3,6 +3,7 @@
 #include "Query.h"
 #include "QueryResult.h"
 #include "PKBAdapter.h"
+#include "Common.h"
 
 class PatternEvaluator {
 public:

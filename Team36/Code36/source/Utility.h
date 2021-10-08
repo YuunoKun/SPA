@@ -32,11 +32,10 @@ public:
 	static std::vector<std::vector<std::string>> filterResults(std::vector<std::vector<std::string>>&, std::unordered_set<std::string>&, int);
 	static std::vector<std::vector<std::string>> filterResults(std::vector<std::vector<std::string>>&, std::unordered_map<std::string, std::unordered_set<std::string>>&, int, int);
 
-	static bool patternMatch(std::string, std::string);
-	static bool patternContain(std::string, std::string);
 	static std::vector<std::string> mergeColumnEqual(std::vector<std::vector<std::string>>&);
 
 	static std::vector<std::vector<std::string>> joinTable(std::vector<std::vector<std::string>>&, int, std::unordered_multimap<std::string, std::vector<std::string>>&, int);
 
 	static EntityType queryTokenTypeToEntityType(QueryToken::QueryTokenType&);
+	static AttrRef queryTokenTypeToAttrRef(QueryToken::QueryTokenType&);
 };

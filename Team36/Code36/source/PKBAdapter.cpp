@@ -70,16 +70,16 @@ std::vector<assign_info> PKBAdapter::getAssignInfo() {
 	return a;
 }
 
-std::vector<assign_info> PKBAdapter::getAssignInfo(std::string matchExpression, bool isWild) {
+std::vector<assign_info> PKBAdapter::getAssignInfo(expr matchExpression, bool isWild) {
 	std::vector<StmtInfo> s = getAssigns();
 	std::vector<assign_info> a;
 	for (auto s : s) {
-		std::string expression = PKB::getInstance().PKB::getExpression(s.stmt_index);
-		if (isWild && Utility::patternContain(expression, matchExpression)) {
+		expr expression = PKB::getInstance().PKB::getExpression(s.stmt_index);
+		if (isWild && expression.contains(&matchExpression)) {
 			assign_info i = std::make_pair(s, PKB::getInstance().PKB::getAssignment(s.stmt_index));
 			a.push_back(i);
 		}
-		else if (Utility::patternMatch(expression, matchExpression)) {
+		else if (!isWild && expression.equals(&matchExpression)) {
 			assign_info i = std::make_pair(s, PKB::getInstance().PKB::getAssignment(s.stmt_index));
 			a.push_back(i);
 		}
