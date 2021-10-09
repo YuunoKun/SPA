@@ -18,6 +18,7 @@ Pattern::Pattern(Entity pattern_type, Entity left_expression, std::string expr, 
 	if (expr == "") {
 		//empty
 	}else {
+		ExprParser expr_parser;
 		this->expression = expr_parser.parse(expr);
 	}
 	this->is_wild = is_wild;

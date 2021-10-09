@@ -4,6 +4,7 @@
 #include "PKBAdapter.h"
 #include "PKB.h"
 #include "Common.h"
+#include "ExprParser.h"
 
 namespace UnitTesting {
 	class QueryEvaluatorMultiClausesTest : public testing::Test {

@@ -2,6 +2,7 @@
 
 #include "Pattern.h"
 #include "Common.h"
+#include "ExprParser.h"
 
 namespace UnitTesting {
 	ExprParser expr_parser;

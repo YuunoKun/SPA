@@ -1,11 +1,11 @@
 #include "Clause.h"
 
-Clause::Clause(RelRef& rel) {
+Clause::Clause(RelRef rel) {
 	this->rel = rel;
 	this->type = RELATION;
 }
 
-Clause::Clause(Pattern& pattern) {
+Clause::Clause(Pattern pattern) {
 	this->pattern = pattern;
 	this->type = PATTERN;
 }
@@ -24,8 +24,8 @@ Pattern Clause::getPattern() {
 
 bool Clause::operator==(const Clause& other) const {
 	return type == other.type &&
-		rel == other.rel &&
-		pattern == other.pattern;
+		(type == RELATION && rel == other.rel) ||
+		(type == PATTERN && pattern == other.pattern);
 }
 
 

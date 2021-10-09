@@ -4,7 +4,6 @@
 
 #include "Entity.h"
 #include "Common.h"
-#include "ExprParser.h"
 
 class Pattern {
 public:
@@ -19,8 +18,6 @@ public:
 	bool operator==(const Pattern&) const;
 
 private:
-	ExprParser expr_parser;
-	//Member Variable
 	Entity pattern_type;
 	Entity left_expression;
 	expr expression;
