@@ -11,6 +11,7 @@
 #include "SyntacticErrorException.h"
 #include "Utility.h"
 #include "NextParser.h"
+#include "NextTParser.h"
 #include "AssignPatternParser.h"
 
 

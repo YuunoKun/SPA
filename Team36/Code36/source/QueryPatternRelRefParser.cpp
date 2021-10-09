@@ -740,29 +740,9 @@ void QueryPatternRelRefParser::parseParameterSuchThat(
         nextParser.parseNext(query, token_chain);
         break;
     }
-    //TODO
     case QueryToken::NEXT_T: {
-        // stmtRef , stmtRef
-        if (!isStmtRef(query, token_chain)) {
-            throw std::invalid_argument("Invalid parameters for Follows");
-        }
-        QueryToken stmt = token_chain[0];
-        token_chain.erase(token_chain.begin(), token_chain.begin() + 1);
-
-        isCommaRef(token_chain);
-        token_chain.erase(token_chain.begin(), token_chain.begin() + 1);
-
-        if (!isStmtRef(query, token_chain)) {
-            throw std::invalid_argument("Invalid parameters for Follows");
-        }
-        QueryToken stmt2 = token_chain[0];
-        token_chain.erase(token_chain.begin(), token_chain.begin() + 1);
-        if (token_chain.size() != 0) {
-            throw std::invalid_argument("Unexpected parameters for Follows");
-        }
-        query.addRelation(RelRef(RelType::FOLLOWS,
-            setStmtRef(query, stmt),
-            setStmtRef(query, stmt2)));
+        NextTParser nextTParser;
+        nextTParser.parseNextT(query, token_chain);
         break;
     }
 
