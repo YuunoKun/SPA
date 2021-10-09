@@ -373,6 +373,8 @@ bool FSM::optionalRelationalExpression() {
 	if (!optionalRelationalFactor()) {
 		return false;
 	}
+
+	return true;
 }
 
 
