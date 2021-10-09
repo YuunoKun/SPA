@@ -10,6 +10,9 @@ Debug\AutoTester.exe ..\Tests36\iter1_one_clause_source.txt ..\Tests36\iter1_one
 Debug\AutoTester.exe ..\Tests36\iter1_two_clauses_source.txt ..\Tests36\iter1_two_clauses_queries.txt .\Tests\out-6.xml
 Debug\AutoTester.exe ..\Tests36\iter1_nested_while_source.txt ..\Tests36\iter1_nested_while_queries.txt .\Tests\out-7.xml
 Debug\AutoTester.exe ..\Tests36\iter1_single_procedure_source.txt ..\Tests36\iter1_single_procedure_queries.txt .\Tests\out-8.xml
+Debug\AutoTester.exe ..\Tests36\iter2_source.txt ..\Tests36\iter2_queries.txt .\Tests\out-9.xml
+Debug\AutoTester.exe ..\Tests36\iter2_calls_source.txt ..\Tests36\iter2_calls_queries.txt .\Tests\out-10.xml
+Debug\AutoTester.exe ..\Tests36\iter2_no_call_source.txt ..\Tests36\iter2_no_call_queries.txt .\Tests\out-11.xml
 Debug\AutoTester.exe ..\Tests36\container_constants_source.txt ..\Tests36\container_constants_queries.txt .\Tests\out-container_constants.xml
 Debug\AutoTester.exe ..\Tests36\multi_clauses_source.txt ..\Tests36\multi_clauses_queries.txt .\Tests\out-multi-clauses.xml
 Debug\AutoTester.exe ..\Tests36\valid_query_source.txt ..\Tests36\valid_query_queries.txt .\Tests\out-valid-query.xml
