@@ -25,7 +25,7 @@ second, third, fourth, fifth
 5000
 6 - calls, LHS wildcard, RHS ident
 procedure p, q;
-Select p such that Calls(_, "Frodo")
+Select p such that Calls(_, "second")
 first, second, third, fourth, fifth
 5000
 7 - calls, LHS wildcard, RHS synonym
@@ -76,7 +76,7 @@ second, third, fourth, fifth
 16 - callsT, LHS wildcard, RHS ident
 procedure p, q;
 Select p such that Calls*(_, "fifth")
-first, second, third, fourth
+first, second, third, fourth, fifth
 5000
 17 - callsT, LHS wildcard, RHS synonym
 procedure p, q;

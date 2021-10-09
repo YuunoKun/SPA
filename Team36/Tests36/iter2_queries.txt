@@ -161,7 +161,7 @@ Gandulf, Frodo, Aragon
 33 - calls, LHS ident, RHS synonym
 procedure p, q;
 Select q such that Calls("Gandulf", q)
-Frodo
+Frodo, Aragon
 5000
 34 - calls, LHS synonym, RHS ident
 procedure p, q;
@@ -231,7 +231,7 @@ Frodo, Aragon
 47 - callsT, LHS wildcard, RHS ident
 procedure p, q;
 Select p such that Calls*(_, "Aragon")
-Gandulf, Frodo
+Gandulf, Frodo, Aragon
 5000
 48 - callsT, LHS wildcard, RHS synonym
 procedure p, q;
@@ -255,7 +255,7 @@ Gandulf, Frodo, Aragon
 5000
 52 - pattern, exact pattern match
 assign a;
-Select pattern a(_, "ring + 4 + g * a * 2 * 1 + shine")
+Select a pattern a(_, "ring + 4 + g * a * 2 * 1 + shine")
 11
 5000
 53 - pattern, RHS ident, no match
