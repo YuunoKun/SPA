@@ -13,6 +13,8 @@ namespace UnitTesting {
 			PKB::getInstance().resetCache();
 			PKB::getInstance().addVariable({ x });
 			PKB::getInstance().addVariable({ y });
+			PKB::getInstance().addVariable({ x1 });
+			PKB::getInstance().addVariable({ y1 });
 			PKB::getInstance().addVariable({ z });
 			PKB::getInstance().addConstant({ c1 });
 			PKB::getInstance().addConstant({ c2 });
@@ -42,8 +44,10 @@ namespace UnitTesting {
 			PKB::getInstance().addModifiesS(std::stoi(MODIFIES_LEFT2), MODIFIES_RIGHT2);
 			PKB::getInstance().addModifiesS(std::stoi(MODIFIES_LEFT3), MODIFIES_RIGHT3);
 			PKB::getInstance().addModifiesS(std::stoi(MODIFIES_LEFT4), MODIFIES_RIGHT4);
-			PKB::getInstance().addUsesS(std::stoi(USES_LEFT1), USES_RIGHT1);
-			PKB::getInstance().addUsesS(std::stoi(USES_LEFT2), USES_RIGHT2);
+			PKB::getInstance().addUsesS(std::stoi(USES_LEFT1), USES_RIGHT1_1);
+			PKB::getInstance().addUsesS(std::stoi(USES_LEFT1), USES_RIGHT1_2);
+			PKB::getInstance().addUsesS(std::stoi(USES_LEFT2), USES_RIGHT2_1);
+			PKB::getInstance().addUsesS(std::stoi(USES_LEFT2), USES_RIGHT2_2);
 			PKB::getInstance().addModifiesP(MODIFIESP_LEFT1, MODIFIESP_RIGHT1);
 			PKB::getInstance().addModifiesP(MODIFIESP_LEFT2, MODIFIESP_RIGHT2);
 			PKB::getInstance().addUsesP(USESP_LEFT1, USESP_RIGHT1);
@@ -154,7 +158,9 @@ namespace UnitTesting {
 		ExprParser expr_parser;
 
 		const var_name x = "x";
+		const var_name x1 = "x1";
 		const var_name y = "y";
+		const var_name y1 = "y1";
 		const var_name z = "z";
 		const constant c1 = 1;
 		const constant c2 = 2;
@@ -212,11 +218,13 @@ namespace UnitTesting {
 
 		const std::string USES_LEFT1 = "1";
 		const std::string USES_LEFT2 = "3";
-		const std::string USES_RIGHT1 = y;
-		const std::string USES_RIGHT2 = x;
+		const std::string USES_RIGHT1_1 = y;
+		const std::string USES_RIGHT1_2 = y1;
+		const std::string USES_RIGHT2_1 = x;
+		const std::string USES_RIGHT2_2 = x1;
 
 		const std::vector<std::string> USES_LEFTS = { USES_LEFT1, USES_LEFT2 };
-		const std::vector<std::string> USES_RIGHTS = { USES_RIGHT1, USES_RIGHT2 };
+		const std::vector<std::string> USES_RIGHTS = { USES_RIGHT1_1, USES_RIGHT1_2, USES_RIGHT2_1, USES_RIGHT2_2 };
 
 		const std::string USESP_LEFT1 = p1;
 		const std::string USESP_LEFT2 = p2;
@@ -257,7 +265,7 @@ namespace UnitTesting {
 		const Synonym COMMON_SYNONYM2 = { "cs2" };
 
 		// select v
-		const std::list<std::string> ALL_VARIABLE = { x, y, z };
+		const std::list<std::string> ALL_VARIABLE = { x, y, x1, y1, z };
 		const Entity SELECT_VARIABLE = { VARIABLE, COMMON_SYNONYM1 };
 		// select c
 		const std::list<std::string> ALL_CONSTANT = { c1s, c2s, c3s };
@@ -309,7 +317,7 @@ namespace UnitTesting {
 			{STMT, "7"}, {STMT, "8"}, {STMT, "9"}, {STMT, "10"}, {STMT, "11"}, {STMT, "12"}
 		};
 
-		std::vector<Entity> ALL_VARIABLES = { { VARIABLE, x }, { VARIABLE, y }, { VARIABLE, z } };
+		std::vector<Entity> ALL_VARIABLES = { { VARIABLE, x }, { VARIABLE, y }, { VARIABLE, x1 }, { VARIABLE, y1 }, { VARIABLE, z } };
 	};
 
 	//Evaluator Select statement without any relation/Pattern
@@ -1675,13 +1683,17 @@ namespace UnitTesting {
 		RelType type = USES_S;
 		std::string left1 = USES_LEFT1;
 		std::string left2 = USES_LEFT2;
-		std::string right1 = USES_RIGHT1;
-		std::string right2 = USES_RIGHT2;
+		std::string right1_1 = USES_RIGHT1_1;
+		std::string right1_2 = USES_RIGHT1_2;
+		std::string right2_1 = USES_RIGHT2_1;
+		std::string right2_2 = USES_RIGHT2_2;
 
 		std::vector<RelRef> relations;
 		//Test true boolean equation
-		relations.push_back(RelRef(type, { STMT, left1 }, { VARIABLE, right1 }));
-		relations.push_back(RelRef(type, { STMT, left2 }, { VARIABLE, right2 }));
+		relations.push_back(RelRef(type, { STMT, left1 }, { VARIABLE, right1_1 }));
+		relations.push_back(RelRef(type, { STMT, left1 }, { VARIABLE, right1_2 }));
+		relations.push_back(RelRef(type, { STMT, left2 }, { VARIABLE, right2_1 }));
+		relations.push_back(RelRef(type, { STMT, left2 }, { VARIABLE, right2_2 }));
 		relations.push_back(RelRef(type, { STMT, left1 }, WILD_CARD));
 		relations.push_back(RelRef(type, { STMT, left2 }, WILD_CARD));
 
@@ -1732,8 +1744,10 @@ namespace UnitTesting {
 		RelType type = USES_S;
 		std::string left1 = USES_LEFT1;
 		std::string left2 = USES_LEFT2;
-		std::string right1 = USES_RIGHT1;
-		std::string right2 = USES_RIGHT2;
+		std::string right1_1 = USES_RIGHT1_1;
+		std::string right1_2 = USES_RIGHT1_2;
+		std::string right2_1 = USES_RIGHT2_1;
+		std::string right2_2 = USES_RIGHT2_2;
 
 		std::vector<RelRef> relations;
 		//Have Result for matching header
@@ -1745,10 +1759,14 @@ namespace UnitTesting {
 		relations.push_back(RelRef(type, { WHILE, Synonym{"a"} }, WILD_CARD));
 		relations.push_back(RelRef(type, { STMT, left1 }, { VARIABLE, Synonym{"a"} }));
 		relations.push_back(RelRef(type, { STMT, left2 }, { VARIABLE, Synonym{"a"} }));
-		relations.push_back(RelRef(type, { STMT, Synonym{"a"} }, { VARIABLE, right1 }));
-		relations.push_back(RelRef(type, { IF, Synonym{"a"} }, { VARIABLE, right1 }));
-		relations.push_back(RelRef(type, { STMT, Synonym{"a"} }, { VARIABLE, right2 }));
-		relations.push_back(RelRef(type, { WHILE, Synonym{"a"} }, { VARIABLE, right2 }));
+		relations.push_back(RelRef(type, { STMT, Synonym{"a"} }, { VARIABLE, right1_1 }));
+		relations.push_back(RelRef(type, { STMT, Synonym{"a"} }, { VARIABLE, right1_2 }));
+		relations.push_back(RelRef(type, { IF, Synonym{"a"} }, { VARIABLE, right1_1 }));
+		relations.push_back(RelRef(type, { IF, Synonym{"a"} }, { VARIABLE, right1_2 }));
+		relations.push_back(RelRef(type, { STMT, Synonym{"a"} }, { VARIABLE, right2_1 }));
+		relations.push_back(RelRef(type, { STMT, Synonym{"a"} }, { VARIABLE, right2_2 }));
+		relations.push_back(RelRef(type, { WHILE, Synonym{"a"} }, { VARIABLE, right2_1 }));
+		relations.push_back(RelRef(type, { WHILE, Synonym{"a"} }, { VARIABLE, right2_2 }));
 
 		validateRelations(relations);
 	}
@@ -1777,8 +1795,10 @@ namespace UnitTesting {
 		std::vector<std::string> lefts = USES_LEFTS;
 		std::string left1 = USES_LEFT1;
 		std::string left2 = USES_LEFT2;
-		std::string right1 = USES_RIGHT1;
-		std::string right2 = USES_RIGHT2;
+		std::string right1_1 = USES_RIGHT1_1;
+		std::string right1_2 = USES_RIGHT1_2;
+		std::string right2_1 = USES_RIGHT2_1;
+		std::string right2_2 = USES_RIGHT2_2;
 
 		std::vector<Entity> selectedList;
 		selectedList.push_back({ STMT, COMMON_SYNONYM1 });
@@ -1818,17 +1838,27 @@ namespace UnitTesting {
 		resultList[1] = { left1 };
 		resultList[2] = { };
 		for (unsigned int i = 0; i < selectedList.size(); i++) {
-			RelRef relation(type, selectedList[i], { VARIABLE, right1 });
+			RelRef relation(type, selectedList[i], { VARIABLE, right1_1 });
 			Query q = initQuery(relation, selectedList[i]);
 			EXPECT_EQ(evaluator.evaluateQuery(q).front(), resultList[i]) << "Error at results : " << i + 1;
 		}
 
+		for (unsigned int i = 0; i < selectedList.size(); i++) {
+			RelRef relation(type, selectedList[i], { VARIABLE, right1_2 });
+			Query q = initQuery(relation, selectedList[i]);
+			EXPECT_EQ(evaluator.evaluateQuery(q).front(), resultList[i]) << "Error at results : " << i + 1;
+		}
 		//Test case for Select selected such that USES_S(VARIABLE, "y")
 		resultList[0] = { left2 };
 		resultList[1] = { };
 		resultList[2] = { left2 };
 		for (unsigned int i = 0; i < selectedList.size(); i++) {
-			RelRef relation(type, selectedList[i], { VARIABLE, right2 });
+			RelRef relation(type, selectedList[i], { VARIABLE, right2_1 });
+			Query q = initQuery(relation, selectedList[i]);
+			EXPECT_EQ(evaluator.evaluateQuery(q).front(), resultList[i]) << "Error at results : " << i + 1;
+		}
+		for (unsigned int i = 0; i < selectedList.size(); i++) {
+			RelRef relation(type, selectedList[i], { VARIABLE, right2_2 });
 			Query q = initQuery(relation, selectedList[i]);
 			EXPECT_EQ(evaluator.evaluateQuery(q).front(), resultList[i]) << "Error at results : " << i + 1;
 		}
@@ -1841,9 +1871,9 @@ namespace UnitTesting {
 		}
 
 		//Test case for Select selected such that USES_S(a, selected)
-		resultList[0] = { right1, right2 };
-		resultList[1] = { right1 };
-		resultList[2] = { right2 };
+		resultList[0] = { right1_1, right2_1, right1_2, right2_2 };
+		resultList[1] = { right1_1, right1_2 };
+		resultList[2] = { right2_1, right2_2 };
 
 		Entity selected(VARIABLE, COMMON_SYNONYM2);
 		for (unsigned int i = 0; i < selectedList.size(); i++) {
@@ -1853,7 +1883,7 @@ namespace UnitTesting {
 		}
 
 		//Test case for Select selected such that USES_S("1", selected)
-		resultList[0] = { right1 };
+		resultList[0] = { right1_1, right1_2 };
 		resultList[1] = { };
 		resultList[2] = { };
 		RelRef relation(type, { STMT, left1 }, selected);
@@ -1861,7 +1891,7 @@ namespace UnitTesting {
 		EXPECT_EQ(evaluator.evaluateQuery(q).front(), resultList[0]);
 
 		//Test case for Select selected such that USES_S("3", selected)
-		resultList[0] = { right2 };
+		resultList[0] = { right2_1, right2_2 };
 		relation = RelRef(type, { STMT, left2 }, selected);
 		q = initQuery(relation, selected);
 		EXPECT_EQ(evaluator.evaluateQuery(q).front(), resultList[0]);
