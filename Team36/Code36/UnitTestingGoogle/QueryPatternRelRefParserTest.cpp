@@ -2304,19 +2304,6 @@ namespace UnitTesting {
 
 		EXPECT_THROW(validator.parseParameterSuchThat(query, QueryToken::FOLLOWS, temp_token_chain), SemanticErrorException);
 	}
-
-	TEST(QueryPatternRelRefParserTest, semanticInvalidModifiesSIntIntTest) {
-		QueryPatternRelRefParser validator;
-
-		Query query;
-		std::vector<QueryToken> temp_token_chain;
-		temp_token_chain.push_back({ QueryToken::CONSTANT, "1" });
-		temp_token_chain.push_back({ QueryToken::COMMA, "" });
-		temp_token_chain.push_back({ QueryToken::CONSTANT, "1" });
-
-		EXPECT_THROW(validator.parseParameterSuchThat(query, QueryToken::MODIFIES_S, temp_token_chain), SemanticErrorException);
-	}
-
 	// ModifiesS, ModifiesP Test
 	// test semantically invalid Modiefies with 1st param as WILDCARD
 	TEST(QueryPatternRelRefParserTest, semanticInvalidModifiesSWildSynTest) {
@@ -2376,6 +2363,18 @@ namespace UnitTesting {
 		EXPECT_THROW(validator.parseParameterSuchThat(query, QueryToken::MODIFIES_S, temp_token_chain), SemanticErrorException);
 	}
 	
+	TEST(QueryPatternRelRefParserTest, semanticInvalidModifiesSIntIntTest) {
+		QueryPatternRelRefParser validator;
+
+		Query query;
+		std::vector<QueryToken> temp_token_chain;
+		temp_token_chain.push_back({ QueryToken::CONSTANT, "1" });
+		temp_token_chain.push_back({ QueryToken::COMMA, "" });
+		temp_token_chain.push_back({ QueryToken::CONSTANT, "1" });
+
+		EXPECT_THROW(validator.parseParameterSuchThat(query, QueryToken::MODIFIES_S, temp_token_chain), SemanticErrorException);
+	}
+
 	TEST(QueryPatternRelRefParserTest, semanticInvalidModifiesSVarVarTest) {
 		Query query;
 

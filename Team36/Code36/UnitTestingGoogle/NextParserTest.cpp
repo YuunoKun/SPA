@@ -237,4 +237,37 @@ namespace UnitTesting {
 
 		EXPECT_TRUE(query.getClauses()[0].getRelation() == expected_rel);
 	}
+
+	//Invalid
+
+	TEST(NextParserTest, semanticInvalidNextIdentWildTest) {
+		QueryPatternRelRefParser validator;
+
+		Query query;
+		std::vector<QueryToken> temp_token_chain;
+		temp_token_chain.push_back({ QueryToken::QUOTATION_OPEN, "" });
+		temp_token_chain.push_back({ QueryToken::IDENTIFIER, "ident" });
+		temp_token_chain.push_back({ QueryToken::QUOTATION_CLOSE, "" });
+		temp_token_chain.push_back({ QueryToken::COMMA, "" });
+		temp_token_chain.push_back({ QueryToken::WILDCARD, "" });
+
+		EXPECT_THROW(validator.parseParameterSuchThat(query, QueryToken::NEXT, temp_token_chain), SemanticErrorException);
+	}
+
+	TEST(NextParserTest, semanticInvalidNextVarWildTest) {
+		QueryPatternRelRefParser validator;
+
+		Query query;
+		Synonym synonym;
+		synonym.name = "v";
+		Entity declared_stmt = Entity(EntityType::VARIABLE, synonym);
+		query.addEntity(declared_stmt);
+
+		std::vector<QueryToken> temp_token_chain;
+		temp_token_chain.push_back({ QueryToken::IDENTIFIER, "v" });
+		temp_token_chain.push_back({ QueryToken::COMMA, "" });
+		temp_token_chain.push_back({ QueryToken::WILDCARD, "" });
+
+		EXPECT_THROW(validator.parseParameterSuchThat(query, QueryToken::NEXT, temp_token_chain), SemanticErrorException);
+	}
 }
