@@ -12,13 +12,13 @@ void AssignPatternParser::parseAssign(Query& query, Entity& entity, std::vector<
     QueryPatternRelRefParser parser;
     std::vector<QueryToken> temp_token_chain_1;
     std::vector<QueryToken> temp_token_chain_2;
-    bool comma_count = 0;
+    int comma_count = 0;
     bool is_wild = false;
     size_t token_chain_size = token_chain.size();
     for (size_t i = 0; i < token_chain_size; i++) {
         if (token_chain[0].type == QueryToken::COMMA) {
             token_chain.erase(token_chain.begin());
-            comma_count += 1;
+            comma_count ++;
         } else if (comma_count == 0) {
             // 1st param
             temp_token_chain_1.push_back(token_chain[0]);

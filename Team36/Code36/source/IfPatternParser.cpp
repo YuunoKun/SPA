@@ -14,7 +14,7 @@ void IfPatternParser::parseIf(Query& query, Entity& entity, std::vector<QueryTok
     for (size_t i = 0; i < token_chain_size; i++) {
         if (token_chain[0].type == QueryToken::COMMA) {
             token_chain.erase(token_chain.begin());
-            comma_count += 1;
+            comma_count ++;
         }
         else if (comma_count == 0) {
             // 1st param
