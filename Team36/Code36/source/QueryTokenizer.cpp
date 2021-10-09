@@ -16,6 +16,7 @@ void QueryTokenizer::parse_into_query_tokens(std::string input) {
 	std::stack<char> tuple_validation_stk;
 
 	bool quotation_validation = false;
+	bool is_prog_line = false;
 
 	for (char c : input) {
 
@@ -28,9 +29,7 @@ void QueryTokenizer::parse_into_query_tokens(std::string input) {
 		} else if (curr_query_token.type == QueryToken::IDENTIFIER
 			&& curr_query_token.token_value == "prog_"
 			&& c != 'l') {
-			curr_query_token.token_value.pop_back();
-			add_query_token(curr_query_token);
-			curr_query_token.type = QueryToken::WHITESPACE;
+			throw SyntacticErrorException("Unexpected symbol \"_\"");
 		}
 
 
@@ -94,6 +93,7 @@ void QueryTokenizer::parse_into_query_tokens(std::string input) {
 		case '_':
 			if (curr_query_token.token_value == "prog") {
 				curr_query_token.token_value.push_back(c);
+				is_prog_line = true;
 			} else {
 				add_query_token(curr_query_token);
 				curr_query_token.type = QueryToken::WILDCARD;
@@ -124,6 +124,7 @@ void QueryTokenizer::parse_into_query_tokens(std::string input) {
 				curr_query_token.type = QueryToken::PROG_LINE;
 				curr_query_token.token_value = "";
 				add_query_token(curr_query_token);
+				is_prog_line = false;
 			}
 			add_query_token(curr_query_token);
 			curr_query_token.type = QueryToken::WHITESPACE;
@@ -238,10 +239,12 @@ void QueryTokenizer::parse_into_query_tokens(std::string input) {
 	// Check for open brackets, open quotation marks, temp token active
 	if (!parenthesis_validation_stk.empty()) {
 		throw SyntacticErrorException("expected \')\'");
-	}
-	if (quotation_validation) {
+	} else if (quotation_validation) {
 		throw SyntacticErrorException("missing terminating \" character");
+	} else if (is_prog_line) {
+		throw SyntacticErrorException("invalid _");
 	}
+
 	
 }
 
