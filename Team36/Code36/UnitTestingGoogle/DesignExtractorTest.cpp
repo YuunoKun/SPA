@@ -743,7 +743,7 @@ namespace UnitTesting {
 		ASSERT_EQ(pkb->getStmts().size(), expected_populated_stmt.size());
 		std::vector<StmtInfo> res = pkb->getStmts();
 		sort(res.begin(), res.end(), [](StmtInfo s1, StmtInfo s2) { return s1.stmt_index < s2.stmt_index; });
-		for (int i = 0; i < expected_populated_stmt.size(); i++) {
+		for (size_t i = 0; i < expected_populated_stmt.size(); i++) {
 			ASSERT_EQ(res[i].stmt_index, expected_populated_stmt[i].first);
 			ASSERT_EQ(res[i].stmt_type, expected_populated_stmt[i].second);
 		}
@@ -791,7 +791,7 @@ namespace UnitTesting {
 		};
 		auto table_u = pkb->getUsesS();
 		ASSERT_EQ(table_u.getPairs().size(), 21);
-		for (int i = 0; i < expected_used_variables.size(); i++) {
+		for (size_t i = 0; i < expected_used_variables.size(); i++) {
 			for (var_name v: expected_used_variables[i]) {
 				ASSERT_TRUE(table_u.containsPair(expected_stmt_info[i], v));
 			}
@@ -843,7 +843,7 @@ namespace UnitTesting {
 		};
 		auto table_m = pkb->getModifiesS();
 		ASSERT_EQ(table_m.getPairs().size(), 18);
-		for (int i = 0; i < expected_modified_variables.size(); i++) {
+		for (size_t i = 0; i < expected_modified_variables.size(); i++) {
 			for (var_name v : expected_modified_variables[i]) {
 				ASSERT_TRUE(table_m.containsPair(expected_stmt_info[i], v));
 			}

@@ -200,7 +200,7 @@ void DesignExtractor::validate() {
 	while (call_sequence.size() != all_procedures.size()) {
 		proc_index filtered_id = 0;
 
-		for (int i = 0; i < all_procedures.size(); i++) {
+		for (size_t i = 0; i < all_procedures.size(); i++) {
 			if (all_procedures[i] == 0) {
 				filtered_id = i + 1;
 				call_sequence.push_back(filtered_id);
