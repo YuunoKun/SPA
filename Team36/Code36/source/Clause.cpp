@@ -24,8 +24,8 @@ Pattern Clause::getPattern() {
 
 bool Clause::operator==(const Clause& other) const {
 	return type == other.type &&
-		(type == RELATION && rel == other.rel) ||
-		(type == PATTERN && pattern == other.pattern);
+		((type == RELATION && rel == other.rel) ||
+		(type == PATTERN && pattern == other.pattern));
 }
 
 
