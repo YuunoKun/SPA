@@ -14,7 +14,6 @@ void AssignPatternParser::parseParameterAssign(Query& query, Entity& entity, std
     std::vector<QueryToken> temp_token_chain_2;
     bool comma_found = false;
     bool is_wild = false;
-    bool is_MODIFIES_S = true;
     size_t token_chain_size = token_chain.size();
     for (size_t i = 0; i < token_chain_size; i++) {
         if (token_chain[0].type == QueryToken::COMMA) {
@@ -33,7 +32,11 @@ void AssignPatternParser::parseParameterAssign(Query& query, Entity& entity, std
     }
 
     if (!parser.isEntRef(query, temp_token_chain_1) || !parser.isExpr(temp_token_chain_2)) {
-        throw SemanticErrorException("Invalid parameters for assign pattern*");
+        throw SemanticErrorException("Invalid parameters for assign pattern");
+    }
+
+    if (!parser.isCorrectSynEntRef(query, temp_token_chain_1, EntityType::VARIABLE)) {
+        throw SemanticErrorException("Invalid parameters for Modifies");
     }
 
     is_wild = isWild(temp_token_chain_2);

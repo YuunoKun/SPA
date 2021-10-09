@@ -180,12 +180,15 @@ bool QueryPatternRelRefParser::isCorrectSynEntRef(Query& query, std::vector<Quer
     }
 }
 
-bool QueryPatternRelRefParser::isCommaRef(std::vector<QueryToken> token_chain) {
+bool QueryPatternRelRefParser::isWildCard(std::vector<QueryToken> token_chain) {
     if (token_chain.size() == 0) {
-        throw std::invalid_argument("Invalid argument, no comma found");
-    }
-    if (token_chain[0].type != QueryToken::COMMA) {
-        throw std::invalid_argument("Invalid argument, expected a comma");
+        throw SyntacticErrorException("Invalid arguments, wildcards only");
+    } else if (token_chain.size() > 1) {
+        throw SyntacticErrorException("Invalid arguments, wildcards only");
+    } else if (token_chain[0].type == QueryToken::WILDCARD) {
+        return true;
+    } else {
+        return false;
     }
 }
 
@@ -685,53 +688,13 @@ void QueryPatternRelRefParser::parseParameterSuchThat(
 
     case QueryToken::AFFECTS: {
         // stmtRef , stmtRef
-        if (!isStmtRef(query, token_chain)) {
-            throw std::invalid_argument("Invalid parameters for Affects");
-        }
-        QueryToken stmt = token_chain[0];
-        token_chain.erase(token_chain.begin(), token_chain.begin() + 1);
 
-        isCommaRef(token_chain);
-        token_chain.erase(token_chain.begin(), token_chain.begin() + 1);
-
-        if (!isStmtRef(query, token_chain)) {
-            throw std::invalid_argument("Invalid parameters for Affects");
-        }
-        QueryToken stmt2 = token_chain[0];
-        token_chain.erase(token_chain.begin(), token_chain.begin() + 1);
-        if (token_chain.size() != 0) {
-            throw std::invalid_argument("Unexpected parameters for Affects");
-        }
-        //TODO 
-        query.addRelation(RelRef(RelType::FOLLOWS,
-            setStmtRef(query, stmt),
-            setStmtRef(query, stmt2)));
         break;
     }
 
     case QueryToken::AFFECTS_T: {
         // stmtRef , stmtRef
-        if (!isStmtRef(query, token_chain)) {
-            throw std::invalid_argument("Invalid parameters for Affects*");
-        }
-        QueryToken stmt = token_chain[0];
-        token_chain.erase(token_chain.begin(), token_chain.begin() + 1);
 
-        isCommaRef(token_chain);
-        token_chain.erase(token_chain.begin(), token_chain.begin() + 1);
-
-        if (!isStmtRef(query, token_chain)) {
-            throw std::invalid_argument("Invalid parameters for Affects*");
-        }
-        QueryToken stmt2 = token_chain[0];
-        token_chain.erase(token_chain.begin(), token_chain.begin() + 1);
-        if (token_chain.size() != 0) {
-            throw std::invalid_argument("Unexpected parameters for Affects*");
-        }
-        //TODO
-        query.addRelation(RelRef(RelType::FOLLOWS,
-            setStmtRef(query, stmt),
-            setStmtRef(query, stmt2)));
         break;
     }
 

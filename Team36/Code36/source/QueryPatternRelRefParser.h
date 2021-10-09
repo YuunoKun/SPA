@@ -13,6 +13,9 @@
 #include "NextParser.h"
 #include "NextTParser.h"
 #include "AssignPatternParser.h"
+#include "IfPatternParser.h"
+#include "WhilePatternParser.h"
+
 
 
 class QueryPatternRelRefParser {
@@ -24,6 +27,7 @@ public:
 	bool isLineRef(Query&, std::vector<QueryToken>);
 	bool isExpr(std::vector<QueryToken>);
 	bool isCorrectSynEntRef(Query&, std::vector<QueryToken>, EntityType);
+	bool isWildCard(std::vector<QueryToken>);
 	Entity setStmtRef(Query&, QueryToken);
 	Entity setEntRef(Query&, std::vector<QueryToken>);
 	Entity setLineRef(Query&, QueryToken);
@@ -31,8 +35,5 @@ public:
 	std::string setExpr(std::vector<QueryToken>);
 	void parseParameterSuchThat(Query&, QueryToken::QueryTokenType, std::vector<QueryToken>);
 	void parseParameterPattern(Query&, Entity&, std::vector<QueryToken>);
-
-private:
-	bool isCommaRef(std::vector<QueryToken>);
 
 };
