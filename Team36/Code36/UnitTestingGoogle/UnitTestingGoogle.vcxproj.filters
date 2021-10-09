@@ -96,7 +96,7 @@
 		<ClCompile Include="PKBAdapterTest.cpp">
 			<Filter>PKB</Filter>
 		</ClCompile>
-		<ClCompile Include="PatternRelRefValidatorTest.cpp">
+		<ClCompile Include="NextParserTest.cpp">
 			<Filter>PQL\QueryPreprocessor</Filter>
 		</ClCompile>
 		<ClCompile Include="ClauseTest.cpp">
