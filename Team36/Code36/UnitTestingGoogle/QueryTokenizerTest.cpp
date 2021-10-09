@@ -158,6 +158,30 @@ namespace UnitTesting {
 		EXPECT_TRUE(output[2].type == S_token.type);
 	}
 
+	//Test prog_line
+	TEST(QueryTokenizer, prog_lineTest) {
+
+		//Result
+		QueryTokenizer query_tokenizer;
+		query_tokenizer.parse_into_query_tokens("stmt s; prog_line n; ");
+		std::vector<QueryToken> output = query_tokenizer.get_query_token_chain();
+
+		//Expected
+		std::vector<QueryToken> expected;
+		expected.push_back({ QueryToken::IDENTIFIER, "stmt" });
+		expected.push_back({ QueryToken::IDENTIFIER, "s" });
+		expected.push_back({ QueryToken::TERMINATOR, "" });
+		expected.push_back({ QueryToken::PROG_LINE, "" });
+		expected.push_back({ QueryToken::IDENTIFIER, "n" });
+		expected.push_back({ QueryToken::TERMINATOR, "" });
+
+
+		for (size_t i = 0; i < expected.size(); i++) {
+			EXPECT_TRUE(output[i].token_value == expected[i].token_value);
+			EXPECT_TRUE(output[i].type == expected[i].type);
+		}
+	}
+
 	// Test for open and close parenthesis
 	TEST(QueryTokenizer, ParenthesisOpenCloseTest) {
 
