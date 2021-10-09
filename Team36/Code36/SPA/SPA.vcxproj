@@ -60,6 +60,8 @@
     <ClCompile Include="..\source\SemanticErrorException.cpp" />
 	<ClCompile Include="..\source\SyntacticErrorException.cpp" />
 	<ClCompile Include="..\source\AssignPatternParser.cpp" />
+	<ClCompile Include="..\source\IfPatternParser.cpp" />
+	<ClCompile Include="..\source\WhilePatternParser.cpp" />
 	<ClCompile Include="..\source\NextParser.cpp" />
 	<ClCompile Include="..\source\NextTParser.cpp" />
   </ItemGroup>
@@ -117,6 +119,8 @@
     <ClInclude Include="..\source\SyntacticErrorException.h" />
 	<ClInclude Include="..\source\SemanticErrorException.h" />
 	<ClCompile Include="..\source\AssignPatternParser.h" />
+  	<ClCompile Include="..\source\IfPatternParser.h" />
+	<ClCompile Include="..\source\WhilePatternParser.h" />
 	<ClCompile Include="..\source\NextParser.h" />
     <ClCompile Include="..\source\NextTParser.h" />
   </ItemGroup>

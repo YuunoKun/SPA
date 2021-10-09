@@ -740,6 +740,7 @@ void QueryPatternRelRefParser::parseParameterSuchThat(
         nextParser.parseNext(query, token_chain);
         break;
     }
+    
     case QueryToken::NEXT_T: {
         NextTParser nextTParser;
         nextTParser.parseNextT(query, token_chain);
@@ -759,7 +760,18 @@ void QueryPatternRelRefParser::parseParameterPattern(
     case ASSIGN: {
         AssignPatternParser parser;
         parser.parseParameterAssign(query, synonym_ent, token_chain);
+        break;
         }
+    case IF: {
+        AssignPatternParser parser;
+        parser.parseParameterAssign(query, synonym_ent, token_chain);
+        break;
+    }
+    case WHILE: {
+        AssignPatternParser parser;
+        parser.parseParameterAssign(query, synonym_ent, token_chain);
+        break;
+    }
     }
 
 }
