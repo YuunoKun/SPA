@@ -85,6 +85,7 @@ namespace SourceProcessor {
 		void populateUses(PKB&);
 		void populateModifies(PKB&);
 		void populateCalls(PKB&);
+		void populateNext(PKB&);
 
 		void populateIfs(PKB&);
 		void populateWhiles(PKB&);

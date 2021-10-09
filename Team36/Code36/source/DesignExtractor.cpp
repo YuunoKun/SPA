@@ -367,6 +367,10 @@ void DesignExtractor::populateCalls(PKB& pkb) {
 	}
 }
 
+void DesignExtractor::populateNext(PKB& pkb) {
+	// CFG
+}
+
 void DesignExtractor::populateIfs(PKB& pkb) {
 	for (Statement* s : de_statements) {
 		if (s->getType() == StmtType::STMT_IF) {
