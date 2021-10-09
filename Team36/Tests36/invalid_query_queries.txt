@@ -1220,275 +1220,265 @@ none
 5000
 27 - Semantically invalid Modifies
 stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select s such that Modifies(pr, v)
+Select s such that Modifies(s,s)
 none
 5000
 28 - Semantically invalid Modifies
 stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select s such that Modifies(s,s)
+Select s such that Modifies(s, r)
 none
 5000
 29 - Semantically invalid Modifies
 stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select s such that Modifies(s, r)
+Select s such that Modifies(s, p)
 none
 5000
 30 - Semantically invalid Modifies
 stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select s such that Modifies(s, p)
+Select s such that Modifies(s, w)
 none
 5000
 31 - Semantically invalid Modifies
 stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select s such that Modifies(s, w)
+Select s such that Modifies(s, ifs)
 none
 5000
 32 - Semantically invalid Modifies
 stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select s such that Modifies(s, ifs)
+Select s such that Modifies(s, a)
 none
 5000
 33 - Semantically invalid Modifies
 stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select s such that Modifies(s, a)
+Select s such that Modifies(s, cp)
 none
 5000
 34 - Semantically invalid Modifies
 stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select s such that Modifies(s, cp)
+Select s such that Modifies(s, pr)
 none
 5000
 35 - Semantically invalid Modifies
 stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select s such that Modifies(s, pr)
-none
-5000
-36 - Semantically invalid Modifies
-stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
 Select s such that Modifies(s, c)
 none
 5000
-37 - Semantically invalid Uses
+36 - Semantically invalid Uses
 stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
 Select s such that Uses(v,v)
 none
 5000
-38 - Semantically invalid Uses
+37 - Semantically invalid Uses
 stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
 Select s such that Uses(co, v)
 none
 5000
-39 - Semantically invalid Uses
-stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select s such that Uses(pr, v)
-none
-5000
-40 - Semantically invalid Uses
+38 - Semantically invalid Uses
 stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
 Select s such that Uses(s,s)
 none
 5000
-41 - Semantically invalid Uses
+39 - Semantically invalid Uses
 stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
 Select s such that Uses(s, r)
 none
 5000
-42 - Semantically invalid Uses
+40 - Semantically invalid Uses
 stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
 Select s such that Uses(s, p)
 none
 5000
-43 - Semantically invalid Uses
+41 - Semantically invalid Uses
 stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
 Select s such that Uses(s, w)
 none
 5000
-44 - Semantically invalid Uses
+42 - Semantically invalid Uses
 stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
 Select s such that Uses(s, ifs)
 none
 5000
-45 - Semantically invalid Uses
+43 - Semantically invalid Uses
 stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
 Select s such that Uses(s, a)
 none
 5000
-46 - Semantically invalid Uses
+44 - Semantically invalid Uses
 stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
 Select s such that Uses(s, co)
 none
 5000
-47 - Semantically invalid Uses
+45 - Semantically invalid Uses
 stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
 Select s such that Uses(s, pr)
 none
 5000
-48 - Semantically invalid Uses
+46 - Semantically invalid Uses
 stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
 Select s such that Uses(s, c)
 none
 5000
-49 - Semantically invalid pattern
+47 - Semantically invalid pattern
 stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
 Select r pattern s(_, _)
 none
 5000
-50 - Semantically invalid pattern
+48 - Semantically invalid pattern
 stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
 Select s pattern r(_, _)
 none
 5000
-51 - Semantically invalid pattern
+49 - Semantically invalid pattern
 stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
 Select s pattern p(_, _)
 none
 5000
-52 - Semantically invalid pattern
+50 - Semantically invalid pattern
 stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
 Select s pattern w(_, _)
 none
 5000
-53 - Semantically invalid pattern
+51 - Semantically invalid pattern
 stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
 Select s pattern ifs(_, _)
 none
 5000
-54 - Semantically invalid pattern
+52 - Semantically invalid pattern
 stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
 Select s pattern v(_, _)
 none
 5000
-55 - Semantically invalid pattern
+53 - Semantically invalid pattern
 stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
 Select s pattern co(_, _)
 none
 5000
-56 - Semantically invalid pattern
+54 - Semantically invalid pattern
 stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
 Select s pattern pr(_, _)
 none
 5000
-57 - Semantically invalid pattern
+55 - Semantically invalid pattern
 stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
 Select s pattern c(_, _)
 none
 5000
-58 - Semantically invalid pattern
+56 - Semantically invalid pattern
 stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
 Select s pattern _(_, _)
 none
 5000
-59 - Semantically invalid pattern
+57 - Semantically invalid pattern
 stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
 Select s pattern a(s, _)
 none
 5000
-60 - Semantically invalid pattern
+58 - Semantically invalid pattern
 stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
 Select s pattern a(r, _)
 none
 5000
-61 - Semantically invalid pattern
+59 - Semantically invalid pattern
 stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
 Select s pattern a(p, _)
 none
 5000
-62 - Semantically invalid pattern
+60 - Semantically invalid pattern
 stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
 Select s pattern a(w, _)
 none
 5000
-63 - Semantically invalid pattern
+61 - Semantically invalid pattern
 stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
 Select s pattern a(ifs, _)
 none
 5000
-64 - Semantically invalid pattern
+62 - Semantically invalid pattern
 stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
 Select s pattern a(a, _)
 none
 5000
-65 - Semantically invalid pattern
+63 - Semantically invalid pattern
 stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
 Select s pattern a(co, _)
 none
 5000
-66 - Semantically invalid pattern
+64 - Semantically invalid pattern
 stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
 Select s pattern a(pr, _)
 none
 5000
-67 - Semantically invalid pattern
+65 - Semantically invalid pattern
 stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
 Select s pattern a(c, _)
 none
 5000
-68 - Semantically invalid Uses (stmtRef is out of range) 
+66 - Semantically invalid Uses (stmtRef is out of range) 
 variable v; 
 Select v such that Uses(0, v)
 none
 5000
-69 - Semantically invalid Modifies (stmtRef is out of range) 
+67 - Semantically invalid Modifies (stmtRef is out of range) 
 variable v; 
 Select v such that Modifies(-1, v)
 none
 5000
-70 - Semantically invalid Parent (stmtRef is out of range) 
+68 - Semantically invalid Parent (stmtRef is out of range) 
 variable v; 
 Select v such that Parent(0, v)
 none
 5000
-71 - Semantically invalid Follows (stmtRef is out of range) 
+69 - Semantically invalid Follows (stmtRef is out of range) 
 variable v; 
 Select v such that Follows(-1, v)
 none
 5000
-72 - Semantically invalid pattern (v is not declared)
+70 - Semantically invalid pattern (v is not declared)
 stmt s;
 Select v
 none
 5000
-72 - Semantically invalid pattern (v is not declared)
+71 - Semantically invalid pattern (v is not declared)
 stmt s;
 Select v
 none
 5000
-73 - Semantically invalid pattern (v1 is not declared)
+72 - Semantically invalid pattern (v1 is not declared)
 assign a; variable v;
 Select v1 pattern a(v1, "z - 1")
 none
 5000
-74 - Semantically invalid Parent (w1 is not declared)
+73 - Semantically invalid Parent (w1 is not declared)
 stmt s; while w
 Select s such that Parent(s ,w1)
 none
 5000
-75 - Semantically invalid Parent (w1 is not declared)
+74 - Semantically invalid Parent (w1 is not declared)
 stmt s; if ifs;
 Select s such that Parent(w1 ,s)
 none
 5000
-74 - Semantically invalid Modifies (s1 is not declared)
+75 - Semantically invalid Modifies (s1 is not declared)
 stmt s; variable v;
 Select s such that Modifies(s1, v)
 none
 5000
-75 - Semantically invalid Modifies (v1 is not declared)
+76 - Semantically invalid Modifies (v1 is not declared)
 stmt s; variable v;
 Select v such that Modifies(s, v1)
 none
 5000
-76 - Semantically invalid Modifies (underscore on LHS of Modifies)
+77 - Semantically invalid Modifies (underscore on LHS of Modifies)
 stmt s; variable v;
 Select v such that Modifies(_, v)
 none
 5000
-77 - Semantically invalid Uses (underscore on LHS of Uses)
+78 - Semantically invalid Uses (underscore on LHS of Uses)
 stmt s; variable v;
 Select v such that Uses(_, v)
 none
 5000
-78 - Semantically invalid Uses (variable LHS, stmt RHS)
+79 - Semantically invalid Uses (variable LHS, stmt RHS)
 variable v; stmt s; 
 Select v such that Uses(v, s)
 none
