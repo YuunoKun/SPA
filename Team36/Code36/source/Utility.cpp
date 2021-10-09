@@ -257,6 +257,9 @@ EntityType Utility::queryTokenTypeToEntityType(QueryToken::QueryTokenType& query
 	else if (queryTokenType == QueryToken::QueryTokenType::CONSTANT) {
 		return EntityType::CONSTANT;
 	}
+	else if (queryTokenType == QueryToken::QueryTokenType::PROG_LINE) {
+		return EntityType::PROG_LINE;
+	}
 }
 
 AttrRef Utility::queryTokenTypeToAttrRef(QueryToken::QueryTokenType& queryTokenType) {
