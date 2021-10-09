@@ -15,5 +15,5 @@ class IfPatternParser {
 public:
     IfPatternParser();
 
-    void parseParameterIf(Query&, Entity&, std::vector<QueryToken>);
+    void parseIf(Query&, Entity&, std::vector<QueryToken>);
 };

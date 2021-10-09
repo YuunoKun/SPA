@@ -4,7 +4,7 @@
 
 WhilePatternParser::WhilePatternParser() {}
 
-void WhilePatternParser::parseParameterWhile(Query& query, Entity& entity, std::vector<QueryToken> token_chain) {
+void WhilePatternParser::parseWhile(Query& query, Entity& entity, std::vector<QueryToken> token_chain) {
     QueryPatternRelRefParser parser;
     std::vector<QueryToken> temp_token_chain_1;
     std::vector<QueryToken> temp_token_chain_2;
@@ -36,5 +36,5 @@ void WhilePatternParser::parseParameterWhile(Query& query, Entity& entity, std::
     }
 
     query.addPattern(Pattern(entity, parser.setEntRef(query, temp_token_chain_1),
-        "", false));
+        "", true));
 }

@@ -299,10 +299,18 @@ std::string QueryPatternRelRefParser::setExpr(std::vector<QueryToken> token_chai
         return result;
     } else {
         for (size_t i = 0; i < token_chain.size(); i++) {
-            if (token_chain[i].type != QueryToken::WILDCARD &&
-                token_chain[i].type != QueryToken::QUOTATION_OPEN &&
-                token_chain[i].type != QueryToken::QUOTATION_CLOSE) {
+            if (token_chain[i].type == QueryToken::IDENTIFIER|| token_chain[i].type == QueryToken::CONSTANT) {
                 result += token_chain[i].token_value;
+            } else if (token_chain[i].type == QueryToken::PLUS) {
+                result += "+";
+            } else if (token_chain[i].type == QueryToken::MINUS) {
+                result += "-";
+            } else if (token_chain[i].type == QueryToken::MUL) {
+                result += "*";
+            } else if (token_chain[i].type == QueryToken::DIV) {
+                result += "/";
+            } else if (token_chain[i].type == QueryToken::MOD) {
+                result += "%";
             }
         }
         return result;
@@ -722,17 +730,17 @@ void QueryPatternRelRefParser::parseParameterPattern(
     switch (synonym_ent.getType()) {
     case ASSIGN: {
         AssignPatternParser parser;
-        parser.parseParameterAssign(query, synonym_ent, token_chain);
+        parser.parseAssign(query, synonym_ent, token_chain);
         break;
         }
     case IF: {
-        AssignPatternParser parser;
-        parser.parseParameterAssign(query, synonym_ent, token_chain);
+        IfPatternParser parser;
+        parser.parseIf(query, synonym_ent, token_chain);
         break;
     }
     case WHILE: {
-        AssignPatternParser parser;
-        parser.parseParameterAssign(query, synonym_ent, token_chain);
+        WhilePatternParser parser;
+        parser.parseWhile(query, synonym_ent, token_chain);
         break;
     }
     }

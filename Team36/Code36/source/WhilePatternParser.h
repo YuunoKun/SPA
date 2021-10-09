@@ -15,5 +15,5 @@ class WhilePatternParser {
 public:
     WhilePatternParser();
 
-    void parseParameterWhile(Query&, Entity&, std::vector<QueryToken>);
+    void parseWhile(Query&, Entity&, std::vector<QueryToken>);
 };

@@ -8,7 +8,7 @@ bool AssignPatternParser::isWild(std::vector<QueryToken> token_chain) {
     return token_chain[0].type == QueryToken::WILDCARD;
 }
 
-void AssignPatternParser::parseParameterAssign(Query& query, Entity& entity, std::vector<QueryToken> token_chain) {
+void AssignPatternParser::parseAssign(Query& query, Entity& entity, std::vector<QueryToken> token_chain) {
     QueryPatternRelRefParser parser;
     std::vector<QueryToken> temp_token_chain_1;
     std::vector<QueryToken> temp_token_chain_2;
@@ -36,7 +36,7 @@ void AssignPatternParser::parseParameterAssign(Query& query, Entity& entity, std
     }
 
     if (!parser.isCorrectSynEntRef(query, temp_token_chain_1, EntityType::VARIABLE)) {
-        throw SemanticErrorException("Invalid parameters for Modifies");
+        throw SemanticErrorException("Invalid Left expression for pattern");
     }
 
     is_wild = isWild(temp_token_chain_2);
