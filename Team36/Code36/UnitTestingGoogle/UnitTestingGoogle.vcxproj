@@ -65,6 +65,7 @@
     <ClCompile Include="ModifiesPEvaluatorTest.cpp" />
     <ClCompile Include="QueryPatternRelRefParserTest.cpp" />
 	<ClCompile Include="NextParserTest.cpp" />
+	<ClCompile Include="NextTParserTest.cpp" />
     <ClCompile Include="QueryOptimizerTest.cpp" />
     <ClCompile Include="UsesSEvaluatorTest.cpp" />
     <ClCompile Include="UsesPEvaluatorTest.cpp" />

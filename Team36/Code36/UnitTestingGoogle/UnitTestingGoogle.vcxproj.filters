@@ -99,6 +99,9 @@
 		<ClCompile Include="NextParserTest.cpp">
 			<Filter>PQL\QueryPreprocessor</Filter>
 		</ClCompile>
+		<ClCompile Include="NextTParserTest.cpp">
+			<Filter>PQL\QueryPreprocessor</Filter>
+		</ClCompile>
 		<ClCompile Include="ClauseTest.cpp">
 			<Filter>PQL\QueryObject</Filter>
 		</ClCompile>

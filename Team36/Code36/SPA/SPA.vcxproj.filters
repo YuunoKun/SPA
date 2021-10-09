@@ -228,6 +228,9 @@
     <ClCompile Include="..\source\NextParser.cpp">
       <Filter>Source Files\PQL\QueryPreprocessor\QueryPatternRelRefParser</Filter>
     </ClCompile>
+	<ClCompile Include="..\source\NextTParser.cpp">
+		<Filter>Source Files\PQL\QueryPreprocessor\QueryPatternRelRefParser</Filter>
+	</ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\source\Parser.h">
@@ -406,6 +409,9 @@
 	</ClInclude>
 	<ClInclude Include="..\source\NextParser.h">
 	  <Filter>Header Files\PQL\QueryPreprocessor\QueryPatternRelRefParser</Filter>
+	</ClInclude>
+	<ClInclude Include="..\source\NextTParser.h">
+		<Filter>Header Files\PQL\QueryPreprocessor\QueryPatternRelRefParser</Filter>
 	</ClInclude>
   </ItemGroup>
 </Project>
