@@ -24,7 +24,7 @@ void QueryEvaluator::evaluateClauses(Query& query, QueryResult& queryResult) {
 		if (!queryResult.haveResult()) {
 			break;
 		}
-		if (it.getType() == RELATION) {
+		if (it.getType() == ClauseType::RELATION) {
 			relationEvaluator.evaluateRelation(queryResult, it.getRelation());
 		} else {
 			patternEvaluator.evaluatePattern(queryResult, it.getPattern());

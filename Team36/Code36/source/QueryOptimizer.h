@@ -11,5 +11,9 @@ public:
 private:
 
 	bool checkConstantExist(Entity&);
+
+
+	Entity getLeftEntity(Clause&);
+	Entity getRightEntity(Clause&);
 	PKBAdapter pkb;
 };

@@ -9,20 +9,9 @@
 std::vector<Clause> QueryOptimizer::optimizeClausesOrder(std::vector<Clause>& clauses) {
 	std::list<Clause> noSynonymList, oneSynonymList, twoSynonymList;
 	for (Clause c : clauses) {
-		Entity leftEntity;
-		Entity rightEntity;
+		Entity leftEntity = getLeftEntity(c);
+		Entity rightEntity = getRightEntity(c);
 
-		switch (c.getType()) {
-		case ClauseType::RELATION:
-			leftEntity = c.getRelation().getFirstClause();
-			rightEntity = c.getRelation().getSecondClause();
-			break;
-		case ClauseType::PATTERN:
-			leftEntity = c.getPattern().getPatternType();
-			rightEntity = c.getPattern().getLeftExpression();
-			break;
-		default: throw std::domain_error("Some Clauses is not being handle!!!!");
-		}
 
 		if (leftEntity.isSynonym() && rightEntity.isSynonym()) {
 			twoSynonymList.push_back(c);
@@ -44,20 +33,9 @@ std::vector<Clause> QueryOptimizer::optimizeClausesOrder(std::vector<Clause>& cl
 
 bool QueryOptimizer::checkAllConstantExist(std::vector<Clause>& clauses) {
 	for (Clause c : clauses) {
-		Entity leftEntity;
-		Entity rightEntity;
+		Entity leftEntity = getLeftEntity(c);
+		Entity rightEntity = getRightEntity(c);
 
-		switch (c.getType()) {
-		case RELATION:
-			leftEntity = c.getRelation().getFirstClause();
-			rightEntity = c.getRelation().getSecondClause();
-			break;
-		case PATTERN:
-			leftEntity = c.getPattern().getPatternType();
-			rightEntity = c.getPattern().getLeftExpression();
-			break;
-		default: throw std::domain_error("Some Clauses is not being handle!!!!");
-		}
 		if (!checkConstantExist(leftEntity) || !checkConstantExist(rightEntity)) {
 			return false;
 		}
@@ -72,17 +50,33 @@ bool QueryOptimizer::checkConstantExist(Entity& e) {
 	}
 	switch (e.getType()) {
 	case EntityType::STMT:
-	case EntityType::PROG_LINE: return pkb.isStmt(std::stoi(e.getValue())); break;
-	case EntityType::READ: return pkb.isRead(std::stoi(e.getValue())); break;
-	case EntityType::PRINT: return pkb.isPrint(std::stoi(e.getValue())); break;
-	case EntityType::CALL: return pkb.isCall(std::stoi(e.getValue())); break;
-	case EntityType::WHILE: return pkb.isWhile(std::stoi(e.getValue())); break;
-	case EntityType::IF: return pkb.isIf(std::stoi(e.getValue())); break;
-	case EntityType::ASSIGN: return pkb.isAssign(std::stoi(e.getValue())); break;
-	case EntityType::VARIABLE: return pkb.isVariable(e.getValue()); break;
-	case EntityType::CONSTANT: return pkb.isConstant(std::stoi(e.getValue())); break;
-	case EntityType::PROCEDURE: return pkb.isProcedure(e.getValue()); break;
+	case EntityType::PROG_LINE: return pkb.isStmt(std::stoi(e.getValue()));
+	case EntityType::READ: return pkb.isRead(std::stoi(e.getValue()));
+	case EntityType::PRINT: return pkb.isPrint(std::stoi(e.getValue()));
+	case EntityType::CALL: return pkb.isCall(std::stoi(e.getValue()));
+	case EntityType::WHILE: return pkb.isWhile(std::stoi(e.getValue()));
+	case EntityType::IF: return pkb.isIf(std::stoi(e.getValue()));
+	case EntityType::ASSIGN: return pkb.isAssign(std::stoi(e.getValue()));
+	case EntityType::VARIABLE: return pkb.isVariable(e.getValue());
+	case EntityType::CONSTANT: return pkb.isConstant(std::stoi(e.getValue()));
+	case EntityType::PROCEDURE: return pkb.isProcedure(e.getValue());
 	default: throw std::domain_error("Some constant has not been checked!!");
 	}
 	return false;
+}
+
+Entity QueryOptimizer::getLeftEntity(Clause& c) {
+	switch (c.getType()) {
+	case ClauseType::RELATION: return c.getRelation().getFirstClause();
+	case ClauseType::PATTERN: return c.getPattern().getPatternType();
+	default: throw std::domain_error("Some Clauses is not being handle!!!!");
+	}
+}
+
+Entity QueryOptimizer::getRightEntity(Clause& c) {
+	switch (c.getType()) {
+	case ClauseType::RELATION: return c.getRelation().getSecondClause();
+	case ClauseType::PATTERN: return  c.getPattern().getLeftExpression();
+	default: throw std::domain_error("Some Clauses is not being handle!!!!");
+	}
 }
