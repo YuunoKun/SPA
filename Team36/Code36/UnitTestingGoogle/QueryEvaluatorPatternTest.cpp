@@ -32,6 +32,8 @@ namespace UnitTesting {
 			PKB::getInstance().addStmt(STMT_ASSIGN);
 			PKB::getInstance().addStmt(STMT_CALL);
 			PKB::getInstance().addStmt(STMT_CALL);
+			PKB::getInstance().addStmt(STMT_IF);
+			PKB::getInstance().addStmt(STMT_WHILE);
 			PKB::getInstance().addModifiesS(std::stoi(MODIFIES_LEFT1), MODIFIES_RIGHT1);
 			PKB::getInstance().addModifiesS(std::stoi(MODIFIES_LEFT2), MODIFIES_RIGHT2);
 			PKB::getInstance().addExprTree(std::stoi(MODIFIES_LEFT1), EXPRESSIONNODE_1);
@@ -64,12 +66,6 @@ namespace UnitTesting {
 		Query initQuery(Pattern& pattern, Entity selected) {
 			Query q;
 			q.addPattern(pattern);
-			q.addSelected(selected);
-			return q;
-		}
-		Query initQuery(RelRef relation, Entity selected) {
-			Query q;
-			q.addRelation(relation);
 			q.addSelected(selected);
 			return q;
 		}
@@ -117,8 +113,10 @@ namespace UnitTesting {
 
 		const std::string IF1 = "1";
 		const std::string IF2 = "2";
+		const std::string IF3 = "13";
 		const std::string WHILE1 = "3";
-		const std::string	WHILE2 = "4";
+		const std::string WHILE2 = "4";
+		const std::string WHILE3 = "14";
 		const std::string READ1 = "5";
 		const std::string READ2 = "6";
 		const std::string PRINT1 = "7";
@@ -146,7 +144,7 @@ namespace UnitTesting {
 		const std::vector<std::string> EXPRESSIONS = { EXPRESSION1, EXPRESSION2 };
 
 		const std::list<std::string> STMTS = { IF1, IF2, WHILE1, WHILE2, READ1, READ2,
-			PRINT1, PRINT2, ASSIGN1, ASSIGN2, CALL1, CALL2 };
+			PRINT1, PRINT2, ASSIGN1, ASSIGN2, CALL1, CALL2, IF3, WHILE3 };
 
 		const Synonym COMMON_SYNONYM1 = { "cs1" };
 		const Synonym COMMON_SYNONYM2 = { "cs2" };
@@ -164,10 +162,10 @@ namespace UnitTesting {
 		const std::list<std::string> ALL_STMT = STMTS;
 		const Entity SELECT_STMT = { STMT, COMMON_SYNONYM1 };
 		// select ifs
-		const std::list<std::string> ALL_IF = { IF1, IF2 };
+		const std::list<std::string> ALL_IF = { IF1, IF2, IF3 };
 		const Entity SELECT_IF = { IF, COMMON_SYNONYM1 };
 		// select w
-		const std::list<std::string> ALL_WHILE = { WHILE1, WHILE2 };
+		const std::list<std::string> ALL_WHILE = { WHILE1, WHILE2, WHILE3 };
 		const Entity SELECT_WHILE = { WHILE, COMMON_SYNONYM1 };
 		// select read
 		const std::list<std::string> ALL_READ = { READ1, READ2 };
@@ -202,6 +200,7 @@ namespace UnitTesting {
 		const std::vector<Entity> VALID_CONSTANT_STMT_ENTITY = { WILD_CARD,
 			{STMT, "1"}, {STMT, "2"}, {STMT, "3"}, {STMT, "4"}, {STMT, "5"}, {STMT, "6"},
 			{STMT, "7"}, {STMT, "8"}, {STMT, "9"}, {STMT, "10"}, {STMT, "11"}, {STMT, "12"}
+			, {STMT, "13"}, {STMT, "14"}
 		};
 
 		std::vector<Entity> ALL_VARIABLES = { { VARIABLE, x }, { VARIABLE, y }, { VARIABLE, z } };

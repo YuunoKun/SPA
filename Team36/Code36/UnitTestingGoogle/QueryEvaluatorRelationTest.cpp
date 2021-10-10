@@ -83,41 +83,11 @@ namespace UnitTesting {
 			}
 			return invalid;
 		}
-
-		Query initQuery(Pattern& pattern, Entity selected) {
-			Query q;
-			q.addPattern(pattern);
-			q.addSelected(selected);
-			return q;
-		}
 		Query initQuery(RelRef relation, Entity selected) {
 			Query q;
 			q.addRelation(relation);
 			q.addSelected(selected);
 			return q;
-		}
-
-		void validatePatterns(std::vector<Pattern> patterns) {
-			for (unsigned int i = 0; i < patterns.size(); i++) {
-				for (unsigned int j = 0; j < ALL_SELECT.size(); j++) {
-					Query q = initQuery(patterns[i], ALL_SELECT[j]);
-					EXPECT_EQ(evaluator.evaluateQuery(q).front(), ALL_RESULT[j]) << "Error at results : " << i + 1 << " : " << j + 1;
-					q = initQuery(patterns[i], SELECT_BOOLEAN);
-					EXPECT_EQ(evaluator.evaluateQuery(q).front(), BOOLEAN_TRUE_RESULT) << "Error at results : " << i + 1 << " : " << j + 1;
-				}
-			}
-		}
-
-		void validateEmptyPatterns(std::vector<Pattern> patterns) {
-			std::list<Query> querys;
-			for (unsigned int i = 0; i < patterns.size(); i++) {
-				for (unsigned int j = 0; j < ALL_SELECT.size(); j++) {
-					Query q = initQuery(patterns[i], ALL_SELECT[j]);
-					EXPECT_EQ(evaluator.evaluateQuery(q).front(), EMPTY_RESULT) << "Error at results : " << i + 1 << " : " << j + 1;
-					q = initQuery(patterns[i], SELECT_BOOLEAN);
-					EXPECT_EQ(evaluator.evaluateQuery(q).front(), BOOLEAN_FALSE_RESULT) << "Error at results : " << i + 1 << " : " << j + 1;
-				}
-			}
 		}
 
 		void validateRelations(std::vector<RelRef> relations) {
