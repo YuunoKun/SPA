@@ -90,35 +90,41 @@ namespace UnitTesting {
 			return q;
 		}
 
+		void validate(Query q, std::list<std::string> result, int i, int j) {
+			EXPECT_EQ(evaluator.evaluateQuery(q).front(), result) << "Error at results : " << i + 1 << " : " << j + 1;
+		}
+
+		void validate(RelRef relation, int i) {
+			for (unsigned int j = 0; j < ALL_SELECT.size(); j++) {
+				validate(initQuery(relation, ALL_SELECT[j]), ALL_RESULT[j], i, j);
+				validate(initQuery(relation, SELECT_BOOLEAN), BOOLEAN_TRUE_RESULT, i, j);
+			}
+
+		}
+
+		void validateEmpty(RelRef relation, int i) {
+			for (unsigned int j = 0; j < ALL_SELECT.size(); j++) {
+				validate(initQuery(relation, ALL_SELECT[j]), EMPTY_RESULT, i, j);
+				validate(initQuery(relation, SELECT_BOOLEAN), BOOLEAN_FALSE_RESULT, i, j);
+			}
+		}
+
 		void validateRelations(std::vector<RelRef> relations) {
 			for (unsigned int i = 0; i < relations.size(); i++) {
-				for (unsigned int j = 0; j < ALL_SELECT.size(); j++) {
-					Query q = initQuery(relations[i], ALL_SELECT[j]);
-					EXPECT_EQ(evaluator.evaluateQuery(q).front(), ALL_RESULT[j]) << "Error at results : " << i + 1 << " : " << j + 1;
-					q = initQuery(relations[i], SELECT_BOOLEAN);
-					EXPECT_EQ(evaluator.evaluateQuery(q).front(), BOOLEAN_TRUE_RESULT) << "Error at results : " << i + 1 << " : " << j + 1;
-				}
+				validate(relations[i], i);
 			}
 		}
 
 		void validateEmptyRelations(std::vector<RelRef> relations) {
 			for (unsigned int i = 0; i < relations.size(); i++) {
-				for (unsigned int j = 0; j < ALL_SELECT.size(); j++) {
-					Query q = initQuery(relations[i], ALL_SELECT[j]);
-					EXPECT_EQ(evaluator.evaluateQuery(q).front(), EMPTY_RESULT) << "Error at results : " << i + 1 << " : " << j + 1;
-					q = initQuery(relations[i], SELECT_BOOLEAN);
-					EXPECT_EQ(evaluator.evaluateQuery(q).front(), BOOLEAN_FALSE_RESULT) << "Error at results : " << i + 1 << " : " << j + 1;
-				}
+				validateEmpty(relations[i], i);
 			}
 		}
 
 		void validateRelations(std::vector<RelRef> relations, std::vector<Entity> selected, std::vector<std::list<std::string>> results) {
 			for (unsigned int i = 0; i < relations.size(); i++) {
 				for (unsigned int j = 0; j < selected.size(); j++) {
-					Query q = initQuery(relations[i], ALL_SELECT[j]);
-					EXPECT_EQ(evaluator.evaluateQuery(q).front(), results[j]) << "Error at results : " << i + 1 << " : " << j + 1;
-					q = initQuery(relations[i], SELECT_BOOLEAN);
-					EXPECT_EQ(evaluator.evaluateQuery(q).front(), BOOLEAN_TRUE_RESULT) << "Error at results : " << i + 1 << " : " << j + 1;
+					validate(initQuery(relations[i], selected[j]), results[j], i, j);
 				}
 			}
 		}
