@@ -5,9 +5,9 @@ void PatternEvaluator::evaluatePattern(QueryResult& queryResult, Pattern& patter
 	switch (pattern.getPatternType().getType()) {
 	case ASSIGN: return evaluateAssignPattern(queryResult, pattern);
 		break;
-	case IF: return evaluateIfsPattern(queryResult, pattern);
+	case IF: return evaluatePattern(queryResult, pattern, IfsEvaluator());
 		break;
-	case WHILE: return evaluateWhilePattern(queryResult, pattern);
+	case WHILE: return evaluatePattern(queryResult, pattern, WhileEvaluator());
 		break;
 	default:
 		throw std::invalid_argument("evaluatePattern(): only does not support this type");
@@ -55,41 +55,14 @@ void PatternEvaluator::evaluateAssignPattern(QueryResult& queryResult, Pattern& 
 	}
 }
 
-void PatternEvaluator::evaluateIfsPattern(QueryResult& queryResult, Pattern& pattern) {
-	Entity patternType = pattern.getPatternType();
-	Entity lhsEntity = pattern.getLeftExpression();
-
-	if (lhsEntity.isSynonym()) {
-		//if lhs side is at least is synonym e.g ifs(v, _, _), return 2 column table
-		std::pair<Entity, Entity> header = { patternType, lhsEntity };
-		std::vector<std::pair<stmt_index, var_name>> table = pkb.getAllIfUses();
-
-		ResultTable resultTable(header, table);
-		queryResult.addResult(resultTable);
-	}
-	else {
-		std::vector<stmt_index> table;
-		if (lhsEntity.getType() == WILD) {
-			//If left side is wild and right side is wild: e.g ifs(_, _, _)
-			table = pkb.getIfUses();
-		}
-		else {
-			//If left side is constant and right side is expression: e.g ifs("x", _, _)
-			table = pkb.getIfUses(lhsEntity.getValue());
-		}
-		ResultTable resultTable(patternType, table);
-		queryResult.addResult(resultTable);
-	}
-}
-
-void PatternEvaluator::evaluateWhilePattern(QueryResult& queryResult, Pattern& pattern) {
+void PatternEvaluator::evaluatePattern(QueryResult& queryResult, Pattern& pattern, PatternEvaluatorInterface& evaluator) {
 	Entity patternType = pattern.getPatternType();
 	Entity lhsEntity = pattern.getLeftExpression();
 
 	if (lhsEntity.isSynonym()) {
 		//if lhs side is at least is synonym e.g w(v, _), return 2 column table
 		std::pair<Entity, Entity> header = { patternType, lhsEntity };
-		std::vector<std::pair<stmt_index, var_name>> table = pkb.getAllWhileUses();
+		std::vector<std::pair<stmt_index, var_name>> table = evaluator.getAllPair();
 
 		ResultTable resultTable(header, table);
 		queryResult.addResult(resultTable);
@@ -98,11 +71,11 @@ void PatternEvaluator::evaluateWhilePattern(QueryResult& queryResult, Pattern& p
 		std::vector<stmt_index> table;
 		if (lhsEntity.getType() == WILD) {
 			//If left side is wild and right side is wild: e.g w(_, _)
-			table = pkb.getWhileUses();
+			table = evaluator.getPatternType();
 		}
 		else {
 			//If left side is constant and right side is expression: e.g w("x", _)
-			table = pkb.getWhileUses(lhsEntity.getValue());
+			table = evaluator.getPatternType(lhsEntity.getValue());
 		}
 		ResultTable resultTable(patternType, table);
 		queryResult.addResult(resultTable);
