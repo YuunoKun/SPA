@@ -98,45 +98,27 @@ bool PKBAdapter::isProcedure(proc_name proc) {
 }
 
 bool PKBAdapter::isAssign(stmt_index index) {
-	if (isStmt(index)) {
-		return getStmt(index).stmt_type == StmtType::STMT_ASSIGN;
-	}
-	return false;
+	return isStmt(index) && getStmt(index).stmt_type == StmtType::STMT_ASSIGN;
 }
 
 bool PKBAdapter::isPrint(stmt_index index) {
-	if (isStmt(index)) {
-		return getStmt(index).stmt_type == StmtType::STMT_ASSIGN;
-	}
-	return false;
+	return isStmt(index) && getStmt(index).stmt_type == StmtType::STMT_PRINT;
 }
 
 bool PKBAdapter::isCall(stmt_index index) {
-	if (isStmt(index)) {
-		return getStmt(index).stmt_type == StmtType::STMT_CALL;
-	}
-	return false;
+	return isStmt(index) && getStmt(index).stmt_type == StmtType::STMT_CALL;
 }
 
 bool PKBAdapter::isRead(stmt_index index) {
-	if (isStmt(index)) {
-		return getStmt(index).stmt_type == StmtType::STMT_READ;
-	}
-	return false;
+	return isStmt(index) && getStmt(index).stmt_type == StmtType::STMT_READ;
 }
 
 bool PKBAdapter::isWhile(stmt_index index) {
-	if (isStmt(index)) {
-		return getStmt(index).stmt_type == StmtType::STMT_WHILE;
-	}
-	return false;
+	return isStmt(index) && getStmt(index).stmt_type == StmtType::STMT_WHILE;
 }
 
 bool PKBAdapter::isIf(stmt_index index) {
-	if (isStmt(index)) {
-		return getStmt(index).stmt_type == StmtType::STMT_IF;
-	}
-	return false;
+	return isStmt(index) && getStmt(index).stmt_type == StmtType::STMT_IF;
 }
 
 std::vector<pattern_info> PKBAdapter::getAssignInfo() {
