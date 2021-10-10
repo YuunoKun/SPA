@@ -16,7 +16,6 @@ public:
 	static std::list<std::string> variablesToStringList(std::vector<var_name>&);
 	static std::list<std::string> unorderedSetToStringList(std::unordered_set<std::string>&);
 
-	//static std::vector<StmtInfo> stmtToStmtInfoVector(std::vector<Stmt>&);
 	static std::vector<std::string> stmtInfoToStringVector(std::vector<StmtInfo>&);
 	static std::vector<std::string> stmtIndexToStringVector(std::vector<stmt_index>&);
 	static std::vector<std::vector<std::string>> pairToStringTable(std::vector<std::pair<std::string, std::string>>&);

@@ -24,7 +24,6 @@ public:
 	bool operator==(const Query&) const;
 
 private:
-	//Member Variable
 	std::unordered_map<std::string, Entity> entities;
 	std::vector<Clause> clauses;
 	std::vector<Entity> selected;
