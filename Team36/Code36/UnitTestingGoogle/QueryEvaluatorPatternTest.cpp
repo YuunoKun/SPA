@@ -38,6 +38,10 @@ namespace UnitTesting {
 			PKB::getInstance().addModifiesS(std::stoi(MODIFIES_LEFT2), MODIFIES_RIGHT2);
 			PKB::getInstance().addExprTree(std::stoi(MODIFIES_LEFT1), EXPRESSIONNODE_1);
 			PKB::getInstance().addExprTree(std::stoi(MODIFIES_LEFT2), EXPRESSIONNODE_2);
+			PKB::getInstance().addIf(std::stoi(IF_LEFT1), IF_RIGHT1);
+			PKB::getInstance().addIf(std::stoi(IF_LEFT2), IF_RIGHT2);
+			PKB::getInstance().addWhile(std::stoi(WHILE_LEFT1), WHILE_RIGHT1);
+			PKB::getInstance().addWhile(std::stoi(WHILE_LEFT2), WHILE_RIGHT2);
 		}
 
 		~QueryEvaluatorPatternTest() override {
@@ -143,6 +147,25 @@ namespace UnitTesting {
 		const std::vector<std::string> MODIFIES_RIGHTS = { MODIFIES_RIGHT1, MODIFIES_RIGHT2 };
 		const std::vector<std::string> EXPRESSIONS = { EXPRESSION1, EXPRESSION2 };
 
+
+		const std::string IF_LEFT1 = IF1;
+		const std::string IF_LEFT2 = IF3;
+		const std::string IF_RIGHT1 = x;
+		const std::string IF_RIGHT2 = y;
+		const std::string IF_RIGHT_UNUSE = z;
+		const std::vector<std::string> IF_LEFTS = { IF_LEFT1, IF_LEFT2 };
+		const std::vector<std::string> IF_RIGHTS = { IF_RIGHT1, IF_RIGHT2 };
+
+
+		const std::string WHILE_LEFT1 = WHILE1;
+		const std::string WHILE_LEFT2 = WHILE3;
+		const std::string WHILE_RIGHT1 = x;
+		const std::string WHILE_RIGHT2 = y;
+		const std::string WHILE_RIGHT_UNUSE = z;
+		const std::vector<std::string> WHILE_LEFTS = { WHILE_LEFT1, WHILE_LEFT2 };
+		const std::vector<std::string> WHILE_RIGHTS = { WHILE_RIGHT1, WHILE_RIGHT2 };
+
+
 		const std::list<std::string> STMTS = { IF1, IF2, WHILE1, WHILE2, READ1, READ2,
 			PRINT1, PRINT2, ASSIGN1, ASSIGN2, CALL1, CALL2, IF3, WHILE3 };
 
@@ -208,7 +231,7 @@ namespace UnitTesting {
 
 
 	//Pattern Assign Test ----------------------------------------------------------------------------------------------------
-	TEST_F(QueryEvaluatorPatternTest, evaluateQueryPatternFilterNoCommonSynonymTrue) {
+	TEST_F(QueryEvaluatorPatternTest, evaluateQueryAssignPatternFilterNoCommonSynonymTrue) {
 		Entity assign = { ASSIGN, "a" };
 		Entity lhsSynonym = { VARIABLE, Synonym{"a"} };
 		Entity lhsX = { VARIABLE, x };
@@ -229,7 +252,7 @@ namespace UnitTesting {
 		validatePatterns(patterns);
 	}
 
-	TEST_F(QueryEvaluatorPatternTest, evaluateQueryPatternFilterNoCommonSynonymFalse) {
+	TEST_F(QueryEvaluatorPatternTest, evaluateQueryAssignPatternFilterNoCommonSynonymFalse) {
 		std::string n = "n";
 		Entity assign = { ASSIGN, "a" };
 		Entity lhsSynonym = { VARIABLE, Synonym{"a"} };
@@ -265,7 +288,7 @@ namespace UnitTesting {
 		validateEmptyPatterns(patterns);
 	}
 
-	TEST_F(QueryEvaluatorPatternTest, evaluateQueryPatternFilterCommonSynonym) {
+	TEST_F(QueryEvaluatorPatternTest, evaluateQueryAssignPatternFilterCommonSynonym) {
 		std::string left1 = MODIFIES_LEFT1;
 		std::string left2 = MODIFIES_LEFT2;
 		std::string right1 = MODIFIES_RIGHT1;
@@ -400,6 +423,169 @@ namespace UnitTesting {
 		patterns.push_back(Pattern(assignCommon, lhsCommon, EXPRESSION_CONSTANT, true));
 		selected.push_back(lhsCommon);
 		results.push_back({ right2 });
+
+		for (unsigned int i = 0; i < patterns.size(); i++) {
+			Query q = initQuery(patterns[i], selected[i]);
+			std::list<std::string> result = evaluator.evaluateQuery(q).front();
+			result.sort();
+			results[i].sort();
+			EXPECT_EQ(result, results[i]) << "ERROR AT " << i + 1;
+		}
+	}
+
+
+	//Pattern Ifs Test ----------------------------------------------------------------------------------------------------
+	TEST_F(QueryEvaluatorPatternTest, evaluateQueryIfPatternFilterNoCommonSynonymTrue) {
+		Entity ifs = { IF, Synonym("ifs") };
+		std::string left1 = IF_LEFT1;
+		std::string left2 = IF_LEFT2;
+		std::string right1 = IF_RIGHT1;
+		std::string right2 = IF_RIGHT2;
+
+		std::vector<Pattern> patterns;
+		patterns.push_back(Pattern(ifs, { VARIABLE, Synonym("a") }));
+		patterns.push_back(Pattern(ifs, { VARIABLE, right1 }));
+		patterns.push_back(Pattern(ifs, { VARIABLE, right2 }));
+		patterns.push_back(Pattern(ifs, WILD_CARD));
+
+		validatePatterns(patterns);
+	}
+
+	TEST_F(QueryEvaluatorPatternTest, evaluateQueryIfPatternFilterNoCommonSynonymFalse) {
+		Entity ifs = { IF, Synonym("ifs") };
+		Entity lhsSynonym = { VARIABLE, Synonym{"a"} };
+		Entity lhsZ = { VARIABLE, IF_RIGHT_UNUSE };
+
+		std::vector<Pattern> patterns;
+		patterns.push_back(Pattern(ifs, lhsZ));
+
+		validateEmptyPatterns(patterns);
+	}
+
+	TEST_F(QueryEvaluatorPatternTest, evaluateIfQueryPatternFilterCommonSynonym) {
+		std::string left1 = IF_LEFT1;
+		std::string left2 = IF_LEFT2;
+		std::string right1 = IF_RIGHT1;
+		std::string right2 = IF_RIGHT2;
+		std::string notRight = IF_RIGHT_UNUSE;
+
+		Entity lhsX = { VARIABLE, x };
+		Entity lhsY = { VARIABLE, y };
+
+		Entity ifCommon = { IF,  COMMON_SYNONYM1 };
+		Entity lhsCommon = { VARIABLE, COMMON_SYNONYM2 };
+
+		std::vector<Pattern> patterns;
+		std::vector<std::list<std::string>> results;
+		std::vector<Entity> selected;
+
+		//Handle result for Select ifs pattern ifs(_, _, _)
+		patterns.push_back(Pattern(ifCommon, WILD_CARD));
+		selected.push_back(ifCommon);
+		results.push_back({ left1, left2 });
+
+		//Handle result for Select ifs pattern ifs(v, _, _)
+		patterns.push_back(Pattern(ifCommon, lhsCommon));
+		selected.push_back(ifCommon);
+		results.push_back({ left1, left2 });
+
+
+		//Handle result for Select ifs pattern ifs("x", _, _)
+		patterns.push_back(Pattern(ifCommon, { VARIABLE, right1 }));
+		selected.push_back(ifCommon);
+		results.push_back({ left1 });
+
+
+		//Handle result for Select ifs pattern ifs("y", _, _)
+		patterns.push_back(Pattern(ifCommon, { VARIABLE, right2 }));
+		selected.push_back(ifCommon);
+		results.push_back({ left2 });
+
+		//Handle result for Select ifs pattern ifs("z", _, _)
+		patterns.push_back(Pattern(ifCommon, { VARIABLE, notRight }));
+		selected.push_back(ifCommon);
+		results.push_back({ });
+
+		for (unsigned int i = 0; i < patterns.size(); i++) {
+			Query q = initQuery(patterns[i], selected[i]);
+			std::list<std::string> result = evaluator.evaluateQuery(q).front();
+			result.sort();
+			results[i].sort();
+			EXPECT_EQ(result, results[i]) << "ERROR AT " << i + 1;
+		}
+	}
+
+	//Pattern While Test ----------------------------------------------------------------------------------------------------
+	TEST_F(QueryEvaluatorPatternTest, evaluateQueryWhilePatternFilterNoCommonSynonymTrue) {
+		Entity ifs = { WHILE, Synonym("ifs") };
+		std::string left1 = WHILE_LEFT1;
+		std::string left2 = WHILE_LEFT2;
+		std::string right1 = WHILE_RIGHT1;
+		std::string right2 = WHILE_RIGHT2;
+
+		std::vector<Pattern> patterns;
+		patterns.push_back(Pattern(ifs, { VARIABLE, Synonym("a") }));
+		patterns.push_back(Pattern(ifs, { VARIABLE, right1 }));
+		patterns.push_back(Pattern(ifs, { VARIABLE, right2 }));
+		patterns.push_back(Pattern(ifs, WILD_CARD));
+
+		validatePatterns(patterns);
+	}
+
+	TEST_F(QueryEvaluatorPatternTest, evaluateQueryWhilePatternFilterNoCommonSynonymFalse) {
+		Entity ifs = { WHILE, Synonym("ifs") };
+		Entity lhsSynonym = { VARIABLE, Synonym{"a"} };
+		Entity lhsZ = { VARIABLE, WHILE_RIGHT_UNUSE };
+
+		std::vector<Pattern> patterns;
+		patterns.push_back(Pattern(ifs, lhsZ));
+
+		validateEmptyPatterns(patterns);
+	}
+
+	TEST_F(QueryEvaluatorPatternTest, evaluateWhileQueryPatternFilterCommonSynonym) {
+		std::string left1 = WHILE_LEFT1;
+		std::string left2 = WHILE_LEFT2;
+		std::string right1 = WHILE_RIGHT1;
+		std::string right2 = WHILE_RIGHT2;
+		std::string notRight = WHILE_RIGHT_UNUSE;
+
+		Entity lhsX = { VARIABLE, x };
+		Entity lhsY = { VARIABLE, y };
+
+		Entity whileCommon = { WHILE,  COMMON_SYNONYM1 };
+		Entity lhsCommon = { VARIABLE, COMMON_SYNONYM2 };
+
+		std::vector<Pattern> patterns;
+		std::vector<std::list<std::string>> results;
+		std::vector<Entity> selected;
+
+		//Handle result for Select w pattern w(_, _, _)
+		patterns.push_back(Pattern(whileCommon, WILD_CARD));
+		selected.push_back(whileCommon);
+		results.push_back({ left1, left2 });
+
+		//Handle result for Select w pattern w(v, _, _)
+		patterns.push_back(Pattern(whileCommon, lhsCommon));
+		selected.push_back(whileCommon);
+		results.push_back({ left1, left2 });
+
+
+		//Handle result for Select w pattern w("x", _, _)
+		patterns.push_back(Pattern(whileCommon, { VARIABLE, right1 }));
+		selected.push_back(whileCommon);
+		results.push_back({ left1 });
+
+
+		//Handle result for Select w pattern w("y", _, _)
+		patterns.push_back(Pattern(whileCommon, { VARIABLE, right2 }));
+		selected.push_back(whileCommon);
+		results.push_back({ left2 });
+
+		//Handle result for Select w pattern w("z", _, _)
+		patterns.push_back(Pattern(whileCommon, { VARIABLE, notRight }));
+		selected.push_back(whileCommon);
+		results.push_back({ });
 
 		for (unsigned int i = 0; i < patterns.size(); i++) {
 			Query q = initQuery(patterns[i], selected[i]);
