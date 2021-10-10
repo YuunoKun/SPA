@@ -3,11 +3,11 @@
 
 void PatternEvaluator::evaluatePattern(QueryResult& queryResult, Pattern& pattern) {
 	switch (pattern.getPatternType().getType()) {
-	case ASSIGN: return evaluateAssignPattern(queryResult, pattern);
+	case EntityType::ASSIGN: return evaluateAssignPattern(queryResult, pattern);
 		break;
-	case IF: return evaluatePattern(queryResult, pattern, IfsEvaluator());
+	case EntityType::IF: return evaluatePattern(queryResult, pattern, IfsEvaluator());
 		break;
-	case WHILE: return evaluatePattern(queryResult, pattern, WhileEvaluator());
+	case EntityType::WHILE: return evaluatePattern(queryResult, pattern, WhileEvaluator());
 		break;
 	default:
 		throw std::invalid_argument("evaluatePattern(): only does not support this type");
@@ -35,11 +35,11 @@ void PatternEvaluator::evaluateAssignPattern(QueryResult& queryResult, Pattern& 
 	}
 	else {
 		std::vector<stmt_index> table;
-		if (isWild && lhsEntity.getType() == WILD) {
+		if (isWild && lhsEntity.getType() == EntityType::WILD) {
 			//If left side is wild and right side is wild: e.g a(_,_)
 			table = pkb.getAssignInfoFlitered();
 		}
-		else if (lhsEntity.getType() == WILD) {
+		else if (lhsEntity.getType() == EntityType::WILD) {
 			//If left side is wild and right side is expression: e.g a(_, "x")
 			table = pkb.getAssignInfoFlitered(pattern.getExpression(), pattern.isWild());
 		}
@@ -69,7 +69,7 @@ void PatternEvaluator::evaluatePattern(QueryResult& queryResult, Pattern& patter
 	}
 	else {
 		std::vector<stmt_index> table;
-		if (lhsEntity.getType() == WILD) {
+		if (lhsEntity.getType() == EntityType::WILD) {
 			//If left side is wild and right side is wild: e.g w(_, _)
 			table = evaluator.getPatternType();
 		}

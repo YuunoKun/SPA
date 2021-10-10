@@ -4,12 +4,12 @@
 
 Pattern::Pattern(Entity pattern_type, Entity left_expression, std::string expr, bool is_wild) {
 	// Checks that pattern types are valid
-	if (pattern_type.getType() != ASSIGN) {
+	if (pattern_type.getType() != EntityType::ASSIGN) {
 		throw std::invalid_argument("Pattern Type is invalid");
 	}
 
-	if (left_expression.getType() != VARIABLE &&
-		left_expression.getType() != WILD) {
+	if (left_expression.getType() != EntityType::VARIABLE &&
+		left_expression.getType() != EntityType::WILD) {
 		throw std::invalid_argument("Left Expression Type is invalid");
 	}
 
@@ -26,13 +26,13 @@ Pattern::Pattern(Entity pattern_type, Entity left_expression, std::string expr, 
 
 Pattern::Pattern(Entity pattern_type, Entity left_expression) {
 	// Checks that pattern types are valid
-	if (pattern_type.getType() != IF &&
-		pattern_type.getType() != WHILE) {
+	if (pattern_type.getType() != EntityType::IF &&
+		pattern_type.getType() != EntityType::WHILE) {
 		throw std::invalid_argument("Pattern Type is invalid");
 	}
 
-	if (left_expression.getType() != VARIABLE &&
-		left_expression.getType() != WILD) {
+	if (left_expression.getType() != EntityType::VARIABLE &&
+		left_expression.getType() != EntityType::WILD) {
 		throw std::invalid_argument("Left Expression Type is invalid");
 	}
 	this->pattern_type = pattern_type;
