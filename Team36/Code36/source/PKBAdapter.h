@@ -21,16 +21,16 @@ public:
 	std::vector<StmtInfo> getWhiles();
 	std::vector<StmtInfo> getIfs();
 
-	bool isVariables(var_name);
-	bool isStmts(stmt_index);
-	bool isConstants(constant);
-	bool isProcedures(proc_name);
-	bool isAssigns(stmt_index);
-	bool isPrints(stmt_index);
-	bool isCalls(stmt_index);
-	bool isReads(stmt_index);
-	bool isWhiles(stmt_index);
-	bool isIfs(stmt_index);
+	bool isVariable(var_name);
+	bool isStmt(stmt_index);
+	bool isConstant(constant);
+	bool isProcedure(proc_name);
+	bool isAssign(stmt_index);
+	bool isPrint(stmt_index);
+	bool isCall(stmt_index);
+	bool isRead(stmt_index);
+	bool isWhile(stmt_index);
+	bool isIf(stmt_index);
 
 	std::vector<pattern_info> getAssignInfo();
 	std::vector<pattern_info> getAssignInfo(expr, bool);

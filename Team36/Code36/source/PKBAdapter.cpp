@@ -60,43 +60,82 @@ std::vector<StmtInfo> PKBAdapter::getIfs() {
 	return Utility::filterResult(IF, v);
 }
 
-bool PKBAdapter::isVariables(var_name) {
+bool PKBAdapter::isVariable(var_name var) {
+	//TODO Optimize
+	auto a = getVariables();
+	for (auto v : a) {
+		if (v == var) {
+			return true;
+		}
+	}
 	return false;
 }
 
-bool PKBAdapter::isStmts(stmt_index) {
+bool PKBAdapter::isStmt(stmt_index index) {
+	return index > 0 && index <= getStmts().size();
+}
+
+bool PKBAdapter::isConstant(constant c) {
+	//TODO Optimize
+	auto a = getConstants();
+	for (auto c1 : a) {
+		if (c1 == c) {
+			return true;
+		}
+	}
 	return false;
 }
 
-bool PKBAdapter::isConstants(constant) {
+bool PKBAdapter::isProcedure(proc_name proc) {
+	//TODO Optimize
+	auto a = getProcedures();
+	for (auto p : a) {
+		if (p == proc) {
+			return true;
+		}
+	}
 	return false;
 }
 
-bool PKBAdapter::isProcedures(proc_name) {
+bool PKBAdapter::isAssign(stmt_index index) {
+	if (isStmt(index)) {
+		return getStmt(index).stmt_type == STMT_ASSIGN;
+	}
 	return false;
 }
 
-bool PKBAdapter::isAssigns(stmt_index) {
+bool PKBAdapter::isPrint(stmt_index index) {
+	if (isStmt(index)) {
+		return getStmt(index).stmt_type == STMT_ASSIGN;
+	}
 	return false;
 }
 
-bool PKBAdapter::isPrints(stmt_index) {
+bool PKBAdapter::isCall(stmt_index index) {
+	if (isStmt(index)) {
+		return getStmt(index).stmt_type == STMT_CALL;
+	}
 	return false;
 }
 
-bool PKBAdapter::isCalls(stmt_index) {
+bool PKBAdapter::isRead(stmt_index index) {
+	if (isStmt(index)) {
+		return getStmt(index).stmt_type == STMT_READ;
+	}
 	return false;
 }
 
-bool PKBAdapter::isReads(stmt_index) {
+bool PKBAdapter::isWhile(stmt_index index) {
+	if (isStmt(index)) {
+		return getStmt(index).stmt_type == STMT_WHILE;
+	}
 	return false;
 }
 
-bool PKBAdapter::isWhiles(stmt_index) {
-	return false;
-}
-
-bool PKBAdapter::isIfs(stmt_index) {
+bool PKBAdapter::isIf(stmt_index index) {
+	if (isStmt(index)) {
+		return getStmt(index).stmt_type == STMT_IF;
+	}
 	return false;
 }
 
