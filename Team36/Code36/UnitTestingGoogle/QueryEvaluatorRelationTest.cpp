@@ -182,6 +182,7 @@ namespace UnitTesting {
 		const std::string MODIFIES_LEFT4 = ASSIGN2;
 		const std::string MODIFIES_RIGHT3 = x;
 		const std::string MODIFIES_RIGHT4 = y;
+		const std::string MODIFIES_RIGHT_UNUSE = z;
 
 		const std::vector<std::string> MODIFIES_LEFTS = { MODIFIES_LEFT1, MODIFIES_LEFT2, MODIFIES_LEFT3, MODIFIES_LEFT4 };
 		const std::vector<std::string> MODIFIES_RIGHTS = { MODIFIES_RIGHT1, MODIFIES_RIGHT2, MODIFIES_RIGHT3, MODIFIES_RIGHT4 };
@@ -192,6 +193,7 @@ namespace UnitTesting {
 		const std::string USES_RIGHT1_2 = y1;
 		const std::string USES_RIGHT2_1 = x;
 		const std::string USES_RIGHT2_2 = x1;
+		const std::string USES_RIGHT_UNUSE = z;
 
 		const std::vector<std::string> USES_LEFTS = { USES_LEFT1, USES_LEFT2 };
 		const std::vector<std::string> USES_RIGHTS = { USES_RIGHT1_1, USES_RIGHT1_2, USES_RIGHT2_1, USES_RIGHT2_2 };
@@ -200,6 +202,7 @@ namespace UnitTesting {
 		const std::string USESP_LEFT2 = p2;
 		const std::string USESP_RIGHT1 = y;
 		const std::string USESP_RIGHT2 = x;
+		const std::string USESP_RIGHT_UNUSE = z;
 
 		const std::vector<std::string> USESP_LEFTS = { USESP_LEFT1, USESP_LEFT2 };
 		const std::vector<std::string> USESP_RIGHTS = { USESP_RIGHT1, USESP_RIGHT2 };
@@ -216,6 +219,7 @@ namespace UnitTesting {
 		const std::string MODIFIESP_LEFT2 = p2;
 		const std::string MODIFIESP_RIGHT1 = y;
 		const std::string MODIFIESP_RIGHT2 = x;
+		const std::string MODIFIESP_RIGHT_UNUSE = z;
 
 		const std::vector<std::string> MODIFIESP_LEFTS = { MODIFIESP_LEFT1, MODIFIESP_LEFT2 };
 		const std::vector<std::string> MODIFIESP_RIGHTS = { MODIFIESP_RIGHT1, MODIFIESP_RIGHT2 };
@@ -1451,7 +1455,7 @@ namespace UnitTesting {
 		}
 
 		std::vector<Entity> invalidRight;
-		invalidRight.push_back({ VARIABLE, z });
+		invalidRight.push_back({ VARIABLE, MODIFIES_RIGHT_UNUSE });
 
 		for (unsigned int k = 0; k < invalidRight.size(); k++) {
 			for (unsigned int i = 1; i < VALID_CONSTANT_STMT_ENTITY.size(); i++) {
@@ -1471,7 +1475,7 @@ namespace UnitTesting {
 		for (Entity it : invalidLefts) {
 			relations.push_back(RelRef(type, it, { STMT, Synonym{"a"} }));
 		}
-		relations.push_back(RelRef(type, { STMT, Synonym{"a"} }, { VARIABLE, z }));
+		relations.push_back(RelRef(type, { STMT, Synonym{"a"} }, { VARIABLE, MODIFIES_RIGHT_UNUSE }));
 
 		validateEmptyRelations(relations);
 	}
@@ -1594,7 +1598,7 @@ namespace UnitTesting {
 
 		//Test case for remaining Select selected such that Modifies_S(selected, anyEmpty)
 		for (unsigned int i = 0; i < selectedList.size(); i++) {
-			RelRef relation(type, selectedList[i], { VARIABLE, z });
+			RelRef relation(type, selectedList[i], { VARIABLE, MODIFIES_RIGHT_UNUSE });
 			Query q = initQuery(relation, selectedList[i]);
 			EXPECT_EQ(evaluator.evaluateQuery(q).front(), EMPTY_RESULT) << "Error at results : " << i + 1;
 		}
@@ -1686,7 +1690,7 @@ namespace UnitTesting {
 		}
 
 		std::vector<Entity> invalidRight;
-		invalidRight.push_back({ VARIABLE, z });
+		invalidRight.push_back({ VARIABLE, USES_RIGHT_UNUSE });
 
 		for (unsigned int k = 0; k < invalidRight.size(); k++) {
 			for (unsigned int i = 1; i < VALID_CONSTANT_STMT_ENTITY.size(); i++) {
@@ -1706,7 +1710,7 @@ namespace UnitTesting {
 			relations.push_back(RelRef(type, it, { STMT, Synonym{"a"} }));
 		}
 
-		relations.push_back(RelRef(type, { STMT, Synonym{"a"} }, { VARIABLE, z }));
+		relations.push_back(RelRef(type, { STMT, Synonym{"a"} }, { VARIABLE, USES_RIGHT_UNUSE }));
 
 		validateEmptyRelations(relations);
 	}
@@ -1835,7 +1839,7 @@ namespace UnitTesting {
 
 		//Test case for remaining Select selected such that USES_S(selected, anyEmpty)
 		for (unsigned int i = 0; i < selectedList.size(); i++) {
-			RelRef relation(type, selectedList[i], { VARIABLE, z });
+			RelRef relation(type, selectedList[i], { VARIABLE, USES_RIGHT_UNUSE });
 			Query q = initQuery(relation, selectedList[i]);
 			EXPECT_EQ(evaluator.evaluateQuery(q).front(), EMPTY_RESULT) << "Error at results : " << i + 1;
 		}
@@ -1907,8 +1911,8 @@ namespace UnitTesting {
 		relations.push_back(RelRef(type, { PROCEDURE, p3 }, WILD_CARD));
 		relations.push_back(RelRef(type, { PROCEDURE, p3 }, { VARIABLE, right1 }));
 		relations.push_back(RelRef(type, { PROCEDURE, p3 }, { VARIABLE, right2 }));
-		relations.push_back(RelRef(type, { PROCEDURE, left1 }, { VARIABLE, z }));
-		relations.push_back(RelRef(type, { PROCEDURE, left2 }, { VARIABLE, z }));
+		relations.push_back(RelRef(type, { PROCEDURE, left1 }, { VARIABLE, MODIFIESP_RIGHT_UNUSE }));
+		relations.push_back(RelRef(type, { PROCEDURE, left2 }, { VARIABLE, MODIFIESP_RIGHT_UNUSE }));
 
 		validateEmptyRelations(relations);
 	}
@@ -1964,7 +1968,7 @@ namespace UnitTesting {
 
 		//Test case for Select selected such that MODIFIES_P(selected, "z")
 		result = {  };
-		relation = { type, selected, { VARIABLE, z } };
+		relation = { type, selected, { VARIABLE, MODIFIESP_RIGHT_UNUSE } };
 		q = initQuery(relation, selected);
 		EXPECT_EQ(evaluator.evaluateQuery(q).front(), result);
 
@@ -2028,8 +2032,8 @@ namespace UnitTesting {
 		relations.push_back(RelRef(type, { PROCEDURE, p3 }, WILD_CARD));
 		relations.push_back(RelRef(type, { PROCEDURE, p3 }, { VARIABLE, right1 }));
 		relations.push_back(RelRef(type, { PROCEDURE, p3 }, { VARIABLE, right2 }));
-		relations.push_back(RelRef(type, { PROCEDURE, left1 }, { VARIABLE, z }));
-		relations.push_back(RelRef(type, { PROCEDURE, left2 }, { VARIABLE, z }));
+		relations.push_back(RelRef(type, { PROCEDURE, left1 }, { VARIABLE, USESP_RIGHT_UNUSE }));
+		relations.push_back(RelRef(type, { PROCEDURE, left2 }, { VARIABLE, USESP_RIGHT_UNUSE }));
 
 		validateEmptyRelations(relations);
 	}
@@ -2065,32 +2069,32 @@ namespace UnitTesting {
 
 		std::list<std::string> result = { left1, left2 };
 
-		//Test case for Select selected such that MODIFIES_P(selected, _)
+		//Test case for Select selected such that Uses(selected, _)
 		RelRef relation(type, selected, WILD_CARD);
 		Query q = initQuery(relation, selected);
 		EXPECT_EQ(evaluator.evaluateQuery(q).front(), result);
 
-		//Test case for Select selected such that MODIFIES_P(selected, "x")
+		//Test case for Select selected such that Uses(selected, "x")
 		result = { left1 };
 		relation = { type, selected, { VARIABLE, right1 } };
 		q = initQuery(relation, selected);
 		EXPECT_EQ(evaluator.evaluateQuery(q).front(), result);
 
-		//Test case for Select selected such that MODIFIES_P(selected, "y")
+		//Test case for Select selected such that Uses(selected, "y")
 		result = { left2 };
 		relation = { type, selected, { VARIABLE, right2 } };
 		q = initQuery(relation, selected);
 		EXPECT_EQ(evaluator.evaluateQuery(q).front(), result);
 
 
-		//Test case for Select selected such that MODIFIES_P(selected, "z")
+		//Test case for Select selected such that Uses(selected, "z")
 		result = {  };
-		relation = { type, selected, { VARIABLE, z } };
+		relation = { type, selected, { VARIABLE, USESP_RIGHT_UNUSE } };
 		q = initQuery(relation, selected);
 		EXPECT_EQ(evaluator.evaluateQuery(q).front(), result);
 
 
-		//Test case for Select selected such that MODIFIES_P(a, selected)
+		//Test case for Select selected such that Uses(a, selected)
 		result = { right1, right2 };
 		selected = { VARIABLE, COMMON_SYNONYM1 };
 		relation = { type, { PROCEDURE, COMMON_SYNONYM2 }, selected };
@@ -2098,20 +2102,20 @@ namespace UnitTesting {
 		EXPECT_EQ(evaluator.evaluateQuery(q).front(), result);
 
 
-		//Test case for Select selected such that MODIFIES_P("main1", selected)
+		//Test case for Select selected such that Uses("main1", selected)
 		result = { right1 };
 		relation = { type, { PROCEDURE, left1 }, selected };
 		q = initQuery(relation, selected);
 		EXPECT_EQ(evaluator.evaluateQuery(q).front(), result);
 
-		//Test case for Select selected such that MODIFIES_P("sub1", selected)
+		//Test case for Select selected such that Uses("sub1", selected)
 		result = { right2 };
 		selected = { VARIABLE, COMMON_SYNONYM1 };
 		relation = { type, { PROCEDURE, left2 }, selected };
 		q = initQuery(relation, selected);
 		EXPECT_EQ(evaluator.evaluateQuery(q).front(), result);
 
-		//Test case for Select selected such that MODIFIES_P("sub2", selected)
+		//Test case for Select selected such that Uses("sub2", selected)
 		result = { };
 		relation = { type, { PROCEDURE, p3 }, selected };
 		q = initQuery(relation, selected);
