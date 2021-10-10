@@ -6,11 +6,19 @@ ResultTable::ResultTable(Entity& header, std::vector<StmtInfo>& table) {
 	init(header, Utility::stmtInfoToStringVector(table));
 }
 
+ResultTable::ResultTable(Entity& header, std::vector<stmt_index>& table) {
+	init(header, Utility::stmtIndexToStringVector(table));
+}
+
 ResultTable::ResultTable(Entity& header, std::vector<std::string>& table) {
 	init(header, table);
 }
 
 ResultTable::ResultTable(std::pair<Entity, Entity> header, std::vector<std::pair<std::string, std::string>>& table) {
+	init(header, Utility::pairToStringTable(table));
+}
+
+ResultTable::ResultTable(std::pair<Entity, Entity> header, std::vector<std::pair<stmt_index, std::string>>& table) {
 	init(header, Utility::pairToStringTable(table));
 }
 

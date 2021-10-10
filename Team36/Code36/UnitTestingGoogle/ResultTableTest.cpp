@@ -34,6 +34,28 @@ namespace UnitTesting {
 		ResultTable t(e, a);
 		EXPECT_EQ(t.getEntityResult(e), b);
 	}
+
+	TEST(ResultTable, initWithStmtIndex) {
+		Entity e(ASSIGN, Synonym{ "x" });
+		std::vector<stmt_index> a = { 1, 2, 3, 4, 5 };
+		std::list<std::string> b = { "1", "2", "3", "4", "5" };
+		ResultTable t(e, a);
+		EXPECT_EQ(t.getEntityResult(e), b);
+	}
+
+	TEST(ResultTable, initWithPairStmtIndexString) {
+		Entity e1(ASSIGN, Synonym{ "x" });
+		Entity e2(VARIABLE, Synonym{ "y" });
+		std::vector<std::pair<stmt_index, std::string>> a = {
+			{ 1 , "a"}, {2, "b"} ,
+			{ 3, "c"}, {4, "d"} ,
+			{ 5 , "e"} };
+		std::list<std::string> b1 = { "1", "2", "3", "4", "5" };
+		std::list<std::string> b2 = { "a", "b", "c", "d", "e" };
+		ResultTable t({ e1, e2 }, a);
+		EXPECT_EQ(t.getEntityResult(e1), b1);
+		EXPECT_EQ(t.getEntityResult(e2), b2);
+	}
 	TEST(ResultTable, initWithPairString) {
 		ResultTable table(resultTableHeader1, resultTableTable1);
 		std::list<std::string> result{ "1", "5", "9", "13", "17", "3", "7", "11", "15", "19" };
