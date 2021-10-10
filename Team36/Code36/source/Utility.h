@@ -18,9 +18,11 @@ public:
 
 	//static std::vector<StmtInfo> stmtToStmtInfoVector(std::vector<Stmt>&);
 	static std::vector<std::string> stmtInfoToStringVector(std::vector<StmtInfo>&);
-	static  std::vector<std::vector<std::string>> pairToStringTable(std::vector<std::pair<std::string, std::string>>&);
-	static  std::vector<std::vector<std::string>> pairToStringTable(std::vector<std::pair<StmtInfo, std::string>>&);
-	static  std::vector<std::vector<std::string>> pairToStringTable(std::vector<std::pair<StmtInfo, StmtInfo>>&);
+	static std::vector<std::string> stmtIndexToStringVector(std::vector<stmt_index>&);
+	static std::vector<std::vector<std::string>> pairToStringTable(std::vector<std::pair<std::string, std::string>>&);
+	static std::vector<std::vector<std::string>> pairToStringTable(std::vector<std::pair<stmt_index, std::string>>&);
+	static std::vector<std::vector<std::string>> pairToStringTable(std::vector<std::pair<StmtInfo, std::string>>&);
+	static std::vector<std::vector<std::string>> pairToStringTable(std::vector<std::pair<StmtInfo, StmtInfo>>&);
 
 	static int getIndex(std::vector<std::string>, std::string);
 	static int getIndex(std::vector<Entity>, Entity);

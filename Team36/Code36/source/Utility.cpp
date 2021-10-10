@@ -35,10 +35,27 @@ std::vector<std::string> Utility::stmtInfoToStringVector(std::vector<StmtInfo>& 
 	return to;
 }
 
+std::vector<std::string> Utility::stmtIndexToStringVector(std::vector<stmt_index>& from) {
+	std::vector<std::string> to;
+	for (auto& it : from) {
+		to.push_back(std::to_string(it));
+	}
+	return to;
+}
+
+
 std::vector<std::vector<std::string>> Utility::pairToStringTable(std::vector<std::pair<std::string, std::string>>& from) {
 	std::vector< std::vector<std::string>> to;
 	for (auto& it : from) {
 		to.push_back({ it.first, it.second });
+	}
+	return to;
+}
+
+std::vector<std::vector<std::string>> Utility::pairToStringTable(std::vector<std::pair<stmt_index, std::string>>& from) {
+	std::vector< std::vector<std::string>> to;
+	for (auto& it : from) {
+		to.push_back({ std::to_string(it.first), it.second });
 	}
 	return to;
 }
