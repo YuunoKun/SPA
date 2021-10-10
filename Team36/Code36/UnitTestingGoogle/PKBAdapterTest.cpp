@@ -454,7 +454,7 @@ namespace UnitTesting {
 	}
 
 
-	TEST_F(PKBAdapterTest, getAssignInfoFlitered) {
+	TEST_F(PKBAdapterTest, getAssignInfoFiltered) {
 		ExprParser expr_parser;
 
 		std::vector<var_name> v = { "x", "y", "z", "y", "z", "z" };
@@ -471,91 +471,91 @@ namespace UnitTesting {
 			PKB::getInstance().addExprTree(s[i], expr_parser.parse(e[i]));
 		}
 
-		EXPECT_EQ(pkb.getAssignInfoFlitered(), a);
+		EXPECT_EQ(pkb.getAssignInfoFiltered(), a);
 
 		std::vector<stmt_index> result = { a[0] };
-		EXPECT_EQ(pkb.getAssignInfoFlitered("x"), result);
+		EXPECT_EQ(pkb.getAssignInfoFiltered("x"), result);
 		result = { a[1], a[3] };
-		EXPECT_EQ(pkb.getAssignInfoFlitered("y"), result);
+		EXPECT_EQ(pkb.getAssignInfoFiltered("y"), result);
 		result = { a[2], a[4], a[5] };
-		EXPECT_EQ(pkb.getAssignInfoFlitered("z"), result);
+		EXPECT_EQ(pkb.getAssignInfoFiltered("z"), result);
 
 		result = { a[0] };
-		EXPECT_EQ(pkb.getAssignInfoFlitered(expr_parser.parse("x"), false), result);
-		EXPECT_EQ(pkb.getAssignInfoFlitered(expr_parser.parse("x "), false), result);
-		EXPECT_EQ(pkb.getAssignInfoFlitered(expr_parser.parse("x  "), false), result);
-		EXPECT_EQ(pkb.getAssignInfoFlitered(expr_parser.parse(" x"), false), result);
-		EXPECT_EQ(pkb.getAssignInfoFlitered(expr_parser.parse("  x"), false), result);
-		EXPECT_EQ(pkb.getAssignInfoFlitered(expr_parser.parse("  x "), false), result);
-		EXPECT_EQ(pkb.getAssignInfoFlitered(expr_parser.parse("  x  "), false), result);
-		EXPECT_EQ(pkb.getAssignInfoFlitered("x", expr_parser.parse("x"), false), result);
+		EXPECT_EQ(pkb.getAssignInfoFiltered(expr_parser.parse("x"), false), result);
+		EXPECT_EQ(pkb.getAssignInfoFiltered(expr_parser.parse("x "), false), result);
+		EXPECT_EQ(pkb.getAssignInfoFiltered(expr_parser.parse("x  "), false), result);
+		EXPECT_EQ(pkb.getAssignInfoFiltered(expr_parser.parse(" x"), false), result);
+		EXPECT_EQ(pkb.getAssignInfoFiltered(expr_parser.parse("  x"), false), result);
+		EXPECT_EQ(pkb.getAssignInfoFiltered(expr_parser.parse("  x "), false), result);
+		EXPECT_EQ(pkb.getAssignInfoFiltered(expr_parser.parse("  x  "), false), result);
+		EXPECT_EQ(pkb.getAssignInfoFiltered("x", expr_parser.parse("x"), false), result);
 		result = { };
-		EXPECT_EQ(pkb.getAssignInfoFlitered("y", expr_parser.parse("x"), false), result);
-		EXPECT_EQ(pkb.getAssignInfoFlitered("z", expr_parser.parse("x"), false), result);
+		EXPECT_EQ(pkb.getAssignInfoFiltered("y", expr_parser.parse("x"), false), result);
+		EXPECT_EQ(pkb.getAssignInfoFiltered("z", expr_parser.parse("x"), false), result);
 
 		result = a;
-		EXPECT_EQ(pkb.getAssignInfoFlitered(expr_parser.parse("x"), true), result);
-		EXPECT_EQ(pkb.getAssignInfoFlitered(expr_parser.parse("x "), true), result);
-		EXPECT_EQ(pkb.getAssignInfoFlitered(expr_parser.parse("x  "), true), result);
-		EXPECT_EQ(pkb.getAssignInfoFlitered(expr_parser.parse(" x"), true), result);
-		EXPECT_EQ(pkb.getAssignInfoFlitered(expr_parser.parse("  x"), true), result);
-		EXPECT_EQ(pkb.getAssignInfoFlitered(expr_parser.parse("  x "), true), result);
-		EXPECT_EQ(pkb.getAssignInfoFlitered(expr_parser.parse("  x  "), true), result);
+		EXPECT_EQ(pkb.getAssignInfoFiltered(expr_parser.parse("x"), true), result);
+		EXPECT_EQ(pkb.getAssignInfoFiltered(expr_parser.parse("x "), true), result);
+		EXPECT_EQ(pkb.getAssignInfoFiltered(expr_parser.parse("x  "), true), result);
+		EXPECT_EQ(pkb.getAssignInfoFiltered(expr_parser.parse(" x"), true), result);
+		EXPECT_EQ(pkb.getAssignInfoFiltered(expr_parser.parse("  x"), true), result);
+		EXPECT_EQ(pkb.getAssignInfoFiltered(expr_parser.parse("  x "), true), result);
+		EXPECT_EQ(pkb.getAssignInfoFiltered(expr_parser.parse("  x  "), true), result);
 		result = { a[0] };
-		EXPECT_EQ(pkb.getAssignInfoFlitered("x", expr_parser.parse("x"), true), result);
+		EXPECT_EQ(pkb.getAssignInfoFiltered("x", expr_parser.parse("x"), true), result);
 		result = { a[1], a[3] };
-		EXPECT_EQ(pkb.getAssignInfoFlitered("y", expr_parser.parse("x"), true), result);
+		EXPECT_EQ(pkb.getAssignInfoFiltered("y", expr_parser.parse("x"), true), result);
 		result = { a[2], a[4], a[5] };
-		EXPECT_EQ(pkb.getAssignInfoFlitered("z", expr_parser.parse("x"), true), result);
+		EXPECT_EQ(pkb.getAssignInfoFiltered("z", expr_parser.parse("x"), true), result);
 
 		result = { a[1], a[2], a[5] };
-		EXPECT_EQ(pkb.getAssignInfoFlitered(expr_parser.parse("y"), true), result);
-		EXPECT_EQ(pkb.getAssignInfoFlitered(expr_parser.parse("y "), true), result);
-		EXPECT_EQ(pkb.getAssignInfoFlitered(expr_parser.parse(" y"), true), result);
-		EXPECT_EQ(pkb.getAssignInfoFlitered(expr_parser.parse("  y  "), true), result);
+		EXPECT_EQ(pkb.getAssignInfoFiltered(expr_parser.parse("y"), true), result);
+		EXPECT_EQ(pkb.getAssignInfoFiltered(expr_parser.parse("y "), true), result);
+		EXPECT_EQ(pkb.getAssignInfoFiltered(expr_parser.parse(" y"), true), result);
+		EXPECT_EQ(pkb.getAssignInfoFiltered(expr_parser.parse("  y  "), true), result);
 		result = { };
-		EXPECT_EQ(pkb.getAssignInfoFlitered("x", expr_parser.parse("y"), true), result);
+		EXPECT_EQ(pkb.getAssignInfoFiltered("x", expr_parser.parse("y"), true), result);
 		result = { a[1] };
-		EXPECT_EQ(pkb.getAssignInfoFlitered("y", expr_parser.parse("y"), true), result);
+		EXPECT_EQ(pkb.getAssignInfoFiltered("y", expr_parser.parse("y"), true), result);
 		result = { a[2], a[5] };
-		EXPECT_EQ(pkb.getAssignInfoFlitered("z", expr_parser.parse("y"), true), result);
+		EXPECT_EQ(pkb.getAssignInfoFiltered("z", expr_parser.parse("y"), true), result);
 
 
 		result = { a[3], a[5] };
-		EXPECT_EQ(pkb.getAssignInfoFlitered(expr_parser.parse("z"), true), result);
-		EXPECT_EQ(pkb.getAssignInfoFlitered(expr_parser.parse("z "), true), result);
-		EXPECT_EQ(pkb.getAssignInfoFlitered(expr_parser.parse(" z"), true), result);
-		EXPECT_EQ(pkb.getAssignInfoFlitered(expr_parser.parse("  z  "), true), result);
+		EXPECT_EQ(pkb.getAssignInfoFiltered(expr_parser.parse("z"), true), result);
+		EXPECT_EQ(pkb.getAssignInfoFiltered(expr_parser.parse("z "), true), result);
+		EXPECT_EQ(pkb.getAssignInfoFiltered(expr_parser.parse(" z"), true), result);
+		EXPECT_EQ(pkb.getAssignInfoFiltered(expr_parser.parse("  z  "), true), result);
 
 		result = { };
-		EXPECT_EQ(pkb.getAssignInfoFlitered("x", expr_parser.parse("z"), true), result);
+		EXPECT_EQ(pkb.getAssignInfoFiltered("x", expr_parser.parse("z"), true), result);
 		result = { a[3] };
-		EXPECT_EQ(pkb.getAssignInfoFlitered("y", expr_parser.parse("z"), true), result);
+		EXPECT_EQ(pkb.getAssignInfoFiltered("y", expr_parser.parse("z"), true), result);
 		result = { a[5] };
-		EXPECT_EQ(pkb.getAssignInfoFlitered("z", expr_parser.parse("z"), true), result);
+		EXPECT_EQ(pkb.getAssignInfoFiltered("z", expr_parser.parse("z"), true), result);
 
 		result = {};
-		EXPECT_EQ(pkb.getAssignInfoFlitered(expr_parser.parse("y"), false), result);
-		EXPECT_EQ(pkb.getAssignInfoFlitered(expr_parser.parse("y "), false), result);
-		EXPECT_EQ(pkb.getAssignInfoFlitered(expr_parser.parse(" y"), false), result);
-		EXPECT_EQ(pkb.getAssignInfoFlitered(expr_parser.parse("  y  "), false), result);
-		EXPECT_EQ(pkb.getAssignInfoFlitered(expr_parser.parse("z"), false), result);
-		EXPECT_EQ(pkb.getAssignInfoFlitered(expr_parser.parse("z "), false), result);
-		EXPECT_EQ(pkb.getAssignInfoFlitered(expr_parser.parse(" z"), false), result);
-		EXPECT_EQ(pkb.getAssignInfoFlitered(expr_parser.parse("  z  "), false), result);
-		EXPECT_EQ(pkb.getAssignInfoFlitered(expr_parser.parse("c"), true), result);
-		EXPECT_EQ(pkb.getAssignInfoFlitered(expr_parser.parse("c "), false), result);
-		EXPECT_EQ(pkb.getAssignInfoFlitered(expr_parser.parse(" c"), false), result);
-		EXPECT_EQ(pkb.getAssignInfoFlitered(expr_parser.parse("  c  "), false), result);
-		EXPECT_EQ(pkb.getAssignInfoFlitered("x", expr_parser.parse("y"), false), result);
-		EXPECT_EQ(pkb.getAssignInfoFlitered("x", expr_parser.parse("z"), false), result);
-		EXPECT_EQ(pkb.getAssignInfoFlitered("x", expr_parser.parse("c"), true), result);
-		EXPECT_EQ(pkb.getAssignInfoFlitered("y", expr_parser.parse("y"), false), result);
-		EXPECT_EQ(pkb.getAssignInfoFlitered("y", expr_parser.parse("z"), false), result);
-		EXPECT_EQ(pkb.getAssignInfoFlitered("y", expr_parser.parse("c"), true), result);
-		EXPECT_EQ(pkb.getAssignInfoFlitered("z", expr_parser.parse("y"), false), result);
-		EXPECT_EQ(pkb.getAssignInfoFlitered("z", expr_parser.parse("z"), false), result);
-		EXPECT_EQ(pkb.getAssignInfoFlitered("z", expr_parser.parse("c"), true), result);
+		EXPECT_EQ(pkb.getAssignInfoFiltered(expr_parser.parse("y"), false), result);
+		EXPECT_EQ(pkb.getAssignInfoFiltered(expr_parser.parse("y "), false), result);
+		EXPECT_EQ(pkb.getAssignInfoFiltered(expr_parser.parse(" y"), false), result);
+		EXPECT_EQ(pkb.getAssignInfoFiltered(expr_parser.parse("  y  "), false), result);
+		EXPECT_EQ(pkb.getAssignInfoFiltered(expr_parser.parse("z"), false), result);
+		EXPECT_EQ(pkb.getAssignInfoFiltered(expr_parser.parse("z "), false), result);
+		EXPECT_EQ(pkb.getAssignInfoFiltered(expr_parser.parse(" z"), false), result);
+		EXPECT_EQ(pkb.getAssignInfoFiltered(expr_parser.parse("  z  "), false), result);
+		EXPECT_EQ(pkb.getAssignInfoFiltered(expr_parser.parse("c"), true), result);
+		EXPECT_EQ(pkb.getAssignInfoFiltered(expr_parser.parse("c "), false), result);
+		EXPECT_EQ(pkb.getAssignInfoFiltered(expr_parser.parse(" c"), false), result);
+		EXPECT_EQ(pkb.getAssignInfoFiltered(expr_parser.parse("  c  "), false), result);
+		EXPECT_EQ(pkb.getAssignInfoFiltered("x", expr_parser.parse("y"), false), result);
+		EXPECT_EQ(pkb.getAssignInfoFiltered("x", expr_parser.parse("z"), false), result);
+		EXPECT_EQ(pkb.getAssignInfoFiltered("x", expr_parser.parse("c"), true), result);
+		EXPECT_EQ(pkb.getAssignInfoFiltered("y", expr_parser.parse("y"), false), result);
+		EXPECT_EQ(pkb.getAssignInfoFiltered("y", expr_parser.parse("z"), false), result);
+		EXPECT_EQ(pkb.getAssignInfoFiltered("y", expr_parser.parse("c"), true), result);
+		EXPECT_EQ(pkb.getAssignInfoFiltered("z", expr_parser.parse("y"), false), result);
+		EXPECT_EQ(pkb.getAssignInfoFiltered("z", expr_parser.parse("z"), false), result);
+		EXPECT_EQ(pkb.getAssignInfoFiltered("z", expr_parser.parse("c"), true), result);
 	}
 	TEST_F(PKBAdapterTest, isFollowEmpty) {
 		PKB::getInstance().addStmt(STMT_READ);

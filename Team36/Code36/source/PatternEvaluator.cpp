@@ -37,18 +37,18 @@ void PatternEvaluator::evaluateAssignPattern(QueryResult& queryResult, Pattern& 
 		std::vector<stmt_index> table;
 		if (isWild && lhsEntity.getType() == EntityType::WILD) {
 			//If left side is wild and right side is wild: e.g a(_,_)
-			table = pkb.getAssignInfoFlitered();
+			table = pkb.getAssignInfoFiltered();
 		}
 		else if (lhsEntity.getType() == EntityType::WILD) {
 			//If left side is wild and right side is expression: e.g a(_, "x")
-			table = pkb.getAssignInfoFlitered(pattern.getExpression(), pattern.isWild());
+			table = pkb.getAssignInfoFiltered(pattern.getExpression(), pattern.isWild());
 		}
 		else if (isWild) {
 			//If left side is constant and right side is wild: e.g a("x", _)
-			table = pkb.getAssignInfoFlitered(lhsEntity.getValue());
+			table = pkb.getAssignInfoFiltered(lhsEntity.getValue());
 		} else {
 			//If left side is constant and right side is expression: e.g a("x", "x")
-			table = pkb.getAssignInfoFlitered(lhsEntity.getValue(), pattern.getExpression(), pattern.isWild());
+			table = pkb.getAssignInfoFiltered(lhsEntity.getValue(), pattern.getExpression(), pattern.isWild());
 		}
 		ResultTable resultTable(patternType, table);
 		queryResult.addResult(resultTable);

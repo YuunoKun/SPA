@@ -34,10 +34,10 @@ public:
 
 	std::vector<pattern_info> getAssignInfo();
 	std::vector<pattern_info> getAssignInfo(expr, bool);
-	std::vector<stmt_index> getAssignInfoFlitered();
-	std::vector<stmt_index> getAssignInfoFlitered(expr, bool);
-	std::vector<stmt_index> getAssignInfoFlitered(var_name);
-	std::vector<stmt_index> getAssignInfoFlitered(var_name, expr, bool);
+	std::vector<stmt_index> getAssignInfoFiltered();
+	std::vector<stmt_index> getAssignInfoFiltered(expr, bool);
+	std::vector<stmt_index> getAssignInfoFiltered(var_name);
+	std::vector<stmt_index> getAssignInfoFiltered(var_name, expr, bool);
 
 	//Follow relation function
 	bool isFollowEmpty();
@@ -175,7 +175,7 @@ public:
 	std::vector<var_name> getWhileUsed(stmt_index);
 
 private:
-	std::vector<stmt_index> getAssignInfoFlitered(std::vector<stmt_index>&, expr, bool);
+	std::vector<stmt_index> getAssignInfoFiltered(std::vector<stmt_index>&, expr, bool);
 
 	StmtInfo getStmt(stmt_index);
 };

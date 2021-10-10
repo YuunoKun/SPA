@@ -141,25 +141,25 @@ std::vector<pattern_info> PKBAdapter::getAssignInfo(expr matchExpression, bool i
 	return a;
 }
 
-std::vector<stmt_index> PKBAdapter::getAssignInfoFlitered() {
+std::vector<stmt_index> PKBAdapter::getAssignInfoFiltered() {
 	auto a = PKB::getInstance().PKB::getAssigns();
 	return a.getKeys();
 }
 
-std::vector<stmt_index> PKBAdapter::getAssignInfoFlitered(expr matchExpression, bool isWild) {
-	return getAssignInfoFlitered(getAssignInfoFlitered(), matchExpression, isWild);
+std::vector<stmt_index> PKBAdapter::getAssignInfoFiltered(expr matchExpression, bool isWild) {
+	return getAssignInfoFiltered(getAssignInfoFiltered(), matchExpression, isWild);
 }
 
-std::vector<stmt_index> PKBAdapter::getAssignInfoFlitered(var_name var) {
+std::vector<stmt_index> PKBAdapter::getAssignInfoFiltered(var_name var) {
 	auto a = PKB::getInstance().PKB::getAssigns();
 	return a.getKeys(var);
 }
 
-std::vector<stmt_index> PKBAdapter::getAssignInfoFlitered(var_name var, expr matchExpression, bool isWild) {
-	return getAssignInfoFlitered(getAssignInfoFlitered(var), matchExpression, isWild);
+std::vector<stmt_index> PKBAdapter::getAssignInfoFiltered(var_name var, expr matchExpression, bool isWild) {
+	return getAssignInfoFiltered(getAssignInfoFiltered(var), matchExpression, isWild);
 }
 
-std::vector<stmt_index> PKBAdapter::getAssignInfoFlitered(std::vector<stmt_index>& temp, expr matchExpression, bool isWild) {
+std::vector<stmt_index> PKBAdapter::getAssignInfoFiltered(std::vector<stmt_index>& temp, expr matchExpression, bool isWild) {
 	std::vector<stmt_index> a;
 	for (auto s : temp) {
 		expr expression = PKB::getInstance().PKB::getExpression(s);
