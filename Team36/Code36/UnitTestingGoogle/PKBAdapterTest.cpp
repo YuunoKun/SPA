@@ -183,21 +183,19 @@ namespace UnitTesting {
 		std::vector<std::string> e = { "x", "y*x", "x+y", "z%x", "x-x", "x+y-z" };
 		std::vector<stmt_index> s = { 1, 2, 3, 4, 5, 6 };
 
-		std::vector<StmtInfo> si;
-		std::vector<assign_info> a;
+		std::vector<pattern_info> a;
 
 		for (unsigned int i = 0; i < s.size(); i++) {
 			PKB::getInstance().addStmt(STMT_ASSIGN);
 			PKB::getInstance().addVariable(v[i]);
-			si.push_back({ s[i], STMT_ASSIGN });
-			a.push_back(std::make_pair(si[i], v[i]));
+			a.push_back(std::make_pair(s[i], v[i]));
 			PKB::getInstance().addModifiesS(s[i], v[i]);
 			PKB::getInstance().addExprTree(s[i], expr_parser.parse(e[i]));
 		}
 
 		EXPECT_EQ(pkb.getAssignInfo(), a);
 
-		std::vector<assign_info> result = { a[0] };
+		std::vector<pattern_info> result = { a[0] };
 		EXPECT_EQ(pkb.getAssignInfo(expr_parser.parse("x"), false), result);
 		EXPECT_EQ(pkb.getAssignInfo(expr_parser.parse("x "), false), result);
 		EXPECT_EQ(pkb.getAssignInfo(expr_parser.parse("x  "), false), result);

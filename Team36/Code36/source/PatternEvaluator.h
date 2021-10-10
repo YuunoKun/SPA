@@ -10,5 +10,12 @@ public:
 	void evaluatePattern(QueryResult&, Pattern&);
 
 private:
+
+	void evaluateAssignPattern(QueryResult&, Pattern&);
+	void evaluateIfsPattern(QueryResult&, Pattern&);
+	void evaluateWhilePattern(QueryResult&, Pattern&);
+
+	bool isExpressionWild(Pattern&);
+
 	PKBAdapter pkb;
 };

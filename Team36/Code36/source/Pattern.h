@@ -8,6 +8,7 @@
 class Pattern {
 public:
 	Pattern(Entity, Entity, std::string, bool);
+	Pattern(Entity, Entity);
 	Pattern();
 
 	Entity getPatternType();
