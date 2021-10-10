@@ -38,7 +38,7 @@ struct StmtInfo {
 	}
 };
 
-typedef std::pair<StmtInfo, var_name> assign_info;
+typedef std::pair<stmt_index, var_name> pattern_info;
 
 struct Synonym {
 	std::string name;

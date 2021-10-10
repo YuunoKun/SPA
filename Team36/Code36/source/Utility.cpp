@@ -35,10 +35,27 @@ std::vector<std::string> Utility::stmtInfoToStringVector(std::vector<StmtInfo>& 
 	return to;
 }
 
+std::vector<std::string> Utility::stmtIndexToStringVector(std::vector<stmt_index>& from) {
+	std::vector<std::string> to;
+	for (auto& it : from) {
+		to.push_back(std::to_string(it));
+	}
+	return to;
+}
+
+
 std::vector<std::vector<std::string>> Utility::pairToStringTable(std::vector<std::pair<std::string, std::string>>& from) {
 	std::vector< std::vector<std::string>> to;
 	for (auto& it : from) {
 		to.push_back({ it.first, it.second });
+	}
+	return to;
+}
+
+std::vector<std::vector<std::string>> Utility::pairToStringTable(std::vector<std::pair<stmt_index, std::string>>& from) {
+	std::vector< std::vector<std::string>> to;
+	for (auto& it : from) {
+		to.push_back({ std::to_string(it.first), it.second });
 	}
 	return to;
 }
@@ -95,19 +112,22 @@ int Utility::getIndex(std::vector<Entity> v, Entity s) {
 
 StmtType Utility::convertType(EntityType e) {
 	switch (e) {
-	case WHILE: return STMT_WHILE;
-	case IF: return STMT_IF;
-	case READ: return STMT_READ;
-	case PRINT: return STMT_PRINT;
-	case CALL: return STMT_CALL;
-	case ASSIGN: return STMT_ASSIGN;
+	case EntityType::STMT:
+	case EntityType::PROG_LINE:
+	case EntityType::WHILE: return StmtType::STMT_WHILE;
+	case EntityType::IF: return StmtType::STMT_IF;
+	case EntityType::READ: return StmtType::STMT_READ;
+	case EntityType::PRINT: return StmtType::STMT_PRINT;
+	case EntityType::CALL: return StmtType::STMT_CALL;
+	case EntityType::ASSIGN: return StmtType::STMT_ASSIGN;
+	default: throw std::invalid_argument("convert(): only does not support this type " + e);
 	}
 
 	return StmtType();
 }
 
 std::vector<StmtInfo> Utility::filterResult(EntityType e, std::vector<StmtInfo>& v) {
-	if (e == STMT) {
+	if (e == EntityType::STMT) {
 		return v;
 	}
 
@@ -124,7 +144,7 @@ std::vector<StmtInfo> Utility::filterResult(EntityType e, std::vector<StmtInfo>&
 }
 
 std::vector<std::vector<std::string>> Utility::filterResults(EntityType e, std::vector<std::pair<StmtInfo, std::string>>& v) {
-	if (e == STMT) {
+	if (e == EntityType::STMT) {
 		return pairToStringTable(v);
 	}
 
@@ -139,7 +159,7 @@ std::vector<std::vector<std::string>> Utility::filterResults(EntityType e, std::
 }
 
 std::vector<std::vector<std::string>> Utility::filterResults(std::pair<EntityType, EntityType> type, std::vector<std::pair<StmtInfo, StmtInfo>>& table) {
-	if (type.first == STMT && type.second == STMT) {
+	if (type.first == EntityType::STMT && type.second == EntityType::STMT) {
 		return pairToStringTable(table);
 	}
 
@@ -147,8 +167,8 @@ std::vector<std::vector<std::string>> Utility::filterResults(std::pair<EntityTyp
 	StmtType type1 = convertType(type.first);
 	StmtType type2 = convertType(type.second);
 	for (auto& row : table) {
-		if ((type.first == STMT || type1 == row.first.stmt_type) &&
-			(type.second == STMT || type2 == row.second.stmt_type)) {
+		if ((type.first == EntityType::STMT || type1 == row.first.stmt_type) &&
+			(type.second == EntityType::STMT || type2 == row.second.stmt_type)) {
 			results.push_back(row);
 		}
 	}

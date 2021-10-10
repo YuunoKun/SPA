@@ -3,6 +3,7 @@
 #include "pch.h"
 #include "PKB.h"
 #include "QuerySystem.h"
+#include "ExprParser.h"
 
 namespace UnitTesting {
 	class PQLPKBTest : public testing::Test {

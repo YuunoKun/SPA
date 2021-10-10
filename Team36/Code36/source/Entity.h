@@ -47,8 +47,6 @@ public:
 	bool operator==(const Entity&) const;
 
 private:
-
-	//Member Variable
 	EntityType entity_type;
 	Synonym synonym;
 	std::string value;

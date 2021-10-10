@@ -4,6 +4,10 @@
 #include "pkb.h"
 
 namespace UnitTesting {
+
+
+	//Type 1 test relation that take in stmt (left) and stmt (right)
+	//The following relations is tested : FOLLOWS, PARENT, FOLLOWS_T, PARENT_T, NEXT
 	TEST(RelationsEvaluatorTest, evaluateRelationType1) {
 		PKB::getInstance().resetCache();
 		PKB::getInstance().addStmt(STMT_IF);
@@ -12,7 +16,7 @@ namespace UnitTesting {
 		RelationsEvaluator evaluator;
 		QueryResult result;
 
-		std::vector<RelType> types = { FOLLOWS, PARENT, FOLLOWS_T, PARENT_T };
+		std::vector<RelType> types = { FOLLOWS, PARENT, FOLLOWS_T, PARENT_T, NEXT };
 
 		//Negative Test Case
 		for (auto type : types) {
@@ -36,6 +40,7 @@ namespace UnitTesting {
 		}
 		PKB::getInstance().addFollows(1, 2);
 		PKB::getInstance().addParent(1, 2);
+		PKB::getInstance().addNext(1, 2);
 		PKB::getInstance().generateFollowsT();
 		PKB::getInstance().generateParentT();
 
@@ -77,6 +82,8 @@ namespace UnitTesting {
 		}
 	}
 
+	//Type 2 test relation that take in stmt (left) and variable (right)
+	//The following relations is tested : MODIFIES_S, USES_S
 	TEST(RelationsEvaluatorTest, evaluateRelationType2) {
 		PKB::getInstance().resetCache();
 		PKB::getInstance().addStmt(STMT_READ);
@@ -144,6 +151,8 @@ namespace UnitTesting {
 	}
 
 
+	//Type 3 test relation that take in procedure (left) and variable (right)
+	//The following relations is tested : MODIFIES_P, USES_P
 	TEST(RelationsEvaluatorTest, evaluateRelationType3) {
 		PKB::getInstance().resetCache();
 		proc_name main1 = "main1";
@@ -213,6 +222,8 @@ namespace UnitTesting {
 	}
 
 
+	//Type 4 test relation that take in procedure (left) and procedure (right)
+	//The following relations is tested : CALLS, CALLS_T
 	TEST(RelationsEvaluatorTest, evaluateRelationType4) {
 		PKB::getInstance().resetCache();
 		proc_name main1 = "main1";

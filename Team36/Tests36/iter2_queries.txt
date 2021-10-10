@@ -9,7 +9,7 @@ Select v such that Modifies("Gandulf", "ring")
 shine, ring, f, lost, d, g, a, w
 5000
 3 - modifiesp, LHS ident, RHS synonym
-procedure p; variale v;
+procedure p; variable v;
 Select v such that Modifies("Gandulf", v)
 shine, ring, f, lost, d, g, a, w
 5000
@@ -151,7 +151,7 @@ Select c such that Uses(c, _)
 31 - usesp, LHS ident, RHS wildcard
 call c; variable v;
 Select v such that Uses(17, _)
-shine, ring, f, lost, g, a
+shine, ring, f, lost, g, a, d, w
 5000
 32 - calls, LHS ident, RHS ident
 procedure p, q;
