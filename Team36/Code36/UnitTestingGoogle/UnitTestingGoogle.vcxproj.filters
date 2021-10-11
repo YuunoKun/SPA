@@ -111,6 +111,15 @@
     <ClCompile Include="QueryEvaluatorPatternTest.cpp">
       <Filter>PQL\QueryEvaluator</Filter>
     </ClCompile>
+    <ClCompile Include="PatternAssignEvaluatorTest.cpp">
+      <Filter>PQL\QueryEvaluator\PatternEvaluator</Filter>
+    </ClCompile>
+    <ClCompile Include="PatternWhileEvaluatorTest.cpp">
+      <Filter>PQL\QueryEvaluator\PatternEvaluator</Filter>
+    </ClCompile>
+    <ClCompile Include="PatternIfEvaluatorTest.cpp">
+      <Filter>PQL\QueryEvaluator\PatternEvaluator</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -194,9 +203,6 @@
     </ClCompile>
     <ClCompile Include="RelRefTest.cpp">
       <Filter>PQL\QueryObject</Filter>
-    </ClCompile>
-    <ClCompile Include="PatternEvaluatorTest.cpp">
-      <Filter>PQL\QueryEvaluator</Filter>
     </ClCompile>
     <ClCompile Include="QueryEvaluatorMultiClausesTest.cpp">
       <Filter>PQL\QueryEvaluator</Filter>
