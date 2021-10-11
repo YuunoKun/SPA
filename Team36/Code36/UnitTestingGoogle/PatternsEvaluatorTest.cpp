@@ -1,6 +1,5 @@
 #include "pch.h"
 
-#include "RelationsEvaluator.h"
 #include "pkb.h"
 #include "PatternsEvaluator.h"
 #include "ExprParser.h"
