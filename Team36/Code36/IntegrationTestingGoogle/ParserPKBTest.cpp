@@ -366,4 +366,91 @@ namespace IntegrationTesting {
 		std::sort(v.begin(), v.end());
 		EXPECT_EQ(v, expected_modifiesP);
 	}
+
+	TEST_F(ParserPKBTest, Sample5Test_Next) {
+		SourceProcessor::Parser parser;
+		parser.load_file("../UnitTestingGoogle/SPTest/TestSource/Sample5.txt");
+		parser.parse();
+
+		std::vector<std::pair<stmt_index, stmt_index>> expected_next = {
+			{1,2}, {2,3}, {5,6}, {7,8}, {8,9}, {9,10}, {9,12}, {10,11}, {11,9}, {12,13}, {12,14}, {13,15}, {14,15}
+		};
+		std::sort(expected_next.begin(), expected_next.end());
+
+		std::vector<std::pair<StmtInfo, StmtInfo>> expected_next_stmt;
+		for (auto const& pair : expected_next) {
+			expected_next_stmt.push_back({ ParserPKBTest::sample5_stmts[pair.first - 1], ParserPKBTest::sample5_stmts[pair.second - 1] });
+		}
+
+		RelationTable<StmtInfo, StmtInfo> table = PKB::getInstance().getNext();
+		auto v = table.getPairs();
+		std::sort(v.begin(), v.end());
+		EXPECT_EQ(v, expected_next_stmt);
+	}
+
+	TEST_F(ParserPKBTest, Sample5Test_Whiles) {
+		SourceProcessor::Parser parser;
+		parser.load_file("../UnitTestingGoogle/SPTest/TestSource/Sample5.txt");
+		parser.parse();
+
+		std::vector<std::pair<stmt_index, var_name>> expected_whiles = {
+			{9, "x"}, {9, "y"}
+		};
+		std::sort(expected_whiles.begin(), expected_whiles.end());
+
+		RelationTable<stmt_index, var_name> table = PKB::getInstance().getWhile();
+		auto v = table.getPairs();
+		std::sort(v.begin(), v.end());
+		EXPECT_EQ(v, expected_whiles);
+	}
+
+	TEST_F(ParserPKBTest, Sample5Test_While_Nested) {
+		SourceProcessor::Parser parser;
+		parser.load_file("../UnitTestingGoogle/SPTest/TestSource/Sample6.txt");
+		parser.parse();
+
+		std::vector<std::pair<stmt_index, var_name>> expected_whiles = {
+			{8, "g"}, {8, "f"}, {9, "f"}, {9, "e"}, {10, "e"}, {10, "d"},
+			{11, "d"}, {11, "c"}, {12, "c"}, {12, "b"}, {13, "b"}, {13, "a"}
+		};
+		std::sort(expected_whiles.begin(), expected_whiles.end());
+
+		RelationTable<stmt_index, var_name> table = PKB::getInstance().getWhile();
+		auto v = table.getPairs();
+		std::sort(v.begin(), v.end());
+		EXPECT_EQ(v, expected_whiles);
+	}
+
+	TEST_F(ParserPKBTest, Sample5Test_Ifs) {
+		SourceProcessor::Parser parser;
+		parser.load_file("../UnitTestingGoogle/SPTest/TestSource/Sample5.txt");
+		parser.parse();
+
+		std::vector<std::pair<stmt_index, var_name>> expected_ifs = {
+			{12, "count"}
+		};
+		std::sort(expected_ifs.begin(), expected_ifs.end());
+
+		RelationTable<stmt_index, var_name> table = PKB::getInstance().getIf();
+		auto v = table.getPairs();
+		std::sort(v.begin(), v.end());
+		EXPECT_EQ(v, expected_ifs);
+	}
+
+	TEST_F(ParserPKBTest, Sample5Test_Ifs_Nested) {
+		SourceProcessor::Parser parser;
+		parser.load_file("../UnitTestingGoogle/SPTest/TestSource/Sample7.txt");
+		parser.parse();
+
+		std::vector<std::pair<stmt_index, var_name>> expected_ifs = {
+			{3, "count"}, {5, "x"}, {10, "x"}, {10, "y"}, {12, "x"}, {12, "y"},
+			{12, "z"}
+		};
+		std::sort(expected_ifs.begin(), expected_ifs.end());
+
+		RelationTable<stmt_index, var_name> table = PKB::getInstance().getIf();
+		auto v = table.getPairs();
+		std::sort(v.begin(), v.end());
+		EXPECT_EQ(v, expected_ifs);
+	}
 }
