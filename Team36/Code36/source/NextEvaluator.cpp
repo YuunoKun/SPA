@@ -5,13 +5,11 @@
 #include "PKBAdapter.h"
 #include "NextEvaluator.h"
 
-//Handle both wild : e.g Relation(_, _)
 bool NextEvaluator::haveRelation() {
 	//Todo Evaluator
 	return !pkb.isNextEmpty();
 }
 
-//Handle both constant : e.g Relation(1, 2)
 bool NextEvaluator::isRelation(Entity e1, Entity e2) {
 	//Todo Evaluator
 	stmt_index c1 = stoi(e1.getValue());
@@ -19,49 +17,38 @@ bool NextEvaluator::isRelation(Entity e1, Entity e2) {
 	return pkb.isNext(c1, c2);;
 }
 
-//Handle left constant, right wild: e.g Relation(1, _)
 bool NextEvaluator::haveRelationAtRight(Entity e) {
 	//Todo Evaluator
 	stmt_index c = stoi(e.getValue());
 	return pkb.isPrevious(c);
 }
 
-//Handle right wild, left constant: e.g Relation(_, 1)
 bool NextEvaluator::haveRelationAtLeft(Entity e) {
 	//Todo Evaluator
 	stmt_index c = stoi(e.getValue());
 	return pkb.isNext(c);
 }
 
-//If both side is declartion: e.g Relation(a, b)
 ResultTable NextEvaluator::getRelations(Entity left, Entity right) {
-	//Todo Evaluator
-	std::vector<std::pair<StmtInfo, StmtInfo>> results = pkb.getAllNextRelation();
-	std::pair<Entity, Entity> header{ left, right };
-	ResultTable result = ResultTable(header, results);
-	return result;
+	return ResultTable({ left, right }, pkb.getAllNextRelation());
 }
 
-//If left side is WILD and right side is declartion: e.g Relation(_, a)
 ResultTable NextEvaluator::getRightRelations(Entity header) {
 	//Todo Evaluator
 	return ResultTable(header, pkb.getNext());
 }
 
-//Handle right declartion, left constant: e.g Relation(a, _)
 ResultTable NextEvaluator::getLeftRelations(Entity header) {
 	//Todo Evaluator
 	return ResultTable(header, pkb.getPrevious());
 }
 
-//Handle left constant, right declartion: e.g Relation(1, a)
 ResultTable NextEvaluator::getRelationMatchLeft(Entity constant, Entity header) {
 	//Todo Evaluator
 	stmt_index c = stoi(constant.getValue());
 	return ResultTable(header, pkb.getNext(c));
 }
 
-//Handle right declartion, left constant: e.g Relation(a, 1)
 ResultTable NextEvaluator::getRelationMatchRight(Entity header, Entity constant) {
 	//Todo Evaluator
 	stmt_index c = stoi(constant.getValue());

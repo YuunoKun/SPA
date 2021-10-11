@@ -5,17 +5,14 @@
 #include "PKBAdapter.h"
 
 ResultTable PatternIfEvaluator::evaluateSynonym(Pattern& pattern) {
-    std::pair<Entity, Entity> header = { pattern.getPatternType(), pattern.getLeftExpression() };
-    return ResultTable(header, pkb.getAllIfUses());
+    return ResultTable({ pattern.getPatternType(), pattern.getLeftExpression() }, pkb.getAllIfUses());
 }
 
 ResultTable PatternIfEvaluator::evaluateWild(Pattern& pattern) {
-    Entity header = pattern.getPatternType();
-    return ResultTable(header, pkb.getIfUses());
+    return ResultTable(pattern.getPatternType(), pkb.getIfUses());
 }
 
 ResultTable PatternIfEvaluator::evaluateConstant(Pattern& pattern) {
-    Entity header = pattern.getPatternType();
-    return ResultTable(header, pkb.getIfUses(pattern.getLeftExpression().getValue()));
+    return ResultTable(pattern.getPatternType(), pkb.getIfUses(pattern.getLeftExpression().getValue()));
 }
 

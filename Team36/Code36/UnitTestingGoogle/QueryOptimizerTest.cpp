@@ -5,50 +5,50 @@
 namespace UnitTesting {
 	TEST(QueryOptimizer, optimizeClausesOrder) {
 		QueryOptimizer optimizer;
-		RelRef relRefNoSynonym(FOLLOWS, { STMT, "1" }, { STMT, "2" });
-		RelRef relRefOneSynonym(PARENT, { STMT, Synonym("a") }, { STMT, "2" });
-		RelRef relRefTwoSynonym(FOLLOWS_T, { STMT, Synonym("a") }, { STMT, Synonym("b") });
-		Pattern patternNoSynonym({ ASSIGN, "1" }, { WILD }, "", true);
-		Pattern patternOneSynonym({ ASSIGN, Synonym("a") }, { WILD }, "", true);
+		RelRef rel_ref_no_synonym(FOLLOWS, { STMT, "1" }, { STMT, "2" });
+		RelRef rel_ref_one_synonym(PARENT, { STMT, Synonym("a") }, { STMT, "2" });
+		RelRef rel_ref_two_synonym(FOLLOWS_T, { STMT, Synonym("a") }, { STMT, Synonym("b") });
+		Pattern pattern_no_synonym({ ASSIGN, "1" }, { WILD }, "", true);
+		Pattern pattern_one_synonym({ ASSIGN, Synonym("a") }, { WILD }, "", true);
 		Pattern patternTwoSynonym({ ASSIGN, Synonym("a") }, { VARIABLE, Synonym("b")}, "", true);
 
-		std::vector<Clause> unorderedClauses, orderedClauses;
-		unorderedClauses.push_back({ relRefOneSynonym });
-		unorderedClauses.push_back({ relRefTwoSynonym });
-		unorderedClauses.push_back({ relRefNoSynonym });
+		std::vector<Clause> unordered_clauses, ordered_clauses;
+		unordered_clauses.push_back({ rel_ref_one_synonym });
+		unordered_clauses.push_back({ rel_ref_two_synonym });
+		unordered_clauses.push_back({ rel_ref_no_synonym });
 
-		orderedClauses.push_back({ relRefNoSynonym });
-		orderedClauses.push_back({ relRefOneSynonym });
-		orderedClauses.push_back({ relRefTwoSynonym });
-		EXPECT_EQ(optimizer.optimizeClausesOrder(unorderedClauses), orderedClauses);
+		ordered_clauses.push_back({ rel_ref_no_synonym });
+		ordered_clauses.push_back({ rel_ref_one_synonym });
+		ordered_clauses.push_back({ rel_ref_two_synonym });
+		EXPECT_EQ(optimizer.optimizeClausesOrder(unordered_clauses), ordered_clauses);
 
-		unorderedClauses.clear();
-		orderedClauses.clear();
-		unorderedClauses.push_back({ patternTwoSynonym });
-		unorderedClauses.push_back({ patternOneSynonym });
-		unorderedClauses.push_back({ patternNoSynonym });
+		unordered_clauses.clear();
+		ordered_clauses.clear();
+		unordered_clauses.push_back({ patternTwoSynonym });
+		unordered_clauses.push_back({ pattern_one_synonym });
+		unordered_clauses.push_back({ pattern_no_synonym });
 
-		orderedClauses.push_back({ patternNoSynonym });
-		orderedClauses.push_back({ patternOneSynonym });
-		orderedClauses.push_back({ patternTwoSynonym });
-		EXPECT_EQ(optimizer.optimizeClausesOrder(unorderedClauses), orderedClauses);
+		ordered_clauses.push_back({ pattern_no_synonym });
+		ordered_clauses.push_back({ pattern_one_synonym });
+		ordered_clauses.push_back({ patternTwoSynonym });
+		EXPECT_EQ(optimizer.optimizeClausesOrder(unordered_clauses), ordered_clauses);
 
-		unorderedClauses.clear();
-		orderedClauses.clear();
-		unorderedClauses.push_back({ relRefOneSynonym });
-		unorderedClauses.push_back({ relRefTwoSynonym });
-		unorderedClauses.push_back({ relRefNoSynonym });
-		unorderedClauses.push_back({ patternTwoSynonym });
-		unorderedClauses.push_back({ patternOneSynonym });
-		unorderedClauses.push_back({ patternNoSynonym });
+		unordered_clauses.clear();
+		ordered_clauses.clear();
+		unordered_clauses.push_back({ rel_ref_one_synonym });
+		unordered_clauses.push_back({ rel_ref_two_synonym });
+		unordered_clauses.push_back({ rel_ref_no_synonym });
+		unordered_clauses.push_back({ patternTwoSynonym });
+		unordered_clauses.push_back({ pattern_one_synonym });
+		unordered_clauses.push_back({ pattern_no_synonym });
 
-		orderedClauses.push_back({ relRefNoSynonym });
-		orderedClauses.push_back({ patternNoSynonym });
-		orderedClauses.push_back({ relRefOneSynonym });
-		orderedClauses.push_back({ patternOneSynonym });
-		orderedClauses.push_back({ relRefTwoSynonym });
-		orderedClauses.push_back({ patternTwoSynonym });
-		EXPECT_EQ(optimizer.optimizeClausesOrder(unorderedClauses), orderedClauses);
+		ordered_clauses.push_back({ rel_ref_no_synonym });
+		ordered_clauses.push_back({ pattern_no_synonym });
+		ordered_clauses.push_back({ rel_ref_one_synonym });
+		ordered_clauses.push_back({ pattern_one_synonym });
+		ordered_clauses.push_back({ rel_ref_two_synonym });
+		ordered_clauses.push_back({ patternTwoSynonym });
+		EXPECT_EQ(optimizer.optimizeClausesOrder(unordered_clauses), ordered_clauses);
 	}
 
 }
