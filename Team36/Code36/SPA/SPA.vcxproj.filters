@@ -76,7 +76,7 @@
     <Filter Include="Header Files\PQL\QueryEvaluator\PatternEvaluator">
       <UniqueIdentifier>{5c92c625-624b-435e-bd49-146f8d1ab309}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\PQL\QueryEvaluator\PatternEvaluator\RelationEvaluator">
+    <Filter Include="Header Files\PQL\QueryEvaluator\RelationEvaluator">
       <UniqueIdentifier>{c25711b4-12ef-49b2-a273-01893fdc508a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -330,31 +330,31 @@
       <Filter>Header Files\PQL\QueryEvaluator</Filter>
     </ClInclude>
     <ClInclude Include="..\source\FollowsEvaluator.h">
-      <Filter>Header Files\PQL\QueryEvaluator\PatternEvaluator\RelationEvaluator</Filter>
+      <Filter>Header Files\PQL\QueryEvaluator\RelationEvaluator</Filter>
     </ClInclude>
     <ClInclude Include="..\source\FollowsTEvaluator.h">
-      <Filter>Header Files\PQL\QueryEvaluator\PatternEvaluator\RelationEvaluator</Filter>
+      <Filter>Header Files\PQL\QueryEvaluator\RelationEvaluator</Filter>
     </ClInclude>
     <ClInclude Include="..\source\ModifiesPEvaluator.h">
-      <Filter>Header Files\PQL\QueryEvaluator\PatternEvaluator\RelationEvaluator</Filter>
+      <Filter>Header Files\PQL\QueryEvaluator\RelationEvaluator</Filter>
     </ClInclude>
     <ClInclude Include="..\source\ModifiesSEvaluator.h">
-      <Filter>Header Files\PQL\QueryEvaluator\PatternEvaluator\RelationEvaluator</Filter>
+      <Filter>Header Files\PQL\QueryEvaluator\RelationEvaluator</Filter>
     </ClInclude>
     <ClInclude Include="..\source\ParentEvaluator.h">
-      <Filter>Header Files\PQL\QueryEvaluator\PatternEvaluator\RelationEvaluator</Filter>
+      <Filter>Header Files\PQL\QueryEvaluator\RelationEvaluator</Filter>
     </ClInclude>
     <ClInclude Include="..\source\ParentTEvaluator.h">
-      <Filter>Header Files\PQL\QueryEvaluator\PatternEvaluator\RelationEvaluator</Filter>
+      <Filter>Header Files\PQL\QueryEvaluator\RelationEvaluator</Filter>
     </ClInclude>
     <ClInclude Include="..\source\RelationEvaluatorInterface.h">
-      <Filter>Header Files\PQL\QueryEvaluator\PatternEvaluator\RelationEvaluator</Filter>
+      <Filter>Header Files\PQL\QueryEvaluator\RelationEvaluator</Filter>
     </ClInclude>
     <ClInclude Include="..\source\UsesSEvaluator.h">
-      <Filter>Header Files\PQL\QueryEvaluator\PatternEvaluator\RelationEvaluator</Filter>
+      <Filter>Header Files\PQL\QueryEvaluator\RelationEvaluator</Filter>
     </ClInclude>
     <ClInclude Include="..\source\UsesPEvaluator.h">
-      <Filter>Header Files\PQL\QueryEvaluator\PatternEvaluator\RelationEvaluator</Filter>
+      <Filter>Header Files\PQL\QueryEvaluator\RelationEvaluator</Filter>
     </ClInclude>
     <ClInclude Include="..\source\RelationsEvaluator.h">
       <Filter>Header Files\PQL\QueryEvaluator</Filter>
@@ -372,25 +372,25 @@
       <Filter>Header Files\PQL\QueryObject</Filter>
     </ClInclude>
     <ClInclude Include="..\source\NextTEvaluator.h">
-      <Filter>Header Files\PQL\QueryEvaluator\PatternEvaluator\RelationEvaluator</Filter>
+      <Filter>Header Files\PQL\QueryEvaluator\RelationEvaluator</Filter>
     </ClInclude>
     <ClInclude Include="..\source\NextEvaluator.h">
-      <Filter>Header Files\PQL\QueryEvaluator\PatternEvaluator\RelationEvaluator</Filter>
+      <Filter>Header Files\PQL\QueryEvaluator\RelationEvaluator</Filter>
     </ClInclude>
     <ClInclude Include="..\source\CallsTEvaluator.h">
-      <Filter>Header Files\PQL\QueryEvaluator\PatternEvaluator\RelationEvaluator</Filter>
+      <Filter>Header Files\PQL\QueryEvaluator\RelationEvaluator</Filter>
     </ClInclude>
     <ClInclude Include="..\source\CallsEvaluator.h">
-      <Filter>Header Files\PQL\QueryEvaluator\PatternEvaluator\RelationEvaluator</Filter>
+      <Filter>Header Files\PQL\QueryEvaluator\RelationEvaluator</Filter>
     </ClInclude>
     <ClInclude Include="..\source\AffectTEvaluator.h">
-      <Filter>Header Files\PQL\QueryEvaluator\PatternEvaluator\RelationEvaluator</Filter>
+      <Filter>Header Files\PQL\QueryEvaluator\RelationEvaluator</Filter>
     </ClInclude>
     <ClInclude Include="..\source\AffectEvaluator.h">
-      <Filter>Header Files\PQL\QueryEvaluator\PatternEvaluator\RelationEvaluator</Filter>
+      <Filter>Header Files\PQL\QueryEvaluator\RelationEvaluator</Filter>
     </ClInclude>
     <ClInclude Include="..\source\WithEvaluator.h">
-      <Filter>Header Files\PQL\QueryEvaluator\PatternEvaluator\RelationEvaluator</Filter>
+      <Filter>Header Files\PQL\QueryEvaluator\RelationEvaluator</Filter>
     </ClInclude>
     <ClInclude Include="..\source\SyntacticErrorException.h">
       <Filter>Header Files\PQL\Helper</Filter>

@@ -5,52 +5,52 @@
 #include "PKBAdapter.h"
 #include "AffectTEvaluator.h"
 
-bool AffectTEvaluator::haveRelation() {
+bool AffectTEvaluator::evaluateWildAndWild() {
 	//Todo Evaluator
 	return !pkb.isFollowEmpty();
 }
 
-bool AffectTEvaluator::isRelation(Entity e1, Entity e2) {
+bool AffectTEvaluator::evaluateConstantAndConstant(Entity e1, Entity e2) {
 	//Todo Evaluator
 	stmt_index c1 = stoi(e1.getValue());
 	stmt_index c2 = stoi(e2.getValue());
 	return pkb.isFollow(c1, c2);;
 }
 
-bool AffectTEvaluator::haveRelationAtRight(Entity e) {
+bool AffectTEvaluator::evaluateConstantAndWild(Entity e) {
 	//Todo Evaluator
 	stmt_index c = stoi(e.getValue());
 	return pkb.isFollowed(c);
 }
 
-bool AffectTEvaluator::haveRelationAtLeft(Entity e) {
+bool AffectTEvaluator::evaluateWildAndConstant(Entity e) {
 	//Todo Evaluator
 	stmt_index c = stoi(e.getValue());
 	return pkb.isFollowing(c);
 }
 
-ResultTable AffectTEvaluator::getRelations(Entity left, Entity right) {
+ResultTable AffectTEvaluator::evaluateSynonymAndSynonym(Entity left, Entity right) {
 	//Todo Evaluator
 	return ResultTable({ left, right }, pkb.getFollows());
 }
 
-ResultTable AffectTEvaluator::getRightRelations(Entity header) {
+ResultTable AffectTEvaluator::evaluateWildAndSynonym(Entity header) {
 	//Todo Evaluator
 	return ResultTable(header, pkb.getFollowing());
 }
 
-ResultTable AffectTEvaluator::getLeftRelations(Entity header) {
+ResultTable AffectTEvaluator::evaluateSynonymAndWild(Entity header) {
 	//Todo Evaluator
 	return ResultTable(header, pkb.getFollowed());
 }
 
-ResultTable AffectTEvaluator::getRelationMatchLeft(Entity constant, Entity header) {
+ResultTable AffectTEvaluator::evaluateConstantAndSynonym(Entity constant, Entity header) {
 	//Todo Evaluator
 	stmt_index c = stoi(constant.getValue());
 	return ResultTable(header, pkb.getFollowing(c));
 }
 
-ResultTable AffectTEvaluator::getRelationMatchRight(Entity header, Entity constant) {
+ResultTable AffectTEvaluator::evaluateSynonymAndConstant(Entity header, Entity constant) {
 	//Todo Evaluator
 	stmt_index c = stoi(constant.getValue());
 	return ResultTable(header, pkb.getFollowed(c));
