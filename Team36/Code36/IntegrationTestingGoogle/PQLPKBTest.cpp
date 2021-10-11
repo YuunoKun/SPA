@@ -3,6 +3,7 @@
 #include "pch.h"
 #include "PKB.h"
 #include "QuerySystem.h"
+#include "ExprParser.h"
 
 namespace UnitTesting {
 	class PQLPKBTest : public testing::Test {
@@ -48,27 +49,25 @@ namespace UnitTesting {
 			PKB::getInstance().addUsesS(std::stoi(USES_LEFT2), USES_RIGHT2);
 			PKB::getInstance().addUsesP(USES_P_LEFT1, USES_RIGHT1);
 			PKB::getInstance().addUsesP(USES_P_LEFT1, USES_RIGHT2);
-			PKB::getInstance().addExprTree(std::stoi(MODIFIES_LEFT3), EXPRESSION1);
-			PKB::getInstance().addExprTree(std::stoi(MODIFIES_LEFT4), EXPRESSION2);
+			PKB::getInstance().addExprTree(std::stoi(MODIFIES_LEFT3), EXPRESSIONNODE_1);
+			PKB::getInstance().addExprTree(std::stoi(MODIFIES_LEFT4), EXPRESSIONNODE_2);
 			PKB::getInstance().generateFollowsT();
 			PKB::getInstance().generateParentT();
 		}
 
 		QuerySystem qs;
 		PKBAdapter pkb;
+		ExprParser expr_parser;
 
 		void validateAnswer(std::list<std::string> expected, std::list<std::string> result) {
-
 			std::list<std::string>::iterator result_it;
 			std::list<std::string>::iterator expected_it;
 
-			
 			EXPECT_EQ(expected.size(), result.size());
-			
-			for (result_it = result.begin(), expected_it = expected.begin(); 
-				result_it != result.end() && expected_it != expected.end(); 
+
+			for (result_it = result.begin(), expected_it = expected.begin();
+				result_it != result.end() && expected_it != expected.end();
 				result_it++, expected_it++) {
-				
 				EXPECT_EQ(*expected_it, *result_it);
 			}
 
@@ -90,7 +89,6 @@ namespace UnitTesting {
 		const std::string c2s = std::to_string(c2);
 		const std::string c3s = std::to_string(c3);
 		const std::list<std::string> CONSTANTS = { c1s, c2s, c3s };
-
 
 		const proc_name p1 = "main";
 		const proc_name p2 = "sub";
@@ -132,7 +130,7 @@ namespace UnitTesting {
 
 		//Follows(1,s) return 2
 		const std::list<std::string> EXPECTED_FOLLOWS1 = { IF2 };
-		
+
 		//Follows(2,s) return 3
 		const std::list<std::string> EXPECTED_FOLLOWS2 = { WHILE1 };
 
@@ -153,16 +151,15 @@ namespace UnitTesting {
 
 		// Parent(1, s) return stmt 2,3
 		const std::list<std::string> EXPECTED_PARENT1 = { IF2, WHILE1 };
-		
+
 		// Parent(2, s) return stmt 3
 		const std::list<std::string> EXPECTED_PARENT2 = { WHILE1 };
 
 		// Parent(3, s) return stmt 4
 		const std::list<std::string> EXPECTED_PARENT3 = { WHILE2 };
 
-		// Parent*(1, s) return stmt 2, 3, 4 
+		// Parent*(1, s) return stmt 2, 3, 4
 		const std::list<std::string> EXPECTED_PARENTT = { IF2, WHILE1, WHILE2 };
-
 
 		const std::vector<std::string> PARENT_LEFTS = { PARENT_LEFT1, PARENT_LEFT2, PARENT_LEFT3 };
 		const std::vector<std::string> PARENT_RIGHTS = { PARENT_RIGHT1, PARENT_RIGHT2, PARENT_RIGHT3 };
@@ -186,16 +183,17 @@ namespace UnitTesting {
 		const std::string EXPRESSION1 = "x";
 		const std::string EXPRESSION2 = "x + (y * 5)";
 		const std::string EXPRESSION_CONSTANT = "5";
+		expr EXPRESSIONNODE_1 = expr_parser.parse(EXPRESSION1);
+		expr EXPRESSIONNODE_2 = expr_parser.parse(EXPRESSION2);
+		expr EXPRESSIONNODE_CONSTANT = expr_parser.parse(EXPRESSION_CONSTANT);
 
 		const std::list<std::string> EXPECTED_ASSIGN_PATTERN1 = { ASSIGN1 };
 		const std::list<std::string> EXPECTED_ASSIGN_PATTERN2 = { ASSIGN2, ASSIGN1 };
 		const std::list<std::string> EXPECTED_ASSIGN_PATTERN3 = { ASSIGN2 };
 
-
-
 		const std::vector<std::string> MODIFIES_LEFTS = { MODIFIES_LEFT1, MODIFIES_LEFT2, MODIFIES_LEFT3, MODIFIES_LEFT4 };
 		const std::vector<std::string> MODIFIES_RIGHTS = { MODIFIES_RIGHT1, MODIFIES_RIGHT2, MODIFIES_RIGHT3, MODIFIES_RIGHT4 };
-		
+
 		const std::vector<std::string> EXPRESSIONS = { EXPRESSION1, EXPRESSION2 };
 
 		const std::string USES_LEFT1 = "1";
@@ -208,7 +206,6 @@ namespace UnitTesting {
 		const std::list<std::string> EXPECTED_USES1 = { y };
 		const std::list<std::string> EXPECTED_USES2 = { x };
 		const std::list<std::string> EXPECTED_USES3 = { y, x };
-
 
 
 
@@ -235,16 +232,15 @@ namespace UnitTesting {
 			// Code here will be called immediately after each test (right
 			// before the destructor).
 		}
-
 	};
 
 	TEST_F(PQLPKBTest, ValidateAnswerTest) {
-		validateAnswer({ "1", "2", "3"}, { "1", "2", "3" });
+		validateAnswer({ "1", "2", "3" }, { "1", "2", "3" });
 		validateAnswer(EMPTY_RESULT, {});
 	}
 
 	TEST_F(PQLPKBTest, noSuchThatPatternStmtTest) {
-		std::list<std::string> ans_stmt = qs.processQuery("stmt s; Select s");	
+		std::list<std::string> ans_stmt = qs.processQuery("stmt s; Select s");
 
 		validateAnswer(STMTS, ans_stmt);
 	}
@@ -290,7 +286,7 @@ namespace UnitTesting {
 
 		validateAnswer(CONSTANTS, ans_constant);
 	}
-		
+
 	TEST_F(PQLPKBTest, noSuchThatPatternProcedureTest) {
 		std::list<std::string> ans_procedure = qs.processQuery("procedure p; Select p");
 

@@ -1,10 +1,11 @@
 #pragma once
 #include <string>
 #include <stdexcept>
+#include "ExprNode.h"
 
 typedef std::string proc_name;
 typedef std::string var_name;
-typedef std::string expr;
+typedef ExprNode expr;
 typedef unsigned int constant;
 typedef unsigned int stmt_index;
 typedef unsigned int prog_line;
@@ -37,7 +38,7 @@ struct StmtInfo {
 	}
 };
 
-typedef std::pair<StmtInfo, var_name> assign_info;
+typedef std::pair<stmt_index, var_name> pattern_info;
 
 struct Synonym {
 	std::string name;

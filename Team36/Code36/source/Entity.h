@@ -41,13 +41,12 @@ public:
 	std::string getSynonym();
 	std::string getValue();
 	AttrRef getAttribute();
+	void setAttribute(AttrRef&);
 	bool isSynonym();
 
 	bool operator==(const Entity&) const;
 
 private:
-
-	//Member Variable
 	EntityType entity_type;
 	Synonym synonym;
 	std::string value;

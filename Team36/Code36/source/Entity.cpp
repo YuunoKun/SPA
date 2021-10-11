@@ -46,6 +46,10 @@ AttrRef Entity::getAttribute() {
 	return attribute;
 }
 
+void Entity::setAttribute(AttrRef& attrRef) {
+	this->attribute = attrRef;
+}
+
 bool Entity::isSynonym() {
 	return is_synonym;
 }
@@ -58,22 +62,22 @@ bool Entity::operator==(const Entity& entity) const {
 
 void Entity::defaultAttribute(EntityType type) {
 	switch (type) {
-	case STMT:
-	case READ:
-	case PRINT:
-	case CALL:
-	case WHILE:
-	case IF:
-	case ASSIGN: attribute = STMT_INDEX;
+	case EntityType::STMT:
+	case EntityType::READ:
+	case EntityType::PRINT:
+	case EntityType::CALL:
+	case EntityType::WHILE:
+	case EntityType::IF:
+	case EntityType::ASSIGN: attribute = AttrRef::STMT_INDEX;
 		break;
-	case VARIABLE: attribute = VAR_NAME;
+	case EntityType::VARIABLE: attribute = AttrRef::VAR_NAME;
 		break;
-	case CONSTANT: attribute = VALUE;
+	case EntityType::CONSTANT: attribute = AttrRef::VALUE;
 		break;
-	case PROCEDURE: attribute = PROC_NAME;
+	case EntityType::PROCEDURE: attribute = AttrRef::PROC_NAME;
 		break;
-	case BOOLEAN: 
-	case WILD: attribute = NONE;
+	case EntityType::BOOLEAN:
+	case EntityType::WILD: attribute = AttrRef::NONE;
 		break;
 	default: throw std::domain_error("Some default attribute value is not being handle!!!!");
 		break;

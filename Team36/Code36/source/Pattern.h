@@ -3,10 +3,12 @@
 #include <string>
 
 #include "Entity.h"
+#include "Common.h"
 
 class Pattern {
 public:
-	Pattern(Entity, Entity, expr, bool);
+	Pattern(Entity, Entity, std::string, bool);
+	Pattern(Entity, Entity);
 	Pattern();
 
 	Entity getPatternType();
@@ -17,8 +19,6 @@ public:
 	bool operator==(const Pattern&) const;
 
 private:
-
-	//Member Variable
 	Entity pattern_type;
 	Entity left_expression;
 	expr expression;

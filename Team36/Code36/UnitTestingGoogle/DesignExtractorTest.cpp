@@ -139,9 +139,11 @@ namespace UnitTesting {
 
 		// 5  if(mainIfCond==13) then {
 		extractor->addStatement(TokenType::IF);
+		extractor->setCondExpr(true);
 		extractor->addVariable("mainIfCond");
 		extractor->addStatementUses("mainIfCond");
 		extractor->addConstant(13);
+		extractor->setCondExpr(false);
 		extractor->startNesting();
 
 		// 5->6  beforeCall = beforeCall + 2;
@@ -182,8 +184,10 @@ namespace UnitTesting {
 
 		// 5->10  while(whileCond < 15) {
 		extractor->addStatement(TokenType::WHILE);
+		extractor->setCondExpr(true);
 		extractor->addVariable("whileCond");
 		extractor->addStatementUses("whileCond");
+		extractor->setCondExpr(false);
 		extractor->addConstant(15);
 		extractor->startNesting();
 
@@ -743,7 +747,7 @@ namespace UnitTesting {
 		ASSERT_EQ(pkb->getStmts().size(), expected_populated_stmt.size());
 		std::vector<StmtInfo> res = pkb->getStmts();
 		sort(res.begin(), res.end(), [](StmtInfo s1, StmtInfo s2) { return s1.stmt_index < s2.stmt_index; });
-		for (int i = 0; i < expected_populated_stmt.size(); i++) {
+		for (size_t i = 0; i < expected_populated_stmt.size(); i++) {
 			ASSERT_EQ(res[i].stmt_index, expected_populated_stmt[i].first);
 			ASSERT_EQ(res[i].stmt_type, expected_populated_stmt[i].second);
 		}
@@ -791,7 +795,7 @@ namespace UnitTesting {
 		};
 		auto table_u = pkb->getUsesS();
 		ASSERT_EQ(table_u.getPairs().size(), 21);
-		for (int i = 0; i < expected_used_variables.size(); i++) {
+		for (size_t i = 0; i < expected_used_variables.size(); i++) {
 			for (var_name v: expected_used_variables[i]) {
 				ASSERT_TRUE(table_u.containsPair(expected_stmt_info[i], v));
 			}
@@ -843,7 +847,7 @@ namespace UnitTesting {
 		};
 		auto table_m = pkb->getModifiesS();
 		ASSERT_EQ(table_m.getPairs().size(), 18);
-		for (int i = 0; i < expected_modified_variables.size(); i++) {
+		for (size_t i = 0; i < expected_modified_variables.size(); i++) {
 			for (var_name v : expected_modified_variables[i]) {
 				ASSERT_TRUE(table_m.containsPair(expected_stmt_info[i], v));
 			}
@@ -897,6 +901,78 @@ namespace UnitTesting {
 			ASSERT_TRUE(table_p.containsPair(expected_stmt_info[p.first - 1], expected_stmt_info[p.second - 1]));
 		}
 
+
+		// CallsP
+		auto table_cp = pkb->getCallsP();
+		std::vector<std::pair<proc_name, proc_name>> expected_cp =
+		{
+			{"main","p2"}
+		};
+		ASSERT_EQ(table_cp.getPairs().size(), expected_cp.size());
+		for (auto call : expected_cp) {
+			ASSERT_TRUE(table_cp.containsPair(call.first, call.second));
+		}
+
+		/*  TO BE OPENED AFTER IMPLEMENTATION OF addCallsS()
+		// CallsS
+		auto table_cs = pkb->getCallsS();
+		std::vector<std::pair<stmt_index, proc_name>> expected_cs =
+		{
+			{7,"p2"}
+		};
+		ASSERT_EQ(table_cs.getPairs().size(), expected_cs.size());
+		for (auto call : expected_cs) {
+			ASSERT_TRUE(table_cs.containsPair(call.first, call.second));
+		}
+		*/
+
+		// Ifs
+		auto table_ifs = pkb->getIf();
+		std::vector<std::pair<stmt_index, var_name>> expected_ifs =
+		{
+			{5,"mainIfCond"}
+		};
+		ASSERT_EQ(table_ifs.getPairs().size(), expected_ifs.size());
+		for (auto ifs : expected_ifs) {
+			ASSERT_TRUE(table_ifs.containsPair(ifs.first, ifs.second));
+		}
+
+		// Whiles
+		auto table_whiles = pkb->getWhile();
+		std::vector<std::pair<stmt_index, var_name>> expected_whiles =
+		{
+			{10,"whileCond"}
+		};
+		ASSERT_EQ(table_whiles.getPairs().size(), expected_whiles.size());
+		for (auto whiles : expected_whiles) {
+			ASSERT_TRUE(table_whiles.containsPair(whiles.first, whiles.second));
+		}
+
+		/*
+		* procedure main {
+		1	mainX = 1;
+		2	read readVar;
+		3	print printVar;
+		4	beforeIf = beforeIf * mainX;
+		5	if(mainIfCond==13) then {
+		6		beforeCall = beforeCall + 2;
+		7		call p2;
+		8		afterCall = afterCall + 4;
+			} else {
+		9		beforeWhile = beforeWhile;
+		10		while(whileCond < 15) {
+		11			inWhile = inWhile;
+				}
+		12		afterWhile = afterWhile;}
+		13	afterIf = afterIf;}
+		*
+		* procedure p2 {
+		14	p2Var = p2Var - 11;
+		* }
+		*/
+
+		// Clean up
+		delete extractor;
 	}
 
 

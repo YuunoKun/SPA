@@ -1,0 +1,115 @@
+1 - calls, LHS ident, RHS ident
+procedure p, q;
+Select p such that Calls("first", "second")
+first, second, third, fourth, fifth
+5000
+2 - calls, LHS ident, RHS synonym
+procedure p, q;
+Select q such that Calls("first", q)
+second, third, fourth
+5000
+3 - calls, LHS synonym, RHS ident
+procedure p, q;
+Select p such that Calls(p, "fourth")
+first, third
+5000
+4 - calls, LHS synonym, RHS synonym
+procedure p, q;
+Select p such that Calls(p, q)
+first, second, third, fourth
+5000
+5 - calls, LHS synonym, RHS synonym
+procedure p, q;
+Select q such that Calls(p, q)
+second, third, fourth, fifth
+5000
+6 - calls, LHS wildcard, RHS ident
+procedure p, q;
+Select p such that Calls(_, "second")
+first, second, third, fourth, fifth
+5000
+7 - calls, LHS wildcard, RHS synonym
+procedure p, q;
+Select q such that Calls(_, q)
+second, third, fourth, fifth
+5000
+8 - calls, LHS ident, RHS wildcard
+procedure p, q;
+Select p such that Calls("fifth", _)
+none
+5000
+9 - calls, LHS synonym, RHS wildcard
+procedure p, q;
+Select p such that Calls(p, _)
+first, second, third, fourth
+5000
+10 - calls, LHS wildcard, RHS wildcard
+procedure p, q;
+Select p such that Calls(_, _)
+first, second, third, fourth, fifth
+5000 
+11 - callsT, LHS ident, RHS ident
+procedure p, q;
+Select p such that Calls*("first", "third")
+first, second, third, fourth, fifth
+5000
+12 - callsT, LHS ident, RHS synonym
+procedure p, q;
+Select q such that Calls*("first", q)
+second, third, fourth, fifth
+5000
+13 - callsT, LHS synonym, RHS ident
+procedure p, q;
+Select p such that Calls*(p, "fourth")
+first, second, third
+5000
+14 - callsT, LHS synonym, RHS synonym
+procedure p, q;
+Select p such that Calls*(p, q)
+first, second, third, fourth
+5000
+15 - callsT, LHS synonym, RHS synonym
+procedure p, q;
+Select q such that Calls*(p, q)
+second, third, fourth, fifth
+5000
+16 - callsT, LHS wildcard, RHS ident
+procedure p, q;
+Select p such that Calls*(_, "fifth")
+first, second, third, fourth, fifth
+5000
+17 - callsT, LHS wildcard, RHS synonym
+procedure p, q;
+Select q such that Calls*(_, q)
+second, third, fourth, fifth
+5000
+18 - callsT, LHS ident, RHS wildcard
+procedure p, q;
+Select p such that Calls*("fifth", _)
+none
+5000
+19 - callsT, LHS synonym, RHS wildcard
+procedure p, q;
+Select p such that Calls*(p, _)
+first, second, third, fourth
+5000
+20 - callsT, LHS wildcard, RHS wildcard
+procedure p, q;
+Select p such that Calls*(_, _)
+first, second, third, fourth, fifth
+5000
+21 - calls, wrong procedure
+procedure p, q;
+Select p such that Calls("firstProcedure", "secondProcedure")
+none
+5000
+22 - calls, wrong procedure
+procedure p, q;
+Select p such that Calls(p, "secondProcedure")
+none
+5000
+23 - calls, wrong procedure
+procedure p, q;
+Select q such that Calls("firstProcedure", q)
+none
+5000

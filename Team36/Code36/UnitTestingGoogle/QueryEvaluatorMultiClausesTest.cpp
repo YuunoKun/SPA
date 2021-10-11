@@ -4,6 +4,7 @@
 #include "PKBAdapter.h"
 #include "PKB.h"
 #include "Common.h"
+#include "ExprParser.h"
 
 namespace UnitTesting {
 	class QueryEvaluatorMultiClausesTest : public testing::Test {
@@ -43,8 +44,8 @@ namespace UnitTesting {
 			PKB::getInstance().addModifiesS(std::stoi(MODIFIES_LEFT4), MODIFIES_RIGHT4);
 			PKB::getInstance().addUsesS(std::stoi(USES_LEFT1), USES_RIGHT1);
 			PKB::getInstance().addUsesS(std::stoi(USES_LEFT2), USES_RIGHT2);
-			PKB::getInstance().addExprTree(std::stoi(MODIFIES_LEFT3), EXPRESSION1);
-			PKB::getInstance().addExprTree(std::stoi(MODIFIES_LEFT4), EXPRESSION2);
+			PKB::getInstance().addExprTree(std::stoi(MODIFIES_LEFT3), EXPRESSIONNODE_1);
+			PKB::getInstance().addExprTree(std::stoi(MODIFIES_LEFT4), EXPRESSIONNODE_2);
 			PKB::getInstance().generateFollowsT();
 			PKB::getInstance().generateParentT();
 		}
@@ -85,90 +86,65 @@ namespace UnitTesting {
 			return q;
 		}
 
-		void validate(std::vector<Pattern> patterns, std::vector<RelRef> relations) {
-			for (unsigned int k = 0; k < patterns.size(); k++) {
-				for (unsigned int i = 0; i < patterns.size(); i++) {
-					for (unsigned int j = 0; j < ALL_SELECT.size(); j++) {
-						Query q = initQuery({ relations[k] }, { patterns[i] }, ALL_SELECT[j]);
-						EXPECT_EQ(evaluator.evaluateQuery(q).front(), ALL_RESULT[j]) << "Error at results : " << i + 1 << " : " << j + 1;
-						q = initQuery({ relations[k] }, { patterns[i] }, SELECT_BOOLEAN);
-						EXPECT_EQ(evaluator.evaluateQuery(q).front(), BOOLEAN_TRUE_RESULT) << "Error at results : " << i + 1 << " : " << j + 1;
-					}
+		void validate(Query q, std::list<std::string> result, int i, int j) {
+			EXPECT_EQ(evaluator.evaluateQuery(q).front(), result) << "Error at results : " << i + 1 << " : " << j + 1;
+		}
+
+		void validate(std::vector<RelRef> relations, std::vector<Pattern> patterns, int i, int j) {
+
+			validate(initQuery(relations, patterns, ALL_SELECT[i % ALL_SELECT.size()]), ALL_RESULT[i % ALL_SELECT.size()], i, j);
+			validate(initQuery(relations, patterns, SELECT_BOOLEAN), BOOLEAN_TRUE_RESULT, i, j); 
+		}
+
+		void validateEmpty(std::vector<RelRef> relations, std::vector<Pattern> patterns, int i, int j) {
+			validate(initQuery(relations, patterns, ALL_SELECT[i % ALL_SELECT.size()]), EMPTY_RESULT, i, j);
+			validate(initQuery(relations, patterns, SELECT_BOOLEAN), BOOLEAN_FALSE_RESULT, i, j);
+		}
+
+		void validate(std::vector<Pattern>& patterns, std::vector<RelRef>& relations) {
+			for (unsigned int i = 0; i < relations.size(); i++) {
+				for (unsigned int j = 0; j < patterns.size(); j++) {
+					validate({ relations[i] }, { patterns[j] }, i, j);
 				}
 			}
 		}
 
-		void validate(std::vector<Pattern> patterns, std::vector<RelRef> relations, std::vector<Entity> selected, std::vector<std::list<std::string>> results) {
-			for (unsigned int i = 0; i < patterns.size(); i++) {
-				Query q = initQuery({ relations[i] }, { patterns[i] }, selected[i]);
-				EXPECT_EQ(evaluator.evaluateQuery(q).front(), results[i]) << "Error at results : " << i + 1;
-				q = initQuery({ relations[i] }, { patterns[i] }, SELECT_BOOLEAN);
-				EXPECT_EQ(evaluator.evaluateQuery(q).front(), BOOLEAN_TRUE_RESULT) << "Error at results : " << i + 1;
-			}
-		}
-
-		void validate(std::vector<Pattern> patterns1, std::vector<Pattern> patterns2) {
-			for (unsigned int k = 0; k < patterns1.size(); k++) {
-				for (unsigned int i = 0; i < patterns2.size(); i++) {
-					for (unsigned int j = 0; j < ALL_SELECT.size(); j++) {
-						Query q = initQuery({ }, { patterns1[k], patterns2[i] }, ALL_SELECT[j]);
-						EXPECT_EQ(evaluator.evaluateQuery(q).front(), ALL_RESULT[j]) << "Error at results : " << i + 1 << " : " << j + 1;
-						q = initQuery({ }, { patterns1[k], patterns2[i] }, SELECT_BOOLEAN);
-						EXPECT_EQ(evaluator.evaluateQuery(q).front(), BOOLEAN_TRUE_RESULT) << "Error at results : " << i + 1 << " : " << j + 1;
-					}
+		void validate(std::vector<Pattern>& patterns1, std::vector<Pattern>& patterns2) {
+			for (unsigned int i = 0; i < patterns1.size(); i++) {
+				for (unsigned int j = 0; j < patterns2.size(); j++) {
+					validate({ },  { patterns1[i], patterns2[j] }, i, j);
 				}
 			}
 		}
 
-		void validate(std::vector<RelRef> relations1, std::vector<RelRef> relations2) {
-			for (unsigned int k = 0; k < relations1.size(); k++) {
-				for (unsigned int i = 0; i < relations2.size(); i++) {
-					for (unsigned int j = 0; j < ALL_SELECT.size(); j++) {
-						Query q = initQuery({ relations1[k], relations2[i] }, {  }, ALL_SELECT[j]);
-						EXPECT_EQ(evaluator.evaluateQuery(q).front(), ALL_RESULT[j]) << "Error at results : " << i + 1 << " : " << j + 1;
-						q = initQuery({ relations1[k], relations2[i] }, {  }, SELECT_BOOLEAN);
-						EXPECT_EQ(evaluator.evaluateQuery(q).front(), BOOLEAN_TRUE_RESULT) << "Error at results : " << i + 1 << " : " << j + 1;
-					}
+		void validate(std::vector<RelRef>& relations1, std::vector<RelRef>& relations2) {
+			for (unsigned int i = 0; i < relations1.size(); i++) {
+				for (unsigned int j = 0; j < relations2.size(); j++) {
+					validate({ relations1[i], relations2[j] }, { }, i, j);
 				}
 			}
 		}
 
-		void validateEmpty(std::vector<Pattern> patterns, std::vector<RelRef> relations) {
-			for (unsigned int k = 0; k < patterns.size(); k++) {
-				for (unsigned int i = 0; i < patterns.size(); i++) {
-					for (unsigned int j = 0; j < ALL_SELECT.size(); j++) {
-						Query q = initQuery({ relations[k] }, { patterns[i] }, ALL_SELECT[j]);
-						EXPECT_EQ(evaluator.evaluateQuery(q).front(), EMPTY_RESULT) << "Error at results : " << i + 1 << " : " << j + 1;
-						q = initQuery({ relations[k] }, { patterns[i] }, SELECT_BOOLEAN);
-						EXPECT_EQ(evaluator.evaluateQuery(q).front(), BOOLEAN_FALSE_RESULT) << "Error at results : " << i + 1 << " : " << j + 1;
-
-					}
+		void validateEmpty(std::vector<Pattern>& patterns, std::vector<RelRef>& relations) {
+			for (unsigned int i = 0; i < relations.size(); i++) {
+				for (unsigned int j = 0; j < patterns.size(); j++) {
+					validateEmpty({ relations[i] }, { patterns[j] }, i, j);
 				}
 			}
 		}
 
-		void validateEmpty(std::vector<Pattern> patterns1, std::vector<Pattern> patterns2) {
-			for (unsigned int k = 0; k < patterns1.size(); k++) {
-				for (unsigned int i = 0; i < patterns2.size(); i++) {
-					for (unsigned int j = 0; j < ALL_SELECT.size(); j++) {
-						Query q = initQuery({ }, { patterns1[k], patterns2[i] }, ALL_SELECT[j]);
-						EXPECT_EQ(evaluator.evaluateQuery(q).front(), EMPTY_RESULT) << "Error at results : " << i + 1 << " : " << j + 1;
-						q = initQuery({ }, { patterns1[k], patterns2[i] }, SELECT_BOOLEAN);
-						EXPECT_EQ(evaluator.evaluateQuery(q).front(), BOOLEAN_FALSE_RESULT) << "Error at results : " << i + 1 << " : " << j + 1;
-					}
+		void validateEmpty(std::vector<Pattern>& patterns1, std::vector<Pattern>& patterns2) {
+			for (unsigned int i = 0; i < patterns1.size(); i++) {
+				for (unsigned int j = 0; j < patterns2.size(); j++) {
+					validateEmpty({ }, { patterns1[i], patterns2[j] }, i, j);
 				}
 			}
 		}
 
-		void validateEmpty(std::vector<RelRef> relations1, std::vector<RelRef> relations2) {
-			for (unsigned int k = 0; k < relations1.size(); k++) {
-				for (unsigned int i = 0; i < relations2.size(); i++) {
-					for (unsigned int j = 0; j < ALL_SELECT.size(); j++) {
-						Query q = initQuery({ relations1[k], relations2[i] }, {  }, ALL_SELECT[j]);
-						EXPECT_EQ(evaluator.evaluateQuery(q).front(), EMPTY_RESULT) << "Error at results : " << i + 1 << " : " << j + 1;
-						q = initQuery({ relations1[k], relations2[i] }, {  }, BOOLEAN);
-						EXPECT_EQ(evaluator.evaluateQuery(q).front(), BOOLEAN_FALSE_RESULT) << "Error at results : " << i + 1 << " : " << j + 1;
-					}
+		void validateEmpty(std::vector<RelRef>& relations1, std::vector<RelRef>& relations2)  {
+			for (unsigned int i = 0; i < relations1.size(); i++) {
+				for (unsigned int j = 0; j < relations2.size(); j++) {
+					validateEmpty({ relations1[i], relations2[j] }, { }, i, j);
 				}
 			}
 		}
@@ -181,31 +157,7 @@ namespace UnitTesting {
 			std::string left2 = FOLLOW_LEFT2;
 			std::string right1 = FOLLOW_RIGHT1;
 			std::string right2 = FOLLOW_RIGHT2;
-			relations.push_back(RelRef(type, WILD_CARD, WILD_CARD));
-			relations.push_back(RelRef(type, { STMT, left1 }, { STMT, right1 }));
-			relations.push_back(RelRef(type, { STMT, left2 }, { STMT, right2 }));
-			relations.push_back(RelRef(type, { STMT, left1 }, WILD_CARD));
-			relations.push_back(RelRef(type, { STMT, left2 }, WILD_CARD));
-			relations.push_back(RelRef(type, WILD_CARD, { STMT, right1 }));
-			relations.push_back(RelRef(type, WILD_CARD, { STMT, right2 }));
-			relations.push_back(RelRef(type, { STMT, s1 }, { STMT, s2 }));
-			relations.push_back(RelRef(type, { IF, s1 }, { STMT, s2 }));
-			relations.push_back(RelRef(type, { STMT, s1 }, { IF, s2 }));
-			relations.push_back(RelRef(type, { STMT, s1 }, { WHILE, s2 }));
-			relations.push_back(RelRef(type, { IF, s1 }, { IF, s2 }));
-			relations.push_back(RelRef(type, { IF, s1 }, { WHILE, s2 }));
-			relations.push_back(RelRef(type, WILD_CARD, { STMT, s1 }));
-			relations.push_back(RelRef(type, WILD_CARD, { IF, s1 }));
-			relations.push_back(RelRef(type, WILD_CARD, { WHILE, s1 }));
-			relations.push_back(RelRef(type, { STMT, s1 }, WILD_CARD));
-			relations.push_back(RelRef(type, { IF, s1 }, WILD_CARD));
-			relations.push_back(RelRef(type, { STMT, left1 }, { STMT, s1 }));
-			relations.push_back(RelRef(type, { STMT, left1 }, { IF, s1 }));
-			relations.push_back(RelRef(type, { STMT, left2 }, { STMT, s1 }));
-			relations.push_back(RelRef(type, { STMT, left2 }, { WHILE, s1 }));
 			relations.push_back(RelRef(type, { STMT, s1 }, { STMT, right1 }));
-			relations.push_back(RelRef(type, { IF, s1 }, { STMT, right1 }));
-			relations.push_back(RelRef(type, { STMT, s1 }, { STMT, right2 }));
 			relations.push_back(RelRef(type, { IF, s1 }, { STMT, right2 }));
 
 			type = FOLLOWS_T;
@@ -213,33 +165,8 @@ namespace UnitTesting {
 			left2 = FOLLOW_LEFT2;
 			right1 = FOLLOW_RIGHT1;
 			right2 = FOLLOW_RIGHT2;
-			relations.push_back(RelRef(type, WILD_CARD, WILD_CARD));
-			relations.push_back(RelRef(type, { STMT, left1 }, { STMT, right1 }));
-			relations.push_back(RelRef(type, { STMT, left1 }, { STMT, right2 }));
-			relations.push_back(RelRef(type, { STMT, left2 }, { STMT, right2 }));
-			relations.push_back(RelRef(type, { STMT, left1 }, WILD_CARD));
-			relations.push_back(RelRef(type, { STMT, left2 }, WILD_CARD));
-			relations.push_back(RelRef(type, WILD_CARD, { STMT, right1 }));
-			relations.push_back(RelRef(type, WILD_CARD, { STMT, right2 }));
-			relations.push_back(RelRef(type, { STMT, s1 }, { STMT, s2 }));
-			relations.push_back(RelRef(type, { IF, s1 }, { STMT, s2 }));
-			relations.push_back(RelRef(type, { STMT, s1 }, { IF, s2 }));
-			relations.push_back(RelRef(type, { IF, s1 }, { IF, s2 }));
-			relations.push_back(RelRef(type, { IF, s1 }, { WHILE, s2 }));
-			relations.push_back(RelRef(type, WILD_CARD, { STMT, s1 }));
-			relations.push_back(RelRef(type, WILD_CARD, { IF, s1 }));
 			relations.push_back(RelRef(type, WILD_CARD, { WHILE, s1 }));
 			relations.push_back(RelRef(type, { STMT, s1 }, WILD_CARD));
-			relations.push_back(RelRef(type, { IF, s1 }, WILD_CARD));
-			relations.push_back(RelRef(type, { STMT, left1 }, { STMT, s1 }));
-			relations.push_back(RelRef(type, { STMT, left1 }, { IF, s1 }));
-			relations.push_back(RelRef(type, { STMT, left1 }, { WHILE, s1 }));
-			relations.push_back(RelRef(type, { STMT, left2 }, { STMT, s1 }));
-			relations.push_back(RelRef(type, { STMT, left2 }, { WHILE, s1 }));
-			relations.push_back(RelRef(type, { STMT, s1 }, { STMT, right1 }));
-			relations.push_back(RelRef(type, { IF, s1 }, { STMT, right1 }));
-			relations.push_back(RelRef(type, { STMT, s1 }, { STMT, right2 }));
-			relations.push_back(RelRef(type, { IF, s1 }, { STMT, right2 }));
 
 			type = PARENT;
 			left1 = PARENT_LEFT1;
@@ -248,44 +175,9 @@ namespace UnitTesting {
 			right1 = PARENT_RIGHT1;
 			right2 = PARENT_RIGHT2;
 			std::string right3 = PARENT_RIGHT3;
-			relations.push_back(RelRef(type, WILD_CARD, WILD_CARD));
-			relations.push_back(RelRef(type, { STMT, left1 }, { STMT, right1 }));
-			relations.push_back(RelRef(type, { STMT, left1 }, { STMT, right2 }));
-			relations.push_back(RelRef(type, { STMT, left2 }, { STMT, right2 }));
-			relations.push_back(RelRef(type, { STMT, left3 }, { STMT, right3 }));
-			relations.push_back(RelRef(type, { STMT, left1 }, WILD_CARD));
-			relations.push_back(RelRef(type, { STMT, left2 }, WILD_CARD));
-			relations.push_back(RelRef(type, { STMT, left3 }, WILD_CARD));
 			relations.push_back(RelRef(type, WILD_CARD, { STMT, right1 }));
 			relations.push_back(RelRef(type, WILD_CARD, { STMT, right2 }));
 			relations.push_back(RelRef(type, WILD_CARD, { STMT, right3 }));
-			relations.push_back(RelRef(type, { STMT, s1 }, { STMT, s2 }));
-			relations.push_back(RelRef(type, { IF, s1 }, { STMT, s2 }));
-			relations.push_back(RelRef(type, { WHILE, s1 }, { STMT, s2 }));
-			relations.push_back(RelRef(type, { STMT, s1 }, { IF, s2 }));
-			relations.push_back(RelRef(type, { STMT, s1 }, { WHILE, s2 }));
-			relations.push_back(RelRef(type, { IF, s1 }, { IF, s2 }));
-			relations.push_back(RelRef(type, { IF, s1 }, { WHILE, s2 }));
-			relations.push_back(RelRef(type, { WHILE, s1 }, { WHILE, s2 }));
-			relations.push_back(RelRef(type, WILD_CARD, { STMT, s1 }));
-			relations.push_back(RelRef(type, WILD_CARD, { IF, s1 }));
-			relations.push_back(RelRef(type, WILD_CARD, { WHILE, s1 }));
-			relations.push_back(RelRef(type, { STMT, s1 }, WILD_CARD));
-			relations.push_back(RelRef(type, { IF, s1 }, WILD_CARD));
-			relations.push_back(RelRef(type, { WHILE, s1 }, WILD_CARD));
-			relations.push_back(RelRef(type, { STMT, left1 }, { STMT, s1 }));
-			relations.push_back(RelRef(type, { STMT, left1 }, { IF, s1 }));
-			relations.push_back(RelRef(type, { STMT, left1 }, { WHILE, s1 }));
-			relations.push_back(RelRef(type, { STMT, left2 }, { STMT, s1 }));
-			relations.push_back(RelRef(type, { STMT, left2 }, { WHILE, s1 }));
-			relations.push_back(RelRef(type, { STMT, left3 }, { STMT, s1 }));
-			relations.push_back(RelRef(type, { STMT, left3 }, { WHILE, s1 }));
-			relations.push_back(RelRef(type, { STMT, s1 }, { STMT, right1 }));
-			relations.push_back(RelRef(type, { IF, s1 }, { STMT, right1 }));
-			relations.push_back(RelRef(type, { STMT, s1 }, { STMT, right2 }));
-			relations.push_back(RelRef(type, { IF, s1 }, { STMT, right2 }));
-			relations.push_back(RelRef(type, { STMT, s1 }, { STMT, right3 }));
-			relations.push_back(RelRef(type, { WHILE, s1 }, { STMT, right3 }));
 
 			type = PARENT_T;
 			left1 = PARENT_LEFT1;
@@ -294,98 +186,23 @@ namespace UnitTesting {
 			right1 = PARENT_RIGHT1;
 			right2 = PARENT_RIGHT2;
 			right3 = PARENT_RIGHT3;
-			relations.push_back(RelRef(type, WILD_CARD, WILD_CARD));
-			relations.push_back(RelRef(type, { STMT, left1 }, { STMT, right1 }));
-			relations.push_back(RelRef(type, { STMT, left1 }, { STMT, right2 }));
-			relations.push_back(RelRef(type, { STMT, left1 }, { STMT, right3 }));
-			relations.push_back(RelRef(type, { STMT, left2 }, { STMT, right2 }));
-			relations.push_back(RelRef(type, { STMT, left2 }, { STMT, right3 }));
-			relations.push_back(RelRef(type, { STMT, left3 }, { STMT, right3 }));
-			relations.push_back(RelRef(type, { STMT, left1 }, WILD_CARD));
-			relations.push_back(RelRef(type, { STMT, left2 }, WILD_CARD));
-			relations.push_back(RelRef(type, { STMT, left3 }, WILD_CARD));
-			relations.push_back(RelRef(type, WILD_CARD, { STMT, right1 }));
-			relations.push_back(RelRef(type, WILD_CARD, { STMT, right2 }));
-			relations.push_back(RelRef(type, WILD_CARD, { STMT, right3 }));
-			relations.push_back(RelRef(type, { STMT, s1 }, { STMT, s2 }));
-			relations.push_back(RelRef(type, { IF, s1 }, { STMT, s2 }));
-			relations.push_back(RelRef(type, { WHILE, s1 }, { STMT, s2 }));
-			relations.push_back(RelRef(type, { STMT, s1 }, { IF, s2 }));
-			relations.push_back(RelRef(type, { STMT, s1 }, { WHILE, s2 }));
-			relations.push_back(RelRef(type, { IF, s1 }, { IF, s2 }));
-			relations.push_back(RelRef(type, { IF, s1 }, { WHILE, s2 }));
-			relations.push_back(RelRef(type, { WHILE, s1 }, { WHILE, s2 }));
-			relations.push_back(RelRef(type, WILD_CARD, { STMT, s1 }));
-			relations.push_back(RelRef(type, WILD_CARD, { IF, s1 }));
-			relations.push_back(RelRef(type, WILD_CARD, { WHILE, s1 }));
-			relations.push_back(RelRef(type, { STMT, s1 }, WILD_CARD));
-			relations.push_back(RelRef(type, { IF, s1 }, WILD_CARD));
-			relations.push_back(RelRef(type, { WHILE, s1 }, WILD_CARD));
 			relations.push_back(RelRef(type, { STMT, left1 }, { STMT, s1 }));
-			relations.push_back(RelRef(type, { STMT, left1 }, { IF, s1 }));
-			relations.push_back(RelRef(type, { STMT, left1 }, { WHILE, s1 }));
-			relations.push_back(RelRef(type, { STMT, left2 }, { STMT, s1 }));
-			relations.push_back(RelRef(type, { STMT, left2 }, { WHILE, s1 }));
-			relations.push_back(RelRef(type, { STMT, left3 }, { STMT, s1 }));
-			relations.push_back(RelRef(type, { STMT, left3 }, { WHILE, s1 }));
-			relations.push_back(RelRef(type, { STMT, s1 }, { STMT, right1 }));
-			relations.push_back(RelRef(type, { IF, s1 }, { STMT, right1 }));
-			relations.push_back(RelRef(type, { STMT, s1 }, { STMT, right2 }));
-			relations.push_back(RelRef(type, { IF, s1 }, { STMT, right2 }));
-			relations.push_back(RelRef(type, { STMT, s1 }, { STMT, right3 }));
 			relations.push_back(RelRef(type, { WHILE, s1 }, { STMT, right3 }));
-			relations.push_back(RelRef(type, { IF, s1 }, { STMT, right3 }));
 
 			type = MODIFIES_S;
 			left1 = MODIFIES_LEFT1;
 			left2 = MODIFIES_LEFT2;
 			right1 = MODIFIES_RIGHT1;
 			right2 = MODIFIES_RIGHT2;
-			relations.push_back(RelRef(type, WILD_CARD, WILD_CARD));
 			relations.push_back(RelRef(type, { STMT, left1 }, { VARIABLE, right1 }));
 			relations.push_back(RelRef(type, { STMT, left2 }, { VARIABLE, right2 }));
-			relations.push_back(RelRef(type, { STMT, left1 }, WILD_CARD));
-			relations.push_back(RelRef(type, { STMT, left2 }, WILD_CARD));
-			relations.push_back(RelRef(type, WILD_CARD, { VARIABLE, right1 }));
-			relations.push_back(RelRef(type, WILD_CARD, { VARIABLE, right2 }));
-			relations.push_back(RelRef(type, { STMT, s1 }, { VARIABLE, s1 }));
-			relations.push_back(RelRef(type, { IF, s1 }, { VARIABLE, s1 }));
-			relations.push_back(RelRef(type, { WHILE, s1 }, { VARIABLE, s1 }));
-			relations.push_back(RelRef(type, WILD_CARD, { VARIABLE, s1 }));
-			relations.push_back(RelRef(type, { STMT, s1 }, WILD_CARD));
-			relations.push_back(RelRef(type, { IF, s1 }, WILD_CARD));
-			relations.push_back(RelRef(type, { WHILE, s1 }, WILD_CARD));
-			relations.push_back(RelRef(type, { STMT, left1 }, { VARIABLE, s1 }));
-			relations.push_back(RelRef(type, { STMT, left2 }, { VARIABLE, s1 }));
-			relations.push_back(RelRef(type, { STMT, s1 }, { VARIABLE, right1 }));
-			relations.push_back(RelRef(type, { IF, s1 }, { VARIABLE, right1 }));
-			relations.push_back(RelRef(type, { STMT, s1 }, { VARIABLE, right2 }));
-			relations.push_back(RelRef(type, { WHILE, s1 }, { VARIABLE, right2 }));
 
 			type = USES_S;
 			left1 = USES_LEFT1;
 			left2 = USES_LEFT2;
 			right1 = USES_RIGHT1;
 			right2 = USES_RIGHT2;
-			relations.push_back(RelRef(type, WILD_CARD, WILD_CARD));
-			relations.push_back(RelRef(type, { STMT, left1 }, { VARIABLE, right1 }));
-			relations.push_back(RelRef(type, { STMT, left2 }, { VARIABLE, right2 }));
-			relations.push_back(RelRef(type, { STMT, left1 }, WILD_CARD));
 			relations.push_back(RelRef(type, { STMT, left2 }, WILD_CARD));
-			relations.push_back(RelRef(type, WILD_CARD, { VARIABLE, right1 }));
-			relations.push_back(RelRef(type, WILD_CARD, { VARIABLE, right2 }));
-			relations.push_back(RelRef(type, { STMT, s1 }, { VARIABLE, s1 }));
-			relations.push_back(RelRef(type, { IF, s1 }, { VARIABLE, s1 }));
-			relations.push_back(RelRef(type, { WHILE, s1 }, { VARIABLE, s1 }));
-			relations.push_back(RelRef(type, WILD_CARD, { VARIABLE, s1 }));
-			relations.push_back(RelRef(type, { STMT, s1 }, WILD_CARD));
-			relations.push_back(RelRef(type, { IF, s1 }, WILD_CARD));
-			relations.push_back(RelRef(type, { WHILE, s1 }, WILD_CARD));
-			relations.push_back(RelRef(type, { STMT, left1 }, { VARIABLE, s1 }));
-			relations.push_back(RelRef(type, { STMT, left2 }, { VARIABLE, s1 }));
-			relations.push_back(RelRef(type, { STMT, s1 }, { VARIABLE, right1 }));
-			relations.push_back(RelRef(type, { IF, s1 }, { VARIABLE, right1 }));
-			relations.push_back(RelRef(type, { STMT, s1 }, { VARIABLE, right2 }));
 			relations.push_back(RelRef(type, { WHILE, s1 }, { VARIABLE, right2 }));
 
 			return relations;
@@ -407,16 +224,12 @@ namespace UnitTesting {
 
 			std::vector<Entity> invalidLefts = getInvalidConstant(lefts);
 			for (unsigned int k = 0; k < invalidLefts.size(); k++) {
-				for (unsigned int i = 0; i < VALID_CONSTANT_STMT_ENTITY.size(); i++) {
-					relations.push_back(RelRef(type, invalidLefts[k], VALID_CONSTANT_STMT_ENTITY[i]));
-				}
+				relations.push_back(RelRef(type, invalidLefts[k], VALID_CONSTANT_STMT_ENTITY[k % VALID_CONSTANT_STMT_ENTITY.size()]));
 			}
 
 			std::vector<Entity> invalidRight = getInvalidConstant(rights);
 			for (unsigned int k = 0; k < invalidRight.size(); k++) {
-				for (unsigned int i = 0; i < VALID_CONSTANT_STMT_ENTITY.size(); i++) {
-					relations.push_back(RelRef(type, VALID_CONSTANT_STMT_ENTITY[i], invalidRight[k]));
-				}
+				relations.push_back(RelRef(type, VALID_CONSTANT_STMT_ENTITY[k % VALID_CONSTANT_STMT_ENTITY.size()], invalidRight[k]));
 			}
 
 			for (Entity it : invalidLefts) {
@@ -425,32 +238,6 @@ namespace UnitTesting {
 
 			for (Entity it : invalidRight) {
 				relations.push_back(RelRef(type, { STMT, s1 }, it));
-			}
-
-			std::vector<Entity> synonyms;
-			synonyms.push_back({ PRINT, s1 });
-			synonyms.push_back({ READ, s1 });
-			synonyms.push_back({ ASSIGN, s1 });
-			synonyms.push_back({ CALL, s1 });
-
-			for (unsigned int k = 0; k < synonyms.size(); k++) {
-				for (unsigned int j = 0; j < synonyms.size(); j++) {
-					relations.push_back(RelRef(type, synonyms[k], synonyms[j]));
-				}
-			}
-
-			for (unsigned int k = 0; k < synonyms.size(); k++) {
-				relations.push_back(RelRef(type, WILD_CARD, synonyms[k]));
-				relations.push_back(RelRef(type, { synonyms[k] }, WILD_CARD));
-				relations.push_back(RelRef(type, { synonyms[k] }, WILD_CARD));
-
-				for (auto valid : lefts) {
-					relations.push_back(RelRef(type, { STMT, valid }, { synonyms[k] }));
-				}
-
-				for (auto valid : rights) {
-					relations.push_back(RelRef(type, { synonyms[k] }, { STMT, valid }));
-				}
 			}
 
 			type = FOLLOWS_T;
@@ -461,186 +248,24 @@ namespace UnitTesting {
 			right1 = FOLLOW_RIGHT1;
 			right2 = FOLLOW_RIGHT2;
 
-			relations.push_back(RelRef(type, { STMT, left2 }, { STMT, right1 }));
-
-			invalidLefts = getInvalidConstant(lefts);
-			for (unsigned int k = 0; k < invalidLefts.size(); k++) {
-				for (unsigned int i = 0; i < VALID_CONSTANT_STMT_ENTITY.size(); i++) {
-					relations.push_back(RelRef(type, invalidLefts[k], VALID_CONSTANT_STMT_ENTITY[i]));
-				}
-			}
-
 			invalidRight = getInvalidConstant(rights);
 			for (unsigned int k = 0; k < invalidRight.size(); k++) {
-				for (unsigned int i = 0; i < VALID_CONSTANT_STMT_ENTITY.size(); i++) {
-					relations.push_back(RelRef(type, VALID_CONSTANT_STMT_ENTITY[i], invalidRight[k]));
-				}
+				relations.push_back(RelRef(type, VALID_CONSTANT_STMT_ENTITY[k % VALID_CONSTANT_STMT_ENTITY.size()], invalidRight[k]));
 			}
 
-			for (Entity it : invalidLefts) {
-				relations.push_back(RelRef(type, it, { STMT, s1 }));
-			}
-
-			for (Entity it : invalidRight) {
-				relations.push_back(RelRef(type, { STMT, s1 }, it));
-			}
-
-			synonyms = {};
-			synonyms.push_back({ PRINT, s1 });
-			synonyms.push_back({ READ, s1 });
-			synonyms.push_back({ ASSIGN, s1 });
-			synonyms.push_back({ CALL, s1 });
-
-			for (unsigned int k = 0; k < synonyms.size(); k++) {
-				for (unsigned int j = 0; j < synonyms.size(); j++) {
-					relations.push_back(RelRef(type, synonyms[k], synonyms[j]));
-				}
-			}
-
-			//Empty result for non-matching header for single column
-			for (unsigned int k = 0; k < synonyms.size(); k++) {
-				relations.push_back(RelRef(type, WILD_CARD, synonyms[k]));
-				relations.push_back(RelRef(type, { synonyms[k] }, WILD_CARD));
-				relations.push_back(RelRef(type, { synonyms[k] }, WILD_CARD));
-
-				for (auto valid : lefts) {
-					relations.push_back(RelRef(type, { STMT, valid }, { synonyms[k] }));
-				}
-
-				for (auto valid : rights) {
-					relations.push_back(RelRef(type, { synonyms[k] }, { STMT, valid }));
-				}
-			}
-
-			type = PARENT;
 			left1 = PARENT_LEFT1;
 			left2 = PARENT_LEFT2;
 			std::string left3 = PARENT_LEFT3;
 			right1 = PARENT_RIGHT1;
 			right2 = PARENT_RIGHT2;
 			std::string right3 = PARENT_RIGHT3;
-
-			relations.push_back(RelRef(type, { STMT, left1 }, { STMT, right3 }));
-			relations.push_back(RelRef(type, { STMT, left2 }, { STMT, right1 }));
-			relations.push_back(RelRef(type, { STMT, left2 }, { STMT, right3 }));
-			relations.push_back(RelRef(type, { STMT, left3 }, { STMT, right2 }));
-
-			invalidLefts = getInvalidConstant(lefts);
-
-			for (unsigned int k = 0; k < invalidLefts.size(); k++) {
-				for (unsigned int i = 0; i < VALID_CONSTANT_STMT_ENTITY.size(); i++) {
-					relations.push_back(RelRef(type, invalidLefts[k], VALID_CONSTANT_STMT_ENTITY[i]));
-				}
-			}
-
-			invalidRight = getInvalidConstant(rights);
-
-			for (unsigned int k = 0; k < invalidRight.size(); k++) {
-				for (unsigned int i = 0; i < VALID_CONSTANT_STMT_ENTITY.size(); i++) {
-					relations.push_back(RelRef(type, VALID_CONSTANT_STMT_ENTITY[i], invalidRight[k]));
-				}
-			}
-
-			for (Entity it : invalidLefts) {
-				relations.push_back(RelRef(type, it, { STMT, s1 }));
-			}
-
-			for (Entity it : invalidRight) {
-				relations.push_back(RelRef(type, { STMT, s1 }, it));
-			}
-
-			synonyms = {};
-			synonyms.push_back({ PRINT, s1 });
-			synonyms.push_back({ READ, s1 });
-			synonyms.push_back({ ASSIGN, s1 });
-			synonyms.push_back({ CALL, s1 });
-
-			for (unsigned int k = 0; k < synonyms.size(); k++) {
-				for (unsigned int j = 0; j < synonyms.size(); j++) {
-					relations.push_back(RelRef(type, synonyms[k], synonyms[j]));
-				}
-			}
-
-			//Empty result for non-matching header for single column
-			for (unsigned int k = 0; k < synonyms.size(); k++) {
-				relations.push_back(RelRef(type, WILD_CARD, synonyms[k]));
-				relations.push_back(RelRef(type, { synonyms[k] }, WILD_CARD));
-				relations.push_back(RelRef(type, { synonyms[k] }, WILD_CARD));
-
-				for (auto valid : lefts) {
-					relations.push_back(RelRef(type, { STMT, valid }, { synonyms[k] }));
-				}
-
-				for (auto valid : rights) {
-					relations.push_back(RelRef(type, { synonyms[k] }, { STMT, valid }));
-				}
-			}
-
-			type = PARENT_T;
-			left1 = PARENT_LEFT1;
-			left2 = PARENT_LEFT2;
-			left3 = PARENT_LEFT3;
-			right1 = PARENT_RIGHT1;
-			right2 = PARENT_RIGHT2;
-			right3 = PARENT_RIGHT3;
 			lefts = PARENT_LEFTS;
 			rights = PARENT_RIGHTS;
 			//Test false boolean equation
 
 			relations.push_back(RelRef(type, { STMT, "2" }, { STMT, "2" }));
 			relations.push_back(RelRef(type, { STMT, "3" }, { STMT, "3" }));
-
-			invalidLefts = getInvalidConstant(lefts);
-
-			for (unsigned int k = 0; k < invalidLefts.size(); k++) {
-				for (unsigned int i = 0; i < VALID_CONSTANT_STMT_ENTITY.size(); i++) {
-					relations.push_back((RelRef(type, invalidLefts[k], VALID_CONSTANT_STMT_ENTITY[i])));
-				}
-			}
-
-			invalidRight = getInvalidConstant(rights);
-
-			for (unsigned int k = 0; k < invalidRight.size(); k++) {
-				for (unsigned int i = 0; i < VALID_CONSTANT_STMT_ENTITY.size(); i++) {
-					relations.push_back((RelRef(type, VALID_CONSTANT_STMT_ENTITY[i], invalidRight[k])));
-				}
-			}
-
-			for (Entity it : invalidLefts) {
-				relations.push_back(RelRef(type, it, { STMT, s1 }));
-			}
-
-			for (Entity it : invalidRight) {
-				relations.push_back(RelRef(type, { STMT, s1 }, it));
-			}
-
-			synonyms = {};
-			synonyms.push_back({ PRINT, s1 });
-			synonyms.push_back({ READ, s1 });
-			synonyms.push_back({ ASSIGN, s1 });
-			synonyms.push_back({ CALL, s1 });
-
-			for (unsigned int k = 0; k < synonyms.size(); k++) {
-				for (unsigned int j = 0; j < synonyms.size(); j++) {
-					relations.push_back(RelRef(type, synonyms[k], synonyms[j]));
-				}
-			}
-
-			//Empty result for non-matching header for single column
-			for (unsigned int k = 0; k < synonyms.size(); k++) {
-				relations.push_back(RelRef(type, WILD_CARD, synonyms[k]));
-				relations.push_back(RelRef(type, { synonyms[k] }, WILD_CARD));
-				relations.push_back(RelRef(type, { synonyms[k] }, WILD_CARD));
-
-				for (auto valid : lefts) {
-					relations.push_back(RelRef(type, { STMT, valid }, { synonyms[k] }));
-				}
-
-				for (auto valid : rights) {
-					relations.push_back(RelRef(type, { synonyms[k] }, { STMT, valid }));
-				}
-			}
-
+			
 			type = MODIFIES_S;
 			left1 = MODIFIES_LEFT1;
 			left2 = MODIFIES_LEFT2;
@@ -648,30 +273,7 @@ namespace UnitTesting {
 			right2 = MODIFIES_RIGHT2;
 			lefts = MODIFIES_LEFTS;
 
-			invalidLefts = getInvalidConstant(lefts);
-
-			for (unsigned int k = 0; k < invalidLefts.size(); k++) {
-				for (unsigned int i = 0; i < ALL_VARIABLES.size(); i++) {
-					relations.push_back((RelRef(type, invalidLefts[k], ALL_VARIABLES[i])));
-				}
-			}
-
-			invalidRight = { { VARIABLE, z } };
-
-			for (unsigned int k = 0; k < invalidRight.size(); k++) {
-				for (unsigned int i = 0; i < VALID_CONSTANT_STMT_ENTITY.size(); i++) {
-					relations.push_back(RelRef(type, VALID_CONSTANT_STMT_ENTITY[i], invalidRight[k]));
-				}
-			}
-
-			for (Entity it : invalidLefts) {
-				relations.push_back(RelRef(type, it, { STMT, s1 }));
-			}
-			relations.push_back(RelRef(type, { STMT, s1 }, { VARIABLE, z }));
-
-			synonyms = {};
-			synonyms.push_back({ PRINT, s1 });
-			synonyms.push_back({ READ, s1 });
+			std::vector<Entity> synonyms = {};
 			synonyms.push_back({ CALL, s1 });
 
 			for (unsigned int k = 0; k < synonyms.size(); k++) {
@@ -679,7 +281,7 @@ namespace UnitTesting {
 					relations.push_back(RelRef(type, synonyms[k], ALL_VARIABLES[j]));
 				}
 			}
-
+			
 			type = USES_S;
 			left1 = USES_LEFT1;
 			left2 = USES_LEFT2;
@@ -687,41 +289,15 @@ namespace UnitTesting {
 			right2 = USES_RIGHT2;
 			lefts = USES_LEFTS;
 
-			invalidLefts = getInvalidConstant(lefts);
-
-			for (unsigned int k = 0; k < invalidLefts.size(); k++) {
-				for (unsigned int i = 0; i < ALL_VARIABLES.size(); i++) {
-					relations.push_back((RelRef(type, invalidLefts[k], ALL_VARIABLES[i])));
-				}
-			}
-
 			invalidRight = { { VARIABLE, z } };
-
 			for (unsigned int k = 0; k < invalidRight.size(); k++) {
-				for (unsigned int i = 0; i < VALID_CONSTANT_STMT_ENTITY.size(); i++) {
+				for (unsigned int i = 1; i < VALID_CONSTANT_STMT_ENTITY.size(); i++) {
 					relations.push_back(RelRef(type, VALID_CONSTANT_STMT_ENTITY[i], invalidRight[k]));
 				}
 			}
-
-			for (Entity it : invalidLefts) {
-				relations.push_back(RelRef(type, it, { STMT, s1 }));
-			}
-
-			relations.push_back(RelRef(type, { STMT, s1 }, { VARIABLE, z }));
-
-			synonyms = { };
-			synonyms.push_back({ PRINT, s1 });
-			synonyms.push_back({ READ, s1 });
-			synonyms.push_back({ ASSIGN, s1 });
-			synonyms.push_back({ CALL, s1 });
-
-			for (unsigned int k = 0; k < synonyms.size(); k++) {
-				for (unsigned int j = 0; j < ALL_VARIABLES.size(); j++) {
-					relations.push_back(RelRef(type, synonyms[k], ALL_VARIABLES[j]));
-				}
-			}
-
+			
 			return relations;
+			
 		}
 
 		std::vector<Pattern> getAllValidPattern(Synonym s1, Synonym s2) {
@@ -752,30 +328,28 @@ namespace UnitTesting {
 			Entity lhsN = { VARIABLE, "n" };
 
 			std::vector<std::string> patternExpr;
-			patternExpr.push_back("x");
 			patternExpr.push_back("y");
 			patternExpr.push_back("z");
 			patternExpr.push_back("n");
 			std::vector<Pattern> patterns;
 			for (auto expr : patternExpr) {
-				patterns.push_back(Pattern(assign, lhsZ, expr, false));
 				patterns.push_back(Pattern(assign, lhsZ, expr, true));
 				patterns.push_back(Pattern(assign, lhsN, expr, false));
 				patterns.push_back(Pattern(assign, lhsN, expr, true));
 			}
 
 			patterns.push_back(Pattern(assign, lhsX, "y", true));
-			patterns.push_back(Pattern(assign, lhsX, "y", false));
-			patterns.push_back(Pattern(assign, lhsY, "y", false));
 			patterns.push_back(Pattern(assign, lhsY, "x", false));
-			patterns.push_back(Pattern(assign, lhsSynonym, "y", false));
-			patterns.push_back(Pattern(assign, lhsSynonym, "z", false));
 			patterns.push_back(Pattern(assign, lhsSynonym, "n", false));
 			patterns.push_back(Pattern(assign, lhsSynonym, "z", true));
 			patterns.push_back(Pattern(assign, lhsSynonym, "n", true));
 
 			return patterns;
 		}
+
+		PKBAdapter pkb;
+		QueryEvaluator evaluator;
+		ExprParser expr_parser;
 
 		const var_name x = "x";
 		const var_name y = "y";
@@ -832,7 +406,9 @@ namespace UnitTesting {
 		const std::string MODIFIES_RIGHT4 = y;
 
 		const std::string EXPRESSION1 = "x";
-		const std::string EXPRESSION2 = "x + y";
+		const std::string EXPRESSION2 = "x + (y * 5)";
+		expr EXPRESSIONNODE_1 = expr_parser.parse(EXPRESSION1);
+		expr EXPRESSIONNODE_2 = expr_parser.parse(EXPRESSION2);
 
 		const std::vector<std::string> MODIFIES_LEFTS = { MODIFIES_LEFT1, MODIFIES_LEFT2, MODIFIES_LEFT3, MODIFIES_LEFT4 };
 		const std::vector<std::string> MODIFIES_RIGHTS = { MODIFIES_RIGHT1, MODIFIES_RIGHT2, MODIFIES_RIGHT3, MODIFIES_RIGHT4 };
@@ -848,8 +424,6 @@ namespace UnitTesting {
 
 		const std::list<std::string> STMTS = { IF1, IF2, WHILE1, WHILE2, READ1, READ2,
 			PRINT1, PRINT2, ASSIGN1, ASSIGN2, CALL1, CALL2 };
-		PKBAdapter pkb;
-		QueryEvaluator evaluator;
 
 		const Synonym COMMON_SYNONYM1 = { "cs1" };
 		const Synonym COMMON_SYNONYM2 = { "cs2" };
@@ -922,9 +496,7 @@ namespace UnitTesting {
 
 		validate(validPattern, validRelation);
 		validate(validPattern, validPattern1);
-
-		// Don't do this unless needed, it 172 * 172 * 10 = 295,840 test case combination
-		//validate(validRelation, validRelation1);
+		validate(validRelation, validRelation1);
 	}
 
 	TEST_F(QueryEvaluatorMultiClausesTest, evaluateQueryTwoClausesNoCommonSynonymFalses) {
@@ -941,10 +513,9 @@ namespace UnitTesting {
 		validateEmpty(invalidPattern, validPattern);
 		validateEmpty(invalidPattern, invalidPattern);
 
-		// Don't do this unless needed, it 172 * 172 * 10 = 295,840 test case combination each
-		//validateEmpty(validRelation, invalidRelation);
-		//validateEmpty(invalidRelation, validRelation);
-		//validateEmpty(invalidRelation, invalidRelation);
+		validateEmpty(validRelation, invalidRelation);
+		validateEmpty(invalidRelation, validRelation);
+		validateEmpty(invalidRelation, invalidRelation);
 	}
 
 	TEST_F(QueryEvaluatorMultiClausesTest, evaluateQueryPatternRelationFilterSingleCommonSynonymsEmpty) {

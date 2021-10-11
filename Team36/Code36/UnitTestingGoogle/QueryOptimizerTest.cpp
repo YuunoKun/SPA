@@ -4,7 +4,7 @@
 
 namespace UnitTesting {
 	TEST(QueryOptimizer, optimizeClausesOrder) {
-
+		QueryOptimizer optimizer;
 		RelRef relRefNoSynonym(FOLLOWS, { STMT, "1" }, { STMT, "2" });
 		RelRef relRefOneSynonym(PARENT, { STMT, Synonym("a") }, { STMT, "2" });
 		RelRef relRefTwoSynonym(FOLLOWS_T, { STMT, Synonym("a") }, { STMT, Synonym("b") });
@@ -20,7 +20,7 @@ namespace UnitTesting {
 		orderedClauses.push_back({ relRefNoSynonym });
 		orderedClauses.push_back({ relRefOneSynonym });
 		orderedClauses.push_back({ relRefTwoSynonym });
-		EXPECT_EQ(QueryOptimizer::optimizeClausesOrder(unorderedClauses), orderedClauses);
+		EXPECT_EQ(optimizer.optimizeClausesOrder(unorderedClauses), orderedClauses);
 
 		unorderedClauses.clear();
 		orderedClauses.clear();
@@ -31,7 +31,7 @@ namespace UnitTesting {
 		orderedClauses.push_back({ patternNoSynonym });
 		orderedClauses.push_back({ patternOneSynonym });
 		orderedClauses.push_back({ patternTwoSynonym });
-		EXPECT_EQ(QueryOptimizer::optimizeClausesOrder(unorderedClauses), orderedClauses);
+		EXPECT_EQ(optimizer.optimizeClausesOrder(unorderedClauses), orderedClauses);
 
 		unorderedClauses.clear();
 		orderedClauses.clear();
@@ -48,7 +48,7 @@ namespace UnitTesting {
 		orderedClauses.push_back({ patternOneSynonym });
 		orderedClauses.push_back({ relRefTwoSynonym });
 		orderedClauses.push_back({ patternTwoSynonym });
-		EXPECT_EQ(QueryOptimizer::optimizeClausesOrder(unorderedClauses), orderedClauses);
+		EXPECT_EQ(optimizer.optimizeClausesOrder(unorderedClauses), orderedClauses);
 	}
 
 }

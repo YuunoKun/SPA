@@ -336,7 +336,7 @@ void FSM::expectFactor() {
 }
 
 
-Token& FSM::expectIdentifier() {
+Token FSM::expectIdentifier() {
 	switch (tokenizer.peekToken().getTokenType()) {
 	case TokenType::PROCEDURE:
 	case TokenType::READ:
@@ -347,12 +347,13 @@ Token& FSM::expectIdentifier() {
 	case TokenType::THEN:
 	case TokenType::ELSE:
 	case TokenType::IDENTIFIER:
-		return expectTokenAndPop(tokenizer.peekToken().getTokenType());
 		break;
 	default:
 		unexpectedToken("expectIdentifier error.");
 		break;
 	}
+
+	return expectTokenAndPop(tokenizer.peekToken().getTokenType());
 }
 
 
@@ -373,6 +374,8 @@ bool FSM::optionalRelationalExpression() {
 	if (!optionalRelationalFactor()) {
 		return false;
 	}
+
+	return true;
 }
 
 
@@ -450,16 +453,19 @@ bool FSM::optionalIdentifier() {
 		return false;
 		break;
 	}
+
+	return false;
 }
 
 
-Token& FSM::expectTokenAndPop(TokenType token_type) {
+Token FSM::expectTokenAndPop(TokenType token_type) {
 	tokenizer.resetProbe();
 	if (peekToken(token_type)) {
 		return tokenizer.popToken();
 	}
 	else {
 		unexpectedToken("");
+		return Token(TokenType::INVAL, "");
 	}
 }
 

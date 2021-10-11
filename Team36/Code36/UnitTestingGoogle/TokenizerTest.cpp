@@ -26,7 +26,7 @@ namespace UnitTesting {
 
 		ASSERT_EQ(test_output.size(), correct_output.size());
 
-		for (int i = 0; i < correct_output.size(); i++) {
+		for (size_t i = 0; i < correct_output.size(); i++) {
 			ASSERT_EQ(test_output[i].getTokenType(), correct_output[i]);
 		}
 	}
@@ -64,7 +64,7 @@ namespace UnitTesting {
 
 		ASSERT_EQ(test_output.size(), correct_output.size());
 
-		for (int i = 0; i < correct_output.size(); i++) {
+		for (size_t i = 0; i < correct_output.size(); i++) {
 			ASSERT_EQ(test_output[i].getTokenType(), correct_output[i]);
 		}
 	}
@@ -119,7 +119,7 @@ namespace UnitTesting {
 
 		ASSERT_EQ(test_output.size(), correct_output.size());
 
-		for (int i = 0; i < correct_output.size(); i++) {
+		for (size_t i = 0; i < correct_output.size(); i++) {
 			ASSERT_EQ(test_output[i].getTokenType(), correct_output[i]);
 		}
 	}

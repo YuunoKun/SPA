@@ -14,6 +14,7 @@ PKB& PKB::getInstance() {
 	return pkb;
 }
 
+
 void PKB::addConstant(constant constant) {
 	const_table.emplace(constant);
 	return;
@@ -53,7 +54,7 @@ void PKB::addExprTree(stmt_index stmt_index, expr expr) {
 	else if (stmt_table[stmt_index - 1].stmt_type != STMT_ASSIGN) {
 		throw std::invalid_argument("Stmt index does not belong to an assignment statement: " + std::to_string(stmt_index));
 	}
-	expr_table.insert(stmt_index, expr);
+	expr_table.insert({ stmt_index, expr });
 }
 
 void PKB::addParent(stmt_index parent, stmt_index child) {
@@ -165,15 +166,47 @@ void PKB::addCallsS(stmt_index caller_stmt_index, proc_name callee_proc_name) {
 }
 
 void PKB::addIf(stmt_index if_stmt_index, var_name control_var) {
-	//TODO(Kelvin): Implement addition
+	try {
+		if (stmt_table.at(if_stmt_index - 1).stmt_type != STMT_IF) {
+			throw std::invalid_argument("addIf: Stmt index does not belong to an if statement: " + std::to_string(if_stmt_index));
+		}
+		std::vector<var_name>::iterator it = std::find(var_table.begin(), var_table.end(), control_var);
+		if (it == var_table.end()) {
+			throw std::invalid_argument("addIf: Invalid var name: " + control_var);
+		}
+		if_table.insert(if_stmt_index, control_var);
+	}
+	catch (std::out_of_range&) {
+		throw std::invalid_argument("addIf: Invalid stmt index:" + std::to_string(if_stmt_index));
+	}
 }
 
 void PKB::addWhile(stmt_index while_stmt_index, var_name control_var) {
-	//TODO(Kelvin): Implement addition
+	try {
+		if (stmt_table.at(while_stmt_index - 1).stmt_type != STMT_WHILE) {
+			throw std::invalid_argument("addWhile: Stmt index does not belong to an while statement: " + std::to_string(while_stmt_index));
+		}
+		std::vector<var_name>::iterator it = std::find(var_table.begin(), var_table.end(), control_var);
+		if (it == var_table.end()) {
+			throw std::invalid_argument("addWhile: Invalid var name: " + control_var);
+		}
+		while_table.insert(while_stmt_index, control_var);
+	}
+	catch (std::out_of_range&) {
+		throw std::invalid_argument("addWhile: Invalid stmt index:" + std::to_string(while_stmt_index));
+	}
 }
 
 void PKB::addNext(prog_line prog_line1, prog_line prog_line2) {
-	//TODO(Kelvin): Implement addition
+	try {
+		StmtInfo first_stmt_info{ prog_line1, stmt_table.at(prog_line1 - 1).stmt_type };
+		StmtInfo second_stmt_info{ prog_line2, stmt_table.at(prog_line2 - 1).stmt_type };
+		next_table.insert(first_stmt_info, second_stmt_info);
+	}
+	catch (std::out_of_range&) {
+		throw std::invalid_argument("addNext: Invalid prog line: [" + std::to_string(prog_line1)
+			+ "," + std::to_string(prog_line2) + "]");
+	}
 }
 
 void PKB::generateParentT() {
@@ -194,7 +227,6 @@ void PKB::resetCache() {
 	var_table.clear();
 	stmt_table.clear();
 	assignment_table.clear();
-	expr_table.clear();
 	follows_table.clear();
 	parent_table.clear();
 	followsT_table.clear();
@@ -205,6 +237,12 @@ void PKB::resetCache() {
 	modifiesP_table.clear();
 	callsP_table.clear();
 	callsPT_table.clear();
+	if_table.clear();
+	while_table.clear();
+	next_table.clear();
+	read_table.clear();
+	print_table.clear();
+	expr_table.clear();
 }
 
 void PKB::resetEntities() {
@@ -252,7 +290,7 @@ const var_name PKB::getAssignment(stmt_index stmt_index) {
 	return assignment_table.getValues(stmt_index)[0];
 }
 
-const expr PKB::getExpression(stmt_index stmt_index) {
+expr PKB::getExpression(stmt_index stmt_index) {
 	if (stmt_index <= 0) {
 		throw std::invalid_argument("Stmt index must be greater than zero: " + std::to_string(stmt_index));
 	}
@@ -262,10 +300,10 @@ const expr PKB::getExpression(stmt_index stmt_index) {
 	else if (stmt_table[stmt_index - 1].stmt_type != STMT_ASSIGN) {
 		throw std::invalid_argument("Stmt index does not belong to an assignment statement: " + std::to_string(stmt_index));
 	}
-	else if (!expr_table.containsKey(stmt_index)) {
+	else if (expr_table.find(stmt_index) == expr_table.end()) {
 		throw std::invalid_argument("Stmt-related expression has not been initiated: " + std::to_string(stmt_index));
 	}
-	return expr_table.getValues(stmt_index)[0];
+	return expr_table.at(stmt_index);
 }
 
 const std::vector<constant> PKB::getConstants() {
@@ -277,7 +315,7 @@ const UniqueRelationTable<stmt_index, var_name>& PKB::getAssigns() {
 	return assignment_table;
 }
 
-const UniqueRelationTable<stmt_index, expr>& PKB::getExpr() {
+const std::unordered_map<stmt_index, expr>& PKB::getExpr() {
 	return expr_table;
 }
 

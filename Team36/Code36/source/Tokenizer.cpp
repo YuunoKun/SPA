@@ -188,7 +188,7 @@ void Tokenizer::parseIntoTokens(const char* input) {
 }
 
 
-const std::vector<Token> &Tokenizer::getTokenChain() const {
+std::vector<Token> Tokenizer::getTokenChain() {
 	return token_cache;
 }
 
@@ -244,7 +244,7 @@ bool Tokenizer::hasToken() {
 }
 
 
-Token &Tokenizer::peekToken() {
+Token Tokenizer::peekToken() {
 	if (!hasToken()) {
 		return Token(TokenType::INVAL, "");
 	}
@@ -255,7 +255,7 @@ Token &Tokenizer::peekToken() {
 }
 
 
-Token &Tokenizer::popToken() {
+Token Tokenizer::popToken() {
 	if (!hasToken()) {
 		return Token(TokenType::INVAL, "");
 	}
@@ -266,7 +266,7 @@ Token &Tokenizer::popToken() {
 }
 
 
-Token& Tokenizer::peekProbe() {
+Token Tokenizer::peekProbe() {
 	if (probe >= token_cache.size()) {
 		return Token(TokenType::INVAL, "");
 	}
@@ -276,7 +276,7 @@ Token& Tokenizer::peekProbe() {
 }
 
 
-Token& Tokenizer::popProbe() {
+Token Tokenizer::popProbe() {
 	if (probe >= token_cache.size()) {
 		return Token(TokenType::INVAL, "");
 	}

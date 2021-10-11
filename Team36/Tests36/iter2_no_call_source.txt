@@ -1,0 +1,5 @@
+procedure myFirstProcedure{
+x=3; y=4;
+}
+
+procedure mySecondProcedure {   z = x+y; x = 5; w=7;      }

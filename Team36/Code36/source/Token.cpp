@@ -33,13 +33,3 @@ std::string &Token::getTokenValue() {
 void Token::setTokenValue(std::string value) {
 	token_value = value;
 }
-
-
-std::string Token::toString() {
-	if (token_value == "") {
-		return "Empty token.";
-	}
-	else {
-		//return "Token type : " + tokenTypeStrings[token_type] + ", token value : " + token_value;
-	}
-}

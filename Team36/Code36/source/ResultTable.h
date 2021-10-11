@@ -6,8 +6,10 @@
 class ResultTable {
 public:
 	ResultTable(Entity&, std::vector<StmtInfo>&);
+	ResultTable(Entity&, std::vector<stmt_index>&);
 	ResultTable(Entity&, std::vector<std::string>&);
 	ResultTable(std::pair<Entity, Entity>, std::vector<std::pair<std::string, std::string>>&);
+	ResultTable(std::pair<Entity, Entity>, std::vector<std::pair<stmt_index, std::string>>&);
 	ResultTable(std::pair<Entity, Entity>, std::vector<std::pair<StmtInfo, StmtInfo>>&);
 	ResultTable(std::pair<Entity, Entity>, std::vector<std::pair<StmtInfo, std::string>>&);
 

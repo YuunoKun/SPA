@@ -9,10 +9,7 @@
 #include "Statement.h"
 #include "ExprParser.h"
 
-
-
 namespace SourceProcessor {
-
 	class DesignExtractor : public Extractor {
 	public:
 
@@ -64,7 +61,6 @@ namespace SourceProcessor {
 
 		void populateRelations(PKB&) override;
 
-
 	private:
 		std::vector<Procedure*> de_procedures;
 		std::vector<Statement*> de_statements;
@@ -89,9 +85,9 @@ namespace SourceProcessor {
 		void populateUses(PKB&);
 		void populateModifies(PKB&);
 		void populateCalls(PKB&);
+		void populateNext(PKB&);
 
 		void populateIfs(PKB&);
 		void populateWhiles(PKB&);
 	};
-
 } // namespace SourceProcessor

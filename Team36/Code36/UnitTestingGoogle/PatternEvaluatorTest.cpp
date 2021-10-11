@@ -3,13 +3,15 @@
 #include "RelationsEvaluator.h"
 #include "pkb.h"
 #include <PatternEvaluator.h>
+#include <ExprParser.h>
 
 namespace UnitTesting {
-	TEST(PatternEvaluator, evaluatePattern) {
+	TEST(PatternEvaluator, evaluateAssignPattern) {
 		PKB::getInstance().resetCache();
 		PatternEvaluator evaluator;
+		ExprParser expr_parser;
 
-		Entity assign = { ASSIGN, "a" };
+		Entity assign = { ASSIGN, Synonym{"assign"} };
 		Entity lhsSynonym = { VARIABLE, Synonym{"a"} };
 		Entity lhsX = { VARIABLE, "x" };
 		Entity lhsY = { VARIABLE, "y" };
@@ -25,14 +27,14 @@ namespace UnitTesting {
 		}
 
 		std::vector<var_name> variableList = { "x", "y", "z", "y", "z", "z" };
-		std::vector<expr> expressionList = { "x", "y*x", "x+y", "z%x", "x-x", "x+y-z" };
+		std::vector<std::string> expressionList = { "x", "y*x", "x+y", "z%x", "x-x", "x+y-z" };
 		std::vector<stmt_index> stmtList = { 1, 2, 3, 4, 5, 6 };
 
 		for (unsigned int i = 0; i < variableList.size(); i++) {
 			PKB::getInstance().addStmt(STMT_ASSIGN);
 			PKB::getInstance().addVariable(variableList[i]);
 			PKB::getInstance().addModifiesS(stmtList[i], variableList[i]);
-			PKB::getInstance().addExprTree(stmtList[i], expressionList[i]);
+			PKB::getInstance().addExprTree(stmtList[i], expr_parser.parse(expressionList[i]));
 		}
 
 		//Test for pattern a(x, _)
@@ -120,6 +122,97 @@ namespace UnitTesting {
 		for (auto nonExist : lhsNonExistList) {
 			QueryResult result;
 			Pattern pattern(assign, nonExist, "n", true);
+			evaluator.evaluatePattern(result, pattern);
+			EXPECT_FALSE(result.haveResult());
+		}
+	}
+
+
+	TEST(PatternEvaluator, evaluateIfsPattern) {
+		PKB::getInstance().resetCache();
+		PatternEvaluator evaluator;
+
+		Entity ifs = { IF, Synonym{"if"} };
+		Entity lhsSynonym = { VARIABLE, Synonym{"a"} };
+		Entity lhsX = { VARIABLE, "x" };
+		Entity lhsY = { VARIABLE, "y" };
+		Entity lhsZ = { VARIABLE, "z" };
+		Entity lhsN = { VARIABLE, "n" };
+
+		std::vector<Entity> lhsNonExistList = { lhsSynonym, lhsX, lhsY, lhsZ, lhsN };
+		for (auto nonExist : lhsNonExistList) {
+			QueryResult result;
+			Pattern pattern(ifs, nonExist);
+			evaluator.evaluatePattern(result, pattern);
+			EXPECT_FALSE(result.haveResult());
+		}
+
+		std::vector<var_name> variableList = { "x", "y", "z", "y", "z", "z" };
+		std::vector<stmt_index> stmtList = { 1, 2, 3, 4, 5, 6 };
+
+		for (unsigned int i = 0; i < variableList.size(); i++) {
+			PKB::getInstance().addStmt(STMT_IF);
+			PKB::getInstance().addVariable(variableList[i]);
+			PKB::getInstance().addIf(stmtList[i], variableList[i]);
+		}
+
+		std::vector<Entity> lhsExistList = { lhsSynonym, lhsX, lhsY, lhsZ };
+		for (auto exist : lhsExistList) {
+			QueryResult result;
+			Pattern pattern(ifs, exist);
+			evaluator.evaluatePattern(result, pattern);
+			EXPECT_TRUE(result.haveResult());
+		}
+
+		lhsNonExistList = { lhsN };
+		for (auto nonExist : lhsNonExistList) {
+			QueryResult result;
+			Pattern pattern(ifs, nonExist);
+			evaluator.evaluatePattern(result, pattern);
+			EXPECT_FALSE(result.haveResult());
+		}
+	}
+
+	TEST(PatternEvaluator, evaluateWhilePattern) {
+		PKB::getInstance().resetCache();
+		PatternEvaluator evaluator;
+
+		Entity w = { WHILE, Synonym{"while"} };
+		Entity lhsSynonym = { VARIABLE, Synonym{"a"} };
+		Entity lhsX = { VARIABLE, "x" };
+		Entity lhsY = { VARIABLE, "y" };
+		Entity lhsZ = { VARIABLE, "z" };
+		Entity lhsN = { VARIABLE, "n" };
+
+		std::vector<Entity> lhsNonExistList = { lhsSynonym, lhsX, lhsY, lhsZ, lhsN };
+		for (auto nonExist : lhsNonExistList) {
+			QueryResult result;
+			Pattern pattern(w, nonExist);
+			evaluator.evaluatePattern(result, pattern);
+			EXPECT_FALSE(result.haveResult());
+		}
+
+		std::vector<var_name> variableList = { "x", "y", "z", "y", "z", "z" };
+		std::vector<stmt_index> stmtList = { 1, 2, 3, 4, 5, 6 };
+
+		for (unsigned int i = 0; i < variableList.size(); i++) {
+			PKB::getInstance().addStmt(STMT_WHILE);
+			PKB::getInstance().addVariable(variableList[i]);
+			PKB::getInstance().addWhile(stmtList[i], variableList[i]);
+		}
+
+		std::vector<Entity> lhsExistList = { lhsSynonym, lhsX, lhsY, lhsZ };
+		for (auto exist : lhsExistList) {
+			QueryResult result;
+			Pattern pattern(w, exist);
+			evaluator.evaluatePattern(result, pattern);
+			EXPECT_TRUE(result.haveResult());
+		}
+
+		lhsNonExistList = { lhsN };
+		for (auto nonExist : lhsNonExistList) {
+			QueryResult result;
+			Pattern pattern(w, nonExist);
 			evaluator.evaluatePattern(result, pattern);
 			EXPECT_FALSE(result.haveResult());
 		}

@@ -1,0 +1,100 @@
+1 - calls, no calls stmt
+procedure p, q;
+Select p such that Calls("myFirstProcedure", "mySecondProcedure")
+none
+5000
+2 - calls, no calls stmt
+procedure p, q;
+Select q such that Calls("myFirstProcedure", q)
+none
+5000
+3 - calls, no calls stmt
+procedure p, q;
+Select p such that Calls(p, "mySecondProcedure")
+none
+5000
+4 - calls, no calls stmt
+procedure p, q;
+Select p such that Calls(p, q)
+none
+5000
+5 - calls, no calls stmt
+procedure p, q;
+Select q such that Calls(p, q)
+none
+5000
+6 - calls, no calls stmt
+procedure p, q;
+Select p such that Calls(_, "mySecondProcedure")
+none
+5000
+7 - calls, no calls stmt
+procedure p, q;
+Select q such that Calls("myFirstProcedure", _)
+none
+5000
+8 - calls, no calls stmt
+procedure p, q;
+Select p such that Calls(p, _)
+none
+5000
+9 - calls, no calls stmt
+procedure p, q;
+Select q such that Calls(_, q)
+none
+5000
+10 - calls, no calls stmt
+procedure p, q;
+Select p such that Calls(_, _)
+none
+5000
+11 - callT, no calls stmt
+procedure p, q;
+Select p such that Calls*("myFirstProcedure", "mySecondProcedure")
+none
+5000
+12 - callsT, no calls stmt
+procedure p, q;
+Select q such that Calls*("myFirstProcedure", q)
+none
+5000
+13 - callsT, no calls stmt
+procedure p, q;
+Select p such that Calls*(p, "mySecondProcedure")
+none
+5000
+14 - callsT, no calls stmt
+procedure p, q;
+Select p such that Calls*(p, q)
+none
+5000
+15 - callsT, no calls stmt
+procedure p, q;
+Select q such that Calls*(p, q)
+none
+5000
+16 - callsT, no calls stmt
+procedure p, q;
+Select p such that Calls*(_, "mySecondProcedure")
+none
+5000
+17 - callsT, no calls stmt
+procedure p, q;
+Select q such that Calls*("myFirstProcedure", _)
+none
+5000
+18 - callsT, no calls stmt
+procedure p, q;
+Select p such that Calls*(p, _)
+none
+5000
+19 - callsT, no calls stmt
+procedure p, q;
+Select q such that Calls*(_, q)
+none
+5000
+20 - callsT, no calls stmt
+procedure p, q;
+Select p such that Calls*(_, _)
+none
+5000
