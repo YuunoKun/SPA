@@ -39,7 +39,23 @@ namespace IntegrationTesting {
 		std::vector<StmtInfo> sample5_stmts = { { 1, STMT_ASSIGN }, { 2, STMT_CALL} , { 3, STMT_CALL },
 			{ 4, STMT_READ}, { 5, STMT_PRINT }, { 6, STMT_PRINT}, { 7, STMT_ASSIGN}, { 8, STMT_CALL},
 			{ 9, STMT_WHILE} , { 10, STMT_ASSIGN} , { 11, STMT_CALL} , { 12, STMT_IF},
-			{ 13, STMT_ASSIGN },  { 14, STMT_ASSIGN }, { 15, STMT_ASSIGN } };
+			{ 13, STMT_ASSIGN },  { 14, STMT_ASSIGN }, { 15, STMT_ASSIGN }
+		};
+
+		std::vector<StmtInfo> sample6_stmts = { { 1, STMT_ASSIGN }, { 2, STMT_ASSIGN} , { 3, STMT_WHILE },
+			{ 4, STMT_WHILE}, { 5, STMT_WHILE }, { 6, STMT_WHILE}, { 7, STMT_ASSIGN}, { 8, STMT_ASSIGN},
+			{ 9, STMT_ASSIGN} , { 10, STMT_ASSIGN}
+		};
+
+		std::vector<StmtInfo> sample7_stmts = { { 1, STMT_ASSIGN }, { 2, STMT_ASSIGN} , { 3, STMT_IF },
+			{ 4, STMT_ASSIGN}, { 5, STMT_IF }, { 6, STMT_ASSIGN}, { 7, STMT_ASSIGN}, { 8, STMT_IF},
+			{ 9, STMT_ASSIGN} , { 10, STMT_IF}, { 11, STMT_ASSIGN}, { 12, STMT_IF}, { 13, STMT_ASSIGN},
+			{ 14, STMT_ASSIGN},{ 15, STMT_ASSIGN},{ 16, STMT_ASSIGN}, { 17, STMT_ASSIGN},
+		};
+
+		std::vector<StmtInfo> sample8_stmts = { { 1, STMT_WHILE }, { 2, STMT_ASSIGN} , { 3, STMT_WHILE },
+			{ 4, STMT_IF}, { 5, STMT_ASSIGN }, { 6, STMT_ASSIGN}
+		};
 	};
 
 	TEST_F(ParserPKBTest, Sample3TokenizerTest) {
@@ -388,6 +404,71 @@ namespace IntegrationTesting {
 		EXPECT_EQ(v, expected_next_stmt);
 	}
 
+	TEST_F(ParserPKBTest, Sample6Test_Next) {
+		SourceProcessor::Parser parser;
+		parser.load_file("../UnitTestingGoogle/SPTest/TestSource/Sample6.txt");
+		parser.parse();
+
+		std::vector<std::pair<stmt_index, stmt_index>> expected_next = {
+			{1,2}, {2,3}, {3,4}, {4,5}, {5,6}, {6,7}, {7,6},
+			{6,8}, {8,5}, {5,9}, {9,4}, {4,10}, {10,3}
+		};
+		std::sort(expected_next.begin(), expected_next.end());
+
+		std::vector<std::pair<StmtInfo, StmtInfo>> expected_next_stmt;
+		for (auto const& pair : expected_next) {
+			expected_next_stmt.push_back({ ParserPKBTest::sample6_stmts[pair.first - 1], ParserPKBTest::sample6_stmts[pair.second - 1] });
+		}
+
+		RelationTable<StmtInfo, StmtInfo> table = PKB::getInstance().getNext();
+		auto v = table.getPairs();
+		std::sort(v.begin(), v.end());
+		EXPECT_EQ(v, expected_next_stmt);
+	}
+
+	TEST_F(ParserPKBTest, Sample7Test_Next) {
+		SourceProcessor::Parser parser;
+		parser.load_file("../UnitTestingGoogle/SPTest/TestSource/Sample7.txt");
+		parser.parse();
+
+		std::vector<std::pair<stmt_index, stmt_index>> expected_next = {
+			{1,2}, {2,3}, {3,4}, {3,17}, {4,5}, {5,6}, {5,7}, {7,8}, {8,9}, {8,16},
+			{9,10}, {10,11}, {10,15}, {11,12}, {12,13}, {12,14}
+		};
+		std::sort(expected_next.begin(), expected_next.end());
+
+		std::vector<std::pair<StmtInfo, StmtInfo>> expected_next_stmt;
+		for (auto const& pair : expected_next) {
+			expected_next_stmt.push_back({ ParserPKBTest::sample7_stmts[pair.first - 1], ParserPKBTest::sample7_stmts[pair.second - 1] });
+		}
+
+		RelationTable<StmtInfo, StmtInfo> table = PKB::getInstance().getNext();
+		auto v = table.getPairs();
+		std::sort(v.begin(), v.end());
+		EXPECT_EQ(v, expected_next_stmt);
+	}
+
+	TEST_F(ParserPKBTest, Sample8Test_Next) {
+		SourceProcessor::Parser parser;
+		parser.load_file("../UnitTestingGoogle/SPTest/TestSource/Sample8.txt");
+		parser.parse();
+
+		std::vector<std::pair<stmt_index, stmt_index>> expected_next = {
+			{1,2}, {2,3}, {3,4}, {4,5}, {4,6}, {5,3}, {6,3}, {3,1}
+		};
+		std::sort(expected_next.begin(), expected_next.end());
+
+		std::vector<std::pair<StmtInfo, StmtInfo>> expected_next_stmt;
+		for (auto const& pair : expected_next) {
+			expected_next_stmt.push_back({ ParserPKBTest::sample8_stmts[pair.first - 1], ParserPKBTest::sample8_stmts[pair.second - 1] });
+		}
+
+		RelationTable<StmtInfo, StmtInfo> table = PKB::getInstance().getNext();
+		auto v = table.getPairs();
+		std::sort(v.begin(), v.end());
+		EXPECT_EQ(v, expected_next_stmt);
+	}
+
 	TEST_F(ParserPKBTest, Sample5Test_Whiles) {
 		SourceProcessor::Parser parser;
 		parser.load_file("../UnitTestingGoogle/SPTest/TestSource/Sample5.txt");
@@ -404,14 +485,14 @@ namespace IntegrationTesting {
 		EXPECT_EQ(v, expected_whiles);
 	}
 
-	TEST_F(ParserPKBTest, Sample5Test_While_Nested) {
+	TEST_F(ParserPKBTest, Sample6Test_While_Nested) {
 		SourceProcessor::Parser parser;
 		parser.load_file("../UnitTestingGoogle/SPTest/TestSource/Sample6.txt");
 		parser.parse();
 
 		std::vector<std::pair<stmt_index, var_name>> expected_whiles = {
-			{8, "g"}, {8, "f"}, {9, "f"}, {9, "e"}, {10, "e"}, {10, "d"},
-			{11, "d"}, {11, "c"}, {12, "c"}, {12, "b"}, {13, "b"}, {13, "a"}
+			{3, "g"}, {3, "f"}, {4, "f"}, {4, "e"}, {5, "e"}, {5, "d"},
+			{6, "d"}, {6, "c"}
 		};
 		std::sort(expected_whiles.begin(), expected_whiles.end());
 
@@ -437,7 +518,7 @@ namespace IntegrationTesting {
 		EXPECT_EQ(v, expected_ifs);
 	}
 
-	TEST_F(ParserPKBTest, Sample5Test_Ifs_Nested) {
+	TEST_F(ParserPKBTest, Sample7Test_Ifs_Nested) {
 		SourceProcessor::Parser parser;
 		parser.load_file("../UnitTestingGoogle/SPTest/TestSource/Sample7.txt");
 		parser.parse();

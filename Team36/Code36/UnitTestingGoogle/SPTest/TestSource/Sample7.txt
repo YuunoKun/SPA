@@ -5,25 +5,25 @@ procedure nested {
     flag = 1;
     if (3 > x) then {
       flag = 1;
-    } else {
+     } else {
       a = a;
       if (3 != 4) then {
-        flag = 1;
+         flag = 1;
 	  if (3 > (x+y)) then {
             flag = 1;
 	    if (!(y > (x+y)*(z+3))) then {
-              flag = 1;
+             flag = 1;
             } else {
               a = a;
             }
           } else {
             a = a;
           }
-      } else {
+       } else {
         a = a;
-      }
-    }
-  } else {
-    cenX = cenX / count;
+       }
+     }
+   } else {
+  cenX = cenX / count;
   }
 }

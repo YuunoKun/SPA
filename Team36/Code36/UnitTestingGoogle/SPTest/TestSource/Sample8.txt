@@ -1,0 +1,12 @@
+procedure nested {
+  while (a < 3) {
+    a = 1;
+    while (a > b) {
+      if (count == 0) then {
+        flag = 1;
+      } else {
+        cenX = cenX / count;
+      }
+    }
+  }
+}
