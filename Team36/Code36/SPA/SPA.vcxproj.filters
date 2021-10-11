@@ -65,8 +65,8 @@
       <UniqueIdentifier>{1ea08201-45db-4358-a6ac-6fb079daeeae}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\PQL\QueryEvaluator\QueryObject">
-      <UniqueIdentifier>{68d43cbf-77cf-4ba4-98b7-3415d920e923}</UniqueIdentifier>    
-	</Filter>
+      <UniqueIdentifier>{68d43cbf-77cf-4ba4-98b7-3415d920e923}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Source Files\Common">
       <UniqueIdentifier>{84871b21-c6ae-45ec-95a3-0ddc3888a41d}</UniqueIdentifier>
     </Filter>
@@ -206,11 +206,17 @@
     </ClCompile>
     <ClCompile Include="..\source\SyntacticErrorException.cpp">
       <Filter>Source Files\PQL\Helper</Filter>
-	</ClCompile>
+    </ClCompile>
     <ClCompile Include="..\source\ExprParser.cpp">
       <Filter>Source Files\Common</Filter>
     </ClCompile>
     <ClCompile Include="..\source\ExprNode.cpp">
+      <Filter>Source Files\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\CFGNode.cpp">
+      <Filter>Source Files\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\CFG.cpp">
       <Filter>Source Files\Common</Filter>
     </ClCompile>
   </ItemGroup>
@@ -376,11 +382,17 @@
     </ClInclude>
     <ClInclude Include="..\source\SemanticErrorException.h">
       <Filter>Header Files\PQL\Helper</Filter>
-	</ClInclude>
+    </ClInclude>
     <ClInclude Include="..\source\ExprNode.h">
       <Filter>Header Files\Common</Filter>
     </ClInclude>
     <ClInclude Include="..\source\ExprParser.h">
+      <Filter>Header Files\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\CFGNode.h">
+      <Filter>Header Files\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\CFG.h">
       <Filter>Header Files\Common</Filter>
     </ClInclude>
   </ItemGroup>
