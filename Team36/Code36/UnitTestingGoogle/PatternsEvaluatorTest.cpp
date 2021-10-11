@@ -2,13 +2,13 @@
 
 #include "RelationsEvaluator.h"
 #include "pkb.h"
-#include <PatternEvaluator.h>
-#include <ExprParser.h>
+#include "PatternsEvaluator.h"
+#include "ExprParser.h"
 
 namespace UnitTesting {
-	TEST(PatternEvaluator, evaluateAssignPattern) {
+	TEST(PatternsEvaluator, evaluateAssignPattern) {
 		PKB::getInstance().resetCache();
-		PatternEvaluator evaluator;
+		PatternsEvaluator evaluator;
 		ExprParser expr_parser;
 
 		Entity assign = { ASSIGN, Synonym{"assign"} };
@@ -128,9 +128,9 @@ namespace UnitTesting {
 	}
 
 
-	TEST(PatternEvaluator, evaluateIfsPattern) {
+	TEST(PatternsEvaluator, evaluateIfsPattern) {
 		PKB::getInstance().resetCache();
-		PatternEvaluator evaluator;
+		PatternsEvaluator evaluator;
 
 		Entity ifs = { IF, Synonym{"if"} };
 		Entity lhsSynonym = { VARIABLE, Synonym{"a"} };
@@ -173,9 +173,9 @@ namespace UnitTesting {
 		}
 	}
 
-	TEST(PatternEvaluator, evaluateWhilePattern) {
+	TEST(PatternsEvaluator, evaluateWhilePattern) {
 		PKB::getInstance().resetCache();
-		PatternEvaluator evaluator;
+		PatternsEvaluator evaluator;
 
 		Entity w = { WHILE, Synonym{"while"} };
 		Entity lhsSynonym = { VARIABLE, Synonym{"a"} };

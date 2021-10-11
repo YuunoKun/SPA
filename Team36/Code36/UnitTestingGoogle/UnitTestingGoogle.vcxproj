@@ -49,7 +49,7 @@
     <ClCompile Include="FSMTest.cpp" />
     <ClCompile Include="NextEvaluatorTest.cpp" />
     <ClCompile Include="ParserTest.cpp" />
-    <ClCompile Include="PatternEvaluatorTest.cpp" />
+    <ClCompile Include="PatternsEvaluatorTest.cpp" />
     <ClCompile Include="PKBAdapterTest.cpp" />
     <ClCompile Include="QueryEvaluatorMultiClausesTest.cpp" />
     <ClCompile Include="QueryEvaluatorPatternTest.cpp" />

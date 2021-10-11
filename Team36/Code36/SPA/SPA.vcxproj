@@ -50,7 +50,10 @@
     <ClCompile Include="..\source\AffectEvaluator.cpp" />
     <ClCompile Include="..\source\AffectTEvaluator.cpp" />
     <ClCompile Include="..\source\WithEvaluator.cpp" />
-    <ClCompile Include="..\source\PatternEvaluator.cpp" />
+    <ClCompile Include="..\source\PatternsEvaluator.cpp" />
+    <ClCompile Include="..\source\PatternAssignEvaluator.cpp" />
+    <ClCompile Include="..\source\PatternIfEvaluator.cpp" />
+    <ClCompile Include="..\source\PatternWhileEvaluator.cpp" />
     <ClCompile Include="..\source\ResultTable.cpp" />
     <ClCompile Include="..\source\Utility.cpp" />
     <ClCompile Include="..\source\QueryPatternRelRefParser.cpp" />
@@ -58,8 +61,8 @@
     <ClCompile Include="..\source\QueryOptimizer.cpp" />
     <ClCompile Include="..\source\ResultProjector.cpp" />
     <ClCompile Include="..\source\SemanticErrorException.cpp" />
-	<ClCompile Include="..\source\SyntacticErrorException.cpp" />
-	<ClCompile Include="..\source\AssignPatternParser.cpp" />
+    <ClCompile Include="..\source\SyntacticErrorException.cpp" />
+    <ClCompile Include="..\source\AssignPatternParser.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\source\DesignExtractor.h" />
@@ -91,7 +94,11 @@
     <ClInclude Include="..\source\RelationsEvaluator.h" />
     <ClInclude Include="..\source\RelationEvaluatorInterface.h" />
     <ClInclude Include="..\source\FollowsEvaluator.h" />
-    <ClInclude Include="..\source\PatternEvaluator.h" />
+    <ClInclude Include="..\source\PatternsEvaluator.h" />
+    <ClInclude Include="..\source\PatternEvaluatorInterface.h" />
+    <ClInclude Include="..\source\PatternAssignEvaluator.h" />
+    <ClInclude Include="..\source\PatternIfEvaluator.h" />
+    <ClInclude Include="..\source\PatternWhileEvaluator.h" />
     <ClInclude Include="..\source\FollowsTEvaluator.h" />
     <ClInclude Include="..\source\ParentEvaluator.h" />
     <ClInclude Include="..\source\ParentTEvaluator.h" />
@@ -113,8 +120,8 @@
     <ClInclude Include="..\source\QueryOptimizer.h" />
     <ClInclude Include="..\source\ResultProjector.h" />
     <ClInclude Include="..\source\SyntacticErrorException.h" />
-	<ClInclude Include="..\source\SemanticErrorException.h" />
-	<ClCompile Include="..\source\AssignPatternParser.h" />
+    <ClInclude Include="..\source\SemanticErrorException.h" />
+    <ClCompile Include="..\source\AssignPatternParser.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{DC21A1EA-D2C6-4D14-A2B4-E025B64BDE81}</ProjectGuid>
