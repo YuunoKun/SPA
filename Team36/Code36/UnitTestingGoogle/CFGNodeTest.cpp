@@ -62,6 +62,14 @@ namespace UnitTesting {
 		ASSERT_EQ(node3->getNextBranch(), node2);
 		ASSERT_EQ(node3->getPrevMain(), nullptr);
 		ASSERT_EQ(node3->getPrevBranch(), node1);
+
+		node1->setNextMain(nullptr);
+		node1->setNextBranch(nullptr);
+		node2->setPrevMain(nullptr);
+		node2->setPrevBranch(nullptr);
+		node3->setNextBranch(nullptr);
+		node3->setPrevBranch(nullptr);
+		delete node1, node2, node3;
 	}
 
 	TEST(CFGNode, insertLine) {
@@ -72,6 +80,8 @@ namespace UnitTesting {
 		std::vector<prog_line> expectedV = { 1, 2 };
 		CFGNode* node2 = new CFGNode(expectedV);
 		ASSERT_EQ(node1->getProgramLines(), node2->getProgramLines());
+
+		delete node1;
 	}
 
 }

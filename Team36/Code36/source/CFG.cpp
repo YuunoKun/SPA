@@ -216,15 +216,19 @@ vector<pair<prog_line, prog_line>> CFG::getNexts() {
 				result.push_back({ node->getProgramLines()[i], node->getProgramLines()[i + 1] });
 			}
 		}
-		if (node->getNextMain() != nullptr && node->getNextMain()->getProgramLines().size() > 0 && node->getNextMain()->getVisited() == false) {
+		if (node->getNextMain() != nullptr && node->getNextMain()->getProgramLines().size() > 0) {
 			result.push_back({ node->getProgramLines().back(), node->getNextMain()->getProgramLines().front() });
-			s.push_back(node->getNextMain());
-			node->getNextMain()->setVisited();
+			if (node->getNextMain()->getVisited() == false) {
+				s.push_back(node->getNextMain());
+				node->getNextMain()->setVisited();
+			}
 		}
-		if (node->getNextBranch() != nullptr && node->getNextBranch()->getProgramLines().size() > 0 && node->getNextBranch()->getVisited() == false) {
+		if (node->getNextBranch() != nullptr && node->getNextBranch()->getProgramLines().size() > 0) {
 			result.push_back({ node->getProgramLines().back(), node->getNextBranch()->getProgramLines().front() });
-			s.push_back(node->getNextBranch());
-			node->getNextBranch()->setVisited();
+			if (node->getNextBranch()->getVisited() == false) {
+				s.push_back(node->getNextBranch());
+				node->getNextBranch()->setVisited();
+			}
 		}
 		s.pop_front();
 	}
