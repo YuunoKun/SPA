@@ -10,6 +10,16 @@ CFG::CFG() {
 }
 
 CFG::~CFG() {
+	destroyCFG(head);
+}
+
+void CFG::destroyCFG(CFGNode* node) {
+	if (node) {
+		destroyCFG(node->getNextMain());
+		destroyCFG(node->getNextBranch());
+		delete node;
+	}
+	
 }
 
 CFGNode* CFG::getHead() {
