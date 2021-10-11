@@ -13,8 +13,6 @@ CFGNode::CFGNode(vector<prog_line> lines) {
 CFGNode::~CFGNode() {
 	delete next_main;
 	delete next_branch;
-	delete prev_main;
-	delete prev_branch;
 }
 
 void CFGNode::setProgramLines(vector<prog_line> lines) {
@@ -27,14 +25,6 @@ void CFGNode::setNextMain(CFGNode* nextMain) {
 
 void CFGNode::setNextBranch(CFGNode* nextBranch) {
 	next_branch = nextBranch;
-}
-
-void CFGNode::setPrevMain(CFGNode* prevMain) {
-	prev_main = prevMain;
-}
-
-void CFGNode::setPrevBranch(CFGNode* prevBranch) {
-	prev_branch = prevBranch;
 }
 
 void CFGNode::setVisited() {
@@ -57,14 +47,6 @@ CFGNode* CFGNode::getNextMain() {
 
 CFGNode* CFGNode::getNextBranch() {
 	return next_branch;
-}
-
-CFGNode* CFGNode::getPrevMain() {
-	return prev_main;
-}
-
-CFGNode* CFGNode::getPrevBranch() {
-	return prev_branch;
 }
 
 bool CFGNode::getVisited() {

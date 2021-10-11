@@ -12,33 +12,23 @@ namespace UnitTesting {
 		ASSERT_EQ(node1->getProgramLines(), v1);
 		ASSERT_EQ(node1->getNextMain(), nullptr);
 		ASSERT_EQ(node1->getNextBranch(), nullptr);
-		ASSERT_EQ(node1->getPrevMain(), nullptr);
-		ASSERT_EQ(node1->getPrevBranch(), nullptr);
-		
+
 		std::vector<prog_line> v2 = {4, 5};
 		CFGNode* node2 = new CFGNode();
 		node2->setProgramLines(v2);
 		ASSERT_EQ(node2->getProgramLines(), v2);
 		ASSERT_EQ(node2->getNextMain(), nullptr);
 		ASSERT_EQ(node2->getNextBranch(), nullptr);
-		ASSERT_EQ(node2->getPrevMain(), nullptr);
-		ASSERT_EQ(node2->getPrevBranch(), nullptr);
 
 		node1->setNextMain(node2);
-		node2->setPrevMain(node1);
 		ASSERT_EQ(node1->getProgramLines(), v1);
 		ASSERT_EQ(node1->getNextMain(), node2);
 		ASSERT_EQ(node1->getNextBranch(), nullptr);
-		ASSERT_EQ(node1->getPrevMain(), nullptr);
-		ASSERT_EQ(node1->getPrevBranch(), nullptr);
 
 		ASSERT_EQ(node2->getProgramLines(), v2);
 		ASSERT_EQ(node2->getNextMain(), nullptr);
 		ASSERT_EQ(node2->getNextBranch(), nullptr);
-		ASSERT_EQ(node2->getPrevMain(), node1);
-		ASSERT_EQ(node2->getPrevBranch(), nullptr);
-
-		std::vector<prog_line> v3 = { 6, 7, 8 };
+		/*std::vector<prog_line> v3 = {6, 7, 8};
 		CFGNode* node3 = new CFGNode(v3);
 		node1->setNextBranch(node3);
 		node3->setPrevBranch(node1);
@@ -69,7 +59,7 @@ namespace UnitTesting {
 		node2->setPrevBranch(nullptr);
 		node3->setNextBranch(nullptr);
 		node3->setPrevBranch(nullptr);
-		delete node1, node2, node3;
+		delete node1, node2, node3;*/
 	}
 
 	TEST(CFGNode, insertLine) {

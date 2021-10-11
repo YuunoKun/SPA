@@ -7,7 +7,9 @@ CFG::CFG() {
 	head = new CFGNode();
 	tail = new CFGNode();
 	head->setNextMain(tail);
-	tail->setPrevMain(head);
+}
+
+CFG::~CFG() {
 }
 
 CFGNode* CFG::getHead() {
@@ -22,7 +24,7 @@ bool CFG::isEmptyCFG() {
 	return head->getProgramLines().size() == 0;
 }
 
-void CFG::add(prog_line new_line\) {
+void CFG::add(prog_line new_line) {
 	if (isEmptyCFG()) {
 		head->insertLine(new_line);
 	} else if (new_line == (head->getProgramLines().back() + 1)) {
@@ -37,7 +39,6 @@ void CFG::add(prog_line new_line\) {
 		CFGNode* new_node = new CFGNode();
 		new_node->insertLine(new_line);
 		tail->setNextMain(new_node);
-		new_node->setPrevMain(tail);
 		tail = new_node;
 	}
 }
@@ -75,14 +76,11 @@ void CFG::loop(CFG* cfg, prog_line line_attached) {
 	if (target != nullptr) {
 		if (target->getProgramLines().size() == 1) {
 			target->setNextBranch(cfg->getHead());
-			cfg->getHead()->setPrevBranch(target);
 
 			if (cfg->getTail()->getProgramLines().size() != 0 ) {
 				cfg->getTail()->setNextBranch(target);
-				target->setPrevBranch(cfg->getTail());
 			} else {
 				cfg->getHead()->setNextBranch(target);
-				target->setPrevBranch(cfg->getHead());
 			}
 		} else {
 			for (auto const& line : target->getProgramLines()) {
@@ -100,20 +98,15 @@ void CFG::loop(CFG* cfg, prog_line line_attached) {
 			target->setProgramLines(split1);
 
 			new_node->setNextMain(target->getNextMain());
-			target->getNextMain()->setPrevMain(new_node);
 
-			new_node->setPrevMain(target);
 			target->setNextMain(new_node);
 
 			new_node->setNextBranch(cfg->getHead());
-			cfg->getHead()->setPrevBranch(new_node);
 
 			if (cfg->getTail()->getProgramLines().size() != 0) {
 				cfg->getTail()->setNextBranch(new_node);
-				new_node->setPrevBranch(cfg->getTail());
 			} else {
 				cfg->getHead()->setNextBranch(new_node);
-				new_node->setPrevBranch(cfg->getHead());
 			}
 		}
 
@@ -129,15 +122,12 @@ void CFG::fork(CFG* cfg, prog_line line_start, prog_line line_end) {
 	if (target1 != nullptr) {
 		if (target1->getProgramLines().size() == 1) {
 			target1->setNextBranch(cfg->getHead());
-			cfg->getHead()->setPrevBranch(target1);
 
 			if (cfg->getTail()->getProgramLines().size() != 0) {
 				cfg->getTail()->setNextBranch(target2);
-				target2->setPrevBranch(cfg->getTail());
 			}
 			else {
 				cfg->getHead()->setNextBranch(target2);
-				target2->setPrevBranch(cfg->getHead());
 			}
 		}
 		else {
@@ -164,16 +154,12 @@ void CFG::fork(CFG* cfg, prog_line line_start, prog_line line_end) {
 
 
 				new_node1->setNextMain(new_node2);
-				new_node2->setPrevMain(new_node1);
 
 				new_node2->setNextMain(target1->getNextMain());
-				target1->getNextMain()->setPrevMain(new_node2);
 
 				target1->setNextMain(new_node1);
-				new_node1->setPrevMain(target1);
 
 				new_node1->setNextBranch(cfg->getHead());
-				cfg->getHead()->setPrevBranch(new_node1);
 			}
 			else {
 				target1->setProgramLines(split2);
@@ -182,22 +168,17 @@ void CFG::fork(CFG* cfg, prog_line line_start, prog_line line_end) {
 				new_node->setProgramLines(split3);
 
 				new_node->setNextMain(target1->getNextMain());
-				target1->getNextMain()->setPrevMain(new_node);
 
 				target1->setNextMain(new_node);
-				new_node->setPrevMain(target1);
 
 				target1->setNextBranch(cfg->getHead());
-				cfg->getHead()->setPrevBranch(target1);
 			}
 
 			if (cfg->getTail()->getProgramLines().size() != 0) {
 				cfg->getTail()->setNextBranch(target2);
-				target2->setPrevBranch(cfg->getTail());
 			}
 			else {
 				cfg->getHead()->setNextBranch(target2);
-				target2->setPrevBranch(cfg->getHead());
 			}
 		}
 	}

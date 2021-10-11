@@ -17,8 +17,6 @@ public:
 	void setProgramLines(vector<prog_line>);
 	void setNextMain(CFGNode*);
 	void setNextBranch(CFGNode*);
-	void setPrevMain(CFGNode*);
-	void setPrevBranch(CFGNode*);
 	void setVisited();
 
 	void insertLine(prog_line);
@@ -26,8 +24,6 @@ public:
 	vector<prog_line> getProgramLines();
 	CFGNode* getNextMain();
 	CFGNode* getNextBranch();
-	CFGNode* getPrevMain();
-	CFGNode* getPrevBranch();
 	bool getVisited();
 
 private:
@@ -35,6 +31,4 @@ private:
 	bool visited;
 	CFGNode* next_main{nullptr};
 	CFGNode* next_branch{nullptr};
-	CFGNode* prev_main{nullptr};
-	CFGNode* prev_branch{nullptr};
 };

@@ -6,7 +6,11 @@ using namespace std;
 class CFG {
 public:
 	CFG();
+
+	~CFG();
+
 	bool isEmptyCFG();
+
 	CFGNode* getHead();
 	CFGNode* getTail();
 	vector<pair<prog_line, prog_line>> getNexts();
