@@ -258,6 +258,12 @@
     <ClCompile Include="ExprParserTest.cpp">
       <Filter>Common</Filter>
     </ClCompile>
+    <ClCompile Include="CFGNodeTest.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="CFGTest.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
