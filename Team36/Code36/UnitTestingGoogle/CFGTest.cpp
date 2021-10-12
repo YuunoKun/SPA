@@ -146,9 +146,16 @@ namespace UnitTesting {
 	TEST(CFG, getNext) {
 		CFG* cfg1 = new CFG();
 		CFG* cfg2 = new CFG();
+		CFG* cfg3 = new CFG();
+		CFG* cfg4 = new CFG();
+		CFG* cfg5 = new CFG();
 		std::vector<prog_line> v1 = { 1, 2, 3, 6, 7};
 		std::vector<prog_line> v2 = { 8, 9 };
-		std::vector<std::pair<prog_line, prog_line>> target = { {1, 2}, {2, 3}, {3, 6}, {3, 8} , {6, 7}, {8, 9}, {9, 3} };
+		std::vector<prog_line> v3 = { 9, 10, 12};
+		std::vector<prog_line> v4 = { 11};
+		std::vector<prog_line> v5 = { 5, 6, 7, 8, 13};
+		std::vector<std::pair<prog_line, prog_line>> target1 = { {1, 2}, {2, 3}, {3, 6}, {3, 8} , {6, 7}, {8, 9}, {9, 3} };
+		std::vector<std::pair<prog_line, prog_line>> target2 = { {5, 6}, {5, 9}, {6, 7}, {7, 8}, {8, 13}, {9, 10}, {10, 12}, {10, 11}, {12, 13}, {11, 10} };
 
 		cfg1->add(v1[0]);
 		cfg1->add(v1[1]);
@@ -160,10 +167,26 @@ namespace UnitTesting {
 		cfg2->add(v2[1]);
 
 		cfg1->loop(cfg2, 3);
-		auto test = cfg1->getNexts();
+		auto test1 = cfg1->getNexts();
 
-		ASSERT_EQ(test, target);
-
+		ASSERT_EQ(test1, target1);
 		delete cfg1, cfg2;
+
+		cfg3->add(v3[0]);
+		cfg3->add(v3[1]);
+		cfg3->add(v3[2]);
+
+		cfg4->add(v4[0]);
+
+		cfg5->add(v5[0]);
+		cfg5->add(v5[1]);
+		cfg5->add(v5[2]);
+		cfg5->add(v5[3]);
+		cfg5->add(v5[4]);
+
+		cfg3->loop(cfg4, 10);
+		cfg5->fork(cfg3, 5, 13);
+		auto test2 = cfg5->getNexts();
+		ASSERT_EQ(test2, target2);
 	}
 }
