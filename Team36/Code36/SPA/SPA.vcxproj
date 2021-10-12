@@ -62,7 +62,9 @@
     <ClCompile Include="..\source\ResultProjector.cpp" />
     <ClCompile Include="..\source\SemanticErrorException.cpp" />
     <ClCompile Include="..\source\SyntacticErrorException.cpp" />
-    <ClCompile Include="..\source\AssignPatternParser.cpp" />
+    <ClCompile Include="..\source\CFGNode.cpp" />
+    <ClCompile Include="..\source\CFG.cpp" />
+	<ClCompile Include="..\source\AssignPatternParser.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\source\DesignExtractor.h" />
@@ -121,7 +123,9 @@
     <ClInclude Include="..\source\ResultProjector.h" />
     <ClInclude Include="..\source\SyntacticErrorException.h" />
     <ClInclude Include="..\source\SemanticErrorException.h" />
-    <ClCompile Include="..\source\AssignPatternParser.h" />
+    <ClInclude Include="..\source\CFGNode.h" />
+    <ClInclude Include="..\source\CFG.h" />
+	<ClCompile Include="..\source\AssignPatternParser.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{DC21A1EA-D2C6-4D14-A2B4-E025B64BDE81}</ProjectGuid>
