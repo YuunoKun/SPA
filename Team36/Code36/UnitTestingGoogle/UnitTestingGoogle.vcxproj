@@ -72,6 +72,8 @@
 	<ClCompile Include="IfPatternParserTest.cpp" />
 	<ClCompile Include="WhilePatternParserTest.cpp" />
     <ClCompile Include="QueryOptimizerTest.cpp" />
+    <ClCompile Include="CFGNodeTest.cpp" />
+    <ClCompile Include="CFGTest.cpp" />
     <ClCompile Include="UsesSEvaluatorTest.cpp" />
     <ClCompile Include="UsesPEvaluatorTest.cpp" />
     <ClCompile Include="RelRefTest.cpp" />
