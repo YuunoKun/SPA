@@ -803,53 +803,383 @@ stmt s1, s2; procedure p, q;
 Select s1 such that Parent(s1, s2) and Calls*("mySecond", p)
 none
 5000
-168 - and, between follows follows, no common synonym
+162 - and, between follows follows, no common synonym
 stmt s1, s2;
 Select s1 such that Follows(s1, 15) and Follows(40, s2)
 none
 5000
-169 - and, between follows follows, 1 common synonym
+163 - and, between follows follows, 1 common synonym
 stmt s1, s2;
 Select s1 such that Follows(s1, 15) and Follows(s1, 18)
 none
 5000
-170 - and, between follows follows, 2 common synonym
+164 - and, between follows follows, 2 common synonym
 stmt s1, s2;
 Select s1 such that Follows(s1, 15) and Follows(s1, 15)
 14
 5000
-171 - and, between follows followsT, no common synonym
+165 - and, between follows followsT, no common synonym
 stmt s1, s2;
 Select s1 such that Follows(s1, 15) and Follows*(40, s2)
 none
 5000
-172 - and, between follows followsT, 1 common synonym
+166 - and, between follows followsT, 1 common synonym
 stmt s1, s2;
 Select s1 such that Follows(s1, 14) and Follows*(s1, 15)
 13
 5000
-173 - and, between follows followsT, 2 common synonyms
+167 - and, between follows followsT, 2 common synonyms
 stmt s1, s2;
 Select s1 such that Follows(s1, 14) and Follows*(s1, 14)
 13
 5000
-174 - and, between follows calls, no common synonym
+168 - and, between follows calls, no common synonym
 stmt s1, s2; procedure p, q;
 Select s1 such that Follows(s1, 14) and Calls("myFirst", q)
 13
 5000
-175 - and, between follows callsT, no common synonym
+169 - and, between follows callsT, no common synonym
 stmt s1, s2; procedure p, q;
 Select q such that Follows(s1, 14) and Calls*("myFirst", q)
 mySecond, myThird, myFourth
 5000
-176 - invalid and, only 1 clause
+170 - invalid and, only 1 clause
 stmt s1, s2; procedure p, q;
 Select s1 and Follows(s1, s2)
 none
 5000
-177 - invalid and, only 1 clause
+171 - invalid and, only 1 clause
 stmt s1, s2; procedure p, q;
 Select s1 such that Follows(s1, s2) and
+none
+5000
+172 - if pattern, first argument variable
+if ifs; variable v;
+Select ifs pattern ifs(v,_,_)
+8, 19, 20, 23, 42
+5000
+173 - if pattern, first argument variable
+if ifs; variable v;
+Select v pattern ifs(v,_,_)
+d, c, a, b, h
+5000
+174 - if pattern, first argument wildcard
+if ifs; variable v;
+Select ifs pattern ifs(_,_,_)
+8, 19, 20, 23, 42
+5000
+175 - if pattern, first argument ident
+if ifs; variable v;
+Select ifs pattern ifs("d",_,_)
+8, 42
+5000
+176 - while pattern, first argument variable
+while w; variable v;
+Select w pattern w(v,_)
+6, 12, 30, 31, 38, 43, 45
+5000
+177 - while pattern, first argument variable
+while w; variable v;
+Select v pattern w(v,_)
+a, c, b, k, d
+5000
+178 - while pattern, first argument wildcard
+while w; variable v;
+Select w pattern w(_,_)
+6, 12, 30, 31, 38, 43, 45
+5000
+179 - while pattern, first argument ident
+while w; variable v;
+Select w pattern w("a",_)
+6, 12, 43
+5000
+180 - if pattern such that Modifies, no common synonym
+if ifs; variable v;
+Select ifs pattern ifs("a",_,_) such that Modifies(33, v)
+19
+5000
+181 - if pattern such that Modifies, 1 common synonym
+if ifs; variable v;
+Select ifs pattern ifs(v,_,_) such that Modifies(33, v)
+none
+5000
+182 - if pattern such that ModifiesP, no common synonym
+if ifs; variable v;
+Select ifs pattern ifs("a",_,_) such that Modifies("myFirst", v)
+19
+5000
+183 - if pattern such that ModifiesP, 1 common synonym
+if ifs; variable v;
+Select ifs pattern ifs(v,_,_) such that Modifies("myFirst", v)
+8, 19, 20, 23, 42
+5000
+184 - if pattern such that Uses, no common synonym
+if ifs; variable v;
+Select ifs pattern ifs("b",_,_) such that Uses(15, "f")
+20
+5000
+185 - if pattern such that Uses, 1 common synonym
+if ifs; variable v;
+Select ifs pattern ifs(v,_,_) such that Uses(15, v)
+19
+5000
+186 - if pattern such that UsesP, no common synonym
+if ifs; variable v;
+Select ifs pattern ifs("b",_,_) such that Uses("mySecond", "f")
+none
+5000
+187 - if pattern such that UsesP, no common synonym
+if ifs; variable v;
+Select ifs pattern ifs(v,_,_) such that Uses("mySecond", v)
+8, 19, 20, 23, 42
+5000
+188 - if pattern such that Parent
+if ifs; stmt s;
+Select ifs pattern ifs(_,_,_) such that Parent(20, s)
+8, 19, 20, 23, 42
+5000
+189 - if pattern such that ParentT
+if ifs; stmt s;
+Select ifs pattern ifs(_,_,_) such that Parent*(21, s)
+none
+5000
+190 - if pattern such that Follows
+if ifs; stmt s;
+Select ifs pattern ifs("e",_,_) such that Follows(21, s)
+none
+5000
+191 - if pattern such that FollowsT
+if ifs; stmt s;
+Select ifs pattern ifs("a",_,_) such that Follows*(23, s)
+19
+5000
+192 - if pattern such that Calls
+if ifs; procedure p;
+Select ifs pattern ifs("a",_,_) such that Calls("myFirst", p)
+19
+5000
+193 - if pattern such that CallsT
+if ifs; procedure p;
+Select ifs pattern ifs("a",_,_) such that Calls*("myThird", "mySecond")
+19
+5000
+194 - if pattern such that Next
+if ifs; procedure p;
+Select ifs pattern ifs("a",_,_) such that Next(19, 28)
+19
+5000
+195 - while pattern such that Modifies, no common synonym
+while w; variable v;
+Select w pattern w("k",_) such that Modifies(22, "h")
+38
+5000
+196 - while pattern such that Modifies, 1 common synonym
+while w; variable v;
+Select w pattern w(v,_) such that Modifies(10, v)
+38
+5000
+197 - while pattern such that ModifiesP, no common synonym
+while w; variable v; procedure p;
+Select w pattern w("a",_) such that Modifies(p, "c")
+6, 12, 43
+5000
+198 - while pattern such that ModifiesP, 1 common synonym
+while w; variable v; procedure p;
+Select w pattern w(v,_) such that Modifies(p, v)
+6, 12, 30, 31, 38, 43, 45
+5000
+199 - while pattern such that ModifiesP, 1 common synonym
+while w; variable v; procedure p;
+Select v pattern w(v,_) such that Modifies(p, v)
+a, c, b, k, d
+5000
+200 - while pattern such that Uses, no common synonym
+while w; variable v;
+Select w pattern w("k",_) such that Uses(22, "h")
+38
+5000
+201 - while pattern such that Uses, 1 common synonym
+while w; variable v;
+Select w pattern w(v,_) such that Uses(22, v)
+12, 31, 43, 45
+5000
+202 - while pattern such that UsesP, no common synonym
+while w; variable v; procedure p;
+Select w pattern w("a",_) such that Uses(p, "i")
+6, 12, 43
+5000
+203 - while pattern such that UsesP, 1 common synonym
+while w; variable v; procedure p;
+Select w pattern w(v,_) such that Uses(p, v)
+6, 12, 30, 31, 38, 43, 45
+5000
+204 - while pattern such that Parent
+while w; stmt s;
+Select w pattern w(_,_) such that Parent(20, s)
+6, 12, 30, 31, 38, 43, 45
+5000
+205 - while pattern such that ParentT
+while w; stmt s;
+Select w pattern w(_,_) such that Parent*(20, 25)
+6, 12, 30, 31, 38, 43, 45
+5000
+206 - while pattern such that Follows
+while w; stmt s;
+Select w pattern w(_,_) such that Follows(23, s)
+none
+5000
+207 - while pattern such that FollowsT
+while w; stmt s;
+Select w pattern w(_,_) such that Follows*(23, s)
+6, 12, 30, 31, 38, 43, 45
+5000
+208 - while pattern such that Calls
+while w; procedure p, q;
+Select w pattern w(_,_) such that Calls(p, "mySecond")
+6, 12, 30, 31, 38, 43, 45
+5000
+209 - while pattern such that CallsT
+while w; procedure p, q;
+Select w pattern w(_,_) such that Calls*("mySecond", q)
+none
+5000
+210 - while pattern such that Next
+while w; prog_lin n;
+Select w pattern w(_,_) such that Next(29, n)
+none
+5000
+211 - if pattern and if pattern, no common synonym
+if ifs1, ifs2;
+Select ifs1 pattern ifs1("b",_,_) and ifs2("k",_,_)
+none
+5000
+212 - if pattern and if pattern, 1 common synonym
+if ifs1, ifs2; variable v;
+Select ifs1 pattern ifs1(v,_,_) and ifs2(v,_,_)
+8, 19, 20, 23, 42
+5000
+213 - if pattern and if pattern, 1 common synonym
+if ifs1, ifs2; variable v;
+Select ifs1 pattern ifs1(v,_,_) and ifs1("d",_,_)
+8, 42
+5000
+214 - if pattern and assign pattern, no common synonym
+if ifs; assign a;
+Select ifs pattern ifs(_,_,_) and a(_, _"e*5"_)
+8, 19, 20, 23, 42
+5000
+215 - if pattern and assign pattern, 1 common synonym
+if ifs; assign a;
+Select ifs pattern ifs(v,_,_) and a(v, _"e*5"_)
+8, 20
+5000
+216 - if pattern and assign pattern, 1 common synonym
+if ifs; assign a;
+Select v pattern ifs(v,_,_) and a(v, _"e*5"_)
+c
+5000
+217 - if pattern and while pattern, no common synonym
+if ifs; while w;
+Select ifs pattern ifs("a",_,_) and w("b",_)
+19
+5000
+218 - if pattern and while pattern, 1 common synonym
+if ifs; while w;
+Select ifs pattern ifs(v,_,_) and w(v,_)
+8, 19, 20, 42
+5000
+219 - if pattern and while pattern, 1 common synonym
+if ifs; while w;
+Select v pattern ifs(v,_,_) and w(v,_)
+d, c, a, b
+5000
+220 - while pattern and while pattern, no common synonym
+while w1, w2;
+Select w1 pattern w1("a",_) and w2("b",_)
+6, 12, 43
+5000
+221 - while pattern and while pattern, 1 common synonym
+while w1, w2; variable v;
+Select w1 pattern w1(v,_) and w2(v,_)
+6, 12, 30, 31, 38, 43, 45
+5000
+222 - while pattern and while pattern, 1 common synonym
+while w1, w2; variable v;
+Select v pattern w1(v,_) and w2(v,_)
+a, c, b, k, d
+5000
+223 - while pattern and assign pattern, no common synonym
+while w; assign a;
+Select w pattern w("c",_) and a("i", _"i/c"_)
+12, 31, 43, 45
+5000
+224 - while pattern and assign pattern, 1 common synonym
+while w; assign a; variable v;
+Select w pattern w(v,_) and a(v, _"i/c"_)
+none
+5000
+225 - while pattern and if pattern, no common synonym
+while w; if ifs;
+Select w pattern w("b",_) and ifs("a",_,_)
+30, 31, 43, 45
+5000
+226 - while pattern and if pattern, 1 common synonym
+while w; if ifs; variable v;
+Select w pattern w(v,_) and ifs(v,_,_)
+6, 12, 30, 31, 38, 43, 45
+5000
+227 - assign pattern and assign pattern, no common synonym
+assign a1, a2;
+Select a1 pattern a1("b",_) and a2("h", _"c"_)
+2, 17
+none
+228 - assign pattern and assign pattern, 1 common synonym
+assign a; variable v;
+Select a pattern a(v,_) and a("d", _"c"_)
+10
+none
+229 - assign pattern and if pattern, no common synonym
+assign a; if ifs;
+Select a pattern a("c", _"a + e * 5 + f / 10"_) and ifs("b",_,_)
+15
+5000
+230 - assign pattern and if pattern, 1 common synonym
+assign a; if ifs; variable v;
+Select a pattern a(v, _) and ifs(v,_,_)
+2, 3, 10, 15, 17, 22, 35, 41
+5000
+231 - assign pattern and while pattern, no common synonym
+while w; assign a;
+Select a pattern a("k", _"1"_) and w("b",_)
+39
+5000
+232 - assign pattern and while pattern, 1 common synonym
+while w; assign a; variable v;
+Select a pattern a(v, _"1"_) and w(v,_)
+39
+5000
+233 - invalid if pattern, 2 arguments
+if ifs;
+Select ifs pattern ifs(_,_)
+none
+5000
+234 - invalid while pattern, 3 arguments
+while w;
+Select w pattern w(_,_,_)
+none
+5000
+235 - invalid if pattern, 2nd argument not wildcard
+if ifs; variable v;
+Select ifs pattern ifs(_,v,_)
+none
+5000
+236 - invalid if pattern, 3rd argument not wildcard
+if ifs; variable v;
+Select ifs pattern ifs(_,_,v)
+none
+5000
+237 - invalid while pattern, 2nd argument not wildcard
+while w;
+Select w pattern w(_,v)
 none
 5000
