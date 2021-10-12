@@ -58,7 +58,9 @@
     <ClCompile Include="..\source\QueryOptimizer.cpp" />
     <ClCompile Include="..\source\ResultProjector.cpp" />
     <ClCompile Include="..\source\SemanticErrorException.cpp" />
-	<ClCompile Include="..\source\SyntacticErrorException.cpp" />
+    <ClCompile Include="..\source\SyntacticErrorException.cpp" />
+    <ClCompile Include="..\source\CFGNode.cpp" />
+    <ClCompile Include="..\source\CFG.cpp" />
 	<ClCompile Include="..\source\AssignPatternParser.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -113,7 +115,9 @@
     <ClInclude Include="..\source\QueryOptimizer.h" />
     <ClInclude Include="..\source\ResultProjector.h" />
     <ClInclude Include="..\source\SyntacticErrorException.h" />
-	<ClInclude Include="..\source\SemanticErrorException.h" />
+    <ClInclude Include="..\source\SemanticErrorException.h" />
+    <ClInclude Include="..\source\CFGNode.h" />
+    <ClInclude Include="..\source\CFG.h" />
 	<ClCompile Include="..\source\AssignPatternParser.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
