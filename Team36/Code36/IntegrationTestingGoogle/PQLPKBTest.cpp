@@ -53,6 +53,7 @@ namespace UnitTesting {
 			PKB::getInstance().addExprTree(std::stoi(MODIFIES_LEFT4), EXPRESSIONNODE_2);
 			PKB::getInstance().generateFollowsT();
 			PKB::getInstance().generateParentT();
+			PKB::getInstance().addCallsP(p1, p2);
 		}
 
 		QuerySystem qs;
@@ -217,6 +218,8 @@ namespace UnitTesting {
 
 		//const Synonym COMMON_SYNONYM1 = { "cs1" };
 		//const Synonym COMMON_SYNONYM2 = { "cs2" };
+
+		const std::list<std::string> EXPECTED_P_CALLS = { p1 };
 
 		const std::list<std::string> EMPTY_RESULT = {};
 
@@ -404,5 +407,12 @@ namespace UnitTesting {
 		std::list<std::string> ans = qs.processQuery("stmt s; assign a; variable v; Select a pattern a(_,\"x\") such that Modifies(s, v) ");
 
 		validateAnswer(EXPECTED_ST_PATTERN1, ans);
+	}
+
+	// calls
+	TEST_F(PQLPKBTest, CallsTest) {
+		std::list<std::string> ans = qs.processQuery("procedure p, q; Select p such that Calls(p, q) ");
+
+		validateAnswer(EXPECTED_P_CALLS, ans);
 	}
 }
