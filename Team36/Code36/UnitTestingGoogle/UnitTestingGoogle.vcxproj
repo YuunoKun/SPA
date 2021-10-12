@@ -47,11 +47,13 @@
     <ClCompile Include="ExprNodeTest.cpp" />
     <ClCompile Include="ExprParserTest.cpp" />
     <ClCompile Include="FSMTest.cpp" />
+    <ClCompile Include="NextEvaluatorTest.cpp" />
     <ClCompile Include="ParserTest.cpp" />
     <ClCompile Include="PatternEvaluatorTest.cpp" />
     <ClCompile Include="PKBAdapterTest.cpp" />
     <ClCompile Include="QueryEvaluatorMultiClausesTest.cpp" />
-    <ClCompile Include="QueryEvaluatorTest.cpp" />
+    <ClCompile Include="QueryEvaluatorPatternTest.cpp" />
+    <ClCompile Include="QueryEvaluatorRelationTest.cpp" />
     <ClCompile Include="PatternTest.cpp" />
     <ClCompile Include="QueryResultTest.cpp" />
     <ClCompile Include="QueryPreprocessorTest.cpp" />

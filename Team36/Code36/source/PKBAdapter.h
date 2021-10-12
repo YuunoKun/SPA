@@ -20,8 +20,24 @@ public:
 	std::vector<StmtInfo> getReads();
 	std::vector<StmtInfo> getWhiles();
 	std::vector<StmtInfo> getIfs();
-	std::vector<assign_info> getAssignInfo();
-	std::vector<assign_info> getAssignInfo(expr, bool);
+
+	bool isVariable(var_name);
+	bool isStmt(stmt_index);
+	bool isConstant(constant);
+	bool isProcedure(proc_name);
+	bool isAssign(stmt_index);
+	bool isPrint(stmt_index);
+	bool isCall(stmt_index);
+	bool isRead(stmt_index);
+	bool isWhile(stmt_index);
+	bool isIf(stmt_index);
+
+	std::vector<pattern_info> getAssignInfo();
+	std::vector<pattern_info> getAssignInfo(expr, bool);
+	std::vector<stmt_index> getAssignInfoFiltered();
+	std::vector<stmt_index> getAssignInfoFiltered(expr, bool);
+	std::vector<stmt_index> getAssignInfoFiltered(var_name);
+	std::vector<stmt_index> getAssignInfoFiltered(var_name, expr, bool);
 
 	//Follow relation function
 	bool isFollowEmpty();
@@ -133,27 +149,33 @@ public:
 	std::vector<StmtInfo> getNext(prog_line index);
 
 	//If stmt-controlvar relation Function
+	std::vector<std::pair<stmt_index, var_name>> getAllIfUses();
+	std::vector<stmt_index> getIfUses();
+	std::vector<stmt_index> getIfUses(var_name);
+
+	//Todo before submitting in itr3 if not used at all in the future
 	bool isIfEmpty();
 	bool isIfUses(stmt_index, var_name);
 	bool isIfUses(stmt_index);
 	bool isIfUsed(var_name);
-	std::vector<std::pair<stmt_index, var_name>> getAllIfUses();
-	std::vector<stmt_index> getIfUses();
 	std::vector<var_name> getIfUsed();
-	std::vector<stmt_index> getIfUses(var_name);
 	std::vector<var_name> getIfUsed(stmt_index);
 
 	//While stmt-controlvar relation Function
+	std::vector<std::pair<stmt_index, var_name>> getAllWhileUses();
+	std::vector<stmt_index> getWhileUses();
+	std::vector<stmt_index> getWhileUses(var_name);
+
+	//Todo before submitting in itr3 if not used at all in the future
 	bool isWhileEmpty();
 	bool isWhileUses(stmt_index, var_name);
 	bool isWhileUses(stmt_index);
 	bool isWhileUsed(var_name);
-	std::vector<std::pair<stmt_index, var_name>> getAllWhileUses();
-	std::vector<stmt_index> getWhileUses();
 	std::vector<var_name> getWhileUsed();
-	std::vector<stmt_index> getWhileUses(var_name);
 	std::vector<var_name> getWhileUsed(stmt_index);
 
 private:
+	std::vector<stmt_index> getAssignInfoFiltered(std::vector<stmt_index>&, expr, bool);
+
 	StmtInfo getStmt(stmt_index);
 };

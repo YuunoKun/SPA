@@ -1,0 +1,24 @@
+procedure first {
+  read a;
+  call second;
+  while (a != 0) {
+    a = 0;
+    call third;
+  }
+  call fourth;
+  b = 3 + a;
+  print c;
+}
+procedure second {
+  call third;
+  call fifth;
+}
+procedure third {
+  call fourth;
+}
+procedure fourth {
+  call fifth;
+}
+procedure fifth {
+  read c;
+}

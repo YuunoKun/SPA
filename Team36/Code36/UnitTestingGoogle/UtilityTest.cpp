@@ -86,19 +86,29 @@ namespace UnitTesting {
 		EXPECT_EQ(Utility::stmtInfoToStringVector(a), b);
 	}
 
+	TEST(Utility, stmtIndexToStringVector) {
+		std::vector<stmt_index> a = { 1, 2, 3, 4 };
+		std::vector<std::string> b{ "1", "2", "3", "4" };
+		EXPECT_EQ(Utility::stmtIndexToStringVector(a), b);
+	}
+
 	TEST(Utility, pairToStringTable) {
-		std::vector<std::pair<std::string, std::string>> a = { {"a", "b"},{"c", "d"} };
-		std::vector<std::vector<std::string>> b = { {"a", "b"},{"c", "d"} };
-		EXPECT_EQ(Utility::pairToStringTable(a), b);
+		std::vector<std::pair<std::string, std::string>> p1 = { {"a", "b"},{"c", "d"} };
+		std::vector<std::vector<std::string>> t1 = { {"a", "b"},{"c", "d"} };
+		EXPECT_EQ(Utility::pairToStringTable(p1), t1);
 
-		std::vector<std::pair<StmtInfo, std::string>> c = { {{ 1, STMT_ASSIGN }, "b"},{{ 2, STMT_ASSIGN }, "d"} };
-		std::vector<std::vector<std::string>> d = { {"1", "b"},{"2", "d"} };
-		EXPECT_EQ(Utility::pairToStringTable(c), d);
+		std::vector<std::pair<stmt_index, std::string>> p2 = { { 1 , "b"}, { 2 , "d"} };
+		std::vector<std::vector<std::string>> t2 = { {"1", "b"},{"2", "d"} };
+		EXPECT_EQ(Utility::pairToStringTable(p2), t2);
 
-		std::vector<std::pair<StmtInfo, StmtInfo>> e = { {{ 1, STMT_ASSIGN }, { 3, STMT_WHILE }},
+		std::vector<std::pair<StmtInfo, std::string>> p3 = { {{ 1, STMT_ASSIGN }, "b"},{{ 2, STMT_ASSIGN }, "d"} };
+		std::vector<std::vector<std::string>> t3 = { {"1", "b"},{"2", "d"} };
+		EXPECT_EQ(Utility::pairToStringTable(p3), t3);
+
+		std::vector<std::pair<StmtInfo, StmtInfo>> p4 = { {{ 1, STMT_ASSIGN }, { 3, STMT_WHILE }},
 			{{ 2, STMT_ASSIGN }, { 4, STMT_WHILE }} };
-		std::vector<std::vector<std::string>> f = { {"1", "3"},{"2", "4"} };
-		EXPECT_EQ(Utility::pairToStringTable(e), f);
+		std::vector<std::vector<std::string>> t4 = { {"1", "3"},{"2", "4"} };
+		EXPECT_EQ(Utility::pairToStringTable(p4), t4);
 	}
 	TEST(Utility, getIndexString) {
 		std::vector<std::string> c{ "a", "b", "c", "d", "e" };
