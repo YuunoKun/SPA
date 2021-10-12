@@ -948,6 +948,31 @@ namespace UnitTesting {
 			ASSERT_TRUE(table_whiles.containsPair(whiles.first, whiles.second));
 		}
 
+
+		// Nexts
+		auto table_nexts = pkb->getNext();
+		std::vector<std::pair<StmtInfo, StmtInfo>> expected_nexts =
+		{
+			{{1, STMT_ASSIGN},{2, STMT_READ}}, 
+			{{2, STMT_READ},{3, STMT_PRINT}}, 
+			{{3, STMT_PRINT},{4, STMT_ASSIGN}}, 
+			{{4, STMT_ASSIGN},{5, STMT_IF}},
+			{{5, STMT_IF},{6, STMT_ASSIGN}}, 
+			{{5, STMT_IF},{9, STMT_ASSIGN}},
+			{{6, STMT_ASSIGN},{7, STMT_CALL}}, 
+			{{7, STMT_CALL},{8, STMT_ASSIGN}}, 
+			{{8, STMT_ASSIGN},{13, STMT_ASSIGN}},
+			{{9, STMT_ASSIGN},{10, STMT_WHILE}}, 
+			{{10, STMT_WHILE},{12, STMT_ASSIGN}}, 
+			{{10, STMT_WHILE}, {11, STMT_ASSIGN}}, 
+			{{11, STMT_ASSIGN},{10, STMT_WHILE}}, 
+			//{{12, STMT_ASSIGN}, {13, STMT_ASSIGN}}
+		};
+		ASSERT_EQ(table_nexts.getPairs().size(), expected_nexts.size());
+		for (const auto& next : expected_nexts) {
+			ASSERT_TRUE(table_nexts.containsPair(next.first, next.second));
+		}
+
 		/*
 		* procedure main {
 		1	mainX = 1;

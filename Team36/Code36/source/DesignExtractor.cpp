@@ -377,7 +377,7 @@ void DesignExtractor::populateNext(PKB& pkb) {
 		for (auto next_rel : nexts) {
 			pkb.addNext(next_rel.first, next_rel.second);
 		}
-		delete cfg;
+		//delete cfg; SEGMENTATION FAULT
 	}
 }
 
@@ -411,14 +411,15 @@ CFG* DesignExtractor::generateCFG(std::vector<stmt_index> indexes) {
 	std::vector<stmt_index> main;
 	int if_stmt = -1, if_stmt_list = -1;
 	for (size_t i = 0; i < indexes.size(); i++) {
-		if (de_statements[indexes[i] - 1]->getType() == StmtType::STMT_IF
-			&& de_statements[indexes[0] - 1]->getStmtList() == de_statements[indexes[i] - 1]->getStmtList()) {
+		Statement* curr = de_statements[indexes[i] - 1];
+		Statement* first = de_statements[indexes[0] - 1];
+
+		if (curr->getType() == StmtType::STMT_IF && first->getStmtList() == curr->getStmtList()) {
 			if_stmt = indexes[i];
 			if_stmt_list = indexes[i + 1];
 		}
 
-		if (de_statements[indexes[i] - 1]->getStmtList() == indexes[0] 
-			|| (de_statements[indexes[i] - 1]->getDirectParent() == if_stmt && de_statements[indexes[i] - 1]->getStmtList() == if_stmt_list)) {
+		if (curr->getStmtList() == indexes[0] || (curr->getDirectParent() == if_stmt && curr->getStmtList() == if_stmt_list)) {
 			main.push_back(indexes[i]);
 		}
 	}
