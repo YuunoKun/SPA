@@ -188,5 +188,6 @@ namespace UnitTesting {
 		cfg5->fork(cfg3, 5, 13);
 		auto test2 = cfg5->getNexts();
 		ASSERT_EQ(test2, target2);
+		delete cfg3, cfg4, cfg5;
 	}
 }
