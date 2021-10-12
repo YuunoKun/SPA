@@ -224,6 +224,7 @@
     </ClCompile>
     <ClCompile Include="..\source\CFG.cpp">
       <Filter>Source Files\Common</Filter>
+    </ClCompile>
     <ClCompile Include="..\source\QueryPatternRelRefParser.cpp">
       <Filter>Source Files\PQL\QueryPreprocessor\QueryPatternRelRefParser</Filter>
     </ClCompile>
@@ -408,6 +409,7 @@
     </ClInclude>
     <ClInclude Include="..\source\CFG.h">
       <Filter>Header Files\Common</Filter>
+    </ClInclude>
     <ClInclude Include="..\source\QueryPatternRelRefParser.h">
       <Filter>Header Files\PQL\QueryPreprocessor\QueryPatternRelRefParser</Filter>
     </ClInclude>
