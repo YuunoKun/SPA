@@ -1,6 +1,8 @@
 #include <stdexcept>
 #include <unordered_map>
+#include <map>
 #include <algorithm>
+#include <numeric>
 #include "DesignExtractor.h"
 #include "PKB.h"
 
@@ -279,6 +281,7 @@ void DesignExtractor::populateRelations(PKB& pkb) {
 	pkb.generateCallsPT();
 	populateIfs(pkb);
 	populateWhiles(pkb);
+	populateNext(pkb);
 }
 
 void DesignExtractor::populateProcedures(PKB& pkb) {
@@ -368,7 +371,14 @@ void DesignExtractor::populateCalls(PKB& pkb) {
 }
 
 void DesignExtractor::populateNext(PKB& pkb) {
-	// CFG
+	for (Procedure* p : de_procedures) {
+		CFG* cfg = generateCFG(de_procedures[0]->getChild());
+		std::vector<std::pair<prog_line, prog_line>> nexts = cfg->getNexts();
+		for (auto next_rel : nexts) {
+			pkb.addNext(next_rel.first, next_rel.second);
+		}
+		delete cfg;
+	}
 }
 
 void DesignExtractor::populateIfs(PKB& pkb) {
@@ -389,4 +399,62 @@ void DesignExtractor::populateWhiles(PKB& pkb) {
 			}
 		}
 	}
+}
+
+CFG* DesignExtractor::generateCFG(std::vector<stmt_index> indexes) {
+	if (indexes.size() == 0) {
+		return nullptr;
+	}
+
+	CFG* cfg = new CFG();
+
+	std::vector<stmt_index> main;
+	int if_stmt = -1, if_stmt_list = -1;
+	for (size_t i = 0; i < indexes.size(); i++) {
+		if (de_statements[indexes[i] - 1]->getType() == StmtType::STMT_IF
+			&& de_statements[indexes[0] - 1]->getStmtList() == de_statements[indexes[i] - 1]->getStmtList()) {
+			if_stmt = indexes[i];
+			if_stmt_list = indexes[i + 1];
+		}
+
+		if (de_statements[indexes[i] - 1]->getStmtList() == indexes[0] 
+			|| (de_statements[indexes[i] - 1]->getDirectParent() == if_stmt && de_statements[indexes[i] - 1]->getStmtList() == if_stmt_list)) {
+			main.push_back(indexes[i]);
+		}
+	}
+	main.push_back(0); // end
+
+	for (size_t i = 0; i < main.size() - 1; i++) {
+		prog_line curr = main[i];
+		prog_line next = main[i + 1];
+
+		if (i == 0 || next - curr == 1 || next == 0) {
+			cfg->add(curr);
+		}
+		else if (next - curr > 1) {
+			cfg->add(curr);
+			std::vector<stmt_index> scope(next - curr - 1);
+			std::iota(scope.begin(), scope.end(), curr + 1);
+			CFG* sub_cfg = generateCFG(scope);
+			if (de_statements[curr - 1]->getType() == StmtType::STMT_WHILE) {
+				cfg->loop(sub_cfg, curr);
+			}
+			else if (de_statements[de_statements[curr - 1]->getDirectParent() - 1]->getType() == StmtType::STMT_IF) {
+				if (next == 0) { // What should happen if procedure ends after 'if' container???
+					cfg->add(next);
+				}
+				cfg->fork(sub_cfg, de_statements[curr - 1]->getDirectParent(), next);
+			}
+			else {
+				throw std::runtime_error("CFG build failure. Sub cfg error.");
+			}
+			
+			//delete cfg_while;
+		}
+		else {
+			throw std::runtime_error("CFG build failure. Invalid statement list.");
+		}
+	}
+
+	return cfg;
 }
