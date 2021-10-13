@@ -377,7 +377,7 @@ void DesignExtractor::populateNext(PKB& pkb) {
 		for (auto next_rel : nexts) {
 			pkb.addNext(next_rel.first, next_rel.second);
 		}
-		//delete cfg; SEGMENTATION FAULT
+		//delete cfg;
 	}
 }
 
@@ -425,9 +425,15 @@ CFG* DesignExtractor::generateCFG(std::vector<stmt_index> indexes) {
 	}
 	main.push_back(0); // end
 
+	bool added = false;
 	for (size_t i = 0; i < main.size() - 1; i++) {
 		prog_line curr = main[i];
 		prog_line next = main[i + 1];
+
+		if (added) {
+			added = false;
+			continue;
+		}
 
 		if (i == 0 || next - curr == 1 || next == 0) {
 			cfg->add(curr);
@@ -443,6 +449,11 @@ CFG* DesignExtractor::generateCFG(std::vector<stmt_index> indexes) {
 			else if (de_statements[de_statements[curr - 1]->getDirectParent() - 1]->getType() == StmtType::STMT_IF) {
 				if (next == 0) { // What should happen if procedure ends after 'if' container???
 					cfg->add(next);
+					added = true;
+				}
+				else {
+					cfg->add(next);
+					added = true;
 				}
 				cfg->fork(sub_cfg, de_statements[curr - 1]->getDirectParent(), next);
 			}
@@ -450,7 +461,7 @@ CFG* DesignExtractor::generateCFG(std::vector<stmt_index> indexes) {
 				throw std::runtime_error("CFG build failure. Sub cfg error.");
 			}
 			
-			//delete cfg_while;
+			//delete sub_cfg;
 		}
 		else {
 			throw std::runtime_error("CFG build failure. Invalid statement list.");

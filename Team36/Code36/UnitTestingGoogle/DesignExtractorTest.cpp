@@ -966,7 +966,7 @@ namespace UnitTesting {
 			{{10, STMT_WHILE},{12, STMT_ASSIGN}}, 
 			{{10, STMT_WHILE}, {11, STMT_ASSIGN}}, 
 			{{11, STMT_ASSIGN},{10, STMT_WHILE}}, 
-			//{{12, STMT_ASSIGN}, {13, STMT_ASSIGN}}
+			{{12, STMT_ASSIGN}, {13, STMT_ASSIGN}}
 		};
 		ASSERT_EQ(table_nexts.getPairs().size(), expected_nexts.size());
 		for (const auto& next : expected_nexts) {
