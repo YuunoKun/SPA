@@ -1,0 +1,273 @@
+#include "pch.h"
+
+#include "QueryPatternRelRefParser.h"
+#include "Common.h"
+#include <iostream>
+
+namespace UnitTesting {
+	class NextParserTest : public ::testing::Test {
+	protected:
+		NextParserTest() {
+		}
+
+		// If the constructor and destructor are not enough for setting up
+		// and cleaning up each test, you can define the following methods:
+
+		virtual void SetUp() override {
+			// Code here will be called immediately after the constructor (right
+			// before each test).
+		}
+
+		void TearDown() override {
+			// Code here will be called immediately after each test (right
+			// before the destructor).
+		}
+
+		// Class members declared here can be used by all tests in the test suite
+		// for Foo.
+	};
+
+	TEST(NextParserTest, NextSynSynTest) {
+		Query query;
+
+		//Synonym
+		//Expected
+		Synonym synonym;
+		synonym.name = "s";
+		Entity expected_1 = Entity(EntityType::STMT, synonym);
+		query.addEntity(expected_1);
+
+		Synonym synonym2;
+		synonym2.name = "a";
+		Entity expected_2 = Entity(EntityType::ASSIGN, synonym2);
+		query.addEntity(expected_2);
+
+		RelRef expected_rel = RelRef(RelType::NEXT, expected_1, expected_2);
+
+		//Result
+		QueryPatternRelRefParser validator;
+		std::vector<QueryToken> temp_token_chain;
+		temp_token_chain.push_back({ QueryToken::IDENTIFIER, "s" });
+		temp_token_chain.push_back({ QueryToken::COMMA, "" });
+		temp_token_chain.push_back({ QueryToken::IDENTIFIER, "a" });
+		validator.parseParameterSuchThat(query, QueryToken::NEXT, temp_token_chain);
+
+		EXPECT_TRUE(query.getClauses()[0].getRelation() == expected_rel);
+	}
+
+	TEST(NextParserTest, NextSynWildTest) {
+		Query query;
+
+		//Synonym
+		//Expected
+		Synonym synonym;
+		synonym.name = "s";
+		Entity expected_stmt_1 = Entity(EntityType::STMT, synonym);
+		query.addEntity(expected_stmt_1);
+
+		Entity expected_stmt_2 = Entity(EntityType::WILD);
+
+		RelRef expected_rel = RelRef(RelType::NEXT, expected_stmt_1, expected_stmt_2);
+
+		//Result
+		QueryPatternRelRefParser validator;
+		std::vector<QueryToken> temp_token_chain;
+		temp_token_chain.push_back({ QueryToken::IDENTIFIER, "s" });
+		temp_token_chain.push_back({ QueryToken::COMMA, "" });
+		temp_token_chain.push_back({ QueryToken::WILDCARD, "" });
+		validator.parseParameterSuchThat(query, QueryToken::NEXT, temp_token_chain);
+
+		EXPECT_TRUE(query.getClauses()[0].getRelation() == expected_rel);
+	}
+
+	TEST(NextParserTest, NextSynIntTest) {
+		Query query;
+
+		//Synonym
+		//Expected
+		Synonym synonym;
+		synonym.name = "s";
+		Entity expected_stmt_1 = Entity(EntityType::STMT, synonym);
+		query.addEntity(expected_stmt_1);
+
+		Entity expected_stmt_2 = Entity(EntityType::CONSTANT, "3");
+
+		RelRef expected_rel = RelRef(RelType::NEXT, expected_stmt_1, expected_stmt_2);
+
+		//Result
+		QueryPatternRelRefParser validator;
+		std::vector<QueryToken> temp_token_chain;
+		temp_token_chain.push_back({ QueryToken::IDENTIFIER, "s" });
+		temp_token_chain.push_back({ QueryToken::COMMA, "" });
+		temp_token_chain.push_back({ QueryToken::CONSTANT, "3" });
+		validator.parseParameterSuchThat(query, QueryToken::NEXT, temp_token_chain);
+
+		EXPECT_TRUE(query.getClauses()[0].getRelation() == expected_rel);
+	}
+
+	TEST(NextParserTest, NextWildSynTest) {
+		Query query;
+
+		//Synonym
+		//Expected
+		Entity expected_stmt_1 = Entity(EntityType::WILD);
+
+		Synonym synonym;
+		synonym.name = "s";
+		Entity expected_stmt_2 = Entity(EntityType::STMT, synonym);
+		query.addEntity(expected_stmt_2);
+
+		RelRef expected_rel = RelRef(RelType::NEXT, expected_stmt_1, expected_stmt_2);
+
+		//Result
+		QueryPatternRelRefParser validator;
+		std::vector<QueryToken> temp_token_chain;
+		temp_token_chain.push_back({ QueryToken::WILDCARD, "" });
+		temp_token_chain.push_back({ QueryToken::COMMA, "" });
+		temp_token_chain.push_back({ QueryToken::IDENTIFIER, "s" });
+		validator.parseParameterSuchThat(query, QueryToken::NEXT, temp_token_chain);
+
+		EXPECT_TRUE(query.getClauses()[0].getRelation() == expected_rel);
+	}
+
+	TEST(NextParserTest, NextWildWildTest) {
+		Query query;
+
+		//Expected
+		Entity expected_stmt_1 = Entity(EntityType::WILD);
+
+		Entity expected_stmt_2 = Entity(EntityType::WILD);
+
+		RelRef expected_rel = RelRef(RelType::NEXT, expected_stmt_1, expected_stmt_2);
+
+		//Result
+		QueryPatternRelRefParser validator;
+		std::vector<QueryToken> temp_token_chain;
+		temp_token_chain.push_back({ QueryToken::WILDCARD, "" });
+		temp_token_chain.push_back({ QueryToken::COMMA, "" });
+		temp_token_chain.push_back({ QueryToken::WILDCARD, "" });
+		validator.parseParameterSuchThat(query, QueryToken::NEXT, temp_token_chain);
+
+		EXPECT_TRUE(query.getClauses()[0].getRelation() == expected_rel);
+	}
+
+	TEST(NextParserTest, NextWildIntTest) {
+		Query query;
+
+		//Expected
+		Entity expected_stmt_1 = Entity(EntityType::WILD);
+
+		Entity expected_stmt_2 = Entity(EntityType::CONSTANT, "3");
+
+		RelRef expected_rel = RelRef(RelType::NEXT, expected_stmt_1, expected_stmt_2);
+
+		//Result
+		QueryPatternRelRefParser validator;
+		std::vector<QueryToken> temp_token_chain;
+		temp_token_chain.push_back({ QueryToken::WILDCARD, "" });
+		temp_token_chain.push_back({ QueryToken::COMMA, "" });
+		temp_token_chain.push_back({ QueryToken::CONSTANT, "3" });
+		validator.parseParameterSuchThat(query, QueryToken::NEXT, temp_token_chain);
+
+		EXPECT_TRUE(query.getClauses()[0].getRelation() == expected_rel);
+	}
+
+	TEST(NextParserTest, NextIntSynTest) {
+		Query query;
+
+		//Expected
+		Entity expected_stmt_1 = Entity(EntityType::CONSTANT, "3");
+
+		Synonym synonym;
+		synonym.name = "s";
+		Entity expected_stmt_2 = Entity(EntityType::STMT, synonym);
+		query.addEntity(expected_stmt_2);
+
+		RelRef expected_rel = RelRef(RelType::NEXT, expected_stmt_1, expected_stmt_2);
+
+		//Result
+		QueryPatternRelRefParser validator;
+		std::vector<QueryToken> temp_token_chain;
+		temp_token_chain.push_back({ QueryToken::CONSTANT, "3" });
+		temp_token_chain.push_back({ QueryToken::COMMA, "" });
+		temp_token_chain.push_back({ QueryToken::IDENTIFIER, "s" });
+		validator.parseParameterSuchThat(query, QueryToken::NEXT, temp_token_chain);
+
+		EXPECT_TRUE(query.getClauses()[0].getRelation() == expected_rel);
+	}
+
+	TEST(NextParserTest, NextIntWildTest) {
+		Query query;
+
+		//Expected
+		Entity expected_stmt_1 = Entity(EntityType::CONSTANT, "3");
+
+		Entity expected_stmt_2 = Entity(EntityType::WILD);
+
+		RelRef expected_rel = RelRef(RelType::NEXT, expected_stmt_1, expected_stmt_2);
+
+		//Result
+		QueryPatternRelRefParser validator;
+		std::vector<QueryToken> temp_token_chain;
+		temp_token_chain.push_back({ QueryToken::CONSTANT, "3" });
+		temp_token_chain.push_back({ QueryToken::COMMA, "" });
+		temp_token_chain.push_back({ QueryToken::WILDCARD, "" });
+		validator.parseParameterSuchThat(query, QueryToken::NEXT, temp_token_chain);
+
+		EXPECT_TRUE(query.getClauses()[0].getRelation() == expected_rel);
+	}
+
+	TEST(NextParserTest, NextIntIntTest) {
+		Query query;
+
+		//Expected
+		Entity expected_stmt_1 = Entity(EntityType::CONSTANT, "3");
+
+		Entity expected_stmt_2 = Entity(EntityType::CONSTANT, "4");
+
+		RelRef expected_rel = RelRef(RelType::NEXT, expected_stmt_1, expected_stmt_2);
+
+		//Result
+		QueryPatternRelRefParser validator;
+		std::vector<QueryToken> temp_token_chain;
+		temp_token_chain.push_back({ QueryToken::CONSTANT, "3" });
+		temp_token_chain.push_back({ QueryToken::COMMA, "" });
+		temp_token_chain.push_back({ QueryToken::CONSTANT, "4" });
+		validator.parseParameterSuchThat(query, QueryToken::NEXT, temp_token_chain);
+
+		EXPECT_TRUE(query.getClauses()[0].getRelation() == expected_rel);
+	}
+
+	//Invalid
+
+	TEST(NextParserTest, semanticInvalidNextIdentWildTest) {
+		QueryPatternRelRefParser validator;
+
+		Query query;
+		std::vector<QueryToken> temp_token_chain;
+		temp_token_chain.push_back({ QueryToken::QUOTATION_OPEN, "" });
+		temp_token_chain.push_back({ QueryToken::IDENTIFIER, "ident" });
+		temp_token_chain.push_back({ QueryToken::QUOTATION_CLOSE, "" });
+		temp_token_chain.push_back({ QueryToken::COMMA, "" });
+		temp_token_chain.push_back({ QueryToken::WILDCARD, "" });
+
+		EXPECT_THROW(validator.parseParameterSuchThat(query, QueryToken::NEXT, temp_token_chain), SemanticErrorException);
+	}
+
+	TEST(NextParserTest, semanticInvalidNextVarWildTest) {
+		QueryPatternRelRefParser validator;
+
+		Query query;
+		Synonym synonym;
+		synonym.name = "v";
+		Entity declared_stmt = Entity(EntityType::VARIABLE, synonym);
+		query.addEntity(declared_stmt);
+
+		std::vector<QueryToken> temp_token_chain;
+		temp_token_chain.push_back({ QueryToken::IDENTIFIER, "v" });
+		temp_token_chain.push_back({ QueryToken::COMMA, "" });
+		temp_token_chain.push_back({ QueryToken::WILDCARD, "" });
+
+		EXPECT_THROW(validator.parseParameterSuchThat(query, QueryToken::NEXT, temp_token_chain), SemanticErrorException);
+	}
+}

@@ -11,12 +11,9 @@
 #include "SyntacticErrorException.h"
 #include "Utility.h"
 
-class AssignPatternParser {
+class WhilePatternParser {
 public:
-    AssignPatternParser();
+    WhilePatternParser();
 
-    void parseAssign(Query&, Entity&, std::vector<QueryToken>);
-
-private:
-    bool isWild(std::vector<QueryToken>);
+    void parseWhile(Query&, Entity&, std::vector<QueryToken>);
 };
