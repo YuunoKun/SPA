@@ -16,20 +16,20 @@ namespace UnitTesting {
 		PKBAdapter pkb;
 		ModifiesPEvaluator evaluator;
 	};
-	TEST_F(ModifiesPEvaluatorTest, haveRelation) {
+	TEST_F(ModifiesPEvaluatorTest, evaluateWildAndWild) {
 		proc_name main1 = "main1";
 		var_name x = "x";
 		PKB::getInstance().addProcedure(main1);
 		PKB::getInstance().addVariable(x);
 
-		EXPECT_THROW(evaluator.haveRelation(), std::invalid_argument);
+		EXPECT_THROW(evaluator.evaluateWildAndWild(), std::invalid_argument);
 
 		PKB::getInstance().addModifiesP(main1, x);
 
-		EXPECT_THROW(evaluator.haveRelation(), std::invalid_argument);
+		EXPECT_THROW(evaluator.evaluateWildAndWild(), std::invalid_argument);
 	}
 
-	TEST_F(ModifiesPEvaluatorTest, isRelation) {
+	TEST_F(ModifiesPEvaluatorTest, evaluateConstantAndConstant) {
 		proc_name main1 = "main1";
 		proc_name sub1 = "sub1";
 		proc_name main2 = "main2";
@@ -54,21 +54,21 @@ namespace UnitTesting {
 		PKB::getInstance().addVariable(y);
 		PKB::getInstance().addModifiesP(main2, y);
 
-		EXPECT_TRUE(evaluator.isRelation(e1, v1));
-		EXPECT_FALSE(evaluator.isRelation(e1, v2));
-		EXPECT_FALSE(evaluator.isRelation(e1, v3));
-		EXPECT_FALSE(evaluator.isRelation(e2, v1));
-		EXPECT_FALSE(evaluator.isRelation(e2, v2));
-		EXPECT_FALSE(evaluator.isRelation(e2, v3));
-		EXPECT_FALSE(evaluator.isRelation(e3, v1));
-		EXPECT_TRUE(evaluator.isRelation(e3, v2));
-		EXPECT_FALSE(evaluator.isRelation(e3, v3));
-		EXPECT_FALSE(evaluator.isRelation(e4, v1));
-		EXPECT_FALSE(evaluator.isRelation(e4, v2));
-		EXPECT_FALSE(evaluator.isRelation(e4, v3));
+		EXPECT_TRUE(evaluator.evaluateConstantAndConstant(e1, v1));
+		EXPECT_FALSE(evaluator.evaluateConstantAndConstant(e1, v2));
+		EXPECT_FALSE(evaluator.evaluateConstantAndConstant(e1, v3));
+		EXPECT_FALSE(evaluator.evaluateConstantAndConstant(e2, v1));
+		EXPECT_FALSE(evaluator.evaluateConstantAndConstant(e2, v2));
+		EXPECT_FALSE(evaluator.evaluateConstantAndConstant(e2, v3));
+		EXPECT_FALSE(evaluator.evaluateConstantAndConstant(e3, v1));
+		EXPECT_TRUE(evaluator.evaluateConstantAndConstant(e3, v2));
+		EXPECT_FALSE(evaluator.evaluateConstantAndConstant(e3, v3));
+		EXPECT_FALSE(evaluator.evaluateConstantAndConstant(e4, v1));
+		EXPECT_FALSE(evaluator.evaluateConstantAndConstant(e4, v2));
+		EXPECT_FALSE(evaluator.evaluateConstantAndConstant(e4, v3));
 	}
 
-	TEST_F(ModifiesPEvaluatorTest, haveRelationAtRight) {
+	TEST_F(ModifiesPEvaluatorTest, evaluateConstantAndWild) {
 		proc_name main1 = "main1";
 		proc_name sub1 = "sub1";
 		proc_name main2 = "main2";
@@ -90,13 +90,13 @@ namespace UnitTesting {
 		PKB::getInstance().addVariable(y);
 		PKB::getInstance().addModifiesP(main2, y);
 
-		EXPECT_TRUE(evaluator.haveRelationAtRight(e1));
-		EXPECT_FALSE(evaluator.haveRelationAtRight(e2));
-		EXPECT_TRUE(evaluator.haveRelationAtRight(e3));
-		EXPECT_FALSE(evaluator.haveRelationAtRight(e4));
+		EXPECT_TRUE(evaluator.evaluateConstantAndWild(e1));
+		EXPECT_FALSE(evaluator.evaluateConstantAndWild(e2));
+		EXPECT_TRUE(evaluator.evaluateConstantAndWild(e3));
+		EXPECT_FALSE(evaluator.evaluateConstantAndWild(e4));
 	}
 
-	TEST_F(ModifiesPEvaluatorTest, haveRelationAtLeft) {
+	TEST_F(ModifiesPEvaluatorTest, evaluateWildAndConstant) {
 		proc_name main1 = "main1";
 		proc_name sub1 = "sub1";
 		proc_name main2 = "main2";
@@ -117,12 +117,12 @@ namespace UnitTesting {
 		PKB::getInstance().addVariable(y);
 		PKB::getInstance().addModifiesP(main2, y);
 
-		EXPECT_THROW(evaluator.haveRelationAtLeft(v1), std::invalid_argument);
-		EXPECT_THROW(evaluator.haveRelationAtLeft(v2), std::invalid_argument);
-		EXPECT_THROW(evaluator.haveRelationAtLeft(v3), std::invalid_argument);
+		EXPECT_THROW(evaluator.evaluateWildAndConstant(v1), std::invalid_argument);
+		EXPECT_THROW(evaluator.evaluateWildAndConstant(v2), std::invalid_argument);
+		EXPECT_THROW(evaluator.evaluateWildAndConstant(v3), std::invalid_argument);
 	}
 
-	TEST_F(ModifiesPEvaluatorTest, getRelations) {
+	TEST_F(ModifiesPEvaluatorTest, evaluateSynonymAndSynonym) {
 		proc_name main1 = "main1";
 		proc_name sub1 = "sub1";
 		proc_name main2 = "main2";
@@ -145,10 +145,10 @@ namespace UnitTesting {
 		Entity right = { VARIABLE, Synonym{"b"} };
 		std::pair<Entity, Entity> header = { left, right };
 		ResultTable t(header, v);
-		EXPECT_EQ(evaluator.getRelations(left, right), t);
+		EXPECT_EQ(evaluator.evaluateSynonymAndSynonym(left, right), t);
 	}
 
-	TEST_F(ModifiesPEvaluatorTest, getRightRelations) {
+	TEST_F(ModifiesPEvaluatorTest, evaluateWildAndSynonym) {
 		proc_name main1 = "main1";
 		proc_name sub1 = "sub1";
 		proc_name main2 = "main2";
@@ -168,10 +168,10 @@ namespace UnitTesting {
 
 
 		Entity header = { VARIABLE, Synonym{"a"} };
-		EXPECT_THROW(evaluator.getRightRelations(header), std::invalid_argument);
+		EXPECT_THROW(evaluator.evaluateWildAndSynonym(header), std::invalid_argument);
 	}
 
-	TEST_F(ModifiesPEvaluatorTest, getLeftRelations) {
+	TEST_F(ModifiesPEvaluatorTest, evaluateSynonymAndWild) {
 		proc_name main1 = "main1";
 		proc_name sub1 = "sub1";
 		proc_name main2 = "main2";
@@ -192,10 +192,10 @@ namespace UnitTesting {
 		std::vector<proc_name> v = pkb.getModifiesP();
 		Entity header = { PROCEDURE, Synonym{"a"} };
 		ResultTable t(header, v);
-		EXPECT_EQ(evaluator.getLeftRelations(header), t);
+		EXPECT_EQ(evaluator.evaluateSynonymAndWild(header), t);
 	}
 
-	TEST_F(ModifiesPEvaluatorTest, getRelationMatchLeft) {
+	TEST_F(ModifiesPEvaluatorTest, evaluateConstantAndSynonym) {
 		proc_name main1 = "main1";
 		proc_name sub1 = "sub1";
 		proc_name main2 = "main2";
@@ -224,25 +224,25 @@ namespace UnitTesting {
 		Entity header = { VARIABLE, Synonym{"a"} };
 		Entity match = e1;
 		ResultTable t(header, v);
-		EXPECT_EQ(evaluator.getRelationMatchLeft(match, header), t);
+		EXPECT_EQ(evaluator.evaluateConstantAndSynonym(match, header), t);
 
 		v = { y };
 		match = e3;
 		t = ResultTable(header, v);
-		EXPECT_EQ(evaluator.getRelationMatchLeft(match, header), t);
+		EXPECT_EQ(evaluator.evaluateConstantAndSynonym(match, header), t);
 
 		v = { };
 		match = e2;
 		t = ResultTable(header, v);
-		EXPECT_EQ(evaluator.getRelationMatchLeft(match, header), t);
+		EXPECT_EQ(evaluator.evaluateConstantAndSynonym(match, header), t);
 
 		v = { };
 		match = e4;
 		t = ResultTable(header, v);
-		EXPECT_EQ(evaluator.getRelationMatchLeft(match, header), t);
+		EXPECT_EQ(evaluator.evaluateConstantAndSynonym(match, header), t);
 	}
 
-	TEST_F(ModifiesPEvaluatorTest, getRelationMatchRight) {
+	TEST_F(ModifiesPEvaluatorTest, evaluateSynonymAndConstant) {
 		proc_name main1 = "main1";
 		proc_name sub1 = "sub1";
 		proc_name main2 = "main2";
@@ -271,16 +271,16 @@ namespace UnitTesting {
 		Entity header = { PROCEDURE, Synonym{"a"} };
 		Entity match = v2;
 		ResultTable t(header, v);
-		EXPECT_EQ(evaluator.getRelationMatchRight(header, match), t);
+		EXPECT_EQ(evaluator.evaluateSynonymAndConstant(header, match), t);
 
 		v = { main1 };
 		match = v1;
 		t = ResultTable(header, v);
-		EXPECT_EQ(evaluator.getRelationMatchRight(header, match), t);
+		EXPECT_EQ(evaluator.evaluateSynonymAndConstant(header, match), t);
 
 		v = {};
 		match = v3;
 		t = ResultTable(header, v);
-		EXPECT_EQ(evaluator.getRelationMatchRight(header, match), t);
+		EXPECT_EQ(evaluator.evaluateSynonymAndConstant(header, match), t);
 	}
 }

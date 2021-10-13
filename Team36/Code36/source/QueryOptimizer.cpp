@@ -7,36 +7,36 @@
 //2. clauses with one synonym
 //3. clauses with two synonym
 std::vector<Clause> QueryOptimizer::optimizeClausesOrder(std::vector<Clause>& clauses) {
-	std::list<Clause> noSynonymList, oneSynonymList, twoSynonymList;
+	std::list<Clause> no_synonym_list, one_synonym_list, two_synonym_list;
 	for (Clause c : clauses) {
-		Entity leftEntity = getLeftEntity(c);
-		Entity rightEntity = getRightEntity(c);
+		Entity left_entity = getLeftEntity(c);
+		Entity right_entity = getRightEntity(c);
 
 
-		if (leftEntity.isSynonym() && rightEntity.isSynonym()) {
-			twoSynonymList.push_back(c);
+		if (left_entity.isSynonym() && right_entity.isSynonym()) {
+			two_synonym_list.push_back(c);
 		}
-		else if (leftEntity.isSynonym() || rightEntity.isSynonym()) {
-			oneSynonymList.push_back(c);
+		else if (left_entity.isSynonym() || right_entity.isSynonym()) {
+			one_synonym_list.push_back(c);
 		}
 		else {
-			noSynonymList.push_back(c);
+			no_synonym_list.push_back(c);
 		}
 	}
 
-	std::vector<Clause> reorderedClauses;
-	reorderedClauses.insert(reorderedClauses.end(), noSynonymList.begin(), noSynonymList.end());
-	reorderedClauses.insert(reorderedClauses.end(), oneSynonymList.begin(), oneSynonymList.end());
-	reorderedClauses.insert(reorderedClauses.end(), twoSynonymList.begin(), twoSynonymList.end());
-	return reorderedClauses;
+	std::vector<Clause> reordered_clauses;
+	reordered_clauses.insert(reordered_clauses.end(), no_synonym_list.begin(), no_synonym_list.end());
+	reordered_clauses.insert(reordered_clauses.end(), one_synonym_list.begin(), one_synonym_list.end());
+	reordered_clauses.insert(reordered_clauses.end(), two_synonym_list.begin(), two_synonym_list.end());
+	return reordered_clauses;
 }
 
 bool QueryOptimizer::checkAllConstantExist(std::vector<Clause>& clauses) {
 	for (Clause c : clauses) {
-		Entity leftEntity = getLeftEntity(c);
-		Entity rightEntity = getRightEntity(c);
+		Entity left_entity = getLeftEntity(c);
+		Entity right_entity = getRightEntity(c);
 
-		if (!checkConstantExist(leftEntity) || !checkConstantExist(rightEntity)) {
+		if (!checkConstantExist(left_entity) || !checkConstantExist(right_entity)) {
 			return false;
 		}
 	}

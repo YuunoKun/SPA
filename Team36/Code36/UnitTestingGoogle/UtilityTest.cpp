@@ -582,7 +582,7 @@ namespace UnitTesting {
 			{"3", "3"},
 		};
 
-		std::unordered_multimap<std::string, std::vector<std::string>> toJoin = {
+		std::unordered_multimap<std::string, std::vector<std::string>> to_join = {
 			{"1", { "1", "1" } },
 			{"2", { "2", "2" } },
 			{"3", { "3", "3" } },
@@ -591,7 +591,7 @@ namespace UnitTesting {
 		};
 
 		int fromIndex = 0;
-		int toJoinIndex = 0;
+		int to_join_index = 0;
 
 		std::vector<std::vector<std::string>> to = {
 			{"1", "1", "1"},
@@ -605,10 +605,10 @@ namespace UnitTesting {
 			{"3", "3", "3"},
 		};
 
-		EXPECT_EQ(Utility::joinTable(from, fromIndex, toJoin, toJoinIndex), to);
+		EXPECT_EQ(Utility::joinTable(from, fromIndex, to_join, to_join_index), to);
 
 		fromIndex = 1;
-		toJoinIndex = 0;
+		to_join_index = 0;
 
 		to = {
 			{"1", "1", "1"},
@@ -622,7 +622,7 @@ namespace UnitTesting {
 			{"3", "3", "3"},
 		};
 
-		EXPECT_EQ(Utility::joinTable(from, fromIndex, toJoin, toJoinIndex), to);
+		EXPECT_EQ(Utility::joinTable(from, fromIndex, to_join, to_join_index), to);
 
 		from = {
 			{"1"},
@@ -630,7 +630,7 @@ namespace UnitTesting {
 			{"3"}
 		};
 
-		toJoin = {
+		to_join = {
 			{"1", { "1", "1" } },
 			{"1", { "1", "2" } },
 			{"2", { "2", "3" } },
@@ -639,7 +639,7 @@ namespace UnitTesting {
 		};
 
 		fromIndex = 0;
-		toJoinIndex = 0;
+		to_join_index = 0;
 
 		to = {
 			{"1", "1"},
@@ -649,7 +649,7 @@ namespace UnitTesting {
 			{"2", "3"}
 		};
 
-		EXPECT_EQ(Utility::joinTable(from, fromIndex, toJoin, toJoinIndex), to);
+		EXPECT_EQ(Utility::joinTable(from, fromIndex, to_join, to_join_index), to);
 
 		from = {
 			{"1"},
@@ -657,7 +657,7 @@ namespace UnitTesting {
 			{"3"}
 		};
 
-		toJoin = {
+		to_join = {
 			{"1", { "1", "1", "5" } },
 			{"1", { "1", "2", "4" } },
 			{"2", { "2", "3", "3" } },
@@ -666,7 +666,7 @@ namespace UnitTesting {
 		};
 
 		fromIndex = 0;
-		toJoinIndex = 0;
+		to_join_index = 0;
 
 		to = {
 			{"1", "1", "5" },
@@ -676,7 +676,7 @@ namespace UnitTesting {
 			{"2", "3", "3" }
 		};
 
-		EXPECT_EQ(Utility::joinTable(from, fromIndex, toJoin, toJoinIndex), to);
+		EXPECT_EQ(Utility::joinTable(from, fromIndex, to_join, to_join_index), to);
 
 		from = {
 			{"1", "1"},
@@ -690,7 +690,7 @@ namespace UnitTesting {
 			{"3", "3"}
 		};
 
-		toJoin = {
+		to_join = {
 			{"1", { "1", "1", "5" } },
 			{"1", { "1", "2", "4" } },
 			{"2", { "2", "3", "3" } },
@@ -699,7 +699,7 @@ namespace UnitTesting {
 		};
 
 		fromIndex = 0;
-		toJoinIndex = 0;
+		to_join_index = 0;
 
 		to = {
 			{"1", "1", "1", "5" },
@@ -719,7 +719,7 @@ namespace UnitTesting {
 			{"2", "3", "3", "3" }
 		};
 
-		EXPECT_EQ(Utility::joinTable(from, fromIndex, toJoin, toJoinIndex), to);
+		EXPECT_EQ(Utility::joinTable(from, fromIndex, to_join, to_join_index), to);
 
 		from = {
 			{"1"},
@@ -733,7 +733,7 @@ namespace UnitTesting {
 			{"9"}
 		};
 
-		toJoin = {
+		to_join = {
 			{"1", { "1", "1", "5" } },
 			{"1", { "1", "2", "4" } },
 			{"1", { "1", "4", "2" } },
@@ -741,7 +741,7 @@ namespace UnitTesting {
 		};
 
 		fromIndex = 0;
-		toJoinIndex = 0;
+		to_join_index = 0;
 
 		to = {
 			{"1", "1", "5" },
@@ -750,10 +750,10 @@ namespace UnitTesting {
 			{"1", "5", "1" }
 		};
 
-		EXPECT_EQ(Utility::joinTable(from, fromIndex, toJoin, toJoinIndex), to);
+		EXPECT_EQ(Utility::joinTable(from, fromIndex, to_join, to_join_index), to);
 
 		fromIndex = 0;
-		toJoinIndex = 1;
+		to_join_index = 1;
 
 		to = {
 			{"1", "1", "5" },
@@ -762,7 +762,7 @@ namespace UnitTesting {
 			{"1", "1", "1" }
 		};
 
-		EXPECT_EQ(Utility::joinTable(from, fromIndex, toJoin, toJoinIndex), to);
+		EXPECT_EQ(Utility::joinTable(from, fromIndex, to_join, to_join_index), to);
 	}
 
 	TEST(Utility, queryTokenTypeToEntityType) {

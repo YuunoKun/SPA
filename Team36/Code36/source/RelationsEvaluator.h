@@ -8,5 +8,6 @@
 class RelationsEvaluator {
 public:
 	void evaluateRelation(QueryResult&, RelRef&);
+private:
 	void evaluateRelation(QueryResult&, RelRef&, RelationEvaluatorInterface&);
 };

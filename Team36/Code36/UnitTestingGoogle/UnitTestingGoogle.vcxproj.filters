@@ -51,7 +51,7 @@
     <ClCompile Include="RelRefTest.cpp">
       <Filter>PQL\QueryObject</Filter>
     </ClCompile>
-    <ClCompile Include="PatternEvaluatorTest.cpp">
+    <ClCompile Include="PatternsEvaluatorTest.cpp">
       <Filter>PQL\QueryEvaluator</Filter>
     </ClCompile>
     <ClCompile Include="QueryEvaluatorMultiClausesTest.cpp">
@@ -111,6 +111,15 @@
     <ClCompile Include="QueryEvaluatorPatternTest.cpp">
       <Filter>PQL\QueryEvaluator</Filter>
     </ClCompile>
+    <ClCompile Include="PatternAssignEvaluatorTest.cpp">
+      <Filter>PQL\QueryEvaluator\PatternEvaluator</Filter>
+    </ClCompile>
+    <ClCompile Include="PatternWhileEvaluatorTest.cpp">
+      <Filter>PQL\QueryEvaluator\PatternEvaluator</Filter>
+    </ClCompile>
+    <ClCompile Include="PatternIfEvaluatorTest.cpp">
+      <Filter>PQL\QueryEvaluator\PatternEvaluator</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -145,6 +154,9 @@
     </Filter>
     <Filter Include="Common">
       <UniqueIdentifier>{06725a9a-7be9-46a8-ae6c-cf15393301f0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PQL\QueryEvaluator\PatternEvaluator">
+      <UniqueIdentifier>{ad4a0fd3-2b25-467d-99d5-1ce665350f45}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -192,13 +204,7 @@
     <ClCompile Include="RelRefTest.cpp">
       <Filter>PQL\QueryObject</Filter>
     </ClCompile>
-    <ClCompile Include="PatternEvaluatorTest.cpp">
-      <Filter>PQL\QueryEvaluator</Filter>
-    </ClCompile>
     <ClCompile Include="QueryEvaluatorMultiClausesTest.cpp">
-      <Filter>PQL\QueryEvaluator</Filter>
-    </ClCompile>
-    <ClCompile Include="QueryEvaluatorTest.cpp">
       <Filter>PQL\QueryEvaluator</Filter>
     </ClCompile>
     <ClCompile Include="QueryResultTest.cpp">

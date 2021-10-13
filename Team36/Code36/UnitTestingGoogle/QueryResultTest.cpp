@@ -3,24 +3,24 @@
 #include "QueryResult.h""
 
 namespace UnitTesting {
-	std::pair<Entity, Entity> queryTableHeader1{ {WHILE, Synonym{"test"} }, { READ,Synonym{"hello"} } };
-	std::vector<std::pair<std::string, std::string>> queryTableTable1{
+	std::pair<Entity, Entity> query_table_header1{ {WHILE, Synonym{"test"} }, { READ,Synonym{"hello"} } };
+	std::vector<std::pair<std::string, std::string>> query_list_pair1{
 		{ "1", "2" }, { "3", "4" },
 		{ "5", "6" }, { "7", "8" },
 		{ "9", "10" }, { "11", "12" },
 		{ "13", "14" }, { "15", "16" },
 		{ "17", "18" }, { "19", "20" } };
 
-	std::pair<Entity, Entity> queryTableHeader2{ {WHILE, Synonym{"t1"} }, { READ,Synonym{"t2"} } };
-	std::vector<std::pair<std::string, std::string>> queryTableTable2{
+	std::pair<Entity, Entity> query_table_header2{ {WHILE, Synonym{"t1"} }, { READ,Synonym{"t2"} } };
+	std::vector<std::pair<std::string, std::string>> query_list_pair2{
 		{ "1", "11", },
 		{ "2", "12", },
 		{ "3", "13",},
 		{ "4", "14",},
 		{ "5", "15", } };
 
-	std::pair<Entity, Entity> queryTableHeader3{ {VARIABLE, Synonym{"t3"} }, { IF,Synonym{"t4"} } };
-	std::vector<std::pair<std::string, std::string>> queryTableTable3{
+	std::pair<Entity, Entity> query_table_header3{ {VARIABLE, Synonym{"t3"} }, { IF,Synonym{"t4"} } };
+	std::vector<std::pair<std::string, std::string>> query_list_pair3{
 		{ "6", "16", },
 		{ "7", "17", },
 		{ "8", "18",},
@@ -28,23 +28,23 @@ namespace UnitTesting {
 		{ "10", "20", } };
 
 	TEST(QueryResult, isInTable) {
-		ResultTable resultTable1(queryTableHeader1, queryTableTable1);
-		ResultTable resultTable2(queryTableHeader2, queryTableTable2);
-		ResultTable resultTable3(queryTableHeader3, queryTableTable3);
+		ResultTable result_table1(query_table_header1, query_list_pair1);
+		ResultTable result_table2(query_table_header2, query_list_pair2);
+		ResultTable result_table3(query_table_header3, query_list_pair3);
 
-		QueryResult queryResult;
-		queryResult.addResult(resultTable1);
-		queryResult.addResult(resultTable2);
-		queryResult.addResult(resultTable3);
+		QueryResult query_result;
+		query_result.addResult(result_table1);
+		query_result.addResult(result_table2);
+		query_result.addResult(result_table3);
 
-		EXPECT_TRUE(queryResult.isInTables(queryTableHeader1.first));
-		EXPECT_TRUE(queryResult.isInTables(queryTableHeader1.second));
-		EXPECT_TRUE(queryResult.isInTables(queryTableHeader2.first));
-		EXPECT_TRUE(queryResult.isInTables(queryTableHeader2.second));
-		EXPECT_TRUE(queryResult.isInTables(queryTableHeader3.first));
-		EXPECT_TRUE(queryResult.isInTables(queryTableHeader3.second));
-		EXPECT_TRUE(queryResult.isInTables({ WHILE, Synonym{"test"} }));
-		EXPECT_FALSE(queryResult.isInTables({ PRINT,Synonym{ "test1" } }));
+		EXPECT_TRUE(query_result.isInTables(query_table_header1.first));
+		EXPECT_TRUE(query_result.isInTables(query_table_header1.second));
+		EXPECT_TRUE(query_result.isInTables(query_table_header2.first));
+		EXPECT_TRUE(query_result.isInTables(query_table_header2.second));
+		EXPECT_TRUE(query_result.isInTables(query_table_header3.first));
+		EXPECT_TRUE(query_result.isInTables(query_table_header3.second));
+		EXPECT_TRUE(query_result.isInTables({ WHILE, Synonym{"test"} }));
+		EXPECT_FALSE(query_result.isInTables({ PRINT,Synonym{ "test1" } }));
 	}
 
 	TEST(QueryResult, haveResult) {
@@ -68,53 +68,53 @@ namespace UnitTesting {
 	}
 
 	TEST(QueryResult, getEntityResult) {
-		ResultTable resultTable1(queryTableHeader1, queryTableTable1);
-		ResultTable resultTable2(queryTableHeader2, queryTableTable2);
-		ResultTable resultTable3(queryTableHeader3, queryTableTable3);
+		ResultTable result_table1(query_table_header1, query_list_pair1);
+		ResultTable result_table2(query_table_header2, query_list_pair2);
+		ResultTable result_table3(query_table_header3, query_list_pair3);
 
-		QueryResult queryResult;
-		queryResult.addResult(resultTable1);
-		queryResult.addResult(resultTable2);
-		queryResult.addResult(resultTable3);
+		QueryResult query_result;
+		query_result.addResult(result_table1);
+		query_result.addResult(result_table2);
+		query_result.addResult(result_table3);
 
 		std::list<std::string> result{ "1", "5", "9", "13", "17", "3", "7", "11", "15", "19" };
-		std::list<std::string> tableResult = queryResult.getResult(queryTableHeader1.first);
+		std::list<std::string> table_result = query_result.getResult(query_table_header1.first);
 		result.sort();
-		tableResult.sort();
-		EXPECT_EQ(tableResult, result);
+		table_result.sort();
+		EXPECT_EQ(table_result, result);
 
 		result = { "2", "6", "10", "14", "18", "4", "8", "12", "16", "20" };
-		tableResult = queryResult.getResult(queryTableHeader1.second);
+		table_result = query_result.getResult(query_table_header1.second);
 		result.sort();
-		tableResult.sort();
-		EXPECT_EQ(tableResult, result);
+		table_result.sort();
+		EXPECT_EQ(table_result, result);
 
 		result = { "1", "2", "3", "4", "5" };
-		tableResult = queryResult.getResult(queryTableHeader2.first);
+		table_result = query_result.getResult(query_table_header2.first);
 		result.sort();
-		tableResult.sort();
-		EXPECT_EQ(tableResult, result);
+		table_result.sort();
+		EXPECT_EQ(table_result, result);
 
 		result = { "11", "12", "13", "14", "15" };
-		tableResult = queryResult.getResult(queryTableHeader2.second);
+		table_result = query_result.getResult(query_table_header2.second);
 		result.sort();
-		tableResult.sort();
-		EXPECT_EQ(tableResult, result);
+		table_result.sort();
+		EXPECT_EQ(table_result, result);
 
 		result = { "6", "7", "8", "9", "10" };
-		tableResult = queryResult.getResult(queryTableHeader3.first);
+		table_result = query_result.getResult(query_table_header3.first);
 		result.sort();
-		tableResult.sort();
-		EXPECT_EQ(tableResult, result);
+		table_result.sort();
+		EXPECT_EQ(table_result, result);
 
 		result = { "16", "17", "18", "19", "20" };
-		tableResult = queryResult.getResult(queryTableHeader3.second);
+		table_result = query_result.getResult(query_table_header3.second);
 		result.sort();
-		tableResult.sort();
-		EXPECT_EQ(tableResult, result);
+		table_result.sort();
+		EXPECT_EQ(table_result, result);
 
 		try {
-			tableResult = queryResult.getResult({ STMT, Synonym{"DoesNotExist"} });
+			table_result = query_result.getResult({ STMT, Synonym{"DoesNotExist"} });
 			FAIL();
 		}
 		catch (std::domain_error const& ex) {
@@ -387,7 +387,7 @@ namespace UnitTesting {
 		EXPECT_EQ(q.getResult(e1), b1);
 		EXPECT_EQ(q.getResult(e2), b2);
 		EXPECT_EQ(q.getResult(e3), b3);
-		/*
+		
 		t1 = ResultTable(h1, a1);
 		t2 = ResultTable(h2, a2);
 		t2 = ResultTable(h3, a3);
@@ -425,7 +425,7 @@ namespace UnitTesting {
 		q.addResult(t1);
 		q.addResult(t2);
 		q.addResult(t3);
-		EXPECT_FALSE(q.haveResult());*/
+		EXPECT_FALSE(q.haveResult());
 	}
 
 	TEST(QueryResult, addResultMergeJoinTableSingleColumn) {

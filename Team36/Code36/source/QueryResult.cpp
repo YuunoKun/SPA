@@ -24,7 +24,7 @@ bool QueryResult::isInTables(std::vector<Entity> v) {
 }
 
 bool QueryResult::isInTables(Entity e) {
-	if (headerSet.find(e.getSynonym()) != headerSet.end()) {
+	if (header_set.find(e.getSynonym()) != header_set.end()) {
 		return true;
 	}
 	return false;
@@ -44,7 +44,7 @@ void QueryResult::addResult(ResultTable t) {
 	addHeader(t.getHeaders());
 
 	//Common header found, began merge
-	std::vector<ResultTable> newResults;
+	std::vector<ResultTable> new_results;
 	while (!results.empty()) {
 		ResultTable r = results.back();
 		results.pop_back();
@@ -53,17 +53,17 @@ void QueryResult::addResult(ResultTable t) {
 			have_result = false;
 			return;
 		}else if(!merged) {
-			newResults.push_back(r);
+			new_results.push_back(r);
 		}
 	}
 
-	newResults.push_back(t);
-	results = newResults;
+	new_results.push_back(t);
+	results = new_results;
 }
 
 void QueryResult::addHeader(std::vector<Entity> v) {
 	for (auto& it : v) {
-		headerSet.insert(it.getSynonym());
+		header_set.insert(it.getSynonym());
 	}
 }
 
