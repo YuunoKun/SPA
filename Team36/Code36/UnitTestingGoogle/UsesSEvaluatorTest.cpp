@@ -17,19 +17,19 @@ namespace UnitTesting {
 		UsesSEvaluator evaluator;
 	};
 
-	TEST_F(UsesSEvaluatorTest, haveRelation) {
+	TEST_F(UsesSEvaluatorTest, evaluateWildAndWild) {
 		var_name x = "x";
 		PKB::getInstance().addStmt(STMT_READ);
 		PKB::getInstance().addVariable(x);
 
-		EXPECT_THROW(evaluator.haveRelation(), std::invalid_argument);
+		EXPECT_THROW(evaluator.evaluateWildAndWild(), std::invalid_argument);
 
 		PKB::getInstance().addUsesS(1, x);
 
-		EXPECT_THROW(evaluator.haveRelation(), std::invalid_argument);
+		EXPECT_THROW(evaluator.evaluateWildAndWild(), std::invalid_argument);
 	}
 
-	TEST_F(UsesSEvaluatorTest, isRelation) {
+	TEST_F(UsesSEvaluatorTest, evaluateConstantAndConstant) {
 		Entity e1 = { STMT, "1" };
 		Entity e2 = { STMT, "2" };
 		Entity e3 = { STMT, "3" };
@@ -51,21 +51,21 @@ namespace UnitTesting {
 		PKB::getInstance().addUsesS(1, x);
 		PKB::getInstance().addUsesS(3, y);
 
-		EXPECT_TRUE(evaluator.isRelation(e1, v1));
-		EXPECT_FALSE(evaluator.isRelation(e1, v2));
-		EXPECT_FALSE(evaluator.isRelation(e1, v3));
-		EXPECT_FALSE(evaluator.isRelation(e2, v1));
-		EXPECT_FALSE(evaluator.isRelation(e2, v2));
-		EXPECT_FALSE(evaluator.isRelation(e2, v3));
-		EXPECT_FALSE(evaluator.isRelation(e3, v1));
-		EXPECT_TRUE(evaluator.isRelation(e3, v2));
-		EXPECT_FALSE(evaluator.isRelation(e3, v3));
-		EXPECT_FALSE(evaluator.isRelation(e4, v1));
-		EXPECT_FALSE(evaluator.isRelation(e4, v2));
-		EXPECT_FALSE(evaluator.isRelation(e4, v3));
+		EXPECT_TRUE(evaluator.evaluateConstantAndConstant(e1, v1));
+		EXPECT_FALSE(evaluator.evaluateConstantAndConstant(e1, v2));
+		EXPECT_FALSE(evaluator.evaluateConstantAndConstant(e1, v3));
+		EXPECT_FALSE(evaluator.evaluateConstantAndConstant(e2, v1));
+		EXPECT_FALSE(evaluator.evaluateConstantAndConstant(e2, v2));
+		EXPECT_FALSE(evaluator.evaluateConstantAndConstant(e2, v3));
+		EXPECT_FALSE(evaluator.evaluateConstantAndConstant(e3, v1));
+		EXPECT_TRUE(evaluator.evaluateConstantAndConstant(e3, v2));
+		EXPECT_FALSE(evaluator.evaluateConstantAndConstant(e3, v3));
+		EXPECT_FALSE(evaluator.evaluateConstantAndConstant(e4, v1));
+		EXPECT_FALSE(evaluator.evaluateConstantAndConstant(e4, v2));
+		EXPECT_FALSE(evaluator.evaluateConstantAndConstant(e4, v3));
 	}
 
-	TEST_F(UsesSEvaluatorTest, haveRelationAtRight) {
+	TEST_F(UsesSEvaluatorTest, evaluateConstantAndWild) {
 		Entity e1 = { STMT, "1" };
 		Entity e2 = { STMT, "2" };
 		Entity e3 = { STMT, "3" };
@@ -87,13 +87,13 @@ namespace UnitTesting {
 		PKB::getInstance().addUsesS(1, x);
 		PKB::getInstance().addUsesS(3, y);
 
-		EXPECT_TRUE(evaluator.haveRelationAtRight(e1));
-		EXPECT_FALSE(evaluator.haveRelationAtRight(e2));
-		EXPECT_TRUE(evaluator.haveRelationAtRight(e3));
-		EXPECT_FALSE(evaluator.haveRelationAtRight(e4));
+		EXPECT_TRUE(evaluator.evaluateConstantAndWild(e1));
+		EXPECT_FALSE(evaluator.evaluateConstantAndWild(e2));
+		EXPECT_TRUE(evaluator.evaluateConstantAndWild(e3));
+		EXPECT_FALSE(evaluator.evaluateConstantAndWild(e4));
 	}
 
-	TEST_F(UsesSEvaluatorTest, haveRelationAtLeft) {
+	TEST_F(UsesSEvaluatorTest, evaluateWildAndConstant) {
 		Entity e1 = { STMT, "1" };
 		Entity e2 = { STMT, "2" };
 		Entity e3 = { STMT, "3" };
@@ -115,12 +115,12 @@ namespace UnitTesting {
 		PKB::getInstance().addUsesS(1, x);
 		PKB::getInstance().addUsesS(3, y);
 
-		EXPECT_THROW(evaluator.haveRelationAtLeft(v1), std::invalid_argument);
-		EXPECT_THROW(evaluator.haveRelationAtLeft(v2), std::invalid_argument);
-		EXPECT_THROW(evaluator.haveRelationAtLeft(v3), std::invalid_argument);
+		EXPECT_THROW(evaluator.evaluateWildAndConstant(v1), std::invalid_argument);
+		EXPECT_THROW(evaluator.evaluateWildAndConstant(v2), std::invalid_argument);
+		EXPECT_THROW(evaluator.evaluateWildAndConstant(v3), std::invalid_argument);
 	}
 
-	TEST_F(UsesSEvaluatorTest, getRelations) {
+	TEST_F(UsesSEvaluatorTest, evaluateSynonymAndSynonym) {
 		StmtInfo p1{ 1, STMT_READ };
 		StmtInfo p2{ 2, STMT_PRINT };
 		StmtInfo p3{ 3, STMT_IF };
@@ -147,37 +147,37 @@ namespace UnitTesting {
 		Entity right = { VARIABLE, Synonym{"b"} };
 		std::pair<Entity, Entity> header = { left, right };
 		ResultTable t(header, v);
-		EXPECT_EQ(evaluator.getRelations(left, right), t);
+		EXPECT_EQ(evaluator.evaluateSynonymAndSynonym(left, right), t);
 
 		v = { {p1, x} };
 		left = { READ, Synonym{"a"} };
 		right = { VARIABLE, Synonym{"b"} };
 		header = { left, right };
 		t = ResultTable(header, v);
-		EXPECT_EQ(evaluator.getRelations(left, right), t);
+		EXPECT_EQ(evaluator.evaluateSynonymAndSynonym(left, right), t);
 
 		v = { {p3, y} };
 		left = { IF, Synonym{"a"} };
 		right = { VARIABLE, Synonym{"b"} };
 		header = { left, right };
 		t = ResultTable(header, v);
-		EXPECT_EQ(evaluator.getRelations(left, right), t);
+		EXPECT_EQ(evaluator.evaluateSynonymAndSynonym(left, right), t);
 
 		v = { };
 		left = { WHILE, Synonym{"a"} };
 		right = { READ, Synonym{"b"} };
 		header = { left, right };
 		t = ResultTable(header, v);
-		EXPECT_EQ(evaluator.getRelations(left, right), t);
+		EXPECT_EQ(evaluator.evaluateSynonymAndSynonym(left, right), t);
 
 		left = { PRINT, Synonym{"a"} };
 		right = { IF, Synonym{"b"} };
 		header = { left, right };
 		t = ResultTable(header, v);
-		EXPECT_EQ(evaluator.getRelations(left, right), t);
+		EXPECT_EQ(evaluator.evaluateSynonymAndSynonym(left, right), t);
 	}
 
-	TEST_F(UsesSEvaluatorTest, getRightRelations) {
+	TEST_F(UsesSEvaluatorTest, evaluateWildAndSynonym) {
 		StmtInfo p1{ 1, STMT_READ };
 		StmtInfo p2{ 2, STMT_PRINT };
 		StmtInfo p3{ 3, STMT_IF };
@@ -201,10 +201,10 @@ namespace UnitTesting {
 
 
 		Entity header = { VARIABLE, Synonym{"a"} };
-		EXPECT_THROW(evaluator.getRightRelations(header), std::invalid_argument);
+		EXPECT_THROW(evaluator.evaluateWildAndSynonym(header), std::invalid_argument);
 	}
 
-	TEST_F(UsesSEvaluatorTest, getLeftRelations) {
+	TEST_F(UsesSEvaluatorTest, evaluateSynonymAndWild) {
 		StmtInfo p1{ 1, STMT_READ };
 		StmtInfo p2{ 2, STMT_PRINT };
 		StmtInfo p3{ 3, STMT_IF };
@@ -229,34 +229,34 @@ namespace UnitTesting {
 		std::vector<StmtInfo> v = pkb.getUsesS();
 		Entity header = { STMT, Synonym{"a"} };
 		ResultTable t(header, v);
-		EXPECT_EQ(evaluator.getLeftRelations(header), t);
+		EXPECT_EQ(evaluator.evaluateSynonymAndWild(header), t);
 
 		v = { p1 };
 		header = { READ, Synonym{"a"} };
 		t = ResultTable(header, v);
-		EXPECT_EQ(evaluator.getLeftRelations(header), t);
+		EXPECT_EQ(evaluator.evaluateSynonymAndWild(header), t);
 
 		v = { p3 };
 		header = { IF, Synonym{"a"} };
 		t = ResultTable(header, v);
-		EXPECT_EQ(evaluator.getLeftRelations(header), t);
+		EXPECT_EQ(evaluator.evaluateSynonymAndWild(header), t);
 
 		v = { };
 		header = { WHILE, Synonym{"a"} };
 		t = ResultTable(header, v);
-		EXPECT_EQ(evaluator.getLeftRelations(header), t);
+		EXPECT_EQ(evaluator.evaluateSynonymAndWild(header), t);
 		header = { PRINT, Synonym{"a"} };
 		t = ResultTable(header, v);
-		EXPECT_EQ(evaluator.getLeftRelations(header), t);
+		EXPECT_EQ(evaluator.evaluateSynonymAndWild(header), t);
 		header = { CALL, Synonym{"a"} };
 		t = ResultTable(header, v);
-		EXPECT_EQ(evaluator.getLeftRelations(header), t);
+		EXPECT_EQ(evaluator.evaluateSynonymAndWild(header), t);
 		header = { ASSIGN, Synonym{"a"} };
 		t = ResultTable(header, v);
-		EXPECT_EQ(evaluator.getLeftRelations(header), t);
+		EXPECT_EQ(evaluator.evaluateSynonymAndWild(header), t);
 	}
 
-	TEST_F(UsesSEvaluatorTest, getRelationMatchLeft) {
+	TEST_F(UsesSEvaluatorTest, evaluateConstantAndSynonym) {
 		StmtInfo p1{ 1, STMT_READ };
 		StmtInfo p2{ 2, STMT_PRINT };
 		StmtInfo p3{ 3, STMT_IF };
@@ -282,32 +282,32 @@ namespace UnitTesting {
 		Entity header = { VARIABLE, Synonym{"a"} };
 		Entity match = { STMT, "1" };
 		ResultTable t(header, v);
-		EXPECT_EQ(evaluator.getRelationMatchLeft(match, header), t);
+		EXPECT_EQ(evaluator.evaluateConstantAndSynonym(match, header), t);
 		header = { READ, Synonym{"a"} };
 		t = ResultTable(header, v);
-		EXPECT_EQ(evaluator.getRelationMatchLeft(match, header), t);
+		EXPECT_EQ(evaluator.evaluateConstantAndSynonym(match, header), t);
 
 		v = { y };
 		match = { STMT, "3" };
 		t = ResultTable(header, v);
-		EXPECT_EQ(evaluator.getRelationMatchLeft(match, header), t);
+		EXPECT_EQ(evaluator.evaluateConstantAndSynonym(match, header), t);
 
 		match = { IF, "3" };
 		t = ResultTable(header, v);
-		EXPECT_EQ(evaluator.getRelationMatchLeft(match, header), t);
+		EXPECT_EQ(evaluator.evaluateConstantAndSynonym(match, header), t);
 
 		match = { WHILE, "3" };
 		t = ResultTable(header, v);
-		EXPECT_EQ(evaluator.getRelationMatchLeft(match, header), t);
+		EXPECT_EQ(evaluator.evaluateConstantAndSynonym(match, header), t);
 
 		v = { };
 		header = { VARIABLE, Synonym{"a"} };
 		match = { STMT, "2" };
 		t = ResultTable(header, v);
-		EXPECT_EQ(evaluator.getRelationMatchLeft(match, header), t);
+		EXPECT_EQ(evaluator.evaluateConstantAndSynonym(match, header), t);
 	}
 
-	TEST_F(UsesSEvaluatorTest, getRelationMatchRight) {
+	TEST_F(UsesSEvaluatorTest, evaluateSynonymAndConstant) {
 		StmtInfo p1{ 1, STMT_READ };
 		StmtInfo p2{ 2, STMT_PRINT };
 		StmtInfo p3{ 3, STMT_IF };
@@ -333,73 +333,73 @@ namespace UnitTesting {
 		Entity header = { STMT, Synonym{"a"} };
 		Entity match = { VARIABLE, "y" };
 		ResultTable t(header, v);
-		EXPECT_EQ(evaluator.getRelationMatchRight(header, match), t);
+		EXPECT_EQ(evaluator.evaluateSynonymAndConstant(header, match), t);
 		header = { READ, Synonym{"a"} };
 		t = ResultTable(header, v);
-		EXPECT_EQ(evaluator.getRelationMatchRight(header, match), t);
+		EXPECT_EQ(evaluator.evaluateSynonymAndConstant(header, match), t);
 
 		v = {};
 		header = { WHILE, Synonym{"a"} };
 		t = ResultTable(header, v);
-		EXPECT_EQ(evaluator.getRelationMatchRight(header, match), t);
+		EXPECT_EQ(evaluator.evaluateSynonymAndConstant(header, match), t);
 		header = { CALL, Synonym{"a"} };
 		t = ResultTable(header, v);
-		EXPECT_EQ(evaluator.getRelationMatchRight(header, match), t);
+		EXPECT_EQ(evaluator.evaluateSynonymAndConstant(header, match), t);
 		header = { READ, Synonym{"a"} };
 		t = ResultTable(header, v);
-		EXPECT_EQ(evaluator.getRelationMatchRight(header, match), t);
+		EXPECT_EQ(evaluator.evaluateSynonymAndConstant(header, match), t);
 		header = { ASSIGN, Synonym{"a"} };
 		t = ResultTable(header, v);
-		EXPECT_EQ(evaluator.getRelationMatchRight(header, match), t);
+		EXPECT_EQ(evaluator.evaluateSynonymAndConstant(header, match), t);
 		header = { PRINT, Synonym{"a"} };
 		t = ResultTable(header, v);
-		EXPECT_EQ(evaluator.getRelationMatchRight(header, match), t);
+		EXPECT_EQ(evaluator.evaluateSynonymAndConstant(header, match), t);
 
 		v = { p1 };
 		header = { STMT, Synonym{"a"} };
 		match = { VARIABLE, "x" };
 		t = ResultTable(header, v);
-		EXPECT_EQ(evaluator.getRelationMatchRight(header, match), t);
+		EXPECT_EQ(evaluator.evaluateSynonymAndConstant(header, match), t);
 		header = { IF, Synonym{"a"} };
 		t = ResultTable(header, v);
-		EXPECT_EQ(evaluator.getRelationMatchRight(header, match), t);
+		EXPECT_EQ(evaluator.evaluateSynonymAndConstant(header, match), t);
 		header = { PRINT, Synonym{"a"} };
 		t = ResultTable(header, v);
-		EXPECT_EQ(evaluator.getRelationMatchRight(header, match), t);
+		EXPECT_EQ(evaluator.evaluateSynonymAndConstant(header, match), t);
 
 		v = {};
 		header = { WHILE, Synonym{"a"} };
 		t = ResultTable(header, v);
-		EXPECT_EQ(evaluator.getRelationMatchRight(header, match), t);
+		EXPECT_EQ(evaluator.evaluateSynonymAndConstant(header, match), t);
 		header = { CALL, Synonym{"a"} };
 		t = ResultTable(header, v);
-		EXPECT_EQ(evaluator.getRelationMatchRight(header, match), t);
+		EXPECT_EQ(evaluator.evaluateSynonymAndConstant(header, match), t);
 		header = { IF, Synonym{"a"} };
 		t = ResultTable(header, v);
-		EXPECT_EQ(evaluator.getRelationMatchRight(header, match), t);
+		EXPECT_EQ(evaluator.evaluateSynonymAndConstant(header, match), t);
 		header = { ASSIGN, Synonym{"a"} };
 		t = ResultTable(header, v);
-		EXPECT_EQ(evaluator.getRelationMatchRight(header, match), t);
+		EXPECT_EQ(evaluator.evaluateSynonymAndConstant(header, match), t);
 
 		v = { };
 		match = { VARIABLE, "z" };
 		header = { WHILE, Synonym{"a"} };
 		t = ResultTable(header, v);
-		EXPECT_EQ(evaluator.getRelationMatchRight(header, match), t);
+		EXPECT_EQ(evaluator.evaluateSynonymAndConstant(header, match), t);
 		header = { CALL, Synonym{"a"} };
 		t = ResultTable(header, v);
-		EXPECT_EQ(evaluator.getRelationMatchRight(header, match), t);
+		EXPECT_EQ(evaluator.evaluateSynonymAndConstant(header, match), t);
 		header = { IF, Synonym{"a"} };
 		t = ResultTable(header, v);
-		EXPECT_EQ(evaluator.getRelationMatchRight(header, match), t);
+		EXPECT_EQ(evaluator.evaluateSynonymAndConstant(header, match), t);
 		header = { ASSIGN, Synonym{"a"} };
 		t = ResultTable(header, v);
-		EXPECT_EQ(evaluator.getRelationMatchRight(header, match), t);
+		EXPECT_EQ(evaluator.evaluateSynonymAndConstant(header, match), t);
 		header = { READ, Synonym{"a"} };
 		t = ResultTable(header, v);
-		EXPECT_EQ(evaluator.getRelationMatchRight(header, match), t);
+		EXPECT_EQ(evaluator.evaluateSynonymAndConstant(header, match), t);
 		header = { PRINT, Synonym{"a"} };
 		t = ResultTable(header, v);
-		EXPECT_EQ(evaluator.getRelationMatchRight(header, match), t);
+		EXPECT_EQ(evaluator.evaluateSynonymAndConstant(header, match), t);
 	}
 }

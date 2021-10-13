@@ -10,17 +10,34 @@ CFG::CFG() {
 }
 
 CFG::~CFG() {
-	destroyCFG(head);
+	std::list<CFGNode*> s;
+	CFGNode* node;
+	s.push_back(head);
+	head->setVisited();
+	while (!s.empty()) {
+		node = s.front();
+		if (node->getNextMain() != nullptr) {
+			if (node->getNextMain()->getVisited() == false) {
+				node->getNextMain()->setVisited();
+				s.push_back(node->getNextMain());
+			} else {
+				node->setNextMain(nullptr);
+			}
+		}
+		if (node->getNextBranch() != nullptr) {
+			if (node->getNextBranch()->getVisited() == false) {
+				node->getNextBranch()->setVisited();
+				s.push_back(node->getNextBranch());
+			}else {
+				node->setNextBranch(nullptr);
+			}
+		}
+		s.pop_front();
+	}
+	delete head;
+
 }
 
-void CFG::destroyCFG(CFGNode* node) {
-	if (node) {
-		destroyCFG(node->getNextMain());
-		destroyCFG(node->getNextBranch());
-		delete node;
-	}
-	
-}
 
 CFGNode* CFG::getHead() {
 	return head;
@@ -170,6 +187,12 @@ void CFG::fork(CFG* cfg, prog_line line_start, prog_line line_end) {
 				target1->setNextMain(new_node1);
 
 				new_node1->setNextBranch(cfg->getHead());
+				if (cfg->getTail()->getProgramLines().size() != 0) {
+					cfg->getTail()->setNextBranch(target2);
+				}
+				else {
+					cfg->getHead()->setNextBranch(target2);
+				}
 			}
 			else {
 				target1->setProgramLines(split2);
@@ -182,13 +205,12 @@ void CFG::fork(CFG* cfg, prog_line line_start, prog_line line_end) {
 				target1->setNextMain(new_node);
 
 				target1->setNextBranch(cfg->getHead());
-			}
-
-			if (cfg->getTail()->getProgramLines().size() != 0) {
-				cfg->getTail()->setNextBranch(target2);
-			}
-			else {
-				cfg->getHead()->setNextBranch(target2);
+				if (cfg->getTail()->getProgramLines().size() != 0) {
+					cfg->getTail()->setNextBranch(target2);
+				}
+				else {
+					cfg->getHead()->setNextBranch(target2);
+				}
 			}
 		}
 	}

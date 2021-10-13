@@ -30,13 +30,13 @@ private:
 	void addHeader(std::vector<Entity>);
 
 	std::vector<Entity> header;
-	std::unordered_set<std::string> headerSet;
+	std::unordered_set<std::string> header_set;
 	std::vector<std::vector<std::string>> table;
 
 	int getHeaderIndex(Entity);
 
-	void filterTable(ResultTable, Entity);
-	void filterTable(ResultTable, Entity, Entity);
+	void filter_table(ResultTable, Entity);
+	void filter_table(ResultTable, Entity, Entity);
 
 	void joinTable(ResultTable, Entity);
 };
