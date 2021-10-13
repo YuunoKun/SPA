@@ -169,6 +169,9 @@ namespace UnitTesting {
 		// Parent*(1, s) return stmt 2, 3, 4
 		const std::list<std::string> EXPECTED_PARENTT = { IF2, WHILE1, WHILE2 };
 
+		//Follows(s,1) and Parent(1,s) return stmt 2
+		const std::list<std::string> EXPECTED_FOLLOWS_PARENT = { IF2 };
+
 		const std::vector<std::string> PARENT_LEFTS = { PARENT_LEFT1, PARENT_LEFT2, PARENT_LEFT3 };
 		const std::vector<std::string> PARENT_RIGHTS = { PARENT_RIGHT1, PARENT_RIGHT2, PARENT_RIGHT3 };
 
@@ -413,7 +416,7 @@ namespace UnitTesting {
 	TEST_F(PQLPKBTest, multipleRelRef) {
 		std::list<std::string> ans = qs.processQuery("stmt s; Select s such that Follows(1,s) and Parent(1,s)");
 
-		validateAnswer(EXPECTED_FOLLOWS1, ans);
+		validateAnswer(EXPECTED_FOLLOWS_PARENT, ans);
 	}
 
 
