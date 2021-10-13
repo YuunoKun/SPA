@@ -9,7 +9,6 @@ public:
 
 	~CFG();
 
-	void destroyCFG(CFGNode*);
 	bool isEmptyCFG();
 
 	CFGNode* getHead();
