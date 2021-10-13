@@ -972,31 +972,6 @@ namespace UnitTesting {
 		for (const auto& next : expected_nexts) {
 			ASSERT_TRUE(table_nexts.containsPair(next.first, next.second));
 		}
-
-		/*
-		* procedure main {
-		1	mainX = 1;
-		2	read readVar;
-		3	print printVar;
-		4	beforeIf = beforeIf * mainX;
-		5	if(mainIfCond==13) then {
-		6		beforeCall = beforeCall + 2;
-		7		call p2;
-		8		afterCall = afterCall + 4;
-			} else {
-		9		beforeWhile = beforeWhile;
-		10		while(whileCond < 15) {
-		11			inWhile = inWhile;
-				}
-		12		afterWhile = afterWhile;}
-		13	afterIf = afterIf;}
-		*
-		* procedure p2 {
-		14	p2Var = p2Var - 11;
-		* }
-		*/
-
-		// Clean up
 		delete extractor;
 	}
 

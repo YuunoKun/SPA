@@ -377,7 +377,7 @@ void DesignExtractor::populateNext(PKB& pkb) {
 		for (auto next_rel : nexts) {
 			pkb.addNext(next_rel.first, next_rel.second);
 		}
-		//delete cfg;
+		delete cfg;
 	}
 }
 
@@ -461,7 +461,7 @@ CFG* DesignExtractor::generateCFG(std::vector<stmt_index> indexes) {
 				throw std::runtime_error("CFG build failure. Sub cfg error.");
 			}
 			
-			//delete sub_cfg;
+			delete sub_cfg;
 		}
 		else {
 			throw std::runtime_error("CFG build failure. Invalid statement list.");
