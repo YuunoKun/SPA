@@ -13,8 +13,8 @@ public:
 	TEST_METHOD(getType) {
 		for (int i = EntityType::STMT; i != EntityType::WILD; ++i) {
 			EntityType type = static_cast<EntityType>(i);
-			Entity testEntity(type, "test");
-			Assert::IsTrue(testEntity.getType() == type);
+			Entity test_entity(type, "test");
+			Assert::IsTrue(test_entity.getType() == type);
 		}
 	}
 

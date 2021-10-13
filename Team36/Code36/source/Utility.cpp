@@ -143,7 +143,8 @@ std::vector<StmtInfo> Utility::filterResult(EntityType e, std::vector<StmtInfo>&
 	return  result;
 }
 
-std::vector<std::vector<std::string>> Utility::filterResults(EntityType e, std::vector<std::pair<StmtInfo, std::string>>& v) {
+std::vector<std::vector<std::string>> Utility::filterResults(EntityType e, 
+	std::vector<std::pair<StmtInfo, std::string>>& v) {
 	if (e == EntityType::STMT) {
 		return pairToStringTable(v);
 	}
@@ -158,7 +159,8 @@ std::vector<std::vector<std::string>> Utility::filterResults(EntityType e, std::
 	return pairToStringTable(result);
 }
 
-std::vector<std::vector<std::string>> Utility::filterResults(std::pair<EntityType, EntityType> type, std::vector<std::pair<StmtInfo, StmtInfo>>& table) {
+std::vector<std::vector<std::string>> Utility::filterResults(
+	std::pair<EntityType, EntityType> type, std::vector<std::pair<StmtInfo, StmtInfo>>& table) {
 	if (type.first == EntityType::STMT && type.second == EntityType::STMT) {
 		return pairToStringTable(table);
 	}
@@ -176,7 +178,8 @@ std::vector<std::vector<std::string>> Utility::filterResults(std::pair<EntityTyp
 	return pairToStringTable(results);
 }
 
-std::vector<std::vector<std::string>> Utility::filterResults(std::vector<std::vector<std::string>>& from, std::unordered_set<std::string>& filter, int index) {
+std::vector<std::vector<std::string>> Utility::filterResults(
+	std::vector<std::vector<std::string>>& from, std::unordered_set<std::string>& filter, int index) {
 	std::vector<std::vector<std::string>> results;
 
 	for (auto& it : from) {
@@ -188,7 +191,8 @@ std::vector<std::vector<std::string>> Utility::filterResults(std::vector<std::ve
 	return results;
 }
 
-std::vector<std::vector<std::string>> Utility::filterResults(std::vector<std::vector<std::string>>& from, std::unordered_map<std::string, std::unordered_set<std::string>>& filter, int index1, int index2) {
+std::vector<std::vector<std::string>> Utility::filterResults(std::vector<std::vector<std::string>>& from, 
+	std::unordered_map<std::string, std::unordered_set<std::string>>& filter, int index1, int index2) {
 	std::vector<std::vector<std::string>> results;
 
 	for (auto& v : from) {
@@ -220,22 +224,22 @@ std::vector<std::string> Utility::mergeColumnEqual(std::vector<std::vector<std::
 	return to;
 }
 
-std::vector<std::vector<std::string>> Utility::joinTable(std::vector<std::vector<std::string>>& main, int mainHeaderIndex,
-	std::unordered_multimap<std::string, std::vector<std::string>>& toJoin, int toJoinHeaderIndex) {
+std::vector<std::vector<std::string>> Utility::joinTable(std::vector<std::vector<std::string>>& main, int main_header_index,
+	std::unordered_multimap<std::string, std::vector<std::string>>& to_join, int to_join_header_index) {
 	std::vector<std::vector<std::string>> results;
 
 	for (auto& it : main) {
-		if (toJoin.count(it[mainHeaderIndex]) == 0) {
+		if (to_join.count(it[main_header_index]) == 0) {
 			continue;
 		}
 		std::pair<std::unordered_multimap<std::string, std::vector<std::string>>::iterator, std::unordered_multimap<std::string, std::vector<std::string>>::iterator> ret;
 
-		ret = toJoin.equal_range(it[mainHeaderIndex]);
+		ret = to_join.equal_range(it[main_header_index]);
 
 		for (std::unordered_multimap<std::string, std::vector<std::string>>::iterator itr1 = ret.first; itr1 != ret.second; ++itr1) {
 			std::vector<std::string> to(it);
 			for (unsigned int i = 0; i < itr1->second.size(); i++) {
-				if (i == toJoinHeaderIndex) {
+				if (i == to_join_header_index) {
 					continue;
 				}
 				to.push_back(itr1->second[i]);
@@ -246,50 +250,53 @@ std::vector<std::vector<std::string>> Utility::joinTable(std::vector<std::vector
 	return results;
 }
 
-EntityType Utility::queryTokenTypeToEntityType(QueryToken::QueryTokenType& queryTokenType) {
-	if (queryTokenType == QueryToken::QueryTokenType::STMT) {
+EntityType Utility::queryTokenTypeToEntityType(QueryToken::QueryTokenType& query_token_type) {
+	if (query_token_type == QueryToken::QueryTokenType::STMT) {
 		return EntityType::STMT;
 	}
-	else if (queryTokenType == QueryToken::QueryTokenType::PROCEDURE) {
+	else if (query_token_type == QueryToken::QueryTokenType::PROCEDURE) {
 		return EntityType::PROCEDURE;
 	}
-	else if (queryTokenType == QueryToken::QueryTokenType::READ) {
+	else if (query_token_type == QueryToken::QueryTokenType::READ) {
 		return EntityType::READ;
 	}
-	else if (queryTokenType == QueryToken::QueryTokenType::PRINT) {
+	else if (query_token_type == QueryToken::QueryTokenType::PRINT) {
 		return EntityType::PRINT;
 	}
-	else if (queryTokenType == QueryToken::QueryTokenType::CALL) {
+	else if (query_token_type == QueryToken::QueryTokenType::CALL) {
 		return EntityType::CALL;
 	}
-	else if (queryTokenType == QueryToken::QueryTokenType::IF) {
+	else if (query_token_type == QueryToken::QueryTokenType::IF) {
 		return EntityType::IF;
 	}
-	else if (queryTokenType == QueryToken::QueryTokenType::WHILE) {
+	else if (query_token_type == QueryToken::QueryTokenType::WHILE) {
 		return EntityType::WHILE;
 	}
-	else if (queryTokenType == QueryToken::QueryTokenType::ASSIGN) {
+	else if (query_token_type == QueryToken::QueryTokenType::ASSIGN) {
 		return EntityType::ASSIGN;
 	}
-	else if (queryTokenType == QueryToken::QueryTokenType::VARIABLE) {
+	else if (query_token_type == QueryToken::QueryTokenType::VARIABLE) {
 		return EntityType::VARIABLE;
 	}
-	else if (queryTokenType == QueryToken::QueryTokenType::CONSTANT) {
+	else if (query_token_type == QueryToken::QueryTokenType::CONSTANT) {
 		return EntityType::CONSTANT;
+	}
+	else if (queryTokenType == QueryToken::QueryTokenType::PROG_LINE) {
+		return EntityType::PROG_LINE;
 	}
 }
 
-AttrRef Utility::queryTokenTypeToAttrRef(QueryToken::QueryTokenType& queryTokenType) {
-	if (queryTokenType == QueryToken::QueryTokenType::PROC_NAME) {
+AttrRef Utility::queryTokenTypeToAttrRef(QueryToken::QueryTokenType& query_token_type) {
+	if (query_token_type == QueryToken::QueryTokenType::PROC_NAME) {
 		return AttrRef::PROC_NAME;
 	}
-	else if (queryTokenType == QueryToken::QueryTokenType::VAR_NAME) {
+	else if (query_token_type == QueryToken::QueryTokenType::VAR_NAME) {
 		return AttrRef::VAR_NAME;
 	}
-	else if (queryTokenType == QueryToken::QueryTokenType::VALUE) {
+	else if (query_token_type == QueryToken::QueryTokenType::VALUE) {
 		return AttrRef::VALUE;
 	}
-	else if (queryTokenType == QueryToken::QueryTokenType::STMT_INDEX) {
+	else if (query_token_type == QueryToken::QueryTokenType::STMT_INDEX) {
 		return AttrRef::STMT_INDEX;
 	}
 }

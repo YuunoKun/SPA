@@ -3,7 +3,7 @@
 #include "Utility.h"
 #include "ResultTable.h"
 #include "RelationsEvaluator.h"
-#include "PatternEvaluator.h"
+#include "PatternsEvaluator.h"
 #include "Clause.h"
 
 QueryEvaluator::QueryEvaluator() {
@@ -17,17 +17,17 @@ std::list<std::list<std::string>> QueryEvaluator::evaluateQuery(Query& query) {
 	return { getResult(query, result) };
 }
 
-void QueryEvaluator::evaluateClauses(Query& query, QueryResult& queryResult) {
-	RelationsEvaluator relationEvaluator;
-	PatternEvaluator patternEvaluator;
+void QueryEvaluator::evaluateClauses(Query& query, QueryResult& query_result) {
+	RelationsEvaluator relation_evaluator;
+	PatternsEvaluator pattern_evaluator;
 	for (auto& it : query.getClauses()) {
-		if (!queryResult.haveResult()) {
+		if (!query_result.haveResult()) {
 			break;
 		}
 		if (it.getType() == ClauseType::RELATION) {
-			relationEvaluator.evaluateRelation(queryResult, it.getRelation());
+			relation_evaluator.evaluateRelation(query_result, it.getRelation());
 		} else {
-			patternEvaluator.evaluatePattern(queryResult, it.getPattern());
+			pattern_evaluator.evaluatePattern(query_result, it.getPattern());
 		}
 	}
 }

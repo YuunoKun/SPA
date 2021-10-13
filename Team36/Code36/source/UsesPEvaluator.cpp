@@ -5,55 +5,43 @@
 #include "PKBAdapter.h"
 #include "UsesPEvaluator.h"
 
-//Handle both wild : e.g Relation(_, _)
-bool UsesPEvaluator::haveRelation() {
-	throw std::invalid_argument("haveRelation(): Wild is not allowed for first argument of Uses_P");
+bool UsesPEvaluator::evaluateWildAndWild() {
+	throw std::invalid_argument("evaluateWildAndWild(): Wild is not allowed for first argument of Uses_P");
 }
 
-//Handle both constant : e.g Relation(1, 2)
-bool UsesPEvaluator::isRelation(Entity e1, Entity e2) {
+bool UsesPEvaluator::evaluateConstantAndConstant(Entity e1, Entity e2) {
 	proc_name p = e1.getValue();
 	var_name v = e2.getValue();
 	return pkb.isUsesP(p, v);
 }
 
-//Handle left constant, right wild: e.g Relation(1, _)
-bool UsesPEvaluator::haveRelationAtRight(Entity e) {
+bool UsesPEvaluator::evaluateConstantAndWild(Entity e) {
 	proc_name p = e.getValue();
 	return pkb.isUsesP(p);
 }
 
-//Handle right wild, left constant: e.g Relation(_, 1)
-bool UsesPEvaluator::haveRelationAtLeft(Entity e) {
-	throw std::invalid_argument("haveRelationAtLeft(): Wild is not allowed for first argument of Uses_P");
+bool UsesPEvaluator::evaluateWildAndConstant(Entity e) {
+	throw std::invalid_argument("evaluateWildAndConstant(): Wild is not allowed for first argument of Uses_P");
 }
 
-//If both side is declartion: e.g Relation(a, b)
-ResultTable UsesPEvaluator::getRelations(Entity left, Entity right) {
-	std::vector<std::pair<std::string, std::string>> results = pkb.getUsesPRelation();
-	std::pair<Entity, Entity> header{ left, right };
-	ResultTable result = ResultTable(header, results);
-	return result;
+ResultTable UsesPEvaluator::evaluateSynonymAndSynonym(Entity left, Entity right) {
+	return ResultTable({ left, right }, pkb.getUsesPRelation());
 }
 
-//If left side is WILD and right side is declartion: e.g Relation(_, a)
-ResultTable UsesPEvaluator::getRightRelations(Entity header) {
-	throw std::invalid_argument("getRightRelations(): Wild is not allowed for first argument of Uses_P");
+ResultTable UsesPEvaluator::evaluateWildAndSynonym(Entity header) {
+	throw std::invalid_argument("evaluateWildAndSynonym(): Wild is not allowed for first argument of Uses_P");
 }
 
-//Handle right declartion, left constant: e.g Relation(a, _)
-ResultTable UsesPEvaluator::getLeftRelations(Entity header) {
+ResultTable UsesPEvaluator::evaluateSynonymAndWild(Entity header) {
 	return ResultTable(header, pkb.getUsesP());
 }
 
-//Handle left constant, right declartion: e.g Relation(1, a)
-ResultTable UsesPEvaluator::getRelationMatchLeft(Entity constant, Entity header) {
+ResultTable UsesPEvaluator::evaluateConstantAndSynonym(Entity constant, Entity header) {
 	proc_name p = constant.getValue();
 	return ResultTable(header, pkb.getUsedP(p));
 }
 
-//Handle right declartion, left constant: e.g Relation(a, 1)
-ResultTable UsesPEvaluator::getRelationMatchRight(Entity header, Entity constant) {
+ResultTable UsesPEvaluator::evaluateSynonymAndConstant(Entity header, Entity constant) {
 	var_name v = constant.getValue();
 	return ResultTable(header, pkb.getUsesP(v));
 }
