@@ -28,7 +28,11 @@ void CFGNode::setNextBranch(CFGNode* nextBranch) {
 }
 
 void CFGNode::setVisited() {
-	visited = true;
+	if (visited == false) {
+		visited = true;
+	}else {
+		visited = false;
+	}
 }
 
 void CFGNode::insertLine(prog_line programLine) {

@@ -245,5 +245,29 @@ vector<pair<prog_line, prog_line>> CFG::getNexts() {
 		}
 		s.pop_front();
 	}
+	resetAllVisited();
 	return result;
+}
+
+void CFG::resetAllVisited() {
+	std::list<CFGNode*> s;
+	CFGNode* node;
+	s.push_back(head);
+	head->setVisited();
+	while (!s.empty()) {
+		node = s.front();
+		if (node->getNextMain() != nullptr) {
+			if (node->getNextMain()->getVisited() == true) {
+				node->getNextMain()->setVisited();
+				s.push_back(node->getNextMain());
+			}
+		}
+		if (node->getNextBranch() != nullptr) {
+			if (node->getNextBranch()->getVisited() == true) {
+				node->getNextBranch()->setVisited();
+				s.push_back(node->getNextBranch());
+			}
+		}
+		s.pop_front();
+	}
 }

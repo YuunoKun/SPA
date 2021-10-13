@@ -149,6 +149,7 @@ namespace UnitTesting {
 		CFG* cfg3 = new CFG();
 		CFG* cfg4 = new CFG();
 		CFG* cfg5 = new CFG();
+		CFG* cfg6 = new CFG();
 		std::vector<prog_line> v1 = { 1, 2, 3, 6, 7};
 		std::vector<prog_line> v2 = { 8, 9 };
 		std::vector<prog_line> v3 = { 9, 10, 12};
@@ -189,5 +190,19 @@ namespace UnitTesting {
 		auto test2 = cfg5->getNexts();
 		ASSERT_EQ(test2, target2);
 		delete cfg3, cfg4, cfg5;
+
+		cfg6->add(v1[0]);
+		cfg6->add(v1[1]);
+		cfg6->add(v1[2]);
+		cfg6->add(v1[3]);
+		cfg6->add(v1[4]);
+		cfg6->add(v3[0]);
+		cfg6->add(v3[1]);
+		cfg6->add(v3[2]);
+
+		auto test3 = cfg6->getNexts();
+		auto test4 = cfg6->getNexts();
+		ASSERT_EQ(test3, test4);
+		delete cfg6;
 	}
 }
