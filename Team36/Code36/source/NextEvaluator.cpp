@@ -5,64 +5,51 @@
 #include "PKBAdapter.h"
 #include "NextEvaluator.h"
 
-//Handle both wild : e.g Relation(_, _)
-bool NextEvaluator::haveRelation() {
+bool NextEvaluator::evaluateWildAndWild() {
 	//Todo Evaluator
 	return !pkb.isNextEmpty();
 }
 
-//Handle both constant : e.g Relation(1, 2)
-bool NextEvaluator::isRelation(Entity e1, Entity e2) {
+bool NextEvaluator::evaluateConstantAndConstant(Entity e1, Entity e2) {
 	//Todo Evaluator
 	stmt_index c1 = stoi(e1.getValue());
 	stmt_index c2 = stoi(e2.getValue());
 	return pkb.isNext(c1, c2);;
 }
 
-//Handle left constant, right wild: e.g Relation(1, _)
-bool NextEvaluator::haveRelationAtRight(Entity e) {
+bool NextEvaluator::evaluateConstantAndWild(Entity e) {
 	//Todo Evaluator
 	stmt_index c = stoi(e.getValue());
 	return pkb.isPrevious(c);
 }
 
-//Handle right wild, left constant: e.g Relation(_, 1)
-bool NextEvaluator::haveRelationAtLeft(Entity e) {
+bool NextEvaluator::evaluateWildAndConstant(Entity e) {
 	//Todo Evaluator
 	stmt_index c = stoi(e.getValue());
 	return pkb.isNext(c);
 }
 
-//If both side is declartion: e.g Relation(a, b)
-ResultTable NextEvaluator::getRelations(Entity left, Entity right) {
-	//Todo Evaluator
-	std::vector<std::pair<StmtInfo, StmtInfo>> results = pkb.getAllNextRelation();
-	std::pair<Entity, Entity> header{ left, right };
-	ResultTable result = ResultTable(header, results);
-	return result;
+ResultTable NextEvaluator::evaluateSynonymAndSynonym(Entity left, Entity right) {
+	return ResultTable({ left, right }, pkb.getAllNextRelation());
 }
 
-//If left side is WILD and right side is declartion: e.g Relation(_, a)
-ResultTable NextEvaluator::getRightRelations(Entity header) {
+ResultTable NextEvaluator::evaluateWildAndSynonym(Entity header) {
 	//Todo Evaluator
 	return ResultTable(header, pkb.getNext());
 }
 
-//Handle right declartion, left constant: e.g Relation(a, _)
-ResultTable NextEvaluator::getLeftRelations(Entity header) {
+ResultTable NextEvaluator::evaluateSynonymAndWild(Entity header) {
 	//Todo Evaluator
 	return ResultTable(header, pkb.getPrevious());
 }
 
-//Handle left constant, right declartion: e.g Relation(1, a)
-ResultTable NextEvaluator::getRelationMatchLeft(Entity constant, Entity header) {
+ResultTable NextEvaluator::evaluateConstantAndSynonym(Entity constant, Entity header) {
 	//Todo Evaluator
 	stmt_index c = stoi(constant.getValue());
 	return ResultTable(header, pkb.getNext(c));
 }
 
-//Handle right declartion, left constant: e.g Relation(a, 1)
-ResultTable NextEvaluator::getRelationMatchRight(Entity header, Entity constant) {
+ResultTable NextEvaluator::evaluateSynonymAndConstant(Entity header, Entity constant) {
 	//Todo Evaluator
 	stmt_index c = stoi(constant.getValue());
 	return ResultTable(header, pkb.getPrevious(c));

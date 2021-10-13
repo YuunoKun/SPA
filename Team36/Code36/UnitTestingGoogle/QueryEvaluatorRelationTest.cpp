@@ -71,13 +71,13 @@ namespace UnitTesting {
 				if (it.getType() == WILD) {
 					continue;
 				}
-				bool isInvalid = true;
+				bool is_invalid = true;
 				for (std::string valid : validStmt) {
 					if (it.getValue() == valid) {
-						isInvalid = false;
+						is_invalid = false;
 					}
 				}
-				if (isInvalid) {
+				if (is_invalid) {
 					invalid.push_back(it);
 				}
 			}
@@ -344,17 +344,17 @@ namespace UnitTesting {
 		relations.push_back(RelRef(type, { STMT, left1 }, { STMT, right2 }));
 		relations.push_back(RelRef(type, { STMT, left2 }, { STMT, right1 }));
 
-		std::vector<Entity> invalidLefts = getInvalidConstant(lefts);
-		for (unsigned int k = 0; k < invalidLefts.size(); k++) {
+		std::vector<Entity> invalid_lefts = getInvalidConstant(lefts);
+		for (unsigned int k = 0; k < invalid_lefts.size(); k++) {
 			for (unsigned int i = 0; i < VALID_CONSTANT_STMT_ENTITY.size(); i++) {
-				relations.push_back(RelRef(type, invalidLefts[k], VALID_CONSTANT_STMT_ENTITY[i]));
+				relations.push_back(RelRef(type, invalid_lefts[k], VALID_CONSTANT_STMT_ENTITY[i]));
 			}
 		}
 
-		std::vector<Entity> invalidRight = getInvalidConstant(rights);
-		for (unsigned int k = 0; k < invalidRight.size(); k++) {
+		std::vector<Entity> invalid_rights = getInvalidConstant(rights);
+		for (unsigned int k = 0; k < invalid_rights.size(); k++) {
 			for (unsigned int i = 0; i < VALID_CONSTANT_STMT_ENTITY.size(); i++) {
-				relations.push_back(RelRef(type, VALID_CONSTANT_STMT_ENTITY[i], invalidRight[k]));
+				relations.push_back(RelRef(type, VALID_CONSTANT_STMT_ENTITY[i], invalid_rights[k]));
 			}
 		}
 
@@ -366,13 +366,13 @@ namespace UnitTesting {
 		std::vector<std::string> lefts = FOLLOW_LEFTS;
 		std::vector<std::string> rights = FOLLOW_RIGHTS;
 
-		std::vector<Entity> invalidLefts = getInvalidConstant(lefts);
-		for (Entity it : invalidLefts) {
+		std::vector<Entity> invalid_lefts = getInvalidConstant(lefts);
+		for (Entity it : invalid_lefts) {
 			relations.push_back(RelRef(type, it, { STMT, Synonym{"a"} }));
 		}
 
-		std::vector<Entity> invalidRight = getInvalidConstant(rights);
-		for (Entity it : invalidRight) {
+		std::vector<Entity> invalid_rights = getInvalidConstant(rights);
+		for (Entity it : invalid_rights) {
 			relations.push_back(RelRef(type, { STMT, Synonym{"a"} }, it));
 		}
 
@@ -455,14 +455,14 @@ namespace UnitTesting {
 		std::string right1 = FOLLOW_RIGHT1;
 		std::string right2 = FOLLOW_RIGHT2;
 
-		std::vector<Entity> selectedList;
-		selectedList.push_back({ STMT, COMMON_SYNONYM1 });
-		selectedList.push_back({ IF, COMMON_SYNONYM1 });
-		selectedList.push_back({ WHILE, COMMON_SYNONYM1 });
-		selectedList.push_back({ PRINT, COMMON_SYNONYM1 });
-		selectedList.push_back({ READ, COMMON_SYNONYM1 });
-		selectedList.push_back({ ASSIGN, COMMON_SYNONYM1 });
-		selectedList.push_back({ CALL, COMMON_SYNONYM1 });
+		std::vector<Entity> selected_list;
+		selected_list.push_back({ STMT, COMMON_SYNONYM1 });
+		selected_list.push_back({ IF, COMMON_SYNONYM1 });
+		selected_list.push_back({ WHILE, COMMON_SYNONYM1 });
+		selected_list.push_back({ PRINT, COMMON_SYNONYM1 });
+		selected_list.push_back({ READ, COMMON_SYNONYM1 });
+		selected_list.push_back({ ASSIGN, COMMON_SYNONYM1 });
+		selected_list.push_back({ CALL, COMMON_SYNONYM1 });
 
 		//Test case for Select selected such that Follow(selected, a)
 		std::list<std::string> result1 = { left1, left2 };
@@ -473,94 +473,94 @@ namespace UnitTesting {
 		std::list<std::string> result6 = { };
 		std::list<std::string> result7 = { };
 
-		std::vector<std::list<std::string>> resultList = { result1, result2, result3,
+		std::vector<std::list<std::string>> result_list = { result1, result2, result3,
 			result4, result5, result6, result7 };
-		for (unsigned int i = 0; i < selectedList.size(); i++) {
-			RelRef relation(type, selectedList[i], { STMT, Synonym{"a"} });
-			Query q = initQuery(relation, selectedList[i]);
-			EXPECT_EQ(evaluator.evaluateQuery(q).front(), resultList[i]) << "Error at results : " << i + 1;
+		for (unsigned int i = 0; i < selected_list.size(); i++) {
+			RelRef relation(type, selected_list[i], { STMT, Synonym{"a"} });
+			Query q = initQuery(relation, selected_list[i]);
+			EXPECT_EQ(evaluator.evaluateQuery(q).front(), result_list[i]) << "Error at results : " << i + 1;
 		}
 
 		//Test case for Select selected such that Follow(selected, _)
-		for (unsigned int i = 0; i < selectedList.size(); i++) {
-			RelRef relation(type, selectedList[i], WILD_CARD);
-			Query q = initQuery(relation, selectedList[i]);
-			EXPECT_EQ(evaluator.evaluateQuery(q).front(), resultList[i]) << "Error at results : " << i + 1;
+		for (unsigned int i = 0; i < selected_list.size(); i++) {
+			RelRef relation(type, selected_list[i], WILD_CARD);
+			Query q = initQuery(relation, selected_list[i]);
+			EXPECT_EQ(evaluator.evaluateQuery(q).front(), result_list[i]) << "Error at results : " << i + 1;
 		}
 
 		//Test case for Select selected such that Follow(a, selected)
-		resultList[0] = { right1, right2 };
-		resultList[1] = { right1 };
-		resultList[2] = { right2 };
-		for (unsigned int i = 0; i < selectedList.size(); i++) {
-			RelRef relation(type, { STMT, Synonym{"a"} }, selectedList[i]);
-			Query q = initQuery(relation, selectedList[i]);
-			EXPECT_EQ(evaluator.evaluateQuery(q).front(), resultList[i]) << "Error at results : " << i + 1;
+		result_list[0] = { right1, right2 };
+		result_list[1] = { right1 };
+		result_list[2] = { right2 };
+		for (unsigned int i = 0; i < selected_list.size(); i++) {
+			RelRef relation(type, { STMT, Synonym{"a"} }, selected_list[i]);
+			Query q = initQuery(relation, selected_list[i]);
+			EXPECT_EQ(evaluator.evaluateQuery(q).front(), result_list[i]) << "Error at results : " << i + 1;
 		}
 
 		//Test case for Select selected such that Follow(_, selected)
-		for (unsigned int i = 0; i < selectedList.size(); i++) {
-			RelRef relation(type, WILD_CARD, selectedList[i]);
-			Query q = initQuery(relation, selectedList[i]);
-			EXPECT_EQ(evaluator.evaluateQuery(q).front(), resultList[i]) << "Error at results : " << i + 1;
+		for (unsigned int i = 0; i < selected_list.size(); i++) {
+			RelRef relation(type, WILD_CARD, selected_list[i]);
+			Query q = initQuery(relation, selected_list[i]);
+			EXPECT_EQ(evaluator.evaluateQuery(q).front(), result_list[i]) << "Error at results : " << i + 1;
 		}
 
 		//Test case for Select selected such that Follow("1", selected)
-		resultList[0] = { right1 };
-		resultList[1] = { right1 };
-		resultList[2] = { };
-		for (unsigned int i = 0; i < selectedList.size(); i++) {
-			RelRef relation(type, { STMT, left1 }, selectedList[i]);
-			Query q = initQuery(relation, selectedList[i]);
-			EXPECT_EQ(evaluator.evaluateQuery(q).front(), resultList[i]) << "Error at results : " << i + 1;
+		result_list[0] = { right1 };
+		result_list[1] = { right1 };
+		result_list[2] = { };
+		for (unsigned int i = 0; i < selected_list.size(); i++) {
+			RelRef relation(type, { STMT, left1 }, selected_list[i]);
+			Query q = initQuery(relation, selected_list[i]);
+			EXPECT_EQ(evaluator.evaluateQuery(q).front(), result_list[i]) << "Error at results : " << i + 1;
 		}
 
 		//Test case for Select selected such that Follow("2", selected)
-		resultList[0] = { right2 };
-		resultList[1] = { };
-		resultList[2] = { right2 };
-		for (unsigned int i = 0; i < selectedList.size(); i++) {
-			RelRef relation(type, { STMT, left2 }, selectedList[i]);
-			Query q = initQuery(relation, selectedList[i]);
-			EXPECT_EQ(evaluator.evaluateQuery(q).front(), resultList[i]) << "Error at results : " << i + 1;
+		result_list[0] = { right2 };
+		result_list[1] = { };
+		result_list[2] = { right2 };
+		for (unsigned int i = 0; i < selected_list.size(); i++) {
+			RelRef relation(type, { STMT, left2 }, selected_list[i]);
+			Query q = initQuery(relation, selected_list[i]);
+			EXPECT_EQ(evaluator.evaluateQuery(q).front(), result_list[i]) << "Error at results : " << i + 1;
 		}
 
 		//Test case for remaining Select selected such that Follow(anyEmpty, selected)
 		std::vector<Entity> emptyList = getInvalidConstant(lefts);
 		for (unsigned int j = 0; j < emptyList.size(); j++) {
-			for (unsigned int i = 0; i < selectedList.size(); i++) {
-				RelRef relation(type, emptyList[j], selectedList[i]);
-				Query q = initQuery(relation, selectedList[i]);
+			for (unsigned int i = 0; i < selected_list.size(); i++) {
+				RelRef relation(type, emptyList[j], selected_list[i]);
+				Query q = initQuery(relation, selected_list[i]);
 				EXPECT_EQ(evaluator.evaluateQuery(q).front(), EMPTY_RESULT) << "Error at results : " << i + 1;
 			}
 		}
 
 		//Test case for Select selected such that Follow(selected, "2")
-		resultList[0] = { left1 };
-		resultList[1] = { left1 };
-		resultList[2] = { };
-		for (unsigned int i = 0; i < selectedList.size(); i++) {
-			RelRef relation(type, selectedList[i], { STMT, right1 });
-			Query q = initQuery(relation, selectedList[i]);
-			EXPECT_EQ(evaluator.evaluateQuery(q).front(), resultList[i]) << "Error at results : " << i + 1;
+		result_list[0] = { left1 };
+		result_list[1] = { left1 };
+		result_list[2] = { };
+		for (unsigned int i = 0; i < selected_list.size(); i++) {
+			RelRef relation(type, selected_list[i], { STMT, right1 });
+			Query q = initQuery(relation, selected_list[i]);
+			EXPECT_EQ(evaluator.evaluateQuery(q).front(), result_list[i]) << "Error at results : " << i + 1;
 		}
 
 		//Test case for Select selected such that Follow(selected, "3")
-		resultList[0] = { left2 };
-		resultList[1] = { left2 };
-		resultList[2] = { };
-		for (unsigned int i = 0; i < selectedList.size(); i++) {
-			RelRef relation(type, selectedList[i], { STMT, right2 });
-			Query q = initQuery(relation, selectedList[i]);
-			EXPECT_EQ(evaluator.evaluateQuery(q).front(), resultList[i]) << "Error at results : " << i + 1;
+		result_list[0] = { left2 };
+		result_list[1] = { left2 };
+		result_list[2] = { };
+		for (unsigned int i = 0; i < selected_list.size(); i++) {
+			RelRef relation(type, selected_list[i], { STMT, right2 });
+			Query q = initQuery(relation, selected_list[i]);
+			EXPECT_EQ(evaluator.evaluateQuery(q).front(), result_list[i]) << "Error at results : " << i + 1;
 		}
 
 		//Test case for remaining Select selected such that Follow(selected, anyEmpty)
 		emptyList = getInvalidConstant(rights);
 		for (unsigned int j = 0; j < emptyList.size(); j++) {
-			for (unsigned int i = 0; i < selectedList.size(); i++) {
-				RelRef relation(type, selectedList[i], emptyList[j]);
-				Query q = initQuery(relation, selectedList[i]);
+			for (unsigned int i = 0; i < selected_list.size(); i++) {
+				RelRef relation(type, selected_list[i], emptyList[j]);
+				Query q = initQuery(relation, selected_list[i]);
 				EXPECT_EQ(evaluator.evaluateQuery(q).front(), EMPTY_RESULT) << "Error at results : " << i + 1;
 			}
 		}
@@ -601,17 +601,17 @@ namespace UnitTesting {
 		//Test false boolean equation
 		relations.push_back(RelRef(type, { STMT, left2 }, { STMT, right1 }));
 
-		std::vector<Entity> invalidLefts = getInvalidConstant(lefts);
-		for (unsigned int k = 0; k < invalidLefts.size(); k++) {
+		std::vector<Entity> invalid_lefts = getInvalidConstant(lefts);
+		for (unsigned int k = 0; k < invalid_lefts.size(); k++) {
 			for (unsigned int i = 0; i < VALID_CONSTANT_STMT_ENTITY.size(); i++) {
-				relations.push_back(RelRef(type, invalidLefts[k], VALID_CONSTANT_STMT_ENTITY[i]));
+				relations.push_back(RelRef(type, invalid_lefts[k], VALID_CONSTANT_STMT_ENTITY[i]));
 			}
 		}
 
-		std::vector<Entity> invalidRight = getInvalidConstant(rights);
-		for (unsigned int k = 0; k < invalidRight.size(); k++) {
+		std::vector<Entity> invalid_rights = getInvalidConstant(rights);
+		for (unsigned int k = 0; k < invalid_rights.size(); k++) {
 			for (unsigned int i = 0; i < VALID_CONSTANT_STMT_ENTITY.size(); i++) {
-				relations.push_back(RelRef(type, VALID_CONSTANT_STMT_ENTITY[i], invalidRight[k]));
+				relations.push_back(RelRef(type, VALID_CONSTANT_STMT_ENTITY[i], invalid_rights[k]));
 			}
 		}
 
@@ -624,13 +624,13 @@ namespace UnitTesting {
 		std::vector<std::string> lefts = FOLLOW_LEFTS;
 		std::vector<std::string> rights = FOLLOW_RIGHTS;
 
-		std::vector<Entity> invalidLefts = getInvalidConstant(lefts);
-		for (Entity it : invalidLefts) {
+		std::vector<Entity> invalid_lefts = getInvalidConstant(lefts);
+		for (Entity it : invalid_lefts) {
 			relations.push_back(RelRef(type, it, { STMT, Synonym{"a"} }));
 		}
 
-		std::vector<Entity> invalidRight = getInvalidConstant(rights);
-		for (Entity it : invalidRight) {
+		std::vector<Entity> invalid_rights = getInvalidConstant(rights);
+		for (Entity it : invalid_rights) {
 			relations.push_back(RelRef(type, { STMT, Synonym{"a"} }, it));
 		}
 
@@ -715,14 +715,14 @@ namespace UnitTesting {
 		std::string right1 = FOLLOW_RIGHT1;
 		std::string right2 = FOLLOW_RIGHT2;
 
-		std::vector<Entity> selectedList;
-		selectedList.push_back({ STMT, COMMON_SYNONYM1 });
-		selectedList.push_back({ IF, COMMON_SYNONYM1 });
-		selectedList.push_back({ WHILE, COMMON_SYNONYM1 });
-		selectedList.push_back({ PRINT, COMMON_SYNONYM1 });
-		selectedList.push_back({ READ, COMMON_SYNONYM1 });
-		selectedList.push_back({ ASSIGN, COMMON_SYNONYM1 });
-		selectedList.push_back({ CALL, COMMON_SYNONYM1 });
+		std::vector<Entity> selected_list;
+		selected_list.push_back({ STMT, COMMON_SYNONYM1 });
+		selected_list.push_back({ IF, COMMON_SYNONYM1 });
+		selected_list.push_back({ WHILE, COMMON_SYNONYM1 });
+		selected_list.push_back({ PRINT, COMMON_SYNONYM1 });
+		selected_list.push_back({ READ, COMMON_SYNONYM1 });
+		selected_list.push_back({ ASSIGN, COMMON_SYNONYM1 });
+		selected_list.push_back({ CALL, COMMON_SYNONYM1 });
 
 		//Test case for Select selected such that FollowT(selected, a)
 		std::list<std::string> result1 = { FOLLOW_LEFT1, FOLLOW_LEFT2 };
@@ -733,96 +733,96 @@ namespace UnitTesting {
 		std::list<std::string> result6 = { };
 		std::list<std::string> result7 = { };
 
-		std::vector<std::list<std::string>> resultList = { result1, result2, result3,
+		std::vector<std::list<std::string>> result_list = { result1, result2, result3,
 			result4, result5, result6, result7 };
-		for (unsigned int i = 0; i < selectedList.size(); i++) {
-			RelRef relation(type, selectedList[i], { STMT, Synonym{"a"} });
-			Query q = initQuery(relation, selectedList[i]);
-			EXPECT_EQ(evaluator.evaluateQuery(q).front(), resultList[i]) << "Error at results : " << i + 1;
+		for (unsigned int i = 0; i < selected_list.size(); i++) {
+			RelRef relation(type, selected_list[i], { STMT, Synonym{"a"} });
+			Query q = initQuery(relation, selected_list[i]);
+			EXPECT_EQ(evaluator.evaluateQuery(q).front(), result_list[i]) << "Error at results : " << i + 1;
 		}
 
 		//Test case for Select selected such that FollowT(selected, _)
-		for (unsigned int i = 0; i < selectedList.size(); i++) {
-			RelRef relation(type, selectedList[i], WILD_CARD);
+		for (unsigned int i = 0; i < selected_list.size(); i++) {
+			RelRef relation(type, selected_list[i], WILD_CARD);
 			Query q;
 			q.addRelation(relation);
-			q.addSelected(selectedList[i]);
-			EXPECT_EQ(evaluator.evaluateQuery(q).front(), resultList[i]) << "Error at results : " << i + 1;
+			q.addSelected(selected_list[i]);
+			EXPECT_EQ(evaluator.evaluateQuery(q).front(), result_list[i]) << "Error at results : " << i + 1;
 		}
 
 		//Test case for Select selected such that FollowT(a, selected)
-		resultList[0] = { right1, right2 };
-		resultList[1] = { right1 };
-		resultList[2] = { right2 };
-		for (unsigned int i = 0; i < selectedList.size(); i++) {
-			RelRef relation(type, { STMT, Synonym{"a"} }, selectedList[i]);
-			Query q = initQuery(relation, selectedList[i]);
-			EXPECT_EQ(evaluator.evaluateQuery(q).front(), resultList[i]) << "Error at results : " << i + 1;
+		result_list[0] = { right1, right2 };
+		result_list[1] = { right1 };
+		result_list[2] = { right2 };
+		for (unsigned int i = 0; i < selected_list.size(); i++) {
+			RelRef relation(type, { STMT, Synonym{"a"} }, selected_list[i]);
+			Query q = initQuery(relation, selected_list[i]);
+			EXPECT_EQ(evaluator.evaluateQuery(q).front(), result_list[i]) << "Error at results : " << i + 1;
 		}
 
 		//Test case for Select selected such that FollowT(_, selected)
-		for (unsigned int i = 0; i < selectedList.size(); i++) {
-			RelRef relation(type, WILD_CARD, selectedList[i]);
-			Query q = initQuery(relation, selectedList[i]);
-			EXPECT_EQ(evaluator.evaluateQuery(q).front(), resultList[i]) << "Error at results : " << i + 1;
+		for (unsigned int i = 0; i < selected_list.size(); i++) {
+			RelRef relation(type, WILD_CARD, selected_list[i]);
+			Query q = initQuery(relation, selected_list[i]);
+			EXPECT_EQ(evaluator.evaluateQuery(q).front(), result_list[i]) << "Error at results : " << i + 1;
 		}
 
 		//Test case for Select selected such that FollowT("1", selected)
-		resultList[0] = { right1, right2 };
-		resultList[1] = { right1 };
-		resultList[2] = { right2 };
-		for (unsigned int i = 0; i < selectedList.size(); i++) {
-			RelRef relation(type, { STMT, left1 }, selectedList[i]);
-			Query q = initQuery(relation, selectedList[i]);
-			EXPECT_EQ(evaluator.evaluateQuery(q).front(), resultList[i]) << "Error at results : " << i + 1;
+		result_list[0] = { right1, right2 };
+		result_list[1] = { right1 };
+		result_list[2] = { right2 };
+		for (unsigned int i = 0; i < selected_list.size(); i++) {
+			RelRef relation(type, { STMT, left1 }, selected_list[i]);
+			Query q = initQuery(relation, selected_list[i]);
+			EXPECT_EQ(evaluator.evaluateQuery(q).front(), result_list[i]) << "Error at results : " << i + 1;
 		}
 
 		//Test case for Select selected such that FollowT("2", selected)
-		resultList[0] = { right2 };
-		resultList[1] = { };
-		resultList[2] = { right2 };
-		for (unsigned int i = 0; i < selectedList.size(); i++) {
-			RelRef relation(type, { STMT, left2 }, selectedList[i]);
-			Query q = initQuery(relation, selectedList[i]);
-			EXPECT_EQ(evaluator.evaluateQuery(q).front(), resultList[i]) << "Error at results : " << i + 1;
+		result_list[0] = { right2 };
+		result_list[1] = { };
+		result_list[2] = { right2 };
+		for (unsigned int i = 0; i < selected_list.size(); i++) {
+			RelRef relation(type, { STMT, left2 }, selected_list[i]);
+			Query q = initQuery(relation, selected_list[i]);
+			EXPECT_EQ(evaluator.evaluateQuery(q).front(), result_list[i]) << "Error at results : " << i + 1;
 		}
 
 		//Test case for remaining Select selected such that FollowT(anyEmpty, selected)
 		std::vector<Entity> emptyList = getInvalidConstant(lefts);
 		for (unsigned int j = 0; j < emptyList.size(); j++) {
-			for (unsigned int i = 0; i < selectedList.size(); i++) {
-				RelRef relation(type, emptyList[j], selectedList[i]);
-				Query q = initQuery(relation, selectedList[i]);
+			for (unsigned int i = 0; i < selected_list.size(); i++) {
+				RelRef relation(type, emptyList[j], selected_list[i]);
+				Query q = initQuery(relation, selected_list[i]);
 				EXPECT_EQ(evaluator.evaluateQuery(q).front(), EMPTY_RESULT) << "Error at results : " << i + 1;
 			}
 		}
 
 		//Test case for Select selected such that FollowT(selected, "2")
-		resultList[0] = { left1 };
-		resultList[1] = { left1 };
-		resultList[2] = { };
-		for (unsigned int i = 0; i < selectedList.size(); i++) {
-			RelRef relation(type, selectedList[i], { STMT, right1 });
-			Query q = initQuery(relation, selectedList[i]);
-			EXPECT_EQ(evaluator.evaluateQuery(q).front(), resultList[i]) << "Error at results : " << i + 1;
+		result_list[0] = { left1 };
+		result_list[1] = { left1 };
+		result_list[2] = { };
+		for (unsigned int i = 0; i < selected_list.size(); i++) {
+			RelRef relation(type, selected_list[i], { STMT, right1 });
+			Query q = initQuery(relation, selected_list[i]);
+			EXPECT_EQ(evaluator.evaluateQuery(q).front(), result_list[i]) << "Error at results : " << i + 1;
 		}
 
 		//Test case for Select selected such that FollowT(selected, "3")
-		resultList[0] = { left1, left2 };
-		resultList[1] = { left1, left2 };
-		resultList[2] = { };
-		for (unsigned int i = 0; i < selectedList.size(); i++) {
-			RelRef relation(type, selectedList[i], { STMT, right2 });
-			Query q = initQuery(relation, selectedList[i]);
-			EXPECT_EQ(evaluator.evaluateQuery(q).front(), resultList[i]) << "Error at results : " << i + 1;
+		result_list[0] = { left1, left2 };
+		result_list[1] = { left1, left2 };
+		result_list[2] = { };
+		for (unsigned int i = 0; i < selected_list.size(); i++) {
+			RelRef relation(type, selected_list[i], { STMT, right2 });
+			Query q = initQuery(relation, selected_list[i]);
+			EXPECT_EQ(evaluator.evaluateQuery(q).front(), result_list[i]) << "Error at results : " << i + 1;
 		}
 
 		//Test case for remaining Select selected such that FollowT(selected, anyEmpty)
 		emptyList = getInvalidConstant(rights);
 		for (unsigned int j = 0; j < emptyList.size(); j++) {
-			for (unsigned int i = 0; i < selectedList.size(); i++) {
-				RelRef relation(type, selectedList[i], emptyList[j]);
-				Query q = initQuery(relation, selectedList[i]);
+			for (unsigned int i = 0; i < selected_list.size(); i++) {
+				RelRef relation(type, selected_list[i], emptyList[j]);
+				Query q = initQuery(relation, selected_list[i]);
 				EXPECT_EQ(evaluator.evaluateQuery(q).front(), EMPTY_RESULT) << "Error at results : " << i + 1;
 			}
 		}
@@ -872,19 +872,19 @@ namespace UnitTesting {
 		relations.push_back(RelRef(type, { STMT, left2 }, { STMT, right3 }));
 		relations.push_back(RelRef(type, { STMT, left3 }, { STMT, right2 }));
 
-		std::vector<Entity> invalidLefts = getInvalidConstant(lefts);
+		std::vector<Entity> invalid_lefts = getInvalidConstant(lefts);
 
-		for (unsigned int k = 0; k < invalidLefts.size(); k++) {
+		for (unsigned int k = 0; k < invalid_lefts.size(); k++) {
 			for (unsigned int i = 0; i < VALID_CONSTANT_STMT_ENTITY.size(); i++) {
-				relations.push_back(RelRef(type, invalidLefts[k], VALID_CONSTANT_STMT_ENTITY[i]));
+				relations.push_back(RelRef(type, invalid_lefts[k], VALID_CONSTANT_STMT_ENTITY[i]));
 			}
 		}
 
-		std::vector<Entity> invalidRight = getInvalidConstant(rights);
+		std::vector<Entity> invalid_rights = getInvalidConstant(rights);
 
-		for (unsigned int k = 0; k < invalidRight.size(); k++) {
+		for (unsigned int k = 0; k < invalid_rights.size(); k++) {
 			for (unsigned int i = 0; i < VALID_CONSTANT_STMT_ENTITY.size(); i++) {
-				relations.push_back(RelRef(type, VALID_CONSTANT_STMT_ENTITY[i], invalidRight[k]));
+				relations.push_back(RelRef(type, VALID_CONSTANT_STMT_ENTITY[i], invalid_rights[k]));
 			}
 		}
 		validateEmptyRelations(relations);
@@ -895,13 +895,13 @@ namespace UnitTesting {
 		std::vector<std::string> lefts = PARENT_LEFTS;
 		std::vector<std::string> rights = PARENT_RIGHTS;
 
-		std::vector<Entity> invalidLefts = getInvalidConstant(lefts);
-		for (Entity it : invalidLefts) {
+		std::vector<Entity> invalid_lefts = getInvalidConstant(lefts);
+		for (Entity it : invalid_lefts) {
 			relations.push_back(RelRef(type, it, { STMT, Synonym{"a"} }));
 		}
 
-		std::vector<Entity> invalidRight = getInvalidConstant(rights);
-		for (Entity it : invalidRight) {
+		std::vector<Entity> invalid_rights = getInvalidConstant(rights);
+		for (Entity it : invalid_rights) {
 			relations.push_back(RelRef(type, { STMT, Synonym{"a"} }, it));
 		}
 
@@ -998,14 +998,14 @@ namespace UnitTesting {
 		std::string right2 = PARENT_RIGHT2;
 		std::string right3 = PARENT_RIGHT3;
 
-		std::vector<Entity> selectedList;
-		selectedList.push_back({ STMT, COMMON_SYNONYM1 });
-		selectedList.push_back({ IF, COMMON_SYNONYM1 });
-		selectedList.push_back({ WHILE, COMMON_SYNONYM1 });
-		selectedList.push_back({ PRINT, COMMON_SYNONYM1 });
-		selectedList.push_back({ READ, COMMON_SYNONYM1 });
-		selectedList.push_back({ ASSIGN, COMMON_SYNONYM1 });
-		selectedList.push_back({ CALL, COMMON_SYNONYM1 });
+		std::vector<Entity> selected_list;
+		selected_list.push_back({ STMT, COMMON_SYNONYM1 });
+		selected_list.push_back({ IF, COMMON_SYNONYM1 });
+		selected_list.push_back({ WHILE, COMMON_SYNONYM1 });
+		selected_list.push_back({ PRINT, COMMON_SYNONYM1 });
+		selected_list.push_back({ READ, COMMON_SYNONYM1 });
+		selected_list.push_back({ ASSIGN, COMMON_SYNONYM1 });
+		selected_list.push_back({ CALL, COMMON_SYNONYM1 });
 
 		//Test case for Select selected such that Parent(selected, a)
 		std::list<std::string> result1 = { left1, left2, left3 };
@@ -1016,116 +1016,116 @@ namespace UnitTesting {
 		std::list<std::string> result6 = { };
 		std::list<std::string> result7 = { };
 
-		std::vector<std::list<std::string>> resultList = { result1, result2, result3,
+		std::vector<std::list<std::string>> result_list = { result1, result2, result3,
 			result4, result5, result6, result7 };
-		for (unsigned int i = 0; i < selectedList.size(); i++) {
-			RelRef relation(type, selectedList[i], { STMT, Synonym{"a"} });
-			Query q = initQuery(relation, selectedList[i]);
-			EXPECT_EQ(evaluator.evaluateQuery(q).front(), resultList[i]) << "Error at results : " << i + 1;
+		for (unsigned int i = 0; i < selected_list.size(); i++) {
+			RelRef relation(type, selected_list[i], { STMT, Synonym{"a"} });
+			Query q = initQuery(relation, selected_list[i]);
+			EXPECT_EQ(evaluator.evaluateQuery(q).front(), result_list[i]) << "Error at results : " << i + 1;
 		}
 
 		//Test case for Select selected such that Parent(selected, _)
-		for (unsigned int i = 0; i < selectedList.size(); i++) {
-			RelRef relation(type, selectedList[i], WILD_CARD);
-			Query q = initQuery(relation, selectedList[i]);
-			EXPECT_EQ(evaluator.evaluateQuery(q).front(), resultList[i]) << "Error at results : " << i + 1;
+		for (unsigned int i = 0; i < selected_list.size(); i++) {
+			RelRef relation(type, selected_list[i], WILD_CARD);
+			Query q = initQuery(relation, selected_list[i]);
+			EXPECT_EQ(evaluator.evaluateQuery(q).front(), result_list[i]) << "Error at results : " << i + 1;
 		}
 
 		//Test case for Select selected such that Parent(a, selected)
-		resultList[0] = { right1, right2, right3 };
-		resultList[1] = { right1 };
-		resultList[2] = { right2, right3 };
-		for (unsigned int i = 0; i < selectedList.size(); i++) {
-			RelRef relation(type, { STMT, Synonym{"a"} }, selectedList[i]);
-			Query q = initQuery(relation, selectedList[i]);
-			EXPECT_EQ(evaluator.evaluateQuery(q).front(), resultList[i]) << "Error at results : " << i + 1;
+		result_list[0] = { right1, right2, right3 };
+		result_list[1] = { right1 };
+		result_list[2] = { right2, right3 };
+		for (unsigned int i = 0; i < selected_list.size(); i++) {
+			RelRef relation(type, { STMT, Synonym{"a"} }, selected_list[i]);
+			Query q = initQuery(relation, selected_list[i]);
+			EXPECT_EQ(evaluator.evaluateQuery(q).front(), result_list[i]) << "Error at results : " << i + 1;
 		}
 
 		//Test case for Select selected such that Parent(_, selected)
-		for (unsigned int i = 0; i < selectedList.size(); i++) {
-			RelRef relation(type, WILD_CARD, selectedList[i]);
-			Query q = initQuery(relation, selectedList[i]);
-			EXPECT_EQ(evaluator.evaluateQuery(q).front(), resultList[i]) << "Error at results : " << i + 1;
+		for (unsigned int i = 0; i < selected_list.size(); i++) {
+			RelRef relation(type, WILD_CARD, selected_list[i]);
+			Query q = initQuery(relation, selected_list[i]);
+			EXPECT_EQ(evaluator.evaluateQuery(q).front(), result_list[i]) << "Error at results : " << i + 1;
 		}
 
 		//Test case for Select selected such that Parent("1", selected)
-		resultList[0] = { right1, right2 };
-		resultList[1] = { right1 };
-		resultList[2] = { right2 };
-		for (unsigned int i = 0; i < selectedList.size(); i++) {
-			RelRef relation(type, { STMT, left1 }, selectedList[i]);
-			Query q = initQuery(relation, selectedList[i]);
-			EXPECT_EQ(evaluator.evaluateQuery(q).front(), resultList[i]) << "Error at results : " << i + 1;
+		result_list[0] = { right1, right2 };
+		result_list[1] = { right1 };
+		result_list[2] = { right2 };
+		for (unsigned int i = 0; i < selected_list.size(); i++) {
+			RelRef relation(type, { STMT, left1 }, selected_list[i]);
+			Query q = initQuery(relation, selected_list[i]);
+			EXPECT_EQ(evaluator.evaluateQuery(q).front(), result_list[i]) << "Error at results : " << i + 1;
 		}
 
 		//Test case for Select selected such that Parent("2", selected)
-		resultList[0] = { right2 };
-		resultList[1] = { };
-		resultList[2] = { right2 };
-		for (unsigned int i = 0; i < selectedList.size(); i++) {
-			RelRef relation(type, { STMT, left2 }, selectedList[i]);
-			Query q = initQuery(relation, selectedList[i]);
-			EXPECT_EQ(evaluator.evaluateQuery(q).front(), resultList[i]) << "Error at results : " << i + 1;
+		result_list[0] = { right2 };
+		result_list[1] = { };
+		result_list[2] = { right2 };
+		for (unsigned int i = 0; i < selected_list.size(); i++) {
+			RelRef relation(type, { STMT, left2 }, selected_list[i]);
+			Query q = initQuery(relation, selected_list[i]);
+			EXPECT_EQ(evaluator.evaluateQuery(q).front(), result_list[i]) << "Error at results : " << i + 1;
 		}
 
 		//Test case for Select selected such that Parent("3", selected)
-		resultList[0] = { right3 };
-		resultList[1] = { };
-		resultList[2] = { right3 };
-		for (unsigned int i = 0; i < selectedList.size(); i++) {
-			RelRef relation(type, { STMT, left3 }, selectedList[i]);
-			Query q = initQuery(relation, selectedList[i]);
-			EXPECT_EQ(evaluator.evaluateQuery(q).front(), resultList[i]) << "Error at results : " << i + 1;
+		result_list[0] = { right3 };
+		result_list[1] = { };
+		result_list[2] = { right3 };
+		for (unsigned int i = 0; i < selected_list.size(); i++) {
+			RelRef relation(type, { STMT, left3 }, selected_list[i]);
+			Query q = initQuery(relation, selected_list[i]);
+			EXPECT_EQ(evaluator.evaluateQuery(q).front(), result_list[i]) << "Error at results : " << i + 1;
 		}
 
 		//Test case for remaining Select selected such that Parent(anyEmpty, selected)
 		std::vector<Entity> emptyList = getInvalidConstant(lefts);
 
 		for (unsigned int j = 0; j < emptyList.size(); j++) {
-			for (unsigned int i = 0; i < selectedList.size(); i++) {
-				RelRef relation(type, emptyList[j], selectedList[i]);
-				Query q = initQuery(relation, selectedList[i]);
+			for (unsigned int i = 0; i < selected_list.size(); i++) {
+				RelRef relation(type, emptyList[j], selected_list[i]);
+				Query q = initQuery(relation, selected_list[i]);
 				EXPECT_EQ(evaluator.evaluateQuery(q).front(), EMPTY_RESULT) << "Error at results : " << i + 1;
 			}
 		}
 
 		//Test case for Select selected such that Parent(selected, "2")
-		resultList[0] = { left1 };
-		resultList[1] = { left1 };
-		resultList[2] = { };
-		for (unsigned int i = 0; i < selectedList.size(); i++) {
-			RelRef relation(type, selectedList[i], { STMT, right1 });
-			Query q = initQuery(relation, selectedList[i]);
-			EXPECT_EQ(evaluator.evaluateQuery(q).front(), resultList[i]) << "Error at results : " << i + 1;
+		result_list[0] = { left1 };
+		result_list[1] = { left1 };
+		result_list[2] = { };
+		for (unsigned int i = 0; i < selected_list.size(); i++) {
+			RelRef relation(type, selected_list[i], { STMT, right1 });
+			Query q = initQuery(relation, selected_list[i]);
+			EXPECT_EQ(evaluator.evaluateQuery(q).front(), result_list[i]) << "Error at results : " << i + 1;
 		}
 
 		//Test case for Select selected such that Parent(selected, "3")
-		resultList[0] = { left1, left2 };
-		resultList[1] = { left1, left2 };
-		resultList[2] = { };
-		for (unsigned int i = 0; i < selectedList.size(); i++) {
-			RelRef relation(type, selectedList[i], { STMT, right2 });
-			Query q = initQuery(relation, selectedList[i]);
-			EXPECT_EQ(evaluator.evaluateQuery(q).front(), resultList[i]) << "Error at results : " << i + 1;
+		result_list[0] = { left1, left2 };
+		result_list[1] = { left1, left2 };
+		result_list[2] = { };
+		for (unsigned int i = 0; i < selected_list.size(); i++) {
+			RelRef relation(type, selected_list[i], { STMT, right2 });
+			Query q = initQuery(relation, selected_list[i]);
+			EXPECT_EQ(evaluator.evaluateQuery(q).front(), result_list[i]) << "Error at results : " << i + 1;
 		}
 
 		//Test case for Select selected such that Parent(selected, "4")
-		resultList[0] = { left3 };
-		resultList[1] = { };
-		resultList[2] = { left3 };
-		for (unsigned int i = 0; i < selectedList.size(); i++) {
-			RelRef relation(type, selectedList[i], { STMT, right3 });
-			Query q = initQuery(relation, selectedList[i]);
-			EXPECT_EQ(evaluator.evaluateQuery(q).front(), resultList[i]) << "Error at results : " << i + 1;
+		result_list[0] = { left3 };
+		result_list[1] = { };
+		result_list[2] = { left3 };
+		for (unsigned int i = 0; i < selected_list.size(); i++) {
+			RelRef relation(type, selected_list[i], { STMT, right3 });
+			Query q = initQuery(relation, selected_list[i]);
+			EXPECT_EQ(evaluator.evaluateQuery(q).front(), result_list[i]) << "Error at results : " << i + 1;
 		}
 
 		//Test case for remaining Select selected such that Parent(selected, anyEmpty)
 		emptyList = getInvalidConstant(rights);
 
 		for (unsigned int j = 0; j < emptyList.size(); j++) {
-			for (unsigned int i = 0; i < selectedList.size(); i++) {
-				RelRef relation(type, selectedList[i], emptyList[j]);
-				Query q = initQuery(relation, selectedList[i]);
+			for (unsigned int i = 0; i < selected_list.size(); i++) {
+				RelRef relation(type, selected_list[i], emptyList[j]);
+				Query q = initQuery(relation, selected_list[i]);
 				EXPECT_EQ(evaluator.evaluateQuery(q).front(), EMPTY_RESULT) << "Error at results : " << i + 1;
 			}
 		}
@@ -1169,19 +1169,19 @@ namespace UnitTesting {
 		relations.push_back(RelRef(type, { STMT, "2" }, { STMT, "2" }));
 		relations.push_back(RelRef(type, { STMT, "3" }, { STMT, "3" }));
 
-		std::vector<Entity> invalidLefts = getInvalidConstant(lefts);
+		std::vector<Entity> invalid_lefts = getInvalidConstant(lefts);
 
-		for (unsigned int k = 0; k < invalidLefts.size(); k++) {
+		for (unsigned int k = 0; k < invalid_lefts.size(); k++) {
 			for (unsigned int i = 0; i < VALID_CONSTANT_STMT_ENTITY.size(); i++) {
-				relations.push_back((RelRef(type, invalidLefts[k], VALID_CONSTANT_STMT_ENTITY[i])));
+				relations.push_back((RelRef(type, invalid_lefts[k], VALID_CONSTANT_STMT_ENTITY[i])));
 			}
 		}
 
-		std::vector<Entity> invalidRight = getInvalidConstant(rights);
+		std::vector<Entity> invalid_rights = getInvalidConstant(rights);
 
-		for (unsigned int k = 0; k < invalidRight.size(); k++) {
+		for (unsigned int k = 0; k < invalid_rights.size(); k++) {
 			for (unsigned int i = 0; i < VALID_CONSTANT_STMT_ENTITY.size(); i++) {
-				relations.push_back((RelRef(type, VALID_CONSTANT_STMT_ENTITY[i], invalidRight[k])));
+				relations.push_back((RelRef(type, VALID_CONSTANT_STMT_ENTITY[i], invalid_rights[k])));
 			}
 		}
 
@@ -1193,13 +1193,13 @@ namespace UnitTesting {
 		std::vector<std::string> lefts = PARENT_LEFTS;
 		std::vector<std::string> rights = PARENT_RIGHTS;
 
-		std::vector<Entity> invalidLefts = getInvalidConstant(lefts);
-		for (Entity it : invalidLefts) {
+		std::vector<Entity> invalid_lefts = getInvalidConstant(lefts);
+		for (Entity it : invalid_lefts) {
 			relations.push_back(RelRef(type, it, { STMT, Synonym{"a"} }));
 		}
 
-		std::vector<Entity> invalidRight = getInvalidConstant(rights);
-		for (Entity it : invalidRight) {
+		std::vector<Entity> invalid_rights = getInvalidConstant(rights);
+		for (Entity it : invalid_rights) {
 			relations.push_back(RelRef(type, { STMT, Synonym{"a"} }, it));
 		}
 
@@ -1296,14 +1296,14 @@ namespace UnitTesting {
 		std::string right2 = PARENT_RIGHT2;
 		std::string right3 = PARENT_RIGHT3;
 
-		std::vector<Entity> selectedList;
-		selectedList.push_back({ STMT, COMMON_SYNONYM1 });
-		selectedList.push_back({ IF, COMMON_SYNONYM1 });
-		selectedList.push_back({ WHILE, COMMON_SYNONYM1 });
-		selectedList.push_back({ PRINT, COMMON_SYNONYM1 });
-		selectedList.push_back({ READ, COMMON_SYNONYM1 });
-		selectedList.push_back({ ASSIGN, COMMON_SYNONYM1 });
-		selectedList.push_back({ CALL, COMMON_SYNONYM1 });
+		std::vector<Entity> selected_list;
+		selected_list.push_back({ STMT, COMMON_SYNONYM1 });
+		selected_list.push_back({ IF, COMMON_SYNONYM1 });
+		selected_list.push_back({ WHILE, COMMON_SYNONYM1 });
+		selected_list.push_back({ PRINT, COMMON_SYNONYM1 });
+		selected_list.push_back({ READ, COMMON_SYNONYM1 });
+		selected_list.push_back({ ASSIGN, COMMON_SYNONYM1 });
+		selected_list.push_back({ CALL, COMMON_SYNONYM1 });
 
 		//Test case for Select selected such that ParentT(selected, a)
 		std::list<std::string> result1 = { left1, left2, left3 };
@@ -1314,114 +1314,114 @@ namespace UnitTesting {
 		std::list<std::string> result6 = { };
 		std::list<std::string> result7 = { };
 
-		std::vector<std::list<std::string>> resultList = { result1, result2, result3,
+		std::vector<std::list<std::string>> result_list = { result1, result2, result3,
 			result4, result5, result6, result7 };
-		for (unsigned int i = 0; i < selectedList.size(); i++) {
-			RelRef relation(type, selectedList[i], { STMT, Synonym{"a"} });
-			Query q = initQuery(relation, selectedList[i]);
-			EXPECT_EQ(evaluator.evaluateQuery(q).front(), resultList[i]) << "Error at results : " << i + 1;
+		for (unsigned int i = 0; i < selected_list.size(); i++) {
+			RelRef relation(type, selected_list[i], { STMT, Synonym{"a"} });
+			Query q = initQuery(relation, selected_list[i]);
+			EXPECT_EQ(evaluator.evaluateQuery(q).front(), result_list[i]) << "Error at results : " << i + 1;
 		}
 
 		//Test case for Select selected such that ParentT(selected, _)
-		for (unsigned int i = 0; i < selectedList.size(); i++) {
-			RelRef relation(type, selectedList[i], WILD_CARD);
-			Query q = initQuery(relation, selectedList[i]);
-			EXPECT_EQ(evaluator.evaluateQuery(q).front(), resultList[i]) << "Error at results : " << i + 1;
+		for (unsigned int i = 0; i < selected_list.size(); i++) {
+			RelRef relation(type, selected_list[i], WILD_CARD);
+			Query q = initQuery(relation, selected_list[i]);
+			EXPECT_EQ(evaluator.evaluateQuery(q).front(), result_list[i]) << "Error at results : " << i + 1;
 		}
 
 		//Test case for Select selected such that ParentT(a, selected)
-		resultList[0] = { right1, right2, right3 };
-		resultList[1] = { right1 };
-		resultList[2] = { right2, right3 };
-		for (unsigned int i = 0; i < selectedList.size(); i++) {
-			RelRef relation(type, { STMT, Synonym{"a"} }, selectedList[i]);
-			Query q = initQuery(relation, selectedList[i]);
-			EXPECT_EQ(evaluator.evaluateQuery(q).front(), resultList[i]) << "Error at results : " << i + 1;
+		result_list[0] = { right1, right2, right3 };
+		result_list[1] = { right1 };
+		result_list[2] = { right2, right3 };
+		for (unsigned int i = 0; i < selected_list.size(); i++) {
+			RelRef relation(type, { STMT, Synonym{"a"} }, selected_list[i]);
+			Query q = initQuery(relation, selected_list[i]);
+			EXPECT_EQ(evaluator.evaluateQuery(q).front(), result_list[i]) << "Error at results : " << i + 1;
 		}
 
 		//Test case for Select selected such that ParentT(_, selected)
-		for (unsigned int i = 0; i < selectedList.size(); i++) {
-			RelRef relation(type, WILD_CARD, selectedList[i]);
-			Query q = initQuery(relation, selectedList[i]);
-			EXPECT_EQ(evaluator.evaluateQuery(q).front(), resultList[i]) << "Error at results : " << i + 1;
+		for (unsigned int i = 0; i < selected_list.size(); i++) {
+			RelRef relation(type, WILD_CARD, selected_list[i]);
+			Query q = initQuery(relation, selected_list[i]);
+			EXPECT_EQ(evaluator.evaluateQuery(q).front(), result_list[i]) << "Error at results : " << i + 1;
 		}
 
 		//Test case for Select selected such that ParentT("1", selected)
-		resultList[0] = { right1, right2, right3 };
-		resultList[1] = { right1 };
-		resultList[2] = { right2, right3 };
-		for (unsigned int i = 0; i < selectedList.size(); i++) {
-			RelRef relation(type, { STMT, left1 }, selectedList[i]);
-			Query q = initQuery(relation, selectedList[i]);
-			EXPECT_EQ(evaluator.evaluateQuery(q).front(), resultList[i]) << "Error at results : " << i + 1;
+		result_list[0] = { right1, right2, right3 };
+		result_list[1] = { right1 };
+		result_list[2] = { right2, right3 };
+		for (unsigned int i = 0; i < selected_list.size(); i++) {
+			RelRef relation(type, { STMT, left1 }, selected_list[i]);
+			Query q = initQuery(relation, selected_list[i]);
+			EXPECT_EQ(evaluator.evaluateQuery(q).front(), result_list[i]) << "Error at results : " << i + 1;
 		}
 
 		//Test case for Select selected such that ParentT("2", selected)
-		resultList[0] = { right2, right3 };
-		resultList[1] = { };
-		resultList[2] = { right2, right3 };
-		for (unsigned int i = 0; i < selectedList.size(); i++) {
-			RelRef relation(type, { STMT, left2 }, selectedList[i]);
-			Query q = initQuery(relation, selectedList[i]);
-			EXPECT_EQ(evaluator.evaluateQuery(q).front(), resultList[i]) << "Error at results : " << i + 1;
+		result_list[0] = { right2, right3 };
+		result_list[1] = { };
+		result_list[2] = { right2, right3 };
+		for (unsigned int i = 0; i < selected_list.size(); i++) {
+			RelRef relation(type, { STMT, left2 }, selected_list[i]);
+			Query q = initQuery(relation, selected_list[i]);
+			EXPECT_EQ(evaluator.evaluateQuery(q).front(), result_list[i]) << "Error at results : " << i + 1;
 		}
 
 		//Test case for Select selected such that ParentT("3", selected)
-		resultList[0] = { right3 };
-		resultList[1] = { };
-		resultList[2] = { right3 };
-		for (unsigned int i = 0; i < selectedList.size(); i++) {
-			RelRef relation(type, { STMT, left3 }, selectedList[i]);
-			Query q = initQuery(relation, selectedList[i]);
-			EXPECT_EQ(evaluator.evaluateQuery(q).front(), resultList[i]) << "Error at results : " << i + 1;
+		result_list[0] = { right3 };
+		result_list[1] = { };
+		result_list[2] = { right3 };
+		for (unsigned int i = 0; i < selected_list.size(); i++) {
+			RelRef relation(type, { STMT, left3 }, selected_list[i]);
+			Query q = initQuery(relation, selected_list[i]);
+			EXPECT_EQ(evaluator.evaluateQuery(q).front(), result_list[i]) << "Error at results : " << i + 1;
 		}
 
 		//Test case for remaining Select selected such that ParentT(anyEmpty, selected)
 		std::vector<Entity> emptyList = getInvalidConstant(lefts);
 		for (unsigned int j = 0; j < emptyList.size(); j++) {
-			for (unsigned int i = 0; i < selectedList.size(); i++) {
-				RelRef relation(type, emptyList[j], selectedList[i]);
-				Query q = initQuery(relation, selectedList[i]);
+			for (unsigned int i = 0; i < selected_list.size(); i++) {
+				RelRef relation(type, emptyList[j], selected_list[i]);
+				Query q = initQuery(relation, selected_list[i]);
 				EXPECT_EQ(evaluator.evaluateQuery(q).front(), EMPTY_RESULT) << "Error at results : " << i + 1;
 			}
 		}
 
 		//Test case for Select selected such that ParentT(selected, "2")
-		resultList[0] = { left1 };
-		resultList[1] = { left1 };
-		resultList[2] = { };
-		for (unsigned int i = 0; i < selectedList.size(); i++) {
-			RelRef relation(type, selectedList[i], { STMT, right1 });
-			Query q = initQuery(relation, selectedList[i]);
-			EXPECT_EQ(evaluator.evaluateQuery(q).front(), resultList[i]) << "Error at results : " << i + 1;
+		result_list[0] = { left1 };
+		result_list[1] = { left1 };
+		result_list[2] = { };
+		for (unsigned int i = 0; i < selected_list.size(); i++) {
+			RelRef relation(type, selected_list[i], { STMT, right1 });
+			Query q = initQuery(relation, selected_list[i]);
+			EXPECT_EQ(evaluator.evaluateQuery(q).front(), result_list[i]) << "Error at results : " << i + 1;
 		}
 
 		//Test case for Select selected such that ParentT(selected, "3")
-		resultList[0] = { left1, left2 };
-		resultList[1] = { left1, left2 };
-		resultList[2] = { };
-		for (unsigned int i = 0; i < selectedList.size(); i++) {
-			RelRef relation(type, selectedList[i], { STMT, right2 });
-			Query q = initQuery(relation, selectedList[i]);
-			EXPECT_EQ(evaluator.evaluateQuery(q).front(), resultList[i]) << "Error at results : " << i + 1;
+		result_list[0] = { left1, left2 };
+		result_list[1] = { left1, left2 };
+		result_list[2] = { };
+		for (unsigned int i = 0; i < selected_list.size(); i++) {
+			RelRef relation(type, selected_list[i], { STMT, right2 });
+			Query q = initQuery(relation, selected_list[i]);
+			EXPECT_EQ(evaluator.evaluateQuery(q).front(), result_list[i]) << "Error at results : " << i + 1;
 		}
 
 		//Test case for Select selected such that ParentT(selected, "4")
-		resultList[0] = { left1, left2, left3 };
-		resultList[1] = { left1, left2 };
-		resultList[2] = { left3 };
-		for (unsigned int i = 0; i < selectedList.size(); i++) {
-			RelRef relation(type, selectedList[i], { STMT, right3 });
-			Query q = initQuery(relation, selectedList[i]);
-			EXPECT_EQ(evaluator.evaluateQuery(q).front(), resultList[i]) << "Error at results : " << i + 1;
+		result_list[0] = { left1, left2, left3 };
+		result_list[1] = { left1, left2 };
+		result_list[2] = { left3 };
+		for (unsigned int i = 0; i < selected_list.size(); i++) {
+			RelRef relation(type, selected_list[i], { STMT, right3 });
+			Query q = initQuery(relation, selected_list[i]);
+			EXPECT_EQ(evaluator.evaluateQuery(q).front(), result_list[i]) << "Error at results : " << i + 1;
 		}
 
 		//Test case for remaining Select selected such that ParentT(selected, anyEmpty)
 		emptyList = getInvalidConstant(rights);
 		for (unsigned int j = 0; j < emptyList.size(); j++) {
-			for (unsigned int i = 0; i < selectedList.size(); i++) {
-				RelRef relation(type, selectedList[i], emptyList[j]);
-				Query q = initQuery(relation, selectedList[i]);
+			for (unsigned int i = 0; i < selected_list.size(); i++) {
+				RelRef relation(type, selected_list[i], emptyList[j]);
+				Query q = initQuery(relation, selected_list[i]);
 				EXPECT_EQ(evaluator.evaluateQuery(q).front(), EMPTY_RESULT) << "Error at results : " << i + 1;
 			}
 		}
@@ -1452,20 +1452,20 @@ namespace UnitTesting {
 
 		std::vector<RelRef> relations;
 
-		std::vector<Entity> invalidLefts = getInvalidConstant(lefts);
+		std::vector<Entity> invalid_lefts = getInvalidConstant(lefts);
 
-		for (unsigned int k = 0; k < invalidLefts.size(); k++) {
+		for (unsigned int k = 0; k < invalid_lefts.size(); k++) {
 			for (unsigned int i = 0; i < ALL_VARIABLES.size(); i++) {
-				relations.push_back((RelRef(type, invalidLefts[k], ALL_VARIABLES[i])));
+				relations.push_back((RelRef(type, invalid_lefts[k], ALL_VARIABLES[i])));
 			}
 		}
 
-		std::vector<Entity> invalidRight;
-		invalidRight.push_back({ VARIABLE, MODIFIES_RIGHT_UNUSE });
+		std::vector<Entity> invalid_rights;
+		invalid_rights.push_back({ VARIABLE, MODIFIES_RIGHT_UNUSE });
 
-		for (unsigned int k = 0; k < invalidRight.size(); k++) {
+		for (unsigned int k = 0; k < invalid_rights.size(); k++) {
 			for (unsigned int i = 1; i < VALID_CONSTANT_STMT_ENTITY.size(); i++) {
-				relations.push_back(RelRef(type, VALID_CONSTANT_STMT_ENTITY[i], invalidRight[k]));
+				relations.push_back(RelRef(type, VALID_CONSTANT_STMT_ENTITY[i], invalid_rights[k]));
 			}
 		}
 
@@ -1477,8 +1477,8 @@ namespace UnitTesting {
 		std::vector<std::string> lefts = MODIFIES_LEFTS;
 
 		std::vector<RelRef> relations;
-		std::vector<Entity> invalidLefts = getInvalidConstant(lefts);
-		for (Entity it : invalidLefts) {
+		std::vector<Entity> invalid_lefts = getInvalidConstant(lefts);
+		for (Entity it : invalid_lefts) {
 			relations.push_back(RelRef(type, it, { STMT, Synonym{"a"} }));
 		}
 		relations.push_back(RelRef(type, { STMT, Synonym{"a"} }, { VARIABLE, MODIFIES_RIGHT_UNUSE }));
@@ -1541,14 +1541,14 @@ namespace UnitTesting {
 		std::string right3 = MODIFIES_RIGHT3;
 		std::string right4 = MODIFIES_RIGHT4;
 
-		std::vector<Entity> selectedList;
-		selectedList.push_back({ STMT, COMMON_SYNONYM1 });
-		selectedList.push_back({ IF, COMMON_SYNONYM1 });
-		selectedList.push_back({ WHILE, COMMON_SYNONYM1 });
-		selectedList.push_back({ ASSIGN, COMMON_SYNONYM1 });
-		selectedList.push_back({ PRINT, COMMON_SYNONYM1 });
-		selectedList.push_back({ READ, COMMON_SYNONYM1 });
-		selectedList.push_back({ CALL, COMMON_SYNONYM1 });
+		std::vector<Entity> selected_list;
+		selected_list.push_back({ STMT, COMMON_SYNONYM1 });
+		selected_list.push_back({ IF, COMMON_SYNONYM1 });
+		selected_list.push_back({ WHILE, COMMON_SYNONYM1 });
+		selected_list.push_back({ ASSIGN, COMMON_SYNONYM1 });
+		selected_list.push_back({ PRINT, COMMON_SYNONYM1 });
+		selected_list.push_back({ READ, COMMON_SYNONYM1 });
+		selected_list.push_back({ CALL, COMMON_SYNONYM1 });
 
 		//Test case for Select selected such that Modifies_S(selected, a)
 		std::list<std::string> result1 = { left1, left2, left3, left4 };
@@ -1559,94 +1559,94 @@ namespace UnitTesting {
 		std::list<std::string> result6 = { };
 		std::list<std::string> result7 = { };
 
-		std::vector<std::list<std::string>> resultList = { result1, result2, result3,
+		std::vector<std::list<std::string>> result_list = { result1, result2, result3,
 			result4, result5, result6, result7 };
-		for (unsigned int i = 0; i < selectedList.size(); i++) {
-			RelRef relation(type, selectedList[i], { VARIABLE, Synonym{"a"} });
-			Query q = initQuery(relation, selectedList[i]);
+		for (unsigned int i = 0; i < selected_list.size(); i++) {
+			RelRef relation(type, selected_list[i], { VARIABLE, Synonym{"a"} });
+			Query q = initQuery(relation, selected_list[i]);
 			std::list<std::string> result = evaluator.evaluateQuery(q).front();
 			result.sort();
-			resultList[i].sort();
-			EXPECT_EQ(result, resultList[i]) << "Error at results : " << i + 1;
+			result_list[i].sort();
+			EXPECT_EQ(result, result_list[i]) << "Error at results : " << i + 1;
 		}
 
 		//Test case for Select selected such that Modifies_S(selected, _)
-		for (unsigned int i = 0; i < selectedList.size(); i++) {
-			RelRef relation(type, selectedList[i], WILD_CARD);
-			Query q = initQuery(relation, selectedList[i]);
+		for (unsigned int i = 0; i < selected_list.size(); i++) {
+			RelRef relation(type, selected_list[i], WILD_CARD);
+			Query q = initQuery(relation, selected_list[i]);
 			std::list<std::string> result = evaluator.evaluateQuery(q).front();
 			result.sort();
-			resultList[i].sort();
-			EXPECT_EQ(result, resultList[i]) << "Error at results : " << i + 1;
+			result_list[i].sort();
+			EXPECT_EQ(result, result_list[i]) << "Error at results : " << i + 1;
 		}
 
 		//Test case for Select selected such that Modifies_S(selected, "x")
-		resultList[0] = { left3, left1 };
-		resultList[1] = { left1 };
-		resultList[2] = { };
-		resultList[3] = { left3 };
-		for (unsigned int i = 0; i < selectedList.size(); i++) {
-			RelRef relation(type, selectedList[i], { VARIABLE, right1 });
-			Query q = initQuery(relation, selectedList[i]);
-			EXPECT_EQ(evaluator.evaluateQuery(q).front(), resultList[i]) << "Error at results : " << i + 1;
+		result_list[0] = { left3, left1 };
+		result_list[1] = { left1 };
+		result_list[2] = { };
+		result_list[3] = { left3 };
+		for (unsigned int i = 0; i < selected_list.size(); i++) {
+			RelRef relation(type, selected_list[i], { VARIABLE, right1 });
+			Query q = initQuery(relation, selected_list[i]);
+			EXPECT_EQ(evaluator.evaluateQuery(q).front(), result_list[i]) << "Error at results : " << i + 1;
 		}
 
 		//Test case for Select selected such that Modifies_S(selected, "y")
-		resultList[0] = { left2, left4 };
-		resultList[1] = { };
-		resultList[2] = { left2 };
-		resultList[3] = { left4 };
-		for (unsigned int i = 0; i < selectedList.size(); i++) {
-			RelRef relation(type, selectedList[i], { VARIABLE, right2 });
-			Query q = initQuery(relation, selectedList[i]);
-			EXPECT_EQ(evaluator.evaluateQuery(q).front(), resultList[i]) << "Error at results : " << i + 1;
+		result_list[0] = { left2, left4 };
+		result_list[1] = { };
+		result_list[2] = { left2 };
+		result_list[3] = { left4 };
+		for (unsigned int i = 0; i < selected_list.size(); i++) {
+			RelRef relation(type, selected_list[i], { VARIABLE, right2 });
+			Query q = initQuery(relation, selected_list[i]);
+			EXPECT_EQ(evaluator.evaluateQuery(q).front(), result_list[i]) << "Error at results : " << i + 1;
 		}
 
 		//Test case for remaining Select selected such that Modifies_S(selected, anyEmpty)
-		for (unsigned int i = 0; i < selectedList.size(); i++) {
-			RelRef relation(type, selectedList[i], { VARIABLE, MODIFIES_RIGHT_UNUSE });
-			Query q = initQuery(relation, selectedList[i]);
+		for (unsigned int i = 0; i < selected_list.size(); i++) {
+			RelRef relation(type, selected_list[i], { VARIABLE, MODIFIES_RIGHT_UNUSE });
+			Query q = initQuery(relation, selected_list[i]);
 			EXPECT_EQ(evaluator.evaluateQuery(q).front(), EMPTY_RESULT) << "Error at results : " << i + 1;
 		}
 
 		//Test case for Select selected such that Modifies_S(a, selected)
-		resultList[0] = { right1, right2 };
-		resultList[1] = { right1 };
-		resultList[2] = { right2 };
-		resultList[3] = { right3, right4 };
+		result_list[0] = { right1, right2 };
+		result_list[1] = { right1 };
+		result_list[2] = { right2 };
+		result_list[3] = { right3, right4 };
 
 		Entity selected(VARIABLE, COMMON_SYNONYM2);
-		for (unsigned int i = 0; i < selectedList.size(); i++) {
-			RelRef relation(type, selectedList[i], selected);
+		for (unsigned int i = 0; i < selected_list.size(); i++) {
+			RelRef relation(type, selected_list[i], selected);
 			Query q = initQuery(relation, selected);
-			EXPECT_EQ(evaluator.evaluateQuery(q).front(), resultList[i]);
+			EXPECT_EQ(evaluator.evaluateQuery(q).front(), result_list[i]);
 		}
 
 		//Test case for Select selected such that Modifies_S("1", selected)
-		resultList[0] = { right1 };
-		resultList[1] = { };
-		resultList[2] = { };
+		result_list[0] = { right1 };
+		result_list[1] = { };
+		result_list[2] = { };
 		RelRef relation(type, { STMT, left1 }, selected);
 		Query q = initQuery(relation, selected);
-		EXPECT_EQ(evaluator.evaluateQuery(q).front(), resultList[0]);
+		EXPECT_EQ(evaluator.evaluateQuery(q).front(), result_list[0]);
 
 		//Test case for Select selected such that Modifies_S("3", selected)
-		resultList[0] = { right2 };
+		result_list[0] = { right2 };
 		relation = RelRef(type, { STMT, left2 }, selected);
 		q = initQuery(relation, selected);
-		EXPECT_EQ(evaluator.evaluateQuery(q).front(), resultList[0]);
+		EXPECT_EQ(evaluator.evaluateQuery(q).front(), result_list[0]);
 
 		//Test case for Select selected such that Modifies_S("9", selected)
-		resultList[0] = { right3 };
+		result_list[0] = { right3 };
 		relation = RelRef(type, { STMT, left3 }, selected);
 		q = initQuery(relation, selected);
-		EXPECT_EQ(evaluator.evaluateQuery(q).front(), resultList[0]);
+		EXPECT_EQ(evaluator.evaluateQuery(q).front(), result_list[0]);
 
 		//Test case for Select selected such that Modifies_S("10", selected)
-		resultList[0] = { right4 };
+		result_list[0] = { right4 };
 		relation = RelRef(type, { STMT, left4 }, selected);
 		q = initQuery(relation, selected);
-		EXPECT_EQ(evaluator.evaluateQuery(q).front(), resultList[0]);
+		EXPECT_EQ(evaluator.evaluateQuery(q).front(), result_list[0]);
 
 		//Test case for remaining Select selected such that Modifies_S(anyEmpty, selected)
 		std::vector<Entity> emptyList = getInvalidConstant(lefts);
@@ -1687,20 +1687,20 @@ namespace UnitTesting {
 
 		std::vector<RelRef> relations;
 
-		std::vector<Entity> invalidLefts = getInvalidConstant(lefts);
+		std::vector<Entity> invalid_lefts = getInvalidConstant(lefts);
 
-		for (unsigned int k = 0; k < invalidLefts.size(); k++) {
+		for (unsigned int k = 0; k < invalid_lefts.size(); k++) {
 			for (unsigned int i = 0; i < ALL_VARIABLES.size(); i++) {
-				relations.push_back((RelRef(type, invalidLefts[k], ALL_VARIABLES[i])));
+				relations.push_back((RelRef(type, invalid_lefts[k], ALL_VARIABLES[i])));
 			}
 		}
 
-		std::vector<Entity> invalidRight;
-		invalidRight.push_back({ VARIABLE, USES_RIGHT_UNUSE });
+		std::vector<Entity> invalid_rights;
+		invalid_rights.push_back({ VARIABLE, USES_RIGHT_UNUSE });
 
-		for (unsigned int k = 0; k < invalidRight.size(); k++) {
+		for (unsigned int k = 0; k < invalid_rights.size(); k++) {
 			for (unsigned int i = 1; i < VALID_CONSTANT_STMT_ENTITY.size(); i++) {
-				relations.push_back(RelRef(type, VALID_CONSTANT_STMT_ENTITY[i], invalidRight[k]));
+				relations.push_back(RelRef(type, VALID_CONSTANT_STMT_ENTITY[i], invalid_rights[k]));
 			}
 		}
 
@@ -1711,8 +1711,8 @@ namespace UnitTesting {
 		std::vector<std::string> lefts = USES_LEFTS;
 
 		std::vector<RelRef> relations;
-		std::vector<Entity> invalidLefts = getInvalidConstant(lefts);
-		for (Entity it : invalidLefts) {
+		std::vector<Entity> invalid_lefts = getInvalidConstant(lefts);
+		for (Entity it : invalid_lefts) {
 			relations.push_back(RelRef(type, it, { STMT, Synonym{"a"} }));
 		}
 
@@ -1780,14 +1780,14 @@ namespace UnitTesting {
 		std::string right2_1 = USES_RIGHT2_1;
 		std::string right2_2 = USES_RIGHT2_2;
 
-		std::vector<Entity> selectedList;
-		selectedList.push_back({ STMT, COMMON_SYNONYM1 });
-		selectedList.push_back({ IF, COMMON_SYNONYM1 });
-		selectedList.push_back({ WHILE, COMMON_SYNONYM1 });
-		selectedList.push_back({ PRINT, COMMON_SYNONYM1 });
-		selectedList.push_back({ READ, COMMON_SYNONYM1 });
-		selectedList.push_back({ ASSIGN, COMMON_SYNONYM1 });
-		selectedList.push_back({ CALL, COMMON_SYNONYM1 });
+		std::vector<Entity> selected_list;
+		selected_list.push_back({ STMT, COMMON_SYNONYM1 });
+		selected_list.push_back({ IF, COMMON_SYNONYM1 });
+		selected_list.push_back({ WHILE, COMMON_SYNONYM1 });
+		selected_list.push_back({ PRINT, COMMON_SYNONYM1 });
+		selected_list.push_back({ READ, COMMON_SYNONYM1 });
+		selected_list.push_back({ ASSIGN, COMMON_SYNONYM1 });
+		selected_list.push_back({ CALL, COMMON_SYNONYM1 });
 
 		//Test case for Select selected such that USES_S(selected, a)
 		std::list<std::string> result1 = { left1, left2 };
@@ -1798,83 +1798,83 @@ namespace UnitTesting {
 		std::list<std::string> result6 = { };
 		std::list<std::string> result7 = { };
 
-		std::vector<std::list<std::string>> resultList = { result1, result2, result3,
+		std::vector<std::list<std::string>> result_list = { result1, result2, result3,
 			result4, result5, result6, result7 };
-		for (unsigned int i = 0; i < selectedList.size(); i++) {
-			RelRef relation(type, selectedList[i], { VARIABLE, Synonym{"a"} });
-			Query q = initQuery(relation, selectedList[i]);
-			EXPECT_EQ(evaluator.evaluateQuery(q).front(), resultList[i]) << "Error at results : " << i + 1;
+		for (unsigned int i = 0; i < selected_list.size(); i++) {
+			RelRef relation(type, selected_list[i], { VARIABLE, Synonym{"a"} });
+			Query q = initQuery(relation, selected_list[i]);
+			EXPECT_EQ(evaluator.evaluateQuery(q).front(), result_list[i]) << "Error at results : " << i + 1;
 		}
 
 		//Test case for Select selected such that USES_S(selected, _)
-		for (unsigned int i = 0; i < selectedList.size(); i++) {
-			RelRef relation(type, selectedList[i], WILD_CARD);
-			Query q = initQuery(relation, selectedList[i]);
-			EXPECT_EQ(evaluator.evaluateQuery(q).front(), resultList[i]) << "Error at results : " << i + 1;
+		for (unsigned int i = 0; i < selected_list.size(); i++) {
+			RelRef relation(type, selected_list[i], WILD_CARD);
+			Query q = initQuery(relation, selected_list[i]);
+			EXPECT_EQ(evaluator.evaluateQuery(q).front(), result_list[i]) << "Error at results : " << i + 1;
 		}
 
 		//Test case for Select selected such that USES_S(selected, "x")
-		resultList[0] = { left1 };
-		resultList[1] = { left1 };
-		resultList[2] = { };
-		for (unsigned int i = 0; i < selectedList.size(); i++) {
-			RelRef relation(type, selectedList[i], { VARIABLE, right1_1 });
-			Query q = initQuery(relation, selectedList[i]);
-			EXPECT_EQ(evaluator.evaluateQuery(q).front(), resultList[i]) << "Error at results : " << i + 1;
+		result_list[0] = { left1 };
+		result_list[1] = { left1 };
+		result_list[2] = { };
+		for (unsigned int i = 0; i < selected_list.size(); i++) {
+			RelRef relation(type, selected_list[i], { VARIABLE, right1_1 });
+			Query q = initQuery(relation, selected_list[i]);
+			EXPECT_EQ(evaluator.evaluateQuery(q).front(), result_list[i]) << "Error at results : " << i + 1;
 		}
 
-		for (unsigned int i = 0; i < selectedList.size(); i++) {
-			RelRef relation(type, selectedList[i], { VARIABLE, right1_2 });
-			Query q = initQuery(relation, selectedList[i]);
-			EXPECT_EQ(evaluator.evaluateQuery(q).front(), resultList[i]) << "Error at results : " << i + 1;
+		for (unsigned int i = 0; i < selected_list.size(); i++) {
+			RelRef relation(type, selected_list[i], { VARIABLE, right1_2 });
+			Query q = initQuery(relation, selected_list[i]);
+			EXPECT_EQ(evaluator.evaluateQuery(q).front(), result_list[i]) << "Error at results : " << i + 1;
 		}
 		//Test case for Select selected such that USES_S(VARIABLE, "y")
-		resultList[0] = { left2 };
-		resultList[1] = { };
-		resultList[2] = { left2 };
-		for (unsigned int i = 0; i < selectedList.size(); i++) {
-			RelRef relation(type, selectedList[i], { VARIABLE, right2_1 });
-			Query q = initQuery(relation, selectedList[i]);
-			EXPECT_EQ(evaluator.evaluateQuery(q).front(), resultList[i]) << "Error at results : " << i + 1;
+		result_list[0] = { left2 };
+		result_list[1] = { };
+		result_list[2] = { left2 };
+		for (unsigned int i = 0; i < selected_list.size(); i++) {
+			RelRef relation(type, selected_list[i], { VARIABLE, right2_1 });
+			Query q = initQuery(relation, selected_list[i]);
+			EXPECT_EQ(evaluator.evaluateQuery(q).front(), result_list[i]) << "Error at results : " << i + 1;
 		}
-		for (unsigned int i = 0; i < selectedList.size(); i++) {
-			RelRef relation(type, selectedList[i], { VARIABLE, right2_2 });
-			Query q = initQuery(relation, selectedList[i]);
-			EXPECT_EQ(evaluator.evaluateQuery(q).front(), resultList[i]) << "Error at results : " << i + 1;
+		for (unsigned int i = 0; i < selected_list.size(); i++) {
+			RelRef relation(type, selected_list[i], { VARIABLE, right2_2 });
+			Query q = initQuery(relation, selected_list[i]);
+			EXPECT_EQ(evaluator.evaluateQuery(q).front(), result_list[i]) << "Error at results : " << i + 1;
 		}
 
 		//Test case for remaining Select selected such that USES_S(selected, anyEmpty)
-		for (unsigned int i = 0; i < selectedList.size(); i++) {
-			RelRef relation(type, selectedList[i], { VARIABLE, USES_RIGHT_UNUSE });
-			Query q = initQuery(relation, selectedList[i]);
+		for (unsigned int i = 0; i < selected_list.size(); i++) {
+			RelRef relation(type, selected_list[i], { VARIABLE, USES_RIGHT_UNUSE });
+			Query q = initQuery(relation, selected_list[i]);
 			EXPECT_EQ(evaluator.evaluateQuery(q).front(), EMPTY_RESULT) << "Error at results : " << i + 1;
 		}
 
 		//Test case for Select selected such that USES_S(a, selected)
-		resultList[0] = { right1_1, right2_1, right1_2, right2_2 };
-		resultList[1] = { right1_1, right1_2 };
-		resultList[2] = { right2_1, right2_2 };
+		result_list[0] = { right1_1, right2_1, right1_2, right2_2 };
+		result_list[1] = { right1_1, right1_2 };
+		result_list[2] = { right2_1, right2_2 };
 
 		Entity selected(VARIABLE, COMMON_SYNONYM2);
-		for (unsigned int i = 0; i < selectedList.size(); i++) {
-			RelRef relation(type, selectedList[i], selected);
+		for (unsigned int i = 0; i < selected_list.size(); i++) {
+			RelRef relation(type, selected_list[i], selected);
 			Query q = initQuery(relation, selected);
-			EXPECT_EQ(evaluator.evaluateQuery(q).front(), resultList[i]);
+			EXPECT_EQ(evaluator.evaluateQuery(q).front(), result_list[i]);
 		}
 
 		//Test case for Select selected such that USES_S("1", selected)
-		resultList[0] = { right1_1, right1_2 };
-		resultList[1] = { };
-		resultList[2] = { };
+		result_list[0] = { right1_1, right1_2 };
+		result_list[1] = { };
+		result_list[2] = { };
 		RelRef relation(type, { STMT, left1 }, selected);
 		Query q = initQuery(relation, selected);
-		EXPECT_EQ(evaluator.evaluateQuery(q).front(), resultList[0]);
+		EXPECT_EQ(evaluator.evaluateQuery(q).front(), result_list[0]);
 
 		//Test case for Select selected such that USES_S("3", selected)
-		resultList[0] = { right2_1, right2_2 };
+		result_list[0] = { right2_1, right2_2 };
 		relation = RelRef(type, { STMT, left2 }, selected);
 		q = initQuery(relation, selected);
-		EXPECT_EQ(evaluator.evaluateQuery(q).front(), resultList[0]);
+		EXPECT_EQ(evaluator.evaluateQuery(q).front(), result_list[0]);
 
 		//Test case for remaining Select selected such that USES_S(anyEmpty, selected)
 		std::vector<Entity> emptyList = getInvalidConstant(lefts);
@@ -2433,17 +2433,17 @@ namespace UnitTesting {
 		relations.push_back(RelRef(type, { STMT, left1 }, { STMT, right2 }));
 		relations.push_back(RelRef(type, { STMT, left2 }, { STMT, right1 }));
 
-		std::vector<Entity> invalidLefts = getInvalidConstant(lefts);
-		for (unsigned int k = 0; k < invalidLefts.size(); k++) {
+		std::vector<Entity> invalid_lefts = getInvalidConstant(lefts);
+		for (unsigned int k = 0; k < invalid_lefts.size(); k++) {
 			for (unsigned int i = 0; i < VALID_CONSTANT_STMT_ENTITY.size(); i++) {
-				relations.push_back(RelRef(type, invalidLefts[k], VALID_CONSTANT_STMT_ENTITY[i]));
+				relations.push_back(RelRef(type, invalid_lefts[k], VALID_CONSTANT_STMT_ENTITY[i]));
 			}
 		}
 
-		std::vector<Entity> invalidRight = getInvalidConstant(rights);
-		for (unsigned int k = 0; k < invalidRight.size(); k++) {
+		std::vector<Entity> invalid_rights = getInvalidConstant(rights);
+		for (unsigned int k = 0; k < invalid_rights.size(); k++) {
 			for (unsigned int i = 0; i < VALID_CONSTANT_STMT_ENTITY.size(); i++) {
-				relations.push_back(RelRef(type, VALID_CONSTANT_STMT_ENTITY[i], invalidRight[k]));
+				relations.push_back(RelRef(type, VALID_CONSTANT_STMT_ENTITY[i], invalid_rights[k]));
 			}
 		}
 
@@ -2455,13 +2455,13 @@ namespace UnitTesting {
 		std::vector<std::string> lefts = NEXT_LEFTS;
 		std::vector<std::string> rights = NEXT_RIGHTS;
 
-		std::vector<Entity> invalidLefts = getInvalidConstant(lefts);
-		for (Entity it : invalidLefts) {
+		std::vector<Entity> invalid_lefts = getInvalidConstant(lefts);
+		for (Entity it : invalid_lefts) {
 			relations.push_back(RelRef(type, it, { STMT, Synonym{"a"} }));
 		}
 
-		std::vector<Entity> invalidRight = getInvalidConstant(rights);
-		for (Entity it : invalidRight) {
+		std::vector<Entity> invalid_rights = getInvalidConstant(rights);
+		for (Entity it : invalid_rights) {
 			relations.push_back(RelRef(type, { STMT, Synonym{"a"} }, it));
 		}
 
@@ -2544,14 +2544,14 @@ namespace UnitTesting {
 		std::string right1 = NEXT_RIGHT1;
 		std::string right2 = NEXT_RIGHT2;
 
-		std::vector<Entity> selectedList;
-		selectedList.push_back({ STMT, COMMON_SYNONYM1 });
-		selectedList.push_back({ IF, COMMON_SYNONYM1 });
-		selectedList.push_back({ WHILE, COMMON_SYNONYM1 });
-		selectedList.push_back({ PRINT, COMMON_SYNONYM1 });
-		selectedList.push_back({ READ, COMMON_SYNONYM1 });
-		selectedList.push_back({ ASSIGN, COMMON_SYNONYM1 });
-		selectedList.push_back({ CALL, COMMON_SYNONYM1 });
+		std::vector<Entity> selected_list;
+		selected_list.push_back({ STMT, COMMON_SYNONYM1 });
+		selected_list.push_back({ IF, COMMON_SYNONYM1 });
+		selected_list.push_back({ WHILE, COMMON_SYNONYM1 });
+		selected_list.push_back({ PRINT, COMMON_SYNONYM1 });
+		selected_list.push_back({ READ, COMMON_SYNONYM1 });
+		selected_list.push_back({ ASSIGN, COMMON_SYNONYM1 });
+		selected_list.push_back({ CALL, COMMON_SYNONYM1 });
 
 		//Test case for Select selected such that Next(selected, a)
 		std::list<std::string> result1 = { left1, left2 };
@@ -2562,94 +2562,94 @@ namespace UnitTesting {
 		std::list<std::string> result6 = { };
 		std::list<std::string> result7 = { };
 
-		std::vector<std::list<std::string>> resultList = { result1, result2, result3,
+		std::vector<std::list<std::string>> result_list = { result1, result2, result3,
 			result4, result5, result6, result7 };
-		for (unsigned int i = 0; i < selectedList.size(); i++) {
-			RelRef relation(type, selectedList[i], { STMT, Synonym{"a"} });
-			Query q = initQuery(relation, selectedList[i]);
-			EXPECT_EQ(evaluator.evaluateQuery(q).front(), resultList[i]) << "Error at results : " << i + 1;
+		for (unsigned int i = 0; i < selected_list.size(); i++) {
+			RelRef relation(type, selected_list[i], { STMT, Synonym{"a"} });
+			Query q = initQuery(relation, selected_list[i]);
+			EXPECT_EQ(evaluator.evaluateQuery(q).front(), result_list[i]) << "Error at results : " << i + 1;
 		}
 
 		//Test case for Select selected such that Next(selected, _)
-		for (unsigned int i = 0; i < selectedList.size(); i++) {
-			RelRef relation(type, selectedList[i], WILD_CARD);
-			Query q = initQuery(relation, selectedList[i]);
-			EXPECT_EQ(evaluator.evaluateQuery(q).front(), resultList[i]) << "Error at results : " << i + 1;
+		for (unsigned int i = 0; i < selected_list.size(); i++) {
+			RelRef relation(type, selected_list[i], WILD_CARD);
+			Query q = initQuery(relation, selected_list[i]);
+			EXPECT_EQ(evaluator.evaluateQuery(q).front(), result_list[i]) << "Error at results : " << i + 1;
 		}
 
 		//Test case for Select selected such that Next(a, selected)
-		resultList[0] = { right1, right2 };
-		resultList[1] = { right1 };
-		resultList[2] = { right2 };
-		for (unsigned int i = 0; i < selectedList.size(); i++) {
-			RelRef relation(type, { STMT, Synonym{"a"} }, selectedList[i]);
-			Query q = initQuery(relation, selectedList[i]);
-			EXPECT_EQ(evaluator.evaluateQuery(q).front(), resultList[i]) << "Error at results : " << i + 1;
+		result_list[0] = { right1, right2 };
+		result_list[1] = { right1 };
+		result_list[2] = { right2 };
+		for (unsigned int i = 0; i < selected_list.size(); i++) {
+			RelRef relation(type, { STMT, Synonym{"a"} }, selected_list[i]);
+			Query q = initQuery(relation, selected_list[i]);
+			EXPECT_EQ(evaluator.evaluateQuery(q).front(), result_list[i]) << "Error at results : " << i + 1;
 		}
 
 		//Test case for Select selected such that Next(_, selected)
-		for (unsigned int i = 0; i < selectedList.size(); i++) {
-			RelRef relation(type, WILD_CARD, selectedList[i]);
-			Query q = initQuery(relation, selectedList[i]);
-			EXPECT_EQ(evaluator.evaluateQuery(q).front(), resultList[i]) << "Error at results : " << i + 1;
+		for (unsigned int i = 0; i < selected_list.size(); i++) {
+			RelRef relation(type, WILD_CARD, selected_list[i]);
+			Query q = initQuery(relation, selected_list[i]);
+			EXPECT_EQ(evaluator.evaluateQuery(q).front(), result_list[i]) << "Error at results : " << i + 1;
 		}
 
 		//Test case for Select selected such that Next("1", selected)
-		resultList[0] = { right1 };
-		resultList[1] = { right1 };
-		resultList[2] = { };
-		for (unsigned int i = 0; i < selectedList.size(); i++) {
-			RelRef relation(type, { STMT, left1 }, selectedList[i]);
-			Query q = initQuery(relation, selectedList[i]);
-			EXPECT_EQ(evaluator.evaluateQuery(q).front(), resultList[i]) << "Error at results : " << i + 1;
+		result_list[0] = { right1 };
+		result_list[1] = { right1 };
+		result_list[2] = { };
+		for (unsigned int i = 0; i < selected_list.size(); i++) {
+			RelRef relation(type, { STMT, left1 }, selected_list[i]);
+			Query q = initQuery(relation, selected_list[i]);
+			EXPECT_EQ(evaluator.evaluateQuery(q).front(), result_list[i]) << "Error at results : " << i + 1;
 		}
 
 		//Test case for Select selected such that Next("2", selected)
-		resultList[0] = { right2 };
-		resultList[1] = { };
-		resultList[2] = { right2 };
-		for (unsigned int i = 0; i < selectedList.size(); i++) {
-			RelRef relation(type, { STMT, left2 }, selectedList[i]);
-			Query q = initQuery(relation, selectedList[i]);
-			EXPECT_EQ(evaluator.evaluateQuery(q).front(), resultList[i]) << "Error at results : " << i + 1;
+		result_list[0] = { right2 };
+		result_list[1] = { };
+		result_list[2] = { right2 };
+		for (unsigned int i = 0; i < selected_list.size(); i++) {
+			RelRef relation(type, { STMT, left2 }, selected_list[i]);
+			Query q = initQuery(relation, selected_list[i]);
+			EXPECT_EQ(evaluator.evaluateQuery(q).front(), result_list[i]) << "Error at results : " << i + 1;
 		}
 
 		//Test case for remaining Select selected such that Next(anyEmpty, selected)
 		std::vector<Entity> emptyList = getInvalidConstant(lefts);
 		for (unsigned int j = 0; j < emptyList.size(); j++) {
-			for (unsigned int i = 0; i < selectedList.size(); i++) {
-				RelRef relation(type, emptyList[j], selectedList[i]);
-				Query q = initQuery(relation, selectedList[i]);
+			for (unsigned int i = 0; i < selected_list.size(); i++) {
+				RelRef relation(type, emptyList[j], selected_list[i]);
+				Query q = initQuery(relation, selected_list[i]);
 				EXPECT_EQ(evaluator.evaluateQuery(q).front(), EMPTY_RESULT) << "Error at results : " << i + 1;
 			}
 		}
 
 		//Test case for Select selected such that Next(selected, "2")
-		resultList[0] = { left1 };
-		resultList[1] = { left1 };
-		resultList[2] = { };
-		for (unsigned int i = 0; i < selectedList.size(); i++) {
-			RelRef relation(type, selectedList[i], { STMT, right1 });
-			Query q = initQuery(relation, selectedList[i]);
-			EXPECT_EQ(evaluator.evaluateQuery(q).front(), resultList[i]) << "Error at results : " << i + 1;
+		result_list[0] = { left1 };
+		result_list[1] = { left1 };
+		result_list[2] = { };
+		for (unsigned int i = 0; i < selected_list.size(); i++) {
+			RelRef relation(type, selected_list[i], { STMT, right1 });
+			Query q = initQuery(relation, selected_list[i]);
+			EXPECT_EQ(evaluator.evaluateQuery(q).front(), result_list[i]) << "Error at results : " << i + 1;
 		}
 
 		//Test case for Select selected such that Next(selected, "3")
-		resultList[0] = { left2 };
-		resultList[1] = { left2 };
-		resultList[2] = { };
-		for (unsigned int i = 0; i < selectedList.size(); i++) {
-			RelRef relation(type, selectedList[i], { STMT, right2 });
-			Query q = initQuery(relation, selectedList[i]);
-			EXPECT_EQ(evaluator.evaluateQuery(q).front(), resultList[i]) << "Error at results : " << i + 1;
+		result_list[0] = { left2 };
+		result_list[1] = { left2 };
+		result_list[2] = { };
+		for (unsigned int i = 0; i < selected_list.size(); i++) {
+			RelRef relation(type, selected_list[i], { STMT, right2 });
+			Query q = initQuery(relation, selected_list[i]);
+			EXPECT_EQ(evaluator.evaluateQuery(q).front(), result_list[i]) << "Error at results : " << i + 1;
 		}
 
 		//Test case for remaining Select selected such that Next(selected, anyEmpty)
 		emptyList = getInvalidConstant(rights);
 		for (unsigned int j = 0; j < emptyList.size(); j++) {
-			for (unsigned int i = 0; i < selectedList.size(); i++) {
-				RelRef relation(type, selectedList[i], emptyList[j]);
-				Query q = initQuery(relation, selectedList[i]);
+			for (unsigned int i = 0; i < selected_list.size(); i++) {
+				RelRef relation(type, selected_list[i], emptyList[j]);
+				Query q = initQuery(relation, selected_list[i]);
 				EXPECT_EQ(evaluator.evaluateQuery(q).front(), EMPTY_RESULT) << "Error at results : " << i + 1;
 			}
 		}

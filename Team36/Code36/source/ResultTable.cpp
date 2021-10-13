@@ -32,23 +32,23 @@ ResultTable::ResultTable(std::pair<Entity, Entity>  header, std::vector<std::pai
 
 //Return true if merge is successful
 bool ResultTable::merge(ResultTable t) {
-	std::vector<Entity> commonHeaders = getCommonHeaders(t.header);
+	std::vector<Entity> common_headers = getCommonHeaders(t.header);
 	//No common header, abandon merge.
-	if (commonHeaders.empty()) {
+	if (common_headers.empty()) {
 		return false;
 	}
 
-	if (commonHeaders.size() == 1 && (t.header.size() == 1 || header.size() == 1)) {
+	if (common_headers.size() == 1 && (t.header.size() == 1 || header.size() == 1)) {
 		//If table a or b only have 1 column, filter the result
-		filterTable(t, commonHeaders[0]);
+		filter_table(t, common_headers[0]);
 	}
-	else if (commonHeaders.size() == 2 && (t.header.size() == 2 || header.size() == 2)) {
-		//If table a or b only have 2 column, and both synonym is in the commonHeader, filter the result
-		filterTable(t, commonHeaders[0], commonHeaders[1]);
+	else if (common_headers.size() == 2 && (t.header.size() == 2 || header.size() == 2)) {
+		//If table a or b only have 2 column, and both synonym is in the common_header, filter the result
+		filter_table(t, common_headers[0], common_headers[1]);
 	}
-	else if (commonHeaders.size() == 1) {
+	else if (common_headers.size() == 1) {
 		//If table a and b have more than 1 column and there is 1 common header, join table
-		joinTable(t, commonHeaders[0]);
+		joinTable(t, common_headers[0]);
 	}
 	else {
 		throw std::exception("Error: table merging scenario is not handled!!!");
@@ -58,7 +58,7 @@ bool ResultTable::merge(ResultTable t) {
 }
 
 bool ResultTable::isInTable(Entity e) {
-	return headerSet.find(e.getSynonym()) != headerSet.end();
+	return header_set.find(e.getSynonym()) != header_set.end();
 }
 
 //if table contain no value
@@ -76,15 +76,15 @@ std::list<std::string> ResultTable::getEntityResult(Entity e) {
 }
 
 std::vector<Entity> ResultTable::getCommonHeaders(std::vector<Entity> v) {
-	std::vector<Entity> commonHeaders;
+	std::vector<Entity> common_headers;
 
 	for (unsigned int i = 0; i < v.size(); i++) {
-		if (headerSet.find(v[i].getSynonym()) != headerSet.end()) {
-			commonHeaders.push_back(v[i]);
+		if (header_set.find(v[i].getSynonym()) != header_set.end()) {
+			common_headers.push_back(v[i]);
 		}
 	}
 
-	return commonHeaders;
+	return common_headers;
 }
 
 std::vector<Entity> ResultTable::getHeaders() {
@@ -115,9 +115,9 @@ void ResultTable::init(std::pair<Entity, Entity> header, std::vector<std::vector
 }
 
 void ResultTable::addHeader(Entity entity) {
-	if (headerSet.count(entity.getSynonym()) == 0) {
+	if (header_set.count(entity.getSynonym()) == 0) {
 		header.push_back(entity);
-		headerSet.insert(entity.getSynonym());
+		header_set.insert(entity.getSynonym());
 	}
 }
 
@@ -136,87 +136,87 @@ int ResultTable::getHeaderIndex(Entity e) {
 	return -1;
 }
 
-void ResultTable::filterTable(ResultTable t, Entity commonHeader) {
-	int headerIndex;
-	std::vector<std::vector<std::string>> mainTable;
-	std::vector<std::vector<std::string>> filterTable;
+void ResultTable::filter_table(ResultTable t, Entity common_header) {
+	int header_index;
+	std::vector<std::vector<std::string>> main_table;
+	std::vector<std::vector<std::string>> filter_table;
 
 	if (t.header.size() == 1) {
-		headerIndex = getHeaderIndex(commonHeader);
-		mainTable = table;
-		filterTable = t.table;
+		header_index = getHeaderIndex(common_header);
+		main_table = table;
+		filter_table = t.table;
 	}
 	else if (header.size() == 1) {
-		headerIndex = t.getHeaderIndex(commonHeader);
-		mainTable = t.table;
-		filterTable = table;
+		header_index = t.getHeaderIndex(common_header);
+		main_table = t.table;
+		filter_table = table;
 		header = t.header;
-		headerSet = t.headerSet;
+		header_set = t.header_set;
 	}
 	else {
 		throw std::exception("Error: table filter 1 column scenario is not handled!!!");
 	}
 
 	std::unordered_set<std::string> filter;
-	for (auto& it : filterTable) {
+	for (auto& it : filter_table) {
 		filter.insert(it[0]);
 	}
 
-	table = Utility::filterResults(mainTable, filter, headerIndex);
+	table = Utility::filterResults(main_table, filter, header_index);
 }
 
-void ResultTable::filterTable(ResultTable t, Entity commonHeader1, Entity commonHeader2) {
-	int headerIndex1;
-	int headerIndex2;
-	int filterIndex1;
-	int filterIndex2;
-	std::vector<std::vector<std::string>> mainTable;
-	std::vector<std::vector<std::string>> filterTable;
+void ResultTable::filter_table(ResultTable t, Entity common_header1, Entity common_header2) {
+	int header_index1;
+	int header_index2;
+	int filter_index1;
+	int filter_index2;
+	std::vector<std::vector<std::string>> main_table;
+	std::vector<std::vector<std::string>> filter_table;
 
 	if (t.header.size() == 2) {
-		headerIndex1 = getHeaderIndex(commonHeader1);
-		headerIndex2 = getHeaderIndex(commonHeader2);
-		filterIndex1 = t.getHeaderIndex(commonHeader1);
-		filterIndex2 = t.getHeaderIndex(commonHeader2);
-		mainTable = table;
-		filterTable = t.table;
+		header_index1 = getHeaderIndex(common_header1);
+		header_index2 = getHeaderIndex(common_header2);
+		filter_index1 = t.getHeaderIndex(common_header1);
+		filter_index2 = t.getHeaderIndex(common_header2);
+		main_table = table;
+		filter_table = t.table;
 	}
 	else if (header.size() == 2) {
-		headerIndex1 = t.getHeaderIndex(commonHeader1);
-		headerIndex2 = t.getHeaderIndex(commonHeader2);
-		filterIndex1 = getHeaderIndex(commonHeader1);
-		filterIndex2 = getHeaderIndex(commonHeader2);
-		mainTable = t.table;
-		filterTable = table;
+		header_index1 = t.getHeaderIndex(common_header1);
+		header_index2 = t.getHeaderIndex(common_header2);
+		filter_index1 = getHeaderIndex(common_header1);
+		filter_index2 = getHeaderIndex(common_header2);
+		main_table = t.table;
+		filter_table = table;
 		header = t.header;
-		headerSet = t.headerSet;
+		header_set = t.header_set;
 	}
 	else {
 		throw std::exception("Error: table filter 2 column scenario is not handled!!!");
 	}
 
 	std::unordered_map<std::string, std::unordered_set<std::string>> filters;
-	for (auto& it : filterTable) {
-		if (filters.find(it[filterIndex1]) == filters.end()) {
-			filters.insert({ it[filterIndex1], {} });
+	for (auto& it : filter_table) {
+		if (filters.find(it[filter_index1]) == filters.end()) {
+			filters.insert({ it[filter_index1], {} });
 		}
-		auto container = filters.find(it[filterIndex1]);
-		container->second.insert(it[filterIndex2]);
+		auto container = filters.find(it[filter_index1]);
+		container->second.insert(it[filter_index2]);
 	}
 
-	table = Utility::filterResults(mainTable, filters, headerIndex1, headerIndex2);
+	table = Utility::filterResults(main_table, filters, header_index1, header_index2);
 }
 
-void ResultTable::joinTable(ResultTable t, Entity commonHeader) {
-	int headerIndex = getHeaderIndex(commonHeader);
-	int toJoinIndex = t.getHeaderIndex(commonHeader);
+void ResultTable::joinTable(ResultTable t, Entity common_header) {
+	int header_index = getHeaderIndex(common_header);
+	int to_join_index = t.getHeaderIndex(common_header);
 
-	std::unordered_multimap<std::string, std::vector<std::string>> toJoin;
+	std::unordered_multimap<std::string, std::vector<std::string>> to_join;
 
 	for (auto& it : t.table) {
-		toJoin.insert({ it[toJoinIndex], it });
+		to_join.insert({ it[to_join_index], it });
 	}
 
-	table = Utility::joinTable(table, headerIndex, toJoin, toJoinIndex);
+	table = Utility::joinTable(table, header_index, to_join, to_join_index);
 	addHeader(t.header);
 }

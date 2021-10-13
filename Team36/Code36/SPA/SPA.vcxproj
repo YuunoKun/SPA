@@ -50,7 +50,10 @@
     <ClCompile Include="..\source\AffectEvaluator.cpp" />
     <ClCompile Include="..\source\AffectTEvaluator.cpp" />
     <ClCompile Include="..\source\WithEvaluator.cpp" />
-    <ClCompile Include="..\source\PatternEvaluator.cpp" />
+    <ClCompile Include="..\source\PatternsEvaluator.cpp" />
+    <ClCompile Include="..\source\PatternAssignEvaluator.cpp" />
+    <ClCompile Include="..\source\PatternIfEvaluator.cpp" />
+    <ClCompile Include="..\source\PatternWhileEvaluator.cpp" />
     <ClCompile Include="..\source\ResultTable.cpp" />
     <ClCompile Include="..\source\Utility.cpp" />
     <ClCompile Include="..\source\QueryPatternRelRefParser.cpp" />
@@ -93,7 +96,11 @@
     <ClInclude Include="..\source\RelationsEvaluator.h" />
     <ClInclude Include="..\source\RelationEvaluatorInterface.h" />
     <ClInclude Include="..\source\FollowsEvaluator.h" />
-    <ClInclude Include="..\source\PatternEvaluator.h" />
+    <ClInclude Include="..\source\PatternsEvaluator.h" />
+    <ClInclude Include="..\source\PatternEvaluatorInterface.h" />
+    <ClInclude Include="..\source\PatternAssignEvaluator.h" />
+    <ClInclude Include="..\source\PatternIfEvaluator.h" />
+    <ClInclude Include="..\source\PatternWhileEvaluator.h" />
     <ClInclude Include="..\source\FollowsTEvaluator.h" />
     <ClInclude Include="..\source\ParentEvaluator.h" />
     <ClInclude Include="..\source\ParentTEvaluator.h" />

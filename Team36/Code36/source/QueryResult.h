@@ -17,7 +17,7 @@ public:
 
 private:
 	std::vector<ResultTable> results;
-	std::unordered_set<std::string> headerSet;
+	std::unordered_set<std::string> header_set;
 	bool have_result;
 
 	void addHeader(std::vector<Entity>);

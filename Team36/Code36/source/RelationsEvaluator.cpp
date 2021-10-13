@@ -38,69 +38,53 @@ void RelationsEvaluator::evaluateRelation(QueryResult& result, RelRef& relation)
 	}
 }
 
-void RelationsEvaluator::evaluateRelation(QueryResult& queryResult, RelRef& relation, RelationEvaluatorInterface& evaluator) {
+void RelationsEvaluator::evaluateRelation(QueryResult& query_result, RelRef& relation, RelationEvaluatorInterface& evaluator) {
 	Entity clauses1 = relation.getFirstClause();
 	Entity clauses2 = relation.getSecondClause();
 
-	//if there is at least one side is declaration
 	if (clauses1.isSynonym() || clauses2.isSynonym()) {
+		//if there is at least one side is synonym, merge table generated
 		if (clauses1.isSynonym() && clauses2.isSynonym()) {
-			//If both side is declartion: e.g Follows(a, b)
-			//Get all follow relation
-			ResultTable resultTable = evaluator.getRelations(clauses1, clauses2);
-			queryResult.addResult(resultTable);
+			query_result.addResult(evaluator.evaluateSynonymAndSynonym(clauses1, clauses2));
 		}
 		else if (clauses1.isSynonym() && clauses2.getType() == EntityType::WILD) {
-			//If left side is declaration and right side is WILD: e.g Follows(a, _)
-			ResultTable resultTable = evaluator.getLeftRelations(clauses1);
-			queryResult.addResult(resultTable);
+			ResultTable resultTable = evaluator.evaluateSynonymAndWild(clauses1);
+			query_result.addResult(evaluator.evaluateSynonymAndWild(clauses1));
 		}
 		else if (clauses1.getType() == EntityType::WILD && clauses2.isSynonym()) {
-			//If left side is WILD and right side is declartion: e.g Follows(_, a)
-			ResultTable resultTable = evaluator.getRightRelations(clauses2);
-			queryResult.addResult(resultTable);
+			query_result.addResult(evaluator.evaluateWildAndSynonym(clauses2));
 		}
 		else if (clauses1.isSynonym() && !clauses2.isSynonym()) {
-			//If left side is declaration and right side is constant: e.g Follows(a, 1)
-			ResultTable resultTable = evaluator.getRelationMatchRight(clauses1, clauses2);
-			queryResult.addResult(resultTable);
+			query_result.addResult(evaluator.evaluateSynonymAndConstant(clauses1, clauses2));
 		}
 		else if (!clauses1.isSynonym() && clauses2.isSynonym()) {
-			//If left side is constant and right side is declartion: e.g Follows(1, a)
-			//get all statment that is following of specfic index
-			ResultTable resultTable = evaluator.getRelationMatchLeft(clauses1, clauses2);
-			queryResult.addResult(resultTable);
+			query_result.addResult(evaluator.evaluateConstantAndSynonym(clauses1, clauses2));
 		}
 		else {
-			throw std::out_of_range("Some Follow logic have not be handle for one side declaration");
+			throw std::out_of_range("Some Follow logic have not be handle for synonym");
 		}
 	}
 	else {
-		//Handle both side NOT declartion
+		//check if result exist for relation with no synonym
 		bool haveResult = false;
-
 		if (clauses1.getType() == EntityType::WILD && clauses2.getType() == EntityType::WILD) {
-			//If both side is WILD: e.g Follows(_, _)
-			haveResult = evaluator.haveRelation();
+			haveResult = evaluator.evaluateWildAndWild();
 		}
 		else if (!clauses1.isSynonym() && clauses2.getType() == EntityType::WILD) {
-			//If left side is constant and right side is WILD: e.g Follows(1, _)
-			haveResult = evaluator.haveRelationAtRight(clauses1);
+			haveResult = evaluator.evaluateConstantAndWild(clauses1);
 		}
 		else if (clauses1.getType() == EntityType::WILD && !clauses2.isSynonym()) {
-			//If left side is WILD and right side is Constant: e.g Follows(_, 1)
-			haveResult = evaluator.haveRelationAtLeft(clauses2);;
+			haveResult = evaluator.evaluateWildAndConstant(clauses2);;
 		}
 		else if (!clauses1.isSynonym() && !clauses2.isSynonym()) {
-			//both is constant, check if relation exist e.g Follows(1, 2)
-			haveResult = evaluator.isRelation(clauses1, clauses2);
+			haveResult = evaluator.evaluateConstantAndConstant(clauses1, clauses2);
 		}
 		else {
-			throw std::out_of_range("Some Follow logic have not be handle for both side none declaration");
+			throw std::out_of_range("Some Follow logic have not be handle for both side no synonym");
 		}
 
 		if (!haveResult) {
-			queryResult.setNoResult();
+			query_result.setNoResult();
 		}
 	}
 }
