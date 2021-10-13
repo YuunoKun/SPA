@@ -258,6 +258,7 @@ Entity QueryPatternRelRefParser::setLineRef(Query& query, QueryToken token) {
     // synonym check
     std::unordered_map<std::string, Entity> ent_chain = query.getEntities();
     if (ent_chain.find(token.token_value) != ent_chain.end()) {
+
         return ent_chain.at(token.token_value);
     }
 

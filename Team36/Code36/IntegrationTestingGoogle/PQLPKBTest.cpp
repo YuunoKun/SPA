@@ -53,7 +53,12 @@ namespace UnitTesting {
 			PKB::getInstance().addExprTree(std::stoi(MODIFIES_LEFT4), EXPRESSIONNODE_2);
 			PKB::getInstance().generateFollowsT();
 			PKB::getInstance().generateParentT();
+			PKB::getInstance().addIf(std::stoi(IF_LEFT1), IF_RIGHT1);
+			PKB::getInstance().addIf(std::stoi(IF_LEFT2), IF_RIGHT2);
+			PKB::getInstance().addWhile(std::stoi(WHILE_LEFT1), WHILE_RIGHT1);
+			PKB::getInstance().addWhile(std::stoi(WHILE_LEFT2), WHILE_RIGHT2);
 			PKB::getInstance().addCallsP(p1, p2);
+			//PKB::getInstance().addNext(p1, p2);
 
 
 		}
@@ -214,7 +219,6 @@ namespace UnitTesting {
 		const std::list<std::string> EXPECTED_USES3 = { y, x };
 
 
-
 		const std::vector<std::string> USES_LEFTS = { USES_LEFT1, USES_LEFT2 };
 		const std::vector<std::string> USES_RIGHTS = { USES_RIGHT1, USES_RIGHT2 };
 
@@ -225,6 +229,25 @@ namespace UnitTesting {
 		//const Synonym COMMON_SYNONYM2 = { "cs2" };
 
 		const std::list<std::string> EXPECTED_P_CALLS = { p1 };
+
+		const std::string IF_LEFT1 = IF1;
+		const std::string IF_LEFT2 = IF2;
+		const std::string IF_RIGHT1 = x;
+		const std::string IF_RIGHT2 = y;
+		//const std::string IF_RIGHT_UNUSE = z;
+		const std::vector<std::string> IF_LEFTS = { IF_LEFT1, IF_LEFT2 };
+		const std::vector<std::string> IF_RIGHTS = { IF_RIGHT1, IF_RIGHT2 };
+		const std::list<std::string> EXPECTED_IFS1 = { IF_RIGHT1};
+		const std::list<std::string> EXPECTED_IFS2 = { IF_RIGHT2 };
+		const std::list<std::string> EXPECTED_IFS3 = { IF_RIGHT1, IF_RIGHT2 };
+
+		const std::string WHILE_LEFT1 = WHILE1;
+		const std::string WHILE_LEFT2 = WHILE2;
+		const std::string WHILE_RIGHT1 = x;
+		const std::string WHILE_RIGHT2 = y;
+		//const std::string WHILE_RIGHT_UNUSE = z;
+		const std::vector<std::string> WHILE_LEFTS = { WHILE_LEFT1, WHILE_LEFT2 };
+		const std::vector<std::string> WHILE_RIGHTS = { WHILE_RIGHT1, WHILE_RIGHT2 };
 
 		const std::list<std::string> EMPTY_RESULT = {};
 
@@ -383,34 +406,52 @@ namespace UnitTesting {
 
 	// one pattern cl ----------------------------------------------------------------------------------------------------------------
 
-	TEST_F(PQLPKBTest, PatternTest1) {
+	TEST_F(PQLPKBTest, PatternAssignTest1) {
 		std::list<std::string> ans = qs.processQuery("assign a; Select a pattern a (_,\"x\")");
 
 		validateAnswer(EXPECTED_ASSIGN_PATTERN1, ans);
 	}
 
-	TEST_F(PQLPKBTest, PatternTest2) {
+	TEST_F(PQLPKBTest, PatternAssignTest2) {
 		std::list<std::string> ans = qs.processQuery("assign a; Select a pattern a (_,_\"x\"_)");
 
 		validateAnswer(EXPECTED_ASSIGN_PATTERN2, ans);
 	}
 
-	TEST_F(PQLPKBTest, PatternTest3) {
+	TEST_F(PQLPKBTest, PatternAssignTest3) {
 		std::list<std::string> ans = qs.processQuery("assign a; Select a pattern a (_,_\"5\"_)");
 
-		validateAnswer(EXPECTED_ASSIGN_PATTERN4, ans);
+		validateAnswer(EXPECTED_ASSIGN_PATTERN3, ans);
 	}
 
-	TEST_F(PQLPKBTest, PatternTest4) {
+	TEST_F(PQLPKBTest, PatternAssignTest4) {
 		std::list<std::string> ans = qs.processQuery("assign a; Select a pattern a (_,\"x + (y * 5)\")");
 
 		validateAnswer(EXPECTED_ASSIGN_PATTERN5, ans);
 	}
 
-	TEST_F(PQLPKBTest, PatternTest5) {
+	TEST_F(PQLPKBTest, PatternAssignTest5) {
 		std::list<std::string> ans = qs.processQuery("assign a; Select a pattern a (_,_\"x + (y * 5)\"_)");
 
-		validateAnswer(EXPECTED_ASSIGN_PATTERN3, ans);
+		validateAnswer(EXPECTED_ASSIGN_PATTERN5, ans);
+	}
+
+	TEST_F(PQLPKBTest, PatternIfTest) {
+		std::list<std::string> ans = qs.processQuery("if ifs; Select ifs pattern if(1,_,_)");
+
+		validateAnswer(EXPECTED_IFS1, ans);
+	}
+
+	TEST_F(PQLPKBTest, PatternIfTest2) {
+		std::list<std::string> ans = qs.processQuery("if ifs; Select ifs pattern if(2,_,_)");
+
+		validateAnswer(EXPECTED_IFS2, ans);
+	}
+
+	TEST_F(PQLPKBTest, PatternIfTest3) {
+		std::list<std::string> ans = qs.processQuery("if ifs; Select ifs pattern if(_,_,_)");
+
+		validateAnswer(EXPECTED_IFS3, ans);
 	}
 
 
