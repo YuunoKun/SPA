@@ -237,9 +237,9 @@ namespace UnitTesting {
 		//const std::string IF_RIGHT_UNUSE = z;
 		const std::vector<std::string> IF_LEFTS = { IF_LEFT1, IF_LEFT2 };
 		const std::vector<std::string> IF_RIGHTS = { IF_RIGHT1, IF_RIGHT2 };
-		const std::list<std::string> EXPECTED_IFS1 = { IF_RIGHT1};
-		const std::list<std::string> EXPECTED_IFS2 = { IF_RIGHT2 };
-		const std::list<std::string> EXPECTED_IFS3 = { IF_RIGHT1, IF_RIGHT2 };
+		const std::list<std::string> EXPECTED_IFS1 = { IF_LEFT1};
+		const std::list<std::string> EXPECTED_IFS2 = { IF_LEFT2 };
+		const std::list<std::string> EXPECTED_IFS3 = { IF_LEFT1, IF_LEFT2 };
 
 		const std::string WHILE_LEFT1 = WHILE1;
 		const std::string WHILE_LEFT2 = WHILE2;
@@ -248,6 +248,11 @@ namespace UnitTesting {
 		//const std::string WHILE_RIGHT_UNUSE = z;
 		const std::vector<std::string> WHILE_LEFTS = { WHILE_LEFT1, WHILE_LEFT2 };
 		const std::vector<std::string> WHILE_RIGHTS = { WHILE_RIGHT1, WHILE_RIGHT2 };
+		const std::list<std::string> EXPECTED_WHILES1 = { WHILE_LEFT1 };
+		const std::list<std::string> EXPECTED_WHILES2 = { WHILE_LEFT2 };
+		const std::list<std::string> EXPECTED_WHILES3 = { WHILE_LEFT1, WHILE_LEFT2 };
+
+
 
 		const std::list<std::string> EMPTY_RESULT = {};
 
@@ -437,21 +442,39 @@ namespace UnitTesting {
 	}
 
 	TEST_F(PQLPKBTest, PatternIfTest) {
-		std::list<std::string> ans = qs.processQuery("if ifs; Select ifs pattern if(1,_,_)");
+		std::list<std::string> ans = qs.processQuery("if ifs; Select ifs pattern ifs(\"x\", _, _)");
 
 		validateAnswer(EXPECTED_IFS1, ans);
 	}
 
 	TEST_F(PQLPKBTest, PatternIfTest2) {
-		std::list<std::string> ans = qs.processQuery("if ifs; Select ifs pattern if(2,_,_)");
+		std::list<std::string> ans = qs.processQuery("if ifs; Select ifs pattern ifs(\"y\",_,_)");
 
 		validateAnswer(EXPECTED_IFS2, ans);
 	}
 
 	TEST_F(PQLPKBTest, PatternIfTest3) {
-		std::list<std::string> ans = qs.processQuery("if ifs; Select ifs pattern if(_,_,_)");
+		std::list<std::string> ans = qs.processQuery("if ifs; Select ifs pattern ifs(_,_,_)");
 
 		validateAnswer(EXPECTED_IFS3, ans);
+	}
+
+	TEST_F(PQLPKBTest, PatternWhileTest) {
+		std::list<std::string> ans = qs.processQuery("while w; Select w pattern w(\"x\", _)");
+
+		validateAnswer(EXPECTED_WHILES1, ans);
+	}
+
+	TEST_F(PQLPKBTest, PatternWhileTest2) {
+		std::list<std::string> ans = qs.processQuery("while w; Select w pattern w(\"y\",_)");
+
+		validateAnswer(EXPECTED_WHILES2, ans);
+	}
+
+	TEST_F(PQLPKBTest, PatternWhileTest3) {
+		std::list<std::string> ans = qs.processQuery("while w; Select w pattern w(_,_)");
+
+		validateAnswer(EXPECTED_WHILES3, ans);
 	}
 
 

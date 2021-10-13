@@ -43,6 +43,5 @@ void IfPatternParser::parseIf(Query& query, Entity& entity, std::vector<QueryTok
         throw SemanticErrorException("Invalid parameters for if");
     }
 
-    query.addPattern(Pattern(entity, parser.setEntRef(query, temp_token_chain_1),
-        "", true));
+    query.addPattern(Pattern(entity, parser.setEntRef(query, temp_token_chain_1)));
 }
