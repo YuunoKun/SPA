@@ -54,6 +54,8 @@ namespace UnitTesting {
 			PKB::getInstance().generateFollowsT();
 			PKB::getInstance().generateParentT();
 			PKB::getInstance().addCallsP(p1, p2);
+
+
 		}
 
 		QuerySystem qs;
@@ -191,6 +193,9 @@ namespace UnitTesting {
 		const std::list<std::string> EXPECTED_ASSIGN_PATTERN1 = { ASSIGN1 };
 		const std::list<std::string> EXPECTED_ASSIGN_PATTERN2 = { ASSIGN2, ASSIGN1 };
 		const std::list<std::string> EXPECTED_ASSIGN_PATTERN3 = { ASSIGN2 };
+		const std::list<std::string> EXPECTED_ASSIGN_PATTERN4 = { ASSIGN2 };
+		const std::list<std::string> EXPECTED_ASSIGN_PATTERN5 = { ASSIGN2 };
+
 
 		const std::vector<std::string> MODIFIES_LEFTS = { MODIFIES_LEFT1, MODIFIES_LEFT2, MODIFIES_LEFT3, MODIFIES_LEFT4 };
 		const std::vector<std::string> MODIFIES_RIGHTS = { MODIFIES_RIGHT1, MODIFIES_RIGHT2, MODIFIES_RIGHT3, MODIFIES_RIGHT4 };
@@ -393,8 +398,21 @@ namespace UnitTesting {
 	TEST_F(PQLPKBTest, PatternTest3) {
 		std::list<std::string> ans = qs.processQuery("assign a; Select a pattern a (_,_\"5\"_)");
 
+		validateAnswer(EXPECTED_ASSIGN_PATTERN4, ans);
+	}
+
+	TEST_F(PQLPKBTest, PatternTest4) {
+		std::list<std::string> ans = qs.processQuery("assign a; Select a pattern a (_,\"x + (y * 5)\")");
+
+		validateAnswer(EXPECTED_ASSIGN_PATTERN5, ans);
+	}
+
+	TEST_F(PQLPKBTest, PatternTest5) {
+		std::list<std::string> ans = qs.processQuery("assign a; Select a pattern a (_,_\"x + (y * 5)\"_)");
+
 		validateAnswer(EXPECTED_ASSIGN_PATTERN3, ans);
 	}
+
 
 	// one st and one pattern cl -----------------------------------------------------------------------------------------------------
 	TEST_F(PQLPKBTest, SuchThatPatternTest1) {
