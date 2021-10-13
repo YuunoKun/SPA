@@ -159,6 +159,9 @@
     <ClCompile Include="..\source\QueryEvaluator.cpp">
       <Filter>Source Files\PQL\QueryEvaluator</Filter>
     </ClCompile>
+	<ClCompile Include="..\source\QueryValidator.cpp">
+	  <Filter>Source Files\PQL\QueryPreprocessor</Filter>
+	</ClCompile>
     <ClCompile Include="..\source\QueryValidator.cpp">
       <Filter>Source Files\PQL\QueryPreprocessor</Filter>
     </ClCompile>
@@ -225,15 +228,25 @@
     <ClCompile Include="..\source\CFG.cpp">
       <Filter>Source Files\Common</Filter>
     </ClCompile>
+	</ClCompile>
     <ClCompile Include="..\source\QueryPatternRelRefParser.cpp">
       <Filter>Source Files\PQL\QueryPreprocessor\QueryPatternRelRefParser</Filter>
     </ClCompile>
     <ClCompile Include="..\source\AssignPatternParser.cpp">
       <Filter>Source Files\PQL\QueryPreprocessor\QueryPatternRelRefParser</Filter>
     </ClCompile>
-    <ClCompile Include="..\source\AssignPatternParser.h">
-      <Filter>Header Files\PQL\QueryPreprocessor\QueryPatternRelRefParser</Filter>
+	<ClCompile Include="..\source\IfPatternParser.cpp">
+	  <Filter>Source Files\PQL\QueryPreprocessor\QueryPatternRelRefParser</Filter>
+	</ClCompile>
+	<ClCompile Include="..\source\WhilePatternParser.cpp">
+	  <Filter>Source Files\PQL\QueryPreprocessor\QueryPatternRelRefParser</Filter>
+	</ClCompile>
+    <ClCompile Include="..\source\NextParser.cpp">
+      <Filter>Source Files\PQL\QueryPreprocessor\QueryPatternRelRefParser</Filter>
     </ClCompile>
+	<ClCompile Include="..\source\NextTParser.cpp">
+      <Filter>Source Files\PQL\QueryPreprocessor\QueryPatternRelRefParser</Filter>
+	</ClCompile>
     <ClCompile Include="..\source\PatternAssignEvaluator.cpp">
       <Filter>Source Files\PQL\QueryEvaluator\PatternEvaluator</Filter>
     </ClCompile>
@@ -296,6 +309,9 @@
     <ClInclude Include="..\source\QueryToken.h">
       <Filter>Header Files\PQL\QueryPreprocessor</Filter>
     </ClInclude>
+	<ClInclude Include="..\source\QueryValidator.h">
+	  <Filter>Header Files\PQL\QueryPreprocessor</Filter>
+	</ClInclude>
     <ClInclude Include="..\source\QueryValidator.h">
       <Filter>Header Files\PQL\QueryPreprocessor</Filter>
     </ClInclude>
@@ -416,9 +432,25 @@
     <ClInclude Include="..\source\CFG.h">
       <Filter>Header Files\Common</Filter>
     </ClInclude>
+	</ClInclude>
     <ClInclude Include="..\source\QueryPatternRelRefParser.h">
       <Filter>Header Files\PQL\QueryPreprocessor\QueryPatternRelRefParser</Filter>
     </ClInclude>
+	<ClInclude Include="..\source\AssignPatternParser.h">
+	  <Filter>Header Files\PQL\QueryPreprocessor\QueryPatternRelRefParser</Filter>
+	</ClInclude>
+	<ClInclude Include="..\source\IfPatternParser.h">
+	  <Filter>Header Files\PQL\QueryPreprocessor\QueryPatternRelRefParser</Filter>
+	</ClInclude>
+	<ClInclude Include="..\source\WhilePatternParser.h">
+	  <Filter>Header Files\PQL\QueryPreprocessor\QueryPatternRelRefParser</Filter>
+	</ClInclude>
+	<ClInclude Include="..\source\NextParser.h">
+	  <Filter>Header Files\PQL\QueryPreprocessor\QueryPatternRelRefParser</Filter>
+	</ClInclude>
+	<ClInclude Include="..\source\NextTParser.h">
+	  <Filter>Header Files\PQL\QueryPreprocessor\QueryPatternRelRefParser</Filter>
+	</ClInclude>
     <ClInclude Include="..\source\PatternsEvaluator.h">
       <Filter>Header Files\PQL\QueryEvaluator</Filter>
     </ClInclude>

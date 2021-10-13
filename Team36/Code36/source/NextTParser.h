@@ -1,5 +1,4 @@
 #pragma once
-
 #include <iostream>
 #include <string>
 #include <vector>
@@ -11,12 +10,10 @@
 #include "SyntacticErrorException.h"
 #include "Utility.h"
 
-class AssignPatternParser {
+class NextTParser {
 public:
-    AssignPatternParser();
+    NextTParser();
 
-    void parseAssign(Query&, Entity&, std::vector<QueryToken>);
+    void parseNextT(Query&, std::vector<QueryToken>);
 
-private:
-    bool isWild(std::vector<QueryToken>);
 };

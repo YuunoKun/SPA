@@ -281,6 +281,9 @@ EntityType Utility::queryTokenTypeToEntityType(QueryToken::QueryTokenType& query
 	else if (query_token_type == QueryToken::QueryTokenType::CONSTANT) {
 		return EntityType::CONSTANT;
 	}
+	else if (query_token_type == QueryToken::QueryTokenType::PROG_LINE) {
+		return EntityType::PROG_LINE;
+	}
 }
 
 AttrRef Utility::queryTokenTypeToAttrRef(QueryToken::QueryTokenType& query_token_type) {
