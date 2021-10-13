@@ -409,6 +409,14 @@ namespace UnitTesting {
 		validateAnswer(EXPECTED_FOLLOWST, ans);
 	}
 
+	// test for "and" in between multiple relref clauses
+	TEST_F(PQLPKBTest, multipleRelRef) {
+		std::list<std::string> ans = qs.processQuery("stmt s; Select s such that Follows(1,s) and Parent(1,s)");
+
+		validateAnswer(EXPECTED_FOLLOWS1, ans);
+	}
+
+
 	// one pattern cl ----------------------------------------------------------------------------------------------------------------
 
 	TEST_F(PQLPKBTest, PatternAssignTest1) {
