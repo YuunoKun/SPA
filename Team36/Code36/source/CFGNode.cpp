@@ -19,16 +19,28 @@ void CFGNode::setProgramLines(vector<prog_line> lines) {
 	program_lines = lines;
 }
 
-void CFGNode::setNextMain(CFGNode* nextMain) {
-	next_main = nextMain;
+void CFGNode::setNextMain(CFGNode* next_m) {
+	next_main = next_m;
 }
 
-void CFGNode::setNextBranch(CFGNode* nextBranch) {
-	next_branch = nextBranch;
+void CFGNode::setNextBranch(CFGNode* next_m) {
+	next_branch = next_m;
+}
+
+void CFGNode::setPrevMain(CFGNode* prev_m) {
+	prev_main = prev_m;
+}
+
+void CFGNode::setPrevBranch(CFGNode* prev_b) {
+	prev_branch = prev_b;
 }
 
 void CFGNode::setVisited() {
-	visited = true;
+	if (visited == false) {
+		visited = true;
+	}else {
+		visited = false;
+	}
 }
 
 void CFGNode::insertLine(prog_line programLine) {
@@ -47,6 +59,14 @@ CFGNode* CFGNode::getNextMain() {
 
 CFGNode* CFGNode::getNextBranch() {
 	return next_branch;
+}
+
+CFGNode* CFGNode::getPrevMain() {
+	return prev_main;
+}
+
+CFGNode* CFGNode::getPrevBranch() {
+	return prev_branch;
 }
 
 bool CFGNode::getVisited() {
