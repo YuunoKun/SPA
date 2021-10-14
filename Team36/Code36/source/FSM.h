@@ -25,7 +25,7 @@ namespace SourceProcessor {
 		void build();
 
 		// Expects a procedure.
-		// procedure: ¡®procedure¡¯ proc_name ¡®{¡® stmtLst ¡®}¡¯
+		// procedure: 'procedure' proc_name '{' stmtLst '}'
 		void expectProcedure();
 
 		// Expects a statement list.
@@ -37,43 +37,43 @@ namespace SourceProcessor {
 		void expectStatement();
 
 		// Expects a read statement.
-		// read: ¡®read¡¯ var_name¡¯;¡¯
+		// read: 'read' var_name';'
 		void expectStatementTypeRead();
 
 		// Expects a print statement.
-		// print: ¡®print¡¯ var_name¡¯;¡¯
+		// print: 'print' var_name';'
 		void expectStatementTypePrint();
 
 		// Expects a call statement.
-		// call: ¡®call¡¯ proc_name ¡®;¡¯
+		// call: 'call' proc_name ';'
 		void expectStatementTypeCall();
 
 		// Expects a while container statement.
-		// while: ¡®while¡¯ ¡®(¡¯ cond_expr ¡®)¡¯ ¡®{¡® stmtLst ¡®}¡¯
+		// while: 'while' '(' cond_expr ')' '{' stmtLst '}'
 		void expectStatementTypeWhile();
 
 		// Expects a if container statement.
-		// if: ¡®if¡¯ ¡®(¡¯ cond_expr ¡®)¡¯ ¡®then¡¯ ¡®{¡® stmtLst ¡®}¡¯ ¡®else¡¯ ¡®{¡® stmtLst ¡®}¡¯
+		// if: 'if' '(' cond_expr ')' 'then' '{' stmtLst '}' 'else' '{' stmtLst '}'
 		void expectStatementTypeIf();
 
 		// Expects a assignment statement.
-		// assign: var_name ¡®=¡¯ expr ¡®;¡¯
+		// assign: var_name '=' expr ';'
 		void expectStatementTypeAssign();
 
 		// Expects a conditional expression.
 		// cond_expr: rel_expr 
-		//			| ¡®!¡¯ ¡®(¡¯ cond_expr ¡®)¡¯ 
-		//			| ¡®(¡¯ cond_expr ¡®)¡¯ ¡®&&¡¯ ¡®(¡¯ cond_expr ¡®)¡¯ 
-		//			| ¡®(¡¯ cond_expr ¡®)¡¯ ¡®||¡¯ ¡®(¡¯ cond_expr ¡®)¡¯
+		//			| '!' '(' cond_expr ')' 
+		//			| '(' cond_expr ')' '&&' '(' cond_expr ')' 
+		//			| '(' cond_expr ')' '||' '(' cond_expr ')'
 		void expectConditionalExpression();
 
 		// Expects a relational expression.
-		// rel_expr : rel_factor ¡®>¡¯ rel_factor
-		//			| rel_factor ¡®>=¡¯ rel_factor 
-		//			| rel_factor ¡®<¡¯ rel_factor 
-		//			| rel_factor ¡®<=¡¯ rel_factor 
-		//			| rel_factor ¡®==¡¯ rel_factor 
-		//			| rel_factor ¡®!=¡¯ rel_factor
+		// rel_expr : rel_factor '>' rel_factor
+		//			| rel_factor '>=' rel_factor 
+		//			| rel_factor '<' rel_factor 
+		//			| rel_factor '<=' rel_factor 
+		//			| rel_factor '==' rel_factor 
+		//			| rel_factor '!=' rel_factor
 		void expectRelationalExpression();
 
 		// Expects a replational factor.
@@ -81,19 +81,19 @@ namespace SourceProcessor {
 		void expectRelationalFactor();
 
 		// Expects a expression.
-		// expr: expr ¡®+¡¯ term | expr ¡®-¡¯ term | term
+		// expr: expr '+' term | expr '-' term | term
 		void expectExpression();
 
 		// Expects a term.
-		// term: term ¡®*¡¯ factor | term ¡®/¡¯ factor | term ¡®%¡¯ factor | factor
+		// term: term '*' factor | term '/' factor | term '%' factor | factor
 		void expectTerm();
 
 		// Expects a factor.
-		// factor: var_name | const_value | ¡®(¡¯ expr ¡®)¡¯
+		// factor: var_name | const_value | '(' expr ')'
 		void expectFactor();
 
 		// Expects an identifier.
-		Token& expectIdentifier();
+		Token expectIdentifier();
 
 		// Optional relational expression.
 		bool optionalRelationalExpression();
@@ -118,7 +118,7 @@ namespace SourceProcessor {
 		Extractor *design_extractor;
 
 		// Expects a compulsory token with given token type, or else the build fails.
-		Token& expectTokenAndPop(TokenType);
+		Token expectTokenAndPop(TokenType);
 
 		// This token can be optional, will return a boolean value indicating if that token exists
 		bool peekToken(TokenType);

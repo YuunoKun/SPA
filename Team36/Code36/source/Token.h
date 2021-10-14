@@ -123,8 +123,6 @@ namespace SourceProcessor {
 
 		void setTokenValue(std::string);
 
-		std::string toString();
-
 	private:
 		TokenType token_type;
 		std::string token_value;
