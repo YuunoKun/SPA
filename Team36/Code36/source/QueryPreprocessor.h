@@ -45,6 +45,7 @@ private:
 	Entity patternTypeEntity;
 	ParseStatus status;
 	int parenthesis_counter;
+	QueryToken nextToken;
 
 	// Methods
 
