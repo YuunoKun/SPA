@@ -39,7 +39,7 @@ procedure mySecond {
         }
     } else {
         read j;
-        print j;\
+        print j;
     }
 }
 procedure myThird {
