@@ -437,10 +437,6 @@ void QueryPreprocessor::addSelectedToQuery(QueryToken& token) {
 }
 
 void QueryPreprocessor::setQueryParameter() {
-	if (nextToken.type != QueryToken::QueryTokenType::PARENTHESIS_OPEN) {
-		throw SyntacticErrorException("After relref keyword must be an open bracket");
-	}
-
 	// USES_P to be handled in PatternRelRefValidator
 	if (prevTokenSelect.token_value == "Uses" && prevTokenSelect.type == QueryToken::QueryTokenType::IDENTIFIER) {
 		queryParameter = { QueryToken::QueryTokenType::USES_S, "Uses" };

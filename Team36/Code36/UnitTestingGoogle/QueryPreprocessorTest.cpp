@@ -1080,11 +1080,61 @@ namespace UnitTesting {
 
 		EXPECT_THROW(qp.parse("stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; Select s such that Modifies()"), SyntacticErrorException);
 		qp.resetQuery();
+
+		EXPECT_THROW(qp.parse("assign a; variable v; Select v pattern a(v, \"x\" \"x\")"), SyntacticErrorException);
+		qp.resetQuery();
+
+		EXPECT_THROW(qp.parse("assign a; variable v; Select v pattern a(v , _\"x\"_ _\"x\"_)"), SyntacticErrorException);
+		qp.resetQuery();
+
+		EXPECT_THROW(qp.parse("assign a; variable v; Select v pattern a(v, _ _)"), SyntacticErrorException);
+		qp.resetQuery();
+
+		EXPECT_THROW(qp.parse("stmts s1, s2, s3; Select s1 Follows(s1 s2, s3)"), SyntacticErrorException);
+		qp.resetQuery();
+
+		EXPECT_THROW(qp.parse("stmts s1, s2, s3; Select s1 Follows(s1 _, s3)"), SyntacticErrorException);
+		qp.resetQuery();
+
+		EXPECT_THROW(qp.parse("stmts s1, s2, s3; Select s1 Follows(s1 1, s3)"), SyntacticErrorException);
+		qp.resetQuery();
+
+		EXPECT_THROW(qp.parse("stmts s1, s2, s3; Select s1 Follows(1 1, s3)"), SyntacticErrorException);
+		qp.resetQuery();
+
+		EXPECT_THROW(qp.parse("stmts s1, s2, s3; Select s1 Follows(_ s1, s3)"), SyntacticErrorException);
+		qp.resetQuery();
+
+		EXPECT_THROW(qp.parse("stmts s1, s2, s3; Select s1 Follows(s1, _ s3)"), SyntacticErrorException);
+		qp.resetQuery();
+
+		EXPECT_THROW(qp.parse("stmts s1, s2, s3; Select s1 Follows(s1, _ _)"), SyntacticErrorException);
+		qp.resetQuery();
+
+		EXPECT_THROW(qp.parse("stmts s1, s2, s3; Select s1 Follows("), SyntacticErrorException);
+		qp.resetQuery();
+
+		EXPECT_THROW(qp.parse("stmts s1, s2, s3; Select s1 Follows(s1"), SyntacticErrorException);
+		qp.resetQuery();
+
+		EXPECT_THROW(qp.parse("stmts s1, s2, s3; Select s1 Follows(s1,s2"), SyntacticErrorException);
+		qp.resetQuery();
+
+		EXPECT_THROW(qp.parse("assign a; variable v; Select a pattern a(v,_\"x\"_"), SyntacticErrorException);
+		qp.resetQuery();
+
+		EXPECT_THROW(qp.parse("assign a; variable v; Select a pattern a(v,_\"x\"_) s"), SyntacticErrorException);
+		qp.resetQuery();
+
+		EXPECT_THROW(qp.parse("assign 1; Select 1"), SyntacticErrorException);
+		qp.resetQuery();
+
+		EXPECT_THROW(qp.parse("assign a; stmt s; Select s such that such that Follows(s,a)"), SyntacticErrorException);
+		qp.resetQuery();
 	}
 
 	TEST(QueryPreprocessor, invalidSemantic) {
 		QueryPreprocessor qp;
-
 		EXPECT_THROW(qp.parse("stmt s, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; Select s"), SemanticErrorException);
 		qp.resetQuery();
 
@@ -1109,7 +1159,47 @@ namespace UnitTesting {
 		EXPECT_THROW(qp.parse("assign a; variable v; Select a pattern pattern a(v, _)"), SemanticErrorException);
 		qp.resetQuery();
 
-		EXPECT_THROW(qp.parse("stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; Select s such that Follows(\"1\",1)"), SemanticErrorException);
+		EXPECT_THROW(qp.parse("assign a; variable v; Select a pattern pattern a(v, _)"), SemanticErrorException);
+		qp.resetQuery();
+	}
+
+	TEST(QueryPreprocessor, invalidSemanticFollows) {
+		QueryPreprocessor qp;
+
+		EXPECT_THROW(qp.parse("stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; Select s such that Follows(s,v)"), SemanticErrorException);
+		qp.resetQuery();
+
+		EXPECT_THROW(qp.parse("stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; Select s such that Follows(s,co)"), SemanticErrorException);
+		qp.resetQuery();
+
+		EXPECT_THROW(qp.parse("stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; Select s such that Follows(s,pr)"), SemanticErrorException);
+		qp.resetQuery();
+
+		EXPECT_THROW(qp.parse("stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; Select s such that Follows(v,s)"), SemanticErrorException);
+		qp.resetQuery();
+
+		EXPECT_THROW(qp.parse("stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; Select s such that Follows(co, s)"), SemanticErrorException);
+		qp.resetQuery();
+
+		EXPECT_THROW(qp.parse("stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; Select s such that Follows(pr, s)"), SemanticErrorException);
+		qp.resetQuery();
+
+		EXPECT_THROW(qp.parse("stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; Select s such that Follows*(s,v)"), SemanticErrorException);
+		qp.resetQuery();
+
+		EXPECT_THROW(qp.parse("stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; Select s such that Follows*(s,co)"), SemanticErrorException);
+		qp.resetQuery();
+
+		EXPECT_THROW(qp.parse("stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; Select s such that Follows*(s,pr)"), SemanticErrorException);
+		qp.resetQuery();
+
+		EXPECT_THROW(qp.parse("stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; Select s such that Follows*(v,s)"), SemanticErrorException);
+		qp.resetQuery();
+
+		EXPECT_THROW(qp.parse("stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; Select s such that Follows*(co, s)"), SemanticErrorException);
+		qp.resetQuery();
+
+		EXPECT_THROW(qp.parse("stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; Select s such that Follows*(pr, s)"), SemanticErrorException);
 		qp.resetQuery();
 	}
 }
