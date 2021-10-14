@@ -52,6 +52,36 @@ namespace UnitTesting {
 		EXPECT_EQ(optimizer.optimizeClausesOrder(unordered_clauses), ordered_clauses);
 	}
 
+	TEST(QueryOptimizer, optimizeNextClausesOrder) {
+		QueryOptimizer optimizer;
+		RelRef no_synonym(NEXT_T, { STMT, "1" }, { WILD });
+		RelRef one_synonym(NEXT_T, { STMT, Synonym("a") }, { WILD });
+		RelRef compute_next_t_data(NEXT_T, { STMT, Synonym("a") }, { STMT, Synonym("b") });
+		RelRef no_synonym_graph_search_before_precompute(NEXT_T, { STMT, "1" }, { STMT, "2" });
+		RelRef one_synonym_graph_search_before_precompute1(NEXT_T, { STMT, Synonym("a") }, { STMT, "2" });
+		RelRef one_synonym_graph_search_before_precompute2(NEXT_T, { STMT, "2" },  { STMT, Synonym("a") });
+		RelRef two_synonym_next_after_compute(NEXT_T, { STMT, Synonym("a") }, { STMT, Synonym("b") });
+
+
+		std::vector<Clause> unordered_clauses, ordered_clauses;
+		unordered_clauses.push_back({ one_synonym_graph_search_before_precompute2 });
+		unordered_clauses.push_back({ one_synonym_graph_search_before_precompute1 });
+		unordered_clauses.push_back({ no_synonym_graph_search_before_precompute });
+		unordered_clauses.push_back({ compute_next_t_data });
+		unordered_clauses.push_back({ one_synonym });
+		unordered_clauses.push_back({ two_synonym_next_after_compute });
+		unordered_clauses.push_back({ no_synonym });
+
+		ordered_clauses.push_back({ no_synonym });
+		ordered_clauses.push_back({ one_synonym });
+		ordered_clauses.push_back({ compute_next_t_data });
+		ordered_clauses.push_back({ no_synonym_graph_search_before_precompute });
+		ordered_clauses.push_back({ one_synonym_graph_search_before_precompute2 });
+		ordered_clauses.push_back({ one_synonym_graph_search_before_precompute1 });
+		ordered_clauses.push_back({ two_synonym_next_after_compute });
+		EXPECT_EQ(optimizer.optimizeClausesOrder(unordered_clauses), ordered_clauses);
+	}
+
 	TEST(QueryOptimizer, checkConstantExist) {
 		PKB::getInstance().resetCache();
 		QueryOptimizer optimizer;
