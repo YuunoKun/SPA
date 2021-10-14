@@ -337,13 +337,34 @@ namespace UnitTesting {
 
 	TEST(QueryPreprocessor, similarSelectName) {
 		QueryPreprocessor qp;
-		Query test = qp.parse("procedure select; Select select");
+		Query test = qp.parse("procedure Select; Select Select");
 
 		Query q;
-		q.addEntity(Entity(EntityType::PROCEDURE, Synonym{ "select" }));
-		q.addSelected(Entity(EntityType::PROCEDURE, Synonym{ "select" }));
+		q.addEntity(Entity(EntityType::PROCEDURE, Synonym{ "Select" }));
+		q.addSelected(Entity(EntityType::PROCEDURE, Synonym{ "Select" }));
 
 		EXPECT_EQ(test, q);
+
+		Query test2 = qp.parse("procedure Select; stmt s; Select Select such that Follows* (6, s)");
+
+		Query q2;
+		q2.addEntity(Entity(EntityType::PROCEDURE, Synonym{ "Select" }));
+		q2.addEntity(Entity(EntityType::STMT, Synonym{ "s" }));
+		q2.addSelected(Entity(EntityType::PROCEDURE, Synonym{ "Select" }));
+		q2.addRelation(RelRef(RelType::FOLLOWS_T, Entity(EntityType::CONSTANT, "6"), Entity(EntityType::STMT, Synonym{ "s" })));
+
+		EXPECT_EQ(test2, q2);
+
+		Query test3 = qp.parse("procedure Select, procedure; stmt s; Select Select such that Follows* (6, s)");
+
+		Query q3;
+		q3.addEntity(Entity(EntityType::PROCEDURE, Synonym{ "Select" }));
+		q3.addEntity(Entity(EntityType::PROCEDURE, Synonym{ "procedure" }));
+		q3.addEntity(Entity(EntityType::STMT, Synonym{ "s" }));
+		q3.addSelected(Entity(EntityType::PROCEDURE, Synonym{ "Select" }));
+		q3.addRelation(RelRef(RelType::FOLLOWS_T, Entity(EntityType::CONSTANT, "6"), Entity(EntityType::STMT, Synonym{ "s" })));
+
+		EXPECT_EQ(test3, q3);
 	}
 
 	TEST(QueryPreprocessor, selectBOOLEAN) {
@@ -625,12 +646,12 @@ namespace UnitTesting {
 
 		EXPECT_EQ(test7, q7);
 
-		Query test8 = qp.parse("assign pattern; procedure p; Select p pattern pattern(_,_)");
+		Query test8 = qp.parse("assign pattern; procedure p; Select pattern pattern pattern(_,_)");
 
 		Query q8;
 		q8.addEntity(Entity(EntityType::ASSIGN, Synonym{ "pattern" }));
 		q8.addEntity(Entity(EntityType::PROCEDURE, Synonym{ "p" }));
-		q8.addSelected(Entity(EntityType::PROCEDURE, Synonym{ "p" }));
+		q8.addSelected(Entity(EntityType::ASSIGN, Synonym{ "pattern" }));
 		q8.addPattern(Pattern(Entity(EntityType::ASSIGN, Synonym{ "pattern" }), Entity(EntityType::WILD, ""), "", true));
 
 		EXPECT_EQ(test8, q8);
