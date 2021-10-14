@@ -75,7 +75,6 @@ QueryPreprocessor::QueryPreprocessor() {
 
 Query QueryPreprocessor::parse(std::string str) {
 	QueryTokenizer query_tokenizer;
-	QueryPatternRelRefParser validator;
 	QueryValidator queryValidator = QueryValidator();
 
 	query_tokenizer.parse_into_query_tokens(str);
@@ -438,6 +437,10 @@ void QueryPreprocessor::addSelectedToQuery(QueryToken& token) {
 }
 
 void QueryPreprocessor::setQueryParameter() {
+	if (nextToken.type != QueryToken::QueryTokenType::PARENTHESIS_OPEN) {
+		throw SyntacticErrorException("After relref keyword must be an open bracket");
+	}
+
 	// USES_P to be handled in PatternRelRefValidator
 	if (prevTokenSelect.token_value == "Uses" && prevTokenSelect.type == QueryToken::QueryTokenType::IDENTIFIER) {
 		queryParameter = { QueryToken::QueryTokenType::USES_S, "Uses" };
