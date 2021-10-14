@@ -13,6 +13,7 @@ Debug\AutoTester.exe ..\Tests36\iter1_single_procedure_source.txt ..\Tests36\ite
 Debug\AutoTester.exe ..\Tests36\iter2_source.txt ..\Tests36\iter2_queries.txt .\Tests\out-9-iter2_queries.xml
 Debug\AutoTester.exe ..\Tests36\iter2_calls_source.txt ..\Tests36\iter2_calls_queries.txt .\Tests\out-10-iter2_calls_queries.xml
 Debug\AutoTester.exe ..\Tests36\iter2_no_call_source.txt ..\Tests36\iter2_no_call_queries.txt .\Tests\out-11-iter2_no_call_queries.xml
+Debug\AutoTester.exe ..\Tests36\iter2_multiprocedure_source.txt ..\Tests36\iter2_multiprocedure_queries.txt .\Tests\out-12-iter2_multiprocedure_queries.xml
 Debug\AutoTester.exe ..\Tests36\container_constants_source.txt ..\Tests36\container_constants_queries.txt .\Tests\out-container_constants.xml
 Debug\AutoTester.exe ..\Tests36\multi_clauses_source.txt ..\Tests36\multi_clauses_queries.txt .\Tests\out-multi-clauses.xml
 Debug\AutoTester.exe ..\Tests36\valid_query_source.txt ..\Tests36\valid_query_queries.txt .\Tests\out-valid-query.xml
