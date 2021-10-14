@@ -96,7 +96,7 @@ bool QueryOptimizer::isGraphSearchNextNoSynonym(RelType type, Entity& e1, Entity
 bool QueryOptimizer::isGraphSearchNextOneSynonym(RelType type, Entity& e1, Entity& e2) {
 	return type == RelType::NEXT_T && 
 		((e1.isSynonym() && (!e2.isSynonym() && e2.getType() != EntityType::WILD)) ||
-		(e2.isSynonym() && (!e1.isSynonym() && e2.getType() != EntityType::WILD)));
+		(e2.isSynonym() && (!e1.isSynonym() && e1.getType() != EntityType::WILD)));
 }
 
 Entity QueryOptimizer::getLeftEntity(Clause& c) {
