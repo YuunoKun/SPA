@@ -53,6 +53,10 @@ private:
 
 	void handleSelection(QueryToken&);
 
+	void handleIsSelecting(QueryToken&);
+
+	void handleSelectingMultipleClause(QueryToken&);
+
 	void setIdentifierToQueryTokenType(QueryToken&);
 
 	void addEntityToQuery(QueryToken&);
