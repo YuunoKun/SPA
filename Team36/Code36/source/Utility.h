@@ -39,4 +39,7 @@ public:
 
 	static EntityType queryTokenTypeToEntityType(QueryToken::QueryTokenType&);
 	static AttrRef queryTokenTypeToAttrRef(QueryToken::QueryTokenType&);
+
+private:
+	static bool isStmt(EntityType);
 };
