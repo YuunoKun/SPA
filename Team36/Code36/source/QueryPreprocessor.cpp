@@ -84,25 +84,7 @@ Query QueryPreprocessor::parse(std::string str) {
 		// First iteration, set identifier to correct type
 		// Check what is my previous token
 		if (!isSelect) {
-			if (endOfCurrentDeclaration) {
-				setIdentifierToQueryTokenType(tokens[i]);
-				haveNextDeclaration = true;
-				endOfCurrentDeclaration = false;
-			}
-			else if (haveNextDeclaration && tokens[i].type == QueryToken::QueryTokenType::IDENTIFIER) {
-				addEntityToQuery(tokens[i]);
-				haveNextDeclaration = false;
-			}
-			else if (!haveNextDeclaration && !endOfCurrentDeclaration && tokens[i].type == QueryToken::QueryTokenType::TERMINATOR) {
-				endOfCurrentDeclaration = true;
-			}
-			else if (!haveNextDeclaration && !endOfCurrentDeclaration && tokens[i].type == QueryToken::QueryTokenType::COMMA) {
-				haveNextDeclaration = true;
-			}
-			else {
-				throw SyntacticErrorException("Invalid declaration");
-			}
-			prevToken = tokens[i];
+			handleDeclaration(tokens[i]);
 		}
 		// assign pattern ; Select pattern pattern pattern (_,_)
 		else if (isSelect) {
@@ -311,6 +293,31 @@ Query QueryPreprocessor::parse(std::string str) {
 	queryValidator.validateQuery(query, endOfCurrentClauses);
 
 	return QueryPreprocessor::returnAndResetQuery();
+}
+
+void QueryPreprocessor::handleDeclaration(QueryToken& token) {
+	if (endOfCurrentDeclaration) {
+		setIdentifierToQueryTokenType(token);
+		haveNextDeclaration = true;
+		endOfCurrentDeclaration = false;
+	}
+	else if (haveNextDeclaration && token.type == QueryToken::QueryTokenType::IDENTIFIER) {
+		addEntityToQuery(token);
+		haveNextDeclaration = false;
+	}
+	else if (!haveNextDeclaration && !endOfCurrentDeclaration && token.type == QueryToken::QueryTokenType::TERMINATOR) {
+		endOfCurrentDeclaration = true;
+	}
+	else if (!haveNextDeclaration && !endOfCurrentDeclaration && token.type == QueryToken::QueryTokenType::COMMA) {
+		haveNextDeclaration = true;
+	}
+	else {
+		throw SyntacticErrorException("Invalid declaration");
+	}
+	prevToken = token;
+}
+
+void QueryPreprocessor::handleSelection(QueryToken& token) {
 }
 
 void QueryPreprocessor::setIdentifierToQueryTokenType(QueryToken& token) {

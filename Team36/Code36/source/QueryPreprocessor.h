@@ -48,6 +48,10 @@ private:
 
 	// Methods
 
+	void handleDeclaration(QueryToken&);
+
+	void handleSelection(QueryToken&);
+
 	void setIdentifierToQueryTokenType(QueryToken&);
 
 	void addEntityToQuery(QueryToken&);
