@@ -1,0 +1,21 @@
+
+		  procedure main {
+			mainX = 1;
+			read readVar;
+			print printVar;
+			beforeIf = beforeIf * mainX;
+			if(mainIfCond==13) then {
+				beforeCall = beforeCall + 2;
+				call p2;
+				afterCall = afterCall + 4;
+			} else {
+				beforeWhile = beforeWhile;
+				while(whileCond < 15) {
+					inWhile = inWhile;
+				}
+				afterWhile = afterWhile;}
+			afterIf = afterIf;}
+		 
+		 procedure p2 {
+			p2Var = p2Var - 11;
+		 }
