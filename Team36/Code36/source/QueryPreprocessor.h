@@ -57,6 +57,8 @@ private:
 
 	void handleSelectingMultipleClause(QueryToken&);
 
+	void handleWithinParameter(QueryToken&);
+
 	void setIdentifierToQueryTokenType(QueryToken&);
 
 	void addEntityToQuery(QueryToken&);
