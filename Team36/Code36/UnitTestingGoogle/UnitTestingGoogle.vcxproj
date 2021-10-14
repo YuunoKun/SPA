@@ -49,7 +49,10 @@
     <ClCompile Include="FSMTest.cpp" />
     <ClCompile Include="NextEvaluatorTest.cpp" />
     <ClCompile Include="ParserTest.cpp" />
-    <ClCompile Include="PatternEvaluatorTest.cpp" />
+    <ClCompile Include="PatternAssignEvaluatorTest.cpp" />
+    <ClCompile Include="PatternIfEvaluatorTest.cpp" />
+    <ClCompile Include="PatternsEvaluatorTest.cpp" />
+    <ClCompile Include="PatternWhileEvaluatorTest.cpp" />
     <ClCompile Include="PKBAdapterTest.cpp" />
     <ClCompile Include="QueryEvaluatorMultiClausesTest.cpp" />
     <ClCompile Include="QueryEvaluatorPatternTest.cpp" />
@@ -66,7 +69,14 @@
     <ClCompile Include="ModifiesSEvaluatorTest.cpp" />
     <ClCompile Include="ModifiesPEvaluatorTest.cpp" />
     <ClCompile Include="QueryPatternRelRefParserTest.cpp" />
+	<ClCompile Include="NextParserTest.cpp" />
+	<ClCompile Include="NextTParserTest.cpp" />
+	<ClCompile Include="AssignPatternParserTest.cpp" />
+	<ClCompile Include="IfPatternParserTest.cpp" />
+	<ClCompile Include="WhilePatternParserTest.cpp" />
     <ClCompile Include="QueryOptimizerTest.cpp" />
+    <ClCompile Include="CFGNodeTest.cpp" />
+    <ClCompile Include="CFGTest.cpp" />
     <ClCompile Include="UsesSEvaluatorTest.cpp" />
     <ClCompile Include="UsesPEvaluatorTest.cpp" />
     <ClCompile Include="RelRefTest.cpp" />

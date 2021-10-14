@@ -8,6 +8,7 @@
 #include "Procedure.h"
 #include "Statement.h"
 #include "ExprParser.h"
+#include "CFG.h"
 
 namespace SourceProcessor {
 	class DesignExtractor : public Extractor {
@@ -89,5 +90,7 @@ namespace SourceProcessor {
 
 		void populateIfs(PKB&);
 		void populateWhiles(PKB&);
+
+		CFG* generateCFG(std::vector<stmt_index>);
 	};
 } // namespace SourceProcessor

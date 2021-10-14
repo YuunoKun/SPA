@@ -89,6 +89,50 @@ bool QueryPatternRelRefParser::isEntRef(Query& query, std::vector<QueryToken> to
     }
 }
 
+bool QueryPatternRelRefParser::isLineRef(Query& query, std::vector<QueryToken> token_chain) {
+
+    // no args found, throw syntax errors
+    if (token_chain.size() == 0) {
+        throw SyntacticErrorException("Invalid lineRef arguments");
+    }
+
+    // more than 1 args found. possible entref
+    if (token_chain.size() > 1) {
+        return false;
+    }
+
+    QueryToken token = token_chain[0];
+
+    //if integer, return true
+    if (token.type == QueryToken::CONSTANT) {
+        return true;
+    }
+
+    if (token.type == QueryToken::WILDCARD) {
+        return true;
+    }
+
+    // check synonym if is program lines
+    if (token.type == QueryToken::IDENTIFIER) {
+        std::unordered_map<std::string, Entity> ent_chain = query.getEntities();
+        if (ent_chain.find(token.token_value) != ent_chain.end()) {
+            return ent_chain.at(token.token_value).getType() == EntityType::STMT ||
+                ent_chain.at(token.token_value).getType() == EntityType::READ ||
+                ent_chain.at(token.token_value).getType() == EntityType::PRINT ||
+                ent_chain.at(token.token_value).getType() == EntityType::CALL ||
+                ent_chain.at(token.token_value).getType() == EntityType::WHILE ||
+                ent_chain.at(token.token_value).getType() == EntityType::IF ||
+                ent_chain.at(token.token_value).getType() == EntityType::ASSIGN;
+        }
+        else {
+            // Undeclared Syn, Cannot find Entity in Query
+            throw SyntacticErrorException("Undeclared lineRef");
+        }
+    }
+
+    return false;
+}
+
 bool QueryPatternRelRefParser::isExpr(std::vector<QueryToken> token_chain) {
     
     size_t token_chain_size = token_chain.size();
@@ -136,12 +180,15 @@ bool QueryPatternRelRefParser::isCorrectSynEntRef(Query& query, std::vector<Quer
     }
 }
 
-bool QueryPatternRelRefParser::isCommaRef(std::vector<QueryToken> token_chain) {
+bool QueryPatternRelRefParser::isWildCard(std::vector<QueryToken> token_chain) {
     if (token_chain.size() == 0) {
-        throw std::invalid_argument("Invalid argument, no comma found");
-    }
-    if (token_chain[0].type != QueryToken::COMMA) {
-        throw std::invalid_argument("Invalid argument, expected a comma");
+        throw SyntacticErrorException("Invalid arguments, wildcards only");
+    } else if (token_chain.size() > 1) {
+        throw SyntacticErrorException("Invalid arguments, wildcards only");
+    } else if (token_chain[0].type == QueryToken::WILDCARD) {
+        return true;
+    } else {
+        return false;
     }
 }
 
@@ -195,6 +242,28 @@ Entity QueryPatternRelRefParser::setEntRef(Query& query,
   throw SemanticErrorException("Unknown entRef");
 }
 
+Entity QueryPatternRelRefParser::setLineRef(Query& query, QueryToken token) {
+    // synonym | ‘_’ | INTEGER
+
+    // wild card check
+    if (token.type == QueryToken::WILDCARD) {
+        return Entity(EntityType::WILD);
+    }
+
+    // is INTEGER, constant type
+    if (token.type == QueryToken::CONSTANT) {
+        return Entity(EntityType::CONSTANT, token.token_value);
+    }
+
+    // synonym check
+    std::unordered_map<std::string, Entity> ent_chain = query.getEntities();
+    if (ent_chain.find(token.token_value) != ent_chain.end()) {
+        return ent_chain.at(token.token_value);
+    }
+
+    throw SemanticErrorException("Unknown lineRef");
+}
+
 Entity QueryPatternRelRefParser::setCallEntRef(Query& query,
     std::vector<QueryToken> token_chain) {
     // entRef : synonym | ‘_’ | ‘"’ IDENT ‘"’
@@ -230,10 +299,18 @@ std::string QueryPatternRelRefParser::setExpr(std::vector<QueryToken> token_chai
         return result;
     } else {
         for (size_t i = 0; i < token_chain.size(); i++) {
-            if (token_chain[i].type != QueryToken::WILDCARD &&
-                token_chain[i].type != QueryToken::QUOTATION_OPEN &&
-                token_chain[i].type != QueryToken::QUOTATION_CLOSE) {
+            if (token_chain[i].type == QueryToken::IDENTIFIER|| token_chain[i].type == QueryToken::CONSTANT) {
                 result += token_chain[i].token_value;
+            } else if (token_chain[i].type == QueryToken::PLUS) {
+                result += "+";
+            } else if (token_chain[i].type == QueryToken::MINUS) {
+                result += "-";
+            } else if (token_chain[i].type == QueryToken::MUL) {
+                result += "*";
+            } else if (token_chain[i].type == QueryToken::DIV) {
+                result += "/";
+            } else if (token_chain[i].type == QueryToken::MOD) {
+                result += "%";
             }
         }
         return result;
@@ -251,23 +328,25 @@ void QueryPatternRelRefParser::parseParameterSuchThat(
 
         std::vector<QueryToken> temp_token_chain_1;
         std::vector<QueryToken> temp_token_chain_2;
-        bool comma_found = false;
+        int comma_count = 0;
         bool is_MODIFIES_S = true;
         size_t token_chain_size = token_chain.size();
         for (size_t i = 0; i < token_chain_size; i++) {
             if (token_chain[0].type == QueryToken::COMMA) {
                 token_chain.erase(token_chain.begin());
-                comma_found = true;
+                comma_count ++;
             }
-            else if (!comma_found) {
+            else if (comma_count == 0) {
                 // 1st param
                 temp_token_chain_1.push_back(token_chain[0]);
                 token_chain.erase(token_chain.begin());
             }
-            else {
+            else if (comma_count == 1) {
                 // 2nd param
                 temp_token_chain_2.push_back(token_chain[0]);
                 token_chain.erase(token_chain.begin());
+            } else {
+                throw SyntacticErrorException("Invalid parameters for Modifies");
             }
         }
         
@@ -319,23 +398,25 @@ void QueryPatternRelRefParser::parseParameterSuchThat(
         // entRef, entRef
         std::vector<QueryToken> temp_token_chain_1;
         std::vector<QueryToken> temp_token_chain_2;
-        bool comma_found = false;
+        int comma_count = false;
         bool is_USES_S = true;
         size_t token_chain_size = token_chain.size();
         for (size_t i = 0; i < token_chain_size; i++) {
             if (token_chain[0].type == QueryToken::COMMA) {
                 token_chain.erase(token_chain.begin());
-                comma_found = true;
+                comma_count ++;
             }
-            else if (!comma_found) {
+            else if (comma_count == 0) {
                 // 1st param
                 temp_token_chain_1.push_back(token_chain[0]);
                 token_chain.erase(token_chain.begin());
             }
-            else {
+            else if (comma_count == 1) {
                 // 2nd param
                 temp_token_chain_2.push_back(token_chain[0]);
                 token_chain.erase(token_chain.begin());
+            } else {
+                throw SyntacticErrorException("Invalid parameters for Uses");
             }
         }
 
@@ -392,22 +473,24 @@ void QueryPatternRelRefParser::parseParameterSuchThat(
 
         std::vector<QueryToken> temp_token_chain_1;
         std::vector<QueryToken> temp_token_chain_2;
-        bool comma_found = false;
+        int comma_count = 0;
         size_t token_chain_size = token_chain.size();
         for (size_t i = 0; i < token_chain_size; i++) {
             if (token_chain[0].type == QueryToken::COMMA) {
                 token_chain.erase(token_chain.begin());
-                comma_found = true;
+                comma_count ++;
             }
-            else if (!comma_found) {
+            else if (comma_count == 0) {
                 // 1st param
                 temp_token_chain_1.push_back(token_chain[0]);
                 token_chain.erase(token_chain.begin());
             }
-            else {
+            else if (comma_count == 1) {
                 // 2nd param
                 temp_token_chain_2.push_back(token_chain[0]);
                 token_chain.erase(token_chain.begin());
+            } else {
+                throw SyntacticErrorException("Invalid parameters for Parent");
             }
         }
 
@@ -430,22 +513,24 @@ void QueryPatternRelRefParser::parseParameterSuchThat(
 
         std::vector<QueryToken> temp_token_chain_1;
         std::vector<QueryToken> temp_token_chain_2;
-        bool comma_found = false;
+        int comma_count = 0;
         size_t token_chain_size = token_chain.size();
         for (size_t i = 0; i < token_chain_size; i++) {
             if (token_chain[0].type == QueryToken::COMMA) {
                 token_chain.erase(token_chain.begin());
-                comma_found = true;
+                comma_count ++;
             }
-            else if (!comma_found) {
+            else if (comma_count == 0) {
                 // 1st param
                 temp_token_chain_1.push_back(token_chain[0]);
                 token_chain.erase(token_chain.begin());
             }
-            else {
+            else if (comma_count == 1) {
                 // 2nd param
                 temp_token_chain_2.push_back(token_chain[0]);
                 token_chain.erase(token_chain.begin());
+            } else {
+                throw SyntacticErrorException("Invalid parameters for Parent*");
             }
         }
 
@@ -468,22 +553,24 @@ void QueryPatternRelRefParser::parseParameterSuchThat(
 
         std::vector<QueryToken> temp_token_chain_1;
         std::vector<QueryToken> temp_token_chain_2;
-        bool comma_found = false;
+        int comma_count = false;
         size_t token_chain_size = token_chain.size();
         for (size_t i = 0; i < token_chain_size; i++) {
             if (token_chain[0].type == QueryToken::COMMA) {
                 token_chain.erase(token_chain.begin());
-                comma_found = true;
+                comma_count ++;
             }
-            else if (!comma_found) {
+            else if (comma_count == 0) {
                 // 1st param
                 temp_token_chain_1.push_back(token_chain[0]);
                 token_chain.erase(token_chain.begin());
             }
-            else {
+            else if (comma_count == 1){
                 // 2nd param
                 temp_token_chain_2.push_back(token_chain[0]);
                 token_chain.erase(token_chain.begin());
+            } else {
+                throw SyntacticErrorException("Invalid parameters for Follows");
             }
         }
 
@@ -506,22 +593,24 @@ void QueryPatternRelRefParser::parseParameterSuchThat(
 
         std::vector<QueryToken> temp_token_chain_1;
         std::vector<QueryToken> temp_token_chain_2;
-        bool comma_found = false;
+        int comma_count = false;
         size_t token_chain_size = token_chain.size();
         for (size_t i = 0; i < token_chain_size; i++) {
             if (token_chain[0].type == QueryToken::COMMA) {
                 token_chain.erase(token_chain.begin());
-                comma_found = true;
+                comma_count ++;
             }
-            else if (!comma_found) {
+            else if (comma_count == 0) {
                 // 1st param
                 temp_token_chain_1.push_back(token_chain[0]);
                 token_chain.erase(token_chain.begin());
             }
-            else {
+            else if (comma_count == 1) {
                 // 2nd param
                 temp_token_chain_2.push_back(token_chain[0]);
                 token_chain.erase(token_chain.begin());
+            } else {
+                throw SyntacticErrorException("Invalid parameters for Follows*");
             }
         }
 
@@ -544,22 +633,24 @@ void QueryPatternRelRefParser::parseParameterSuchThat(
 
         std::vector<QueryToken> temp_token_chain_1;
         std::vector<QueryToken> temp_token_chain_2;
-        bool comma_found = false;
+        int comma_count = 0;
         size_t token_chain_size = token_chain.size();
         for (size_t i = 0; i < token_chain_size; i++) {
             if (token_chain[0].type == QueryToken::COMMA) {
                 token_chain.erase(token_chain.begin());
-                comma_found = true;
+                comma_count ++;
             }
-            else if (!comma_found) {
+            else if (comma_count == 0) {
                 // 1st param
                 temp_token_chain_1.push_back(token_chain[0]);
                 token_chain.erase(token_chain.begin());
             }
-            else {
+            else if (comma_count == 1) {
                 // 2nd param
                 temp_token_chain_2.push_back(token_chain[0]);
                 token_chain.erase(token_chain.begin());
+            } else {
+                throw SyntacticErrorException("Invalid parameters for Calls");
             }
         }
 
@@ -583,22 +674,24 @@ void QueryPatternRelRefParser::parseParameterSuchThat(
 
         std::vector<QueryToken> temp_token_chain_1;
         std::vector<QueryToken> temp_token_chain_2;
-        bool comma_found = false;
+        int comma_count = 0;
         size_t token_chain_size = token_chain.size();
         for (size_t i = 0; i < token_chain_size; i++) {
             if (token_chain[0].type == QueryToken::COMMA) {
                 token_chain.erase(token_chain.begin());
-                comma_found = true;
+                comma_count ++;
             }
-            else if (!comma_found) {
+            else if (comma_count == 0) {
                 // 1st param
                 temp_token_chain_1.push_back(token_chain[0]);
                 token_chain.erase(token_chain.begin());
             }
-            else {
+            else if (comma_count == 1) {
                 // 2nd param
                 temp_token_chain_2.push_back(token_chain[0]);
                 token_chain.erase(token_chain.begin());
+            } else {
+                throw SyntacticErrorException("Invalid parameters for Calls*");
             }
         }
 
@@ -619,103 +712,25 @@ void QueryPatternRelRefParser::parseParameterSuchThat(
 
     case QueryToken::AFFECTS: {
         // stmtRef , stmtRef
-        if (!isStmtRef(query, token_chain)) {
-            throw std::invalid_argument("Invalid parameters for Affects");
-        }
-        QueryToken stmt = token_chain[0];
-        token_chain.erase(token_chain.begin(), token_chain.begin() + 1);
 
-        isCommaRef(token_chain);
-        token_chain.erase(token_chain.begin(), token_chain.begin() + 1);
-
-        if (!isStmtRef(query, token_chain)) {
-            throw std::invalid_argument("Invalid parameters for Affects");
-        }
-        QueryToken stmt2 = token_chain[0];
-        token_chain.erase(token_chain.begin(), token_chain.begin() + 1);
-        if (token_chain.size() != 0) {
-            throw std::invalid_argument("Unexpected parameters for Affects");
-        }
-        //TODO 
-        query.addRelation(RelRef(RelType::FOLLOWS,
-            setStmtRef(query, stmt),
-            setStmtRef(query, stmt2)));
         break;
     }
 
     case QueryToken::AFFECTS_T: {
         // stmtRef , stmtRef
-        if (!isStmtRef(query, token_chain)) {
-            throw std::invalid_argument("Invalid parameters for Affects*");
-        }
-        QueryToken stmt = token_chain[0];
-        token_chain.erase(token_chain.begin(), token_chain.begin() + 1);
 
-        isCommaRef(token_chain);
-        token_chain.erase(token_chain.begin(), token_chain.begin() + 1);
-
-        if (!isStmtRef(query, token_chain)) {
-            throw std::invalid_argument("Invalid parameters for Affects*");
-        }
-        QueryToken stmt2 = token_chain[0];
-        token_chain.erase(token_chain.begin(), token_chain.begin() + 1);
-        if (token_chain.size() != 0) {
-            throw std::invalid_argument("Unexpected parameters for Affects*");
-        }
-        //TODO
-        query.addRelation(RelRef(RelType::FOLLOWS,
-            setStmtRef(query, stmt),
-            setStmtRef(query, stmt2)));
         break;
     }
-    //TODO
+
     case QueryToken::NEXT: {
-        // stmtRef , stmtRef
-        if (!isStmtRef(query, token_chain)) {
-            throw std::invalid_argument("Invalid parameters for Follows");
-        }
-        QueryToken stmt = token_chain[0];
-        token_chain.erase(token_chain.begin(), token_chain.begin() + 1);
-
-        isCommaRef(token_chain);
-        token_chain.erase(token_chain.begin(), token_chain.begin() + 1);
-
-        if (!isStmtRef(query, token_chain)) {
-            throw std::invalid_argument("Invalid parameters for Follows");
-        }
-        QueryToken stmt2 = token_chain[0];
-        token_chain.erase(token_chain.begin(), token_chain.begin() + 1);
-        if (token_chain.size() != 0) {
-            throw std::invalid_argument("Unexpected parameters for Follows");
-        }
-        query.addRelation(RelRef(RelType::FOLLOWS,
-            setStmtRef(query, stmt),
-            setStmtRef(query, stmt2)));
+        NextParser nextParser;
+        nextParser.parseNext(query, token_chain);
         break;
     }
-    //TODO
+    
     case QueryToken::NEXT_T: {
-        // stmtRef , stmtRef
-        if (!isStmtRef(query, token_chain)) {
-            throw std::invalid_argument("Invalid parameters for Follows");
-        }
-        QueryToken stmt = token_chain[0];
-        token_chain.erase(token_chain.begin(), token_chain.begin() + 1);
-
-        isCommaRef(token_chain);
-        token_chain.erase(token_chain.begin(), token_chain.begin() + 1);
-
-        if (!isStmtRef(query, token_chain)) {
-            throw std::invalid_argument("Invalid parameters for Follows");
-        }
-        QueryToken stmt2 = token_chain[0];
-        token_chain.erase(token_chain.begin(), token_chain.begin() + 1);
-        if (token_chain.size() != 0) {
-            throw std::invalid_argument("Unexpected parameters for Follows");
-        }
-        query.addRelation(RelRef(RelType::FOLLOWS,
-            setStmtRef(query, stmt),
-            setStmtRef(query, stmt2)));
+        NextTParser nextTParser;
+        nextTParser.parseNextT(query, token_chain);
         break;
     }
 
@@ -731,8 +746,19 @@ void QueryPatternRelRefParser::parseParameterPattern(
     switch (synonym_ent.getType()) {
     case ASSIGN: {
         AssignPatternParser parser;
-        parser.parseParameterAssign(query, synonym_ent, token_chain);
+        parser.parseAssign(query, synonym_ent, token_chain);
+        break;
         }
+    case IF: {
+        IfPatternParser parser;
+        parser.parseIf(query, synonym_ent, token_chain);
+        break;
+    }
+    case WHILE: {
+        WhilePatternParser parser;
+        parser.parseWhile(query, synonym_ent, token_chain);
+        break;
+    }
     }
 
 }

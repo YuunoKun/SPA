@@ -42,9 +42,9 @@ void TestWrapper::evaluate(std::string query, std::list<std::string>& results) {
 
 	  // store the answers to the query in the results list (it is initially empty)
 	  // each result must be a string.
-	QuerySystem querySystem;
-	std::list<std::string> queryResult = querySystem.processQuery(query);
-	for each (std::string s in queryResult) {
+	QuerySystem query_system;
+	std::list<std::string> query_result = query_system.processQuery(query);
+	for each (std::string s in query_result) {
 		results.push_back(s);
 	}
 }
