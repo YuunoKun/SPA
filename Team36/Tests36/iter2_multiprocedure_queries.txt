@@ -1064,12 +1064,12 @@ Select ifs pattern ifs(_,_,_) and a(_, _"e*5"_)
 8, 19, 20, 23, 42
 5000
 215 - if pattern and assign pattern, 1 common synonym
-if ifs; assign a;
+if ifs; assign a; variable v;
 Select ifs pattern ifs(v,_,_) and a(v, _"e*5"_)
 8, 20
 5000
 216 - if pattern and assign pattern, 1 common synonym
-if ifs; assign a;
+if ifs; assign a; variable v;
 Select v pattern ifs(v,_,_) and a(v, _"e*5"_)
 c
 5000
@@ -1079,12 +1079,12 @@ Select ifs pattern ifs("a",_,_) and w("b",_)
 19
 5000
 218 - if pattern and while pattern, 1 common synonym
-if ifs; while w;
+if ifs; while w; variable v;
 Select ifs pattern ifs(v,_,_) and w(v,_)
 8, 19, 20, 42
 5000
 219 - if pattern and while pattern, 1 common synonym
-if ifs; while w;
+if ifs; while w; variable v;
 Select v pattern ifs(v,_,_) and w(v,_)
 d, c, a, b
 5000
