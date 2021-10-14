@@ -3,6 +3,7 @@
 #include "pch.h"
 #include "PKB.h"
 #include "QuerySystem.h"
+#include "ExprParser.h"
 
 namespace UnitTesting {
 	class PQLPKBTest : public testing::Test {
@@ -52,6 +53,14 @@ namespace UnitTesting {
 			PKB::getInstance().addExprTree(std::stoi(MODIFIES_LEFT4), EXPRESSIONNODE_2);
 			PKB::getInstance().generateFollowsT();
 			PKB::getInstance().generateParentT();
+			PKB::getInstance().addIf(std::stoi(IF_LEFT1), IF_RIGHT1);
+			PKB::getInstance().addIf(std::stoi(IF_LEFT2), IF_RIGHT2);
+			PKB::getInstance().addWhile(std::stoi(WHILE_LEFT1), WHILE_RIGHT1);
+			PKB::getInstance().addWhile(std::stoi(WHILE_LEFT2), WHILE_RIGHT2);
+			PKB::getInstance().addCallsP(p1, p2);
+			//PKB::getInstance().addNext(p1, p2);
+
+
 		}
 
 		QuerySystem qs;
@@ -160,6 +169,9 @@ namespace UnitTesting {
 		// Parent*(1, s) return stmt 2, 3, 4
 		const std::list<std::string> EXPECTED_PARENTT = { IF2, WHILE1, WHILE2 };
 
+		//Follows(s,1) and Parent(1,s) return stmt 2
+		const std::list<std::string> EXPECTED_FOLLOWS_PARENT = { IF2 };
+
 		const std::vector<std::string> PARENT_LEFTS = { PARENT_LEFT1, PARENT_LEFT2, PARENT_LEFT3 };
 		const std::vector<std::string> PARENT_RIGHTS = { PARENT_RIGHT1, PARENT_RIGHT2, PARENT_RIGHT3 };
 
@@ -189,6 +201,9 @@ namespace UnitTesting {
 		const std::list<std::string> EXPECTED_ASSIGN_PATTERN1 = { ASSIGN1 };
 		const std::list<std::string> EXPECTED_ASSIGN_PATTERN2 = { ASSIGN2, ASSIGN1 };
 		const std::list<std::string> EXPECTED_ASSIGN_PATTERN3 = { ASSIGN2 };
+		const std::list<std::string> EXPECTED_ASSIGN_PATTERN4 = { ASSIGN2 };
+		const std::list<std::string> EXPECTED_ASSIGN_PATTERN5 = { ASSIGN2 };
+
 
 		const std::vector<std::string> MODIFIES_LEFTS = { MODIFIES_LEFT1, MODIFIES_LEFT2, MODIFIES_LEFT3, MODIFIES_LEFT4 };
 		const std::vector<std::string> MODIFIES_RIGHTS = { MODIFIES_RIGHT1, MODIFIES_RIGHT2, MODIFIES_RIGHT3, MODIFIES_RIGHT4 };
@@ -207,7 +222,6 @@ namespace UnitTesting {
 		const std::list<std::string> EXPECTED_USES3 = { y, x };
 
 
-
 		const std::vector<std::string> USES_LEFTS = { USES_LEFT1, USES_LEFT2 };
 		const std::vector<std::string> USES_RIGHTS = { USES_RIGHT1, USES_RIGHT2 };
 
@@ -216,6 +230,32 @@ namespace UnitTesting {
 
 		//const Synonym COMMON_SYNONYM1 = { "cs1" };
 		//const Synonym COMMON_SYNONYM2 = { "cs2" };
+
+		const std::list<std::string> EXPECTED_P_CALLS = { p1 };
+
+		const std::string IF_LEFT1 = IF1;
+		const std::string IF_LEFT2 = IF2;
+		const std::string IF_RIGHT1 = x;
+		const std::string IF_RIGHT2 = y;
+		//const std::string IF_RIGHT_UNUSE = z;
+		const std::vector<std::string> IF_LEFTS = { IF_LEFT1, IF_LEFT2 };
+		const std::vector<std::string> IF_RIGHTS = { IF_RIGHT1, IF_RIGHT2 };
+		const std::list<std::string> EXPECTED_IFS1 = { IF_LEFT1};
+		const std::list<std::string> EXPECTED_IFS2 = { IF_LEFT2 };
+		const std::list<std::string> EXPECTED_IFS3 = { IF_LEFT1, IF_LEFT2 };
+
+		const std::string WHILE_LEFT1 = WHILE1;
+		const std::string WHILE_LEFT2 = WHILE2;
+		const std::string WHILE_RIGHT1 = x;
+		const std::string WHILE_RIGHT2 = y;
+		//const std::string WHILE_RIGHT_UNUSE = z;
+		const std::vector<std::string> WHILE_LEFTS = { WHILE_LEFT1, WHILE_LEFT2 };
+		const std::vector<std::string> WHILE_RIGHTS = { WHILE_RIGHT1, WHILE_RIGHT2 };
+		const std::list<std::string> EXPECTED_WHILES1 = { WHILE_LEFT1 };
+		const std::list<std::string> EXPECTED_WHILES2 = { WHILE_LEFT2 };
+		const std::list<std::string> EXPECTED_WHILES3 = { WHILE_LEFT1, WHILE_LEFT2 };
+
+
 
 		const std::list<std::string> EMPTY_RESULT = {};
 
@@ -372,25 +412,82 @@ namespace UnitTesting {
 		validateAnswer(EXPECTED_FOLLOWST, ans);
 	}
 
+	// test for "and" in between multiple relref clauses
+	TEST_F(PQLPKBTest, multipleRelRef) {
+		std::list<std::string> ans = qs.processQuery("stmt s; Select s such that Follows(1,s) and Parent(1,s)");
+
+		validateAnswer(EXPECTED_FOLLOWS_PARENT, ans);
+	}
+
+
 	// one pattern cl ----------------------------------------------------------------------------------------------------------------
 
-	TEST_F(PQLPKBTest, PatternTest1) {
+	TEST_F(PQLPKBTest, PatternAssignTest1) {
 		std::list<std::string> ans = qs.processQuery("assign a; Select a pattern a (_,\"x\")");
 
 		validateAnswer(EXPECTED_ASSIGN_PATTERN1, ans);
 	}
 
-	TEST_F(PQLPKBTest, PatternTest2) {
+	TEST_F(PQLPKBTest, PatternAssignTest2) {
 		std::list<std::string> ans = qs.processQuery("assign a; Select a pattern a (_,_\"x\"_)");
 
 		validateAnswer(EXPECTED_ASSIGN_PATTERN2, ans);
 	}
 
-	TEST_F(PQLPKBTest, PatternTest3) {
+	TEST_F(PQLPKBTest, PatternAssignTest3) {
 		std::list<std::string> ans = qs.processQuery("assign a; Select a pattern a (_,_\"5\"_)");
 
 		validateAnswer(EXPECTED_ASSIGN_PATTERN3, ans);
 	}
+
+	TEST_F(PQLPKBTest, PatternAssignTest4) {
+		std::list<std::string> ans = qs.processQuery("assign a; Select a pattern a (_,\"x + (y * 5)\")");
+
+		validateAnswer(EXPECTED_ASSIGN_PATTERN5, ans);
+	}
+
+	TEST_F(PQLPKBTest, PatternAssignTest5) {
+		std::list<std::string> ans = qs.processQuery("assign a; Select a pattern a (_,_\"x + (y * 5)\"_)");
+
+		validateAnswer(EXPECTED_ASSIGN_PATTERN5, ans);
+	}
+
+	TEST_F(PQLPKBTest, PatternIfTest) {
+		std::list<std::string> ans = qs.processQuery("if ifs; Select ifs pattern ifs(\"x\", _, _)");
+
+		validateAnswer(EXPECTED_IFS1, ans);
+	}
+
+	TEST_F(PQLPKBTest, PatternIfTest2) {
+		std::list<std::string> ans = qs.processQuery("if ifs; Select ifs pattern ifs(\"y\",_,_)");
+
+		validateAnswer(EXPECTED_IFS2, ans);
+	}
+
+	TEST_F(PQLPKBTest, PatternIfTest3) {
+		std::list<std::string> ans = qs.processQuery("if ifs; Select ifs pattern ifs(_,_,_)");
+
+		validateAnswer(EXPECTED_IFS3, ans);
+	}
+
+	TEST_F(PQLPKBTest, PatternWhileTest) {
+		std::list<std::string> ans = qs.processQuery("while w; Select w pattern w(\"x\", _)");
+
+		validateAnswer(EXPECTED_WHILES1, ans);
+	}
+
+	TEST_F(PQLPKBTest, PatternWhileTest2) {
+		std::list<std::string> ans = qs.processQuery("while w; Select w pattern w(\"y\",_)");
+
+		validateAnswer(EXPECTED_WHILES2, ans);
+	}
+
+	TEST_F(PQLPKBTest, PatternWhileTest3) {
+		std::list<std::string> ans = qs.processQuery("while w; Select w pattern w(_,_)");
+
+		validateAnswer(EXPECTED_WHILES3, ans);
+	}
+
 
 	// one st and one pattern cl -----------------------------------------------------------------------------------------------------
 	TEST_F(PQLPKBTest, SuchThatPatternTest1) {
@@ -403,5 +500,12 @@ namespace UnitTesting {
 		std::list<std::string> ans = qs.processQuery("stmt s; assign a; variable v; Select a pattern a(_,\"x\") such that Modifies(s, v) ");
 
 		validateAnswer(EXPECTED_ST_PATTERN1, ans);
+	}
+
+	// calls
+	TEST_F(PQLPKBTest, CallsTest) {
+		std::list<std::string> ans = qs.processQuery("procedure p, q; Select p such that Calls(p, q) ");
+
+		validateAnswer(EXPECTED_P_CALLS, ans);
 	}
 }

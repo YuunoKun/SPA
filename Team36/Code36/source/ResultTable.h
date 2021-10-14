@@ -6,8 +6,10 @@
 class ResultTable {
 public:
 	ResultTable(Entity&, std::vector<StmtInfo>&);
+	ResultTable(Entity&, std::vector<stmt_index>&);
 	ResultTable(Entity&, std::vector<std::string>&);
 	ResultTable(std::pair<Entity, Entity>, std::vector<std::pair<std::string, std::string>>&);
+	ResultTable(std::pair<Entity, Entity>, std::vector<std::pair<stmt_index, std::string>>&);
 	ResultTable(std::pair<Entity, Entity>, std::vector<std::pair<StmtInfo, StmtInfo>>&);
 	ResultTable(std::pair<Entity, Entity>, std::vector<std::pair<StmtInfo, std::string>>&);
 
@@ -28,13 +30,13 @@ private:
 	void addHeader(std::vector<Entity>);
 
 	std::vector<Entity> header;
-	std::unordered_set<std::string> headerSet;
+	std::unordered_set<std::string> header_set;
 	std::vector<std::vector<std::string>> table;
 
 	int getHeaderIndex(Entity);
 
-	void filterTable(ResultTable, Entity);
-	void filterTable(ResultTable, Entity, Entity);
+	void filter_table(ResultTable, Entity);
+	void filter_table(ResultTable, Entity, Entity);
 
 	void joinTable(ResultTable, Entity);
 };

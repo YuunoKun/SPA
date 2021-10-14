@@ -4,6 +4,7 @@
 #include "PKBAdapter.h"
 #include "PKB.h"
 #include "Common.h"
+#include "ExprParser.h"
 
 namespace UnitTesting {
 	class QueryEvaluatorMultiClausesTest : public testing::Test {
@@ -59,13 +60,13 @@ namespace UnitTesting {
 				if (it.getType() == WILD) {
 					continue;
 				}
-				bool isInvalid = true;
+				bool is_invalid = true;
 				for (std::string valid : validStmt) {
 					if (it.getValue() == valid) {
-						isInvalid = false;
+						is_invalid = false;
 					}
 				}
-				if (isInvalid) {
+				if (is_invalid) {
 					invalid.push_back(it);
 				}
 			}
@@ -85,90 +86,65 @@ namespace UnitTesting {
 			return q;
 		}
 
-		void validate(std::vector<Pattern> patterns, std::vector<RelRef> relations) {
-			for (unsigned int k = 0; k < patterns.size(); k++) {
-				for (unsigned int i = 0; i < patterns.size(); i++) {
-					for (unsigned int j = 0; j < ALL_SELECT.size(); j++) {
-						Query q = initQuery({ relations[k] }, { patterns[i] }, ALL_SELECT[j]);
-						EXPECT_EQ(evaluator.evaluateQuery(q).front(), ALL_RESULT[j]) << "Error at results : " << i + 1 << " : " << j + 1;
-						q = initQuery({ relations[k] }, { patterns[i] }, SELECT_BOOLEAN);
-						EXPECT_EQ(evaluator.evaluateQuery(q).front(), BOOLEAN_TRUE_RESULT) << "Error at results : " << i + 1 << " : " << j + 1;
-					}
+		void validate(Query q, std::list<std::string> result, int i, int j) {
+			EXPECT_EQ(evaluator.evaluateQuery(q).front(), result) << "Error at results : " << i + 1 << " : " << j + 1;
+		}
+
+		void validate(std::vector<RelRef> relations, std::vector<Pattern> patterns, int i, int j) {
+
+			validate(initQuery(relations, patterns, ALL_SELECT[i % ALL_SELECT.size()]), ALL_RESULT[i % ALL_SELECT.size()], i, j);
+			validate(initQuery(relations, patterns, SELECT_BOOLEAN), BOOLEAN_TRUE_RESULT, i, j); 
+		}
+
+		void validateEmpty(std::vector<RelRef> relations, std::vector<Pattern> patterns, int i, int j) {
+			validate(initQuery(relations, patterns, ALL_SELECT[i % ALL_SELECT.size()]), EMPTY_RESULT, i, j);
+			validate(initQuery(relations, patterns, SELECT_BOOLEAN), BOOLEAN_FALSE_RESULT, i, j);
+		}
+
+		void validate(std::vector<Pattern>& patterns, std::vector<RelRef>& relations) {
+			for (unsigned int i = 0; i < relations.size(); i++) {
+				for (unsigned int j = 0; j < patterns.size(); j++) {
+					validate({ relations[i] }, { patterns[j] }, i, j);
 				}
 			}
 		}
 
-		void validate(std::vector<Pattern> patterns, std::vector<RelRef> relations, std::vector<Entity> selected, std::vector<std::list<std::string>> results) {
-			for (unsigned int i = 0; i < patterns.size(); i++) {
-				Query q = initQuery({ relations[i] }, { patterns[i] }, selected[i]);
-				EXPECT_EQ(evaluator.evaluateQuery(q).front(), results[i]) << "Error at results : " << i + 1;
-				q = initQuery({ relations[i] }, { patterns[i] }, SELECT_BOOLEAN);
-				EXPECT_EQ(evaluator.evaluateQuery(q).front(), BOOLEAN_TRUE_RESULT) << "Error at results : " << i + 1;
-			}
-		}
-
-		void validate(std::vector<Pattern> patterns1, std::vector<Pattern> patterns2) {
-			for (unsigned int k = 0; k < patterns1.size(); k++) {
-				for (unsigned int i = 0; i < patterns2.size(); i++) {
-					for (unsigned int j = 0; j < ALL_SELECT.size(); j++) {
-						Query q = initQuery({ }, { patterns1[k], patterns2[i] }, ALL_SELECT[j]);
-						EXPECT_EQ(evaluator.evaluateQuery(q).front(), ALL_RESULT[j]) << "Error at results : " << i + 1 << " : " << j + 1;
-						q = initQuery({ }, { patterns1[k], patterns2[i] }, SELECT_BOOLEAN);
-						EXPECT_EQ(evaluator.evaluateQuery(q).front(), BOOLEAN_TRUE_RESULT) << "Error at results : " << i + 1 << " : " << j + 1;
-					}
+		void validate(std::vector<Pattern>& patterns1, std::vector<Pattern>& patterns2) {
+			for (unsigned int i = 0; i < patterns1.size(); i++) {
+				for (unsigned int j = 0; j < patterns2.size(); j++) {
+					validate({ },  { patterns1[i], patterns2[j] }, i, j);
 				}
 			}
 		}
 
-		void validate(std::vector<RelRef> relations1, std::vector<RelRef> relations2) {
-			for (unsigned int k = 0; k < relations1.size(); k++) {
-				for (unsigned int i = 0; i < relations2.size(); i++) {
-					for (unsigned int j = 0; j < ALL_SELECT.size(); j++) {
-						Query q = initQuery({ relations1[k], relations2[i] }, {  }, ALL_SELECT[j]);
-						EXPECT_EQ(evaluator.evaluateQuery(q).front(), ALL_RESULT[j]) << "Error at results : " << i + 1 << " : " << j + 1;
-						q = initQuery({ relations1[k], relations2[i] }, {  }, SELECT_BOOLEAN);
-						EXPECT_EQ(evaluator.evaluateQuery(q).front(), BOOLEAN_TRUE_RESULT) << "Error at results : " << i + 1 << " : " << j + 1;
-					}
+		void validate(std::vector<RelRef>& relations1, std::vector<RelRef>& relations2) {
+			for (unsigned int i = 0; i < relations1.size(); i++) {
+				for (unsigned int j = 0; j < relations2.size(); j++) {
+					validate({ relations1[i], relations2[j] }, { }, i, j);
 				}
 			}
 		}
 
-		void validateEmpty(std::vector<Pattern>& patterns, std::vector<RelRef> relations) {
-			for (unsigned int k = 0; k < patterns.size(); k++) {
-				for (unsigned int i = 0; i < patterns.size(); i++) {
-					for (unsigned int j = 0; j < ALL_SELECT.size(); j++) {
-						Query q = initQuery({ relations[k] }, { patterns[i] }, ALL_SELECT[j]);
-						EXPECT_EQ(evaluator.evaluateQuery(q).front(), EMPTY_RESULT) << "Error at results : " << i + 1 << " : " << j + 1;
-						q = initQuery({ relations[k] }, { patterns[i] }, SELECT_BOOLEAN);
-						EXPECT_EQ(evaluator.evaluateQuery(q).front(), BOOLEAN_FALSE_RESULT) << "Error at results : " << i + 1 << " : " << j + 1;
-
-					}
+		void validateEmpty(std::vector<Pattern>& patterns, std::vector<RelRef>& relations) {
+			for (unsigned int i = 0; i < relations.size(); i++) {
+				for (unsigned int j = 0; j < patterns.size(); j++) {
+					validateEmpty({ relations[i] }, { patterns[j] }, i, j);
 				}
 			}
 		}
 
-		void validateEmpty(std::vector<Pattern> patterns1, std::vector<Pattern> patterns2) {
-			for (unsigned int k = 0; k < patterns1.size(); k++) {
-				for (unsigned int i = 0; i < patterns2.size(); i++) {
-					for (unsigned int j = 0; j < ALL_SELECT.size(); j++) {
-						Query q = initQuery({ }, { patterns1[k], patterns2[i] }, ALL_SELECT[j]);
-						EXPECT_EQ(evaluator.evaluateQuery(q).front(), EMPTY_RESULT) << "Error at results : " << i + 1 << " : " << j + 1;
-						q = initQuery({ }, { patterns1[k], patterns2[i] }, SELECT_BOOLEAN);
-						EXPECT_EQ(evaluator.evaluateQuery(q).front(), BOOLEAN_FALSE_RESULT) << "Error at results : " << i + 1 << " : " << j + 1;
-					}
+		void validateEmpty(std::vector<Pattern>& patterns1, std::vector<Pattern>& patterns2) {
+			for (unsigned int i = 0; i < patterns1.size(); i++) {
+				for (unsigned int j = 0; j < patterns2.size(); j++) {
+					validateEmpty({ }, { patterns1[i], patterns2[j] }, i, j);
 				}
 			}
 		}
 
-		void validateEmpty(std::vector<RelRef> relations1, std::vector<RelRef> relations2) {
-			for (unsigned int k = 0; k < relations1.size(); k++) {
-				for (unsigned int i = 0; i < relations2.size(); i++) {
-					for (unsigned int j = 0; j < ALL_SELECT.size(); j++) {
-						Query q = initQuery({ relations1[k], relations2[i] }, {  }, ALL_SELECT[j]);
-						EXPECT_EQ(evaluator.evaluateQuery(q).front(), EMPTY_RESULT) << "Error at results : " << i + 1 << " : " << j + 1;
-						q = initQuery({ relations1[k], relations2[i] }, {  }, BOOLEAN);
-						EXPECT_EQ(evaluator.evaluateQuery(q).front(), BOOLEAN_FALSE_RESULT) << "Error at results : " << i + 1 << " : " << j + 1;
-					}
+		void validateEmpty(std::vector<RelRef>& relations1, std::vector<RelRef>& relations2)  {
+			for (unsigned int i = 0; i < relations1.size(); i++) {
+				for (unsigned int j = 0; j < relations2.size(); j++) {
+					validateEmpty({ relations1[i], relations2[j] }, { }, i, j);
 				}
 			}
 		}
@@ -181,31 +157,7 @@ namespace UnitTesting {
 			std::string left2 = FOLLOW_LEFT2;
 			std::string right1 = FOLLOW_RIGHT1;
 			std::string right2 = FOLLOW_RIGHT2;
-			relations.push_back(RelRef(type, WILD_CARD, WILD_CARD));
-			relations.push_back(RelRef(type, { STMT, left1 }, { STMT, right1 }));
-			relations.push_back(RelRef(type, { STMT, left2 }, { STMT, right2 }));
-			relations.push_back(RelRef(type, { STMT, left1 }, WILD_CARD));
-			relations.push_back(RelRef(type, { STMT, left2 }, WILD_CARD));
-			relations.push_back(RelRef(type, WILD_CARD, { STMT, right1 }));
-			relations.push_back(RelRef(type, WILD_CARD, { STMT, right2 }));
-			relations.push_back(RelRef(type, { STMT, s1 }, { STMT, s2 }));
-			relations.push_back(RelRef(type, { IF, s1 }, { STMT, s2 }));
-			relations.push_back(RelRef(type, { STMT, s1 }, { IF, s2 }));
-			relations.push_back(RelRef(type, { STMT, s1 }, { WHILE, s2 }));
-			relations.push_back(RelRef(type, { IF, s1 }, { IF, s2 }));
-			relations.push_back(RelRef(type, { IF, s1 }, { WHILE, s2 }));
-			relations.push_back(RelRef(type, WILD_CARD, { STMT, s1 }));
-			relations.push_back(RelRef(type, WILD_CARD, { IF, s1 }));
-			relations.push_back(RelRef(type, WILD_CARD, { WHILE, s1 }));
-			relations.push_back(RelRef(type, { STMT, s1 }, WILD_CARD));
-			relations.push_back(RelRef(type, { IF, s1 }, WILD_CARD));
-			relations.push_back(RelRef(type, { STMT, left1 }, { STMT, s1 }));
-			relations.push_back(RelRef(type, { STMT, left1 }, { IF, s1 }));
-			relations.push_back(RelRef(type, { STMT, left2 }, { STMT, s1 }));
-			relations.push_back(RelRef(type, { STMT, left2 }, { WHILE, s1 }));
 			relations.push_back(RelRef(type, { STMT, s1 }, { STMT, right1 }));
-			relations.push_back(RelRef(type, { IF, s1 }, { STMT, right1 }));
-			relations.push_back(RelRef(type, { STMT, s1 }, { STMT, right2 }));
 			relations.push_back(RelRef(type, { IF, s1 }, { STMT, right2 }));
 
 			type = FOLLOWS_T;
@@ -213,33 +165,8 @@ namespace UnitTesting {
 			left2 = FOLLOW_LEFT2;
 			right1 = FOLLOW_RIGHT1;
 			right2 = FOLLOW_RIGHT2;
-			relations.push_back(RelRef(type, WILD_CARD, WILD_CARD));
-			relations.push_back(RelRef(type, { STMT, left1 }, { STMT, right1 }));
-			relations.push_back(RelRef(type, { STMT, left1 }, { STMT, right2 }));
-			relations.push_back(RelRef(type, { STMT, left2 }, { STMT, right2 }));
-			relations.push_back(RelRef(type, { STMT, left1 }, WILD_CARD));
-			relations.push_back(RelRef(type, { STMT, left2 }, WILD_CARD));
-			relations.push_back(RelRef(type, WILD_CARD, { STMT, right1 }));
-			relations.push_back(RelRef(type, WILD_CARD, { STMT, right2 }));
-			relations.push_back(RelRef(type, { STMT, s1 }, { STMT, s2 }));
-			relations.push_back(RelRef(type, { IF, s1 }, { STMT, s2 }));
-			relations.push_back(RelRef(type, { STMT, s1 }, { IF, s2 }));
-			relations.push_back(RelRef(type, { IF, s1 }, { IF, s2 }));
-			relations.push_back(RelRef(type, { IF, s1 }, { WHILE, s2 }));
-			relations.push_back(RelRef(type, WILD_CARD, { STMT, s1 }));
-			relations.push_back(RelRef(type, WILD_CARD, { IF, s1 }));
 			relations.push_back(RelRef(type, WILD_CARD, { WHILE, s1 }));
 			relations.push_back(RelRef(type, { STMT, s1 }, WILD_CARD));
-			relations.push_back(RelRef(type, { IF, s1 }, WILD_CARD));
-			relations.push_back(RelRef(type, { STMT, left1 }, { STMT, s1 }));
-			relations.push_back(RelRef(type, { STMT, left1 }, { IF, s1 }));
-			relations.push_back(RelRef(type, { STMT, left1 }, { WHILE, s1 }));
-			relations.push_back(RelRef(type, { STMT, left2 }, { STMT, s1 }));
-			relations.push_back(RelRef(type, { STMT, left2 }, { WHILE, s1 }));
-			relations.push_back(RelRef(type, { STMT, s1 }, { STMT, right1 }));
-			relations.push_back(RelRef(type, { IF, s1 }, { STMT, right1 }));
-			relations.push_back(RelRef(type, { STMT, s1 }, { STMT, right2 }));
-			relations.push_back(RelRef(type, { IF, s1 }, { STMT, right2 }));
 
 			type = PARENT;
 			left1 = PARENT_LEFT1;
@@ -248,44 +175,9 @@ namespace UnitTesting {
 			right1 = PARENT_RIGHT1;
 			right2 = PARENT_RIGHT2;
 			std::string right3 = PARENT_RIGHT3;
-			relations.push_back(RelRef(type, WILD_CARD, WILD_CARD));
-			relations.push_back(RelRef(type, { STMT, left1 }, { STMT, right1 }));
-			relations.push_back(RelRef(type, { STMT, left1 }, { STMT, right2 }));
-			relations.push_back(RelRef(type, { STMT, left2 }, { STMT, right2 }));
-			relations.push_back(RelRef(type, { STMT, left3 }, { STMT, right3 }));
-			relations.push_back(RelRef(type, { STMT, left1 }, WILD_CARD));
-			relations.push_back(RelRef(type, { STMT, left2 }, WILD_CARD));
-			relations.push_back(RelRef(type, { STMT, left3 }, WILD_CARD));
 			relations.push_back(RelRef(type, WILD_CARD, { STMT, right1 }));
 			relations.push_back(RelRef(type, WILD_CARD, { STMT, right2 }));
 			relations.push_back(RelRef(type, WILD_CARD, { STMT, right3 }));
-			relations.push_back(RelRef(type, { STMT, s1 }, { STMT, s2 }));
-			relations.push_back(RelRef(type, { IF, s1 }, { STMT, s2 }));
-			relations.push_back(RelRef(type, { WHILE, s1 }, { STMT, s2 }));
-			relations.push_back(RelRef(type, { STMT, s1 }, { IF, s2 }));
-			relations.push_back(RelRef(type, { STMT, s1 }, { WHILE, s2 }));
-			relations.push_back(RelRef(type, { IF, s1 }, { IF, s2 }));
-			relations.push_back(RelRef(type, { IF, s1 }, { WHILE, s2 }));
-			relations.push_back(RelRef(type, { WHILE, s1 }, { WHILE, s2 }));
-			relations.push_back(RelRef(type, WILD_CARD, { STMT, s1 }));
-			relations.push_back(RelRef(type, WILD_CARD, { IF, s1 }));
-			relations.push_back(RelRef(type, WILD_CARD, { WHILE, s1 }));
-			relations.push_back(RelRef(type, { STMT, s1 }, WILD_CARD));
-			relations.push_back(RelRef(type, { IF, s1 }, WILD_CARD));
-			relations.push_back(RelRef(type, { WHILE, s1 }, WILD_CARD));
-			relations.push_back(RelRef(type, { STMT, left1 }, { STMT, s1 }));
-			relations.push_back(RelRef(type, { STMT, left1 }, { IF, s1 }));
-			relations.push_back(RelRef(type, { STMT, left1 }, { WHILE, s1 }));
-			relations.push_back(RelRef(type, { STMT, left2 }, { STMT, s1 }));
-			relations.push_back(RelRef(type, { STMT, left2 }, { WHILE, s1 }));
-			relations.push_back(RelRef(type, { STMT, left3 }, { STMT, s1 }));
-			relations.push_back(RelRef(type, { STMT, left3 }, { WHILE, s1 }));
-			relations.push_back(RelRef(type, { STMT, s1 }, { STMT, right1 }));
-			relations.push_back(RelRef(type, { IF, s1 }, { STMT, right1 }));
-			relations.push_back(RelRef(type, { STMT, s1 }, { STMT, right2 }));
-			relations.push_back(RelRef(type, { IF, s1 }, { STMT, right2 }));
-			relations.push_back(RelRef(type, { STMT, s1 }, { STMT, right3 }));
-			relations.push_back(RelRef(type, { WHILE, s1 }, { STMT, right3 }));
 
 			type = PARENT_T;
 			left1 = PARENT_LEFT1;
@@ -294,98 +186,23 @@ namespace UnitTesting {
 			right1 = PARENT_RIGHT1;
 			right2 = PARENT_RIGHT2;
 			right3 = PARENT_RIGHT3;
-			relations.push_back(RelRef(type, WILD_CARD, WILD_CARD));
-			relations.push_back(RelRef(type, { STMT, left1 }, { STMT, right1 }));
-			relations.push_back(RelRef(type, { STMT, left1 }, { STMT, right2 }));
-			relations.push_back(RelRef(type, { STMT, left1 }, { STMT, right3 }));
-			relations.push_back(RelRef(type, { STMT, left2 }, { STMT, right2 }));
-			relations.push_back(RelRef(type, { STMT, left2 }, { STMT, right3 }));
-			relations.push_back(RelRef(type, { STMT, left3 }, { STMT, right3 }));
-			relations.push_back(RelRef(type, { STMT, left1 }, WILD_CARD));
-			relations.push_back(RelRef(type, { STMT, left2 }, WILD_CARD));
-			relations.push_back(RelRef(type, { STMT, left3 }, WILD_CARD));
-			relations.push_back(RelRef(type, WILD_CARD, { STMT, right1 }));
-			relations.push_back(RelRef(type, WILD_CARD, { STMT, right2 }));
-			relations.push_back(RelRef(type, WILD_CARD, { STMT, right3 }));
-			relations.push_back(RelRef(type, { STMT, s1 }, { STMT, s2 }));
-			relations.push_back(RelRef(type, { IF, s1 }, { STMT, s2 }));
-			relations.push_back(RelRef(type, { WHILE, s1 }, { STMT, s2 }));
-			relations.push_back(RelRef(type, { STMT, s1 }, { IF, s2 }));
-			relations.push_back(RelRef(type, { STMT, s1 }, { WHILE, s2 }));
-			relations.push_back(RelRef(type, { IF, s1 }, { IF, s2 }));
-			relations.push_back(RelRef(type, { IF, s1 }, { WHILE, s2 }));
-			relations.push_back(RelRef(type, { WHILE, s1 }, { WHILE, s2 }));
-			relations.push_back(RelRef(type, WILD_CARD, { STMT, s1 }));
-			relations.push_back(RelRef(type, WILD_CARD, { IF, s1 }));
-			relations.push_back(RelRef(type, WILD_CARD, { WHILE, s1 }));
-			relations.push_back(RelRef(type, { STMT, s1 }, WILD_CARD));
-			relations.push_back(RelRef(type, { IF, s1 }, WILD_CARD));
-			relations.push_back(RelRef(type, { WHILE, s1 }, WILD_CARD));
 			relations.push_back(RelRef(type, { STMT, left1 }, { STMT, s1 }));
-			relations.push_back(RelRef(type, { STMT, left1 }, { IF, s1 }));
-			relations.push_back(RelRef(type, { STMT, left1 }, { WHILE, s1 }));
-			relations.push_back(RelRef(type, { STMT, left2 }, { STMT, s1 }));
-			relations.push_back(RelRef(type, { STMT, left2 }, { WHILE, s1 }));
-			relations.push_back(RelRef(type, { STMT, left3 }, { STMT, s1 }));
-			relations.push_back(RelRef(type, { STMT, left3 }, { WHILE, s1 }));
-			relations.push_back(RelRef(type, { STMT, s1 }, { STMT, right1 }));
-			relations.push_back(RelRef(type, { IF, s1 }, { STMT, right1 }));
-			relations.push_back(RelRef(type, { STMT, s1 }, { STMT, right2 }));
-			relations.push_back(RelRef(type, { IF, s1 }, { STMT, right2 }));
-			relations.push_back(RelRef(type, { STMT, s1 }, { STMT, right3 }));
 			relations.push_back(RelRef(type, { WHILE, s1 }, { STMT, right3 }));
-			relations.push_back(RelRef(type, { IF, s1 }, { STMT, right3 }));
 
 			type = MODIFIES_S;
 			left1 = MODIFIES_LEFT1;
 			left2 = MODIFIES_LEFT2;
 			right1 = MODIFIES_RIGHT1;
 			right2 = MODIFIES_RIGHT2;
-			relations.push_back(RelRef(type, WILD_CARD, WILD_CARD));
 			relations.push_back(RelRef(type, { STMT, left1 }, { VARIABLE, right1 }));
 			relations.push_back(RelRef(type, { STMT, left2 }, { VARIABLE, right2 }));
-			relations.push_back(RelRef(type, { STMT, left1 }, WILD_CARD));
-			relations.push_back(RelRef(type, { STMT, left2 }, WILD_CARD));
-			relations.push_back(RelRef(type, WILD_CARD, { VARIABLE, right1 }));
-			relations.push_back(RelRef(type, WILD_CARD, { VARIABLE, right2 }));
-			relations.push_back(RelRef(type, { STMT, s1 }, { VARIABLE, s1 }));
-			relations.push_back(RelRef(type, { IF, s1 }, { VARIABLE, s1 }));
-			relations.push_back(RelRef(type, { WHILE, s1 }, { VARIABLE, s1 }));
-			relations.push_back(RelRef(type, WILD_CARD, { VARIABLE, s1 }));
-			relations.push_back(RelRef(type, { STMT, s1 }, WILD_CARD));
-			relations.push_back(RelRef(type, { IF, s1 }, WILD_CARD));
-			relations.push_back(RelRef(type, { WHILE, s1 }, WILD_CARD));
-			relations.push_back(RelRef(type, { STMT, left1 }, { VARIABLE, s1 }));
-			relations.push_back(RelRef(type, { STMT, left2 }, { VARIABLE, s1 }));
-			relations.push_back(RelRef(type, { STMT, s1 }, { VARIABLE, right1 }));
-			relations.push_back(RelRef(type, { IF, s1 }, { VARIABLE, right1 }));
-			relations.push_back(RelRef(type, { STMT, s1 }, { VARIABLE, right2 }));
-			relations.push_back(RelRef(type, { WHILE, s1 }, { VARIABLE, right2 }));
 
 			type = USES_S;
 			left1 = USES_LEFT1;
 			left2 = USES_LEFT2;
 			right1 = USES_RIGHT1;
 			right2 = USES_RIGHT2;
-			relations.push_back(RelRef(type, WILD_CARD, WILD_CARD));
-			relations.push_back(RelRef(type, { STMT, left1 }, { VARIABLE, right1 }));
-			relations.push_back(RelRef(type, { STMT, left2 }, { VARIABLE, right2 }));
-			relations.push_back(RelRef(type, { STMT, left1 }, WILD_CARD));
 			relations.push_back(RelRef(type, { STMT, left2 }, WILD_CARD));
-			relations.push_back(RelRef(type, WILD_CARD, { VARIABLE, right1 }));
-			relations.push_back(RelRef(type, WILD_CARD, { VARIABLE, right2 }));
-			relations.push_back(RelRef(type, { STMT, s1 }, { VARIABLE, s1 }));
-			relations.push_back(RelRef(type, { IF, s1 }, { VARIABLE, s1 }));
-			relations.push_back(RelRef(type, { WHILE, s1 }, { VARIABLE, s1 }));
-			relations.push_back(RelRef(type, WILD_CARD, { VARIABLE, s1 }));
-			relations.push_back(RelRef(type, { STMT, s1 }, WILD_CARD));
-			relations.push_back(RelRef(type, { IF, s1 }, WILD_CARD));
-			relations.push_back(RelRef(type, { WHILE, s1 }, WILD_CARD));
-			relations.push_back(RelRef(type, { STMT, left1 }, { VARIABLE, s1 }));
-			relations.push_back(RelRef(type, { STMT, left2 }, { VARIABLE, s1 }));
-			relations.push_back(RelRef(type, { STMT, s1 }, { VARIABLE, right1 }));
-			relations.push_back(RelRef(type, { IF, s1 }, { VARIABLE, right1 }));
-			relations.push_back(RelRef(type, { STMT, s1 }, { VARIABLE, right2 }));
 			relations.push_back(RelRef(type, { WHILE, s1 }, { VARIABLE, right2 }));
 
 			return relations;
@@ -405,52 +222,22 @@ namespace UnitTesting {
 			relations.push_back(RelRef(type, { STMT, left1 }, { STMT, right2 }));
 			relations.push_back(RelRef(type, { STMT, left2 }, { STMT, right1 }));
 
-			std::vector<Entity> invalidLefts = getInvalidConstant(lefts);
-			for (unsigned int k = 0; k < invalidLefts.size(); k++) {
-				for (unsigned int i = 0; i < VALID_CONSTANT_STMT_ENTITY.size(); i++) {
-					relations.push_back(RelRef(type, invalidLefts[k], VALID_CONSTANT_STMT_ENTITY[i]));
-				}
+			std::vector<Entity> invalid_lefts = getInvalidConstant(lefts);
+			for (unsigned int k = 0; k < invalid_lefts.size(); k++) {
+				relations.push_back(RelRef(type, invalid_lefts[k], VALID_CONSTANT_STMT_ENTITY[k % VALID_CONSTANT_STMT_ENTITY.size()]));
 			}
 
-			std::vector<Entity> invalidRight = getInvalidConstant(rights);
-			for (unsigned int k = 0; k < invalidRight.size(); k++) {
-				for (unsigned int i = 0; i < VALID_CONSTANT_STMT_ENTITY.size(); i++) {
-					relations.push_back(RelRef(type, VALID_CONSTANT_STMT_ENTITY[i], invalidRight[k]));
-				}
+			std::vector<Entity> invalid_rights = getInvalidConstant(rights);
+			for (unsigned int k = 0; k < invalid_rights.size(); k++) {
+				relations.push_back(RelRef(type, VALID_CONSTANT_STMT_ENTITY[k % VALID_CONSTANT_STMT_ENTITY.size()], invalid_rights[k]));
 			}
 
-			for (Entity it : invalidLefts) {
+			for (Entity it : invalid_lefts) {
 				relations.push_back(RelRef(type, it, { STMT, s1 }));
 			}
 
-			for (Entity it : invalidRight) {
+			for (Entity it : invalid_rights) {
 				relations.push_back(RelRef(type, { STMT, s1 }, it));
-			}
-
-			std::vector<Entity> synonyms;
-			synonyms.push_back({ PRINT, s1 });
-			synonyms.push_back({ READ, s1 });
-			synonyms.push_back({ ASSIGN, s1 });
-			synonyms.push_back({ CALL, s1 });
-
-			for (unsigned int k = 0; k < synonyms.size(); k++) {
-				for (unsigned int j = 0; j < synonyms.size(); j++) {
-					relations.push_back(RelRef(type, synonyms[k], synonyms[j]));
-				}
-			}
-
-			for (unsigned int k = 0; k < synonyms.size(); k++) {
-				relations.push_back(RelRef(type, WILD_CARD, synonyms[k]));
-				relations.push_back(RelRef(type, { synonyms[k] }, WILD_CARD));
-				relations.push_back(RelRef(type, { synonyms[k] }, WILD_CARD));
-
-				for (auto valid : lefts) {
-					relations.push_back(RelRef(type, { STMT, valid }, { synonyms[k] }));
-				}
-
-				for (auto valid : rights) {
-					relations.push_back(RelRef(type, { synonyms[k] }, { STMT, valid }));
-				}
 			}
 
 			type = FOLLOWS_T;
@@ -461,186 +248,24 @@ namespace UnitTesting {
 			right1 = FOLLOW_RIGHT1;
 			right2 = FOLLOW_RIGHT2;
 
-			relations.push_back(RelRef(type, { STMT, left2 }, { STMT, right1 }));
-
-			invalidLefts = getInvalidConstant(lefts);
-			for (unsigned int k = 0; k < invalidLefts.size(); k++) {
-				for (unsigned int i = 0; i < VALID_CONSTANT_STMT_ENTITY.size(); i++) {
-					relations.push_back(RelRef(type, invalidLefts[k], VALID_CONSTANT_STMT_ENTITY[i]));
-				}
+			invalid_rights = getInvalidConstant(rights);
+			for (unsigned int k = 0; k < invalid_rights.size(); k++) {
+				relations.push_back(RelRef(type, VALID_CONSTANT_STMT_ENTITY[k % VALID_CONSTANT_STMT_ENTITY.size()], invalid_rights[k]));
 			}
 
-			invalidRight = getInvalidConstant(rights);
-			for (unsigned int k = 0; k < invalidRight.size(); k++) {
-				for (unsigned int i = 0; i < VALID_CONSTANT_STMT_ENTITY.size(); i++) {
-					relations.push_back(RelRef(type, VALID_CONSTANT_STMT_ENTITY[i], invalidRight[k]));
-				}
-			}
-
-			for (Entity it : invalidLefts) {
-				relations.push_back(RelRef(type, it, { STMT, s1 }));
-			}
-
-			for (Entity it : invalidRight) {
-				relations.push_back(RelRef(type, { STMT, s1 }, it));
-			}
-
-			synonyms = {};
-			synonyms.push_back({ PRINT, s1 });
-			synonyms.push_back({ READ, s1 });
-			synonyms.push_back({ ASSIGN, s1 });
-			synonyms.push_back({ CALL, s1 });
-
-			for (unsigned int k = 0; k < synonyms.size(); k++) {
-				for (unsigned int j = 0; j < synonyms.size(); j++) {
-					relations.push_back(RelRef(type, synonyms[k], synonyms[j]));
-				}
-			}
-
-			//Empty result for non-matching header for single column
-			for (unsigned int k = 0; k < synonyms.size(); k++) {
-				relations.push_back(RelRef(type, WILD_CARD, synonyms[k]));
-				relations.push_back(RelRef(type, { synonyms[k] }, WILD_CARD));
-				relations.push_back(RelRef(type, { synonyms[k] }, WILD_CARD));
-
-				for (auto valid : lefts) {
-					relations.push_back(RelRef(type, { STMT, valid }, { synonyms[k] }));
-				}
-
-				for (auto valid : rights) {
-					relations.push_back(RelRef(type, { synonyms[k] }, { STMT, valid }));
-				}
-			}
-
-			type = PARENT;
 			left1 = PARENT_LEFT1;
 			left2 = PARENT_LEFT2;
 			std::string left3 = PARENT_LEFT3;
 			right1 = PARENT_RIGHT1;
 			right2 = PARENT_RIGHT2;
 			std::string right3 = PARENT_RIGHT3;
-
-			relations.push_back(RelRef(type, { STMT, left1 }, { STMT, right3 }));
-			relations.push_back(RelRef(type, { STMT, left2 }, { STMT, right1 }));
-			relations.push_back(RelRef(type, { STMT, left2 }, { STMT, right3 }));
-			relations.push_back(RelRef(type, { STMT, left3 }, { STMT, right2 }));
-
-			invalidLefts = getInvalidConstant(lefts);
-
-			for (unsigned int k = 0; k < invalidLefts.size(); k++) {
-				for (unsigned int i = 0; i < VALID_CONSTANT_STMT_ENTITY.size(); i++) {
-					relations.push_back(RelRef(type, invalidLefts[k], VALID_CONSTANT_STMT_ENTITY[i]));
-				}
-			}
-
-			invalidRight = getInvalidConstant(rights);
-
-			for (unsigned int k = 0; k < invalidRight.size(); k++) {
-				for (unsigned int i = 0; i < VALID_CONSTANT_STMT_ENTITY.size(); i++) {
-					relations.push_back(RelRef(type, VALID_CONSTANT_STMT_ENTITY[i], invalidRight[k]));
-				}
-			}
-
-			for (Entity it : invalidLefts) {
-				relations.push_back(RelRef(type, it, { STMT, s1 }));
-			}
-
-			for (Entity it : invalidRight) {
-				relations.push_back(RelRef(type, { STMT, s1 }, it));
-			}
-
-			synonyms = {};
-			synonyms.push_back({ PRINT, s1 });
-			synonyms.push_back({ READ, s1 });
-			synonyms.push_back({ ASSIGN, s1 });
-			synonyms.push_back({ CALL, s1 });
-
-			for (unsigned int k = 0; k < synonyms.size(); k++) {
-				for (unsigned int j = 0; j < synonyms.size(); j++) {
-					relations.push_back(RelRef(type, synonyms[k], synonyms[j]));
-				}
-			}
-
-			//Empty result for non-matching header for single column
-			for (unsigned int k = 0; k < synonyms.size(); k++) {
-				relations.push_back(RelRef(type, WILD_CARD, synonyms[k]));
-				relations.push_back(RelRef(type, { synonyms[k] }, WILD_CARD));
-				relations.push_back(RelRef(type, { synonyms[k] }, WILD_CARD));
-
-				for (auto valid : lefts) {
-					relations.push_back(RelRef(type, { STMT, valid }, { synonyms[k] }));
-				}
-
-				for (auto valid : rights) {
-					relations.push_back(RelRef(type, { synonyms[k] }, { STMT, valid }));
-				}
-			}
-
-			type = PARENT_T;
-			left1 = PARENT_LEFT1;
-			left2 = PARENT_LEFT2;
-			left3 = PARENT_LEFT3;
-			right1 = PARENT_RIGHT1;
-			right2 = PARENT_RIGHT2;
-			right3 = PARENT_RIGHT3;
 			lefts = PARENT_LEFTS;
 			rights = PARENT_RIGHTS;
 			//Test false boolean equation
 
 			relations.push_back(RelRef(type, { STMT, "2" }, { STMT, "2" }));
 			relations.push_back(RelRef(type, { STMT, "3" }, { STMT, "3" }));
-
-			invalidLefts = getInvalidConstant(lefts);
-
-			for (unsigned int k = 0; k < invalidLefts.size(); k++) {
-				for (unsigned int i = 0; i < VALID_CONSTANT_STMT_ENTITY.size(); i++) {
-					relations.push_back((RelRef(type, invalidLefts[k], VALID_CONSTANT_STMT_ENTITY[i])));
-				}
-			}
-
-			invalidRight = getInvalidConstant(rights);
-
-			for (unsigned int k = 0; k < invalidRight.size(); k++) {
-				for (unsigned int i = 0; i < VALID_CONSTANT_STMT_ENTITY.size(); i++) {
-					relations.push_back((RelRef(type, VALID_CONSTANT_STMT_ENTITY[i], invalidRight[k])));
-				}
-			}
-
-			for (Entity it : invalidLefts) {
-				relations.push_back(RelRef(type, it, { STMT, s1 }));
-			}
-
-			for (Entity it : invalidRight) {
-				relations.push_back(RelRef(type, { STMT, s1 }, it));
-			}
-
-			synonyms = {};
-			synonyms.push_back({ PRINT, s1 });
-			synonyms.push_back({ READ, s1 });
-			synonyms.push_back({ ASSIGN, s1 });
-			synonyms.push_back({ CALL, s1 });
-
-			for (unsigned int k = 0; k < synonyms.size(); k++) {
-				for (unsigned int j = 0; j < synonyms.size(); j++) {
-					relations.push_back(RelRef(type, synonyms[k], synonyms[j]));
-				}
-			}
-
-			//Empty result for non-matching header for single column
-			for (unsigned int k = 0; k < synonyms.size(); k++) {
-				relations.push_back(RelRef(type, WILD_CARD, synonyms[k]));
-				relations.push_back(RelRef(type, { synonyms[k] }, WILD_CARD));
-				relations.push_back(RelRef(type, { synonyms[k] }, WILD_CARD));
-
-				for (auto valid : lefts) {
-					relations.push_back(RelRef(type, { STMT, valid }, { synonyms[k] }));
-				}
-
-				for (auto valid : rights) {
-					relations.push_back(RelRef(type, { synonyms[k] }, { STMT, valid }));
-				}
-			}
-
+			
 			type = MODIFIES_S;
 			left1 = MODIFIES_LEFT1;
 			left2 = MODIFIES_LEFT2;
@@ -648,30 +273,7 @@ namespace UnitTesting {
 			right2 = MODIFIES_RIGHT2;
 			lefts = MODIFIES_LEFTS;
 
-			invalidLefts = getInvalidConstant(lefts);
-
-			for (unsigned int k = 0; k < invalidLefts.size(); k++) {
-				for (unsigned int i = 0; i < ALL_VARIABLES.size(); i++) {
-					relations.push_back((RelRef(type, invalidLefts[k], ALL_VARIABLES[i])));
-				}
-			}
-
-			invalidRight = { { VARIABLE, z } };
-
-			for (unsigned int k = 0; k < invalidRight.size(); k++) {
-				for (unsigned int i = 0; i < VALID_CONSTANT_STMT_ENTITY.size(); i++) {
-					relations.push_back(RelRef(type, VALID_CONSTANT_STMT_ENTITY[i], invalidRight[k]));
-				}
-			}
-
-			for (Entity it : invalidLefts) {
-				relations.push_back(RelRef(type, it, { STMT, s1 }));
-			}
-			relations.push_back(RelRef(type, { STMT, s1 }, { VARIABLE, z }));
-
-			synonyms = {};
-			synonyms.push_back({ PRINT, s1 });
-			synonyms.push_back({ READ, s1 });
+			std::vector<Entity> synonyms = {};
 			synonyms.push_back({ CALL, s1 });
 
 			for (unsigned int k = 0; k < synonyms.size(); k++) {
@@ -679,7 +281,7 @@ namespace UnitTesting {
 					relations.push_back(RelRef(type, synonyms[k], ALL_VARIABLES[j]));
 				}
 			}
-
+			
 			type = USES_S;
 			left1 = USES_LEFT1;
 			left2 = USES_LEFT2;
@@ -687,92 +289,60 @@ namespace UnitTesting {
 			right2 = USES_RIGHT2;
 			lefts = USES_LEFTS;
 
-			invalidLefts = getInvalidConstant(lefts);
-
-			for (unsigned int k = 0; k < invalidLefts.size(); k++) {
-				for (unsigned int i = 0; i < ALL_VARIABLES.size(); i++) {
-					relations.push_back((RelRef(type, invalidLefts[k], ALL_VARIABLES[i])));
+			invalid_rights = { { VARIABLE, z } };
+			for (unsigned int k = 0; k < invalid_rights.size(); k++) {
+				for (unsigned int i = 1; i < VALID_CONSTANT_STMT_ENTITY.size(); i++) {
+					relations.push_back(RelRef(type, VALID_CONSTANT_STMT_ENTITY[i], invalid_rights[k]));
 				}
 			}
-
-			invalidRight = { { VARIABLE, z } };
-
-			for (unsigned int k = 0; k < invalidRight.size(); k++) {
-				for (unsigned int i = 0; i < VALID_CONSTANT_STMT_ENTITY.size(); i++) {
-					relations.push_back(RelRef(type, VALID_CONSTANT_STMT_ENTITY[i], invalidRight[k]));
-				}
-			}
-
-			for (Entity it : invalidLefts) {
-				relations.push_back(RelRef(type, it, { STMT, s1 }));
-			}
-
-			relations.push_back(RelRef(type, { STMT, s1 }, { VARIABLE, z }));
-
-			synonyms = { };
-			synonyms.push_back({ PRINT, s1 });
-			synonyms.push_back({ READ, s1 });
-			synonyms.push_back({ ASSIGN, s1 });
-			synonyms.push_back({ CALL, s1 });
-
-			for (unsigned int k = 0; k < synonyms.size(); k++) {
-				for (unsigned int j = 0; j < ALL_VARIABLES.size(); j++) {
-					relations.push_back(RelRef(type, synonyms[k], ALL_VARIABLES[j]));
-				}
-			}
-
+			
 			return relations;
+			
 		}
 
 		std::vector<Pattern> getAllValidPattern(Synonym s1, Synonym s2) {
 			Entity assign = { ASSIGN, s1 };
-			Entity lhsSynonym = { VARIABLE, s2 };
-			Entity lhsX = { VARIABLE, x };
-			Entity lhsY = { VARIABLE, y };
+			Entity lhs_synonym = { VARIABLE, s2 };
+			Entity lhs_x = { VARIABLE, x };
+			Entity lhs_y = { VARIABLE, y };
 
 			std::vector<Pattern> patterns;
-			patterns.push_back(Pattern(assign, lhsX, "x", true));
-			patterns.push_back(Pattern(assign, lhsX, "x", false));
-			patterns.push_back(Pattern(assign, lhsY, "y", true));
-			patterns.push_back(Pattern(assign, lhsY, "x", true));
+			patterns.push_back(Pattern(assign, lhs_x, "x", true));
+			patterns.push_back(Pattern(assign, lhs_x, "x", false));
+			patterns.push_back(Pattern(assign, lhs_y, "y", true));
+			patterns.push_back(Pattern(assign, lhs_y, "x", true));
 
-			patterns.push_back(Pattern(assign, lhsSynonym, "x", true));
-			patterns.push_back(Pattern(assign, lhsSynonym, "x", false));
-			patterns.push_back(Pattern(assign, lhsSynonym, "y", true));
+			patterns.push_back(Pattern(assign, lhs_synonym, "x", true));
+			patterns.push_back(Pattern(assign, lhs_synonym, "x", false));
+			patterns.push_back(Pattern(assign, lhs_synonym, "y", true));
 
 			return patterns;
 		}
 
 		std::vector<Pattern> getAllInvalidPattern(Synonym s1, Synonym s2) {
 			Entity assign = { ASSIGN, s1 };
-			Entity lhsSynonym = { VARIABLE, s2 };
-			Entity lhsX = { VARIABLE, x };
-			Entity lhsY = { VARIABLE, y };
-			Entity lhsZ = { VARIABLE, z };
-			Entity lhsN = { VARIABLE, "n" };
+			Entity lhs_synonym = { VARIABLE, s2 };
+			Entity lhs_x = { VARIABLE, x };
+			Entity lhs_y = { VARIABLE, y };
+			Entity lhs_z = { VARIABLE, z };
+			Entity lhs_n = { VARIABLE, "n" };
 
-			std::vector<std::string> patternExpr;
-			patternExpr.push_back("x");
-			patternExpr.push_back("y");
-			patternExpr.push_back("z");
-			patternExpr.push_back("n");
+			std::vector<std::string> pattern_expr;
+			pattern_expr.push_back("y");
+			pattern_expr.push_back("z");
+			pattern_expr.push_back("n");
 			std::vector<Pattern> patterns;
-			for (auto expr : patternExpr) {
-				patterns.push_back(Pattern(assign, lhsZ, expr, false));
-				patterns.push_back(Pattern(assign, lhsZ, expr, true));
-				patterns.push_back(Pattern(assign, lhsN, expr, false));
-				patterns.push_back(Pattern(assign, lhsN, expr, true));
+			for (auto expr : pattern_expr) {
+				patterns.push_back(Pattern(assign, lhs_z, expr, true));
+				patterns.push_back(Pattern(assign, lhs_n, expr, false));
+				patterns.push_back(Pattern(assign, lhs_n, expr, true));
 			}
 
-			patterns.push_back(Pattern(assign, lhsX, "y", true));
-			patterns.push_back(Pattern(assign, lhsX, "y", false));
-			patterns.push_back(Pattern(assign, lhsY, "y", false));
-			patterns.push_back(Pattern(assign, lhsY, "x", false));
-			patterns.push_back(Pattern(assign, lhsSynonym, "y", false));
-			patterns.push_back(Pattern(assign, lhsSynonym, "z", false));
-			patterns.push_back(Pattern(assign, lhsSynonym, "n", false));
-			patterns.push_back(Pattern(assign, lhsSynonym, "z", true));
-			patterns.push_back(Pattern(assign, lhsSynonym, "n", true));
+			patterns.push_back(Pattern(assign, lhs_x, "y", true));
+			patterns.push_back(Pattern(assign, lhs_y, "x", false));
+			patterns.push_back(Pattern(assign, lhs_synonym, "n", false));
+			patterns.push_back(Pattern(assign, lhs_synonym, "z", true));
+			patterns.push_back(Pattern(assign, lhs_synonym, "n", true));
 
 			return patterns;
 		}
@@ -797,7 +367,7 @@ namespace UnitTesting {
 		const std::string IF1 = "1";
 		const std::string IF2 = "2";
 		const std::string WHILE1 = "3";
-		const std::string	WHILE2 = "4";
+		const std::string WHILE2 = "4";
 		const std::string READ1 = "5";
 		const std::string READ2 = "6";
 		const std::string PRINT1 = "7";
@@ -919,540 +489,537 @@ namespace UnitTesting {
 
 	//Multiple Clause, Pattern and Relation----------------------------------------------------------------------------------------------------
 	TEST_F(QueryEvaluatorMultiClausesTest, evaluateQueryTwoClausesNoCommonSynonmsTrue) {
-		std::vector<RelRef> validRelation = getAllValidRelation({ "a" }, { "b" });
-		std::vector<Pattern> validPattern = getAllValidPattern({ "c" }, { "d" });
-		std::vector<RelRef> validRelation1 = getAllValidRelation({ "e" }, { "f" });
-		std::vector<Pattern> validPattern1 = getAllValidPattern({ "g" }, { "h" });
+		std::vector<RelRef> valid_relation = getAllValidRelation({ "a" }, { "b" });
+		std::vector<Pattern> valid_pattern = getAllValidPattern({ "c" }, { "d" });
+		std::vector<RelRef> valid_relation1 = getAllValidRelation({ "e" }, { "f" });
+		std::vector<Pattern> valid_pattern1 = getAllValidPattern({ "g" }, { "h" });
 
-		validate(validPattern, validRelation);
-		validate(validPattern, validPattern1);
-
-		// Don't do this unless needed, it 172 * 172 * 10 = 295,840 test case combination
-		//validate(validRelation, validRelation1);
+		validate(valid_pattern, valid_relation);
+		validate(valid_pattern, valid_pattern1);
+		validate(valid_relation, valid_relation1);
 	}
 
 	TEST_F(QueryEvaluatorMultiClausesTest, evaluateQueryTwoClausesNoCommonSynonymFalses) {
-		std::vector<RelRef> validRelation = getAllValidRelation({ "a" }, { "b" });
-		std::vector<Pattern> validPattern = getAllValidPattern({ "c" }, { "d" });
+		std::vector<RelRef> valid_relation = getAllValidRelation({ "a" }, { "b" });
+		std::vector<Pattern> valid_pattern = getAllValidPattern({ "c" }, { "d" });
 		std::vector<RelRef> invalidRelation = getAllInvalidRelation({ "a1" }, { "b1" });
 		std::vector<Pattern> invalidPattern = getAllInvalidPattern({ "c1" }, { "d1" });
 
-		validateEmpty(validPattern, invalidRelation);
-		validateEmpty(invalidPattern, validPattern);
+		validateEmpty(valid_pattern, invalidRelation);
+		validateEmpty(invalidPattern, valid_pattern);
 		validateEmpty(invalidPattern, invalidRelation);
 
-		validateEmpty(validPattern, invalidPattern);
-		validateEmpty(invalidPattern, validPattern);
+		validateEmpty(valid_pattern, invalidPattern);
+		validateEmpty(invalidPattern, valid_pattern);
 		validateEmpty(invalidPattern, invalidPattern);
 
-		// Don't do this unless needed, it 172 * 172 * 10 = 295,840 test case combination each
-		//validateEmpty(validRelation, invalidRelation);
-		//validateEmpty(invalidRelation, validRelation);
-		//validateEmpty(invalidRelation, invalidRelation);
+		validateEmpty(valid_relation, invalidRelation);
+		validateEmpty(invalidRelation, valid_relation);
+		validateEmpty(invalidRelation, invalidRelation);
 	}
 
 	TEST_F(QueryEvaluatorMultiClausesTest, evaluateQueryPatternRelationFilterSingleCommonSynonymsEmpty) {
-		Entity assignCommon = { ASSIGN,  COMMON_SYNONYM1 };
-		Entity lhsCommon = { VARIABLE, COMMON_SYNONYM2 };
-		Entity stmtCommon = { STMT,  COMMON_SYNONYM3 };
-		Entity stmtCommon1 = { STMT,  COMMON_SYNONYM4 };
+		Entity assign_common = { ASSIGN,  COMMON_SYNONYM1 };
+		Entity lhs_common = { VARIABLE, COMMON_SYNONYM2 };
+		Entity stmt_common = { STMT,  COMMON_SYNONYM3 };
+		Entity stmt_common1 = { STMT,  COMMON_SYNONYM4 };
 
 		//Handle result for Select a pattern a(_, "x") such that Uses(a,_)
-		Pattern pattern(assignCommon, WILD_CARD, x, false);
-		RelRef relation(USES_S, assignCommon, WILD_CARD);
-		Entity selected = assignCommon;
+		Pattern pattern(assign_common, WILD_CARD, x, false);
+		RelRef relation(USES_S, assign_common, WILD_CARD);
+		Entity selected = assign_common;
 		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation }, { pattern }, selected)).front(), EMPTY_RESULT);
 
 		//Handle result for Select a pattern a(v, "x") such that Uses(a,_)
-		pattern = Pattern(assignCommon, lhsCommon, x, false);
-		relation = RelRef(USES_S, assignCommon, WILD_CARD);
-		selected = assignCommon;
+		pattern = Pattern(assign_common, lhs_common, x, false);
+		relation = RelRef(USES_S, assign_common, WILD_CARD);
+		selected = assign_common;
 		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation }, { pattern }, selected)).front(), EMPTY_RESULT);
 
 		//Handle result for Select a pattern a(_, "z") such that Modifies(a,_)
-		pattern = Pattern(assignCommon, WILD_CARD, z, false);
-		relation = RelRef(MODIFIES_S, assignCommon, WILD_CARD);
-		selected = assignCommon;
+		pattern = Pattern(assign_common, WILD_CARD, z, false);
+		relation = RelRef(MODIFIES_S, assign_common, WILD_CARD);
+		selected = assign_common;
 		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation }, { pattern }, selected)).front(), EMPTY_RESULT);
 
 		//Handle result for Select a pattern a(v, _"z"_) such that Modifies(a,_)
-		pattern = Pattern(assignCommon, lhsCommon, z, true);
-		relation = RelRef(MODIFIES_S, assignCommon, WILD_CARD);
-		selected = assignCommon;
+		pattern = Pattern(assign_common, lhs_common, z, true);
+		relation = RelRef(MODIFIES_S, assign_common, WILD_CARD);
+		selected = assign_common;
 		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation }, { pattern }, selected)).front(), EMPTY_RESULT);
 
 		//Handle result for Select a pattern a(_, _"x"_) such that Parent(s,a)
-		pattern = Pattern(assignCommon, WILD_CARD, x, true);
-		relation = RelRef(PARENT, stmtCommon, assignCommon);
-		selected = assignCommon;
+		pattern = Pattern(assign_common, WILD_CARD, x, true);
+		relation = RelRef(PARENT, stmt_common, assign_common);
+		selected = assign_common;
 		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation }, { pattern }, selected)).front(), EMPTY_RESULT);
 
-		pattern = Pattern(assignCommon, WILD_CARD, x, true);
-		relation = RelRef(PARENT, stmtCommon, assignCommon);
-		selected = stmtCommon;
+		pattern = Pattern(assign_common, WILD_CARD, x, true);
+		relation = RelRef(PARENT, stmt_common, assign_common);
+		selected = stmt_common;
 		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation }, { pattern }, selected)).front(), EMPTY_RESULT);
 
 		//Handle result for Select a pattern a(_, _"x"_) such that Parent(a,s)
-		pattern = Pattern(assignCommon, WILD_CARD, x, true);
-		relation = RelRef(PARENT, assignCommon, stmtCommon);
-		selected = assignCommon;
+		pattern = Pattern(assign_common, WILD_CARD, x, true);
+		relation = RelRef(PARENT, assign_common, stmt_common);
+		selected = assign_common;
 		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation }, { pattern }, selected)).front(), EMPTY_RESULT);
 
-		pattern = Pattern(assignCommon, WILD_CARD, x, true);
-		relation = RelRef(PARENT, assignCommon, stmtCommon);
-		selected = stmtCommon;
+		pattern = Pattern(assign_common, WILD_CARD, x, true);
+		relation = RelRef(PARENT, assign_common, stmt_common);
+		selected = stmt_common;
 		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation }, { pattern }, selected)).front(), EMPTY_RESULT);
 	}
 
 	TEST_F(QueryEvaluatorMultiClausesTest, evaluateQueryPatternRelationJoinSingleCommonSynonymsEmpty) {
-		Entity assignCommon = { ASSIGN,  COMMON_SYNONYM1 };
-		Entity lhsCommon = { VARIABLE, COMMON_SYNONYM2 };
-		Entity lhsCommon1 = { VARIABLE, COMMON_SYNONYM4 };
-		Entity stmtCommon = { STMT,  COMMON_SYNONYM3 };
-		Entity stmtCommon1 = { STMT,  COMMON_SYNONYM5 };
+		Entity assign_common = { ASSIGN,  COMMON_SYNONYM1 };
+		Entity lhs_common = { VARIABLE, COMMON_SYNONYM2 };
+		Entity lhs_common1 = { VARIABLE, COMMON_SYNONYM4 };
+		Entity stmt_common = { STMT,  COMMON_SYNONYM3 };
+		Entity stmt_common1 = { STMT,  COMMON_SYNONYM5 };
 
 		//Handle result for Select a pattern a(v, _"z"_) such that Uses(s,v)
-		Pattern pattern(assignCommon, lhsCommon, z, true);
-		RelRef relation(USES_S, stmtCommon, lhsCommon);
+		Pattern pattern(assign_common, lhs_common, z, true);
+		RelRef relation(USES_S, stmt_common, lhs_common);
 
-		Entity selected = assignCommon;
+		Entity selected = assign_common;
 		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation }, { pattern }, selected)).front(), EMPTY_RESULT);
-		selected = stmtCommon;
+		selected = stmt_common;
 		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation }, { pattern }, selected)).front(), EMPTY_RESULT);
-		selected = lhsCommon;
+		selected = lhs_common;
 		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation }, { pattern }, selected)).front(), EMPTY_RESULT);
 
 		//Handle result for Select a pattern a(v, "x") such that Uses(a,v1)
-		pattern = Pattern(assignCommon, lhsCommon, x, false);
-		relation = RelRef(USES_S, assignCommon, lhsCommon1);
+		pattern = Pattern(assign_common, lhs_common, x, false);
+		relation = RelRef(USES_S, assign_common, lhs_common1);
 
-		selected = assignCommon;
+		selected = assign_common;
 		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation }, { pattern }, selected)).front(), EMPTY_RESULT);
-		selected = lhsCommon;
+		selected = lhs_common;
 		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation }, { pattern }, selected)).front(), EMPTY_RESULT);
-		selected = lhsCommon1;
+		selected = lhs_common1;
 		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation }, { pattern }, selected)).front(), EMPTY_RESULT);
 
 		//Handle result for Select a pattern a(v, _) such that Parent(s,a)
-		pattern = Pattern(assignCommon, lhsCommon, "", true);
-		relation = RelRef(PARENT, stmtCommon, assignCommon);
+		pattern = Pattern(assign_common, lhs_common, "", true);
+		relation = RelRef(PARENT, stmt_common, assign_common);
 
-		selected = assignCommon;
+		selected = assign_common;
 		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation }, { pattern }, selected)).front(), EMPTY_RESULT);
-		selected = lhsCommon;
+		selected = lhs_common;
 		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation }, { pattern }, selected)).front(), EMPTY_RESULT);
-		selected = stmtCommon;
+		selected = stmt_common;
 		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation }, { pattern }, selected)).front(), EMPTY_RESULT);
 
 		//Handle result for Select a pattern a(v, _) such that Parent(a,s)
-		pattern = Pattern(assignCommon, lhsCommon, "", true);
-		relation = RelRef(PARENT, assignCommon, stmtCommon);
+		pattern = Pattern(assign_common, lhs_common, "", true);
+		relation = RelRef(PARENT, assign_common, stmt_common);
 
-		selected = assignCommon;
+		selected = assign_common;
 		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation }, { pattern }, selected)).front(), EMPTY_RESULT);
-		selected = lhsCommon;
+		selected = lhs_common;
 		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation }, { pattern }, selected)).front(), EMPTY_RESULT);
-		selected = stmtCommon;
+		selected = stmt_common;
 		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation }, { pattern }, selected)).front(), EMPTY_RESULT);
 	}
 
 	TEST_F(QueryEvaluatorMultiClausesTest, evaluateQueryPatternRelationFilterDoubleCommonSynonymsEmpty) {
-		Entity assignCommon = { ASSIGN,  COMMON_SYNONYM1 };
-		Entity lhsCommon = { VARIABLE, COMMON_SYNONYM2 };
+		Entity assign_common = { ASSIGN,  COMMON_SYNONYM1 };
+		Entity lhs_common = { VARIABLE, COMMON_SYNONYM2 };
 
 		//Handle result for Select a pattern a(v, "y") such that MODIFIES_S(a,v)
-		Pattern pattern(assignCommon, lhsCommon, y, false);
-		RelRef relation(MODIFIES_S, assignCommon, lhsCommon);
-		Entity selected = assignCommon;
+		Pattern pattern(assign_common, lhs_common, y, false);
+		RelRef relation(MODIFIES_S, assign_common, lhs_common);
+		Entity selected = assign_common;
 		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation }, { pattern }, selected)).front(), EMPTY_RESULT);
-		selected = lhsCommon;
+		selected = lhs_common;
 		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation }, { pattern }, selected)).front(), EMPTY_RESULT);
 
 		//Handle result for Select a pattern a(v, _"z"_) such that MODIFIES_S(a,v)
-		pattern = Pattern(assignCommon, lhsCommon, z, true);
-		relation = RelRef(MODIFIES_S, assignCommon, lhsCommon);
-		selected = assignCommon;
+		pattern = Pattern(assign_common, lhs_common, z, true);
+		relation = RelRef(MODIFIES_S, assign_common, lhs_common);
+		selected = assign_common;
 		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation }, { pattern }, selected)).front(), EMPTY_RESULT);
-		selected = lhsCommon;
+		selected = lhs_common;
 		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation }, { pattern }, selected)).front(), EMPTY_RESULT);
 
 		//Handle result for Select a pattern a(v, _) such that USES_S(a,v)
-		pattern = Pattern(assignCommon, lhsCommon, "", true);
-		relation = RelRef(USES_S, assignCommon, lhsCommon);
-		selected = assignCommon;
+		pattern = Pattern(assign_common, lhs_common, "", true);
+		relation = RelRef(USES_S, assign_common, lhs_common);
+		selected = assign_common;
 		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation }, { pattern }, selected)).front(), EMPTY_RESULT);
-		selected = lhsCommon;
+		selected = lhs_common;
 		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation }, { pattern }, selected)).front(), EMPTY_RESULT);
 	}
 
 	TEST_F(QueryEvaluatorMultiClausesTest, evaluateQueryPatternRelationFilterSingleCommonSynonyms) {
-		Entity assignCommon = { ASSIGN,  COMMON_SYNONYM1 };
-		Entity lhsCommon = { VARIABLE, COMMON_SYNONYM2 };
-		Entity stmtCommon = { STMT,  COMMON_SYNONYM3 };
+		Entity assign_common = { ASSIGN,  COMMON_SYNONYM1 };
+		Entity lhs_common = { VARIABLE, COMMON_SYNONYM2 };
+		Entity stmt_common = { STMT,  COMMON_SYNONYM3 };
 
 		//Handle result for Select a pattern a(_, "x") such that Modifies(a,v)
-		Pattern pattern(assignCommon, WILD_CARD, x, false);
-		RelRef relation(MODIFIES_S, assignCommon, lhsCommon);
+		Pattern pattern(assign_common, WILD_CARD, x, false);
+		RelRef relation(MODIFIES_S, assign_common, lhs_common);
 
 		std::list<std::string> result = { MODIFIES_LEFT3 };
-		Entity selected = assignCommon;
+		Entity selected = assign_common;
 		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation }, { pattern }, selected)).front(), result);
 
-		selected = lhsCommon;
+		selected = lhs_common;
 		result = { MODIFIES_RIGHT3 };
 		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation }, { pattern }, selected)).front(), result);
 
 		//Handle result for Select a pattern a(_, _"x"_) such that Modifies(a,v)
-		pattern = Pattern(assignCommon, WILD_CARD, x, true);
-		relation = RelRef(MODIFIES_S, assignCommon, lhsCommon);
+		pattern = Pattern(assign_common, WILD_CARD, x, true);
+		relation = RelRef(MODIFIES_S, assign_common, lhs_common);
 
-		selected = assignCommon;
+		selected = assign_common;
 		result = { MODIFIES_LEFT4, MODIFIES_LEFT3 };
 		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation }, { pattern }, selected)).front(), result);
 
-		selected = lhsCommon;
+		selected = lhs_common;
 		result = { MODIFIES_RIGHT3, MODIFIES_RIGHT4 };
 		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation }, { pattern }, selected)).front(), result);
 
 		//Handle result for Select a pattern a(_, _"y"_) such that Modifies(a,v)
-		pattern = Pattern(assignCommon, WILD_CARD, y, true);
-		relation = RelRef(MODIFIES_S, assignCommon, lhsCommon);
+		pattern = Pattern(assign_common, WILD_CARD, y, true);
+		relation = RelRef(MODIFIES_S, assign_common, lhs_common);
 
-		selected = assignCommon;
+		selected = assign_common;
 		result = { MODIFIES_LEFT4 };
 		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation }, { pattern }, selected)).front(), result);
 
-		selected = lhsCommon;
+		selected = lhs_common;
 		result = { MODIFIES_RIGHT4 };
 		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation }, { pattern }, selected)).front(), result);
 
 		//Handle result for Select a pattern a(_, _) such that Modifies(a,v)
-		pattern = Pattern(assignCommon, WILD_CARD, "", true);
-		relation = RelRef(MODIFIES_S, assignCommon, lhsCommon);
+		pattern = Pattern(assign_common, WILD_CARD, "", true);
+		relation = RelRef(MODIFIES_S, assign_common, lhs_common);
 
-		selected = assignCommon;
+		selected = assign_common;
 		result = { MODIFIES_LEFT4, MODIFIES_LEFT3 };
 		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation }, { pattern }, selected)).front(), result);
 
-		selected = lhsCommon;
+		selected = lhs_common;
 		result = { MODIFIES_RIGHT3, MODIFIES_RIGHT4 };
 		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation }, { pattern }, selected)).front(), result);
 
 		//Handle result for Select a pattern a(v, "x") such that Modifies(a,_)
-		pattern = Pattern(assignCommon, lhsCommon, x, false);
-		relation = RelRef(MODIFIES_S, assignCommon, WILD_CARD);
+		pattern = Pattern(assign_common, lhs_common, x, false);
+		relation = RelRef(MODIFIES_S, assign_common, WILD_CARD);
 
 		result = { MODIFIES_LEFT3 };
-		selected = assignCommon;
+		selected = assign_common;
 		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation }, { pattern }, selected)).front(), result);
 
-		selected = lhsCommon;
+		selected = lhs_common;
 		result = { MODIFIES_RIGHT3 };
 		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation }, { pattern }, selected)).front(), result);
 
 		//Handle result for Select a pattern a(v, _"x"_) such that Modifies(a,_)
-		pattern = Pattern(assignCommon, lhsCommon, x, true);
-		relation = RelRef(MODIFIES_S, assignCommon, WILD_CARD);
+		pattern = Pattern(assign_common, lhs_common, x, true);
+		relation = RelRef(MODIFIES_S, assign_common, WILD_CARD);
 
-		selected = assignCommon;
+		selected = assign_common;
 		result = { MODIFIES_LEFT4, MODIFIES_LEFT3 };
 		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation }, { pattern }, selected)).front(), result);
 
-		selected = lhsCommon;
+		selected = lhs_common;
 		result = { MODIFIES_RIGHT3, MODIFIES_RIGHT4 };
 		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation }, { pattern }, selected)).front(), result);
 
 		//Handle result for Select a pattern a(v, _"y"_) such that Modifies(a,_)
-		pattern = Pattern(assignCommon, lhsCommon, y, true);
-		relation = RelRef(MODIFIES_S, assignCommon, WILD_CARD);
+		pattern = Pattern(assign_common, lhs_common, y, true);
+		relation = RelRef(MODIFIES_S, assign_common, WILD_CARD);
 
-		selected = assignCommon;
+		selected = assign_common;
 		result = { MODIFIES_LEFT4 };
 		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation }, { pattern }, selected)).front(), result);
 
-		selected = lhsCommon;
+		selected = lhs_common;
 		result = { MODIFIES_RIGHT4 };
 		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation }, { pattern }, selected)).front(), result);
 
 		//Handle result for Select a pattern a(v, _) such that Modifies(a,_)
-		pattern = Pattern(assignCommon, lhsCommon, "", true);
-		relation = RelRef(MODIFIES_S, assignCommon, WILD_CARD);
+		pattern = Pattern(assign_common, lhs_common, "", true);
+		relation = RelRef(MODIFIES_S, assign_common, WILD_CARD);
 
-		selected = assignCommon;
+		selected = assign_common;
 		result = { MODIFIES_LEFT4, MODIFIES_LEFT3 };
 		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation }, { pattern }, selected)).front(), result);
 
-		selected = lhsCommon;
+		selected = lhs_common;
 		result = { MODIFIES_RIGHT3, MODIFIES_RIGHT4 };
 		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation }, { pattern }, selected)).front(), result);
 
 		//Handle result for Select a pattern a(_, "x") such that Modifies(a,_)
-		pattern = Pattern(assignCommon, lhsCommon, x, false);
-		relation = RelRef(MODIFIES_S, assignCommon, WILD_CARD);
+		pattern = Pattern(assign_common, lhs_common, x, false);
+		relation = RelRef(MODIFIES_S, assign_common, WILD_CARD);
 		result = { MODIFIES_LEFT3 };
-		selected = assignCommon;
+		selected = assign_common;
 		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation }, { pattern }, selected)).front(), result);
 
 		//Handle result for Select a pattern a(_, _"x"_) such that Modifies(a,_)
-		pattern = Pattern(assignCommon, lhsCommon, x, true);
-		relation = RelRef(MODIFIES_S, assignCommon, WILD_CARD);
-		selected = assignCommon;
+		pattern = Pattern(assign_common, lhs_common, x, true);
+		relation = RelRef(MODIFIES_S, assign_common, WILD_CARD);
+		selected = assign_common;
 		result = { MODIFIES_LEFT4, MODIFIES_LEFT3 };
 		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation }, { pattern }, selected)).front(), result);
 
 		//Handle result for Select a pattern a(_, _"y"_) such that Modifies(a,_)
-		pattern = Pattern(assignCommon, lhsCommon, y, true);
-		relation = RelRef(MODIFIES_S, assignCommon, WILD_CARD);
-		selected = assignCommon;
+		pattern = Pattern(assign_common, lhs_common, y, true);
+		relation = RelRef(MODIFIES_S, assign_common, WILD_CARD);
+		selected = assign_common;
 		result = { MODIFIES_LEFT4 };
 		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation }, { pattern }, selected)).front(), result);
 	}
 
 	TEST_F(QueryEvaluatorMultiClausesTest, evaluateQueryPatternRelationJoinSingleCommonSynonyms) {
-		Entity assignCommon = { ASSIGN,  COMMON_SYNONYM1 };
-		Entity lhsCommon = { VARIABLE, COMMON_SYNONYM2 };
-		Entity stmtCommon = { STMT,  COMMON_SYNONYM3 };
+		Entity assign_common = { ASSIGN,  COMMON_SYNONYM1 };
+		Entity lhs_common = { VARIABLE, COMMON_SYNONYM2 };
+		Entity stmt_common = { STMT,  COMMON_SYNONYM3 };
 
 		//Handle result for Select a pattern a(v, "x") such that uses(s,v)
-		Pattern pattern(assignCommon, lhsCommon, x, false);
-		RelRef relation(USES_S, stmtCommon, lhsCommon);
-		Entity selected = assignCommon;
+		Pattern pattern(assign_common, lhs_common, x, false);
+		RelRef relation(USES_S, stmt_common, lhs_common);
+		Entity selected = assign_common;
 		std::list<std::string> result = { MODIFIES_LEFT3 };
 		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation }, { pattern }, selected)).front(), result);
 
-		selected = lhsCommon;
+		selected = lhs_common;
 		result = { MODIFIES_RIGHT3 };
 		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation }, { pattern }, selected)).front(), result);
 
-		selected = stmtCommon;
+		selected = stmt_common;
 		result = { USES_LEFT2 };
 		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation }, { pattern }, selected)).front(), result);
 
 		//Handle result for Select a pattern a(v, _"x"_) such that uses(s,v)
-		pattern = Pattern(assignCommon, lhsCommon, x, true);
-		relation = RelRef(USES_S, stmtCommon, lhsCommon);
+		pattern = Pattern(assign_common, lhs_common, x, true);
+		relation = RelRef(USES_S, stmt_common, lhs_common);
 
-		selected = assignCommon;
+		selected = assign_common;
 		result = { MODIFIES_LEFT4, MODIFIES_LEFT3 };
 		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation }, { pattern }, selected)).front(), result);
 
-		selected = lhsCommon;
+		selected = lhs_common;
 		result = { MODIFIES_RIGHT3, MODIFIES_RIGHT4 };
 		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation }, { pattern }, selected)).front(), result);
 
-		selected = stmtCommon;
+		selected = stmt_common;
 		result = { USES_LEFT2, USES_LEFT1 };
 		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation }, { pattern }, selected)).front(), result);
 
 		//Handle result for Select a pattern a(v, _"y"_) such that uses(s,v)
-		pattern = Pattern(assignCommon, lhsCommon, y, true);
-		relation = RelRef(USES_S, stmtCommon, lhsCommon);
+		pattern = Pattern(assign_common, lhs_common, y, true);
+		relation = RelRef(USES_S, stmt_common, lhs_common);
 
-		selected = assignCommon;
+		selected = assign_common;
 		result = { MODIFIES_LEFT4 };
 		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation }, { pattern }, selected)).front(), result);
 
-		selected = lhsCommon;
+		selected = lhs_common;
 		result = { MODIFIES_RIGHT4 };
 		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation }, { pattern }, selected)).front(), result);
 
-		selected = stmtCommon;
+		selected = stmt_common;
 		result = { USES_LEFT1 };
 		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation }, { pattern }, selected)).front(), result);
 
 		//Handle result for Select a pattern a(v, _) such that uses(s,v)
-		pattern = Pattern(assignCommon, lhsCommon, "", true);
-		relation = RelRef(USES_S, stmtCommon, lhsCommon);
-		selected = assignCommon;
+		pattern = Pattern(assign_common, lhs_common, "", true);
+		relation = RelRef(USES_S, stmt_common, lhs_common);
+		selected = assign_common;
 		result = { MODIFIES_LEFT4, MODIFIES_LEFT3 };
 		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation }, { pattern }, selected)).front(), result);
 
-		selected = lhsCommon;
+		selected = lhs_common;
 		result = { MODIFIES_RIGHT3, MODIFIES_RIGHT4 };
 		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation }, { pattern }, selected)).front(), result);
 
-		selected = stmtCommon;
+		selected = stmt_common;
 		result = { USES_LEFT2, USES_LEFT1 };
 		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation }, { pattern }, selected)).front(), result);
 
 		//Handle result for Select a pattern a(v, "x") such that modifies(s,v)
-		pattern = Pattern(assignCommon, lhsCommon, x, false);
-		relation = RelRef(MODIFIES_S, stmtCommon, lhsCommon);
-		selected = assignCommon;
+		pattern = Pattern(assign_common, lhs_common, x, false);
+		relation = RelRef(MODIFIES_S, stmt_common, lhs_common);
+		selected = assign_common;
 		result = { MODIFIES_LEFT3 };
 		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation }, { pattern }, selected)).front(), result);
 
-		selected = lhsCommon;
+		selected = lhs_common;
 		result = { MODIFIES_RIGHT3 };
 		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation }, { pattern }, selected)).front(), result);
 
-		pattern = Pattern(assignCommon, lhsCommon, x, false);
-		relation = RelRef(MODIFIES_S, stmtCommon, lhsCommon);
-		selected = stmtCommon;
+		pattern = Pattern(assign_common, lhs_common, x, false);
+		relation = RelRef(MODIFIES_S, stmt_common, lhs_common);
+		selected = stmt_common;
 		result = { MODIFIES_LEFT3, MODIFIES_LEFT1 };
 		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation }, { pattern }, selected)).front(), result);
 
 		//Handle result for Select a pattern a(v, _"x"_) such that modifies(s,v)
-		pattern = Pattern(assignCommon, lhsCommon, x, true);
-		relation = RelRef(MODIFIES_S, stmtCommon, lhsCommon);
+		pattern = Pattern(assign_common, lhs_common, x, true);
+		relation = RelRef(MODIFIES_S, stmt_common, lhs_common);
 
-		selected = assignCommon;
+		selected = assign_common;
 		result = { MODIFIES_LEFT4, MODIFIES_LEFT3 };
 		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation }, { pattern }, selected)).front(), result);
 
-		selected = lhsCommon;
+		selected = lhs_common;
 		result = { MODIFIES_RIGHT3, MODIFIES_RIGHT4 };
 		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation }, { pattern }, selected)).front(), result);
 
-		selected = stmtCommon;
+		selected = stmt_common;
 		result = { MODIFIES_LEFT4, MODIFIES_LEFT3, MODIFIES_LEFT1, MODIFIES_LEFT2 };
 		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation }, { pattern }, selected)).front(), result);
 	}
 
 	TEST_F(QueryEvaluatorMultiClausesTest, evaluateQueryPatternRelationFilterDoubleCommonSynonyms) {
-		Entity assignCommon = { ASSIGN,  COMMON_SYNONYM1 };
-		Entity lhsCommon = { VARIABLE, COMMON_SYNONYM2 };
+		Entity assign_common = { ASSIGN,  COMMON_SYNONYM1 };
+		Entity lhs_common = { VARIABLE, COMMON_SYNONYM2 };
 
 		//Handle result for Select a pattern a(v, "_") such that MODIFIES_S(a,v)
-		Pattern pattern(assignCommon, lhsCommon, "", true);
-		RelRef relation(MODIFIES_S, assignCommon, lhsCommon);
+		Pattern pattern(assign_common, lhs_common, "", true);
+		RelRef relation(MODIFIES_S, assign_common, lhs_common);
 
 		std::list<std::string> result = { MODIFIES_LEFT4, MODIFIES_LEFT3 };
-		Entity selected = assignCommon;
+		Entity selected = assign_common;
 		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation }, { pattern }, selected)).front(), result);
 
-		selected = lhsCommon;
+		selected = lhs_common;
 		result = { MODIFIES_RIGHT3, MODIFIES_RIGHT4 };
 		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation }, { pattern }, selected)).front(), result);
 
 		//Handle result for Select a pattern a(v, "x") such that MODIFIES_S(a,v)
-		pattern = Pattern(assignCommon, lhsCommon, "x", false);
-		relation = RelRef(MODIFIES_S, assignCommon, lhsCommon);
+		pattern = Pattern(assign_common, lhs_common, "x", false);
+		relation = RelRef(MODIFIES_S, assign_common, lhs_common);
 
 		result = { MODIFIES_LEFT3, };
-		selected = assignCommon;
+		selected = assign_common;
 		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation }, { pattern }, selected)).front(), result);
 
-		selected = lhsCommon;
+		selected = lhs_common;
 		result = { MODIFIES_RIGHT3 };
 		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation }, { pattern }, selected)).front(), result);
 	}
 
 	TEST_F(QueryEvaluatorMultiClausesTest, evaluateQueryPatternRelationJoinDoubleCommonSynonyms) {
-		Entity assignCommon = { ASSIGN,  COMMON_SYNONYM1 };
-		Entity lhsCommon = { VARIABLE, COMMON_SYNONYM2 };
-		Entity stmtCommon = { STMT,  COMMON_SYNONYM3 };
-		Entity assignCommon1 = { ASSIGN,  COMMON_SYNONYM4 };
-		Entity lhsCommon1 = { VARIABLE, COMMON_SYNONYM5 };
-		Entity stmtCommon1 = { STMT,  COMMON_SYNONYM6 };
+		Entity assign_common = { ASSIGN,  COMMON_SYNONYM1 };
+		Entity lhs_common = { VARIABLE, COMMON_SYNONYM2 };
+		Entity stmt_common = { STMT,  COMMON_SYNONYM3 };
+		Entity assign_common1 = { ASSIGN,  COMMON_SYNONYM4 };
+		Entity lhs_common1 = { VARIABLE, COMMON_SYNONYM5 };
+		Entity stmt_common1 = { STMT,  COMMON_SYNONYM6 };
 
-		Pattern pattern1(assignCommon, lhsCommon, "", true);
-		RelRef relation1(MODIFIES_S, assignCommon, lhsCommon);
-		Pattern pattern2(assignCommon1, lhsCommon1, "", true);
-		RelRef relation2(MODIFIES_S, assignCommon1, lhsCommon1);
-		Pattern pattern3(assignCommon1, lhsCommon, "", true);
+		Pattern pattern1(assign_common, lhs_common, "", true);
+		RelRef relation1(MODIFIES_S, assign_common, lhs_common);
+		Pattern pattern2(assign_common1, lhs_common1, "", true);
+		RelRef relation2(MODIFIES_S, assign_common1, lhs_common1);
+		Pattern pattern3(assign_common1, lhs_common, "", true);
 
-		Entity selected = assignCommon;
+		Entity selected = assign_common;
 		std::list<std::string> result = { MODIFIES_LEFT4, MODIFIES_LEFT3 };
 		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation1, relation2 }, { pattern1, pattern2, pattern3 }, selected)).front(), result);
-		selected = assignCommon1;
+		selected = assign_common1;
 		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation1, relation2 }, { pattern1, pattern2, pattern3 }, selected)).front(), result);
 
-		selected = lhsCommon;
+		selected = lhs_common;
 		result = { MODIFIES_RIGHT3, MODIFIES_RIGHT4 };
 		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation1, relation2 }, { pattern1, pattern2, pattern3 }, selected)).front(), result);
-		selected = lhsCommon1;
+		selected = lhs_common1;
 		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation1, relation2 }, { pattern1, pattern2, pattern3 }, selected)).front(), result);
 
-		pattern1 = Pattern(assignCommon, lhsCommon, "", true);
-		relation1 = RelRef(MODIFIES_S, stmtCommon, lhsCommon);
-		pattern2 = Pattern(assignCommon1, lhsCommon1, "", true);
-		relation2 = RelRef(MODIFIES_S, stmtCommon1, lhsCommon1);
-		pattern3 = Pattern(assignCommon1, lhsCommon, "", true);
+		pattern1 = Pattern(assign_common, lhs_common, "", true);
+		relation1 = RelRef(MODIFIES_S, stmt_common, lhs_common);
+		pattern2 = Pattern(assign_common1, lhs_common1, "", true);
+		relation2 = RelRef(MODIFIES_S, stmt_common1, lhs_common1);
+		pattern3 = Pattern(assign_common1, lhs_common, "", true);
 
-		selected = assignCommon;
+		selected = assign_common;
 		result = { MODIFIES_LEFT4, MODIFIES_LEFT3 };
 		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation1, relation2 }, { pattern1, pattern2, pattern3 }, selected)).front(), result);
-		selected = assignCommon1;
+		selected = assign_common1;
 		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation1, relation2 }, { pattern1, pattern2, pattern3 }, selected)).front(), result);
 
-		selected = lhsCommon;
+		selected = lhs_common;
 		result = { MODIFIES_RIGHT3, MODIFIES_RIGHT4 };
 		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation1, relation2 }, { pattern1, pattern2, pattern3 }, selected)).front(), result);
-		selected = lhsCommon1;
+		selected = lhs_common1;
 		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation1, relation2 }, { pattern1, pattern2, pattern3 }, selected)).front(), result);
 
-		selected = stmtCommon;
+		selected = stmt_common;
 		result = { MODIFIES_LEFT4, MODIFIES_LEFT3, MODIFIES_LEFT1, MODIFIES_LEFT2 };
 		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation1, relation2 }, { pattern1, pattern2, pattern3 }, selected)).front(), result);
-		selected = stmtCommon1;
+		selected = stmt_common1;
 		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation1, relation2 }, { pattern1, pattern2, pattern3 }, selected)).front(), result);
 	}
 
 	TEST_F(QueryEvaluatorMultiClausesTest, evaluateQueryPatternRelationJoinDoubleCommonSynonymsEmpty) {
-		Entity assignCommon = { ASSIGN,  COMMON_SYNONYM1 };
-		Entity lhsCommon = { VARIABLE, COMMON_SYNONYM2 };
-		Entity stmtCommon = { STMT,  COMMON_SYNONYM3 };
-		Entity assignCommon1 = { ASSIGN,  COMMON_SYNONYM4 };
-		Entity lhsCommon1 = { VARIABLE, COMMON_SYNONYM5 };
-		Entity stmtCommon1 = { STMT,  COMMON_SYNONYM6 };
+		Entity assign_common = { ASSIGN,  COMMON_SYNONYM1 };
+		Entity lhs_common = { VARIABLE, COMMON_SYNONYM2 };
+		Entity stmt_common = { STMT,  COMMON_SYNONYM3 };
+		Entity assign_common1 = { ASSIGN,  COMMON_SYNONYM4 };
+		Entity lhs_common1 = { VARIABLE, COMMON_SYNONYM5 };
+		Entity stmt_common1 = { STMT,  COMMON_SYNONYM6 };
 
-		Pattern pattern1(assignCommon, lhsCommon, "", true);
-		RelRef relation1(MODIFIES_S, assignCommon, lhsCommon);
-		Pattern pattern2(assignCommon1, lhsCommon1, "", true);
-		RelRef relation2(MODIFIES_S, assignCommon1, lhsCommon1);
-		Pattern pattern3(assignCommon1, lhsCommon, "z", true);
+		Pattern pattern1(assign_common, lhs_common, "", true);
+		RelRef relation1(MODIFIES_S, assign_common, lhs_common);
+		Pattern pattern2(assign_common1, lhs_common1, "", true);
+		RelRef relation2(MODIFIES_S, assign_common1, lhs_common1);
+		Pattern pattern3(assign_common1, lhs_common, "z", true);
 
-		Entity selected = assignCommon;
+		Entity selected = assign_common;
 		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation1, relation2 }, { pattern1, pattern2, pattern3 }, selected)).front(), EMPTY_RESULT);
-		selected = assignCommon1;
-		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation1, relation2 }, { pattern1, pattern2, pattern3 }, selected)).front(), EMPTY_RESULT);
-
-		selected = lhsCommon;
-		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation1, relation2 }, { pattern1, pattern2, pattern3 }, selected)).front(), EMPTY_RESULT);
-		selected = lhsCommon1;
+		selected = assign_common1;
 		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation1, relation2 }, { pattern1, pattern2, pattern3 }, selected)).front(), EMPTY_RESULT);
 
-		pattern1 = Pattern(assignCommon, lhsCommon, "", true);
-		relation1 = RelRef(MODIFIES_S, stmtCommon, lhsCommon);
-		pattern2 = Pattern(assignCommon1, lhsCommon1, "", true);
-		relation2 = RelRef(MODIFIES_S, stmtCommon1, lhsCommon1);
-		pattern3 = Pattern(assignCommon1, lhsCommon, "z", true);
-
-		selected = assignCommon;
+		selected = lhs_common;
 		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation1, relation2 }, { pattern1, pattern2, pattern3 }, selected)).front(), EMPTY_RESULT);
-		selected = assignCommon1;
+		selected = lhs_common1;
 		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation1, relation2 }, { pattern1, pattern2, pattern3 }, selected)).front(), EMPTY_RESULT);
 
-		selected = lhsCommon;
+		pattern1 = Pattern(assign_common, lhs_common, "", true);
+		relation1 = RelRef(MODIFIES_S, stmt_common, lhs_common);
+		pattern2 = Pattern(assign_common1, lhs_common1, "", true);
+		relation2 = RelRef(MODIFIES_S, stmt_common1, lhs_common1);
+		pattern3 = Pattern(assign_common1, lhs_common, "z", true);
+
+		selected = assign_common;
 		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation1, relation2 }, { pattern1, pattern2, pattern3 }, selected)).front(), EMPTY_RESULT);
-		selected = lhsCommon1;
+		selected = assign_common1;
 		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation1, relation2 }, { pattern1, pattern2, pattern3 }, selected)).front(), EMPTY_RESULT);
 
-		selected = stmtCommon;
+		selected = lhs_common;
 		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation1, relation2 }, { pattern1, pattern2, pattern3 }, selected)).front(), EMPTY_RESULT);
-		selected = stmtCommon1;
-		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation1, relation2 }, { pattern1, pattern2, pattern3 }, selected)).front(), EMPTY_RESULT);
-
-		pattern1 = Pattern(assignCommon, lhsCommon, "", true);
-		relation1 = RelRef(MODIFIES_S, stmtCommon, lhsCommon);
-		pattern2 = Pattern(assignCommon1, lhsCommon1, "", true);
-		relation2 = RelRef(PARENT, stmtCommon, stmtCommon1);
-		pattern3 = Pattern(assignCommon1, lhsCommon, "z", true);
-
-		selected = assignCommon;
-		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation1, relation2 }, { pattern1, pattern2, pattern3 }, selected)).front(), EMPTY_RESULT);
-		selected = assignCommon1;
+		selected = lhs_common1;
 		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation1, relation2 }, { pattern1, pattern2, pattern3 }, selected)).front(), EMPTY_RESULT);
 
-		selected = lhsCommon;
+		selected = stmt_common;
 		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation1, relation2 }, { pattern1, pattern2, pattern3 }, selected)).front(), EMPTY_RESULT);
-		selected = lhsCommon1;
+		selected = stmt_common1;
 		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation1, relation2 }, { pattern1, pattern2, pattern3 }, selected)).front(), EMPTY_RESULT);
 
-		selected = stmtCommon;
+		pattern1 = Pattern(assign_common, lhs_common, "", true);
+		relation1 = RelRef(MODIFIES_S, stmt_common, lhs_common);
+		pattern2 = Pattern(assign_common1, lhs_common1, "", true);
+		relation2 = RelRef(PARENT, stmt_common, stmt_common1);
+		pattern3 = Pattern(assign_common1, lhs_common, "z", true);
+
+		selected = assign_common;
 		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation1, relation2 }, { pattern1, pattern2, pattern3 }, selected)).front(), EMPTY_RESULT);
-		selected = stmtCommon1;
+		selected = assign_common1;
+		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation1, relation2 }, { pattern1, pattern2, pattern3 }, selected)).front(), EMPTY_RESULT);
+
+		selected = lhs_common;
+		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation1, relation2 }, { pattern1, pattern2, pattern3 }, selected)).front(), EMPTY_RESULT);
+		selected = lhs_common1;
+		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation1, relation2 }, { pattern1, pattern2, pattern3 }, selected)).front(), EMPTY_RESULT);
+
+		selected = stmt_common;
+		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation1, relation2 }, { pattern1, pattern2, pattern3 }, selected)).front(), EMPTY_RESULT);
+		selected = stmt_common1;
 		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation1, relation2 }, { pattern1, pattern2, pattern3 }, selected)).front(), EMPTY_RESULT);
 	}
 }

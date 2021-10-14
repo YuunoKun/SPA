@@ -9,29 +9,29 @@
 class CallsEvaluator : public RelationEvaluatorInterface {
 public:
 	//Handle both wild : e.g Relation(_, _)
-	bool haveRelation() override;
+	bool evaluateWildAndWild() override;
 
 	//Handle both constant : e.g Relation(1, 2)
-	bool isRelation(Entity, Entity) override;
+	bool evaluateConstantAndConstant(Entity, Entity) override;
 
 	//Handle left constant, right wild: e.g Relation(1, _)
-	bool haveRelationAtRight(Entity) override;
+	bool evaluateConstantAndWild(Entity) override;
 
 	//Handle right wild, left constant: e.g Relation(_, 1)
-	bool haveRelationAtLeft(Entity) override;
+	bool evaluateWildAndConstant(Entity) override;
 
 	//Handle both declartion : e.g Relation(a, b)
-	ResultTable getRelations(Entity, Entity) override;
+	ResultTable evaluateSynonymAndSynonym(Entity, Entity) override;
 
 	//Handle left constant, right declartion: e.g Relation(_, a)
-	ResultTable getRightRelations(Entity) override;
+	ResultTable evaluateWildAndSynonym(Entity) override;
 
 	//Handle right declartion, left constant: e.g Relation(a, _)
-	ResultTable getLeftRelations(Entity) override;
+	ResultTable evaluateSynonymAndWild(Entity) override;
 
 	//Handle left constant, right declartion: e.g Relation(1, a)
-	ResultTable getRelationMatchLeft(Entity, Entity) override;
+	ResultTable evaluateConstantAndSynonym(Entity, Entity) override;
 
 	//Handle right declartion, left constant: e.g Relation(a, 1)
-	ResultTable getRelationMatchRight(Entity, Entity) override;
+	ResultTable evaluateSynonymAndConstant(Entity, Entity) override;
 };

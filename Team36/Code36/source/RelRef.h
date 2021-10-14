@@ -35,8 +35,6 @@ public:
 	bool operator==(const RelRef&) const;
 
 private:
-
-	//Member Variable
 	RelType rel_type;
 	Entity first_clause;
 	Entity second_clause;

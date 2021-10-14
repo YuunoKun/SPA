@@ -3,29 +3,21 @@
 #include "ResultTable.h"
 
 namespace UnitTesting {
-	std::pair<Entity, Entity> resultTableHeader1{ {WHILE, Synonym{"test"} } , { READ,Synonym{"hello"} } };
-	std::vector<std::pair<std::string, std::string>> resultTableTable1{
+	std::pair<Entity, Entity> result_table_header1{ {WHILE, Synonym{"test"} } , { READ,Synonym{"hello"} } };
+	std::vector<std::pair<std::string, std::string>> result_list_pair1{
 		{ "1", "2" }, { "3", "4" },
 		{ "5", "6" }, { "7", "8" },
 		{ "9", "10" }, { "11", "12" },
 		{ "13", "14" }, { "15", "16" },
 		{ "17", "18" }, { "19", "20" } };
 
-	std::pair<Entity, Entity> resultTableHeader2{ {WHILE, Synonym{"t1"} }, { READ,Synonym{"t2"} } };
-	std::vector<std::pair<std::string, std::string>> resultTableTable2{
+	std::pair<Entity, Entity> result_table_header2{ {WHILE, Synonym{"t1"} }, { READ,Synonym{"t2"} } };
+	std::vector<std::pair<std::string, std::string>> result_list_pair2{
 		{ "1", "11", },
 		{ "2", "12", },
 		{ "3", "13",},
 		{ "4", "14",},
 		{ "5", "15", } };
-
-	std::pair<Entity, Entity> resultTableHeader3{ {VARIABLE, Synonym{"t3"} }, { IF,Synonym{"t4"} } };
-	std::vector<std::pair<std::string, std::string>> resultTableTable3{
-		{ "6", "16", },
-		{ "7", "17", },
-		{ "8", "18",},
-		{ "9", "19",},
-		{ "10", "20", } };
 
 	TEST(ResultTable, initWithString) {
 		Entity e(ASSIGN, Synonym{ "x" });
@@ -34,19 +26,41 @@ namespace UnitTesting {
 		ResultTable t(e, a);
 		EXPECT_EQ(t.getEntityResult(e), b);
 	}
+
+	TEST(ResultTable, initWithStmtIndex) {
+		Entity e(ASSIGN, Synonym{ "x" });
+		std::vector<stmt_index> a = { 1, 2, 3, 4, 5 };
+		std::list<std::string> b = { "1", "2", "3", "4", "5" };
+		ResultTable t(e, a);
+		EXPECT_EQ(t.getEntityResult(e), b);
+	}
+
+	TEST(ResultTable, initWithPairStmtIndexString) {
+		Entity e1(ASSIGN, Synonym{ "x" });
+		Entity e2(VARIABLE, Synonym{ "y" });
+		std::vector<std::pair<stmt_index, std::string>> a = {
+			{ 1 , "a"}, {2, "b"} ,
+			{ 3, "c"}, {4, "d"} ,
+			{ 5 , "e"} };
+		std::list<std::string> b1 = { "1", "2", "3", "4", "5" };
+		std::list<std::string> b2 = { "a", "b", "c", "d", "e" };
+		ResultTable t({ e1, e2 }, a);
+		EXPECT_EQ(t.getEntityResult(e1), b1);
+		EXPECT_EQ(t.getEntityResult(e2), b2);
+	}
 	TEST(ResultTable, initWithPairString) {
-		ResultTable table(resultTableHeader1, resultTableTable1);
+		ResultTable table(result_table_header1, result_list_pair1);
 		std::list<std::string> result{ "1", "5", "9", "13", "17", "3", "7", "11", "15", "19" };
-		std::list<std::string> tableResult = table.getEntityResult(resultTableHeader1.first);
+		std::list<std::string> table_result = table.getEntityResult(result_table_header1.first);
 		result.sort();
-		tableResult.sort();
-		EXPECT_EQ(tableResult, result);
+		table_result.sort();
+		EXPECT_EQ(table_result, result);
 
 		result = { "2", "6", "10", "14", "18", "4", "8", "12", "16", "20" };
-		tableResult = table.getEntityResult(resultTableHeader1.second);
+		table_result = table.getEntityResult(result_table_header1.second);
 		result.sort();
-		tableResult.sort();
-		EXPECT_EQ(tableResult, result);
+		table_result.sort();
+		EXPECT_EQ(table_result, result);
 	}
 	TEST(ResultTable, initWithStmtInfo) {
 		Entity e(ASSIGN, Synonym{ "x" });
@@ -667,61 +681,61 @@ namespace UnitTesting {
 		EXPECT_EQ(t1.getEntityResult(e3), b3);
 	}
 	TEST(ResultTable, isInTable) {
-		ResultTable table(resultTableHeader1, resultTableTable1);
+		ResultTable table(result_table_header1, result_list_pair1);
 
-		EXPECT_TRUE(table.isInTable(resultTableHeader1.first));
-		EXPECT_TRUE(table.isInTable(resultTableHeader1.second));
+		EXPECT_TRUE(table.isInTable(result_table_header1.first));
+		EXPECT_TRUE(table.isInTable(result_table_header1.second));
 		EXPECT_TRUE(table.isInTable({ WHILE, Synonym{"test"} }));
 		EXPECT_FALSE(table.isInTable({ PRINT, Synonym{"test1"} }));
 	}
 
 	TEST(ResultTable, isEmpty) {
-		ResultTable table(resultTableHeader1, resultTableTable1);
+		ResultTable table(result_table_header1, result_list_pair1);
 		EXPECT_FALSE(table.isEmpty());
 
 		std::vector<std::pair<std::string, std::string>> tables;
-		ResultTable table1(resultTableHeader1, tables);
+		ResultTable table1(result_table_header1, tables);
 		EXPECT_TRUE(table1.isEmpty());
 	}
 
 	TEST(ResultTable, getEntityResult) {
-		ResultTable table(resultTableHeader1, resultTableTable1);
+		ResultTable table(result_table_header1, result_list_pair1);
 
 		std::list<std::string> result{ "1", "5", "9", "13", "17", "3", "7", "11", "15", "19" };
-		std::list<std::string> tableResult = table.getEntityResult(resultTableHeader1.first);
+		std::list<std::string> table_result = table.getEntityResult(result_table_header1.first);
 		result.sort();
-		tableResult.sort();
-		EXPECT_EQ(tableResult, result);
+		table_result.sort();
+		EXPECT_EQ(table_result, result);
 
 		result = { "2", "6", "10", "14", "18", "4", "8", "12", "16", "20" };
-		tableResult = table.getEntityResult(resultTableHeader1.second);
+		table_result = table.getEntityResult(result_table_header1.second);
 		result.sort();
-		tableResult.sort();
-		EXPECT_EQ(tableResult, result);
+		table_result.sort();
+		EXPECT_EQ(table_result, result);
 	}
 
 	TEST(ResultTable, getCommonHeaders) {
-		ResultTable table(resultTableHeader1, resultTableTable1);
+		ResultTable table(result_table_header1, result_list_pair1);
 
-		std::vector<Entity> v = { resultTableHeader1.first };
-		EXPECT_EQ(table.getCommonHeaders({ resultTableHeader1.first }), v);
+		std::vector<Entity> v = { result_table_header1.first };
+		EXPECT_EQ(table.getCommonHeaders({ result_table_header1.first }), v);
 
-		v = { resultTableHeader1.second };
-		EXPECT_EQ(table.getCommonHeaders({ resultTableHeader1.second }), v);
+		v = { result_table_header1.second };
+		EXPECT_EQ(table.getCommonHeaders({ result_table_header1.second }), v);
 
-		v = { resultTableHeader1.first, resultTableHeader1.second };
-		EXPECT_EQ(table.getCommonHeaders({ resultTableHeader1.first, resultTableHeader1.second }), v);
+		v = { result_table_header1.first, result_table_header1.second };
+		EXPECT_EQ(table.getCommonHeaders({ result_table_header1.first, result_table_header1.second }), v);
 
-		v = { resultTableHeader1.first, resultTableHeader1.second };
-		EXPECT_EQ(table.getCommonHeaders({ resultTableHeader1.first, resultTableHeader1.second, resultTableHeader2.first, resultTableHeader2.second }), v);
+		v = { result_table_header1.first, result_table_header1.second };
+		EXPECT_EQ(table.getCommonHeaders({ result_table_header1.first, result_table_header1.second, result_table_header2.first, result_table_header2.second }), v);
 
-		v = { resultTableHeader1.first };
-		EXPECT_EQ(table.getCommonHeaders({ resultTableHeader1.first, resultTableHeader2.first, resultTableHeader2.second }), v);
+		v = { result_table_header1.first };
+		EXPECT_EQ(table.getCommonHeaders({ result_table_header1.first, result_table_header2.first, result_table_header2.second }), v);
 
-		v = { resultTableHeader1.second };
-		EXPECT_EQ(table.getCommonHeaders({ resultTableHeader1.second, resultTableHeader2.first, resultTableHeader2.second }), v);
+		v = { result_table_header1.second };
+		EXPECT_EQ(table.getCommonHeaders({ result_table_header1.second, result_table_header2.first, result_table_header2.second }), v);
 
 		v = { };
-		EXPECT_EQ(table.getCommonHeaders({ resultTableHeader2.first, resultTableHeader2.second }), v);
+		EXPECT_EQ(table.getCommonHeaders({ result_table_header2.first, result_table_header2.second }), v);
 	}
 }

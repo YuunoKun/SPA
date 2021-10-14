@@ -86,19 +86,29 @@ namespace UnitTesting {
 		EXPECT_EQ(Utility::stmtInfoToStringVector(a), b);
 	}
 
+	TEST(Utility, stmtIndexToStringVector) {
+		std::vector<stmt_index> a = { 1, 2, 3, 4 };
+		std::vector<std::string> b{ "1", "2", "3", "4" };
+		EXPECT_EQ(Utility::stmtIndexToStringVector(a), b);
+	}
+
 	TEST(Utility, pairToStringTable) {
-		std::vector<std::pair<std::string, std::string>> a = { {"a", "b"},{"c", "d"} };
-		std::vector<std::vector<std::string>> b = { {"a", "b"},{"c", "d"} };
-		EXPECT_EQ(Utility::pairToStringTable(a), b);
+		std::vector<std::pair<std::string, std::string>> p1 = { {"a", "b"},{"c", "d"} };
+		std::vector<std::vector<std::string>> t1 = { {"a", "b"},{"c", "d"} };
+		EXPECT_EQ(Utility::pairToStringTable(p1), t1);
 
-		std::vector<std::pair<StmtInfo, std::string>> c = { {{ 1, STMT_ASSIGN }, "b"},{{ 2, STMT_ASSIGN }, "d"} };
-		std::vector<std::vector<std::string>> d = { {"1", "b"},{"2", "d"} };
-		EXPECT_EQ(Utility::pairToStringTable(c), d);
+		std::vector<std::pair<stmt_index, std::string>> p2 = { { 1 , "b"}, { 2 , "d"} };
+		std::vector<std::vector<std::string>> t2 = { {"1", "b"},{"2", "d"} };
+		EXPECT_EQ(Utility::pairToStringTable(p2), t2);
 
-		std::vector<std::pair<StmtInfo, StmtInfo>> e = { {{ 1, STMT_ASSIGN }, { 3, STMT_WHILE }},
+		std::vector<std::pair<StmtInfo, std::string>> p3 = { {{ 1, STMT_ASSIGN }, "b"},{{ 2, STMT_ASSIGN }, "d"} };
+		std::vector<std::vector<std::string>> t3 = { {"1", "b"},{"2", "d"} };
+		EXPECT_EQ(Utility::pairToStringTable(p3), t3);
+
+		std::vector<std::pair<StmtInfo, StmtInfo>> p4 = { {{ 1, STMT_ASSIGN }, { 3, STMT_WHILE }},
 			{{ 2, STMT_ASSIGN }, { 4, STMT_WHILE }} };
-		std::vector<std::vector<std::string>> f = { {"1", "3"},{"2", "4"} };
-		EXPECT_EQ(Utility::pairToStringTable(e), f);
+		std::vector<std::vector<std::string>> t4 = { {"1", "3"},{"2", "4"} };
+		EXPECT_EQ(Utility::pairToStringTable(p4), t4);
 	}
 	TEST(Utility, getIndexString) {
 		std::vector<std::string> c{ "a", "b", "c", "d", "e" };
@@ -572,7 +582,7 @@ namespace UnitTesting {
 			{"3", "3"},
 		};
 
-		std::unordered_multimap<std::string, std::vector<std::string>> toJoin = {
+		std::unordered_multimap<std::string, std::vector<std::string>> to_join = {
 			{"1", { "1", "1" } },
 			{"2", { "2", "2" } },
 			{"3", { "3", "3" } },
@@ -581,7 +591,7 @@ namespace UnitTesting {
 		};
 
 		int fromIndex = 0;
-		int toJoinIndex = 0;
+		int to_join_index = 0;
 
 		std::vector<std::vector<std::string>> to = {
 			{"1", "1", "1"},
@@ -595,10 +605,10 @@ namespace UnitTesting {
 			{"3", "3", "3"},
 		};
 
-		EXPECT_EQ(Utility::joinTable(from, fromIndex, toJoin, toJoinIndex), to);
+		EXPECT_EQ(Utility::joinTable(from, fromIndex, to_join, to_join_index), to);
 
 		fromIndex = 1;
-		toJoinIndex = 0;
+		to_join_index = 0;
 
 		to = {
 			{"1", "1", "1"},
@@ -612,7 +622,7 @@ namespace UnitTesting {
 			{"3", "3", "3"},
 		};
 
-		EXPECT_EQ(Utility::joinTable(from, fromIndex, toJoin, toJoinIndex), to);
+		EXPECT_EQ(Utility::joinTable(from, fromIndex, to_join, to_join_index), to);
 
 		from = {
 			{"1"},
@@ -620,7 +630,7 @@ namespace UnitTesting {
 			{"3"}
 		};
 
-		toJoin = {
+		to_join = {
 			{"1", { "1", "1" } },
 			{"1", { "1", "2" } },
 			{"2", { "2", "3" } },
@@ -629,7 +639,7 @@ namespace UnitTesting {
 		};
 
 		fromIndex = 0;
-		toJoinIndex = 0;
+		to_join_index = 0;
 
 		to = {
 			{"1", "1"},
@@ -639,7 +649,7 @@ namespace UnitTesting {
 			{"2", "3"}
 		};
 
-		EXPECT_EQ(Utility::joinTable(from, fromIndex, toJoin, toJoinIndex), to);
+		EXPECT_EQ(Utility::joinTable(from, fromIndex, to_join, to_join_index), to);
 
 		from = {
 			{"1"},
@@ -647,7 +657,7 @@ namespace UnitTesting {
 			{"3"}
 		};
 
-		toJoin = {
+		to_join = {
 			{"1", { "1", "1", "5" } },
 			{"1", { "1", "2", "4" } },
 			{"2", { "2", "3", "3" } },
@@ -656,7 +666,7 @@ namespace UnitTesting {
 		};
 
 		fromIndex = 0;
-		toJoinIndex = 0;
+		to_join_index = 0;
 
 		to = {
 			{"1", "1", "5" },
@@ -666,7 +676,7 @@ namespace UnitTesting {
 			{"2", "3", "3" }
 		};
 
-		EXPECT_EQ(Utility::joinTable(from, fromIndex, toJoin, toJoinIndex), to);
+		EXPECT_EQ(Utility::joinTable(from, fromIndex, to_join, to_join_index), to);
 
 		from = {
 			{"1", "1"},
@@ -680,7 +690,7 @@ namespace UnitTesting {
 			{"3", "3"}
 		};
 
-		toJoin = {
+		to_join = {
 			{"1", { "1", "1", "5" } },
 			{"1", { "1", "2", "4" } },
 			{"2", { "2", "3", "3" } },
@@ -689,7 +699,7 @@ namespace UnitTesting {
 		};
 
 		fromIndex = 0;
-		toJoinIndex = 0;
+		to_join_index = 0;
 
 		to = {
 			{"1", "1", "1", "5" },
@@ -709,7 +719,7 @@ namespace UnitTesting {
 			{"2", "3", "3", "3" }
 		};
 
-		EXPECT_EQ(Utility::joinTable(from, fromIndex, toJoin, toJoinIndex), to);
+		EXPECT_EQ(Utility::joinTable(from, fromIndex, to_join, to_join_index), to);
 
 		from = {
 			{"1"},
@@ -723,7 +733,7 @@ namespace UnitTesting {
 			{"9"}
 		};
 
-		toJoin = {
+		to_join = {
 			{"1", { "1", "1", "5" } },
 			{"1", { "1", "2", "4" } },
 			{"1", { "1", "4", "2" } },
@@ -731,7 +741,7 @@ namespace UnitTesting {
 		};
 
 		fromIndex = 0;
-		toJoinIndex = 0;
+		to_join_index = 0;
 
 		to = {
 			{"1", "1", "5" },
@@ -740,10 +750,10 @@ namespace UnitTesting {
 			{"1", "5", "1" }
 		};
 
-		EXPECT_EQ(Utility::joinTable(from, fromIndex, toJoin, toJoinIndex), to);
+		EXPECT_EQ(Utility::joinTable(from, fromIndex, to_join, to_join_index), to);
 
 		fromIndex = 0;
-		toJoinIndex = 1;
+		to_join_index = 1;
 
 		to = {
 			{"1", "1", "5" },
@@ -752,7 +762,7 @@ namespace UnitTesting {
 			{"1", "1", "1" }
 		};
 
-		EXPECT_EQ(Utility::joinTable(from, fromIndex, toJoin, toJoinIndex), to);
+		EXPECT_EQ(Utility::joinTable(from, fromIndex, to_join, to_join_index), to);
 	}
 
 	TEST(Utility, queryTokenTypeToEntityType) {

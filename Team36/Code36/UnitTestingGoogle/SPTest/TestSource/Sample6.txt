@@ -1,0 +1,16 @@
+procedure nested {
+ a = 0;
+ b = 1;
+ while (g > f) {
+   while(f > e) {
+     while(e > d) {
+       while(d > c) {
+          d = d - 1;
+        }
+       e = e - 1;
+      }
+     f = f - 1;
+     }
+  g = g - 1;
+  }
+}

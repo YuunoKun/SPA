@@ -7,8 +7,8 @@ namespace UnitTesting {
 	TEST(Entity, getType) {
 		for (int i = EntityType::STMT; i != EntityType::WILD; ++i) {
 			EntityType type = static_cast<EntityType>(i);
-			Entity testEntity(type, Synonym{ "test" });
-			EXPECT_EQ(testEntity.getType(), type);
+			Entity test_entity(type, Synonym{ "test" });
+			EXPECT_EQ(test_entity.getType(), type);
 		}
 	}
 
@@ -16,8 +16,8 @@ namespace UnitTesting {
 		std::vector<Synonym> v{ {"test"}, {"test1"}, {"name"}, {"whatever"} };
 
 		for each (Synonym name in v) {
-			Entity testEntity(STMT, name);
-			EXPECT_EQ(testEntity.getSynonym(), name.name);
+			Entity test_entity(STMT, name);
+			EXPECT_EQ(test_entity.getSynonym(), name.name);
 		}
 	}
 
@@ -25,11 +25,11 @@ namespace UnitTesting {
 		std::vector<std::string> testInput{ "test", "test1", "test2", "test1" };
 		std::unordered_set<std::string> values;
 
-		Entity testEntity(STMT, "");
+		Entity test_entity(STMT, "");
 
 		for each (std::string input in testInput) {
-			Entity testEntity(STMT, input);
-			EXPECT_EQ(testEntity.getValue(), input);
+			Entity test_entity(STMT, input);
+			EXPECT_EQ(test_entity.getValue(), input);
 		}
 	}
 
@@ -71,11 +71,11 @@ namespace UnitTesting {
 
 	TEST(Entity, isDeclartion) {
 		Synonym s = { "test" };
-		Entity testEntity(STMT, s);
-		EXPECT_TRUE(testEntity.isSynonym());
+		Entity test_entity(STMT, s);
+		EXPECT_TRUE(test_entity.isSynonym());
 
-		Entity testEntity2(STMT, "test");
-		EXPECT_FALSE(testEntity2.isSynonym());
+		Entity test_entity2(STMT, "test");
+		EXPECT_FALSE(test_entity2.isSynonym());
 	}
 	TEST(Entity, equal) {
 		Entity e1(STMT, Synonym{ "test" });

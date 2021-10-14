@@ -479,12 +479,12 @@ void QueryPreprocessor::setQueryParameter() {
 }
 
 Query QueryPreprocessor::returnAndResetQuery() {
-	Query queryResult = this->query;
+	Query query_result = this->query;
 
 	// Reset variables
 	QueryPreprocessor::resetQuery();
 
-	return queryResult;
+	return query_result;
 }
 
 void QueryPreprocessor::resetQuery() {

@@ -6,8 +6,10 @@
 namespace UnitTesting {
 	TEST(Clause, PatternClause) {
 		Pattern pattern({ ASSIGN, Synonym{ "a" } }, { VARIABLE, Synonym{ "v" } }, "", true);
-		Clause clause(pattern);
+		Clause clause(pattern); 
+		Clause clause2(pattern);
 		EXPECT_EQ(clause, Clause(pattern));
+		EXPECT_EQ(clause, clause2);
 		EXPECT_EQ(clause.getPattern(), pattern);
 		EXPECT_EQ(clause.getPattern().getPatternType(), pattern.getPatternType());
 		EXPECT_EQ(clause.getPattern().getLeftExpression(), pattern.getLeftExpression());
@@ -30,7 +32,10 @@ namespace UnitTesting {
 
 	TEST(Clause, RelationClause) {
 		RelRef relation(MODIFIES_S, { ASSIGN, Synonym{ "a" } }, { VARIABLE, Synonym{ "v" } });
-		Clause clause(relation);
+		Clause clause(relation); 
+		Clause clause2(relation);
+		EXPECT_EQ(clause, Clause(relation));
+		EXPECT_EQ(clause, clause2);
 		EXPECT_EQ(clause.getRelation(), relation);
 		EXPECT_EQ(clause.getType(), RELATION);
 	}

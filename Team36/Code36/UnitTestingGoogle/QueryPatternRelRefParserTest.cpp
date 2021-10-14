@@ -2052,222 +2052,7 @@ namespace UnitTesting {
 		EXPECT_TRUE(query.getClauses()[0].getRelation() == expected_rel);
 	}
 
-	// Test parseParameterPattern
-	// Test ASSIGN
-	TEST(QueryPatternRelRefParserTest, parseParameterPatternAssignTest) {
-		QueryPatternRelRefParser validator;
-		Query query;
 
-		std::vector<QueryToken> temp_token_chain;
-		temp_token_chain.push_back({ QueryToken::QUOTATION_OPEN, "" });
-		temp_token_chain.push_back({ QueryToken::IDENTIFIER, "procName" });
-		temp_token_chain.push_back({ QueryToken::QUOTATION_CLOSE, "" });
-		temp_token_chain.push_back({ QueryToken::COMMA, "" });
-		temp_token_chain.push_back({ QueryToken::QUOTATION_OPEN, "" });
-		temp_token_chain.push_back({ QueryToken::IDENTIFIER, "s" });
-		temp_token_chain.push_back({ QueryToken::QUOTATION_CLOSE, "" });
-
-		std::vector<QueryToken> left_expr_token_chain;
-		left_expr_token_chain.push_back({ QueryToken::QUOTATION_OPEN, "" });
-		left_expr_token_chain.push_back({ QueryToken::IDENTIFIER, "procName" });
-		left_expr_token_chain.push_back({ QueryToken::QUOTATION_CLOSE, "" });
-
-		std::vector<QueryToken> right_expr_token_chain;
-		right_expr_token_chain.push_back({ QueryToken::QUOTATION_OPEN, "" });
-		right_expr_token_chain.push_back({ QueryToken::IDENTIFIER, "s" });
-		right_expr_token_chain.push_back({ QueryToken::QUOTATION_CLOSE, "" });
-		//Synonym
-		//Expected
-		Synonym synonym;
-		synonym.name = "a";
-		Entity expected_declared_assign = Entity(EntityType::ASSIGN, synonym);
-		query.addEntity(expected_declared_assign);
-
-		Entity expected_ent_wildcard = Entity(EntityType::WILD);
-
-		Pattern expected_pat = Pattern(expected_declared_assign, validator.setEntRef(query, left_expr_token_chain), validator.setExpr(right_expr_token_chain), false);
-
-		//Result
-		validator.parseParameterPattern(query, expected_declared_assign, temp_token_chain);
-
-		EXPECT_TRUE(query.getClauses()[0].getPattern() == expected_pat);
-	}
-
-	TEST(QueryPatternRelRefParserTest, parseParameterPatternAssignTest2) {
-		QueryPatternRelRefParser validator;
-		Query query;
-
-		std::vector<QueryToken> temp_token_chain;
-		temp_token_chain.push_back({ QueryToken::QUOTATION_OPEN, "" });
-		temp_token_chain.push_back({ QueryToken::IDENTIFIER, "procName" });
-		temp_token_chain.push_back({ QueryToken::QUOTATION_CLOSE, "" });
-		temp_token_chain.push_back({ QueryToken::COMMA, "" });
-		temp_token_chain.push_back({ QueryToken::QUOTATION_OPEN, "" });
-		temp_token_chain.push_back({ QueryToken::IDENTIFIER, "a" });
-		temp_token_chain.push_back({ QueryToken::PLUS, "" });
-		temp_token_chain.push_back({ QueryToken::IDENTIFIER, "b" });
-		temp_token_chain.push_back({ QueryToken::QUOTATION_CLOSE, "" });
-
-		std::vector<QueryToken> left_expr_token_chain;
-		left_expr_token_chain.push_back({ QueryToken::QUOTATION_OPEN, "" });
-		left_expr_token_chain.push_back({ QueryToken::IDENTIFIER, "procName" });
-		left_expr_token_chain.push_back({ QueryToken::QUOTATION_CLOSE, "" });
-
-		std::vector<QueryToken> right_expr_token_chain;
-		right_expr_token_chain.push_back({ QueryToken::QUOTATION_OPEN, "" });
-		right_expr_token_chain.push_back({ QueryToken::IDENTIFIER, "a" });
-		right_expr_token_chain.push_back({ QueryToken::PLUS, "" });
-		right_expr_token_chain.push_back({ QueryToken::IDENTIFIER, "b" });
-		right_expr_token_chain.push_back({ QueryToken::QUOTATION_CLOSE, "" });
-		//Synonym
-		//Expected
-		Synonym synonym;
-		synonym.name = "a";
-		Entity expected_declared_assign = Entity(EntityType::ASSIGN, synonym);
-		query.addEntity(expected_declared_assign);
-
-		Entity expected_ent_wildcard = Entity(EntityType::WILD);
-
-		Pattern expected_pat = Pattern(expected_declared_assign, validator.setEntRef(query, left_expr_token_chain), validator.setExpr(right_expr_token_chain), false);
-
-		//Result
-		validator.parseParameterPattern(query, expected_declared_assign, temp_token_chain);
-
-		EXPECT_TRUE(query.getClauses()[0].getPattern() == expected_pat);
-	}
-
-
-	TEST(QueryPatternRelRefParserTest, parseParameterPatternAssignSingleWildCardTest) {
-		QueryPatternRelRefParser validator;
-
-		Query query;
-
-		std::vector<QueryToken> temp_token_chain;
-
-		temp_token_chain.push_back({ QueryToken::QUOTATION_OPEN, "" });
-		temp_token_chain.push_back({ QueryToken::IDENTIFIER, "procName" });
-		temp_token_chain.push_back({ QueryToken::QUOTATION_CLOSE, "" });
-		temp_token_chain.push_back({ QueryToken::COMMA, "" });
-		temp_token_chain.push_back({ QueryToken::WILDCARD, "" });
-
-		std::vector<QueryToken> left_expr_token_chain;
-		left_expr_token_chain.push_back({ QueryToken::QUOTATION_OPEN, "" });
-		left_expr_token_chain.push_back({ QueryToken::IDENTIFIER, "procName" });
-		left_expr_token_chain.push_back({ QueryToken::QUOTATION_CLOSE, "" });
-
-		std::vector<QueryToken> right_expr_token_chain;
-		right_expr_token_chain.push_back({ QueryToken::WILDCARD, "" });
-
-		//Synonym
-		//Expected
-		Synonym synonym;
-		synonym.name = "a";
-		Entity expected_declared_assign = Entity(EntityType::ASSIGN, synonym);
-		query.addEntity(expected_declared_assign);
-
-		Entity expected_ent_wildcard = Entity(EntityType::WILD);
-
-		Pattern expected_pat = Pattern(expected_declared_assign, validator.setEntRef(query, left_expr_token_chain), validator.setExpr(right_expr_token_chain), true);
-
-		//Result
-		validator.parseParameterPattern(query, expected_declared_assign, temp_token_chain);
-
-		EXPECT_TRUE(query.getClauses()[0].getPattern() == expected_pat);
-	}
-
-	TEST(QueryPatternRelRefParserTest, parseParameterPatternAssignWildCardTest) {
-		QueryPatternRelRefParser validator;
-
-		Query query;
-
-		std::vector<QueryToken> temp_token_chain;
-
-		temp_token_chain.push_back({ QueryToken::QUOTATION_OPEN, "" });
-		temp_token_chain.push_back({ QueryToken::IDENTIFIER, "procName" });
-		temp_token_chain.push_back({ QueryToken::QUOTATION_CLOSE, "" });
-		temp_token_chain.push_back({ QueryToken::COMMA, "" });
-		temp_token_chain.push_back({ QueryToken::WILDCARD, "" });
-		temp_token_chain.push_back({ QueryToken::QUOTATION_OPEN, "" });
-		temp_token_chain.push_back({ QueryToken::IDENTIFIER, "s" });
-		temp_token_chain.push_back({ QueryToken::QUOTATION_CLOSE, "" });
-		temp_token_chain.push_back({ QueryToken::WILDCARD, "" });
-
-		std::vector<QueryToken> left_expr_token_chain;
-		left_expr_token_chain.push_back({ QueryToken::QUOTATION_OPEN, "" });
-		left_expr_token_chain.push_back({ QueryToken::IDENTIFIER, "procName" });
-		left_expr_token_chain.push_back({ QueryToken::QUOTATION_CLOSE, "" });
-
-		std::vector<QueryToken> right_expr_token_chain;
-		right_expr_token_chain.push_back({ QueryToken::WILDCARD, "" });
-		right_expr_token_chain.push_back({ QueryToken::QUOTATION_OPEN, "" });
-		right_expr_token_chain.push_back({ QueryToken::IDENTIFIER, "s" });
-		right_expr_token_chain.push_back({ QueryToken::QUOTATION_CLOSE, "" });
-		right_expr_token_chain.push_back({ QueryToken::WILDCARD, "" });
-		//Synonym
-		//Expected
-		Synonym synonym;
-		synonym.name = "a";
-		Entity expected_declared_assign = Entity(EntityType::ASSIGN, synonym);
-		query.addEntity(expected_declared_assign);
-
-		Entity expected_ent_wildcard = Entity(EntityType::WILD);
-
-		Pattern expected_pat = Pattern(expected_declared_assign, validator.setEntRef(query, left_expr_token_chain), validator.setExpr(right_expr_token_chain), true);
-
-		//Result
-		validator.parseParameterPattern(query, expected_declared_assign, temp_token_chain);
-
-		EXPECT_TRUE(query.getClauses()[0].getPattern() == expected_pat);
-	}
-
-	TEST(QueryPatternRelRefParserTest, parseParameterPatternAssignWildCardTest2) {
-		QueryPatternRelRefParser validator;
-
-		Query query;
-
-		std::vector<QueryToken> temp_token_chain;
-
-		temp_token_chain.push_back({ QueryToken::QUOTATION_OPEN, "" });
-		temp_token_chain.push_back({ QueryToken::IDENTIFIER, "procName" });
-		temp_token_chain.push_back({ QueryToken::QUOTATION_CLOSE, "" });
-		temp_token_chain.push_back({ QueryToken::COMMA, "" });
-		temp_token_chain.push_back({ QueryToken::WILDCARD, "" });
-		temp_token_chain.push_back({ QueryToken::QUOTATION_OPEN, "" });
-		temp_token_chain.push_back({ QueryToken::IDENTIFIER, "a" });
-		temp_token_chain.push_back({ QueryToken::PLUS, "" });
-		temp_token_chain.push_back({ QueryToken::IDENTIFIER, "b" });
-		temp_token_chain.push_back({ QueryToken::QUOTATION_CLOSE, "" });
-		temp_token_chain.push_back({ QueryToken::WILDCARD, "" });
-
-		std::vector<QueryToken> left_expr_token_chain;
-		left_expr_token_chain.push_back({ QueryToken::QUOTATION_OPEN, "" });
-		left_expr_token_chain.push_back({ QueryToken::IDENTIFIER, "procName" });
-		left_expr_token_chain.push_back({ QueryToken::QUOTATION_CLOSE, "" });
-
-		std::vector<QueryToken> right_expr_token_chain;
-		right_expr_token_chain.push_back({ QueryToken::WILDCARD, "" });
-		right_expr_token_chain.push_back({ QueryToken::QUOTATION_OPEN, "" });
-		right_expr_token_chain.push_back({ QueryToken::IDENTIFIER, "a" });
-		right_expr_token_chain.push_back({ QueryToken::PLUS, "" });
-		right_expr_token_chain.push_back({ QueryToken::IDENTIFIER, "b" });
-		right_expr_token_chain.push_back({ QueryToken::QUOTATION_CLOSE, "" });
-		right_expr_token_chain.push_back({ QueryToken::WILDCARD, "" });
-		//Synonym
-		//Expected
-		Synonym synonym;
-		synonym.name = "a";
-		Entity expected_declared_assign = Entity(EntityType::ASSIGN, synonym);
-		query.addEntity(expected_declared_assign);
-
-		Entity expected_ent_wildcard = Entity(EntityType::WILD);
-
-		Pattern expected_pat = Pattern(expected_declared_assign, validator.setEntRef(query, left_expr_token_chain), validator.setExpr(right_expr_token_chain), true);
-
-		//Result
-		validator.parseParameterPattern(query, expected_declared_assign, temp_token_chain);
-
-		EXPECT_TRUE(query.getClauses()[0].getPattern() == expected_pat);
-	}
 	// Invalid tests -------------------------------------------------------------------------------------------------------------------------------
 
 	// Semantically Invalid Test -------------------------------------------------------------------------------------------------------------------
@@ -2304,19 +2089,6 @@ namespace UnitTesting {
 
 		EXPECT_THROW(validator.parseParameterSuchThat(query, QueryToken::FOLLOWS, temp_token_chain), SemanticErrorException);
 	}
-
-	TEST(QueryPatternRelRefParserTest, semanticInvalidModifiesSIntIntTest) {
-		QueryPatternRelRefParser validator;
-
-		Query query;
-		std::vector<QueryToken> temp_token_chain;
-		temp_token_chain.push_back({ QueryToken::CONSTANT, "1" });
-		temp_token_chain.push_back({ QueryToken::COMMA, "" });
-		temp_token_chain.push_back({ QueryToken::CONSTANT, "1" });
-
-		EXPECT_THROW(validator.parseParameterSuchThat(query, QueryToken::MODIFIES_S, temp_token_chain), SemanticErrorException);
-	}
-
 	// ModifiesS, ModifiesP Test
 	// test semantically invalid Modiefies with 1st param as WILDCARD
 	TEST(QueryPatternRelRefParserTest, semanticInvalidModifiesSWildSynTest) {
@@ -2376,6 +2148,18 @@ namespace UnitTesting {
 		EXPECT_THROW(validator.parseParameterSuchThat(query, QueryToken::MODIFIES_S, temp_token_chain), SemanticErrorException);
 	}
 	
+	TEST(QueryPatternRelRefParserTest, semanticInvalidModifiesSIntIntTest) {
+		QueryPatternRelRefParser validator;
+
+		Query query;
+		std::vector<QueryToken> temp_token_chain;
+		temp_token_chain.push_back({ QueryToken::CONSTANT, "1" });
+		temp_token_chain.push_back({ QueryToken::COMMA, "" });
+		temp_token_chain.push_back({ QueryToken::CONSTANT, "1" });
+
+		EXPECT_THROW(validator.parseParameterSuchThat(query, QueryToken::MODIFIES_S, temp_token_chain), SemanticErrorException);
+	}
+
 	TEST(QueryPatternRelRefParserTest, semanticInvalidModifiesSVarVarTest) {
 		Query query;
 
