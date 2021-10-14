@@ -120,6 +120,7 @@ bool QueryPatternRelRefParser::isLineRef(Query& query, std::vector<QueryToken> t
                 ent_chain.at(token.token_value).getType() == EntityType::READ ||
                 ent_chain.at(token.token_value).getType() == EntityType::PRINT ||
                 ent_chain.at(token.token_value).getType() == EntityType::CALL ||
+                ent_chain.at(token.token_value).getType() == EntityType::PROG_LINE ||
                 ent_chain.at(token.token_value).getType() == EntityType::WHILE ||
                 ent_chain.at(token.token_value).getType() == EntityType::IF ||
                 ent_chain.at(token.token_value).getType() == EntityType::ASSIGN;
@@ -258,6 +259,7 @@ Entity QueryPatternRelRefParser::setLineRef(Query& query, QueryToken token) {
     // synonym check
     std::unordered_map<std::string, Entity> ent_chain = query.getEntities();
     if (ent_chain.find(token.token_value) != ent_chain.end()) {
+
         return ent_chain.at(token.token_value);
     }
 
