@@ -365,5 +365,7 @@ namespace UnitTesting {
 		cfg13->loop(cfg14, 30);
 		auto test9 = cfg13->getNexts();
 		ASSERT_EQ(test9, target9);
+
+		delete cfg1, cfg2, cfg3, cfg4, cfg5, cfg6, cfg7, cfg8, cfg9, cfg10, cfg11, cfg12, cfg13, cfg14, cfg15, cfg16;
 	}
 }
