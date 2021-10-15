@@ -2,6 +2,7 @@
 #include <iostream>
 #include "../../source/ExprNode.h"
 #include "../../source/ExprParser.h"
+#include "SyntacticErrorException.h"
 
 namespace UnitTesting {
 	TEST(ExprParser, parse_identifier) {
@@ -238,11 +239,11 @@ namespace UnitTesting {
 	TEST(ExprParser, invalid_expression) {
 		ExprParser parser;
 
-		ASSERT_THROW(parser.parse("+"), std::runtime_error);
-		ASSERT_THROW(parser.parse("1-"), std::runtime_error);
-		ASSERT_THROW(parser.parse("*var"), std::runtime_error);
-		ASSERT_THROW(parser.parse("()"), std::runtime_error);
-		ASSERT_THROW(parser.parse("(x"), std::runtime_error);
-		ASSERT_THROW(parser.parse("x)"), std::runtime_error);
+		ASSERT_THROW(parser.parse("+"), SyntacticErrorException);
+		ASSERT_THROW(parser.parse("1-"), SyntacticErrorException);
+		ASSERT_THROW(parser.parse("*var"), SyntacticErrorException);
+		ASSERT_THROW(parser.parse("()"), SyntacticErrorException);
+		ASSERT_THROW(parser.parse("(x"), SyntacticErrorException);
+		ASSERT_THROW(parser.parse("x)"), SyntacticErrorException);
 	}
 } // namespace UnitTesting

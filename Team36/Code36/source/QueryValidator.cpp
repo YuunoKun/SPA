@@ -86,3 +86,19 @@ void QueryValidator::validateQuery(Query& query, bool& endOfCurrentClauses) {
 		}
 	}
 }
+
+void QueryValidator::validatePatternType(Entity& patternTypeEntity) {
+	if (patternTypeEntity.getType() != EntityType::ASSIGN &&
+		patternTypeEntity.getType() != EntityType::WHILE &&
+		patternTypeEntity.getType() != EntityType::IF) {
+		throw SemanticErrorException("Pattern Type is invalid");
+	}
+}
+
+void QueryValidator::validateAnd(QueryToken& patternOrSuchThat) {
+	if (patternOrSuchThat.type != QueryToken::QueryTokenType::PATTERN &&
+		patternOrSuchThat.type != QueryToken::QueryTokenType::SUCH_THAT &&
+		patternOrSuchThat.type != QueryToken::QueryTokenType::WITH) {
+		throw SyntacticErrorException("The keyword 'and' should come after pattern/ relations have been initalized previously");
+	}
+}

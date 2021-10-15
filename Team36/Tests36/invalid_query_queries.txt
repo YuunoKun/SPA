@@ -1335,7 +1335,7 @@ none
 5000
 50 - Semantically invalid pattern
 stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select s pattern w(_, _)
+Select s pattern *(_, _)
 none
 5000
 51 - Semantically invalid pattern

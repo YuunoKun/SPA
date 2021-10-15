@@ -372,7 +372,7 @@ void DesignExtractor::populateCalls(PKB& pkb) {
 
 void DesignExtractor::populateNext(PKB& pkb) {
 	for (Procedure* p : de_procedures) {
-		CFG* cfg = generateCFG(de_procedures[0]->getChild());
+		CFG* cfg = generateCFG(p->getChild());
 		std::vector<std::pair<prog_line, prog_line>> nexts = cfg->getNexts();
 		for (auto next_rel : nexts) {
 			pkb.addNext(next_rel.first, next_rel.second);
@@ -408,63 +408,74 @@ CFG* DesignExtractor::generateCFG(std::vector<stmt_index> indexes) {
 
 	CFG* cfg = new CFG();
 
+	stmt_index parent = de_statements[indexes[0] - 1]->getDirectParent();
 	std::vector<stmt_index> main;
-	int if_stmt = -1, if_stmt_list = -1;
-	for (size_t i = 0; i < indexes.size(); i++) {
-		Statement* curr = de_statements[indexes[i] - 1];
-		Statement* first = de_statements[indexes[0] - 1];
-
-		if (curr->getType() == StmtType::STMT_IF && first->getStmtList() == curr->getStmtList()) {
-			if_stmt = indexes[i];
-			if_stmt_list = indexes[i + 1];
-		}
-
-		if (curr->getStmtList() == indexes[0] || (curr->getDirectParent() == if_stmt && curr->getStmtList() == if_stmt_list)) {
-			main.push_back(indexes[i]);
+	for (stmt_index id: indexes) {
+		if (de_statements[id - 1]->getDirectParent() == parent && de_statements[id - 1]->getStmtList() == indexes[0]) {
+			main.push_back(id);
 		}
 	}
-	main.push_back(0); // end
 
-	bool added = false;
-	for (size_t i = 0; i < main.size() - 1; i++) {
-		prog_line curr = main[i];
-		prog_line next = main[i + 1];
+	for (stmt_index id : main) {
+		cfg->add(id);
+	}
 
-		if (added) {
-			added = false;
-			continue;
-		}
+	for (size_t i = 0; i < main.size(); i++) {
+		prog_line curr, next;
 
-		if (i == 0 || next - curr == 1 || next == 0) {
-			cfg->add(curr);
-		}
-		else if (next - curr > 1) {
-			cfg->add(curr);
-			std::vector<stmt_index> scope(next - curr - 1);
-			std::iota(scope.begin(), scope.end(), curr + 1);
-			CFG* sub_cfg = generateCFG(scope);
-			if (de_statements[curr - 1]->getType() == StmtType::STMT_WHILE) {
-				cfg->loop(sub_cfg, curr);
-			}
-			else if (de_statements[de_statements[curr - 1]->getDirectParent() - 1]->getType() == StmtType::STMT_IF) {
-				if (next == 0) { // What should happen if procedure ends after 'if' container???
-					cfg->add(next);
-					added = true;
-				}
-				else {
-					cfg->add(next);
-					added = true;
-				}
-				cfg->fork(sub_cfg, de_statements[curr - 1]->getDirectParent(), next);
-			}
-			else {
-				throw std::runtime_error("CFG build failure. Sub cfg error.");
-			}
-			
-			delete sub_cfg;
+		curr = main[i];
+		if (i == main.size() - 1) {
+			next = *indexes.rbegin() + 1;
 		}
 		else {
-			throw std::runtime_error("CFG build failure. Invalid statement list.");
+			next = main[i + 1];
+		}
+
+		if (next - curr > 1) { // gap
+			Statement* container = de_statements[curr - 1];
+
+			if (container->getType() == StmtType::STMT_IF) {
+				std::vector<stmt_index> children(container->getDirectChild());
+				std::set<stmt_index> split;
+				for (stmt_index child_id : children) {
+					split.insert(de_statements[child_id - 1]->getStmtList());
+				}
+
+				if (split.size() != 2) {
+					throw runtime_error("CFG build failure. If statement not 2 splits.");
+				}
+
+				stmt_index then_start = curr + 1;
+				split.erase(then_start);
+				stmt_index else_start = *split.begin();
+				
+				std::vector<stmt_index> then_scope(else_start - then_start);
+				std::iota(then_scope.begin(), then_scope.end(), then_start);
+				CFG* cfg_then = generateCFG(then_scope);
+
+				std::vector<stmt_index> else_scope(next - else_start);
+				std::iota(else_scope.begin(), else_scope.end(), else_start);
+				CFG* cfg_else = generateCFG(else_scope);
+
+				cfg->fork(cfg_then, cfg_else, curr);
+
+				delete cfg_then, cfg_else;
+			}
+			else if (container->getType() == StmtType::STMT_WHILE) {
+				std::vector<stmt_index> scope(next - curr - 1);
+				std::iota(scope.begin(), scope.end(), curr + 1);
+				CFG* cfg_while = generateCFG(scope);
+
+				cfg->loop(cfg_while, curr);
+
+				delete cfg_while;
+			}
+			else {
+				throw runtime_error("CFG build failure. Gap involved non-container statement.");
+			}
+		}
+		else {
+			continue;
 		}
 	}
 

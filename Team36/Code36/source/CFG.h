@@ -10,6 +10,7 @@ public:
 	~CFG();
 
 	bool isEmptyCFG();
+	bool isInvalidCFG();
 
 	CFGNode* getHead();
 	CFGNode* getTail();
@@ -18,7 +19,7 @@ public:
 	CFGNode* contains(CFGNode*, prog_line);
 	void add(prog_line);
 	void loop(CFG*, prog_line);
-	void fork(CFG*, prog_line, prog_line);
+	void fork(CFG*, CFG*, prog_line);
 
 private:
 	CFGNode* head;
