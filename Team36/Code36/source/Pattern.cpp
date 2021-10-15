@@ -37,6 +37,7 @@ Pattern::Pattern(Entity pattern_type, Entity left_expression) {
 	}
 	this->pattern_type = pattern_type;
 	this->left_expression = left_expression;
+	this->is_wild = true;
 }
 
 Pattern::Pattern(){
