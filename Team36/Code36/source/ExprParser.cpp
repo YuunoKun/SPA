@@ -1,6 +1,7 @@
 #include <stdexcept>
 #include <cassert>
 #include "ExprParser.h"
+#include "SyntacticErrorException.h"
 
 
 ExprNode ExprParser::parse(std::string str) {
@@ -18,7 +19,7 @@ ExprNode ExprParser::parse(std::string str) {
 			return res;
 		}
 		else {
-			throw std::runtime_error("Syntax error while parsing expression.");
+			throw SyntacticErrorException("ExprParser failure : Syntax error while parsing expression.");
 		}
 	}
 }
@@ -52,7 +53,7 @@ std::deque<std::string> ExprParser::sliceString(const std::string str) {
 				segments.rbegin()->push_back(c);
 			}
 			else {
-				throw std::runtime_error("Invalid symbol detected in expression.");
+				throw SyntacticErrorException("ExprParser failure : Invalid symbol detected in expression.");
 			}
 			break;
 		}
@@ -138,7 +139,7 @@ ExprNode ExprParser::parseTerm(std::deque<std::string>& dq) {
 
 ExprNode ExprParser::parseFactor(std::deque<std::string>& dq) {
 	if (dq.empty()) {
-		throw std::runtime_error("Unexpected end of expression.");
+		throw SyntacticErrorException("ExprParser failure : Unexpected end of expression.");
 	}
 
 	if (!dq.begin()->empty() && isalnum(*dq.begin()->begin())) {
@@ -153,14 +154,14 @@ ExprNode ExprParser::parseFactor(std::deque<std::string>& dq) {
 		return node;
 	}
 	else {
-		throw std::runtime_error("Possible syntax error while parsing expression.");
+		throw SyntacticErrorException("ExprParser failure : Possible syntax error while parsing expression.");
 	}
 }
 
 
 void ExprParser::protectedPopFront(std::deque<std::string>& dq) {
 	if (dq.empty()) {
-		throw std::runtime_error("Unexpected end of expression.");
+		throw SyntacticErrorException("ExprParser failure : Unexpected end of expression.");
 	}
 	else {
 		dq.pop_front();
@@ -170,10 +171,10 @@ void ExprParser::protectedPopFront(std::deque<std::string>& dq) {
 
 void ExprParser::protectedPopFront(std::deque<std::string>& dq, std::string str) {
 	if (dq.empty()) {
-		throw std::runtime_error("Unexpected end of expression.");
+		throw SyntacticErrorException("ExprParser failure : Unexpected end of expression.");
 	}
 	else if(*dq.begin() != str) {
-		throw std::runtime_error("Invalid expression.");
+		throw SyntacticErrorException("ExprParser failure : Invalid expression.");
 	}
 	else {
 		dq.pop_front();
