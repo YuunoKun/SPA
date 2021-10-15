@@ -127,7 +127,7 @@ StmtType Utility::convertType(EntityType e) {
 }
 
 std::vector<StmtInfo> Utility::filterResult(EntityType e, std::vector<StmtInfo>& v) {
-	if (e == EntityType::STMT) {
+	if (isStmt(e)) {
 		return v;
 	}
 
@@ -145,7 +145,7 @@ std::vector<StmtInfo> Utility::filterResult(EntityType e, std::vector<StmtInfo>&
 
 std::vector<std::vector<std::string>> Utility::filterResults(EntityType e, 
 	std::vector<std::pair<StmtInfo, std::string>>& v) {
-	if (e == EntityType::STMT) {
+	if (isStmt(e)) {
 		return pairToStringTable(v);
 	}
 
@@ -161,7 +161,7 @@ std::vector<std::vector<std::string>> Utility::filterResults(EntityType e,
 
 std::vector<std::vector<std::string>> Utility::filterResults(
 	std::pair<EntityType, EntityType> type, std::vector<std::pair<StmtInfo, StmtInfo>>& table) {
-	if (type.first == EntityType::STMT && type.second == EntityType::STMT) {
+	if (isStmt(type.first) && isStmt(type.second)) {
 		return pairToStringTable(table);
 	}
 
@@ -169,8 +169,8 @@ std::vector<std::vector<std::string>> Utility::filterResults(
 	StmtType type1 = convertType(type.first);
 	StmtType type2 = convertType(type.second);
 	for (auto& row : table) {
-		if ((type.first == EntityType::STMT || type1 == row.first.stmt_type) &&
-			(type.second == EntityType::STMT || type2 == row.second.stmt_type)) {
+		if ((isStmt(type.first) || type1 == row.first.stmt_type) &&
+			(isStmt(type.second) || type2 == row.second.stmt_type)) {
 			results.push_back(row);
 		}
 	}
@@ -299,4 +299,8 @@ AttrRef Utility::queryTokenTypeToAttrRef(QueryToken::QueryTokenType& query_token
 	else if (query_token_type == QueryToken::QueryTokenType::STMT_INDEX) {
 		return AttrRef::STMT_INDEX;
 	}
+}
+
+bool Utility::isStmt(EntityType e) {
+	return e == EntityType::STMT || e == EntityType::PROG_LINE;
 }

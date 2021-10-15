@@ -7,20 +7,35 @@
 //2. clauses with one synonym
 //3. clauses with two synonym
 std::vector<Clause> QueryOptimizer::optimizeClausesOrder(std::vector<Clause>& clauses) {
-	std::list<Clause> no_synonym_list, one_synonym_list, two_synonym_list;
+	std::list<Clause> no_synonym_list, one_synonym_list, two_synonym_list, compute_next_graph, 
+		graph_search_next_t_no_synonym_list, graph_search_next_t_one_synonym_list, next_t_two_synonym_list_after_compute;
 	for (Clause c : clauses) {
+		ClauseType type = c.getType();
 		Entity left_entity = getLeftEntity(c);
 		Entity right_entity = getRightEntity(c);
 
+		if (type == ClauseType::RELATION && isComputeNextT(c.getRelation().getType(), left_entity, right_entity)) {
+			if (compute_next_graph.empty()) {
+				compute_next_graph.emplace_back(c);
+			} else {
+				next_t_two_synonym_list_after_compute.emplace_back(c);
+			}
 
-		if (left_entity.isSynonym() && right_entity.isSynonym()) {
-			two_synonym_list.push_back(c);
+		}
+		else if (type == ClauseType::RELATION && isGraphSearchNextNoSynonym(c.getRelation().getType(), left_entity, right_entity)) {
+			graph_search_next_t_no_synonym_list.emplace_back(c);
+		}
+		else if (type == ClauseType::RELATION && isGraphSearchNextOneSynonym(c.getRelation().getType(), left_entity, right_entity)) {
+			graph_search_next_t_one_synonym_list.emplace_back(c);
+		}
+		else if (left_entity.isSynonym() && right_entity.isSynonym()) {
+			two_synonym_list.emplace_back(c);
 		}
 		else if (left_entity.isSynonym() || right_entity.isSynonym()) {
-			one_synonym_list.push_back(c);
+			one_synonym_list.emplace_back(c);
 		}
 		else {
-			no_synonym_list.push_back(c);
+			no_synonym_list.emplace_back(c);
 		}
 	}
 
@@ -28,6 +43,10 @@ std::vector<Clause> QueryOptimizer::optimizeClausesOrder(std::vector<Clause>& cl
 	reordered_clauses.insert(reordered_clauses.end(), no_synonym_list.begin(), no_synonym_list.end());
 	reordered_clauses.insert(reordered_clauses.end(), one_synonym_list.begin(), one_synonym_list.end());
 	reordered_clauses.insert(reordered_clauses.end(), two_synonym_list.begin(), two_synonym_list.end());
+	reordered_clauses.insert(reordered_clauses.end(), compute_next_graph.begin(), compute_next_graph.end());
+	reordered_clauses.insert(reordered_clauses.end(), graph_search_next_t_no_synonym_list.begin(), graph_search_next_t_no_synonym_list.end());
+	reordered_clauses.insert(reordered_clauses.end(), graph_search_next_t_one_synonym_list.begin(), graph_search_next_t_one_synonym_list.end());
+	reordered_clauses.insert(reordered_clauses.end(), next_t_two_synonym_list_after_compute.begin(), next_t_two_synonym_list_after_compute.end());
 	return reordered_clauses;
 }
 
@@ -63,6 +82,21 @@ bool QueryOptimizer::checkConstantExist(Entity& e) {
 	default: throw std::domain_error("Some constant has not been checked!!");
 	}
 	return false;
+}
+
+bool QueryOptimizer::isComputeNextT(RelType type, Entity& e1, Entity& e2) {
+	return type == RelType::NEXT_T && e1.isSynonym() && e2.isSynonym();
+}
+
+bool QueryOptimizer::isGraphSearchNextNoSynonym(RelType type, Entity& e1, Entity& e2) {
+	return type == RelType::NEXT_T && (!e1.isSynonym() && e1.getType() != EntityType::WILD) &&
+		(!e2.isSynonym() && e2.getType() != EntityType::WILD);
+}
+
+bool QueryOptimizer::isGraphSearchNextOneSynonym(RelType type, Entity& e1, Entity& e2) {
+	return type == RelType::NEXT_T && 
+		((e1.isSynonym() && (!e2.isSynonym() && e2.getType() != EntityType::WILD)) ||
+		(e2.isSynonym() && (!e1.isSynonym() && e1.getType() != EntityType::WILD)));
 }
 
 Entity QueryOptimizer::getLeftEntity(Clause& c) {
