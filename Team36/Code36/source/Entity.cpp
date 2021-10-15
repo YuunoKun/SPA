@@ -67,7 +67,6 @@ void Entity::defaultAttribute(EntityType type) {
 	case EntityType::READ:
 	case EntityType::PRINT:
 	case EntityType::CALL:
-	case EntityType::PROG_LINE:
 	case EntityType::WHILE:
 	case EntityType::IF:
 	case EntityType::ASSIGN: attribute = AttrRef::STMT_INDEX;
