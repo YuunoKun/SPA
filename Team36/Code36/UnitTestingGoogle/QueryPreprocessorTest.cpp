@@ -1019,6 +1019,19 @@ namespace UnitTesting {
 		q2.addRelation(RelRef(RelType::USES_S, Entity(EntityType::ASSIGN, Synonym{ "a" }), Entity(EntityType::VARIABLE, Synonym{ "v" })));
 
 		EXPECT_EQ(test2, q2);
+
+		Query test3 = qp.parse("stmt s; assign a, a1; variable v; Select a pattern a(\"q\", _\"p\"_) and a1(v, _)");
+
+		Query q3;
+		q3.addEntity(Entity(EntityType::STMT, Synonym{ "s" }));
+		q3.addEntity(Entity(EntityType::ASSIGN, Synonym{ "a" }));
+		q3.addEntity(Entity(EntityType::ASSIGN, Synonym{ "a1" }));
+		q3.addEntity(Entity(EntityType::VARIABLE, Synonym{ "v" }));
+		q3.addSelected(Entity(EntityType::ASSIGN, Synonym{ "a" }));
+		q3.addPattern(Pattern(Entity(EntityType::ASSIGN, Synonym{ "a" }), Entity(EntityType::VARIABLE, "q"), "p", true));
+		q3.addPattern(Pattern(Entity(EntityType::ASSIGN, Synonym{ "a1" }), Entity(EntityType::VARIABLE, Synonym{ "v" }), "", true));
+
+		EXPECT_EQ(test3, q3);
 	}
 
 	TEST(QueryPreprocessor, invalidSyntax) {
@@ -1151,6 +1164,9 @@ namespace UnitTesting {
 		qp.resetQuery();
 
 		EXPECT_THROW(qp.parse("assign a; stmt s; Select s such that such that Follows(s,a)"), SyntacticErrorException);
+		qp.resetQuery();
+
+		EXPECT_THROW(qp.parse("stmt s; assign a, a1; variable v; Select a pattern a(v, _) and pattern a1(v, _)"), SyntacticErrorException);
 		qp.resetQuery();
 	}
 

@@ -161,6 +161,9 @@ void QueryPreprocessor::handleSelection(QueryToken& token) {
 			token.token_value == "and") {
 			queryValidator.validateAnd(patternOrSuchThat);
 			if (patternOrSuchThat.type == QueryToken::QueryTokenType::PATTERN) {
+				if (nextToken.token_value == "pattern") {
+					throw SyntacticErrorException("and pattern is a syntax error");
+				}
 				isExpectingPatternType = true;
 			}
 			else if (patternOrSuchThat.type == QueryToken::QueryTokenType::WITH) {
@@ -187,8 +190,10 @@ void QueryPreprocessor::handleSelection(QueryToken& token) {
 			}
 		}
 		else if (patternOrSuchThat.type == QueryToken::QueryTokenType::PATTERN) {
-			if (prevTokenSelect.token_value == "pattern" && token.type == QueryToken::QueryTokenType::IDENTIFIER
-				&& isExpectingPatternType) {
+			if (
+				((prevTokenSelect.token_value == "pattern" && token.type == QueryToken::QueryTokenType::IDENTIFIER) || prevTokenSelect.token_value == "and")
+				&&
+				isExpectingPatternType) {
 				QueryPreprocessor::addPatternToQuery(token);
 				isExpectingPatternType = false;
 			}
