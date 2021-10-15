@@ -1045,7 +1045,7 @@ none
 5000
 211 - if pattern and if pattern, no common synonym
 if ifs1, ifs2;
-Select ifs1 pattern ifs1("b",_,_) and ifs2("k",_,_)
+Select ifs1 pattern ifs1("b",_,_) and ifs2("a",_,_)
 20
 5000
 212 - if pattern and if pattern, 1 common synonym
@@ -1131,7 +1131,7 @@ Select a1 pattern a1("b",_) and a2("h", _"c"_)
 228 - assign pattern and assign pattern, 1 common synonym
 assign a; variable v;
 Select a pattern a(v,_) and a("d", _"c"_)
-none
+10
 5000
 229 - assign pattern and if pattern, no common synonym
 assign a; if ifs;

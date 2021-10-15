@@ -44,8 +44,20 @@ private:
 	QueryToken patternOrSuchThat;
 	Entity patternTypeEntity;
 	ParseStatus status;
+	int parenthesis_counter;
+	QueryToken nextToken;
 
 	// Methods
+
+	void handleDeclaration(QueryToken&);
+
+	void handleSelection(QueryToken&);
+
+	void handleIsSelecting(QueryToken&);
+
+	void handleSelectingMultipleClause(QueryToken&);
+
+	void handleWithinParameter(QueryToken&);
 
 	void setIdentifierToQueryTokenType(QueryToken&);
 

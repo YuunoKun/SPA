@@ -66,204 +66,244 @@ QueryPreprocessor::QueryPreprocessor() {
 
 	// To keep track of selection, NEUTRAL -> IS_SELECTING -> IS_SELECTING_MULTIPLE_CLAUSE
 	this->status = ParseStatus::NEUTRAL;
+
+	// Keep track of parenthesis counter for ExprParser purposes
+	this->parenthesis_counter = 0;
+
+	// Peek into next token
+	this->nextToken = QueryToken();
 }
 
 Query QueryPreprocessor::parse(std::string str) {
 	QueryTokenizer query_tokenizer;
-	QueryPatternRelRefParser validator;
 	QueryValidator queryValidator = QueryValidator();
 
 	query_tokenizer.parse_into_query_tokens(str);
 
-	std::vector<QueryToken> v = query_tokenizer.get_query_token_chain();
+	std::vector<QueryToken> tokens = query_tokenizer.get_query_token_chain();
 
-	for (QueryToken token : v) {
+	for (int i = 0; i < tokens.size(); i++) {
 		// First iteration, set identifier to correct type
 		// Check what is my previous token
 		if (!isSelect) {
-			if (endOfCurrentDeclaration) {
-				setIdentifierToQueryTokenType(token);
-				haveNextDeclaration = true;
-				endOfCurrentDeclaration = false;
-			}
-			else if (haveNextDeclaration && token.type == QueryToken::QueryTokenType::IDENTIFIER) {
-				addEntityToQuery(token);
-				haveNextDeclaration = false;
-			}
-			else if (!haveNextDeclaration && !endOfCurrentDeclaration && token.type == QueryToken::QueryTokenType::TERMINATOR) {
-				endOfCurrentDeclaration = true;
-			}
-			else if (!haveNextDeclaration && !endOfCurrentDeclaration && token.type == QueryToken::QueryTokenType::COMMA) {
-				haveNextDeclaration = true;
-			}
-			else {
-				throw SyntacticErrorException("Invalid declaration");
-			}
-			prevToken = token;
+			handleDeclaration(tokens[i]);
 		}
-
+		// assign pattern ; Select pattern pattern pattern (_,_)
 		else if (isSelect) {
-			if (endOfCurrentClauses) {
-				if (token.type == QueryToken::QueryTokenType::SUCH_THAT) {
-					patternOrSuchThat = { QueryToken::QueryTokenType::SUCH_THAT, "" };
-					endOfCurrentClauses = false;
-					status = ParseStatus::NEUTRAL;
-				}
-				// pattern only valid when previous token is either identifier or )
-				else if (token.type == QueryToken::QueryTokenType::IDENTIFIER &&
-					token.token_value == "pattern") {
-					isExpectingPatternType = true;
-					patternOrSuchThat = { QueryToken::QueryTokenType::PATTERN, "pattern" };
-					endOfCurrentClauses = false;
-					status = ParseStatus::NEUTRAL;
-				}
-				else if (token.type == QueryToken::QueryTokenType::IDENTIFIER &&
-					token.token_value == "with") {
-					patternOrSuchThat = { QueryToken::QueryTokenType::WITH, "" };
-					isParameter = true;
-					endOfCurrentClauses = false;
-					status = ParseStatus::NEUTRAL;
-				}
-				else if (token.type == QueryToken::QueryTokenType::IDENTIFIER &&
-					token.token_value == "and") {
-					if (patternOrSuchThat.type != QueryToken::QueryTokenType::PATTERN &&
-						patternOrSuchThat.type != QueryToken::QueryTokenType::SUCH_THAT &&
-						patternOrSuchThat.type != QueryToken::QueryTokenType::WITH) {
-						throw SyntacticErrorException("The keyword 'and' should come after pattern/ relations have been initalized previously");
-					}
-					if (patternOrSuchThat.type == QueryToken::QueryTokenType::PATTERN) {
-						isExpectingPatternType = true;
-					}
-					else if (patternOrSuchThat.type == QueryToken::QueryTokenType::WITH) {
-						isParameter = true;
-					}
-					endOfCurrentClauses = false;
-				}
-				// Select content
-				//else if (declarationType.type == QueryToken::QueryTokenType::SELECT) {
-				else if (status == ParseStatus::IS_SELECTING) {
-					// Validation
-					queryValidator.validateSelecting(token, prevTokenSelect);
-
-					// if Select has attribute ie. Select p.procName
-					if (token.type == QueryToken::QueryTokenType::DOT &&
-						prevToken.type == QueryToken::QueryTokenType::IDENTIFIER) {
-						isExpectingAttribute = true;
-					}
-					else if (isExpectingAttribute && prevTokenSelect.type == QueryToken::QueryTokenType::DOT) {
-						AttrRef attrRef = Utility::queryTokenTypeToAttrRef(token.type);
-						this->query.setSelectedAttribute(attrRef);
-						isExpectingAttribute = false;
-					}
-					else if (prevToken.token_value == "Select" && token.type == QueryToken::QueryTokenType::TUPLE_OPEN) {
-						status = ParseStatus::IS_SELECTING_MULTIPLE_CLAUSE;
-					}
-					else if (prevToken.token_value == "Select" &&
-						token.type == QueryToken::QueryTokenType::IDENTIFIER) {
-						addSelectedToQuery(token);
-						haveNextDeclaration = false;
-					}
-					else {
-						throw SyntacticErrorException("Invalid query during selection parsing");
-					}
-				}
-				else if (status == ParseStatus::IS_SELECTING_MULTIPLE_CLAUSE) {
-					queryValidator.validateSelectMultipleClauses(token, prevTokenSelect);
-					if (token.type == QueryToken::QueryTokenType::DOT) {
-						isExpectingAttribute = true;
-					}
-					else if (isExpectingAttribute) {
-						AttrRef attrRef = Utility::queryTokenTypeToAttrRef(token.type);
-						this->query.setSelectedAttribute(attrRef);
-						isExpectingAttribute = false;
-					}
-					else if (token.type == QueryToken::QueryTokenType::IDENTIFIER) {
-						addSelectedToQuery(token);
-						haveNextDeclaration = false;
-					}
-					else if (token.type == QueryToken::QueryTokenType::TUPLE_CLOSE) {
-						status = ParseStatus::NEUTRAL;
-					}
-				}
-
-				else {
-					throw SyntacticErrorException("Invalid query");
-				}
+			if (i < tokens.size() - 1) {
+				nextToken = tokens[i + 1];
 			}
-			else {
-				if (token.type == QueryToken::QueryTokenType::SUCH_THAT) {
-					throw SyntacticErrorException("Invalid query");
-				}
-				// pattern and such that will have parameter inside brackets
-				// with will have parameter as long as the token is not "and", "pattern" or "such that"
-				if (isParameter && (((patternOrSuchThat.type == QueryToken::QueryTokenType::PATTERN ||
-					patternOrSuchThat.type == QueryToken::QueryTokenType::SUCH_THAT) &&
-					token.type != QueryToken::QueryTokenType::PARENTHESIS_CLOSE) ||
-					(patternOrSuchThat.type == QueryToken::QueryTokenType::WITH &&
-						token.token_value != "and" &&
-						token.token_value != "with" &&
-						token.token_value != "pattern" &&
-						token.type != QueryToken::QueryTokenType::SUCH_THAT))) {
-					parameterClause.push_back(token);
-				}
-				else if (patternOrSuchThat.type == QueryToken::QueryTokenType::SUCH_THAT) {
-					if (!isParameter && token.type == QueryToken::QueryTokenType::PARENTHESIS_OPEN) {
-						isParameter = true;
-						setQueryParameter();
-					}
-					else if (token.type == QueryToken::QueryTokenType::PARENTHESIS_CLOSE) {
-						isParameter = false;
-						validator.parseParameterSuchThat(this->query, queryParameter.type, parameterClause);
-						parameterClause.clear();
-						endOfCurrentClauses = true;
-					}
-				}
-				else if (patternOrSuchThat.type == QueryToken::QueryTokenType::PATTERN) {
-					if (prevTokenSelect.token_value == "pattern" && token.type == QueryToken::QueryTokenType::IDENTIFIER
-						&& isExpectingPatternType) {
-						QueryPreprocessor::addPatternToQuery(token);
-						isExpectingPatternType = false;
-					}
-					else if (!isParameter && token.type == QueryToken::QueryTokenType::PARENTHESIS_OPEN) {
-						isParameter = true;
-					}
-					else if (isParameter && token.type == QueryToken::QueryTokenType::PARENTHESIS_CLOSE) {
-						isParameter = false;
-						endOfCurrentClauses = true;
-						if (patternTypeEntity.getType() == EntityType::ASSIGN ||
-							patternTypeEntity.getType() == EntityType::WHILE ||
-							patternTypeEntity.getType() == EntityType::IF) {
-							validator.parseParameterPattern(this->query, patternTypeEntity, parameterClause);
-							parameterClause.clear();
-						}
-						else {
-							throw SemanticErrorException("Invalid pattern type");
-						}
-					}
-				}
-				else if (patternOrSuchThat.type == QueryToken::QueryTokenType::WITH) {
-					if (isParameter && (token.token_value == "and" ||
-						token.token_value == "pattern" ||
-						token.token_value == "with" ||
-						token.type == QueryToken::QueryTokenType::SUCH_THAT)) {
-						isParameter = false;
-						endOfCurrentClauses = true;
-						// TODO: call jiyu's method
-						// validator.parseWith(query, parameterClause);
-						parameterClause.clear();
-					}
-				}
-				else {
-					throw SyntacticErrorException("Invalid query");
-				}
-			}
-
-			prevTokenSelect = token;
+			handleSelection(tokens[i]);
 		}
 	}
 	queryValidator.validateQuery(query, endOfCurrentClauses);
 
 	return QueryPreprocessor::returnAndResetQuery();
+}
+
+void QueryPreprocessor::handleDeclaration(QueryToken& token) {
+	if (endOfCurrentDeclaration) {
+		setIdentifierToQueryTokenType(token);
+		haveNextDeclaration = true;
+		endOfCurrentDeclaration = false;
+	}
+	else if (haveNextDeclaration && token.type == QueryToken::QueryTokenType::IDENTIFIER) {
+		addEntityToQuery(token);
+		haveNextDeclaration = false;
+	}
+	else if (!haveNextDeclaration && !endOfCurrentDeclaration && token.type == QueryToken::QueryTokenType::TERMINATOR) {
+		endOfCurrentDeclaration = true;
+	}
+	else if (!haveNextDeclaration && !endOfCurrentDeclaration && token.type == QueryToken::QueryTokenType::COMMA) {
+		haveNextDeclaration = true;
+	}
+	else {
+		throw SyntacticErrorException("Invalid declaration");
+	}
+	prevToken = token;
+}
+
+void QueryPreprocessor::handleSelection(QueryToken& token) {
+	QueryValidator queryValidator = QueryValidator();
+	if (endOfCurrentClauses) {
+		// Select content
+		//else if (declarationType.type == QueryToken::QueryTokenType::SELECT) {
+		if (status == ParseStatus::IS_SELECTING) {
+			// Validation
+			queryValidator.validateSelecting(token, prevTokenSelect);
+			handleIsSelecting(token);
+		}
+		else if (status == ParseStatus::IS_SELECTING_MULTIPLE_CLAUSE) {
+			queryValidator.validateSelectMultipleClauses(token, prevTokenSelect);
+			handleSelectingMultipleClause(token);
+		}
+		else if (token.type == QueryToken::QueryTokenType::SUCH_THAT) {
+			patternOrSuchThat = { QueryToken::QueryTokenType::SUCH_THAT, "" };
+			endOfCurrentClauses = false;
+			status = ParseStatus::NEUTRAL;
+		}
+		// pattern only valid when previous token is either identifier or )
+		else if (token.type == QueryToken::QueryTokenType::IDENTIFIER &&
+			token.token_value == "pattern") {
+			patternOrSuchThat = { QueryToken::QueryTokenType::PATTERN, "pattern" };
+			isExpectingPatternType = true;
+			endOfCurrentClauses = false;
+			status = ParseStatus::NEUTRAL;
+		}
+		else if (token.type == QueryToken::QueryTokenType::IDENTIFIER &&
+			token.token_value == "with") {
+			patternOrSuchThat = { QueryToken::QueryTokenType::WITH, "" };
+			isParameter = true;
+			endOfCurrentClauses = false;
+			status = ParseStatus::NEUTRAL;
+		}
+		else if (token.type == QueryToken::QueryTokenType::IDENTIFIER &&
+			token.token_value == "and") {
+			queryValidator.validateAnd(patternOrSuchThat);
+			if (patternOrSuchThat.type == QueryToken::QueryTokenType::PATTERN) {
+				if (nextToken.token_value == "pattern") {
+					throw SyntacticErrorException("and pattern is a syntax error");
+				}
+				isExpectingPatternType = true;
+			}
+			else if (patternOrSuchThat.type == QueryToken::QueryTokenType::WITH) {
+				isParameter = true;
+			}
+			endOfCurrentClauses = false;
+		}
+
+		else {
+			throw SyntacticErrorException("Invalid query");
+		}
+	}
+	else {
+		if (token.type == QueryToken::QueryTokenType::SUCH_THAT) {
+			throw SyntacticErrorException("Invalid query");
+		}
+		if (isParameter) {
+			handleWithinParameter(token);
+		}
+		else if (patternOrSuchThat.type == QueryToken::QueryTokenType::SUCH_THAT) {
+			if (!isParameter && token.type == QueryToken::QueryTokenType::PARENTHESIS_OPEN) {
+				isParameter = true;
+				setQueryParameter();
+			}
+		}
+		else if (patternOrSuchThat.type == QueryToken::QueryTokenType::PATTERN) {
+			if (
+				((prevTokenSelect.token_value == "pattern" && token.type == QueryToken::QueryTokenType::IDENTIFIER) || prevTokenSelect.token_value == "and")
+				&&
+				isExpectingPatternType) {
+				QueryPreprocessor::addPatternToQuery(token);
+				isExpectingPatternType = false;
+			}
+			else if (!isParameter && token.type == QueryToken::QueryTokenType::PARENTHESIS_OPEN) {
+				isParameter = true;
+			}
+		}
+		else if (patternOrSuchThat.type == QueryToken::QueryTokenType::WITH) {
+			if (isParameter && (token.token_value == "and" ||
+				token.token_value == "pattern" ||
+				token.token_value == "with" ||
+				token.type == QueryToken::QueryTokenType::SUCH_THAT)) {
+				isParameter = false;
+				endOfCurrentClauses = true;
+				// TODO: call jiyu's method
+				// validator.parseWith(query, parameterClause);
+				parameterClause.clear();
+			}
+		}
+		else {
+			throw SyntacticErrorException("Invalid query");
+		}
+	}
+	prevTokenSelect = token;
+}
+
+void QueryPreprocessor::handleIsSelecting(QueryToken& token) {
+	// Check next token, if its pattern or such that, go out from is_selecting
+	if (nextToken.type != QueryToken::QueryTokenType::WHITESPACE && (nextToken.token_value == "pattern" || nextToken.type == QueryToken::QueryTokenType::SUCH_THAT)) {
+		status = ParseStatus::NEUTRAL;
+	}
+
+	// if Select has attribute ie. Select p.procName
+	if (token.type == QueryToken::QueryTokenType::DOT &&
+		prevToken.type == QueryToken::QueryTokenType::IDENTIFIER) {
+		isExpectingAttribute = true;
+	}
+	else if (isExpectingAttribute && prevTokenSelect.type == QueryToken::QueryTokenType::DOT) {
+		AttrRef attrRef = Utility::queryTokenTypeToAttrRef(token.type);
+		this->query.setSelectedAttribute(attrRef);
+		isExpectingAttribute = false;
+	}
+	else if (prevToken.token_value == "Select" && token.type == QueryToken::QueryTokenType::TUPLE_OPEN) {
+		status = ParseStatus::IS_SELECTING_MULTIPLE_CLAUSE;
+	}
+	else if (prevToken.token_value == "Select" &&
+		token.type == QueryToken::QueryTokenType::IDENTIFIER) {
+		addSelectedToQuery(token);
+		haveNextDeclaration = false;
+	}
+	else {
+		throw SyntacticErrorException("Invalid query during selection parsing");
+	}
+}
+
+void QueryPreprocessor::handleSelectingMultipleClause(QueryToken& token) {
+	if (token.type == QueryToken::QueryTokenType::DOT) {
+		isExpectingAttribute = true;
+	}
+	else if (isExpectingAttribute) {
+		AttrRef attrRef = Utility::queryTokenTypeToAttrRef(token.type);
+		this->query.setSelectedAttribute(attrRef);
+		isExpectingAttribute = false;
+	}
+	else if (token.type == QueryToken::QueryTokenType::IDENTIFIER) {
+		addSelectedToQuery(token);
+		haveNextDeclaration = false;
+	}
+	else if (token.type == QueryToken::QueryTokenType::TUPLE_CLOSE) {
+		status = ParseStatus::NEUTRAL;
+	}
+}
+
+void QueryPreprocessor::handleWithinParameter(QueryToken& token) {
+	if (token.type == QueryToken::QueryTokenType::PARENTHESIS_OPEN) {
+		parenthesis_counter++;
+	}
+	if ((((patternOrSuchThat.type == QueryToken::QueryTokenType::PATTERN ||
+		patternOrSuchThat.type == QueryToken::QueryTokenType::SUCH_THAT) &&
+		(token.type != QueryToken::QueryTokenType::PARENTHESIS_CLOSE || parenthesis_counter > 0)) ||
+		(patternOrSuchThat.type == QueryToken::QueryTokenType::WITH &&
+			token.token_value != "and" &&
+			token.token_value != "with" &&
+			token.token_value != "pattern" &&
+			token.type != QueryToken::QueryTokenType::SUCH_THAT))) {
+		parameterClause.push_back(token);
+	}
+	if (parenthesis_counter == 0 && token.type == QueryToken::QueryTokenType::PARENTHESIS_CLOSE) {
+		if (patternOrSuchThat.type == QueryToken::QueryTokenType::PATTERN) {
+			QueryValidator queryValidator = QueryValidator();
+			queryValidator.validatePatternType(patternTypeEntity);
+			isParameter = false;
+			endOfCurrentClauses = true;
+			QueryPatternRelRefParser validator;
+			validator.parseParameterPattern(this->query, patternTypeEntity, parameterClause);
+			parameterClause.clear();
+			parenthesis_counter = 0;
+		}
+		else if (patternOrSuchThat.type == QueryToken::QueryTokenType::SUCH_THAT) {
+			isParameter = false;
+			QueryPatternRelRefParser validator;
+			validator.parseParameterSuchThat(this->query, queryParameter.type, parameterClause);
+			parameterClause.clear();
+			endOfCurrentClauses = true;
+			parenthesis_counter = 0;
+		}
+	}
+	if (parenthesis_counter > 0 && token.type == QueryToken::QueryTokenType::PARENTHESIS_CLOSE) {
+		parenthesis_counter--;
+	}
 }
 
 void QueryPreprocessor::setIdentifierToQueryTokenType(QueryToken& token) {
@@ -445,4 +485,5 @@ void QueryPreprocessor::resetQuery() {
 	this->patternOrSuchThat = QueryToken();
 	this->patternTypeEntity = Entity();
 	this->status = ParseStatus::NEUTRAL;
+	this->parenthesis_counter = 0;
 }
