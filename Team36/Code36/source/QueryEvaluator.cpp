@@ -36,6 +36,7 @@ void QueryEvaluator::evaluateClauses(Query& query, QueryResult& query_result) {
 std::list<std::string> QueryEvaluator::getRawResult(Entity selected) {
 	std::list<std::string> result;
 	switch (selected.getType()) {
+	case EntityType::PROG_LINE :
 	case EntityType::STMT: result = Utility::stmtInfoToStringList(pkb.getStmts()); break;
 	case EntityType::READ: result = Utility::stmtInfoToStringList(pkb.getReads());  break;
 	case EntityType::PRINT: result = Utility::stmtInfoToStringList(pkb.getPrints()); break;
