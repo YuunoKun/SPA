@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <vector>
+#include <list>
 
 typedef unsigned int prog_line;
 using namespace std;
@@ -9,8 +10,6 @@ using namespace std;
 class CFGNode {
 public:
 	CFGNode();
-
-	CFGNode(vector<prog_line>);
 
 	~CFGNode();
 
@@ -20,6 +19,8 @@ public:
 	void setPrevMain(CFGNode*);
 	void setPrevBranch(CFGNode*);
 	void setVisited();
+	void setTermination();
+	void setInvalid();
 
 	void insertLine(prog_line);
 
@@ -28,13 +29,17 @@ public:
 	CFGNode* getNextBranch();
 	CFGNode* getPrevMain();
 	CFGNode* getPrevBranch();
+	list<CFGNode*> getPrev();
 	bool getVisited();
+	bool getTermination();
+	bool getInvalid();
 
 private:
 	std::vector<prog_line> program_lines;
 	bool visited;
+	bool termination;
+	bool invalid;
 	CFGNode* next_main{nullptr};
 	CFGNode* next_branch{nullptr};
-	CFGNode* prev_main{ nullptr };
-	CFGNode* prev_branch{ nullptr };
+	std::list<CFGNode*> prev;
 };
