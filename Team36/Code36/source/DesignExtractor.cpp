@@ -372,7 +372,7 @@ void DesignExtractor::populateCalls(PKB& pkb) {
 
 void DesignExtractor::populateNext(PKB& pkb) {
 	for (Procedure* p : de_procedures) {
-		CFG* cfg = generateCFG(de_procedures[0]->getChild());
+		CFG* cfg = generateCFG(p->getChild());
 		std::vector<std::pair<prog_line, prog_line>> nexts = cfg->getNexts();
 		for (auto next_rel : nexts) {
 			pkb.addNext(next_rel.first, next_rel.second);
