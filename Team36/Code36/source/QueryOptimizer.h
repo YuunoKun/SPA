@@ -12,6 +12,10 @@ private:
 
 	bool checkConstantExist(Entity&);
 
+	bool isComputeNextT(RelType, Entity&, Entity&);
+	bool isGraphSearchNextNoSynonym(RelType, Entity&, Entity&);
+	bool isGraphSearchNextOneSynonym(RelType, Entity&, Entity&);
+
 
 	Entity getLeftEntity(Clause&);
 	Entity getRightEntity(Clause&);
