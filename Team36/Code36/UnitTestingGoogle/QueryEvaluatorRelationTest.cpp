@@ -256,6 +256,9 @@ namespace UnitTesting {
 		// select s
 		const std::list<std::string> ALL_STMT = STMTS;
 		const Entity SELECT_STMT = { STMT, COMMON_SYNONYM1 };
+		// select p
+		const std::list<std::string> ALL_PROG_LINE = STMTS;
+		const Entity SELECT_PROG_LINE = { PROG_LINE, COMMON_SYNONYM1 };
 		// select ifs
 		const std::list<std::string> ALL_IF = { IF1, IF2 };
 		const Entity SELECT_IF = { IF, COMMON_SYNONYM1 };
@@ -279,11 +282,11 @@ namespace UnitTesting {
 		const Entity SELECT_BOOLEAN = { BOOLEAN };
 
 		const std::vector<std::list<std::string>> ALL_RESULT = {
-			ALL_VARIABLE , ALL_CONSTANT , ALL_PROCEDURE, ALL_STMT, ALL_IF,
+			ALL_VARIABLE , ALL_CONSTANT , ALL_PROCEDURE, ALL_STMT, ALL_PROG_LINE, ALL_IF,
 			ALL_WHILE, ALL_READ, ALL_PRINT, ALL_ASSIGN, ALL_CALL };
 
 		const std::vector<Entity> ALL_SELECT = {
-			SELECT_VARIABLE , SELECT_CONSTANT , SELECT_PROCEDURE, SELECT_STMT, SELECT_IF,
+			SELECT_VARIABLE , SELECT_CONSTANT , SELECT_PROCEDURE, SELECT_STMT, SELECT_PROG_LINE, SELECT_IF,
 			SELECT_WHILE, SELECT_READ, SELECT_PRINT, SELECT_ASSIGN, SELECT_CALL };
 
 		const std::list<std::string> EMPTY_RESULT = {};

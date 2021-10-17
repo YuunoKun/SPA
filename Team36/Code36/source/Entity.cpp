@@ -63,10 +63,10 @@ bool Entity::operator==(const Entity& entity) const {
 void Entity::defaultAttribute(EntityType type) {
 	switch (type) {
 	case EntityType::STMT:
+	case EntityType::PROG_LINE:
 	case EntityType::READ:
 	case EntityType::PRINT:
 	case EntityType::CALL:
-	case EntityType::PROG_LINE:
 	case EntityType::WHILE:
 	case EntityType::IF:
 	case EntityType::ASSIGN: attribute = AttrRef::STMT_INDEX;
