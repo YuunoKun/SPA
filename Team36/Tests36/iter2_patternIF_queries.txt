@@ -156,5 +156,5 @@ d, c, a, b
 32 - if pattern const
 if ifs;
 Select ifs pattern ifs("1", _, _)
-none, 
+none
 5000
