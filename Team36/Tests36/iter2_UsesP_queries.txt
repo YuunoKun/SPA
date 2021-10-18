@@ -11,7 +11,7 @@ shine, ring, f, lost, g, a, d, w
 3 - usesp, LHS ident, RHS synonym
 procedure p; variable v;
 Select v such that Uses("Gandulf", v)
-ring, f, shine, lost, g, a, d
+ring, f, shine, lost, g, a, d, w
 5000
 4 - Usesp, LHS synonym, RHS ident
 procedure p; variable v;
@@ -26,7 +26,7 @@ Gandulf, Frodo, Aragon
 6 - usesp, LHS synonym, RHS synonym
 procedure p; variable v;
 Select v such that Uses(p, v)
-shine, ring, f, lost, g, a, d
+shine, ring, f, lost, g, a, d, w
 5000
 7 - Usesp, LHS ident, RHS wildcard
 procedure p; variable v;
@@ -46,7 +46,7 @@ Select c such that Uses(5, "f")
 10 - usesp, LHS integer, RHS synonym
 call c; variable v;
 Select v such that Uses(5, v)
-a, f, shine, lost, ring
+a, f, shine, lost, ring, w
 5000
 11 - usesp, LHS synonym, RHS ident
 call c; variable v;
@@ -61,7 +61,7 @@ Select c such that Uses(c, v)
 13 - usesp, LHS synonym, RHS synonym
 call c; variable v;
 Select v such that Uses(c, v)
-shine, ring, f, lost, a
+shine, ring, f, lost, a, w
 5000
 14 - usesp, LHS synonym, RHS wildcard
 call c; variable v;
@@ -162,4 +162,9 @@ none
 call c; constant c1;
 Select c such that Uses(c, c1)
 none
+5000
+34 - indirect calling of variable
+procedure p;
+Select p such that Uses(p, "w")
+Gandulf, Frodo, Aragon
 5000

@@ -163,3 +163,8 @@ call c; constant c1;
 Select c such that Modifies(c, c1)
 none
 5000
+34 - indirect calling of variable
+procedure p;
+Select p such that Modifies(p, "w")
+Gandulf, Frodo, Aragon
+5000
