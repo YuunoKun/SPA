@@ -1,0 +1,100 @@
+1 - pattern, exact pattern match
+assign a;
+Select a pattern a(_, "ring + 4 + g * a * 2 * 1 + shine")
+11
+5000
+2 - pattern, RHS ident, no match
+assign a;
+Select a pattern a(_, "g")
+none
+5000
+3 - pattern, RHS single ident expression
+assign a;
+Select a pattern a(_, _"g"_)
+11, 28
+5000
+4 - pattern RHS sub-expression, valid
+assign a;
+Select a pattern a(_, _"g * a"_)
+11
+5000
+5 - pattern RHS sub-expression, no match
+assign a;
+Select a pattern a(_, _"1 + shine"_)
+none
+5000
+6 - pattern, RHS subexpression, valid
+assign a;
+Select a pattern a(_, _"g * a * 2 * 1"_)
+11
+5000
+7 - pattern, RHS subexpression, no match
+assign a;
+Select a pattern a(_, _"2 * 1 + shine"_)
+none
+5000
+8 - pattern, syntax error
+assign a; stmt s;
+Select a pattern a(s, _)
+none
+5000
+9 - pattern, syntax error
+assign a;
+Select a pattern a("a * 2", _)
+none
+5000
+10 - pattern, syntax error
+assign a;
+Select a pattern a(_, "2 * ")
+none
+5000
+11 - pattern, syntax error
+assign a; variable v;
+Select a pattern a(v, _"g * a")
+none
+5000
+12 - pattern, syntax error
+assign a; variable v;
+Select a pattern a(v, "g * a"_)
+none
+5000
+13 - assign pattern and assign pattern, no common synonym
+assign a1, a2;
+Select a1 pattern a1 (_, "ring + 3") and a2 (_, _"shine"_)
+3
+5000
+14 - assign pattern and assign pattern, 1 common synonym
+assign a; variable v;
+Select a pattern a(v, _) and a("f", _"2 * 1"_)
+none
+5000
+15 - assign pattern and if pattern, no common synonym
+assign a; if ifs;
+Select a pattern a("w", _"a + lost"_) and ifs("a",_,_)
+23
+5000
+16 - assign pattern and if pattern, 1 common synonym
+assign a; if ifs; variable v;
+Select a pattern a(v, _) and ifs(v,_,_)
+15, 20, 22, 24, 26
+5000
+17 - assign pattern and while pattern, no common synonym
+while w; assign a;
+Select a pattern a("shine", _"1"_) and w("f",_)
+24
+5000
+18 - assign pattern and while pattern, 1 common synonym
+while w; assign a; variable v;
+Select a pattern a(v, _"1"_) and w(v,_)
+11, 20, 22, 24, 26
+5000
+19 - RHS expr
+assign a;
+Select a pattern a(_, _"ring + 9"_)
+none
+5000
+20 - RHS expr
+assign a;
+Select a pattern a(_, _"(lost % shine) * w"_)
+28
+5000

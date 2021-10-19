@@ -5,7 +5,7 @@ procedure Gandulf {
   read lost;
   call Frodo;
   if (lost == shine) then {
-    call Aragon;
+    call Frodo;
     d = (shine + 12) * (lost + 13);
   } else {
     while (f > 10) {
@@ -37,7 +37,7 @@ procedure Aragon {
       a = lost + 1;
       w = shine * 2;
     } else {
-      w = 1;
+      w = w + 1;
     }
   }
 }

@@ -1,0 +1,160 @@
+1 - if pattern, first argument variable
+if ifs; variable v;
+Select ifs pattern ifs(v,_,_)
+8, 19, 20, 23, 42
+5000
+2 - if pattern, first argument variable
+if ifs; variable v;
+Select v pattern ifs(v,_,_)
+d, c, a, b, h
+5000
+3 - if pattern, first argument wildcard
+if ifs; variable v;
+Select ifs pattern ifs(_,_,_)
+8, 19, 20, 23, 42
+5000
+4 - if pattern, first argument ident
+if ifs; variable v;
+Select ifs pattern ifs("d",_,_)
+8, 42
+5000
+5 - invalid if pattern, 2 arguments
+if ifs;
+Select ifs pattern ifs(_,_)
+none
+5000
+6 - invalid if pattern, 2nd argument not wildcard
+if ifs; variable v;
+Select ifs pattern ifs(_,v,_)
+none
+5000
+7 - invalid if pattern, 3rd argument not wildcard
+if ifs; variable v;
+Select ifs pattern ifs(_,_,v)
+none
+5000
+8 - if pattern such that Modifies, no common synonym
+if ifs; variable v;
+Select ifs pattern ifs("a",_,_) such that Modifies(33, v)
+19
+5000
+9 - if pattern such that Modifies, 1 common synonym
+if ifs; variable v;
+Select ifs pattern ifs(v,_,_) such that Modifies(33, v)
+none
+5000
+10 - if pattern such that ModifiesP, no common synonym
+if ifs; variable v;
+Select ifs pattern ifs("a",_,_) such that Modifies("myFirst", v)
+19
+5000
+11 - if pattern such that ModifiesP, 1 common synonym
+if ifs; variable v;
+Select ifs pattern ifs(v,_,_) such that Modifies("myFirst", v)
+8, 19, 20, 23, 42
+5000
+12 - if pattern such that Uses, no common synonym
+if ifs; variable v;
+Select ifs pattern ifs("b",_,_) such that Uses(15, "f")
+20
+5000
+13 - if pattern such that Uses, 1 common synonym
+if ifs; variable v;
+Select ifs pattern ifs(v,_,_) such that Uses(15, v)
+19
+5000
+14 - if pattern such that UsesP, no common synonym
+if ifs; variable v;
+Select ifs pattern ifs("b",_,_) such that Uses("mySecond", "f")
+none
+5000
+15 - if pattern such that UsesP, no common synonym
+if ifs; variable v;
+Select ifs pattern ifs(v,_,_) such that Uses("mySecond", v)
+8, 19, 20, 23, 42
+5000
+16 - if pattern such that Parent
+if ifs; stmt s;
+Select ifs pattern ifs(_,_,_) such that Parent(20, s)
+8, 19, 20, 23, 42
+5000
+17 - if pattern such that ParentT
+if ifs; stmt s;
+Select ifs pattern ifs(_,_,_) such that Parent*(21, s)
+none
+5000
+18 - if pattern such that Follows
+if ifs; stmt s;
+Select ifs pattern ifs("e",_,_) such that Follows(21, s)
+none
+5000
+19 - if pattern such that FollowsT
+if ifs; stmt s;
+Select ifs pattern ifs("a",_,_) such that Follows*(23, s)
+19
+5000
+20 - if pattern such that Calls
+if ifs; procedure p;
+Select ifs pattern ifs("a",_,_) such that Calls("myFirst", p)
+19
+5000
+21 - if pattern such that CallsT
+if ifs; procedure p;
+Select ifs pattern ifs("a",_,_) such that Calls*("myThird", "mySecond")
+19
+5000
+22 - if pattern such that Next
+if ifs; procedure p;
+Select ifs pattern ifs("a",_,_) such that Next(19, 28)
+19
+5000
+23 - if pattern and if pattern, no common synonym
+if ifs1, ifs2;
+Select ifs1 pattern ifs1("b",_,_) and ifs2("a",_,_)
+20
+5000
+24 - if pattern and if pattern, 1 common synonym
+if ifs1, ifs2; variable v;
+Select ifs1 pattern ifs1(v,_,_) and ifs2(v,_,_)
+8, 19, 20, 23, 42
+5000
+25 - if pattern and if pattern, 1 common synonym
+if ifs1, ifs2; variable v;
+Select ifs1 pattern ifs1(v,_,_) and ifs1("d",_,_)
+8, 42
+5000
+26 - if pattern and assign pattern, no common synonym
+if ifs; assign a;
+Select ifs pattern ifs(_,_,_) and a(_, _"e*5"_)
+8, 19, 20, 23, 42
+5000
+27 - if pattern and assign pattern, 1 common synonym
+if ifs; assign a; variable v;
+Select ifs pattern ifs(v,_,_) and a(v, _"e*5"_)
+8, 20
+5000
+28 - if pattern and assign pattern, 1 common synonym
+if ifs; assign a; variable v;
+Select v pattern ifs(v,_,_) and a(v, _"e*5"_)
+c
+5000
+29 - if pattern and while pattern, no common synonym
+if ifs; while w;
+Select ifs pattern ifs("a",_,_) and w("b",_)
+19
+5000
+30 - if pattern and while pattern, 1 common synonym
+if ifs; while w; variable v;
+Select ifs pattern ifs(v,_,_) and w(v,_)
+8, 19, 20, 42
+5000
+31 - if pattern and while pattern, 1 common synonym
+if ifs; while w; variable v;
+Select v pattern ifs(v,_,_) and w(v,_)
+d, c, a, b
+5000
+32 - if pattern const
+if ifs;
+Select ifs pattern ifs("1", _, _)
+none
+5000

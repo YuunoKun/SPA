@@ -1,0 +1,170 @@
+1 - modifiesp, LHS ident, RHS ident
+procedure p; variable v;
+Select p such that Modifies("Gandulf", "ring")
+Gandulf, Frodo, Aragon
+5000
+2 - modifiesp, LHS ident, RHS ident
+procedure p; variable v;
+Select v such that Modifies("Gandulf", "ring")
+shine, ring, f, lost, d, g, a, w
+5000
+3 - modifiesp, LHS ident, RHS synonym
+procedure p; variable v;
+Select v such that Modifies("Gandulf", v)
+shine, ring, f, lost, d, g, a, w
+5000
+4 - modifiesp, LHS synonym, RHS ident
+procedure p; variable v;
+Select p such that Modifies(p, "f")
+Gandulf, Frodo
+5000
+5 - modifiesp, LHS synonym, RHS synonym
+procedure p; variable v;
+Select p such that Modifies(p, v)
+Gandulf, Frodo, Aragon
+5000
+6 - modifiesp, LHS synonym, RHS synonym
+procedure p; variable v;
+Select v such that Modifies(p, v)
+shine, ring, f, lost, d, g, a, w
+5000
+7 - modifiesp, LHS ident, RHS wildcard
+procedure p; variable v;
+Select p such that Modifies("Frodo", _)
+Gandulf, Frodo, Aragon
+5000
+8 - modifiesp, LHS synonym, RHS wildcard
+procedure p; variable v;
+Select p such that Modifies(p, _)
+Gandulf, Frodo, Aragon
+5000
+9 - modifiesp, LHS integer, RHS ident
+call c; variable v;
+Select c such that Modifies(5, "f")
+5, 7, 12, 17
+5000
+10 - modifiesp, LHS integer, RHS synonym
+call c; variable v;
+Select v such that Modifies(5, v)
+a, f, lost, w, shine
+5000
+11 - modifiesp, LHS synonym, RHS ident
+call c; variable v;
+Select c such that Modifies(c, "f")
+5, 7, 12
+5000
+12 - modifiesp, LHS synonym, RHS synonym
+call c; variable v;
+Select c such that Modifies(c, v)
+5, 7, 12, 17
+5000
+13 - modifiesp, LHS synonym, RHS synonym
+call c; variable v;
+Select v such that Modifies(c, v)
+f, lost, a, w, shine
+5000
+14 - modifiesp, LHS synonym, RHS wildcard
+call c; variable v;
+Select c such that Modifies(c, _)
+5, 7, 12, 17
+5000
+15 - modifiesp, LHS ident, RHS wildcard
+call c; variable v;
+Select c such that Modifies(17, _)
+5, 7, 12, 17
+5000
+16 - invalid ModifiesP, wrong param assign
+procedure p; assign a;
+Select p such that Modifies(p, a)
+none
+5000
+17 - invalid ModifiesP, wrong param procedure
+procedure p, q;
+Select p such that Modifies(p, q)
+none
+5000
+18 - invalid ModifiesP, wrong param call
+procedure p; call c;
+Select p such that Modifies(p, c)
+none
+5000
+19 - invalid ModifiesP, wrong param stmt
+procedure p; stmt s;
+Select p such that Modifies(p, s)
+none
+5000
+20 - invalid ModifiesP, wrong param read
+procedure p; read r;
+Select p such that Modifies(p, r)
+none
+5000
+21 -  invalid ModifiesP, wrong param print
+procedure p; print pn;
+Select p such that Modifies(p, pn)
+none
+5000
+22 - invalid ModifiesP, wrong param if
+procedure p; if ifs;
+Select p such that Modifies(p, ifs)
+none
+5000
+23 - invalid ModifiesP, wrong param while
+procedure p; while w;
+Select p such that Modifies(p, w)
+none
+5000
+24 - invalid ModifiesP, wrong param constant
+procedure p; constant c;
+Select p such that Modifies(p, c)
+none
+5000
+25 - invalid ModifiesP, wrong param assign
+call c; assign a;
+Select c such that Modifies(c, a)
+none
+5000
+26 - invalid ModifiesP, wrong param procedure
+call c; procedure p;
+Select c such that Modifies(c, p)
+none
+5000
+27 - invalid ModifiesP, wrong param stmt
+call c; stmt s;
+Select c such that Modifies(c, s)
+none
+5000
+28 - invalid ModifiesP, wrong param call
+call c, c1;
+Select c such that Modifies(c, c1)
+none
+5000
+29 - invalid ModifiesP, wrong param read
+call c; read r;
+Select c such that Modifies(c, r)
+none
+5000
+30 - invalid ModifiesP, wrong param print
+call c; print pn;
+Select c such that Modifies(c, pn)
+none
+5000
+31 - invalid ModifiesP, wrong param if
+call c; if ifs;
+Select c such that Modifies(c, ifs)
+none
+5000
+32 - invalid ModifiesP, wrong param while
+call c; while w;
+Select c such that Modifies(c, w)
+none
+5000
+33 - invalid ModifiesP, wrong param constant
+call c; constant c1;
+Select c such that Modifies(c, c1)
+none
+5000
+34 - indirect calling of variable
+procedure p;
+Select p such that Modifies(p, "w")
+Gandulf, Frodo, Aragon
+5000
