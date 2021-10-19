@@ -544,6 +544,46 @@ namespace UnitTesting {
 		PKB::getInstance().resetCache();
 	}
 
+	TEST(PKB, getRead) {
+		PKB::getInstance().resetCache();
+
+		var_name x = "x";
+		var_name y = "y";
+		UniqueRelationTable<stmt_index, var_name> expected_table;
+		expected_table.insert(1, x);
+
+		PKB::getInstance().addStmt(STMT_READ);
+		PKB::getInstance().addStmt(STMT_ASSIGN);
+		PKB::getInstance().addVariable(x);
+		PKB::getInstance().addModifiesS(1, x);
+		PKB::getInstance().addVariable(y);
+		PKB::getInstance().addModifiesS(2, x);
+		PKB::getInstance().addModifiesS(2, y);
+		EXPECT_EQ(expected_table, PKB::getInstance().getRead());
+
+		PKB::getInstance().resetCache();
+	}
+
+	TEST(PKB, getPrint) {
+		PKB::getInstance().resetCache();
+
+		var_name x = "x";
+		var_name y = "y";
+		UniqueRelationTable<stmt_index, var_name> expected_table;
+		expected_table.insert(1, x);
+
+		PKB::getInstance().addStmt(STMT_PRINT);
+		PKB::getInstance().addStmt(STMT_ASSIGN);
+		PKB::getInstance().addVariable(x);
+		PKB::getInstance().addUsesS(1, x);
+		PKB::getInstance().addVariable(y);
+		PKB::getInstance().addUsesS(2, x);
+		PKB::getInstance().addUsesS(2, y);
+		EXPECT_EQ(expected_table, PKB::getInstance().getPrint());
+
+		PKB::getInstance().resetCache();
+	}
+
 	TEST(PKB, resetCache) {
 		PKB::getInstance().resetCache();
 

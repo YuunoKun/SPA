@@ -736,3 +736,39 @@ std::vector<var_name> PKBAdapter::getWhileUsed(stmt_index index) {
 	auto a = PKB::getInstance().PKB::getWhile();
 	return a.getValues(index);
 }
+
+std::vector<std::pair<stmt_index, var_name>> PKBAdapter::getAllPrintVars()
+{
+	auto a = PKB::getInstance().PKB::getPrint();
+	return a.getPairs();
+}
+
+std::vector<var_name> PKBAdapter::getPrintVar(stmt_index index)
+{
+	auto a = PKB::getInstance().PKB::getPrint();
+	return a.getValues(index);
+}
+
+bool PKBAdapter::isPrintVar(stmt_index index, var_name var)
+{
+	auto a = PKB::getInstance().PKB::getPrint();
+	return a.containsPair(index, var);
+}
+
+std::vector<std::pair<stmt_index, var_name>> PKBAdapter::getAllReadVars()
+{
+	auto a = PKB::getInstance().PKB::getRead();
+	return a.getPairs();
+}
+
+std::vector<var_name> PKBAdapter::getReadVar(stmt_index index)
+{
+	auto a = PKB::getInstance().PKB::getRead();
+	return a.getValues(index);
+}
+
+bool PKBAdapter::isReadVar(stmt_index index, var_name var)
+{
+	auto a = PKB::getInstance().PKB::getRead();
+	return a.containsPair(index, var);
+}

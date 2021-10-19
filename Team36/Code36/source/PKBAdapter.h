@@ -174,6 +174,16 @@ public:
 	std::vector<var_name> getWhileUsed();
 	std::vector<var_name> getWhileUsed(stmt_index);
 
+	// Read stmt - var relation
+	std::vector<std::pair<stmt_index, var_name>> getAllReadVars();
+	std::vector<var_name> getReadVar(stmt_index);
+	bool isReadVar(stmt_index, var_name);
+
+	// Print stmt - var relation
+	std::vector<std::pair<stmt_index, var_name>> getAllPrintVars();
+	std::vector<var_name> getPrintVar(stmt_index);
+	bool isPrintVar(stmt_index, var_name);
+
 private:
 	std::vector<stmt_index> getAssignInfoFiltered(std::vector<stmt_index>&, expr, bool);
 

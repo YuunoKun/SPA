@@ -14,7 +14,6 @@ PKB& PKB::getInstance() {
 	return pkb;
 }
 
-
 void PKB::addConstant(constant constant) {
 	const_table.emplace(constant);
 	return;
@@ -87,10 +86,14 @@ void PKB::addFollows(stmt_index first, stmt_index second) {
 
 void PKB::addUsesS(stmt_index user, var_name used) {
 	try {
-		StmtInfo user_stmt_info{ user, stmt_table.at(user - 1).stmt_type };
 		std::vector<var_name>::iterator it = std::find(var_table.begin(), var_table.end(), used);
 		if (it != var_table.end()) {
+			StmtType user_stmt_type = stmt_table[user - 1].stmt_type;
+			StmtInfo user_stmt_info{ user, user_stmt_type };
 			usesS_table.insert(user_stmt_info, used);
+			if (user_stmt_type == STMT_PRINT) {
+				print_table.insert(user, used);
+			}
 		}
 		else {
 			throw std::invalid_argument("addUsesS: Invalid var name: " + used);
@@ -108,9 +111,11 @@ void PKB::addModifiesS(stmt_index modifier, var_name modified) {
 		if (it != var_table.end()) {
 			modifiesS_table.insert(modifier_stmt_info, modified);
 			StmtType modifier_stmt_type = stmt_table[modifier - 1].stmt_type;
-			// also add to assignment table if modifier type is assignment
 			if (modifier_stmt_type == STMT_ASSIGN) {
 				assignment_table.insert(modifier, modified);
+			}
+			else if (modifier_stmt_type == STMT_READ) {
+				read_table.insert(modifier, modified);
 			}
 		}
 		else {

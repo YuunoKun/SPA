@@ -101,7 +101,7 @@ namespace UnitTesting {
 		PKB::getInstance().addConstant(e);
 		EXPECT_EQ(pkb.getConstants(), v);
 	}
-	
+
 	TEST_F(PKBAdapterTest, getProcedures) {
 		proc_name a = "a";
 		proc_name b = "b";
@@ -204,7 +204,6 @@ namespace UnitTesting {
 		EXPECT_EQ(pkb.getIfs(), v);
 	}
 
-
 	TEST_F(PKBAdapterTest, isVariables) {
 		var_name a = "a";
 		var_name b = "b";
@@ -259,7 +258,6 @@ namespace UnitTesting {
 		EXPECT_FALSE(pkb.isConstant(e));
 	}
 
-
 	TEST_F(PKBAdapterTest, isProcedure) {
 		proc_name a = "a";
 		proc_name b = "b";
@@ -276,7 +274,6 @@ namespace UnitTesting {
 		EXPECT_TRUE(pkb.isProcedure(d));
 		EXPECT_FALSE(pkb.isProcedure(e));
 	}
-
 
 	TEST_F(PKBAdapterTest, isAssigns) {
 		PKB::getInstance().addStmt(STMT_WHILE);
@@ -299,7 +296,6 @@ namespace UnitTesting {
 	}
 
 	TEST_F(PKBAdapterTest, isCalls) {
-
 		PKB::getInstance().addStmt(STMT_WHILE);
 		PKB::getInstance().addStmt(STMT_IF);
 		PKB::getInstance().addStmt(STMT_READ);
@@ -323,11 +319,9 @@ namespace UnitTesting {
 		EXPECT_FALSE(pkb.isCall(9));
 		EXPECT_TRUE(pkb.isCall(10));
 		EXPECT_FALSE(pkb.isCall(11));
-
 	}
 
 	TEST_F(PKBAdapterTest, isReads) {
-
 		PKB::getInstance().addStmt(STMT_WHILE);
 		PKB::getInstance().addStmt(STMT_IF);
 		PKB::getInstance().addStmt(STMT_READ);
@@ -348,7 +342,6 @@ namespace UnitTesting {
 	}
 
 	TEST_F(PKBAdapterTest, isWhiles) {
-
 		PKB::getInstance().addStmt(STMT_WHILE);
 		PKB::getInstance().addStmt(STMT_IF);
 		PKB::getInstance().addStmt(STMT_READ);
@@ -369,7 +362,6 @@ namespace UnitTesting {
 	}
 
 	TEST_F(PKBAdapterTest, isIf) {
-
 		PKB::getInstance().addStmt(STMT_WHILE);
 		PKB::getInstance().addStmt(STMT_IF);
 		PKB::getInstance().addStmt(STMT_READ);
@@ -388,7 +380,6 @@ namespace UnitTesting {
 		EXPECT_FALSE(pkb.isIf(7));
 		EXPECT_FALSE(pkb.isIf(8));
 	}
-
 
 	TEST_F(PKBAdapterTest, getAssignInfo) {
 		ExprParser expr_parser;
@@ -452,7 +443,6 @@ namespace UnitTesting {
 		EXPECT_EQ(pkb.getAssignInfo(expr_parser.parse(" c"), false), result);
 		EXPECT_EQ(pkb.getAssignInfo(expr_parser.parse("  c  "), false), result);
 	}
-
 
 	TEST_F(PKBAdapterTest, getAssignInfoFiltered) {
 		ExprParser expr_parser;
@@ -519,7 +509,6 @@ namespace UnitTesting {
 		EXPECT_EQ(pkb.getAssignInfoFiltered("y", expr_parser.parse("y"), true), result);
 		result = { a[2], a[5] };
 		EXPECT_EQ(pkb.getAssignInfoFiltered("z", expr_parser.parse("y"), true), result);
-
 
 		result = { a[3], a[5] };
 		EXPECT_EQ(pkb.getAssignInfoFiltered(expr_parser.parse("z"), true), result);
@@ -2627,5 +2616,77 @@ namespace UnitTesting {
 		v1 = { };
 		v2 = pkb.getWhileUsed(2);
 		EXPECT_EQ(v1, v2);
+	}
+
+	TEST_F(PKBAdapterTest, getRead) {
+		PKB::getInstance().resetCache();
+
+		var_name x = "x";
+		var_name y = "y";
+
+		PKB::getInstance().addStmt(STMT_READ);
+		PKB::getInstance().addStmt(STMT_ASSIGN);
+		PKB::getInstance().addStmt(STMT_READ);
+		PKB::getInstance().addVariable(x);
+		PKB::getInstance().addModifiesS(1, x);
+		PKB::getInstance().addVariable(y);
+		PKB::getInstance().addModifiesS(2, x);
+		PKB::getInstance().addModifiesS(2, y);
+		PKB::getInstance().addModifiesS(3, y);
+		EXPECT_TRUE(pkb.isReadVar(1, x));
+		EXPECT_FALSE(pkb.isReadVar(1, y));
+		EXPECT_FALSE(pkb.isReadVar(2, x));
+		EXPECT_FALSE(pkb.isReadVar(2, y));
+		EXPECT_FALSE(pkb.isReadVar(3, x));
+		EXPECT_TRUE(pkb.isReadVar(3, y));
+
+		std::vector<var_name> v1 = { "x" };
+		std::vector<var_name> v2 = pkb.getReadVar(1);
+		EXPECT_EQ(v1, v2);
+
+		v1 = { "y" };
+		v2 = pkb.getReadVar(3);
+		EXPECT_EQ(v1, v2);
+
+		std::vector<std::pair<stmt_index, var_name>> expectedPairs = { {1, x}, {3, y} };
+		EXPECT_EQ(expectedPairs, pkb.getAllReadVars());
+
+		PKB::getInstance().resetCache();
+	}
+
+	TEST_F(PKBAdapterTest, getPrint) {
+		PKB::getInstance().resetCache();
+
+		var_name x = "x";
+		var_name y = "y";
+
+		PKB::getInstance().addStmt(STMT_PRINT);
+		PKB::getInstance().addStmt(STMT_ASSIGN);
+		PKB::getInstance().addStmt(STMT_PRINT);
+		PKB::getInstance().addVariable(x);
+		PKB::getInstance().addUsesS(1, x);
+		PKB::getInstance().addVariable(y);
+		PKB::getInstance().addUsesS(2, x);
+		PKB::getInstance().addUsesS(2, y);
+		PKB::getInstance().addUsesS(3, y);
+		EXPECT_TRUE(pkb.isPrintVar(1, x));
+		EXPECT_FALSE(pkb.isPrintVar(1, y));
+		EXPECT_FALSE(pkb.isPrintVar(2, x));
+		EXPECT_FALSE(pkb.isPrintVar(2, y));
+		EXPECT_FALSE(pkb.isPrintVar(3, x));
+		EXPECT_TRUE(pkb.isPrintVar(3, y));
+
+		std::vector<var_name> v1 = { "x" };
+		std::vector<var_name> v2 = pkb.getPrintVar(1);
+		EXPECT_EQ(v1, v2);
+
+		v1 = { "y" };
+		v2 = pkb.getPrintVar(3);
+		EXPECT_EQ(v1, v2);
+
+		std::vector<std::pair<stmt_index, var_name>> expectedPairs = { {1, x}, {3, y} };
+		EXPECT_EQ(expectedPairs, pkb.getAllPrintVars());
+
+		PKB::getInstance().resetCache();
 	}
 }
