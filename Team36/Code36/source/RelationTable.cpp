@@ -5,14 +5,12 @@
 #include <stack>
 
 template <class T, class S>
-std::unordered_map<T, std::vector<S>> RelationTable<T, S>::getTableForward()
-{
+std::unordered_map<T, std::vector<S>> RelationTable<T, S>::getTableForward() {
 	return forward_table;
 }
 
 template <class T, class S>
-std::unordered_map<S, std::vector<T>> RelationTable<T, S>::getTableBackward()
-{
+std::unordered_map<S, std::vector<T>> RelationTable<T, S>::getTableBackward() {
 	return backward_table;
 }
 
@@ -22,8 +20,7 @@ bool RelationTable<T, S>::isUniqueKey() {
 }
 
 template <class T, class S>
-void RelationTable<T, S>::clear()
-{
+void RelationTable<T, S>::clear() {
 	forward_table.clear();
 	backward_table.clear();
 	lookup_table.clear();
@@ -31,14 +28,12 @@ void RelationTable<T, S>::clear()
 }
 
 template <class T, class S>
-bool RelationTable<T, S>::isEmpty()
-{
+bool RelationTable<T, S>::isEmpty() {
 	return forward_table.empty();
 }
 
 template <class T, class S>
-bool RelationTable<T, S>::insert(T key, S value)
-{
+bool RelationTable<T, S>::insert(T key, S value) {
 	auto iter_forward = forward_table.find(key);
 	auto iter_backward = backward_table.find(value);
 	bool keyExistsForward = iter_forward != forward_table.end();
@@ -77,8 +72,7 @@ bool RelationTable<T, S>::insert(T key, S value)
 }
 
 template<class T, class S>
-std::vector<T> RelationTable<T, S>::getKeys(S value)
-{
+std::vector<T> RelationTable<T, S>::getKeys(S value) {
 	auto iter = backward_table.find(value);
 	if (iter != backward_table.end()) {
 		return iter->second;
@@ -111,8 +105,7 @@ std::vector<T> RelationTable<T, S>::getKeys() {
 }
 
 template<class T, class S>
-std::vector<S> RelationTable<T, S>::getValues()
-{
+std::vector<S> RelationTable<T, S>::getValues() {
 	std::vector<S> values;
 	values.reserve(backward_table.size());
 
@@ -123,8 +116,7 @@ std::vector<S> RelationTable<T, S>::getValues()
 }
 
 template <class T, class S>
-std::vector<std::pair<T, S>> RelationTable<T, S>::getPairs()
-{
+std::vector<std::pair<T, S>> RelationTable<T, S>::getPairs() {
 	std::vector<std::pair<T, S>> result;
 	for (auto const& pair : forward_table) {
 		T key = pair.first;
@@ -135,29 +127,25 @@ std::vector<std::pair<T, S>> RelationTable<T, S>::getPairs()
 }
 
 template <class T, class S>
-bool RelationTable <T, S>::containsKey(T key)
-{
+bool RelationTable <T, S>::containsKey(T key) {
 	auto iter = forward_table.find(key);
 	return iter != forward_table.end();
 }
 
 template<class T, class S>
-bool RelationTable<T, S>::containsValue(S value)
-{
+bool RelationTable<T, S>::containsValue(S value) {
 	auto iter = backward_table.find(value);
 	return iter != backward_table.end();
 }
 
 template <class T, class S>
-bool RelationTable<T, S>::containsPair(T key, S value)
-{
+bool RelationTable<T, S>::containsPair(T key, S value) {
 	auto s = lookup_table[key];
 	return containsKey(key) && s.find(value) != s.end();
 }
 
 template<class T, class S>
-std::vector<S> RelationTable<T, S>::forwardDFS(T key)
-{
+std::vector<S> RelationTable<T, S>::forwardDFS(T key) {
 	static_assert(std::is_same<T, S>::value, "DFS must be used with a table with columns of same datatype");
 	if (calculatedDFSForward.count(key)) {
 		return getValues(key);
@@ -194,8 +182,7 @@ std::vector<S> RelationTable<T, S>::forwardDFS(T key)
 }
 
 template<class T, class S>
-std::vector<T> RelationTable<T, S>::backwardDFS(S value)
-{
+std::vector<T> RelationTable<T, S>::backwardDFS(S value) {
 	static_assert(std::is_same<T, S>::value, "DFS must be used with a table with columns of same datatype");
 	if (calculatedDFSBackward.count(value)) {
 		return getValues(value);
@@ -232,8 +219,7 @@ std::vector<T> RelationTable<T, S>::backwardDFS(S value)
 }
 
 template <class T, class S>
-RelationTable<T, S> RelationTable<T, S>::copy()
-{
+RelationTable<T, S> RelationTable<T, S>::copy() {
 	RelationTable<T, S> res;
 	for (auto const& pair : forward_table) {
 		T key = pair.first;
@@ -246,8 +232,7 @@ RelationTable<T, S> RelationTable<T, S>::copy()
 }
 
 template <class T, class S>
-RelationTable<T, S> RelationTable<T, S>::findTransitiveClosure()
-{
+RelationTable<T, S> RelationTable<T, S>::findTransitiveClosure() {
 	static_assert(std::is_same<T, S>::value, "Transitive closure must be used with a table with columns of same datatype");
 	RelationTable<T, S> res = copy();
 	std::vector<T> keys = getKeys();

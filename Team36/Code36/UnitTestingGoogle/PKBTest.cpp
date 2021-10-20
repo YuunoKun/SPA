@@ -584,6 +584,72 @@ namespace UnitTesting {
 		PKB::getInstance().resetCache();
 	}
 
+	TEST(PKB, getCallsS) {
+		PKB::getInstance().resetCache();
+
+		proc_name first = "first";
+		proc_name second = "second";
+		UniqueRelationTable<stmt_index, proc_name> expected_table;
+		expected_table.insert(1, first);
+
+		PKB::getInstance().addStmt(STMT_CALL);
+		PKB::getInstance().addStmt(STMT_ASSIGN);
+		PKB::getInstance().addProcedure(first);
+		PKB::getInstance().addCallsS(1, first);
+		EXPECT_THROW(PKB::getInstance().addCallsS(1, second), std::invalid_argument);
+		PKB::getInstance().addProcedure(second);
+		EXPECT_THROW(PKB::getInstance().addCallsS(2, second), std::invalid_argument);
+		EXPECT_EQ(expected_table, PKB::getInstance().getCallsS());
+
+		PKB::getInstance().resetCache();
+	}
+
+	TEST(PKB, getProcContains) {
+		PKB::getInstance().resetCache();
+
+		proc_name first = "first";
+		proc_name second = "second";
+
+		RelationTable<proc_name, stmt_index> expected_table;
+		expected_table.insert(first, 1);
+		expected_table.insert(first, 2);
+		expected_table.insert(second, 3);
+
+		PKB::getInstance().addStmt(STMT_CALL);
+		PKB::getInstance().addStmt(STMT_ASSIGN);
+		PKB::getInstance().addStmt(STMT_READ);
+		PKB::getInstance().addProcedure(first);
+		PKB::getInstance().addProcContains(first, 1);
+		PKB::getInstance().addProcContains(first, 2);
+		EXPECT_THROW(PKB::getInstance().addProcContains(second, 2), std::invalid_argument);
+		PKB::getInstance().addProcedure(second);
+		PKB::getInstance().addProcContains(second, 3);
+		EXPECT_EQ(expected_table, PKB::getInstance().getProcContains());
+
+		PKB::getInstance().resetCache();
+	}
+
+	TEST(PKB, inSameProc) {
+		PKB::getInstance().resetCache();
+
+		proc_name first = "first";
+		proc_name second = "second";
+
+		PKB::getInstance().addStmt(STMT_CALL);
+		PKB::getInstance().addStmt(STMT_ASSIGN);
+		PKB::getInstance().addStmt(STMT_READ);
+		PKB::getInstance().addProcedure(first);
+		PKB::getInstance().addProcedure(second);
+		PKB::getInstance().addProcContains(first, 1);
+		PKB::getInstance().addProcContains(first, 2);
+		PKB::getInstance().addProcContains(second, 3);
+		EXPECT_TRUE(PKB::getInstance().inSameProc(1, 2));
+		EXPECT_FALSE(PKB::getInstance().inSameProc(2, 3));
+		EXPECT_FALSE(PKB::getInstance().inSameProc(1, 3));
+
+		PKB::getInstance().resetCache();
+	}
+
 	TEST(PKB, resetCache) {
 		PKB::getInstance().resetCache();
 

@@ -31,6 +31,7 @@ public:
 	virtual void addCallsS(stmt_index caller_stmt_index, proc_name callee_proc_name) = 0;
 	virtual void addIf(stmt_index if_stmt_index, var_name control_var) = 0;
 	virtual void addWhile(stmt_index while_stmt_index, var_name control_var) = 0;
+	virtual void addProcContains(proc_name proc, stmt_index index) = 0;
 
 	virtual void generateParentT() = 0;
 	virtual void generateFollowsT() = 0;
@@ -43,6 +44,7 @@ public:
 	virtual const StmtInfo getStmt(stmt_index stmt_index) = 0;
 	virtual const var_name getAssignment(stmt_index stmt_index) = 0;
 	virtual expr getExpression(stmt_index stmt_index) = 0;
+	virtual const bool inSameProc(stmt_index, stmt_index) = 0;
 	virtual const std::vector<constant> getConstants() = 0;
 	virtual const UniqueRelationTable<stmt_index, var_name>& getAssigns() = 0;
 	virtual const UniqueRelationTable<StmtInfo, StmtInfo>& getFollows() = 0;
@@ -61,6 +63,7 @@ public:
 	virtual const RelationTable<stmt_index, var_name>& getIf() = 0;
 	virtual const RelationTable<stmt_index, var_name>& getWhile() = 0;
 	virtual const RelationTable<StmtInfo, StmtInfo>& getNext() = 0;
+	virtual const RelationTable<proc_name, stmt_index>& getProcContains() = 0;
 
 	virtual void resetCache() = 0;
 	virtual void resetEntities() = 0;
