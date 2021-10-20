@@ -184,6 +184,11 @@ public:
 	std::vector<var_name> getPrintVar(stmt_index);
 	bool isPrintVar(stmt_index, var_name);
 
+	// Call stmt - procname relation
+	std::vector<std::pair<stmt_index, proc_name>> getAllCallS();
+	std::vector<proc_name> getCalledS(stmt_index);
+	bool isCallS(stmt_index, proc_name);
+
 private:
 	std::vector<stmt_index> getAssignInfoFiltered(std::vector<stmt_index>&, expr, bool);
 

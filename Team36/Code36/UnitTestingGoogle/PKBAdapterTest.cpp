@@ -2689,4 +2689,39 @@ namespace UnitTesting {
 
 		PKB::getInstance().resetCache();
 	}
+
+	TEST_F(PKBAdapterTest, getCallS) {
+		PKB::getInstance().resetCache();
+
+		proc_name first = "first";
+		proc_name second = "second";
+		proc_name third = "third";
+
+		PKB::getInstance().addStmt(STMT_CALL);
+		PKB::getInstance().addStmt(STMT_CALL);
+		PKB::getInstance().addStmt(STMT_READ);
+		PKB::getInstance().addProcedure(first);
+		PKB::getInstance().addProcedure(second);
+		PKB::getInstance().addCallsS(1, first);
+		PKB::getInstance().addCallsS(2, second);
+		EXPECT_TRUE(pkb.isCallS(1, first));
+		EXPECT_FALSE(pkb.isCallS(1, second));
+		EXPECT_FALSE(pkb.isCallS(2, first));
+		EXPECT_TRUE(pkb.isCallS(2, second));
+		EXPECT_FALSE(pkb.isCallS(3, first));
+		EXPECT_FALSE(pkb.isCallS(3, second));
+
+		std::vector<var_name> v1 = { first };
+		std::vector<var_name> v2 = pkb.getCalledS(1);
+		EXPECT_EQ(v1, v2);
+
+		v1 = { };
+		v2 = pkb.getCalledS(3);
+		EXPECT_EQ(v1, v2);
+
+		std::vector<std::pair<stmt_index, var_name>> expectedPairs = { {1, first}, {2, second} };
+		EXPECT_EQ(expectedPairs, pkb.getAllCallS());
+
+		PKB::getInstance().resetCache();
+	}
 }
