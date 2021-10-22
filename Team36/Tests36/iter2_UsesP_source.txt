@@ -41,3 +41,8 @@ procedure Aragon {
     }
   }
 }
+procedure Sam {
+    read i;
+    i = a;
+    call Frodo;
+}

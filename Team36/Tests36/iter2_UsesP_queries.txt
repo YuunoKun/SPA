@@ -1,12 +1,12 @@
 1 - usesp, LHS ident, RHS ident
 procedure p; variable v;
 Select p such that Uses("Gandulf", "ring")
-Gandulf, Frodo, Aragon
+Gandulf, Frodo, Aragon, Sam
 5000
 2 - usesp, LHS ident, RHS ident
 procedure p; variable v;
 Select v such that Uses("Gandulf", "ring")
-shine, ring, f, lost, g, a, d, w
+shine, ring, f, lost, g, a, d, w, i
 5000
 3 - usesp, LHS ident, RHS synonym
 procedure p; variable v;
@@ -16,12 +16,12 @@ ring, f, shine, lost, g, a, d, w
 4 - Usesp, LHS synonym, RHS ident
 procedure p; variable v;
 Select p such that Uses(p, "f")
-Gandulf, Frodo, Aragon
+Gandulf, Frodo, Aragon, Sam
 5000
 5 - Usesp, LHS synonym, RHS synonym
 procedure p; variable v;
 Select p such that Uses(p, v)
-Gandulf, Frodo, Aragon
+Gandulf, Frodo, Aragon, Sam
 5000
 6 - usesp, LHS synonym, RHS synonym
 procedure p; variable v;
@@ -31,17 +31,17 @@ shine, ring, f, lost, g, a, d, w
 7 - Usesp, LHS ident, RHS wildcard
 procedure p; variable v;
 Select p such that Uses("Frodo", _)
-Gandulf, Frodo, Aragon
+Gandulf, Frodo, Aragon, Sam
 5000
 8 - Usesp, LHS synonym, RHS wildcard
 procedure p; variable v;
 Select p such that Uses(p, _)
-Gandulf, Frodo, Aragon
+Gandulf, Frodo, Aragon, Sam
 5000
 9 - Usesp, LHS integer, RHS ident
 call c; variable v;
 Select c such that Uses(5, "f")
-5, 7, 12, 17
+5, 7, 12, 17, 31
 5000
 10 - usesp, LHS integer, RHS synonym
 call c; variable v;
@@ -51,12 +51,12 @@ a, f, shine, lost, ring, w
 11 - usesp, LHS synonym, RHS ident
 call c; variable v;
 Select c such that Uses(c, "a")
-5, 7, 12, 17
+5, 7, 12, 17, 31
 5000
 12 - usesp, LHS synonym, RHS synonym
 call c; variable v;
 Select c such that Uses(c, v)
-5, 7, 12, 17
+5, 7, 12, 17, 31
 5000
 13 - usesp, LHS synonym, RHS synonym
 call c; variable v;
@@ -66,12 +66,12 @@ shine, ring, f, lost, a, w
 14 - usesp, LHS synonym, RHS wildcard
 call c; variable v;
 Select c such that Uses(c, _)
-5, 7, 12, 17
+5, 7, 12, 17, 31
 5000
 15 - usesp, LHS ident, RHS wildcard
 call c; variable v;
 Select v such that Uses(17, _)
-shine, ring, f, lost, g, a, d, w
+shine, ring, f, lost, g, a, d, w, i
 5000
 16 - invalid UsesP, wrong param assign
 procedure p; assign a;
@@ -166,5 +166,5 @@ none
 34 - indirect calling of variable
 procedure p;
 Select p such that Uses(p, "w")
-Gandulf, Frodo, Aragon
+Gandulf, Frodo, Aragon, Sam
 5000
