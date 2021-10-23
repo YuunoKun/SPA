@@ -1032,6 +1032,80 @@ namespace UnitTesting {
 		q3.addPattern(Pattern(Entity(EntityType::ASSIGN, Synonym{ "a1" }), Entity(EntityType::VARIABLE, Synonym{ "v" }), "", true));
 
 		EXPECT_EQ(test3, q3);
+
+		Query test4 = qp.parse("stmt s; assign a, a1; variable v; Select a pattern a(\"q\", _\"p\"_) and a1(v, _) such that Parent(s, a) and Uses(a, v)");
+
+		Query q4;
+		q4.addEntity(Entity(EntityType::STMT, Synonym{ "s" }));
+		q4.addEntity(Entity(EntityType::ASSIGN, Synonym{ "a" }));
+		q4.addEntity(Entity(EntityType::ASSIGN, Synonym{ "a1" }));
+		q4.addEntity(Entity(EntityType::VARIABLE, Synonym{ "v" }));
+		q4.addSelected(Entity(EntityType::ASSIGN, Synonym{ "a" }));
+		q4.addPattern(Pattern(Entity(EntityType::ASSIGN, Synonym{ "a" }), Entity(EntityType::VARIABLE, "q"), "p", true));
+		q4.addPattern(Pattern(Entity(EntityType::ASSIGN, Synonym{ "a1" }), Entity(EntityType::VARIABLE, Synonym{ "v" }), "", true));
+		q4.addRelation(RelRef(RelType::PARENT, Entity(EntityType::STMT, Synonym{ "s" }), Entity(EntityType::ASSIGN, Synonym{ "a" })));
+		q4.addRelation(RelRef(RelType::USES_S, Entity(EntityType::ASSIGN, Synonym{ "a" }), Entity(EntityType::VARIABLE, Synonym{ "v" })));
+
+		EXPECT_EQ(test4, q4);
+	}
+
+	TEST(QueryPreprocessor, tupleSelect) {
+		QueryPreprocessor qp;
+
+		Query test1 = qp.parse("procedure p, q; Select <p,q>");
+
+		Query q1;
+		q1.addEntity(Entity(EntityType::PROCEDURE, Synonym{ "p" }));
+		q1.addEntity(Entity(EntityType::PROCEDURE, Synonym{ "q" }));
+		q1.addSelected(Entity(EntityType::PROCEDURE, Synonym{ "p" }));
+		q1.addSelected(Entity(EntityType::PROCEDURE, Synonym{ "q" }));
+
+		EXPECT_EQ(test1, q1);
+	}
+
+	TEST(QueryPreprocessor, tupleSelectWithSuchThat) {
+		QueryPreprocessor qp;
+
+		Query test1 = qp.parse("procedure p, q; Select <p,q> such that Calls (p,q)");
+
+		Query q1;
+		q1.addEntity(Entity(EntityType::PROCEDURE, Synonym{ "p" }));
+		q1.addEntity(Entity(EntityType::PROCEDURE, Synonym{ "q" }));
+		q1.addSelected(Entity(EntityType::PROCEDURE, Synonym{ "p" }));
+		q1.addSelected(Entity(EntityType::PROCEDURE, Synonym{ "q" }));
+		q1.addRelation(RelRef(RelType::CALLS, Entity(EntityType::PROCEDURE, Synonym{ "p" }), Entity(EntityType::PROCEDURE, Synonym{ "q" })));
+
+		EXPECT_EQ(test1, q1);
+	}
+
+	TEST(QueryPreprocessor, tupleSelectAnd) {
+		QueryPreprocessor qp;
+		Query test1 = qp.parse("while w1, w2, w3; Select <w1, w2, w3> such that Parent*(w1, w2) and Parent*(w2, w3)");
+
+		Query q1;
+		q1.addEntity(Entity(EntityType::WHILE, Synonym{ "w1" }));
+		q1.addEntity(Entity(EntityType::WHILE, Synonym{ "w2" }));
+		q1.addEntity(Entity(EntityType::WHILE, Synonym{ "w3" }));
+		q1.addSelected(Entity(EntityType::WHILE, Synonym{ "w1" }));
+		q1.addSelected(Entity(EntityType::WHILE, Synonym{ "w2" }));
+		q1.addSelected(Entity(EntityType::WHILE, Synonym{ "w3" }));
+		q1.addRelation(RelRef(RelType::PARENT_T, Entity(EntityType::WHILE, Synonym{ "w1" }), Entity(EntityType::WHILE, Synonym{ "w2" })));
+		q1.addRelation(RelRef(RelType::PARENT_T, Entity(EntityType::WHILE, Synonym{ "w2" }), Entity(EntityType::WHILE, Synonym{ "w3" })));
+
+		EXPECT_EQ(test1, q1);
+	}
+
+	TEST(QueryPreprocessor, tupleWithAttributes) {
+		QueryPreprocessor qp;
+		Query test1 = qp.parse("assign a1, a2; Select <a1.stmt#, a2>");
+
+		Query q1;
+		q1.addEntity(Entity(EntityType::ASSIGN, Synonym{ "a1" }));
+		q1.addEntity(Entity(EntityType::ASSIGN, Synonym{ "a2" }));
+		q1.addSelected(Entity(EntityType::ASSIGN, Synonym{ "a1" }, AttrRef::STMT_INDEX));
+		q1.addSelected(Entity(EntityType::ASSIGN, Synonym{ "a2" }));
+
+		EXPECT_EQ(test1, q1);
 	}
 
 	TEST(QueryPreprocessor, invalidSyntax) {
