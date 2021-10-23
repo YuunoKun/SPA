@@ -19,4 +19,6 @@ public:
 	void validatePatternType(Entity&);
 
 	void validateAnd(QueryToken&);
+
+	void validateAttributeType(Query&, QueryToken&, QueryToken&);
 };

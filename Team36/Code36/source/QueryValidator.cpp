@@ -102,3 +102,39 @@ void QueryValidator::validateAnd(QueryToken& patternOrSuchThat) {
 		throw SyntacticErrorException("The keyword 'and' should come after pattern/ relations have been initalized previously");
 	}
 }
+
+void QueryValidator::validateAttributeType(Query& query, QueryToken& prevToken, QueryToken& nextToken) {
+	std::unordered_map<std::string, Entity> queryEntities = query.getEntities();
+
+	bool isExist = false;
+	EntityType entType;
+	for (std::pair<std::string, Entity> element : queryEntities) {
+		if (element.first == prevToken.token_value) {
+			entType = element.second.getType();
+			isExist = true;
+		}
+	}
+
+	if (!isExist) {
+		throw SemanticErrorException("Selected Entity has not been declared");
+	}
+
+	if (nextToken.type == QueryToken::QueryTokenType::PROC_NAME &&
+		(entType != EntityType::PROCEDURE && entType != EntityType::CALL)) {
+		throw SyntacticErrorException("Only procedure and call can have a procName attribute");
+	}
+	else if (nextToken.type == QueryToken::QueryTokenType::VAR_NAME &&
+		(entType != EntityType::VARIABLE && entType != EntityType::READ && entType != EntityType::PRINT)) {
+		throw SyntacticErrorException("Only variable, read and print can have varName attribute");
+	}
+	else if (nextToken.type == QueryToken::QueryTokenType::VALUE &&
+		entType != EntityType::CONSTANT) {
+		throw SyntacticErrorException("Only constant can have value attribute");
+	}
+	else if (nextToken.type == QueryToken::QueryTokenType::STMT_INDEX &&
+		(entType != EntityType::STMT && entType != EntityType::READ && entType != EntityType::PRINT &&
+			entType != EntityType::CALL && entType != EntityType::WHILE && entType != EntityType::IF &&
+			entType != EntityType::ASSIGN)) {
+		throw SyntacticErrorException("Entity type for .stmt# attribute is not valid");
+	}
+}

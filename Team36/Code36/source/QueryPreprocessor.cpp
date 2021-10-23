@@ -221,6 +221,7 @@ void QueryPreprocessor::handleSelection(QueryToken& token) {
 }
 
 void QueryPreprocessor::handleIsSelecting(QueryToken& token) {
+	QueryValidator queryValidator = QueryValidator();
 	// Check next token, if its pattern or such that, go out from is_selecting
 	if (nextToken.type != QueryToken::QueryTokenType::WHITESPACE && (nextToken.token_value == "pattern" || nextToken.type == QueryToken::QueryTokenType::SUCH_THAT)) {
 		status = ParseStatus::NEUTRAL;
@@ -229,6 +230,7 @@ void QueryPreprocessor::handleIsSelecting(QueryToken& token) {
 	// if Select has attribute ie. Select p.procName
 	if (token.type == QueryToken::QueryTokenType::DOT &&
 		prevToken.type == QueryToken::QueryTokenType::IDENTIFIER) {
+		queryValidator.validateAttributeType(query, prevTokenSelect, nextToken);
 		isExpectingAttribute = true;
 	}
 	else if (isExpectingAttribute && prevTokenSelect.type == QueryToken::QueryTokenType::DOT) {
