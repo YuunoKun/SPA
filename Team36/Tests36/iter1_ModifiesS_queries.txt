@@ -1,0 +1,100 @@
+1 - modifies, 1 such that and 1 unknown synonym
+assign a;
+Select a such that Modifies(a, "x")
+1, 15
+5000
+2 - modifies, 1 such that and 1 unknown synonym
+variable v;
+Select v such that Modifies(2, v)
+y
+5000
+3 - modifies, 1 such that and 1 unknown synonym
+read r;
+Select r such that Modifies(r, "z")
+3
+5000
+4 - modifies, 1 such that and 1 unknown synonym
+variable v;
+Select v such that Modifies(3, v)
+z
+5000
+5 - modifies, 1 such that and 1 unknown synonym
+if ifs;
+Select ifs such that Modifies(ifs, "y")
+6, 17
+5000
+6 - modifies, 1 such that and 1 unknown synonym
+variable v;
+Select v such that Modifies(6, v)
+y
+5000
+7 - modifies, 1 such that and 1 unknown synonym
+while w;
+Select w such that Modifies(w, "x")
+4, 13
+5000
+8 - modifies, 1 such that and 1 unknown synonym
+variable v;
+Select v such that Modifies(4, v)
+y, var1, x
+5000
+9 - modifies, 1 such that and 2 unknown synonyms
+assign a; variable v;
+Select a such that Modifies(a, v)
+1, 2, 8, 12, 14, 15, 18, 19
+5000
+10 - modifies, 1 such that and 2 unknown synonyms
+read r; variable v;
+Select r such that Modifies(r, v)
+3
+5000
+11 - modifies, 1 such that and 2 unknown synonyms
+if ifs; variable v;
+Select ifs such that Modifies(ifs, v)
+6, 17
+5000
+12 - modifies, 1 such that and 2 unknown synonyms
+while w; variable v;
+Select w such that Modifies(w, v)
+4, 13
+5000
+13 - modifies, 1 such that and assign synonym LHS, wildcard RHS
+assign a;
+Select a such that Modifies(a,_)
+1, 2, 8, 12, 14, 15, 18, 19
+5000
+14 - modifies, 1 such that and read synonym LHS, wildcard RHS
+read r;
+Select r such that Modifies(r, _)
+3
+5000
+15 - modifies, 1 such that and while synonym LHS, wildcard RHS
+while w;
+Select w such that Modifies(w,_)
+4, 13
+5000
+16 - modifies, 1 such that and if synonym LHS, wildcard RHS
+if ifs;
+Select ifs such that Modifies(ifs, _)
+6, 17
+5000
+17 - Modifies, 1 such that and read synonym LHS, wildcard RHS
+stmt s;
+Select s such that Modifies(s,_)
+1, 2, 3, 4, 5, 6, 7, 8, 12, 13, 14, 15, 17, 18, 19
+5000
+18 - Modifies, prog_line LHS, wildcard RHS
+prog_line n;
+Select n such that Modifies(n, _)
+1, 2, 3, 4, 5, 6, 7, 8, 12, 13, 14, 15, 17, 18, 19
+5000
+19 - Modifies, prog_line LHS, ident RHS
+prog_line n;
+Select n such that Modifies(n, "x")
+1, 13, 15
+5000
+20 - Modifies, prog_line LHS, variable RHS
+prog_line n; variable v;
+Select n such that Modifies(n, v)
+1, 2, 3, 4, 5, 6, 7, 8, 12, 13, 14, 15, 17, 18, 19
+5000

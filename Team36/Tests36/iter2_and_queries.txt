@@ -550,33 +550,33 @@ none
 5000
 111 - assign pattern and assign pattern, no common synonym
 assign a1, a2;
-Select a1 pattern a1 (_, "ring + 3") and a2 (_, _"shine"_)
-3
+Select a1 pattern a1 (_, "a * 3") and a2 (_, _"b * c"_)
+2
 5000
 112 - assign pattern and assign pattern, 1 common synonym
 assign a; variable v;
-Select a pattern a(v, _) and a("f", _"2 * 1"_)
+Select a pattern a(v, _) and a("c", _"a + e""_)
 none
 5000
 113 - assign pattern and if pattern, no common synonym
 assign a; if ifs;
-Select a pattern a("w", _"a + lost"_) and ifs("a",_,_)
-23
+Select a pattern a("b", _"7 * e"_) and ifs("a",_,_)
+17
 5000
 114 - assign pattern and if pattern, 1 common synonym
 assign a; if ifs; variable v;
 Select a pattern a(v, _) and ifs(v,_,_)
-15, 20, 22, 24, 26
+2, 3, 10, 15, 17, 22, 35, 41
 5000
 115 - assign pattern and while pattern, no common synonym
 while w; assign a;
-Select a pattern a("shine", _"1"_) and w("f",_)
-24
+Select a pattern a("d", _"3"_) and w("a",_)
+41
 5000
 116 - assign pattern and while pattern, 1 common synonym
 while w; assign a; variable v;
 Select a pattern a(v, _"1"_) and w(v,_)
-11, 20, 22, 24, 26
+39
 5000
 117 - if pattern and if pattern, no common synonym
 if ifs1, ifs2;
@@ -887,4 +887,9 @@ none
 procedure p, q; assign a; while w; variable v;
 Select v such that Calls(p, "mySecond") and Calls*("myFirst", "myFourth") pattern a(v, _) and w("h",_)
 none
+5000
+179 - use 'and' as a entity name
+assign and;
+Select and pattern and(_, _"a"_) and and(_, _"e"_) and and(_, _"f"_)
+15
 5000

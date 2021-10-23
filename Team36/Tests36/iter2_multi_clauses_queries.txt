@@ -158,3 +158,8 @@ assign a; if ifs1, ifs2, ifs3; while w; stmt s1, s2, s3, s4; variable v1, v2, v3
 Select s2 pattern a(v1, _"a + b + c + d"_) and ifs1("d", _, _) and w(v1, _) such that Modifies(s2, "a") and Uses(s2, v3) pattern ifs2(v4, _,_) pattern ifs3(_, _, _) such that Modifies("myFirst", "k") such that Parent(s2, s3)
 30, 31, 6, 8, 12
 5000
+33 - pattern a and if and while such that Modifies and Uses pattern if pattern if such that ModifiesP such that Parent, 3 common synonym
+assign a; if ifs1, ifs2, ifs3; while w; stmt s1, s2, s3, s4; variable v1, v2, v3, v4; procedure p, q;
+Select s2 pattern a(v1, _"a + b + c + d"_) and ifs1(v2, _, _) and w(v1, _) such that Modifies(s2, "a") and Uses(s2, v2) pattern ifs2(v4, _,_) pattern ifs3(_, _, _) such that Modifies("myFirst", "k") such that Parent(s2, s3)
+30, 31, 6, 8, 12
+5000
