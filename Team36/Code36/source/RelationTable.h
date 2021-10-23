@@ -27,7 +27,11 @@ public:
 	bool containsKey(T);
 	bool containsValue(S);
 	bool containsPair(T, S);
+	std::vector<S>forwardDFS(T);
+	std::vector<T>backwardDFS(S);
+
 	RelationTable<T, S> findTransitiveClosure();
+	RelationTable<T, S> copy();
 	RelationTable<S, T> findReverse();
 
 	std::unordered_map<T, std::vector<S>> getTableForward();
@@ -40,6 +44,8 @@ protected:
 	std::unordered_map<T, std::vector<S>> forward_table;
 	std::unordered_map<S, std::vector<T>> backward_table;
 	std::unordered_map<T, std::unordered_set<S>> lookup_table;
+	std::unordered_set<T> calculatedDFSForward;
+	std::unordered_set<S> calculatedDFSBackward;
 	bool uniqueKey;
 };
 

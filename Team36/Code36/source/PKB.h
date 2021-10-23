@@ -35,6 +35,7 @@ public:
 	void addIf(stmt_index if_stmt_index, var_name control_var) override;
 	void addWhile(stmt_index while_stmt_index, var_name control_var) override;
 	void addNext(prog_line prog_line1, prog_line prog_line2) override;
+	void addProcContains(proc_name proc, stmt_index index) override;
 
 	void generateParentT() override;
 	void generateFollowsT() override;
@@ -48,6 +49,7 @@ public:
 	const var_name getAssignment(stmt_index stmt_index) override;
 	expr getExpression(stmt_index stmt_index) override;
 	const std::vector<constant> getConstants() override;
+	const bool inSameProc(stmt_index, stmt_index) override;
 	const UniqueRelationTable<stmt_index, var_name>& getAssigns();
 	const UniqueRelationTable<StmtInfo, StmtInfo>& getFollows() override;
 	const RelationTable<StmtInfo, StmtInfo>& getParent() override;
@@ -65,6 +67,7 @@ public:
 	const RelationTable<stmt_index, var_name>& getIf() override;
 	const RelationTable<stmt_index, var_name>& getWhile() override;
 	const RelationTable<StmtInfo, StmtInfo>& getNext() override;
+	const RelationTable<proc_name, stmt_index>& getProcContains() override;
 
 	void resetCache() override;
 	void resetEntities() override;
@@ -88,10 +91,11 @@ private:
 	RelationTable<proc_name, proc_name> callsPT_table;
 	UniqueRelationTable<stmt_index, var_name> read_table;
 	UniqueRelationTable<stmt_index, var_name> print_table;
-	RelationTable<stmt_index, proc_name> callsS_table;
+	UniqueRelationTable<stmt_index, proc_name> callsS_table;
 	RelationTable<stmt_index, var_name> while_table;
 	RelationTable<stmt_index, var_name> if_table;
 	RelationTable<StmtInfo, StmtInfo> next_table;
+	RelationTable<proc_name, stmt_index> procS_table;
 
 	PKB() {};
 };

@@ -14,7 +14,6 @@ PKB& PKB::getInstance() {
 	return pkb;
 }
 
-
 void PKB::addConstant(constant constant) {
 	const_table.emplace(constant);
 	return;
@@ -87,10 +86,14 @@ void PKB::addFollows(stmt_index first, stmt_index second) {
 
 void PKB::addUsesS(stmt_index user, var_name used) {
 	try {
-		StmtInfo user_stmt_info{ user, stmt_table.at(user - 1).stmt_type };
 		std::vector<var_name>::iterator it = std::find(var_table.begin(), var_table.end(), used);
 		if (it != var_table.end()) {
+			StmtType user_stmt_type = stmt_table[user - 1].stmt_type;
+			StmtInfo user_stmt_info{ user, user_stmt_type };
 			usesS_table.insert(user_stmt_info, used);
+			if (user_stmt_type == STMT_PRINT) {
+				print_table.insert(user, used);
+			}
 		}
 		else {
 			throw std::invalid_argument("addUsesS: Invalid var name: " + used);
@@ -108,9 +111,11 @@ void PKB::addModifiesS(stmt_index modifier, var_name modified) {
 		if (it != var_table.end()) {
 			modifiesS_table.insert(modifier_stmt_info, modified);
 			StmtType modifier_stmt_type = stmt_table[modifier - 1].stmt_type;
-			// also add to assignment table if modifier type is assignment
 			if (modifier_stmt_type == STMT_ASSIGN) {
 				assignment_table.insert(modifier, modified);
+			}
+			else if (modifier_stmt_type == STMT_READ) {
+				read_table.insert(modifier, modified);
 			}
 		}
 		else {
@@ -162,7 +167,19 @@ void PKB::addCallsP(proc_name caller_proc_name, proc_name callee_proc_name) {
 }
 
 void PKB::addCallsS(stmt_index caller_stmt_index, proc_name callee_proc_name) {
-	//TODO(Kelvin): Implement addition
+	try {
+		if (stmt_table.at(caller_stmt_index - 1).stmt_type != STMT_CALL) {
+			throw std::invalid_argument("addCallsS: Stmt index does not belong to an call statement: " + std::to_string(caller_stmt_index));
+		}
+		std::vector<var_name>::iterator it = std::find(proc_table.begin(), proc_table.end(), callee_proc_name);
+		if (it == proc_table.end()) {
+			throw std::invalid_argument("addCallsS: Invalid proc name: " + callee_proc_name);
+		}
+		callsS_table.insert(caller_stmt_index, callee_proc_name);
+	}
+	catch (std::out_of_range&) {
+		throw std::invalid_argument("addCallsS: Invalid stmt index:" + std::to_string(caller_stmt_index));
+	}
 }
 
 void PKB::addIf(stmt_index if_stmt_index, var_name control_var) {
@@ -209,6 +226,19 @@ void PKB::addNext(prog_line prog_line1, prog_line prog_line2) {
 	}
 }
 
+void PKB::addProcContains(proc_name proc, stmt_index index) {
+	try {
+		std::vector<var_name>::iterator it = std::find(proc_table.begin(), proc_table.end(), proc);
+		if (it == proc_table.end()) {
+			throw std::invalid_argument("addProcContains: Invalid proc name: " + proc);
+		}
+		procS_table.insert(proc, index);
+	}
+	catch (std::out_of_range&) {
+		throw std::invalid_argument("addProcContains: Invalid stmt index:" + std::to_string(index));
+	}
+}
+
 void PKB::generateParentT() {
 	parentT_table = parent_table.findTransitiveClosure();
 }
@@ -236,6 +266,7 @@ void PKB::resetCache() {
 	usesP_table.clear();
 	modifiesP_table.clear();
 	callsP_table.clear();
+	callsS_table.clear();
 	callsPT_table.clear();
 	if_table.clear();
 	while_table.clear();
@@ -243,6 +274,7 @@ void PKB::resetCache() {
 	read_table.clear();
 	print_table.clear();
 	expr_table.clear();
+	procS_table.clear();
 }
 
 void PKB::resetEntities() {
@@ -309,6 +341,12 @@ expr PKB::getExpression(stmt_index stmt_index) {
 const std::vector<constant> PKB::getConstants() {
 	std::vector<constant> v(const_table.begin(), const_table.end());
 	return v;
+}
+
+const bool PKB::inSameProc(stmt_index index1, stmt_index index2)
+{
+	std::vector<proc_name> v = procS_table.getKeys(index1);
+	return procS_table.containsPair(v[0], index2);
 }
 
 const UniqueRelationTable<stmt_index, var_name>& PKB::getAssigns() {
@@ -381,4 +419,8 @@ const RelationTable<stmt_index, var_name>& PKB::getWhile() {
 
 const RelationTable<StmtInfo, StmtInfo>& PKB::getNext() {
 	return next_table;
+}
+
+const RelationTable<proc_name, stmt_index>& PKB::getProcContains() {
+	return procS_table;
 }
