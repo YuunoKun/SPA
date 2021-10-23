@@ -1141,6 +1141,38 @@ namespace UnitTesting {
 		EXPECT_EQ(test1, q1);
 	}
 
+	TEST(QueryPreprocessor, tupleWithAttributesAndPattern) {
+		QueryPreprocessor qp;
+		Query test1 = qp.parse("assign a1, a2; stmt s; Select <a1.stmt#, a2> pattern a1(\"q\", _\"p\"_)");
+
+		Query q1;
+		q1.addEntity(Entity(EntityType::ASSIGN, Synonym{ "a1" }));
+		q1.addEntity(Entity(EntityType::ASSIGN, Synonym{ "a2" }));
+		q1.addEntity(Entity(EntityType::STMT, Synonym{ "s" }));
+		q1.addSelected(Entity(EntityType::ASSIGN, Synonym{ "a1" }, AttrRef::STMT_INDEX));
+		q1.addSelected(Entity(EntityType::ASSIGN, Synonym{ "a2" }));
+		q1.addPattern(Pattern(Entity(EntityType::ASSIGN, Synonym{ "a1" }), Entity(EntityType::VARIABLE, "q"), "p", true));
+
+		EXPECT_EQ(test1, q1);
+	}
+
+	TEST(QueryPreprocessor, tupleWithAttributesAndMultiplePatterns) {
+		QueryPreprocessor qp;
+		Query test1 = qp.parse("assign a1, a2; stmt s; variable v; Select <a1.stmt#, a2> pattern a1(\"q\", _\"p\"_) and a2(v, _)");
+
+		Query q1;
+		q1.addEntity(Entity(EntityType::ASSIGN, Synonym{ "a1" }));
+		q1.addEntity(Entity(EntityType::ASSIGN, Synonym{ "a2" }));
+		q1.addEntity(Entity(EntityType::STMT, Synonym{ "s" }));
+		q1.addEntity(Entity(EntityType::VARIABLE, Synonym{ "v" }));
+		q1.addSelected(Entity(EntityType::ASSIGN, Synonym{ "a1" }, AttrRef::STMT_INDEX));
+		q1.addSelected(Entity(EntityType::ASSIGN, Synonym{ "a2" }));
+		q1.addPattern(Pattern(Entity(EntityType::ASSIGN, Synonym{ "a1" }), Entity(EntityType::VARIABLE, "q"), "p", true));
+		q1.addPattern(Pattern(Entity(EntityType::ASSIGN, Synonym{ "a2" }), Entity(EntityType::VARIABLE, Synonym{ "v" }), "", true));
+
+		EXPECT_EQ(test1, q1);
+	}
+
 	TEST(QueryPreprocessor, invalidSyntax) {
 		QueryPreprocessor qp;
 
