@@ -572,6 +572,85 @@ namespace UnitTesting {
 		EXPECT_EQ(test12.getSelected()[0].getAttribute(), AttrRef{ STMT_INDEX });
 	}
 
+	TEST(QueryPreprocessor, selectWithInvalidEntityTypeForAttribute) {
+		QueryPreprocessor qp;
+
+		EXPECT_THROW(qp.parse("procedure p; call c; variable v; read r; print pr; constant co; stmt s; while w; if ifs; assign a; Select v.procName"), SemanticErrorException);
+		qp.resetQuery();
+
+		EXPECT_THROW(qp.parse("procedure p; call c; variable v; read r; print pr; constant co; stmt s; while w; if ifs; assign a; Select r.procName"), SemanticErrorException);
+		qp.resetQuery();
+
+		EXPECT_THROW(qp.parse("procedure p; call c; variable v; read r; print pr; constant co; stmt s; while w; if ifs; assign a; Select pr.procName"), SemanticErrorException);
+		qp.resetQuery();
+
+		EXPECT_THROW(qp.parse("procedure p; call c; variable v; read r; print pr; constant co; stmt s; while w; if ifs; assign a; Select co.procName"), SemanticErrorException);
+		qp.resetQuery();
+
+		EXPECT_THROW(qp.parse("procedure p; call c; variable v; read r; print pr; constant co; stmt s; while w; if ifs; assign a; Select w.procName"), SemanticErrorException);
+		qp.resetQuery();
+
+		EXPECT_THROW(qp.parse("procedure p; call c; variable v; read r; print pr; constant co; stmt s; while w; if ifs; assign a; Select ifs.procName"), SemanticErrorException);
+		qp.resetQuery();
+
+		EXPECT_THROW(qp.parse("procedure p; call c; variable v; read r; print pr; constant co; stmt s; while w; if ifs; assign a; Select a.procName"), SemanticErrorException);
+		qp.resetQuery();
+
+		EXPECT_THROW(qp.parse("procedure p; call c; variable v; read r; print pr; constant co; stmt s; while w; if ifs; assign a; Select p.varName"), SemanticErrorException);
+		qp.resetQuery();
+
+		EXPECT_THROW(qp.parse("procedure p; call c; variable v; read r; print pr; constant co; stmt s; while w; if ifs; assign a; Select c.varName"), SemanticErrorException);
+		qp.resetQuery();
+
+		EXPECT_THROW(qp.parse("procedure p; call c; variable v; read r; print pr; constant co; stmt s; while w; if ifs; assign a; Select co.varName"), SemanticErrorException);
+		qp.resetQuery();
+
+		EXPECT_THROW(qp.parse("procedure p; call c; variable v; read r; print pr; constant co; stmt s; while w; if ifs; assign a; Select s.varName"), SemanticErrorException);
+		qp.resetQuery();
+
+		EXPECT_THROW(qp.parse("procedure p; call c; variable v; read r; print pr; constant co; stmt s; while w; if ifs; assign a; Select w.varName"), SemanticErrorException);
+		qp.resetQuery();
+
+		EXPECT_THROW(qp.parse("procedure p; call c; variable v; read r; print pr; constant co; stmt s; while w; if ifs; assign a; Select ifs.varName"), SemanticErrorException);
+		qp.resetQuery();
+
+		EXPECT_THROW(qp.parse("procedure p; call c; variable v; read r; print pr; constant co; stmt s; while w; if ifs; assign a; Select a.varName"), SemanticErrorException);
+		qp.resetQuery();
+
+		EXPECT_THROW(qp.parse("procedure p; call c; variable v; read r; print pr; constant co; stmt s; while w; if ifs; assign a; Select v.value"), SemanticErrorException);
+		qp.resetQuery();
+
+		EXPECT_THROW(qp.parse("procedure p; call c; variable v; read r; print pr; constant co; stmt s; while w; if ifs; assign a; Select r.value"), SemanticErrorException);
+		qp.resetQuery();
+
+		EXPECT_THROW(qp.parse("procedure p; call c; variable v; read r; print pr; constant co; stmt s; while w; if ifs; assign a; Select pr.value"), SemanticErrorException);
+		qp.resetQuery();
+
+		EXPECT_THROW(qp.parse("procedure p; call c; variable v; read r; print pr; constant co; stmt s; while w; if ifs; assign a; Select p.value"), SemanticErrorException);
+		qp.resetQuery();
+
+		EXPECT_THROW(qp.parse("procedure p; call c; variable v; read r; print pr; constant co; stmt s; while w; if ifs; assign a; Select c.value"), SemanticErrorException);
+		qp.resetQuery();
+
+		EXPECT_THROW(qp.parse("procedure p; call c; variable v; read r; print pr; constant co; stmt s; while w; if ifs; assign a; Select w.value"), SemanticErrorException);
+		qp.resetQuery();
+
+		EXPECT_THROW(qp.parse("procedure p; call c; variable v; read r; print pr; constant co; stmt s; while w; if ifs; assign a; Select ifs.value"), SemanticErrorException);
+		qp.resetQuery();
+
+		EXPECT_THROW(qp.parse("procedure p; call c; variable v; read r; print pr; constant co; stmt s; while w; if ifs; assign a; Select a.value"), SemanticErrorException);
+		qp.resetQuery();
+
+		EXPECT_THROW(qp.parse("procedure p; call c; variable v; read r; print pr; constant co; stmt s; while w; if ifs; assign a; Select v.stmt#"), SemanticErrorException);
+		qp.resetQuery();
+
+		EXPECT_THROW(qp.parse("procedure p; call c; variable v; read r; print pr; constant co; stmt s; while w; if ifs; assign a; Select co.stmt#"), SemanticErrorException);
+		qp.resetQuery();
+
+		EXPECT_THROW(qp.parse("procedure p; call c; variable v; read r; print pr; constant co; stmt s; while w; if ifs; assign a; Select p.stmt#"), SemanticErrorException);
+		qp.resetQuery();
+	}
+
 	TEST(QueryPreprocessor, selectMultipleClauses) {
 		QueryPreprocessor qp;
 		Query test1 = qp.parse("assign a1, a2; Select <a1.procName, a2>");

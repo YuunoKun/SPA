@@ -121,20 +121,20 @@ void QueryValidator::validateAttributeType(Query& query, QueryToken& prevToken, 
 
 	if (nextToken.type == QueryToken::QueryTokenType::PROC_NAME &&
 		(entType != EntityType::PROCEDURE && entType != EntityType::CALL)) {
-		throw SyntacticErrorException("Only procedure and call can have a procName attribute");
+		throw SemanticErrorException("Only procedure and call can have a procName attribute");
 	}
 	else if (nextToken.type == QueryToken::QueryTokenType::VAR_NAME &&
 		(entType != EntityType::VARIABLE && entType != EntityType::READ && entType != EntityType::PRINT)) {
-		throw SyntacticErrorException("Only variable, read and print can have varName attribute");
+		throw SemanticErrorException("Only variable, read and print can have varName attribute");
 	}
 	else if (nextToken.type == QueryToken::QueryTokenType::VALUE &&
 		entType != EntityType::CONSTANT) {
-		throw SyntacticErrorException("Only constant can have value attribute");
+		throw SemanticErrorException("Only constant can have value attribute");
 	}
 	else if (nextToken.type == QueryToken::QueryTokenType::STMT_INDEX &&
 		(entType != EntityType::STMT && entType != EntityType::READ && entType != EntityType::PRINT &&
 			entType != EntityType::CALL && entType != EntityType::WHILE && entType != EntityType::IF &&
 			entType != EntityType::ASSIGN)) {
-		throw SyntacticErrorException("Entity type for .stmt# attribute is not valid");
+		throw SemanticErrorException("Entity type for .stmt# attribute is not valid");
 	}
 }
