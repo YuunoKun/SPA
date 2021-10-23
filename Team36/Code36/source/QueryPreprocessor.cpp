@@ -252,7 +252,10 @@ void QueryPreprocessor::handleIsSelecting(QueryToken& token) {
 }
 
 void QueryPreprocessor::handleSelectingMultipleClause(QueryToken& token) {
+	QueryValidator queryValidator = QueryValidator();
+
 	if (token.type == QueryToken::QueryTokenType::DOT) {
+		queryValidator.validateAttributeType(query, prevTokenSelect, nextToken);
 		isExpectingAttribute = true;
 	}
 	else if (isExpectingAttribute) {
