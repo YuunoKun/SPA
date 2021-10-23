@@ -898,3 +898,8 @@ prog_line n1, n2, n3, n4; print pr;
 Select n3 such that Next(n1, n2) and Next(n2, n3) and Next(n3, n4) and Next(n4,pr)
 38, 16, 7, 3, 34, 44, 22, 46, 35
 5000
+181 - use 'and' as enitity name
+assign and;
+Select and pattern and(_, _"a"_) and and(_, _"e"_) and and(_, _"f"_)
+15
+5000
