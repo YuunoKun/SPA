@@ -888,8 +888,13 @@ procedure p, q; assign a; while w; variable v;
 Select v such that Calls(p, "mySecond") and Calls*("myFirst", "myFourth") pattern a(v, _) and w("h",_)
 none
 5000
-179 - use 'and' as a entity name
-assign and;
-Select and pattern and(_, _"a"_) and and(_, _"e"_) and and(_, _"f"_)
-15
+179 - such that Next and Next and Follows, 3 common synonym 
+prog_line n1, n2, n3, n4; print pr;
+Select n3 such that Next(n1, n2) and Next(n2, n3) and Next(n3, n4) and Follows(n4,pr)
+38, 16, 3, 34, 35
+5000
+180 - such that Next and Next and Next and Next, 3 common synonym 
+prog_line n1, n2, n3, n4; print pr;
+Select n3 such that Next(n1, n2) and Next(n2, n3) and Next(n3, n4) and Next(n4,pr)
+38, 16, 7, 3, 34, 44, 22, 46, 35
 5000
