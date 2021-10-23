@@ -1108,6 +1108,39 @@ namespace UnitTesting {
 		EXPECT_EQ(test1, q1);
 	}
 
+	TEST(QueryPreprocessor, tupleWithAttributesAndRelations) {
+		QueryPreprocessor qp;
+		Query test1 = qp.parse("assign a1, a2; stmt s; Select <a1.stmt#, a2> such that Follows(s,a1)");
+
+		Query q1;
+		q1.addEntity(Entity(EntityType::ASSIGN, Synonym{ "a1" }));
+		q1.addEntity(Entity(EntityType::ASSIGN, Synonym{ "a2" }));
+		q1.addEntity(Entity(EntityType::STMT, Synonym{ "s" }));
+		q1.addSelected(Entity(EntityType::ASSIGN, Synonym{ "a1" }, AttrRef::STMT_INDEX));
+		q1.addSelected(Entity(EntityType::ASSIGN, Synonym{ "a2" }));
+		q1.addRelation(RelRef(RelType::FOLLOWS, Entity(EntityType::STMT, Synonym{ "s" }), Entity(EntityType::ASSIGN, Synonym{ "a1" })));
+
+		EXPECT_EQ(test1, q1);
+	}
+
+	TEST(QueryPreprocessor, tupleWithAttributesAndMultipleRelations) {
+		QueryPreprocessor qp;
+		Query test1 = qp.parse("assign a1, a2; stmt s; while w1, w2; Select <a1.stmt#, a2> such that Follows(s,a1) and Parent(w1, w2)");
+
+		Query q1;
+		q1.addEntity(Entity(EntityType::ASSIGN, Synonym{ "a1" }));
+		q1.addEntity(Entity(EntityType::ASSIGN, Synonym{ "a2" }));
+		q1.addEntity(Entity(EntityType::STMT, Synonym{ "s" }));
+		q1.addEntity(Entity(EntityType::WHILE, Synonym{ "w1" }));
+		q1.addEntity(Entity(EntityType::WHILE, Synonym{ "w2" }));
+		q1.addSelected(Entity(EntityType::ASSIGN, Synonym{ "a1" }, AttrRef::STMT_INDEX));
+		q1.addSelected(Entity(EntityType::ASSIGN, Synonym{ "a2" }));
+		q1.addRelation(RelRef(RelType::FOLLOWS, Entity(EntityType::STMT, Synonym{ "s" }), Entity(EntityType::ASSIGN, Synonym{ "a1" })));
+		q1.addRelation(RelRef(RelType::PARENT, Entity(EntityType::WHILE, Synonym{ "w1" }), Entity(EntityType::WHILE, Synonym{ "w2" })));
+
+		EXPECT_EQ(test1, q1);
+	}
+
 	TEST(QueryPreprocessor, invalidSyntax) {
 		QueryPreprocessor qp;
 
