@@ -5,7 +5,10 @@
 
 #include "Entity.h"
 #include "Common.h"
+#include "Query.h"
 #include "QueryToken.h"
+#include "SemanticErrorException.h"
+#include "SyntacticErrorException.h"
 
 class Utility {
 public:
@@ -39,7 +42,17 @@ public:
 
 	static EntityType queryTokenTypeToEntityType(QueryToken::QueryTokenType&);
 	static AttrRef queryTokenTypeToAttrRef(QueryToken::QueryTokenType&);
-
+	
+	static bool isStmtRef(Query&, std::vector<QueryToken>);
+	static bool isEntRef(Query&, std::vector<QueryToken>);
+	static bool isLineRef(Query&, std::vector<QueryToken>);
+	static bool isExpr(std::vector<QueryToken>);
+	static bool isCorrectSynEntRef(Query&, std::vector<QueryToken>, EntityType);
+	static bool isWildCard(std::vector<QueryToken>);
+	static Entity setStmtRef(Query&, QueryToken);
+	static Entity setEntRef(Query&, std::vector<QueryToken>, EntityType);
+	static Entity setLineRef(Query&, QueryToken);
+	static std::string setExpr(std::vector<QueryToken>);
 private:
 	static bool isStmt(EntityType);
 };
