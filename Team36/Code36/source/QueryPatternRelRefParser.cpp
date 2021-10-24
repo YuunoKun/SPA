@@ -130,7 +130,6 @@ bool QueryPatternRelRefParser::isLineRef(Query& query, std::vector<QueryToken> t
             throw SyntacticErrorException("Undeclared lineRef");
         }
     }
-
     return false;
 }
 
