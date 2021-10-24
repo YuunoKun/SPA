@@ -903,3 +903,8 @@ assign and;
 Select and pattern and(_, _"a"_) and and(_, _"e"_) and and(_, _"f"_)
 15
 5000
+182 - invalid 'and' between such that and pattern
+assign a; stmt s; variable v;
+Select a such that Modifies(s, v) and pattern a(v, _)
+none
+5000
