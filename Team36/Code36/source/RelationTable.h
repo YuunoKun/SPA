@@ -15,24 +15,29 @@ public:
 	RelationTable() {
 		uniqueKey = false;
 	};
-	bool isUniqueKey();
+	RelationTable(std::vector<std::pair<T,S>> input) {
+		for (auto& pair : input) {
+			insert(pair.first, pair.second);
+		}
+		uniqueKey = false;
+	};
+	bool isUniqueKey() const;
 	void clear();
-	bool isEmpty();
+	bool isEmpty() const;
 	bool insert(T key, S value);
 	std::vector<T> getKeys(S);
 	std::vector<S> getValues(T);
-	std::vector<T> getKeys();
-	std::vector<S> getValues();
-	std::vector<std::pair<T, S>> getPairs();
-	bool containsKey(T);
-	bool containsValue(S);
+	std::vector<T> getKeys() const;
+	std::vector<S> getValues() const;
+	std::vector<std::pair<T, S>> getPairs() const;
+	bool containsKey(T) const;
+	bool containsValue(S) const;
 	bool containsPair(T, S);
 	std::vector<S>forwardDFS(T);
 	std::vector<T>backwardDFS(S);
 
-	RelationTable<T, S> findTransitiveClosure();
-	RelationTable<T, S> copy();
-	RelationTable<S, T> findReverse();
+	RelationTable<T, S> findTransitiveClosure() const;
+	RelationTable<T, S> copy() const;
 
 	std::unordered_map<T, std::vector<S>> getTableForward();
 	std::unordered_map<S, std::vector<T>> getTableBackward();
@@ -44,8 +49,8 @@ protected:
 	std::unordered_map<T, std::vector<S>> forward_table;
 	std::unordered_map<S, std::vector<T>> backward_table;
 	std::unordered_map<T, std::unordered_set<S>> lookup_table;
-	std::unordered_set<T> calculatedDFSForward;
-	std::unordered_set<S> calculatedDFSBackward;
+	std::unordered_set<T> calculated_dfs_forward;
+	std::unordered_set<S> calculated_dfs_backward;
 	bool uniqueKey;
 };
 
