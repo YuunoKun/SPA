@@ -806,4 +806,41 @@ namespace UnitTesting {
 		b1 = { "3", "4" };
 		EXPECT_EQ(result.getEntityResult(e3), b1);
 	}
+
+
+	TEST(ResultTable, getMultipleResult) {
+		Entity e1 = { STMT, Synonym{"x"} };
+		Entity e2 = { STMT, Synonym{"y"} };
+		Entity e3 = { STMT, Synonym{"z"} };
+		std::vector<Entity> e{ e1, e2, e3 };
+		std::list<std::vector<std::string>> a{
+			{ "1", "2", "3"},
+			{ "1", "2", "4"},
+			{ "2", "2", "4"},
+		};
+		ResultTable result(e, a);
+
+		std::vector<Entity> b{ e1, e2, e3 };
+		std::list<std::string> b1 = { "1 2 3", "1 2 4", "2 2 4" };
+		EXPECT_EQ(result.getEntityResult(b), b1);
+
+		b = { e2, e3, e1 };
+		b1 = { "2 3 1", "2 4 1", "2 4 2" };
+		EXPECT_EQ(result.getEntityResult(b), b1);
+
+
+		b = { e2, e1, e3 };
+		b1 = { "2 1 3", "2 1 4", "2 2 4" };
+		EXPECT_EQ(result.getEntityResult(b), b1);
+
+
+		b = { e1, e1, e2, e3 };
+		b1 = { "1 1 2 3", "1 1 2 4", "2 2 2 4" };
+		EXPECT_EQ(result.getEntityResult(b), b1);
+
+		b = { e1, e2, e1, e3, e1};
+		b1 = { "1 2 1 3 1", "1 2 1 4 1", "2 2 2 4 2" };
+		EXPECT_EQ(result.getEntityResult(b), b1);
+
+	}
 }

@@ -8,6 +8,7 @@ public:
 	ResultTable(Entity&, std::vector<StmtInfo>&);
 	ResultTable(Entity&, std::vector<stmt_index>&);
 	ResultTable(Entity&, std::vector<std::string>&);
+	ResultTable(Entity&, std::list<std::string>&);
 	ResultTable(std::pair<Entity, Entity>, std::vector<std::pair<std::string, std::string>>&);
 	ResultTable(std::pair<Entity, Entity>, std::vector<std::pair<stmt_index, std::string>>&);
 	ResultTable(std::pair<Entity, Entity>, std::vector<std::pair<StmtInfo, StmtInfo>>&);
@@ -19,6 +20,7 @@ public:
 	bool isInTable(Entity);
 	bool isEmpty();
 	std::list<std::string> getEntityResult(Entity);
+	std::list<std::string> getEntityResult(std::vector<Entity>);
 	std::vector<Entity> getCommonHeaders(std::vector<Entity>&);
 	ResultTable getResultTable(std::vector<Entity>&);
 	std::vector<Entity> getHeaders();

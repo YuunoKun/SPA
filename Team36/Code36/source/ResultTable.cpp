@@ -14,6 +14,10 @@ ResultTable::ResultTable(Entity& header, std::vector<std::string>& table) {
 	init(header, std::list<std::string>(table.begin(), table.end()));
 }
 
+ResultTable::ResultTable(Entity& header, std::list<std::string>& table) {
+	init(header, table);
+}
+
 ResultTable::ResultTable(std::pair<Entity, Entity> header, std::vector<std::pair<std::string, std::string>>& table) {
 	init(header, Utility::pairToStringTable(table));
 }
@@ -79,6 +83,23 @@ std::list<std::string> ResultTable::getEntityResult(Entity e) {
 		result.insert(row[columnIndex]);
 	}
 	return Utility::unorderedSetToStringList(result);
+}
+
+std::list<std::string> ResultTable::getEntityResult(std::vector<Entity> entities) {
+	std::vector<int> indexes;
+	for (auto& e : entities) {
+		indexes.push_back(getHeaderIndex(e));
+	}
+	std::list<std::string> result;
+	for (auto row : table) {
+		std::string row_result = row[indexes[0]];
+		for (int i = 1; i < indexes.size(); i++) {
+			row_result += " " + row[indexes[i]];
+		}
+		result.emplace_back(row_result);
+	}
+
+	return result;
 }
 
 std::vector<Entity> ResultTable::getCommonHeaders(std::vector<Entity>& v) {

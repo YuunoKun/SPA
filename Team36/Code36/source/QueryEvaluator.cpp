@@ -52,6 +52,20 @@ std::list<std::string> QueryEvaluator::getRawResult(Entity selected) {
 	return result;
 }
 
+
+std::list<std::string> QueryEvaluator::getTupleResult(Query& query, QueryResult& query_result) {
+	std::vector<Entity> selectedEntities = query.getSelected();
+
+	ResultTable selected_table = query_result.getResults(selectedEntities);
+	selectedEntities = Utility::removeEntities(selectedEntities, selected_table.getHeaders());
+	for (auto& selected : selectedEntities) {
+		ResultTable to_join(selected, getRawResult(selected));
+		selected_table.joinTable(to_join);
+	}
+	return selected_table.getEntityResult(query.getSelected());
+}
+
+
 std::list<std::string> QueryEvaluator::getResult(Query& query, QueryResult& result) {
 	//Return boolean value if select is BOOLEAN
 	if (query.getSelected()[0].getType() == EntityType::BOOLEAN) {
