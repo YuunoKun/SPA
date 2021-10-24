@@ -48,7 +48,7 @@ namespace UnitTesting {
 		QueryEvaluator evaluator;
 	};
 
-	TEST_F(QueryEvaluatorTupleTest, evaluateQueryTupleDifferentTable) {
+	TEST_F(QueryEvaluatorTupleTest, evaluateQueryTupleWithMultiTable) {
 		Entity e1 = { STMT, Synonym{"e1"} };
 		Entity e2 = { STMT, Synonym{"e2"} };
 		Entity e3 = { STMT, Synonym{"e3"} };
@@ -131,6 +131,33 @@ namespace UnitTesting {
 
 
 	TEST_F(QueryEvaluatorTupleTest, evaluateQueryTupleWithRawResult) {
+		Entity r1 = { READ, Synonym{"r1"} };
+		Entity r2 = { READ, Synonym{"r2"} };
+		Entity r3 = { READ, Synonym{"r3"} };
+
+		Query q = initQuery({ }, { r1, r1 });
+		std::list<std::string> result = { "8 8","9 9" };
+		EXPECT_EQ(evaluator.evaluateQuery(q), result);
+
+		q = initQuery({ }, { r1, r2 });
+		result = { "8 8","8 9", "9 8", "9 9" };
+		EXPECT_EQ(evaluator.evaluateQuery(q), result);
+
+		q = initQuery({ }, { r1, r2 });
+		EXPECT_EQ(evaluator.evaluateQuery(q), result);
+
+		q = initQuery({ }, { r1, r2, r3 });
+		result = { "8 8 8","8 8 9", "8 9 8", "8 9 9", "9 8 8","9 8 9", "9 9 8", "9 9 9" };
+		EXPECT_EQ(evaluator.evaluateQuery(q), result);
+
+		q = initQuery({ }, { r1, r2, r3 });
+		EXPECT_EQ(evaluator.evaluateQuery(q), result);
+
+
+	}
+
+
+	TEST_F(QueryEvaluatorTupleTest, evaluateQueryTupleWithRawResultAndTable) {
 		Entity e1 = { STMT, Synonym{"e1"} };
 		Entity e2 = { STMT, Synonym{"e2"} };
 		Entity r1 = { READ, Synonym{"r1"} };
@@ -139,20 +166,22 @@ namespace UnitTesting {
 		RelRef q1(RelRef(FOLLOWS, e1, e2));
 
 		Query q = initQuery({ q1 }, { e1, r1 });
-		std::list<std::string> result = { "1 8","1 9", "2 8", "2 9", "3 8", "3 9" };
+		std::list<std::string> result = { "1 8", "1 9", "2 8", "2 9", "3 8", "3 9" };
+		EXPECT_EQ(evaluator.evaluateQuery(q), result);
+		q = initQuery({ q1 }, { e1, e2, r1 });
+		result = { "1 2 8", "1 2 9", "2 3 8", "2 3 9", "3 4 8", "3 4 9" };
 		EXPECT_EQ(evaluator.evaluateQuery(q), result);
 
-		q = initQuery({ q1, }, { e1, e2, r1 });
-		result = { "1 2 8","1 2 9", "2 3 8", "2 3 9", "3 4 8", "3 4 9" };
+		q = initQuery({ q1 }, { e1, e2, r1, e1 });
+		result = { "1 2 8 1", "1 2 9 1", "2 3 8 2", "2 3 9 2", "3 4 8 3", "3 4 9 3" };
 		EXPECT_EQ(evaluator.evaluateQuery(q), result);
 
-
-		q = initQuery({q1 }, { r1, r2 });
-		result = { "8 8","8 9", "9 8", "9 9" };
+		q = initQuery({ q1 }, { e1, e2, r1, r1 });
+		result = { "1 2 8 8", "1 2 9 9", "2 3 8 8", "2 3 9 9", "3 4 8 8", "3 4 9 9" };
 		EXPECT_EQ(evaluator.evaluateQuery(q), result);
 
-		q = initQuery({q1 }, { r1, r2, r3 });
-		result = { "8 8 8","8 8 9", "8 9 8", "8 9 9", "9 8 8","9 8 9", "9 9 8", "9 9 9" };
+		q = initQuery({ q1 }, { e1, e2, r1, r2 });
+		result = { "1 2 8 8", "1 2 8 9", "1 2 9 8", "1 2 9 9", "2 3 8 8", "2 3 8 9", "2 3 9 8", "2 3 9 9", "3 4 8 8", "3 4 8 9", "3 4 9 8", "3 4 9 9" };
 		EXPECT_EQ(evaluator.evaluateQuery(q), result);
 	}
 }
