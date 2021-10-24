@@ -31,7 +31,6 @@ public:
 	Entity setStmtRef(Query&, QueryToken);
 	Entity setEntRef(Query&, std::vector<QueryToken>, EntityType);
 	Entity setLineRef(Query&, QueryToken);
-	Entity setCallEntRef(Query&, std::vector<QueryToken>);
 	std::string setExpr(std::vector<QueryToken>);
 	void parseParameterSuchThat(Query&, QueryToken::QueryTokenType, std::vector<QueryToken>);
 	void parseParameterPattern(Query&, Entity&, std::vector<QueryToken>);

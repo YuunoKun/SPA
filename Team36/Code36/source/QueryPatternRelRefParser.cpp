@@ -265,34 +265,6 @@ Entity QueryPatternRelRefParser::setLineRef(Query& query, QueryToken token) {
     throw SemanticErrorException("Unknown lineRef");
 }
 
-Entity QueryPatternRelRefParser::setCallEntRef(Query& query,
-    std::vector<QueryToken> token_chain) {
-    // entRef : synonym | ‘_’ | ‘"’ IDENT ‘"’
-
-    if (token_chain.size() == 1) {
-        // wild card check
-        if (token_chain[0].type == QueryToken::WILDCARD) {
-            return Entity(EntityType::WILD);
-        }
-
-        // synonym check
-        // Can remove?
-        std::unordered_map<std::string, Entity> ent_chain = query.getEntities();
-        if (ent_chain.find(token_chain[0].token_value) != ent_chain.end()) {
-            return ent_chain.at(token_chain[0].token_value);
-        }
-    }
-
-    // is " "IDENT" "
-    // IDENT : LETTER ( LETTER | DIGIT )*
-    if (token_chain.size() == 3) {
-        return Entity(EntityType::PROCEDURE, token_chain[1].token_value);
-    }
-
-
-    throw SemanticErrorException("Unknown entRef");
-}
-
 std::string QueryPatternRelRefParser::setExpr(std::vector<QueryToken> token_chain) {
   // expression-spec : ‘"‘ expr’"’ | ‘_’ ‘"’ expr ‘"’ ‘_’ | ‘_’
     std::string result = "";
@@ -665,8 +637,8 @@ void QueryPatternRelRefParser::parseParameterSuchThat(
         }
 
         query.addRelation(RelRef(RelType::CALLS,
-            setCallEntRef(query, temp_token_chain_1),
-            setCallEntRef(query, temp_token_chain_2)));
+            setEntRef(query, temp_token_chain_1, EntityType::PROCEDURE),
+            setEntRef(query, temp_token_chain_2, EntityType::PROCEDURE)));
         break;
     }
     
@@ -706,8 +678,8 @@ void QueryPatternRelRefParser::parseParameterSuchThat(
         }
 
         query.addRelation(RelRef(RelType::CALLS_T,
-            setCallEntRef(query, temp_token_chain_1),
-            setCallEntRef(query, temp_token_chain_2)));
+            setEntRef(query, temp_token_chain_1, EntityType::PROCEDURE),
+            setEntRef(query, temp_token_chain_2, EntityType::PROCEDURE)));
         break;
     }
 
