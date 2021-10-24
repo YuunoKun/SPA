@@ -1543,3 +1543,20 @@ namespace UnitTesting {
 		qp.resetQuery();
 	}
 }
+
+TEST(QueryPreprocessor, invalidBOOLEANSemanticError) {
+	QueryPreprocessor qp;
+
+	EXPECT_THROW(qp.parse("stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; Select BOOLEAN pattern co(_,_)"), SemanticErrorException);
+	qp.resetQuery();
+}
+
+TEST(QueryPreprocessor, invalidSyntaxPrecendenceSemanticError) {
+	QueryPreprocessor qp;
+
+	EXPECT_THROW(qp.parse("stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; Select asdf such that Uses(s,,)"), SyntacticErrorException);
+	qp.resetQuery();
+
+	EXPECT_THROW(qp.parse("stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; Select BOOLEAN pattern co(_,_,,,)"), SemanticErrorException);
+	qp.resetQuery();
+}
