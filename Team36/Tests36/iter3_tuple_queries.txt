@@ -1,0 +1,95 @@
+1 - select tuple with same type procedure, 2 different
+procedure p, q;
+Select <p, q>
+myFirst myFirst, myFirst mySecond, myFirst myThird, myFirst myFourth, mySecond myFirst, mySecond mySecond, mySecond myThird, mySecond myFourth, myThird myFirst, myThird mySecond, myThird myThird, myThird myFourth, myFourth myFirst, myFourth mySecond, myFourth myThird, myFourth myFourth
+5000
+2 - select tuple with same type procedure, 2 same
+procedure p;
+Select <p, p>
+myFirst myFirst, mySecond mySecond, myThird myThird, myFourth myFourth
+5000
+3 - select tuple with different types, assign and call
+assign a; call c;
+Select <a, c>
+2 7, 2 13, 2 32, 2 47, 3 7, 3 13, 3 32, 3 47, 10 7, 10 13, 10 32, 10 47, 15 7, 15 13, 15 32, 15 47, 17 7, 17 13, 17 32, 17 47, 22 7, 22 13, 22 32, 22 47, 26 7, 26 13, 26 32, 26 47, 34 7, 34 13, 34 32, 34 47, 35 7, 35 13, 35 32, 35 47, 39 7, 39 13, 39 32, 39 47, 41 7, 41 13, 41 32, 41 47
+5000
+4 - select tuple with same type
+read r;
+Select <r, r, r>
+1 1 1, 4 4 4, 11 11 11, 14 14 14, 16 16 16, 21 21 21, 25 25 25, 28 28 28, 33 33 33
+5000
+5 - such that parent, same type
+stmt s1, s2;
+Select <s1, s2> such that Parent<s1, s2>
+6 7, 6 8, 8 9, 8 10, 8 11, 8 12, 8 16, 8 17, 8 18, 12 13, 12 14, 12 15, 19 20, 19 28, 19 29, 20 21, 20 22, 20 23, 20 26, 20 27, 23 24, 23 25, 30 31, 31 32, 31 33, 31 34, 31 35, 31 36, 31 37, 31 38, 38 39, 38 40, 42 43, 42 45, 43 44, 45 46
+5000
+6 - such that Modifies, different types
+procedure p; variable v;
+Select <p, v> such that Modifies(p, v)
+myFirst a, myFirst b, myFirst c, myFirst d, myFirst f, myFirst g, myFirst h, myFirst i, myFirst j, myFirst k, mySecond h, mySecond i, mySecond j, myThird k, myThird a, myThird d, myThird h, myThird i, myThird j, myFourth d, myFourth h, myFourth i, myFourth j
+5000
+7 - multi-clauses
+procedure p, q; if ifs; assign a; variable v1, v2;
+Select <p, v1, a> such that Modifies(p, "d") and Uses("myFirst", v1) pattern ifs(v2, _, _) and a("i", _)
+myFirst a 26, myFirst b 26, myFirst c 26, myFirst d 26, myFirst e 26, myFirst f 26, myFirst g 26, myFirst h 26, myFirst i 26, myFirst j 26, myFirst k 26, myThird a 26, myThird b 26, myThird c 26, myThird d 26, myThird e 26, myThird f 26, myThird g 26, myThird h 26, myThird i 26, myThird j 26, myThird k 26, myFourth a 26, myFourth b 26, myFourth c 26, myFourth d 26, myFourth e 26, myFourth f 26, myFourth g 26, myFourth h 26, myFourth i 26, myFourth j 26, myFourth k 26
+5000
+8 - multi-clauses, no valid answer
+procedure p, q; assign a; while w; variable v;
+Select <p, v> such that Calls(p, "mySecond") and Calls*("myFirst", "myFourth") pattern a(v, _) and w("h",_)
+none
+5000
+9 - select tuples of BOOLEAN
+stmt s;
+Select <s, BOOLEAN>
+none
+5000
+10 - select tuples of other types when such that clause is true
+if ifs; while w; stmt s;
+Select <ifs, w> such that Modifies(s, "i")
+8 6, 8 12, 8 30, 8 31, 8 38, 8 43, 8 45, 19 6, 19 12, 19 30, 19 31, 19 38, 19 43, 19 45, 20 6, 20 12, 20 30, 20 31, 20 38, 20 43, 20 45, 23 6, 23 12, 23 30, 23 31, 23 38, 23 43, 23 45, 42 6, 42 12, 42 30, 42 31, 42 38, 42 43, 42 45
+5000
+11 - select tuples pattern assign
+assign a; variable v;
+Select <a, v> pattern a(v,_)
+2 b, 3 c, 10 d, 15 c, 17 b, 22 h, 26 i, 34 k, 35 a, 39 k, 41 d
+5000
+12 - select tuples pattern if
+if ifs; variable v;
+Select <ifs, v> pattern ifs(v, _, _)
+8 d, 8 c, 19 a, 20 b, 20 c, 23 h, 42 d
+5000
+13 - select tuples pattern while
+while w; variable v;
+Select <w, v> pattern w(v,_)
+6 a, 12 a, 12 c, 30 b, 31 c, 31 b, 38 k, 38 d, 43 a, 43 c, 43 b, 45 b, 45 c
+5000
+14 - select undeclared synonym
+stmt s; variable v;
+Select <s1, v> such that Modifies(s, v)
+none
+5000
+15 - semantically invalid such that
+assign a; stmt s;
+Select <a, s> such that Parent(a, s)
+none
+5000
+16 - semantically invalid pattern
+assign a;
+Select <a, a, a> pattern a(_, "")
+none
+5000
+17 - semantically invalid pattern if
+if ifs;
+Select <ifs, ifs, ifs> pattern ifs(_, _)
+none
+5000
+18 - semantically invalid while
+while w;
+Select <w, w, w> pattern w(_, _, _)
+none
+5000
+19 - nested
+stmt s1, s2, s3;
+Select <s1, s2, s3> such that Parent*(s1, s2) and Parent*(s2, s3)
+6 8 12, 19 20 23, 30 31 38
+5000
