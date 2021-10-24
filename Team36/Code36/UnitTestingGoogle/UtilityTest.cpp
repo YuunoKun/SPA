@@ -781,6 +781,68 @@ namespace UnitTesting {
 
 		EXPECT_EQ(Utility::joinTable(a, b), to);
 	}
+
+	TEST(Utility, removeEntities) {
+		Entity e1 = { STMT,Synonym{"e1"} };
+		Entity e2 = { STMT,Synonym{"e2"} };
+		Entity e3 = { STMT,Synonym{"e3"} };
+		Entity e4 = { STMT,Synonym{"e4"} };
+		Entity e5 = { STMT,Synonym{"e5"} };
+
+		std::vector<Entity> a = { e1, e2, e3, e4, e5 };
+		std::vector<Entity> b = { e1 };
+		std::vector<Entity> to = { e2, e3, e4, e5 };
+		EXPECT_EQ(Utility::removeEntities(a, b), to);
+
+		b = { e2, e4 };
+		to = { e1, e3, e5 };
+		EXPECT_EQ(Utility::removeEntities(a, b), to);
+
+		b = { e1, e3, e5 };
+		to = { e2, e4 };
+		EXPECT_EQ(Utility::removeEntities(a, b), to);
+
+		b = { e1, e3, e4, e5 };
+		to = { e2 };
+		EXPECT_EQ(Utility::removeEntities(a, b), to);
+
+		b = { e1, e2, e3, e4, e5 };
+		to = { };
+		EXPECT_EQ(Utility::removeEntities(a, b), to);
+	}
+
+
+	TEST(Utility, getColumnsNoDuplicate) {
+		std::list<std::vector<std::string>> a = { 
+			{"1","1","1"}, 
+			{"1","2","1"}, 
+			{"1","3","1"} };
+
+		std::vector<int> b = { 1, 2 };
+		std::list<std::vector<std::string>> to = { {"1","1"}, {"2","1"}, {"3","1"} };
+		EXPECT_EQ(Utility::getColumnsNoDuplicate(a, b), to);
+
+		b = { 0, 2 };
+		to = { {"1","1"} };
+		EXPECT_EQ(Utility::getColumnsNoDuplicate(a, b), to);
+
+		b = { 0, 1 };
+		to = { {"1","1"}, {"1","2"}, {"1","3"} };
+		EXPECT_EQ(Utility::getColumnsNoDuplicate(a, b), to);
+
+		b = { 0 };
+		to = { {"1"} };
+		EXPECT_EQ(Utility::getColumnsNoDuplicate(a, b), to);
+
+		b = { 1 };
+		to = { {"1"}, {"2"}, {"3"} };
+		EXPECT_EQ(Utility::getColumnsNoDuplicate(a, b), to);
+
+		b = { 2 };
+		to = { {"1"} };
+		EXPECT_EQ(Utility::getColumnsNoDuplicate(a, b), to);
+
+	}
 	TEST(Utility, queryTokenTypeToEntityType) {
 		EntityType entType = STMT;
 		QueryToken::QueryTokenType temp = QueryToken::QueryTokenType::STMT;

@@ -265,8 +265,40 @@ std::list<std::vector<std::string>> Utility::joinTable(std::list<std::vector<std
 	return result;
 }
 
-std::vector<Entity> Utility::removeEntities(std::vector<Entity>& main, std::vector<Entity>& to_Remove) {
-	return std::vector<Entity>();
+std::vector<Entity> Utility::removeEntities(std::vector<Entity>& main, std::vector<Entity>& to_remove) {
+
+	std::unordered_set<std::string> to_remove_set;
+	for (auto& e : to_remove) {
+		to_remove_set.insert(e.getSynonym());
+	}
+
+	std::vector<Entity> result;
+	
+	for (auto& e : main) {
+		if (to_remove_set.count(e.getSynonym()) == 0) {
+			result.push_back(e);
+		}
+	}
+
+	return result;
+}
+
+std::list<std::vector<std::string>> Utility::getColumnsNoDuplicate(std::list<std::vector<std::string>>& main, std::vector<int>& indexes) {
+	std::unordered_set<std::string> unique;
+	std::list<std::vector<std::string>> result;
+	for (auto& row : main) {
+		std::vector<std::string> newRow;
+		std::string rowString;
+		for (int i = 0; i < indexes.size(); i++) {
+			newRow.emplace_back(row[indexes[i]]);
+			rowString += row[indexes[i]] + " ";
+		}
+		if (unique.count(rowString) == 0) {
+			result.emplace_back(newRow);
+			unique.insert(rowString);
+		}
+	}
+	return result;
 }
 
 

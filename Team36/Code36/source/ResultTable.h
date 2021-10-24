@@ -12,6 +12,7 @@ public:
 	ResultTable(std::pair<Entity, Entity>, std::vector<std::pair<stmt_index, std::string>>&);
 	ResultTable(std::pair<Entity, Entity>, std::vector<std::pair<StmtInfo, StmtInfo>>&);
 	ResultTable(std::pair<Entity, Entity>, std::vector<std::pair<StmtInfo, std::string>>&);
+	ResultTable(std::vector<Entity>&, std::list<std::vector<std::string>>&);
 
 	void joinTable(ResultTable&);
 	bool merge(ResultTable&);
@@ -19,6 +20,7 @@ public:
 	bool isEmpty();
 	std::list<std::string> getEntityResult(Entity);
 	std::vector<Entity> getCommonHeaders(std::vector<Entity>&);
+	ResultTable getResultTable(std::vector<Entity>&);
 	std::vector<Entity> getHeaders();
 
 	bool operator==(const ResultTable&) const;

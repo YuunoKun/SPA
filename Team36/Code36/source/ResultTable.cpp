@@ -30,6 +30,12 @@ ResultTable::ResultTable(std::pair<Entity, Entity>  header, std::vector<std::pai
 	init(header, Utility::filterResults(std::make_pair(header.first.getType(), header.second.getType()), table));
 }
 
+ResultTable::ResultTable(std::vector<Entity>& e, std::list<std::vector<std::string>>& table) {
+	this->table = table;
+	addHeader(e);
+}
+
+
 //Return true if merge is successful
 bool ResultTable::merge(ResultTable& t) {
 	std::vector<Entity> common_headers = getCommonHeaders(t.header);
@@ -85,6 +91,14 @@ std::vector<Entity> ResultTable::getCommonHeaders(std::vector<Entity>& v) {
 	}
 
 	return common_headers;
+}
+
+ResultTable ResultTable::getResultTable(std::vector<Entity>& entities) {
+	std::vector<int> indexes;
+	for (auto& e : entities) {
+		indexes.push_back(getHeaderIndex(e));
+	}
+	return ResultTable(entities, Utility::getColumnsNoDuplicate(table, indexes));
 }
 
 std::vector<Entity> ResultTable::getHeaders() {
