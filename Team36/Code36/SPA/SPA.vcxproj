@@ -69,6 +69,7 @@
 	<ClCompile Include="..\source\WhilePatternParser.cpp" />
 	<ClCompile Include="..\source\NextParser.cpp" />
 	<ClCompile Include="..\source\NextTParser.cpp" />
+	<ClCompile Include="..\source\UsesParser.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\source\DesignExtractor.h" />
@@ -134,6 +135,7 @@
 	<ClInclude Include="..\source\WhilePatternParser.h" />
 	<ClInclude Include="..\source\NextParser.h" />
     <ClInclude Include="..\source\NextTParser.h" />
+	<ClInclude Include="..\source\UsesParser.h" />
 	<ClInclude Include="..\source\RelationParserInterface.h" />
 	<ClInclude Include="..\source\PatternParserInterface.h" />
   </ItemGroup>
