@@ -12,7 +12,7 @@ public:
 	bool isInTables(std::vector<Entity>);
 	bool isInTables(Entity);
 	void addResult(ResultTable);
-	std::list<std::string> getResults(std::vector<Entity>);
+	ResultTable getResults(std::vector<Entity>);
 	std::list<std::string> getResult(Entity);
 
 private:

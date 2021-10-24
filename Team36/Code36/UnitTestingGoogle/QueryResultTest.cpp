@@ -747,4 +747,48 @@ namespace UnitTesting {
 		q.addResult(t4);
 		EXPECT_FALSE(q.haveResult());
 	}
+
+
+	TEST(QueryResult, getResultTable) {
+		Entity e1 = { STMT, Synonym{"x"} };
+		Entity e2 = { STMT, Synonym{"y"} };
+		Entity e3 = { STMT, Synonym{"z"} };
+		Entity e4 = { STMT, Synonym{"v"} };
+		Entity e5 = { STMT, Synonym{"a"} };
+		Entity e6 = { STMT, Synonym{"b"} };
+		std::pair<Entity, Entity> h1{ e1, e2 };
+		std::pair<Entity, Entity> h2{ e3, e4 };
+		std::pair<Entity, Entity> h3{ e5, e6 };
+		std::vector<std::pair<std::string, std::string>> a1{
+			{ "1", "4", },
+			{ "2", "5", },
+			{ "3", "6", },
+		};
+		std::vector<std::pair<std::string, std::string>> a2{
+			{ "4", "7", },
+			{ "5", "8", },
+			{ "6", "9", }
+		};
+		std::vector<std::pair<std::string, std::string>> a3{
+			{ "1", "4", },
+			{ "2", "5", },
+			{ "3", "6", },
+		};
+
+		ResultTable t1(h1, a1);
+		ResultTable t2(h2, a2);
+		ResultTable t3(h3, a3);
+		QueryResult q;
+		q.addResult(t1);
+		q.addResult(t2);
+		q.addResult(t3);
+
+		std::vector<Entity> selected { e1, e5 };
+		ResultTable result = q.getResults(selected);
+		std::list<std::string> b1 = { "1", "2", "3" };
+
+		EXPECT_EQ(result.getEntityResult(e1), b1);
+		EXPECT_EQ(result.getEntityResult(e5), b1);
+
+	}
 }
