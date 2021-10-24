@@ -54,14 +54,14 @@ std::list<std::string> QueryEvaluator::getRawResult(Entity selected) {
 
 
 std::list<std::string> QueryEvaluator::getTupleResult(Query& query, QueryResult& query_result) {
-	std::vector<Entity> selectedEntities = Utility::removeDuplicateEntities(query.getSelected());
+	std::vector<Entity> selected_entities = Utility::removeDuplicateEntities(query.getSelected());
 	std::list<ResultTable> results;
-	if (query_result.isInTables(selectedEntities)) {
-		results.emplace_back(query_result.getResults(selectedEntities));
-		selectedEntities = Utility::removeEntities(selectedEntities, results.front().getHeaders());
+	if (query_result.isInTables(selected_entities)) {
+		results.emplace_back(query_result.getResults(selected_entities));
+		selected_entities = Utility::removeEntities(selected_entities, results.front().getHeaders());
 	}
 
-	for (auto& selected : selectedEntities) {
+	for (auto& selected : selected_entities) {
 		results.push_back(ResultTable(selected, getRawResult(selected)));
 	}
 
