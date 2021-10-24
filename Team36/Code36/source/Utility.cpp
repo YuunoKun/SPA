@@ -283,6 +283,19 @@ std::vector<Entity> Utility::removeEntities(std::vector<Entity>& main, std::vect
 	return result;
 }
 
+std::vector<Entity> Utility::removeDuplicateEntities(std::vector<Entity>& main) {
+	std::unordered_set<std::string> unique;
+	std::vector<Entity> result;
+
+	for (auto& e : main) {
+		if (unique.count(e.getSynonym()) == 0) {
+			result.push_back(e);
+			unique.insert(e.getSynonym());
+		}
+	}
+	return result;
+}
+
 std::list<std::vector<std::string>> Utility::getColumnsNoDuplicate(std::list<std::vector<std::string>>& main, std::vector<int>& indexes) {
 	std::unordered_set<std::string> unique;
 	std::list<std::vector<std::string>> result;

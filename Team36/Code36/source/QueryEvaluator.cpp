@@ -54,20 +54,28 @@ std::list<std::string> QueryEvaluator::getRawResult(Entity selected) {
 
 
 std::list<std::string> QueryEvaluator::getTupleResult(Query& query, QueryResult& query_result) {
-	std::vector<Entity> selectedEntities = query.getSelected();
-
-	ResultTable selected_table = query_result.getResults(selectedEntities);
-	selectedEntities = Utility::removeEntities(selectedEntities, selected_table.getHeaders());
-	for (auto& selected : selectedEntities) {
-		ResultTable to_join(selected, getRawResult(selected));
-		selected_table.joinTable(to_join);
+	std::vector<Entity> selectedEntities = Utility::removeDuplicateEntities(query.getSelected());
+	std::list<ResultTable> results;
+	if (query_result.isInTables(selectedEntities)) {
+		results.emplace_back(query_result.getResults(selectedEntities));
+		selectedEntities = Utility::removeEntities(selectedEntities, results.front().getHeaders());
 	}
-	return selected_table.getEntityResult(query.getSelected());
+
+	for (auto& selected : selectedEntities) {
+		results.push_back(ResultTable(selected, getRawResult(selected)));
+	}
+
+	ResultTable result = results.front();
+	results.pop_front();
+	while (!results.empty()) {
+		result.joinTable(results.front());
+		results.pop_front();
+	}
+	return result.getEntityResult(query.getSelected());
 }
 
 
 std::list<std::string> QueryEvaluator::getResult(Query& query, QueryResult& result) {
-	//Return boolean value if select is BOOLEAN
 	if (query.getSelected()[0].getType() == EntityType::BOOLEAN) {
 		if (result.haveResult()) {
 			return { BOOLEAN_TRUE };
@@ -77,21 +85,17 @@ std::list<std::string> QueryEvaluator::getResult(Query& query, QueryResult& resu
 		}
 	}
 
-	//If some of the relation/pattern return empty list / false
 	if (!result.haveResult()) {
 		return {};
 	}
 
 	if (query.getSelected().size() > 1) {
-		//For iteration 2, handling tuples result
+		return getTupleResult(query, result);
 	}
 
-	//return non-tuples result
-	//If the variable is not found in one of the result table, return all of selected entity type
 	if (!result.isInTables(query.getSelected()[0])) {
 		return getRawResult(query.getSelected()[0]);
 	}
 
-	//If the variable is found in one of the result table
 	return result.getResult(query.getSelected()[0]);
 }

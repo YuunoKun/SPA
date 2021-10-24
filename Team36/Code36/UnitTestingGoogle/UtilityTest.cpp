@@ -812,6 +812,18 @@ namespace UnitTesting {
 	}
 
 
+	TEST(Utility, removeDuplicateEntities) {
+		Entity e1 = { STMT,Synonym{"e1"} };
+		Entity e2 = { STMT,Synonym{"e2"} };
+		Entity e3 = { STMT,Synonym{"e3"} };
+		Entity e4 = { STMT,Synonym{"e4"} };
+		Entity e5 = { STMT,Synonym{"e5"} };
+
+		std::vector<Entity> a = { e1, e2, e1, e3, e2, e3, e4, e5, e1, e2, e3, e4, e5 };
+		std::vector<Entity> b = { e1, e2, e3, e4, e5 };
+		EXPECT_EQ(Utility::removeDuplicateEntities(a), b);
+	}
+
 	TEST(Utility, getColumnsNoDuplicate) {
 		std::list<std::vector<std::string>> a = { 
 			{"1","1","1"}, 

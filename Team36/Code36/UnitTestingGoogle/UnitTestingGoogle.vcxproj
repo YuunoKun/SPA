@@ -58,6 +58,7 @@
     <ClCompile Include="QueryEvaluatorPatternTest.cpp" />
     <ClCompile Include="QueryEvaluatorRelationTest.cpp" />
     <ClCompile Include="PatternTest.cpp" />
+    <ClCompile Include="QueryEvaluatorTupleTest.cpp" />
     <ClCompile Include="QueryResultTest.cpp" />
     <ClCompile Include="QueryPreprocessorTest.cpp" />
     <ClCompile Include="QueryTest.cpp" />
@@ -69,11 +70,11 @@
     <ClCompile Include="ModifiesSEvaluatorTest.cpp" />
     <ClCompile Include="ModifiesPEvaluatorTest.cpp" />
     <ClCompile Include="QueryPatternRelRefParserTest.cpp" />
-	<ClCompile Include="NextParserTest.cpp" />
-	<ClCompile Include="NextTParserTest.cpp" />
-	<ClCompile Include="AssignPatternParserTest.cpp" />
-	<ClCompile Include="IfPatternParserTest.cpp" />
-	<ClCompile Include="WhilePatternParserTest.cpp" />
+    <ClCompile Include="NextParserTest.cpp" />
+    <ClCompile Include="NextTParserTest.cpp" />
+    <ClCompile Include="AssignPatternParserTest.cpp" />
+    <ClCompile Include="IfPatternParserTest.cpp" />
+    <ClCompile Include="WhilePatternParserTest.cpp" />
     <ClCompile Include="QueryOptimizerTest.cpp" />
     <ClCompile Include="CFGNodeTest.cpp" />
     <ClCompile Include="CFGTest.cpp" />
