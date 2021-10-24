@@ -1,8 +1,6 @@
 #include "IfPatternParser.h"
-#include "QueryPatternRelRefParser.h"
 
 void IfPatternParser::parse(Query& query, Entity& entity, std::vector<QueryToken> token_chain) {
-    QueryPatternRelRefParser parser;
     std::vector<QueryToken> temp_token_chain_1;
     std::vector<QueryToken> temp_token_chain_2;
     std::vector<QueryToken> temp_token_chain_3;
@@ -30,15 +28,15 @@ void IfPatternParser::parse(Query& query, Entity& entity, std::vector<QueryToken
         }
     }
 
-    if (!parser.isEntRef(query, temp_token_chain_1) || 
-        !parser.isWildCard(temp_token_chain_2) || 
-        !parser.isWildCard(temp_token_chain_3)) {
+    if (!Utility::isEntRef(query, temp_token_chain_1) ||
+        !Utility::isWildCard(temp_token_chain_2) ||
+        !Utility::isWildCard(temp_token_chain_3)) {
         throw SemanticErrorException("Invalid parameters for if pattern");
     }
 
-    if (!parser.isCorrectSynEntRef(query, temp_token_chain_1, EntityType::VARIABLE)) {
+    if (!Utility::isCorrectSynEntRef(query, temp_token_chain_1, EntityType::VARIABLE)) {
         throw SemanticErrorException("Invalid parameters for if");
     }
 
-    query.addPattern(Pattern(entity, parser.setEntRef(query, temp_token_chain_1, EntityType::VARIABLE)));
+    query.addPattern(Pattern(entity, Utility::setEntRef(query, temp_token_chain_1, EntityType::VARIABLE)));
 }
