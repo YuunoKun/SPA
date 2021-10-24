@@ -3,6 +3,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include "PatternParserInterface.h"
 #include "Entity.h"
 #include "Query.h"
 #include "QueryToken.h"
@@ -11,9 +12,7 @@
 #include "SyntacticErrorException.h"
 #include "Utility.h"
 
-class WhilePatternParser {
+class WhilePatternParser : public PatternParserInterface {
 public:
-    WhilePatternParser();
-
-    void parseWhile(Query&, Entity&, std::vector<QueryToken>);
+    void parse(Query&, Entity&, std::vector<QueryToken>);
 };

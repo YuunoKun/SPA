@@ -1,10 +1,7 @@
 #include "IfPatternParser.h"
 #include "QueryPatternRelRefParser.h"
 
-
-IfPatternParser::IfPatternParser() {}
-
-void IfPatternParser::parseIf(Query& query, Entity& entity, std::vector<QueryToken> token_chain) {
+void IfPatternParser::parse(Query& query, Entity& entity, std::vector<QueryToken> token_chain) {
     QueryPatternRelRefParser parser;
     std::vector<QueryToken> temp_token_chain_1;
     std::vector<QueryToken> temp_token_chain_2;

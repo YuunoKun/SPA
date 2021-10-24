@@ -2,13 +2,11 @@
 #include "QueryPatternRelRefParser.h"
 
 
-AssignPatternParser::AssignPatternParser() {}
-
 bool AssignPatternParser::isWild(std::vector<QueryToken> token_chain) {
     return token_chain[0].type == QueryToken::WILDCARD;
 }
 
-void AssignPatternParser::parseAssign(Query& query, Entity& entity, std::vector<QueryToken> token_chain) {
+void AssignPatternParser::parse(Query& query, Entity& entity, std::vector<QueryToken> token_chain) {
     QueryPatternRelRefParser parser;
     std::vector<QueryToken> temp_token_chain_1;
     std::vector<QueryToken> temp_token_chain_2;

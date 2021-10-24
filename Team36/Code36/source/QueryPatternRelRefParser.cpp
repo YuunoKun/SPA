@@ -719,17 +719,17 @@ void QueryPatternRelRefParser::parseParameterPattern(
     switch (synonym_ent.getType()) {
     case ASSIGN: {
         AssignPatternParser parser;
-        parser.parseAssign(query, synonym_ent, token_chain);
+        parser.parse(query, synonym_ent, token_chain);
         break;
         }
     case IF: {
         IfPatternParser parser;
-        parser.parseIf(query, synonym_ent, token_chain);
+        parser.parse(query, synonym_ent, token_chain);
         break;
     }
     case WHILE: {
         WhilePatternParser parser;
-        parser.parseWhile(query, synonym_ent, token_chain);
+        parser.parse(query, synonym_ent, token_chain);
         break;
     }
     }

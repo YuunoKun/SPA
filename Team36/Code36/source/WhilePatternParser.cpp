@@ -1,10 +1,7 @@
 #include "WhilePatternParser.h"
 #include "QueryPatternRelRefParser.h"
 
-
-WhilePatternParser::WhilePatternParser() {}
-
-void WhilePatternParser::parseWhile(Query& query, Entity& entity, std::vector<QueryToken> token_chain) {
+void WhilePatternParser::parse(Query& query, Entity& entity, std::vector<QueryToken> token_chain) {
     QueryPatternRelRefParser parser;
     std::vector<QueryToken> temp_token_chain_1;
     std::vector<QueryToken> temp_token_chain_2;
