@@ -9,12 +9,12 @@
 QueryEvaluator::QueryEvaluator() {
 }
 
-std::list<std::list<std::string>> QueryEvaluator::evaluateQuery(Query& query) {
+std::list<std::string> QueryEvaluator::evaluateQuery(Query& query) {
 	QueryResult result;
 
 	evaluateClauses(query, result);
 
-	return { getResult(query, result) };
+	return getResult(query, result);
 }
 
 void QueryEvaluator::evaluateClauses(Query& query, QueryResult& query_result) {

@@ -16,10 +16,8 @@ std::list<std::string> QuerySystem::processQuery(std::string input) {
 		}
 
 		query.setClauses(optimizer.optimizeClausesOrder(query.getClauses()));
-		std::list<std::list<std::string>> results = evaluator.evaluateQuery(query);
-		std::list<std::string> result = ResultProjector::projectResult(results);
 
-		return result;
+		return evaluator.evaluateQuery(query);;
 	}
 	catch (SyntacticErrorException&)
 	{
