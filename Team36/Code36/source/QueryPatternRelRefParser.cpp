@@ -215,7 +215,7 @@ Entity QueryPatternRelRefParser::setStmtRef(Query& query, QueryToken token) {
 }
 
 Entity QueryPatternRelRefParser::setEntRef(Query& query,
-                                    std::vector<QueryToken> token_chain) {
+                                    std::vector<QueryToken> token_chain, EntityType ident_type) {
   // entRef : synonym | ‘_’ | ‘"’ IDENT ‘"’
 
   if (token_chain.size() == 1) {
@@ -235,7 +235,7 @@ Entity QueryPatternRelRefParser::setEntRef(Query& query,
   // is " "IDENT" "
   // IDENT : LETTER ( LETTER | DIGIT )*
   if (token_chain.size() == 3) {
-      return Entity(EntityType::VARIABLE, token_chain[1].token_value);
+      return Entity(ident_type, token_chain[1].token_value);
   }
   
 
@@ -384,12 +384,12 @@ void QueryPatternRelRefParser::parseParameterSuchThat(
             QueryToken stmt = temp_token_chain_1[0];
            
             query.addRelation(RelRef(RelType::MODIFIES_S, setStmtRef(query, stmt),
-                setEntRef(query, temp_token_chain_2)));
+                setEntRef(query, temp_token_chain_2, EntityType::VARIABLE)));
 
             break;
         } else {
-            query.addRelation(RelRef(RelType::MODIFIES_P, setEntRef(query, temp_token_chain_1),
-                setEntRef(query, temp_token_chain_2)));
+            query.addRelation(RelRef(RelType::MODIFIES_P, setEntRef(query, temp_token_chain_1, EntityType::VARIABLE),
+                setEntRef(query, temp_token_chain_2, EntityType::VARIABLE)));
             break;
         }
     }
@@ -458,13 +458,13 @@ void QueryPatternRelRefParser::parseParameterSuchThat(
             QueryToken stmt = temp_token_chain_1[0];
 
             query.addRelation(RelRef(RelType::USES_S, setStmtRef(query, stmt),
-                setEntRef(query, temp_token_chain_2)));
+                setEntRef(query, temp_token_chain_2, EntityType::VARIABLE)));
 
             break;
         }
         else {
-            query.addRelation(RelRef(RelType::USES_P, setEntRef(query, temp_token_chain_1),
-                setEntRef(query, temp_token_chain_2)));
+            query.addRelation(RelRef(RelType::USES_P, setEntRef(query, temp_token_chain_1, EntityType::VARIABLE),
+                setEntRef(query, temp_token_chain_2, EntityType::VARIABLE)));
             break;
         }
     }

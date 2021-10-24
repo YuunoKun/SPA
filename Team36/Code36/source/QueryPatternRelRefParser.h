@@ -29,7 +29,7 @@ public:
 	bool isCorrectSynEntRef(Query&, std::vector<QueryToken>, EntityType);
 	bool isWildCard(std::vector<QueryToken>);
 	Entity setStmtRef(Query&, QueryToken);
-	Entity setEntRef(Query&, std::vector<QueryToken>);
+	Entity setEntRef(Query&, std::vector<QueryToken>, EntityType);
 	Entity setLineRef(Query&, QueryToken);
 	Entity setCallEntRef(Query&, std::vector<QueryToken>);
 	std::string setExpr(std::vector<QueryToken>);

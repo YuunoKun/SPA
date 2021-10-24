@@ -88,7 +88,7 @@ namespace UnitTesting {
 		//Result
 		QueryToken stmt_s_token = QueryToken(QueryToken::IDENTIFIER, "s");
 		temp_token_chain.push_back(stmt_s_token);
-		Entity ent_stmt = validator.setEntRef(query, temp_token_chain);
+		Entity ent_stmt = validator.setEntRef(query, temp_token_chain, EntityType::VARIABLE);
 
 		EXPECT_TRUE(ent_stmt == expected_declared_stmt);
 
@@ -99,7 +99,7 @@ namespace UnitTesting {
 		//Result
 		QueryToken wildcard_token = QueryToken(QueryToken::WILDCARD, "_");
 		temp_token_chain.push_back(wildcard_token);
-		Entity ent_wildacrd = validator.setEntRef(query, temp_token_chain);
+		Entity ent_wildacrd = validator.setEntRef(query, temp_token_chain, EntityType::VARIABLE);
 
 		//Expected
 		Entity expected_ent_wildcard = Entity(EntityType::WILD);
@@ -118,7 +118,7 @@ namespace UnitTesting {
 		temp_token_chain.push_back(proc_name_token);
 		temp_token_chain.push_back(quotation_close_token);
 
-		Entity ent_constant = validator.setEntRef(query, temp_token_chain);
+		Entity ent_constant = validator.setEntRef(query, temp_token_chain, EntityType::VARIABLE);
 
 		//Expected
 		Entity expected_ent_constant = Entity(EntityType::VARIABLE, "procName");

@@ -42,6 +42,6 @@ void AssignPatternParser::parseAssign(Query& query, Entity& entity, std::vector<
 
     is_wild = isWild(temp_token_chain_2);
 
-    query.addPattern(Pattern(entity, parser.setEntRef(query, temp_token_chain_1),
+    query.addPattern(Pattern(entity, parser.setEntRef(query, temp_token_chain_1, EntityType::VARIABLE),
         parser.setExpr(temp_token_chain_2), is_wild));
 }

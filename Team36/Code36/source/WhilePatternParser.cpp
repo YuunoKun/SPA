@@ -37,5 +37,5 @@ void WhilePatternParser::parseWhile(Query& query, Entity& entity, std::vector<Qu
         throw SemanticErrorException("Invalid parameters for while");
     }
 
-    query.addPattern(Pattern(entity, parser.setEntRef(query, temp_token_chain_1)));
+    query.addPattern(Pattern(entity, parser.setEntRef(query, temp_token_chain_1, EntityType::VARIABLE)));
 }
