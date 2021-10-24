@@ -628,7 +628,7 @@ void QueryPatternRelRefParser::parseParameterSuchThat(
 
     case QueryToken::NEXT: {
         NextParser nextParser;
-        nextParser.parseNext(query, token_chain);
+        nextParser.parse(query, token_chain);
         break;
     }
     
