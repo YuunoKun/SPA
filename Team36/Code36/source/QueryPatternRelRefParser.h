@@ -10,6 +10,7 @@
 #include "SemanticErrorException.h"
 #include "SyntacticErrorException.h"
 #include "Utility.h"
+#include "UsesParser.h"
 #include "NextParser.h"
 #include "NextTParser.h"
 #include "AssignPatternParser.h"

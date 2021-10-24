@@ -14,5 +14,5 @@
 
 class WhilePatternParser : public PatternParserInterface {
 public:
-    void parse(Query&, Entity&, std::vector<QueryToken>);
+    void parse(Query&, Entity&, std::vector<QueryToken>) override;
 };

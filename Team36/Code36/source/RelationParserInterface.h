@@ -6,5 +6,5 @@
 
 class RelationParserInterface {
 public:
-    virtual void parse(Query&, Entity&, std::vector<QueryToken>) = 0;
+    virtual void parse(Query&, std::vector<QueryToken>) = 0;
 };
