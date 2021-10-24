@@ -449,6 +449,12 @@
 	<ClInclude Include="..\source\NextTParser.h">
 	  <Filter>Header Files\PQL\QueryPreprocessor\QueryPatternRelRefParser</Filter>
 	</ClInclude>
+	<ClInclude Include="..\source\RelationParserInterface.h">
+		<Filter>Header Files\PQL\QueryPreprocessor\QueryPatternRelRefParser</Filter>
+	</ClInclude>
+	<ClInclude Include="..\source\PatternParserInterface.h">
+		<Filter>Header Files\PQL\QueryPreprocessor\QueryPatternRelRefParser</Filter>
+	</ClInclude>
     <ClInclude Include="..\source\PatternsEvaluator.h">
       <Filter>Header Files\PQL\QueryEvaluator</Filter>
     </ClInclude>

@@ -134,6 +134,8 @@
 	<ClInclude Include="..\source\WhilePatternParser.h" />
 	<ClInclude Include="..\source\NextParser.h" />
     <ClInclude Include="..\source\NextTParser.h" />
+	<ClInclude Include="..\source\RelationParserInterface.h" />
+	<ClInclude Include="..\source\PatternParserInterface.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{DC21A1EA-D2C6-4D14-A2B4-E025B64BDE81}</ProjectGuid>
