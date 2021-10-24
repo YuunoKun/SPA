@@ -23,8 +23,8 @@ Debug\AutoTester.exe ..\Tests36\iter2_no_call_source.txt ..\Tests36\iter2_no_cal
 Debug\AutoTester.exe ..\Tests36\iter2_ModifiesP_source.txt ..\Tests36\iter2_ModifiesP_queries.txt .\Tests\out-19-iter2_ModifiesP_queries.xml
 Debug\AutoTester.exe ..\Tests36\iter2_UsesP_source.txt ..\Tests36\iter2_UsesP_queries.txt .\Tests\out-20-iter2_UsesP_queries.xml
 Debug\AutoTester.exe ..\Tests36\iter2_next_source.txt ..\Tests36\iter2_next_queries.txt .\Tests\out-21-iter2_next_queries.xml
-Debug\AutoTester.exe ..\Tests36\iter2_patternA_source.txt ..\Tests36\iter2_patternA_queries.txt .\Tests\out-23-iter2_patternA_queries.xml
-Debug\AutoTester.exe ..\Tests36\iter2_patternIF_source.txt ..\Tests36\iter2_patternIF_queries.txt .\Tests\out-24-iter2_patternIF_queries.xml
+Debug\AutoTester.exe ..\Tests36\iter2_patternA_source.txt ..\Tests36\iter2_patternA_queries.txt .\Tests\out-22-iter2_patternA_queries.xml
+Debug\AutoTester.exe ..\Tests36\iter2_patternIF_source.txt ..\Tests36\iter2_patternIF_queries.txt .\Tests\out-23-iter2_patternIF_queries.xml
 Debug\AutoTester.exe ..\Tests36\iter2_patternWhile_source.txt ..\Tests36\iter2_patternWhile_queries.txt .\Tests\out-24-iter2_patternWhile_queries.xml
 Debug\AutoTester.exe ..\Tests36\iter2_multi_clauses_source.txt ..\Tests36\iter2_multi_clauses_queries.txt .\Tests\out-25-iter2_multi_clauses_queries.xml
 Debug\AutoTester.exe ..\Tests36\iter3_nextT_source.txt ..\Tests36\iter3_nextT_queries.txt .\Tests\out-26-iter3_nextT_queries.xml
