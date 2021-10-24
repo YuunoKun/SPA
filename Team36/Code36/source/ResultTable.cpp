@@ -31,7 +31,7 @@ ResultTable::ResultTable(std::pair<Entity, Entity>  header, std::vector<std::pai
 }
 
 //Return true if merge is successful
-bool ResultTable::merge(ResultTable t) {
+bool ResultTable::merge(ResultTable& t) {
 	std::vector<Entity> common_headers = getCommonHeaders(t.header);
 	//No common header, abandon merge.
 	if (common_headers.empty()) {
@@ -75,7 +75,7 @@ std::list<std::string> ResultTable::getEntityResult(Entity e) {
 	return Utility::unorderedSetToStringList(result);
 }
 
-std::vector<Entity> ResultTable::getCommonHeaders(std::vector<Entity> v) {
+std::vector<Entity> ResultTable::getCommonHeaders(std::vector<Entity>& v) {
 	std::vector<Entity> common_headers;
 
 	for (unsigned int i = 0; i < v.size(); i++) {
@@ -95,14 +95,14 @@ bool ResultTable::operator==(const ResultTable& other) const {
 	return header == other.header && table == other.table;
 }
 
-void ResultTable::init(Entity header, std::vector<std::string> table) {
+void ResultTable::init(Entity header, std::vector<std::string>& table) {
 	addHeader(header);
 	for (auto& it : table) {
 		this->table.push_back({ it });
 	}
 }
 
-void ResultTable::init(std::pair<Entity, Entity> header, std::vector<std::vector<std::string>> table) {
+void ResultTable::init(std::pair<Entity, Entity> header, std::vector<std::vector<std::string>>& table) {
 	if (header.first == header.second) {
 		//If the header is the same, merge column if equal.
 		init(header.first, Utility::mergeColumnEqual(table));
@@ -121,7 +121,7 @@ void ResultTable::addHeader(Entity entity) {
 	}
 }
 
-void ResultTable::addHeader(std::vector<Entity> v) {
+void ResultTable::addHeader(std::vector<Entity>& v) {
 	for (auto& it : v) {
 		addHeader(it);
 	}
@@ -136,7 +136,7 @@ int ResultTable::getHeaderIndex(Entity e) {
 	return -1;
 }
 
-void ResultTable::filter_table(ResultTable t, Entity common_header) {
+void ResultTable::filter_table(ResultTable& t, Entity common_header) {
 	int header_index;
 	std::vector<std::vector<std::string>> main_table;
 	std::vector<std::vector<std::string>> filter_table;
@@ -165,7 +165,7 @@ void ResultTable::filter_table(ResultTable t, Entity common_header) {
 	table = Utility::filterResults(main_table, filter, header_index);
 }
 
-void ResultTable::filter_table(ResultTable t, Entity common_header1, Entity common_header2) {
+void ResultTable::filter_table(ResultTable& t, Entity common_header1, Entity common_header2) {
 	int header_index1;
 	int header_index2;
 	int filter_index1;
@@ -207,7 +207,7 @@ void ResultTable::filter_table(ResultTable t, Entity common_header1, Entity comm
 	table = Utility::filterResults(main_table, filters, header_index1, header_index2);
 }
 
-void ResultTable::joinTable(ResultTable t, Entity common_header) {
+void ResultTable::joinTable(ResultTable& t, Entity common_header) {
 	int header_index = getHeaderIndex(common_header);
 	int to_join_index = t.getHeaderIndex(common_header);
 
@@ -218,5 +218,12 @@ void ResultTable::joinTable(ResultTable t, Entity common_header) {
 	}
 
 	table = Utility::joinTable(table, header_index, to_join, to_join_index);
+	addHeader(t.header);
+}
+
+
+
+void ResultTable::joinTable(ResultTable& t) {
+	table = Utility::joinTable(table, t.table);
 	addHeader(t.header);
 }

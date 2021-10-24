@@ -718,24 +718,31 @@ namespace UnitTesting {
 		ResultTable table(result_table_header1, result_list_pair1);
 
 		std::vector<Entity> v = { result_table_header1.first };
-		EXPECT_EQ(table.getCommonHeaders({ result_table_header1.first }), v);
+		std::vector<Entity> from = { result_table_header1.first };
+		EXPECT_EQ(table.getCommonHeaders(from), v);
 
 		v = { result_table_header1.second };
-		EXPECT_EQ(table.getCommonHeaders({ result_table_header1.second }), v);
+		from = { result_table_header1.second };
+		EXPECT_EQ(table.getCommonHeaders(from), v);
 
 		v = { result_table_header1.first, result_table_header1.second };
-		EXPECT_EQ(table.getCommonHeaders({ result_table_header1.first, result_table_header1.second }), v);
+		from = { result_table_header1.first, result_table_header1.second };
+		EXPECT_EQ(table.getCommonHeaders(from), v);
 
 		v = { result_table_header1.first, result_table_header1.second };
-		EXPECT_EQ(table.getCommonHeaders({ result_table_header1.first, result_table_header1.second, result_table_header2.first, result_table_header2.second }), v);
+		from = { result_table_header1.first, result_table_header1.second, result_table_header2.first, result_table_header2.second };
+		EXPECT_EQ(table.getCommonHeaders(from), v);
 
 		v = { result_table_header1.first };
-		EXPECT_EQ(table.getCommonHeaders({ result_table_header1.first, result_table_header2.first, result_table_header2.second }), v);
+		from = { result_table_header1.first, result_table_header2.first, result_table_header2.second };
+		EXPECT_EQ(table.getCommonHeaders(from), v);
 
 		v = { result_table_header1.second };
-		EXPECT_EQ(table.getCommonHeaders({ result_table_header1.second, result_table_header2.first, result_table_header2.second }), v);
+		from = { result_table_header1.second, result_table_header2.first, result_table_header2.second };
+		EXPECT_EQ(table.getCommonHeaders(from), v);
 
 		v = { };
-		EXPECT_EQ(table.getCommonHeaders({ result_table_header2.first, result_table_header2.second }), v);
+		from = { result_table_header2.first, result_table_header2.second };
+		EXPECT_EQ(table.getCommonHeaders(from), v);
 	}
 }

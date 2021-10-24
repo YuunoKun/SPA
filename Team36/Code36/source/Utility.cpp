@@ -232,7 +232,8 @@ std::vector<std::vector<std::string>> Utility::joinTable(std::vector<std::vector
 		if (to_join.count(it[main_header_index]) == 0) {
 			continue;
 		}
-		std::pair<std::unordered_multimap<std::string, std::vector<std::string>>::iterator, std::unordered_multimap<std::string, std::vector<std::string>>::iterator> ret;
+		std::pair<std::unordered_multimap<std::string, std::vector<std::string>>::iterator, 
+			std::unordered_multimap<std::string, std::vector<std::string>>::iterator> ret;
 
 		ret = to_join.equal_range(it[main_header_index]);
 
@@ -248,6 +249,10 @@ std::vector<std::vector<std::string>> Utility::joinTable(std::vector<std::vector
 		}
 	}
 	return results;
+}
+
+std::vector<std::vector<std::string>> Utility::joinTable(std::vector<std::vector<std::string>>&, std::vector<std::vector<std::string>>&) {
+	return std::vector<std::vector<std::string>>();
 }
 
 EntityType Utility::queryTokenTypeToEntityType(QueryToken::QueryTokenType& query_token_type) {
