@@ -80,34 +80,28 @@ namespace UnitTesting {
 		EXPECT_EQ(Utility::unorderedSetToStringList(d), e);
 	}
 
-	TEST(Utility, stmtInfoToStringVector) {
-		std::vector<StmtInfo> a = { { 1, STMT_ASSIGN }, { 2, STMT_CALL} , { 3, STMT_WHILE }, { 4, STMT_IF} };
-		std::vector<std::string> b{ "1", "2", "3", "4" };
-		EXPECT_EQ(Utility::stmtInfoToStringVector(a), b);
-	}
-
-	TEST(Utility, stmtIndexToStringVector) {
+	TEST(Utility, stmtIndexToStringList) {
 		std::vector<stmt_index> a = { 1, 2, 3, 4 };
-		std::vector<std::string> b{ "1", "2", "3", "4" };
-		EXPECT_EQ(Utility::stmtIndexToStringVector(a), b);
+		std::list<std::string> b{ "1", "2", "3", "4" };
+		EXPECT_EQ(Utility::stmtIndexToStringList(a), b);
 	}
 
 	TEST(Utility, pairToStringTable) {
 		std::vector<std::pair<std::string, std::string>> p1 = { {"a", "b"},{"c", "d"} };
-		std::vector<std::vector<std::string>> t1 = { {"a", "b"},{"c", "d"} };
+		std::list<std::vector<std::string>> t1 = { {"a", "b"},{"c", "d"} };
 		EXPECT_EQ(Utility::pairToStringTable(p1), t1);
 
 		std::vector<std::pair<stmt_index, std::string>> p2 = { { 1 , "b"}, { 2 , "d"} };
-		std::vector<std::vector<std::string>> t2 = { {"1", "b"},{"2", "d"} };
+		std::list<std::vector<std::string>> t2 = { {"1", "b"},{"2", "d"} };
 		EXPECT_EQ(Utility::pairToStringTable(p2), t2);
 
 		std::vector<std::pair<StmtInfo, std::string>> p3 = { {{ 1, STMT_ASSIGN }, "b"},{{ 2, STMT_ASSIGN }, "d"} };
-		std::vector<std::vector<std::string>> t3 = { {"1", "b"},{"2", "d"} };
+		std::list<std::vector<std::string>> t3 = { {"1", "b"},{"2", "d"} };
 		EXPECT_EQ(Utility::pairToStringTable(p3), t3);
 
 		std::vector<std::pair<StmtInfo, StmtInfo>> p4 = { {{ 1, STMT_ASSIGN }, { 3, STMT_WHILE }},
 			{{ 2, STMT_ASSIGN }, { 4, STMT_WHILE }} };
-		std::vector<std::vector<std::string>> t4 = { {"1", "3"},{"2", "4"} };
+		std::list<std::vector<std::string>> t4 = { {"1", "3"},{"2", "4"} };
 		EXPECT_EQ(Utility::pairToStringTable(p4), t4);
 	}
 	TEST(Utility, getIndexString) {
@@ -147,7 +141,7 @@ namespace UnitTesting {
 		a = ASSIGN;
 		EXPECT_EQ(Utility::convertType(a), STMT_ASSIGN);
 	}
-
+	
 	TEST(Utility, filterResult) {
 		std::vector<StmtInfo> a = { { 1, STMT_WHILE }, { 2, STMT_IF} , { 3, STMT_READ },
 			{ 4, STMT_PRINT}, { 5, STMT_CALL }, { 6, STMT_ASSIGN}, { 7, STMT_ASSIGN} };
@@ -177,7 +171,7 @@ namespace UnitTesting {
 			{{ 5, STMT_CALL }, "e"},{{ 6, STMT_ASSIGN }, "f"} ,
 			{{ 7, STMT_ASSIGN }, "g"},{{ 8, STMT_ASSIGN }, "h"} };
 
-		std::vector<std::vector<std::string>> b = { {"6", "f"}, {"7", "g"}, { "8", "h"} };
+		std::list<std::vector<std::string>> b = { {"6", "f"}, {"7", "g"}, { "8", "h"} };
 		EXPECT_EQ(Utility::filterResults(ASSIGN, a), b);
 
 		b = { {"1", "a"} };
@@ -203,7 +197,7 @@ namespace UnitTesting {
 			{{ 5, STMT_CALL }, { 15, STMT_ASSIGN }},{{ 6, STMT_ASSIGN }, { 16, STMT_IF }} ,
 			{{ 7, STMT_ASSIGN }, { 17, STMT_IF }},{{ 8, STMT_ASSIGN }, { 18, STMT_IF }} };
 
-		std::vector<std::vector<std::string>> b = { {"6", "16"}, {"7", "17"}, { "8", "18"} };
+		std::list<std::vector<std::string>> b = { {"6", "16"}, {"7", "17"}, { "8", "18"} };
 		EXPECT_EQ(Utility::filterResults({ ASSIGN, IF }, a), b);
 
 		b = { {"1", "11"} };
@@ -261,7 +255,7 @@ namespace UnitTesting {
 	}
 
 	TEST(Utility, filterResultsSingleColumn) {
-		std::vector<std::vector<std::string>> from = {
+		std::list<std::vector<std::string>> from = {
 			{"1", "1", "1", "1", "1"},
 			{"1", "2", "3", "4", "5"},
 			{"2", "2", "3", "4", "5"},
@@ -274,7 +268,7 @@ namespace UnitTesting {
 
 		int index = 0;
 		std::unordered_set<std::string> filters = { "1", "3", "5" };;
-		std::vector<std::vector<std::string>> to = {
+		std::list<std::vector<std::string>> to = {
 			{"1", "1", "1", "1", "1"},
 			{"1", "2", "3", "4", "5"},
 			{"3", "3", "3", "4", "5"},
@@ -343,7 +337,7 @@ namespace UnitTesting {
 	}
 
 	TEST(Utility, filterResultsDoubleColumn) {
-		std::vector<std::vector<std::string>> from = {
+		std::list<std::vector<std::string>> from = {
 			{"1", "1", "1", "1", "1"},
 			{"1", "2", "3", "4", "5"},
 			{"2", "2", "3", "4", "5"},
@@ -364,7 +358,7 @@ namespace UnitTesting {
 			{"5", {"5" } }
 		};
 
-		std::vector<std::vector<std::string>> to = {
+		std::list<std::vector<std::string>> to = {
 			{"1", "1", "1", "1", "1"},
 			{"1", "2", "3", "4", "5"},
 			{"2", "2", "3", "4", "5"},
@@ -528,9 +522,9 @@ namespace UnitTesting {
 
 		EXPECT_EQ(Utility::filterResults(to, filters, index1, index2), to);
 	}
-
+	
 	TEST(Utility, mergeColumnEqual) {
-		std::vector<std::vector<std::string>> t1 = {
+		std::list<std::vector<std::string>> t1 = {
 			{"1", "1"},{"1", "2"},{"1", "3"},{"1", "4"},{"1", "5"},
 			{"2", "1"},{"2", "2"},{"2", "3"},{"2", "4"},{"2", "5"},
 			{"3", "1"},{"3", "2"},{"3", "3"},{"3", "4"},{"3", "5"},
@@ -538,10 +532,10 @@ namespace UnitTesting {
 			{"5", "1"},{"5", "2"},{"5", "3"},{"5", "4"},{"5", "5"}
 		};
 
-		std::vector<std::string> r1 = { "1", "2", "3", "5" };
+		std::list<std::string> r1 = { "1", "2", "3", "5" };
 
-		std::vector<std::vector<std::string>> t2, t3;
-		std::vector<std::string> r2, r3;
+		std::list<std::vector<std::string>> t2, t3;
+		std::list<std::string> r2, r3;
 
 		for (int i1 = 0; i1 < 10; i1++) {
 			for (int i2 = 0; i2 < 10; i2++) {
@@ -570,7 +564,7 @@ namespace UnitTesting {
 	}
 
 	TEST(Utility, joinTableSingleColumn) {
-		std::vector<std::vector<std::string>> from = {
+		std::list<std::vector<std::string>> from = {
 			{"1", "1"},
 			{"1", "2"},
 			{"1", "3"},
@@ -593,7 +587,7 @@ namespace UnitTesting {
 		int fromIndex = 0;
 		int to_join_index = 0;
 
-		std::vector<std::vector<std::string>> to = {
+		std::list<std::vector<std::string>> to = {
 			{"1", "1", "1"},
 			{"1", "2", "1"},
 			{"1", "3", "1"},

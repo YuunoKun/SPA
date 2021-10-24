@@ -3,15 +3,15 @@
 
 ResultTable::ResultTable(Entity& header, std::vector<StmtInfo>& table) {
 	table = Utility::filterResult(header.getType(), table);
-	init(header, Utility::stmtInfoToStringVector(table));
+	init(header, Utility::stmtInfoToStringList(table));
 }
 
 ResultTable::ResultTable(Entity& header, std::vector<stmt_index>& table) {
-	init(header, Utility::stmtIndexToStringVector(table));
+	init(header, Utility::stmtIndexToStringList(table));
 }
 
 ResultTable::ResultTable(Entity& header, std::vector<std::string>& table) {
-	init(header, table);
+	init(header, std::list<std::string>(table.begin(), table.end()));
 }
 
 ResultTable::ResultTable(std::pair<Entity, Entity> header, std::vector<std::pair<std::string, std::string>>& table) {
@@ -69,8 +69,8 @@ bool ResultTable::isEmpty() {
 std::list<std::string> ResultTable::getEntityResult(Entity e) {
 	int columnIndex = Utility::getIndex(header, e);
 	std::unordered_set<std::string> result;
-	for (unsigned int i = 0; i < table.size(); i++) {
-		result.insert(table[i][columnIndex]);
+	for (auto row : table) {
+		result.insert(row[columnIndex]);
 	}
 	return Utility::unorderedSetToStringList(result);
 }
@@ -95,14 +95,14 @@ bool ResultTable::operator==(const ResultTable& other) const {
 	return header == other.header && table == other.table;
 }
 
-void ResultTable::init(Entity header, std::vector<std::string>& table) {
+void ResultTable::init(Entity header, std::list<std::string>& table) {
 	addHeader(header);
 	for (auto& it : table) {
 		this->table.push_back({ it });
 	}
 }
 
-void ResultTable::init(std::pair<Entity, Entity> header, std::vector<std::vector<std::string>>& table) {
+void ResultTable::init(std::pair<Entity, Entity> header, std::list<std::vector<std::string>>& table) {
 	if (header.first == header.second) {
 		//If the header is the same, merge column if equal.
 		init(header.first, Utility::mergeColumnEqual(table));
@@ -138,8 +138,8 @@ int ResultTable::getHeaderIndex(Entity e) {
 
 void ResultTable::filter_table(ResultTable& t, Entity common_header) {
 	int header_index;
-	std::vector<std::vector<std::string>> main_table;
-	std::vector<std::vector<std::string>> filter_table;
+	std::list<std::vector<std::string>> main_table;
+	std::list<std::vector<std::string>> filter_table;
 
 	if (t.header.size() == 1) {
 		header_index = getHeaderIndex(common_header);
@@ -170,8 +170,8 @@ void ResultTable::filter_table(ResultTable& t, Entity common_header1, Entity com
 	int header_index2;
 	int filter_index1;
 	int filter_index2;
-	std::vector<std::vector<std::string>> main_table;
-	std::vector<std::vector<std::string>> filter_table;
+	std::list<std::vector<std::string>> main_table;
+	std::list<std::vector<std::string>> filter_table;
 
 	if (t.header.size() == 2) {
 		header_index1 = getHeaderIndex(common_header1);
