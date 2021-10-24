@@ -287,6 +287,10 @@ void DesignExtractor::populateRelations(PKB& pkb) {
 void DesignExtractor::populateProcedures(PKB& pkb) {
 	for (Procedure* p : de_procedures) {
 		pkb.addProcedure(p->getName());
+
+		for (stmt_index id : p->getChild()) {
+			pkb.addProcContains(p->getName(), id);
+		}
 	}
 }
 
