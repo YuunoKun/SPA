@@ -59,16 +59,15 @@
     <ClCompile Include="..\source\QueryPatternRelRefParser.cpp" />
     <ClCompile Include="..\source\Clause.cpp" />
     <ClCompile Include="..\source\QueryOptimizer.cpp" />
-    <ClCompile Include="..\source\ResultProjector.cpp" />
     <ClCompile Include="..\source\SemanticErrorException.cpp" />
     <ClCompile Include="..\source\SyntacticErrorException.cpp" />
     <ClCompile Include="..\source\CFGNode.cpp" />
     <ClCompile Include="..\source\CFG.cpp" />
-	<ClCompile Include="..\source\AssignPatternParser.cpp" />
-	<ClCompile Include="..\source\IfPatternParser.cpp" />
-	<ClCompile Include="..\source\WhilePatternParser.cpp" />
-	<ClCompile Include="..\source\NextParser.cpp" />
-	<ClCompile Include="..\source\NextTParser.cpp" />
+    <ClCompile Include="..\source\AssignPatternParser.cpp" />
+    <ClCompile Include="..\source\IfPatternParser.cpp" />
+    <ClCompile Include="..\source\WhilePatternParser.cpp" />
+    <ClCompile Include="..\source\NextParser.cpp" />
+    <ClCompile Include="..\source\NextTParser.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\source\DesignExtractor.h" />
@@ -124,15 +123,14 @@
     <ClInclude Include="..\source\QueryPatternRelRefParser.h" />
     <ClInclude Include="..\source\Clause.h" />
     <ClInclude Include="..\source\QueryOptimizer.h" />
-    <ClInclude Include="..\source\ResultProjector.h" />
     <ClInclude Include="..\source\SyntacticErrorException.h" />
     <ClInclude Include="..\source\SemanticErrorException.h" />
     <ClInclude Include="..\source\CFGNode.h" />
     <ClInclude Include="..\source\CFG.h" />
-	<ClCompile Include="..\source\AssignPatternParser.h" />
-  	<ClInclude Include="..\source\IfPatternParser.h" />
-	<ClInclude Include="..\source\WhilePatternParser.h" />
-	<ClInclude Include="..\source\NextParser.h" />
+    <ClCompile Include="..\source\AssignPatternParser.h" />
+    <ClInclude Include="..\source\IfPatternParser.h" />
+    <ClInclude Include="..\source\WhilePatternParser.h" />
+    <ClInclude Include="..\source\NextParser.h" />
     <ClInclude Include="..\source\NextTParser.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

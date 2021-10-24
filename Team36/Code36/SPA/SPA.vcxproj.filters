@@ -183,9 +183,6 @@
     <ClCompile Include="..\source\QueryOptimizer.cpp">
       <Filter>Source Files\PQL</Filter>
     </ClCompile>
-    <ClCompile Include="..\source\ResultProjector.cpp">
-      <Filter>Source Files\PQL</Filter>
-    </ClCompile>
     <ClCompile Include="..\source\Clause.cpp">
       <Filter>Source Files\PQL\QueryObject</Filter>
     </ClCompile>
@@ -460,9 +457,6 @@
     </ClInclude>
     <ClInclude Include="..\source\PatternWhileEvaluator.h">
       <Filter>Header Files\PQL\QueryEvaluator\PatternEvaluator</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\ResultProjector.h">
-      <Filter>Header Files\PQL\QueryEvaluator</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
