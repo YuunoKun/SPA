@@ -40,6 +40,6 @@ Select s such that Parent*(_, _)
 5000
 9 - parentT, LHS prog_line, RHS wildcard
 prog_line n;
-Select n such that Parent(n,_)
+Select n such that Parent*(n,_)
 4, 6, 13, 17
 5000
