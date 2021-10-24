@@ -7,7 +7,7 @@ void CFGRelationsManager::reset() {
 }
 
 bool CFGRelationsManager::isNextTEmpty() {
-	return next_t_processor.evaluateWildAndWild();
+	return !next_t_processor.evaluateWildAndWild();
 }
 
 bool CFGRelationsManager::isNextT(prog_line index1, prog_line index2) {

@@ -1,25 +1,21 @@
 #include "NextTPreprocessor.h"
 #include <assert.h>
 
-bool NextTPreprocessor::evaluateWildAndWild()
-{
-	return next_table.isEmpty();
+bool NextTPreprocessor::evaluateWildAndWild() {
+	return !next_table.isEmpty();
 }
 
-bool NextTPreprocessor::evaluateConstantAndWild(int index)
-{
+bool NextTPreprocessor::evaluateConstantAndWild(int index) {
 	StmtInfo s1 = stmt_info_list[index - 1];
 	return next_table.containsKey(s1);
 }
 
-bool NextTPreprocessor::evaluateWildAndConstant(int index)
-{
+bool NextTPreprocessor::evaluateWildAndConstant(int index) {
 	StmtInfo s1 = stmt_info_list[index - 1];
 	return next_table.containsValue(s1);
 }
 
-bool NextTPreprocessor::evaluateConstantAndConstant(int index1, int index2)
-{
+bool NextTPreprocessor::evaluateConstantAndConstant(int index1, int index2) {
 	checkCache();
 	StmtInfo s1 = stmt_info_list[index1 - 1];
 	StmtInfo s2 = stmt_info_list[index2 - 1];
@@ -37,26 +33,22 @@ bool NextTPreprocessor::evaluateConstantAndConstant(int index1, int index2)
 	}
 }
 
-std::vector<std::pair<StmtInfo, StmtInfo>> NextTPreprocessor::evaluateSynonymAndSynonym()
-{
+std::vector<std::pair<StmtInfo, StmtInfo>> NextTPreprocessor::evaluateSynonymAndSynonym() {
 	checkCache();
 	cache = next_table.findTransitiveClosure();
 	is_fully_populated = true;
 	return cache.getPairs();
 }
 
-std::vector<StmtInfo> NextTPreprocessor::evaluateWildAndSynonym()
-{
+std::vector<StmtInfo> NextTPreprocessor::evaluateWildAndSynonym() {
 	return next_table.getValues();
 }
 
-std::vector<StmtInfo> NextTPreprocessor::evaluateSynonymAndWild()
-{
+std::vector<StmtInfo> NextTPreprocessor::evaluateSynonymAndWild() {
 	return next_table.getKeys();
 }
 
-std::vector<StmtInfo> NextTPreprocessor::evaluateConstantAndSynonym(int index)
-{
+std::vector<StmtInfo> NextTPreprocessor::evaluateConstantAndSynonym(int index) {
 	checkCache();
 	StmtInfo s1 = stmt_info_list[index - 1];
 	if (is_fully_populated || calculated_dfs_forward[index - 1]) {
@@ -69,8 +61,7 @@ std::vector<StmtInfo> NextTPreprocessor::evaluateConstantAndSynonym(int index)
 	}
 }
 
-std::vector<StmtInfo> NextTPreprocessor::evaluateSynonymAndConstant(int index)
-{
+std::vector<StmtInfo> NextTPreprocessor::evaluateSynonymAndConstant(int index) {
 	checkCache();
 	StmtInfo s1 = stmt_info_list[index - 1];
 	if (is_fully_populated || calculated_dfs_backward[index - 1]) {
@@ -83,8 +74,7 @@ std::vector<StmtInfo> NextTPreprocessor::evaluateSynonymAndConstant(int index)
 	}
 }
 
-void NextTPreprocessor::checkCache()
-{
+void NextTPreprocessor::checkCache() {
 	if (is_cache_initialized == false) {
 		cache = next_table.copy();
 		is_cache_initialized = true;
@@ -92,8 +82,7 @@ void NextTPreprocessor::checkCache()
 }
 
 NextTPreprocessor::NextTPreprocessor(const RelationTable<StmtInfo, StmtInfo>& table, const std::vector<StmtInfo> v) :
-	next_table(table)
-{
+	next_table(table) {
 	stmt_info_list = v;
 	is_fully_populated = false;
 	is_cache_initialized = false;
