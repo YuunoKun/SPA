@@ -1,0 +1,65 @@
+1 - 1 pattern and 1 unknown synonym, wildcard RHS
+assign a;
+Select a pattern a("y", _)
+2, 8, 18, 19
+5000
+2 - 1 pattern and 1 unknown synonym, variable RHS
+assign a;
+Select a pattern a("y", _"z"_)
+18, 19
+5000
+3 - 1 pattern and 1 unknown synonym, constant RHS
+assign a;
+Select a pattern a("x", _"1"_)
+15
+5000
+4 - 1 pattern and 1 unknown synonym, wild card bothside
+assign a;
+Select a pattern a(_,_)
+1, 2, 8, 12, 14, 15, 18, 19
+5000
+5 - 1 pattern and 1 unknown synonym, wildcard LHS
+assign a;
+Select a pattern a(_, _"x"_)
+8, 14, 15, 18
+5000
+6 - 1 pattern and 1 unknown synonym, variable LHS
+assign a;
+Select a pattern a("y", _"x"_)
+8, 18
+5000
+7 - 1 pattern and 2 unknown synonym, wildcard RHS
+assign a; variable v;
+Select a pattern a(v, _)
+1, 2, 8, 12, 14, 15, 18, 19
+5000
+8 - 1 pattern and 2 unknown synonyms, variable RHS
+assign a; variable v;
+Select a pattern a(v, _"x"_)
+8, 14, 15, 18
+5000
+9 - 1 pattern and 2 unknown synonym, wildcard RHS
+procedure p; assign pattern;
+Select p pattern pattern(	_, _	)
+a, b, c
+5000
+10 - 1 pattern and 2 unknown synonyms, variable RHS
+assign pattern;
+Select pattern pattern pattern(_,_"		y"_)
+8, 14, 18, 19
+5000
+11 - 1 pattern clause, exact string match
+assign a;
+Select a pattern a("x", "2")
+1
+5000
+12 - 1 pattern and 2 unknown synonyms, variable synonym LHS, wildcard exp RHS
+assign a; variable v;
+Select v pattern a(v, _"x"_)
+x, y, var1
+5000
+13 - 1 pattern and 2 unknown synonyms, variable synonym LHS, exp RHS
+assign a; variable v;
+Select v pattern a(v, "x")
+none
+5000

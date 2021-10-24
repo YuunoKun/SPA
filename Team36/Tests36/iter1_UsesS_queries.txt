@@ -1,0 +1,105 @@
+1 - uses, 1 such that and 1 unknown synonym
+assign a;
+Select a such that Uses(a, "x")
+8, 14, 15, 18
+5000
+2 - uses, 1 such that and 1 unknown synonym
+variable v;
+Select v such that Uses(18, v)
+x, y, z
+5000
+3 - uses, 1 such that and 1 unknown synonym
+print pn;
+Select pn such that Uses(pn, "z")
+11
+5000
+4 - uses, 1 such that and 1 unknown synonym
+variable v;
+Select v such that Uses(9, v)
+x
+5000
+5 - uses, 1 such that and 1 unknown synonym
+if ifs;
+Select ifs such that Uses(ifs, "y")
+6, 17
+5000
+6 - uses, 1 such that and 1 unknown synonym
+variable v;
+Select v such that Uses(6, v)
+x, y, z
+5000
+7 - uses, 1 such that and 1 unknown synonym
+while w;
+Select w such that Uses(w, "z")
+4, 13
+5000
+8 - uses, 1 such that and 1 unknown synonym
+variable v;
+Select v such that Uses(4, v)
+x, y, z, var1
+5000
+9 - uses, 1 such that and 2 unknown synonyms
+assign a; variable v;
+Select a such that Uses(a, v)
+8, 14, 15, 18, 19
+5000
+10 - uses, 1 such that and 2 unknown synonyms
+print pn; variable v;
+Select pn such that Uses(pn, v)
+9, 10, 11, 16
+5000
+11 - uses, 1 such that and 2 unknown synonyms
+if ifs; variable v;
+Select ifs such that Uses(ifs, v)
+6, 17
+5000
+12 - uses, 1 such that and 2 unknown synonyms
+while w; variable v;
+Select w such that Uses(w, v)
+4, 13
+5000
+13 - Uses, 1 such that and assign synonym LHS, wildcard RHS
+assign a;
+Select a such that Uses(a,_)
+8, 14, 15, 18, 19
+5000
+14 - Uses, 1 such that and print synonym LHS, wildcard RHS
+print pn;
+Select pn such that Uses(pn, _)
+9, 10, 11, 16
+5000
+15 - uses, 1 such that and while synonym LHS, wildcard RHS
+while w;
+Select w such that Uses(w,_)
+4, 13
+5000
+16 - Uses, 1 such that and if synonym LHS, wildcard RHS
+if ifs;
+Select ifs such that Uses(ifs, _)
+6, 17
+5000
+17 - Uses, 1 such that and read synonym LHS, wildcard RHS
+read r;
+Select r such that Uses(r,_)
+none
+5000
+18 - Uses, 1 such that and read synonym LHS, wildcard RHS
+stmt s;
+Select s such that Uses(s,_)
+4, 5, 6, 7, 8, 9, 10, 11, 13, 14, 15, 16, 17, 18, 19
+5000
+19 - Uses, prog_line RHS, wildcard LHS
+prog_line n;
+Select n such that Uses(n,_)
+4, 5, 6, 7, 8, 9, 10, 11, 13, 14, 15, 16, 17, 18, 19
+5000
+20 - Uses, prog_line RHS, ident LHS
+prog_line n;
+Select n such that Uses(n, "x")
+4, 8, 9, 13, 14, 15, 16, 17, 18
+5000
+21 - Uses, prog_line RHS, variable LHS
+prog_line n; variable v;
+Select n such that Uses(n,v)
+4, 5, 6, 7, 8, 9, 10, 11, 13, 14, 15, 16, 17, 18, 19
+5000

@@ -1,47 +1,47 @@
 1 - modifiesp, LHS ident, RHS ident
 procedure p; variable v;
 Select p such that Modifies("Gandulf", "ring")
-Gandulf, Frodo, Aragon
+Gandulf, Frodo, Aragon, Sam
 5000
 2 - modifiesp, LHS ident, RHS ident
 procedure p; variable v;
 Select v such that Modifies("Gandulf", "ring")
-shine, ring, f, lost, d, g, a, w
+shine, ring, f, lost, d, g, a, w, i
 5000
 3 - modifiesp, LHS ident, RHS synonym
 procedure p; variable v;
 Select v such that Modifies("Gandulf", v)
-shine, ring, f, lost, d, g, a, w
+shine, ring, f, lost, d, g, a, w, i
 5000
 4 - modifiesp, LHS synonym, RHS ident
 procedure p; variable v;
 Select p such that Modifies(p, "f")
-Gandulf, Frodo
+Gandulf, Frodo, Sam
 5000
 5 - modifiesp, LHS synonym, RHS synonym
 procedure p; variable v;
 Select p such that Modifies(p, v)
-Gandulf, Frodo, Aragon
+Gandulf, Frodo, Aragon, Sam
 5000
 6 - modifiesp, LHS synonym, RHS synonym
 procedure p; variable v;
 Select v such that Modifies(p, v)
-shine, ring, f, lost, d, g, a, w
+shine, ring, f, lost, d, g, a, w, i
 5000
 7 - modifiesp, LHS ident, RHS wildcard
 procedure p; variable v;
 Select p such that Modifies("Frodo", _)
-Gandulf, Frodo, Aragon
+Gandulf, Frodo, Aragon, Sam
 5000
 8 - modifiesp, LHS synonym, RHS wildcard
 procedure p; variable v;
 Select p such that Modifies(p, _)
-Gandulf, Frodo, Aragon
+Gandulf, Frodo, Aragon, Sam
 5000
 9 - modifiesp, LHS integer, RHS ident
 call c; variable v;
 Select c such that Modifies(5, "f")
-5, 7, 12, 17
+5, 7, 12, 17, 31
 5000
 10 - modifiesp, LHS integer, RHS synonym
 call c; variable v;
@@ -51,27 +51,27 @@ a, f, lost, w, shine
 11 - modifiesp, LHS synonym, RHS ident
 call c; variable v;
 Select c such that Modifies(c, "f")
-5, 7, 12
+5, 7, 12, 31
 5000
 12 - modifiesp, LHS synonym, RHS synonym
 call c; variable v;
 Select c such that Modifies(c, v)
-5, 7, 12, 17
+5, 7, 12, 17, 31
 5000
 13 - modifiesp, LHS synonym, RHS synonym
 call c; variable v;
 Select v such that Modifies(c, v)
-f, lost, a, w, shine
+f, lost, a, w, shine, i
 5000
 14 - modifiesp, LHS synonym, RHS wildcard
 call c; variable v;
 Select c such that Modifies(c, _)
-5, 7, 12, 17
+5, 7, 12, 17, 31
 5000
 15 - modifiesp, LHS ident, RHS wildcard
 call c; variable v;
 Select c such that Modifies(17, _)
-5, 7, 12, 17
+5, 7, 12, 17, 31
 5000
 16 - invalid ModifiesP, wrong param assign
 procedure p; assign a;
@@ -166,5 +166,5 @@ none
 34 - indirect calling of variable
 procedure p;
 Select p such that Modifies(p, "w")
-Gandulf, Frodo, Aragon
+Gandulf, Frodo, Aragon, Sam
 5000
