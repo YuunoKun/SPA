@@ -296,74 +296,10 @@ void QueryPatternRelRefParser::parseParameterSuchThat(
     std::vector<QueryToken> token_chain) {
     switch (token_type) {
     case QueryToken::MODIFIES_S: {
-        // stmtRef , entRef
-        // entRef, entRef
 
-        std::vector<QueryToken> temp_token_chain_1;
-        std::vector<QueryToken> temp_token_chain_2;
-        int comma_count = 0;
-        bool is_MODIFIES_S = true;
-        size_t token_chain_size = token_chain.size();
-        for (size_t i = 0; i < token_chain_size; i++) {
-            if (token_chain[0].type == QueryToken::COMMA) {
-                token_chain.erase(token_chain.begin());
-                comma_count ++;
-            }
-            else if (comma_count == 0) {
-                // 1st param
-                temp_token_chain_1.push_back(token_chain[0]);
-                token_chain.erase(token_chain.begin());
-            }
-            else if (comma_count == 1) {
-                // 2nd param
-                temp_token_chain_2.push_back(token_chain[0]);
-                token_chain.erase(token_chain.begin());
-            } else {
-                throw SyntacticErrorException("Invalid parameters for Modifies");
-            }
-        }
-        
-        //Validate first param
-        if (isStmtRef(query, temp_token_chain_1)) {
-            if (temp_token_chain_1[0].type == QueryToken::WILDCARD) {
-                throw SemanticErrorException("Invalid parameters for Modifies");
-            }
-        } else {
-            // Not stmtRef
-            if (isEntRef(query, temp_token_chain_1)) {
-                is_MODIFIES_S = false;
-            } else {
-                //Not stmtRef or entRef
-                throw SemanticErrorException("Invalid parameters for Modifies");
-            }
-
-            //check if is PROCEDURE only
-            if (!isCorrectSynEntRef(query, temp_token_chain_1, EntityType::PROCEDURE)) {
-                throw SemanticErrorException("Invalid parameters for Modifies");
-            }
-        }
-
-        //Validate second param
-        if (!isEntRef(query, temp_token_chain_2)) {
-            throw SemanticErrorException("Invalid parameters for Modifies");
-        }
-        // check if VARIABLE only
-        if (!isCorrectSynEntRef(query, temp_token_chain_2, EntityType::VARIABLE)) {
-            throw SemanticErrorException("Invalid parameters for Modifies");
-        }
-
-        if (is_MODIFIES_S) {
-            QueryToken stmt = temp_token_chain_1[0];
-           
-            query.addRelation(RelRef(RelType::MODIFIES_S, setStmtRef(query, stmt),
-                setEntRef(query, temp_token_chain_2, EntityType::VARIABLE)));
-
-            break;
-        } else {
-            query.addRelation(RelRef(RelType::MODIFIES_P, setEntRef(query, temp_token_chain_1, EntityType::VARIABLE),
-                setEntRef(query, temp_token_chain_2, EntityType::VARIABLE)));
-            break;
-        }
+        ModifiesParser usesParser;
+        usesParser.parse(query, token_chain);
+        break;
     }
     
     case QueryToken::USES_S: {
