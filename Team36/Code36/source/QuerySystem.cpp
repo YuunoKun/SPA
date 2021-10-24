@@ -26,11 +26,10 @@ std::list<std::string> QuerySystem::processQuery(std::string input) {
 		preprocessor.resetQuery();
 		return {};
 	}
-	catch (SemanticErrorException&)
+	catch (SemanticErrorException& err)
 	{
-		// TODO: Return false here instead of empty query
+		returnEmptyResult(err.getQuery().getSelected().front());
 		preprocessor.resetQuery();
-		return {};
 	}
 	catch (std::exception& e)
 	{
@@ -39,7 +38,6 @@ std::list<std::string> QuerySystem::processQuery(std::string input) {
 		return {};
 	}
 }
-
 
 std::list<std::string> QuerySystem::returnEmptyResult(Entity& selected) {
 	if (selected.getType() == BOOLEAN) {

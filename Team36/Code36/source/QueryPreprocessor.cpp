@@ -289,7 +289,7 @@ void QueryPreprocessor::handleWithinParameter(QueryToken& token) {
 	if (parenthesis_counter == 0 && token.type == QueryToken::QueryTokenType::PARENTHESIS_CLOSE) {
 		if (patternOrSuchThat.type == QueryToken::QueryTokenType::PATTERN) {
 			QueryValidator queryValidator = QueryValidator();
-			queryValidator.validatePatternType(patternTypeEntity);
+			queryValidator.validatePatternType(patternTypeEntity, query);
 			isParameter = false;
 			endOfCurrentClauses = true;
 			QueryPatternRelRefParser validator;
@@ -365,7 +365,7 @@ void QueryPreprocessor::addEntityToQuery(QueryToken& token) {
 	Entity ent;
 	for (QueryToken each : this->output) {
 		if (token.token_value == each.token_value) {
-			throw SemanticErrorException("Name is already used!");
+			this->query.setIsSemanticError("Name is already used!");
 		}
 	}
 
@@ -390,7 +390,7 @@ void QueryPreprocessor::addPatternToQuery(QueryToken& token) {
 		}
 	}
 	if (!isValid) {
-		throw SemanticErrorException("Pattern type has not been declared");
+		this->query.setIsSemanticError("Pattern type has not been declared");
 	}
 }
 
@@ -415,7 +415,7 @@ void QueryPreprocessor::addSelectedToQuery(QueryToken& token) {
 	}
 
 	if (!isValid) {
-		throw SemanticErrorException("Select variable content has not been declared");
+		this->query.setIsSemanticError("Select variable content has not been declared");
 	}
 	this->query.addSelected(ent);
 }
@@ -463,6 +463,11 @@ void QueryPreprocessor::setQueryParameter() {
 
 Query QueryPreprocessor::returnAndResetQuery() {
 	Query query_result = this->query;
+
+	if (query_result.getIsSemanticError() != "") {
+		//returnEmptyResult(query.getSelected().front());
+		throw SemanticErrorException(query.getIsSemanticError(), query);
+	}
 
 	// Reset variables
 	QueryPreprocessor::resetQuery();

@@ -87,11 +87,11 @@ void QueryValidator::validateQuery(Query& query, bool& endOfCurrentClauses) {
 	}
 }
 
-void QueryValidator::validatePatternType(Entity& patternTypeEntity) {
+void QueryValidator::validatePatternType(Entity& patternTypeEntity, Query& query) {
 	if (patternTypeEntity.getType() != EntityType::ASSIGN &&
 		patternTypeEntity.getType() != EntityType::WHILE &&
 		patternTypeEntity.getType() != EntityType::IF) {
-		throw SemanticErrorException("Pattern Type is invalid");
+		query.setIsSemanticError("Pattern Type is invalid");
 	}
 }
 
@@ -116,25 +116,25 @@ void QueryValidator::validateAttributeType(Query& query, QueryToken& prevToken, 
 	}
 
 	if (!isExist) {
-		throw SemanticErrorException("Selected Entity has not been declared");
+		query.setIsSemanticError("Selected Entity has not been declared");
 	}
 
 	if (nextToken.type == QueryToken::QueryTokenType::PROC_NAME &&
 		(entType != EntityType::PROCEDURE && entType != EntityType::CALL)) {
-		throw SemanticErrorException("Only procedure and call can have a procName attribute");
+		query.setIsSemanticError("Only procedure and call can have a procName attribute");
 	}
 	else if (nextToken.type == QueryToken::QueryTokenType::VAR_NAME &&
 		(entType != EntityType::VARIABLE && entType != EntityType::READ && entType != EntityType::PRINT)) {
-		throw SemanticErrorException("Only variable, read and print can have varName attribute");
+		query.setIsSemanticError("Only variable, read and print can have varName attribute");
 	}
 	else if (nextToken.type == QueryToken::QueryTokenType::VALUE &&
 		entType != EntityType::CONSTANT) {
-		throw SemanticErrorException("Only constant can have value attribute");
+		query.setIsSemanticError("Only constant can have value attribute");
 	}
 	else if (nextToken.type == QueryToken::QueryTokenType::STMT_INDEX &&
 		(entType != EntityType::STMT && entType != EntityType::READ && entType != EntityType::PRINT &&
 			entType != EntityType::CALL && entType != EntityType::WHILE && entType != EntityType::IF &&
 			entType != EntityType::ASSIGN)) {
-		throw SemanticErrorException("Entity type for .stmt# attribute is not valid");
+		query.setIsSemanticError("Entity type for .stmt# attribute is not valid");
 	}
 }

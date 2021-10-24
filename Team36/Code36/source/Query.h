@@ -19,6 +19,8 @@ public:
 	void addEntity(Entity&);
 	void addRelation(RelRef&);
 	void addPattern(Pattern&);
+	void setIsSemanticError(std::string);
+	std::string getIsSemanticError();
 
 	void setClauses(std::vector<Clause>);
 	bool operator==(const Query&) const;
@@ -27,4 +29,5 @@ private:
 	std::unordered_map<std::string, Entity> entities;
 	std::vector<Clause> clauses;
 	std::vector<Entity> selected;
+	std::string isSemanticError;
 };

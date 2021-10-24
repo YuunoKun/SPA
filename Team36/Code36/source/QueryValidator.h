@@ -16,7 +16,7 @@ public:
 
 	void validateSelecting(QueryToken&, QueryToken&);
 
-	void validatePatternType(Entity&);
+	void validatePatternType(Entity&, Query&);
 
 	void validateAnd(QueryToken&);
 
