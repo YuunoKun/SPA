@@ -759,6 +759,28 @@ namespace UnitTesting {
 		EXPECT_EQ(Utility::joinTable(from, fromIndex, to_join, to_join_index), to);
 	}
 
+	TEST(Utility, joinTable) {
+		std::list<std::vector<std::string>> a = { {"1"}, {"2"}, {"3"} };
+		std::list<std::vector<std::string>> b = { {"1"} };
+		std::list<std::vector<std::string>> to = { {"1","1"}, {"2","1"}, {"3","1"} };
+
+		EXPECT_EQ(Utility::joinTable(a, b), to);
+
+		a = { {"1"} };
+		b = { {"1"}, {"2"}, {"3"} };
+		to = { {"1","1"}, {"1","2"}, {"1","3"} };
+
+		EXPECT_EQ(Utility::joinTable(a, b), to);
+
+
+		a = { {"1"}, {"2"}, {"3"} };
+		b = { {"1"}, {"2"}, {"3"} };
+		to = { {"1","1"}, {"1","2"}, {"1","3"},
+				{"2","1"}, {"2","2"}, {"2","3"},
+				{"3","1"}, {"3","2"}, {"3","3"} };
+
+		EXPECT_EQ(Utility::joinTable(a, b), to);
+	}
 	TEST(Utility, queryTokenTypeToEntityType) {
 		EntityType entType = STMT;
 		QueryToken::QueryTokenType temp = QueryToken::QueryTokenType::STMT;

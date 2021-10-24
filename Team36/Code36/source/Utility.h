@@ -38,9 +38,13 @@ public:
 	static std::list<std::vector<std::string>> joinTable(std::list<std::vector<std::string>>&, int, std::unordered_multimap<std::string, std::vector<std::string>>&, int);
 	static std::list<std::vector<std::string>> joinTable(std::list<std::vector<std::string>>&, std::list<std::vector<std::string>>&);
 
+	static std::vector<Entity> removeEntitys(std::vector<Entity>&, std::vector<Entity>&);
 	static EntityType queryTokenTypeToEntityType(QueryToken::QueryTokenType&);
 	static AttrRef queryTokenTypeToAttrRef(QueryToken::QueryTokenType&);
 
 private:
 	static bool isStmt(EntityType);
+
+	static std::vector<std::string> joinRow(std::vector<std::string>&, std::vector<std::string>&);
+	static std::vector<std::string> joinRow(std::vector<std::string>&, std::vector<std::string>&, int);
 };

@@ -200,16 +200,16 @@ std::list<std::vector<std::string>> Utility::filterResults(std::list<std::vector
 
 std::list<std::string> Utility::mergeColumnEqual(std::list<std::vector<std::string>>& v) {
 	std::list<std::string> to;
-	for (auto r : v) {
+	for (auto& row : v) {
 		bool equal = true;
-		for (unsigned int j = 1; j < r.size(); j++) {
-			if (r[j - 1] != r[j]) {
+		for (unsigned int j = 1; j < row.size(); j++) {
+			if (row[j - 1] != row[j]) {
 				equal = false;
 				break;
 			}
 		}
 		if (equal) {
-			to.push_back(r[0]);
+			to.push_back(row[0]);
 		}
 	}
 	return to;
@@ -229,22 +229,46 @@ std::list<std::vector<std::string>> Utility::joinTable(std::list<std::vector<std
 		ret = to_join.equal_range(it[main_header_index]);
 
 		for (std::unordered_multimap<std::string, std::vector<std::string>>::iterator itr1 = ret.first; itr1 != ret.second; ++itr1) {
-			std::vector<std::string> to(it);
-			for (unsigned int i = 0; i < itr1->second.size(); i++) {
-				if (i == to_join_header_index) {
-					continue;
-				}
-				to.push_back(itr1->second[i]);
-			}
-			results.push_back(to);
+			results.emplace_back(joinRow(it, itr1->second, to_join_header_index));
 		}
 	}
 	return results;
 }
 
-std::list<std::vector<std::string>> Utility::joinTable(std::list<std::vector<std::string>>&, std::list<std::vector<std::string>>&) {
-	return std::list<std::vector<std::string>>();
+std::vector<std::string> Utility::joinRow(std::vector<std::string>& main, std::vector<std::string>& to_join) {
+	std::vector<std::string> result(main);
+	for (unsigned int i = 0; i < to_join.size(); i++) {
+		result.push_back(to_join[i]);
+	}
+	return result;
 }
+
+std::vector<std::string> Utility::joinRow(std::vector<std::string>& main, std::vector<std::string>& to_join, int common_index) {
+	std::vector<std::string> result(main);
+	for (unsigned int i = 0; i < to_join.size(); i++) {
+		if (i == common_index) {
+			continue;
+		}
+		result.push_back(to_join[i]);
+	}
+	return result;
+}
+
+
+std::list<std::vector<std::string>> Utility::joinTable(std::list<std::vector<std::string>>& main, std::list<std::vector<std::string>>& to_join) {
+	std::list<std::vector<std::string>> result;
+	for (auto& main_row : main) {
+		for (auto& to_join_row : to_join) {
+			result.push_back(joinRow(main_row, to_join_row));
+		}
+	}
+	return result;
+}
+
+std::vector<Entity> Utility::removeEntities(std::vector<Entity>& main, std::vector<Entity>& to_Remove) {
+	return std::vector<Entity>();
+}
+
 
 EntityType Utility::queryTokenTypeToEntityType(QueryToken::QueryTokenType& query_token_type) {
 	if (query_token_type == QueryToken::QueryTokenType::STMT) {
