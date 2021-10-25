@@ -151,7 +151,7 @@ namespace UnitTesting {
 		const std::string IF1 = "1";
 		const std::string IF2 = "2";
 		const std::string WHILE1 = "3";
-		const std::string	WHILE2 = "4";
+		const std::string WHILE2 = "4";
 		const std::string READ1 = "5";
 		const std::string READ2 = "6";
 		const std::string PRINT1 = "7";
