@@ -79,6 +79,12 @@
     <Filter Include="Header Files\PQL\QueryEvaluator\RelationEvaluator">
       <UniqueIdentifier>{c25711b4-12ef-49b2-a273-01893fdc508a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\PKB\RelationPreprocessor">
+      <UniqueIdentifier>{b9384b05-16a0-4d44-9108-e1e886e14b72}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\PKB\RelationPreprocessor">
+      <UniqueIdentifier>{e2572ef7-b040-4343-a034-7c18e6de7970}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\source\QuerySystem.cpp">
@@ -159,9 +165,9 @@
     <ClCompile Include="..\source\QueryEvaluator.cpp">
       <Filter>Source Files\PQL\QueryEvaluator</Filter>
     </ClCompile>
-	<ClCompile Include="..\source\QueryValidator.cpp">
-	  <Filter>Source Files\PQL\QueryPreprocessor</Filter>
-	</ClCompile>
+    <ClCompile Include="..\source\QueryValidator.cpp">
+      <Filter>Source Files\PQL\QueryPreprocessor</Filter>
+    </ClCompile>
     <ClCompile Include="..\source\QueryValidator.cpp">
       <Filter>Source Files\PQL\QueryPreprocessor</Filter>
     </ClCompile>
@@ -234,18 +240,18 @@
     <ClCompile Include="..\source\AssignPatternParser.cpp">
       <Filter>Source Files\PQL\QueryPreprocessor\QueryPatternRelRefParser</Filter>
     </ClCompile>
-	<ClCompile Include="..\source\IfPatternParser.cpp">
-	  <Filter>Source Files\PQL\QueryPreprocessor\QueryPatternRelRefParser</Filter>
-	</ClCompile>
-	<ClCompile Include="..\source\WhilePatternParser.cpp">
-	  <Filter>Source Files\PQL\QueryPreprocessor\QueryPatternRelRefParser</Filter>
-	</ClCompile>
+    <ClCompile Include="..\source\IfPatternParser.cpp">
+      <Filter>Source Files\PQL\QueryPreprocessor\QueryPatternRelRefParser</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\WhilePatternParser.cpp">
+      <Filter>Source Files\PQL\QueryPreprocessor\QueryPatternRelRefParser</Filter>
+    </ClCompile>
     <ClCompile Include="..\source\NextParser.cpp">
       <Filter>Source Files\PQL\QueryPreprocessor\QueryPatternRelRefParser</Filter>
     </ClCompile>
-	<ClCompile Include="..\source\NextTParser.cpp">
+    <ClCompile Include="..\source\NextTParser.cpp">
       <Filter>Source Files\PQL\QueryPreprocessor\QueryPatternRelRefParser</Filter>
-	</ClCompile>
+    </ClCompile>
     <ClCompile Include="..\source\PatternAssignEvaluator.cpp">
       <Filter>Source Files\PQL\QueryEvaluator\PatternEvaluator</Filter>
     </ClCompile>
@@ -257,6 +263,15 @@
     </ClCompile>
     <ClCompile Include="..\source\PatternsEvaluator.cpp">
       <Filter>Source Files\PQL\QueryEvaluator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\CFGRelationsManager.cpp">
+      <Filter>Source Files\PKB</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\NextTPreprocessor.cpp">
+      <Filter>Source Files\PKB\RelationPreprocessor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\RelationPreprocessor.cpp">
+      <Filter>Source Files\PKB\RelationPreprocessor</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -308,9 +323,9 @@
     <ClInclude Include="..\source\QueryToken.h">
       <Filter>Header Files\PQL\QueryPreprocessor</Filter>
     </ClInclude>
-	<ClInclude Include="..\source\QueryValidator.h">
-	  <Filter>Header Files\PQL\QueryPreprocessor</Filter>
-	</ClInclude>
+    <ClInclude Include="..\source\QueryValidator.h">
+      <Filter>Header Files\PQL\QueryPreprocessor</Filter>
+    </ClInclude>
     <ClInclude Include="..\source\QueryValidator.h">
       <Filter>Header Files\PQL\QueryPreprocessor</Filter>
     </ClInclude>
@@ -434,21 +449,18 @@
     <ClInclude Include="..\source\QueryPatternRelRefParser.h">
       <Filter>Header Files\PQL\QueryPreprocessor\QueryPatternRelRefParser</Filter>
     </ClInclude>
-	<ClInclude Include="..\source\AssignPatternParser.h">
-	  <Filter>Header Files\PQL\QueryPreprocessor\QueryPatternRelRefParser</Filter>
-	</ClInclude>
-	<ClInclude Include="..\source\IfPatternParser.h">
-	  <Filter>Header Files\PQL\QueryPreprocessor\QueryPatternRelRefParser</Filter>
-	</ClInclude>
-	<ClInclude Include="..\source\WhilePatternParser.h">
-	  <Filter>Header Files\PQL\QueryPreprocessor\QueryPatternRelRefParser</Filter>
-	</ClInclude>
-	<ClInclude Include="..\source\NextParser.h">
-	  <Filter>Header Files\PQL\QueryPreprocessor\QueryPatternRelRefParser</Filter>
-	</ClInclude>
-	<ClInclude Include="..\source\NextTParser.h">
-	  <Filter>Header Files\PQL\QueryPreprocessor\QueryPatternRelRefParser</Filter>
-	</ClInclude>
+    <ClInclude Include="..\source\IfPatternParser.h">
+      <Filter>Header Files\PQL\QueryPreprocessor\QueryPatternRelRefParser</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\WhilePatternParser.h">
+      <Filter>Header Files\PQL\QueryPreprocessor\QueryPatternRelRefParser</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\NextParser.h">
+      <Filter>Header Files\PQL\QueryPreprocessor\QueryPatternRelRefParser</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\NextTParser.h">
+      <Filter>Header Files\PQL\QueryPreprocessor\QueryPatternRelRefParser</Filter>
+    </ClInclude>
     <ClInclude Include="..\source\PatternsEvaluator.h">
       <Filter>Header Files\PQL\QueryEvaluator</Filter>
     </ClInclude>
@@ -463,6 +475,18 @@
     </ClInclude>
     <ClInclude Include="..\source\PatternWhileEvaluator.h">
       <Filter>Header Files\PQL\QueryEvaluator\PatternEvaluator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\CFGRelationsManager.h">
+      <Filter>Header Files\PKB</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\AssignPatternParser.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\NextTPreprocessor.h">
+      <Filter>Header Files\PKB\RelationPreprocessor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\RelationPreprocessor.h">
+      <Filter>Header Files\PKB\RelationPreprocessor</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

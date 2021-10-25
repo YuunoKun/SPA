@@ -41,6 +41,7 @@
   <ItemGroup>
     <ClCompile Include="CallsEvaluatorTest.cpp" />
     <ClCompile Include="CallsTEvaluatorTest.cpp" />
+    <ClCompile Include="CFGRelationsManagerTest.cpp" />
     <ClCompile Include="ClauseTest.cpp" />
     <ClCompile Include="DesignExtractorTest.cpp" />
     <ClCompile Include="EntityTest.cpp" />
@@ -48,6 +49,7 @@
     <ClCompile Include="ExprParserTest.cpp" />
     <ClCompile Include="FSMTest.cpp" />
     <ClCompile Include="NextEvaluatorTest.cpp" />
+    <ClCompile Include="NextTPreprocessorTest.cpp" />
     <ClCompile Include="ParserTest.cpp" />
     <ClCompile Include="PatternAssignEvaluatorTest.cpp" />
     <ClCompile Include="PatternIfEvaluatorTest.cpp" />
@@ -69,11 +71,11 @@
     <ClCompile Include="ModifiesSEvaluatorTest.cpp" />
     <ClCompile Include="ModifiesPEvaluatorTest.cpp" />
     <ClCompile Include="QueryPatternRelRefParserTest.cpp" />
-	<ClCompile Include="NextParserTest.cpp" />
-	<ClCompile Include="NextTParserTest.cpp" />
-	<ClCompile Include="AssignPatternParserTest.cpp" />
-	<ClCompile Include="IfPatternParserTest.cpp" />
-	<ClCompile Include="WhilePatternParserTest.cpp" />
+    <ClCompile Include="NextParserTest.cpp" />
+    <ClCompile Include="NextTParserTest.cpp" />
+    <ClCompile Include="AssignPatternParserTest.cpp" />
+    <ClCompile Include="IfPatternParserTest.cpp" />
+    <ClCompile Include="WhilePatternParserTest.cpp" />
     <ClCompile Include="QueryOptimizerTest.cpp" />
     <ClCompile Include="CFGNodeTest.cpp" />
     <ClCompile Include="CFGTest.cpp" />

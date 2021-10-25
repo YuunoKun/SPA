@@ -9,8 +9,7 @@
 PKBAdapter::PKBAdapter() {
 }
 
-StmtInfo PKBAdapter::getStmt(stmt_index index)
-{
+StmtInfo PKBAdapter::getStmt(stmt_index index) {
 	return PKB::getInstance().PKB::getStmt(index);
 }
 
