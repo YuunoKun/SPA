@@ -34,6 +34,9 @@ void QueryEvaluator::evaluateClauses(Query& query, QueryResult& query_result) {
 
 
 std::list<std::string> QueryEvaluator::getRawResult(Entity selected) {
+	if (Utility::isSecondaryAttribute(selected)) {
+		return getRawResultWithSecondaryAttribute(selected);
+	}
 	std::list<std::string> result;
 	switch (selected.getType()) {
 	case EntityType::PROG_LINE :
@@ -52,8 +55,26 @@ std::list<std::string> QueryEvaluator::getRawResult(Entity selected) {
 	return result;
 }
 
-std::list<std::string> QueryEvaluator::getRawResultWithSecondaryAttribute(Entity) {
-	return std::list<std::string>();
+std::list<std::string> QueryEvaluator::getRawResultWithSecondaryAttribute(Entity selected) {
+	switch (selected.getType()) {
+	case EntityType::READ:
+		if (selected.getAttribute() == AttrRef::VAR_NAME) {
+			return Utility::variablesToStringList(pkb.getPrintVar());
+		}
+		break;
+	case EntityType::PRINT:
+		if (selected.getAttribute() == AttrRef::VAR_NAME) {
+			return Utility::variablesToStringList(pkb.getReadVar());
+		}
+		break;
+	case EntityType::CALL:
+		if (selected.getAttribute() == AttrRef::PROC_NAME) {
+			return Utility::proceduresToStringList(pkb.getCalledS());
+		}
+		break;
+	}
+
+	throw std::domain_error("Selected Entity type does not have Secondary Attribute!");
 }
 
 
