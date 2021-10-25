@@ -258,10 +258,10 @@
 	<ClCompile Include="..\source\FollowsTParser.cpp">
 		<Filter>Source Files\PQL\QueryPreprocessor\QueryPatternRelRefParser</Filter>
 	</ClCompile>
-	<ClCompile Include="..\source\ParentsParser.cpp">
+	<ClCompile Include="..\source\ParentParser.cpp">
 		<Filter>Source Files\PQL\QueryPreprocessor\QueryPatternRelRefParser</Filter>
 	</ClCompile>
-	<ClCompile Include="..\source\ParentsTParser.cpp">
+	<ClCompile Include="..\source\ParentTParser.cpp">
 		<Filter>Source Files\PQL\QueryPreprocessor\QueryPatternRelRefParser</Filter>
 	</ClCompile>
 	<ClCompile Include="..\source\CallsParser.cpp">
@@ -491,10 +491,10 @@
 	<ClInclude Include="..\source\FollowsTParser.h">
 		<Filter>Header Files\PQL\QueryPreprocessor\QueryPatternRelRefParser</Filter>
 	</ClInclude>
-	<ClInclude Include="..\source\ParentsParser.h">
+	<ClInclude Include="..\source\ParentParser.h">
 		<Filter>Header Files\PQL\QueryPreprocessor\QueryPatternRelRefParser</Filter>
 	</ClInclude>
-	<ClInclude Include="..\source\ParentsTParser.h">
+	<ClInclude Include="..\source\ParentTParser.h">
 		<Filter>Header Files\PQL\QueryPreprocessor\QueryPatternRelRefParser</Filter>
 	</ClInclude>
 	<ClInclude Include="..\source\CallsParser.h">

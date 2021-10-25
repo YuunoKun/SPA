@@ -59,7 +59,7 @@ namespace UnitTesting {
 
 		//Entity expected_ent_wildcard = Entity(EntityType::WILD);
 
-		Pattern expected_pat = Pattern(expected_declared_syn, validator.setEntRef(query, left_expr_token_chain, EntityType::VARIABLE));
+		Pattern expected_pat = Pattern(expected_declared_syn, Utility::setEntRef(query, left_expr_token_chain, EntityType::VARIABLE));
 
 		//Result
 		validator.parseParameterPattern(query, expected_declared_syn, temp_token_chain);
@@ -97,7 +97,7 @@ namespace UnitTesting {
 		Entity expected_2 = Entity(EntityType::VARIABLE, synonym2);
 		query.addEntity(expected_2);
 
-		Pattern expected_pat = Pattern(expected_declared_syn, validator.setEntRef(query, left_expr_token_chain, EntityType::VARIABLE));
+		Pattern expected_pat = Pattern(expected_declared_syn, Utility::setEntRef(query, left_expr_token_chain, EntityType::VARIABLE));
 
 		//Result
 		validator.parseParameterPattern(query, expected_declared_syn, temp_token_chain);
@@ -130,7 +130,7 @@ namespace UnitTesting {
 		Entity expected_declared_syn = Entity(EntityType::IF, synonym);
 		query.addEntity(expected_declared_syn);
 
-		Pattern expected_pat = Pattern(expected_declared_syn, validator.setEntRef(query, left_expr_token_chain, EntityType::VARIABLE));
+		Pattern expected_pat = Pattern(expected_declared_syn, Utility::setEntRef(query, left_expr_token_chain, EntityType::VARIABLE));
 
 		//Result
 		validator.parseParameterPattern(query, expected_declared_syn, temp_token_chain);
