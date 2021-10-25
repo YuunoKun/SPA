@@ -79,6 +79,12 @@
     <Filter Include="Header Files\PQL\QueryEvaluator\RelationEvaluator">
       <UniqueIdentifier>{c25711b4-12ef-49b2-a273-01893fdc508a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\PKB\RelationPreprocessor">
+      <UniqueIdentifier>{b9384b05-16a0-4d44-9108-e1e886e14b72}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\PKB\RelationPreprocessor">
+      <UniqueIdentifier>{e2572ef7-b040-4343-a034-7c18e6de7970}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\source\QuerySystem.cpp">
@@ -257,6 +263,14 @@
     </ClCompile>
     <ClCompile Include="..\source\AssignPatternParser.h">
       <Filter>Header Files</Filter>
+    <ClCompile Include="..\source\CFGRelationsManager.cpp">
+      <Filter>Source Files\PKB</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\NextTPreprocessor.cpp">
+      <Filter>Source Files\PKB\RelationPreprocessor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\RelationPreprocessor.cpp">
+      <Filter>Source Files\PKB\RelationPreprocessor</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -457,6 +471,18 @@
     </ClInclude>
     <ClInclude Include="..\source\PatternWhileEvaluator.h">
       <Filter>Header Files\PQL\QueryEvaluator\PatternEvaluator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\CFGRelationsManager.h">
+      <Filter>Header Files\PKB</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\AssignPatternParser.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\NextTPreprocessor.h">
+      <Filter>Header Files\PKB\RelationPreprocessor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\RelationPreprocessor.h">
+      <Filter>Header Files\PKB\RelationPreprocessor</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

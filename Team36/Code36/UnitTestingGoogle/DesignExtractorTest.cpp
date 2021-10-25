@@ -913,7 +913,6 @@ namespace UnitTesting {
 			ASSERT_TRUE(table_cp.containsPair(call.first, call.second));
 		}
 
-		/*  TO BE OPENED AFTER IMPLEMENTATION OF addCallsS()
 		// CallsS
 		auto table_cs = pkb->getCallsS();
 		std::vector<std::pair<stmt_index, proc_name>> expected_cs =
@@ -924,7 +923,6 @@ namespace UnitTesting {
 		for (auto call : expected_cs) {
 			ASSERT_TRUE(table_cs.containsPair(call.first, call.second));
 		}
-		*/
 
 		// Ifs
 		auto table_ifs = pkb->getIf();

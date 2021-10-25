@@ -116,6 +116,11 @@
     </ClCompile>
     <ClCompile Include="QueryEvaluatorTupleTest.cpp">
       <Filter>PQL\QueryEvaluator</Filter>
+    <ClCompile Include="NextTPreprocessorTest.cpp">
+      <Filter>PKB\RelationsPreprocessor</Filter>
+    </ClCompile>
+    <ClCompile Include="CFGRelationsManagerTest.cpp">
+      <Filter>PKB</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -151,6 +156,9 @@
     </Filter>
     <Filter Include="Common">
       <UniqueIdentifier>{06725a9a-7be9-46a8-ae6c-cf15393301f0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PKB\RelationsPreprocessor">
+      <UniqueIdentifier>{1b465138-0252-405f-b037-6027a9663962}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
