@@ -36,6 +36,9 @@ ResultTable WithEvaluator::evaluateSynonymAndSynonym(Entity left, Entity right) 
 
 	rt1.merge(rt2);
 	std::vector<Entity> header = { left, right };
+	if (left == right) {
+		header = { left };
+	}
 	return rt1.getResultTable(header);
 }
 
@@ -48,11 +51,11 @@ ResultTable WithEvaluator::evaluateSynonymAndWild(Entity header) {
 }
 
 ResultTable WithEvaluator::evaluateConstantAndSynonym(Entity constant, Entity header) {
-	return ResultTable(header, getEntityWithAttribute(header.getType(), constant));
+	return ResultTable(header, getEntityWithAttribute(header, constant));
 }
 
 ResultTable WithEvaluator::evaluateSynonymAndConstant(Entity header, Entity constant) {
-	return ResultTable(header, getEntityWithAttribute(header.getType(), constant));
+	return ResultTable(header, getEntityWithAttribute(header, constant));
 }
 
 std::list<std::vector<std::string>> WithEvaluator::getEntity(Entity e) {
@@ -135,12 +138,12 @@ std::list<std::string> WithEvaluator::getEntityWithSecondaryAttribute(Entity con
 	switch (constant.getType()) {
 	case EntityType::READ:
 		if (constant.getAttribute() == AttrRef::VAR_NAME) {
-		return Utility::stmtIndexToStringList(pkb.getPrint(constant.getValue()));
+		return Utility::stmtIndexToStringList(pkb.getRead(constant.getValue()));
 		}
 		break;
 	case EntityType::PRINT:
 		if (constant.getAttribute() == AttrRef::VAR_NAME) {
-			return Utility::stmtIndexToStringList(pkb.getRead(constant.getValue()));
+			return Utility::stmtIndexToStringList(pkb.getPrint(constant.getValue()));
 		}
 		break;
 	case EntityType::CALL: 

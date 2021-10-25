@@ -61,6 +61,7 @@
     <ClCompile Include="QueryEvaluatorRelationTest.cpp" />
     <ClCompile Include="PatternTest.cpp" />
     <ClCompile Include="QueryEvaluatorTupleTest.cpp" />
+    <ClCompile Include="QueryEvaluatorWithTest.cpp" />
     <ClCompile Include="QueryResultTest.cpp" />
     <ClCompile Include="QueryPreprocessorTest.cpp" />
     <ClCompile Include="QueryTest.cpp" />
@@ -95,6 +96,7 @@
     <ClCompile Include="RelationTableTest.cpp" />
     <ClCompile Include="QueryTokenizerTest.cpp" />
     <ClCompile Include="TokenizerTest.cpp" />
+    <ClCompile Include="WithEvaluatorTest.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SPA\SPA.vcxproj">

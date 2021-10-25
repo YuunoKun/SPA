@@ -116,12 +116,18 @@
     </ClCompile>
     <ClCompile Include="QueryEvaluatorTupleTest.cpp">
       <Filter>PQL\QueryEvaluator</Filter>
-	</ClCompile>
+    </ClCompile>
     <ClCompile Include="NextTPreprocessorTest.cpp">
       <Filter>PKB\RelationsPreprocessor</Filter>
     </ClCompile>
     <ClCompile Include="CFGRelationsManagerTest.cpp">
       <Filter>PKB</Filter>
+    </ClCompile>
+    <ClCompile Include="QueryEvaluatorWithTest.cpp">
+      <Filter>PQL\QueryEvaluator</Filter>
+    </ClCompile>
+    <ClCompile Include="WithEvaluatorTest.cpp">
+      <Filter>PQL\QueryEvaluator\RelationEvaluator</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

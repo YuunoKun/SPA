@@ -36,6 +36,7 @@ public:
 	Entity(EntityType, Synonym);
 	Entity(EntityType, Synonym, AttrRef);
 	Entity(EntityType, std::string);
+	Entity(EntityType, std::string, AttrRef);
 
 	EntityType getType();
 	std::string getSynonym();
