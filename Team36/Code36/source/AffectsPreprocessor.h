@@ -61,7 +61,7 @@ public:
 		const std::vector<StmtInfo> v);
 	AffectsPreprocessor() = default;
 private:
-	void iterativeDataFlowAnalysis(std::vector<StmtInfo>);
+	void iterativeDataFlowAnalysis(std::vector<stmt_index>);
 	void populateDataflowSets();
 	void updateCache(std::vector<StmtInfo>);
 

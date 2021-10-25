@@ -34,7 +34,12 @@ bool AffectsPreprocessor::evaluateConstantAndConstant(int index1, int index2) {
 
 std::vector<std::pair<StmtInfo, StmtInfo>> AffectsPreprocessor::evaluateSynonymAndSynonym() {
 	if (!is_fully_populated) {
-		iterativeDataFlowAnalysis(stmt_info_list);
+		std::vector<stmt_index> worklist_stmts{};
+		for (proc_name proc : procS_table.getKeys()) {
+			worklist_stmts.push_back(procS_table.getValues(proc)[0]);
+		}
+
+		iterativeDataFlowAnalysis(worklist_stmts);
 		is_fully_populated = true;
 	}
 	return cache.getPairs();
@@ -52,10 +57,8 @@ std::vector<StmtInfo> AffectsPreprocessor::evaluateConstantAndSynonym(int index)
 	StmtInfo s1 = stmt_info_list[index - 1];
 	if (!is_fully_populated && !calculated_dfs_forward[index - 1]) {
 		proc_name proc = procS_table.getKeys(index)[0];
-		std::vector<StmtInfo> worklist_stmts{};
-		for (auto& stmt_index : procS_table.getValues(proc)) {
-			worklist_stmts.push_back(stmt_info_list[stmt_index - 1]);
-		}
+		std::vector<stmt_index> worklist_stmts{};
+		worklist_stmts.push_back(procS_table.getValues(proc)[0]);
 		iterativeDataFlowAnalysis(worklist_stmts);
 	}
 	return cache.getValues(s1);
@@ -65,10 +68,8 @@ std::vector<StmtInfo> AffectsPreprocessor::evaluateSynonymAndConstant(int index)
 	StmtInfo s1 = stmt_info_list[index - 1];
 	if (!is_fully_populated && !calculated_dfs_backward[index - 1]) {
 		proc_name proc = procS_table.getKeys(index)[0];
-		std::vector<StmtInfo> worklist_stmts{};
-		for (auto& stmt_index : procS_table.getValues(proc)) {
-			worklist_stmts.push_back(stmt_info_list[stmt_index - 1]);
-		}
+		std::vector<stmt_index> worklist_stmts{};
+		worklist_stmts.push_back(procS_table.getValues(proc)[0]);
 		iterativeDataFlowAnalysis(worklist_stmts);
 	}
 	return cache.getKeys(s1);
@@ -90,7 +91,7 @@ void AffectsPreprocessor::populateDataflowSets() {
 				}
 				if (s.stmt_type == STMT_ASSIGN) {
 					gen_list[i].emplace(ModifiesTuple{ s.stmt_index, var });
-					out_list[i].emplace(ModifiesTuple{ s.stmt_index, var });
+					//out_list[i].emplace(ModifiesTuple{ s.stmt_index, var });
 				}
 			}
 		}
@@ -128,21 +129,21 @@ void AffectsPreprocessor::updateCache(std::vector<StmtInfo> stmts) {
 	}
 }
 
-void AffectsPreprocessor::iterativeDataFlowAnalysis(std::vector<StmtInfo> stmts_worklist) {
+void AffectsPreprocessor::iterativeDataFlowAnalysis(std::vector<stmt_index> stmts_worklist) {
 	populateDataflowSets();
 	std::stack<stmt_index> worklist;
-	int counter = 0;
-	for (int i = stmts_worklist.size(); i >= 1; i--) {
-		worklist.push(i);
+	std::set<stmt_index> visited{};
+	for (auto& stmt_index : stmts_worklist) {
+		worklist.push(stmt_index);
 	}
 
 	while (!worklist.empty()) {
-		counter++;
 		stmt_index curr = worklist.top();
+		visited.emplace(curr);
 		worklist.pop();
 		int index = curr - 1;
 		int old_out_size = out_list[curr - 1].size();
-		int old_in_size = in_list[curr - 1].size();
+		//int old_in_size = in_list[curr - 1].size();
 
 		std::vector<StmtInfo> predecessors = next_table.getKeys(stmt_info_list[index]);
 		std::set<ModifiesTuple> new_in_list{};
@@ -153,27 +154,30 @@ void AffectsPreprocessor::iterativeDataFlowAnalysis(std::vector<StmtInfo> stmts_
 				std::inserter(new_in_list, new_in_list.begin()));
 		}
 
-		if (old_in_size != new_in_list.size()) {
-			in_list[index] = new_in_list;
+		in_list[index] = new_in_list;
 
-			std::set<ModifiesTuple> filtered{ in_list[index] };
-			std::set<ModifiesTuple> new_out_list{};
-			std::set_difference(filtered.begin(), filtered.end(),
-				kill_list[index].begin(), kill_list[index].end(),
-				std::inserter(new_out_list, new_out_list.begin()));
+		std::set<ModifiesTuple> filtered{ in_list[index] };
+		std::set<ModifiesTuple> new_out_list{};
+		std::set_difference(filtered.begin(), filtered.end(),
+			kill_list[index].begin(), kill_list[index].end(),
+			std::inserter(new_out_list, new_out_list.begin()));
 
-			std::set_union(new_out_list.begin(), new_out_list.end(),
-				gen_list[index].begin(), gen_list[index].end(),
-				std::inserter(out_list[index], out_list[index].begin()));
+		std::set_union(new_out_list.begin(), new_out_list.end(),
+			gen_list[index].begin(), gen_list[index].end(),
+			std::inserter(out_list[index], out_list[index].begin()));
 
-			if (out_list[index].size() != old_out_size) {
-				for (auto& succ : succ_list[index]) {
-					worklist.push(succ);
-				}
+		if (out_list[index].size() != old_out_size) {
+			for (auto& succ : succ_list[index]) {
+				worklist.push(succ);
 			}
 		}
 	}
-	updateCache(stmts_worklist);
+
+	std::vector<StmtInfo> v{};
+	for (auto& stmt_index : visited) {
+		v.push_back(stmt_info_list[stmt_index - 1]);
+	}
+	updateCache(v);
 }
 
 AffectsPreprocessor::AffectsPreprocessor(
