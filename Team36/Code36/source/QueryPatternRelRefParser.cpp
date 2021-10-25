@@ -74,7 +74,8 @@ void QueryPatternRelRefParser::parseParameterSuchThat(
 }
 
 void QueryPatternRelRefParser::parseParameterPattern(
-    Query& query, Entity& synonym_ent, std::vector<QueryToken> token_chain) {
+    Query& query, Entity& synonym_ent, std::vector
+    <QueryToken> token_chain) {
     bool wild = false;
     switch (synonym_ent.getType()) {
     case ASSIGN: {

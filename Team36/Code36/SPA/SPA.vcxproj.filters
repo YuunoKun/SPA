@@ -276,6 +276,9 @@
 	<ClCompile Include="..\source\AffectsTParser.cpp">
 		<Filter>Source Files\PQL\QueryPreprocessor\QueryPatternRelRefParser</Filter>
 	</ClCompile>
+	<ClCompile Include="..\source\WithParser.cpp">
+		<Filter>Source Files\PQL\QueryPreprocessor\QueryPatternRelRefParser</Filter>
+	</ClCompile>
     <ClCompile Include="..\source\PatternAssignEvaluator.cpp">
       <Filter>Source Files\PQL\QueryEvaluator\PatternEvaluator</Filter>
     </ClCompile>
@@ -507,6 +510,9 @@
 		<Filter>Header Files\PQL\QueryPreprocessor\QueryPatternRelRefParser</Filter>
 	</ClInclude>
 	<ClInclude Include="..\source\AffectsTParser.h">
+		<Filter>Header Files\PQL\QueryPreprocessor\QueryPatternRelRefParser</Filter>
+	</ClInclude>
+	<ClInclude Include="..\source\WithParser.h">
 		<Filter>Header Files\PQL\QueryPreprocessor\QueryPatternRelRefParser</Filter>
 	</ClInclude>
 	<ClInclude Include="..\source\RelationParserInterface.h">
