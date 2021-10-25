@@ -15,6 +15,7 @@ private:
 
 	std::list<std::string> getResult(Query&, QueryResult&);
 	std::list<std::string> getRawResult(Entity);
+	std::list<std::string> getRawResultWithSecondaryAttribute(Entity);
 	std::list<std::string> getTupleResult(Query&, QueryResult&);
 
 	PKBAdapter pkb;

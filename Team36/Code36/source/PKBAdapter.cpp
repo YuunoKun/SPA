@@ -747,9 +747,14 @@ std::vector<var_name> PKBAdapter::getPrintVar(stmt_index index) {
 	return a.getValues(index);
 }
 
-bool PKBAdapter::isPrintVar(stmt_index index, var_name var) {
+std::vector<var_name> PKBAdapter::getPrintVar() {
 	auto a = PKB::getInstance().PKB::getPrint();
-	return a.containsPair(index, var);
+	return a.getValues();
+}
+
+std::vector<stmt_index> PKBAdapter::getPrint(var_name var) {
+	auto a = PKB::getInstance().PKB::getPrint();
+	return a.getKeys(var);
 }
 
 std::vector<std::pair<stmt_index, var_name>> PKBAdapter::getAllReadVars() {
@@ -762,10 +767,16 @@ std::vector<var_name> PKBAdapter::getReadVar(stmt_index index) {
 	return a.getValues(index);
 }
 
-bool PKBAdapter::isReadVar(stmt_index index, var_name var) {
+std::vector<var_name> PKBAdapter::getReadVar() {
 	auto a = PKB::getInstance().PKB::getRead();
-	return a.containsPair(index, var);
+	return a.getValues();
 }
+
+std::vector<stmt_index> PKBAdapter::getRead(var_name var) {
+	auto a = PKB::getInstance().PKB::getRead();
+	return a.getKeys(var);
+}
+
 
 std::vector<std::pair<stmt_index, proc_name>> PKBAdapter::getAllCallS() {
 	auto a = PKB::getInstance().PKB::getCallsS();
@@ -777,7 +788,14 @@ std::vector<proc_name> PKBAdapter::getCalledS(stmt_index index) {
 	return a.getValues(index);
 }
 
-bool PKBAdapter::isCallS(stmt_index index, proc_name proc) {
+
+std::vector<proc_name> PKBAdapter::getCalledS() {
 	auto a = PKB::getInstance().PKB::getCallsS();
-	return a.containsPair(index, proc);
+	return a.getValues();
+}
+
+
+std::vector<stmt_index> PKBAdapter::getCalleeS(proc_name proc) {
+	auto a = PKB::getInstance().PKB::getCallsS();
+	return a.getKeys(proc);
 }

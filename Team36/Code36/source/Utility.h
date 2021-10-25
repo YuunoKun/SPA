@@ -17,6 +17,7 @@ public:
 	static std::list<std::string> unorderedSetToStringList(std::unordered_set<std::string>&);
 
 	static std::list<std::string> stmtIndexToStringList(std::vector<stmt_index>&);
+
 	static std::list<std::vector<std::string>> pairToStringTable(std::vector<std::pair<std::string, std::string>>&);
 	static std::list<std::vector<std::string>> pairToStringTable(std::vector<std::pair<stmt_index, std::string>>&);
 	static std::list<std::vector<std::string>> pairToStringTable(std::vector<std::pair<StmtInfo, std::string>>&);
@@ -42,6 +43,8 @@ public:
 	static std::vector<Entity> removeDuplicateEntities(std::vector<Entity>&);
 
 	static std::list<std::vector<std::string>> getColumnsNoDuplicate(std::list<std::vector<std::string>>&, std::vector<int>&);
+
+	static bool isSecondaryAttribute(Entity);
 
 	static EntityType queryTokenTypeToEntityType(QueryToken::QueryTokenType&);
 	static AttrRef queryTokenTypeToAttrRef(QueryToken::QueryTokenType&);

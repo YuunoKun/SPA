@@ -52,6 +52,10 @@ std::list<std::string> QueryEvaluator::getRawResult(Entity selected) {
 	return result;
 }
 
+std::list<std::string> QueryEvaluator::getRawResultWithSecondaryAttribute(Entity) {
+	return std::list<std::string>();
+}
+
 
 std::list<std::string> QueryEvaluator::getTupleResult(Query& query, QueryResult& query_result) {
 	std::vector<Entity> selected_entities = Utility::removeDuplicateEntities(query.getSelected());

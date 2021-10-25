@@ -824,6 +824,35 @@ namespace UnitTesting {
 		EXPECT_EQ(Utility::removeDuplicateEntities(a), b);
 	}
 
+	TEST(Utility, isSecondaryAttribute) {
+		Entity e = { CALL,Synonym{"e1"}, PROC_NAME };
+		EXPECT_TRUE(Utility::isSecondaryAttribute(e));
+		e = { READ,Synonym{"e1"}, VAR_NAME };
+		EXPECT_TRUE(Utility::isSecondaryAttribute(e));
+		e = { PRINT,Synonym{"e1"}, VAR_NAME };
+		EXPECT_TRUE(Utility::isSecondaryAttribute(e));
+
+		e = { STMT,Synonym{"e1"}, STMT_INDEX };
+		EXPECT_FALSE(Utility::isSecondaryAttribute(e));
+		e = { READ,Synonym{"e1"}, STMT_INDEX };
+		EXPECT_FALSE(Utility::isSecondaryAttribute(e));
+		e = { PRINT,Synonym{"e1"}, STMT_INDEX };
+		EXPECT_FALSE(Utility::isSecondaryAttribute(e));
+		e = { CALL,Synonym{"e1"}, STMT_INDEX };
+		EXPECT_FALSE(Utility::isSecondaryAttribute(e));
+		e = { WHILE,Synonym{"e1"}, STMT_INDEX };
+		EXPECT_FALSE(Utility::isSecondaryAttribute(e));
+		e = { IF,Synonym{"e1"}, STMT_INDEX };
+		EXPECT_FALSE(Utility::isSecondaryAttribute(e));
+		e = { ASSIGN,Synonym{"e1"}, STMT_INDEX };
+		EXPECT_FALSE(Utility::isSecondaryAttribute(e));
+		e = { CONSTANT,Synonym{"e1"}, VALUE };
+		EXPECT_FALSE(Utility::isSecondaryAttribute(e));
+		e = { PROCEDURE,Synonym{"e1"}, PROC_NAME };
+		EXPECT_FALSE(Utility::isSecondaryAttribute(e));
+
+	}
+
 	TEST(Utility, getColumnsNoDuplicate) {
 		std::list<std::vector<std::string>> a = { 
 			{"1","1","1"}, 

@@ -314,6 +314,12 @@ std::list<std::vector<std::string>> Utility::getColumnsNoDuplicate(std::list<std
 	return result;
 }
 
+bool Utility::isSecondaryAttribute(Entity e) {
+	return (e.getType() == EntityType::CALL && e.getAttribute() == AttrRef::PROC_NAME) ||
+		(e.getType() == EntityType::READ && e.getAttribute() == AttrRef::VAR_NAME) ||
+		(e.getType() == EntityType::PRINT && e.getAttribute() == AttrRef::VAR_NAME);
+}
+
 
 EntityType Utility::queryTokenTypeToEntityType(QueryToken::QueryTokenType& query_token_type) {
 	if (query_token_type == QueryToken::QueryTokenType::STMT) {
