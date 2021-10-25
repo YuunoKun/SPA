@@ -15,7 +15,6 @@ void QueryResult::setNoResult() {
 }
 
 bool QueryResult::isInTables(std::vector<Entity> v) {
-	//for advance requirement
 	for (auto& it : v) {
 		if (isInTables(it)) {
 			return true;

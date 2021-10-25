@@ -77,6 +77,53 @@ std::list<std::string> QueryEvaluator::getRawResultWithSecondaryAttribute(Entity
 	throw std::domain_error("Selected Entity type does not have Secondary Attribute!");
 }
 
+std::string QueryEvaluator::getEntitySecondaryAttribute(std::string primary, Entity type) {
+	switch (type.getType()) {
+	case EntityType::READ:
+		if (type.getAttribute() == AttrRef::VAR_NAME) {
+			return pkb.getReadVar(std::stoi(primary)).front();
+		}
+		break;
+	case EntityType::PRINT:
+		if (type.getAttribute() == AttrRef::VAR_NAME) {
+			return pkb.getPrintVar(std::stoi(primary)).front();
+		}
+		break;
+	case EntityType::CALL:
+		if (type.getAttribute() == AttrRef::PROC_NAME) {
+			return pkb.getCalledS(std::stoi(primary)).front();
+		}
+		break;
+	}
+
+	throw std::domain_error("Selected Entity type does not have Secondary Attribute!");
+}
+
+std::list<std::string> QueryEvaluator::mergeResultTables(std::list<std::list<std::string>> table, std::vector<Entity> selected) {
+
+	std::list<std::string> results;
+	for (auto row : table) {
+		int index = 0;
+		std::string row_result = row.front();
+		if (Utility::isSecondaryAttribute(selected[index])) {
+			row_result = getEntitySecondaryAttribute(row.front(), selected[index]);
+		}
+		row.pop_front();
+		while (!row.empty()) {
+			index++;
+			if (Utility::isSecondaryAttribute(selected[index])) {
+				row_result += " " +getEntitySecondaryAttribute(row.front(), selected[index]);
+			}
+			else {
+				row_result += " " + row.front();
+			}
+			row.pop_front();
+		}
+		results.emplace_back(row_result);
+	}
+	return results;
+}
+
 
 std::list<std::string> QueryEvaluator::getTupleResult(Query& query, QueryResult& query_result) {
 	std::vector<Entity> selected_entities = Utility::removeDuplicateEntities(query.getSelected());
@@ -96,7 +143,7 @@ std::list<std::string> QueryEvaluator::getTupleResult(Query& query, QueryResult&
 		result.joinTable(results.front());
 		results.pop_front();
 	}
-	return result.getEntityResult(query.getSelected());
+	return mergeResultTables(result.getEntityResults(query.getSelected()), query.getSelected());
 }
 
 

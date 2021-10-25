@@ -746,7 +746,6 @@ namespace UnitTesting {
 		EXPECT_EQ(table.getCommonHeaders(from), v);
 	}
 
-
 	TEST(ResultTable, getResultTable) {
 		Entity e1 = { STMT, Synonym{"x"} };
 		Entity e2 = { STMT, Synonym{"y"} };
@@ -761,7 +760,7 @@ namespace UnitTesting {
 
 		std::vector<Entity> b{ e1 };
 		ResultTable result = original.getResultTable(b);
-		std::list<std::string> b1 = { "1", "2"};
+		std::list<std::string> b1 = { "1", "2" };
 		EXPECT_EQ(result.getEntityResult(e1), b1);
 
 		b = { e2 };
@@ -771,28 +770,26 @@ namespace UnitTesting {
 
 		b = { e3 };
 		result = original.getResultTable(b);
-		b1 = { "3", "4"};
+		b1 = { "3", "4" };
 		EXPECT_EQ(result.getEntityResult(e3), b1);
-
 
 		b = { e1, e2 };
 		result = original.getResultTable(b);
 		b1 = { "1", "2" };
 		EXPECT_EQ(result.getEntityResult(e1), b1);
-		b1 = {  "2" };
+		b1 = { "2" };
 		EXPECT_EQ(result.getEntityResult(e2), b1);
-
 
 		b = { e2, e3 };
 		result = original.getResultTable(b);
 		b1 = { "2" };
 		EXPECT_EQ(result.getEntityResult(e2), b1);
-		b1 = { "3", "4"};
+		b1 = { "3", "4" };
 		EXPECT_EQ(result.getEntityResult(e3), b1);
 
 		b = { e1, e3 };
 		result = original.getResultTable(b);
-		b1 = { "1", "2"};
+		b1 = { "1", "2" };
 		EXPECT_EQ(result.getEntityResult(e1), b1);
 		b1 = { "3", "4" };
 		EXPECT_EQ(result.getEntityResult(e3), b1);
@@ -807,7 +804,6 @@ namespace UnitTesting {
 		EXPECT_EQ(result.getEntityResult(e3), b1);
 	}
 
-
 	TEST(ResultTable, getMultipleResult) {
 		Entity e1 = { STMT, Synonym{"x"} };
 		Entity e2 = { STMT, Synonym{"y"} };
@@ -821,26 +817,23 @@ namespace UnitTesting {
 		ResultTable result(e, a);
 
 		std::vector<Entity> b{ e1, e2, e3 };
-		std::list<std::string> b1 = { "1 2 3", "1 2 4", "2 2 4" };
-		EXPECT_EQ(result.getEntityResult(b), b1);
+		std::list<std::list <std::string>> b1 = { { "1","2","3" }, { "1", "2", "4" }, { "2", "2", "4" } };
+		EXPECT_EQ(result.getEntityResults(b), b1);
 
 		b = { e2, e3, e1 };
-		b1 = { "2 3 1", "2 4 1", "2 4 2" };
-		EXPECT_EQ(result.getEntityResult(b), b1);
-
+		b1 = { { "2","3","1" }, { "2", "4", "1" }, { "2", "4", "2" } };
+		EXPECT_EQ(result.getEntityResults(b), b1);
 
 		b = { e2, e1, e3 };
-		b1 = { "2 1 3", "2 1 4", "2 2 4" };
-		EXPECT_EQ(result.getEntityResult(b), b1);
-
+		b1 = { { "2","1","3" }, { "2","1","4" }, { "2","2","4" } };
+		EXPECT_EQ(result.getEntityResults(b), b1);
 
 		b = { e1, e1, e2, e3 };
-		b1 = { "1 1 2 3", "1 1 2 4", "2 2 2 4" };
-		EXPECT_EQ(result.getEntityResult(b), b1);
+		b1 = { { "1","1","2","3" }, { "1","1","2","4" }, { "2","2","2","4" } };
+		EXPECT_EQ(result.getEntityResults(b), b1);
 
-		b = { e1, e2, e1, e3, e1};
-		b1 = { "1 2 1 3 1", "1 2 1 4 1", "2 2 2 4 2" };
-		EXPECT_EQ(result.getEntityResult(b), b1);
-
+		b = { e1, e2, e1, e3, e1 };
+		b1 = { { "1","2","1","3","1" }, { "1","2","1","4","1" }, { "2","2","2","4","2" } };
+		EXPECT_EQ(result.getEntityResults(b), b1);
 	}
 }

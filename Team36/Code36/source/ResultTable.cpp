@@ -85,21 +85,21 @@ std::list<std::string> ResultTable::getEntityResult(Entity e) {
 	return Utility::unorderedSetToStringList(result);
 }
 
-std::list<std::string> ResultTable::getEntityResult(std::vector<Entity> entities) {
+std::list<std::list<std::string>> ResultTable::getEntityResults(std::vector<Entity> entities) {
 	std::vector<int> indexes;
 	for (auto& e : entities) {
 		indexes.push_back(getHeaderIndex(e));
 	}
-	std::list<std::string> result;
+	std::list<std::list<std::string>> results;
 	for (auto row : table) {
-		std::string row_result = row[indexes[0]];
-		for (int i = 1; i < indexes.size(); i++) {
-			row_result += " " + row[indexes[i]];
+		std::list<std::string> row_result;
+		for (int i = 0; i < indexes.size(); i++) {
+			row_result.emplace_back(row[indexes[i]]);
 		}
-		result.emplace_back(row_result);
+		results.emplace_back(row_result);
 	}
 
-	return result;
+	return results;
 }
 
 std::vector<Entity> ResultTable::getCommonHeaders(std::vector<Entity>& v) {

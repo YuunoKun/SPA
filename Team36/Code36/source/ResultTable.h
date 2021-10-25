@@ -20,7 +20,7 @@ public:
 	bool isInTable(Entity);
 	bool isEmpty();
 	std::list<std::string> getEntityResult(Entity);
-	std::list<std::string> getEntityResult(std::vector<Entity>);
+	std::list<std::list<std::string>> getEntityResults(std::vector<Entity>);
 	std::vector<Entity> getCommonHeaders(std::vector<Entity>&);
 	ResultTable getResultTable(std::vector<Entity>&);
 	std::vector<Entity> getHeaders();
