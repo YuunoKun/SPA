@@ -51,6 +51,10 @@
     <ClCompile Include="..\source\AffectEvaluator.cpp" />
     <ClCompile Include="..\source\AffectTEvaluator.cpp" />
     <ClCompile Include="..\source\WithEvaluator.cpp" />
+    <ClCompile Include="..\source\NextBipEvaluator.cpp" />
+    <ClCompile Include="..\source\NextBipTEvaluator.cpp" />
+    <ClCompile Include="..\source\AffectBipEvaluator.cpp" />
+    <ClCompile Include="..\source\AffectBipTEvaluator.cpp" />
     <ClCompile Include="..\source\PatternsEvaluator.cpp" />
     <ClCompile Include="..\source\PatternAssignEvaluator.cpp" />
     <ClCompile Include="..\source\PatternIfEvaluator.cpp" />
@@ -121,6 +125,10 @@
     <ClInclude Include="..\source\AffectEvaluator.h" />
     <ClInclude Include="..\source\AffectTEvaluator.h" />
     <ClInclude Include="..\source\WithEvaluator.h" />
+    <ClInclude Include="..\source\NextBipEvaluator.h" />
+    <ClInclude Include="..\source\NextBipTEvaluator.h" />
+    <ClInclude Include="..\source\AffectBipEvaluator.h" />
+    <ClInclude Include="..\source\AffectBipTEvaluator.h" />
     <ClInclude Include="..\source\ResultTable.h" />
     <ClInclude Include="..\source\Utility.h" />
     <ClInclude Include="..\source\QueryPatternRelRefParser.h" />
