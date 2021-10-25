@@ -15,7 +15,7 @@ public:
 	RelationTable() {
 		uniqueKey = false;
 	};
-	RelationTable(std::vector<std::pair<T,S>> input) {
+	RelationTable(std::vector<std::pair<T, S>> input) {
 		for (auto& pair : input) {
 			insert(pair.first, pair.second);
 		}
@@ -25,8 +25,8 @@ public:
 	void clear();
 	bool isEmpty() const;
 	bool insert(T key, S value);
-	std::vector<T> getKeys(S);
-	std::vector<S> getValues(T);
+	std::vector<T> getKeys(S) const;
+	std::vector<S> getValues(T) const;
 	std::vector<T> getKeys() const;
 	std::vector<S> getValues() const;
 	std::vector<std::pair<T, S>> getPairs() const;

@@ -120,6 +120,9 @@
     <ClCompile Include="CFGRelationsManagerTest.cpp">
       <Filter>PKB</Filter>
     </ClCompile>
+    <ClCompile Include="AffectsPreprocessorTest.cpp">
+      <Filter>PKB\RelationsPreprocessor</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />

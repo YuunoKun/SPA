@@ -84,8 +84,6 @@ void NextTPreprocessor::checkCache() {
 NextTPreprocessor::NextTPreprocessor(const RelationTable<StmtInfo, StmtInfo>& table, const std::vector<StmtInfo> v) :
 	next_table(table) {
 	stmt_info_list = v;
-	is_fully_populated = false;
-	is_cache_initialized = false;
 	int size = stmt_info_list.size();
 	calculated_matrix.resize(size, std::vector<bool>(size, false));
 	calculated_dfs_forward.resize(size, false);

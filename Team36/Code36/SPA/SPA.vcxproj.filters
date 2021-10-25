@@ -273,6 +273,9 @@
     <ClCompile Include="..\source\RelationPreprocessor.cpp">
       <Filter>Source Files\PKB\RelationPreprocessor</Filter>
     </ClCompile>
+    <ClCompile Include="..\source\AffectsPreprocessor.cpp">
+      <Filter>Source Files\PKB\RelationPreprocessor</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\source\Parser.h">
@@ -486,6 +489,9 @@
       <Filter>Header Files\PKB\RelationPreprocessor</Filter>
     </ClInclude>
     <ClInclude Include="..\source\RelationPreprocessor.h">
+      <Filter>Header Files\PKB\RelationPreprocessor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\AffectsPreprocessor.h">
       <Filter>Header Files\PKB\RelationPreprocessor</Filter>
     </ClInclude>
   </ItemGroup>

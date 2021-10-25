@@ -72,7 +72,7 @@ bool RelationTable<T, S>::insert(T key, S value) {
 }
 
 template<class T, class S>
-std::vector<T> RelationTable<T, S>::getKeys(S value) {
+std::vector<T> RelationTable<T, S>::getKeys(S value) const {
 	auto iter = backward_table.find(value);
 	if (iter != backward_table.end()) {
 		return iter->second;
@@ -83,7 +83,7 @@ std::vector<T> RelationTable<T, S>::getKeys(S value) {
 }
 
 template <class T, class S>
-std::vector<S> RelationTable<T, S>::getValues(T key) {
+std::vector<S> RelationTable<T, S>::getValues(T key) const {
 	auto iter = forward_table.find(key);
 	if (iter != forward_table.end()) {
 		return iter->second;
