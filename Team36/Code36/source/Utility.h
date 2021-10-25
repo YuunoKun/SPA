@@ -18,6 +18,8 @@ public:
 
 	static std::list<std::string> stmtIndexToStringList(std::vector<stmt_index>&);
 
+	static std::vector<std::pair<std::string, std::string>> stringListToStringPair(std::list<std::string>&);
+
 	static std::list<std::vector<std::string>> pairToStringTable(std::vector<std::pair<std::string, std::string>>&);
 	static std::list<std::vector<std::string>> pairToStringTable(std::vector<std::pair<stmt_index, std::string>>&);
 	static std::list<std::vector<std::string>> pairToStringTable(std::vector<std::pair<StmtInfo, std::string>>&);

@@ -28,8 +28,15 @@ bool WithEvaluator::evaluateWildAndConstant(Entity e) {
 }
 
 ResultTable WithEvaluator::evaluateSynonymAndSynonym(Entity left, Entity right) {
-	//Todo Evaluator
-	return ResultTable({ left, right }, pkb.getFollows());
+	Entity dummy = { STMT, Synonym() };
+	std::vector<Entity> header1 = { left, dummy };
+	std::vector<Entity> header2 = { right, dummy };
+	ResultTable rt1(header1, getEntity(left));
+	ResultTable rt2(header2, getEntity(right));
+
+	rt1.merge(rt2);
+	std::vector<Entity> header = { left, right };
+	return rt1.getResultTable(header);
 }
 
 ResultTable WithEvaluator::evaluateWildAndSynonym(Entity header) {
@@ -48,17 +55,53 @@ ResultTable WithEvaluator::evaluateSynonymAndConstant(Entity header, Entity cons
 	return ResultTable(header, getEntityWithAttribute(header.getType(), constant));
 }
 
-std::list<std::string> WithEvaluator::getEntityWithAttribute(Entity e) {
-	switch (e.getAttribute()) {
-	case STMT_INDEX:
-	case VALUE:  break;
-	case PROC_NAME:break;
-	case VAR_NAME:break;
-	default: throw std::domain_error("Attribute is not allow for With Evaluator");
+std::list<std::vector<std::string>> WithEvaluator::getEntity(Entity e) {
+
+	if (Utility::isSecondaryAttribute(e)) {
+		return getEntityAndSecondaryAttribute(e);
 	}
+	std::list<std::string> result;
+	switch (e.getType()) {
+	case EntityType::PROG_LINE:
+	case EntityType::STMT: result = Utility::stmtInfoToStringList(pkb.getStmts()); break;
+	case EntityType::READ: result = Utility::stmtInfoToStringList(pkb.getReads());  break;
+	case EntityType::PRINT: result = Utility::stmtInfoToStringList(pkb.getPrints()); break;
+	case EntityType::CALL: result = Utility::stmtInfoToStringList(pkb.getCalls()); break;
+	case EntityType::WHILE: result = Utility::stmtInfoToStringList(pkb.getWhiles()); break;
+	case EntityType::IF: result = Utility::stmtInfoToStringList(pkb.getIfs()); break;
+	case EntityType::ASSIGN: result = Utility::stmtInfoToStringList(pkb.getAssigns()); break;
+	case EntityType::VARIABLE: result = Utility::variablesToStringList(pkb.getVariables());  break;
+	case EntityType::CONSTANT: result = Utility::constantsToStringList(pkb.getConstants());  break;
+	case EntityType::PROCEDURE: result = Utility::proceduresToStringList(pkb.getProcedures());  break;
+	default: throw std::domain_error("getEntityWithAttribute(Entity, Entity): Entity type does not have Attribute!");
+		break;
+	}
+	return Utility::pairToStringTable(Utility::stringListToStringPair(result));
 }
 
 
+
+std::list<std::vector<std::string>> WithEvaluator::getEntityAndSecondaryAttribute(Entity synonym) {
+	switch (synonym.getType()) {
+	case EntityType::READ:
+		if (synonym.getAttribute() == AttrRef::VAR_NAME) {
+			return Utility::pairToStringTable(pkb.getAllReadVars());
+		}
+		break;
+	case EntityType::PRINT:
+		if (synonym.getAttribute() == AttrRef::VAR_NAME) {
+			return Utility::pairToStringTable(pkb.getAllPrintVars());
+		}
+		break;
+	case EntityType::CALL:
+		if (synonym.getAttribute() == AttrRef::PROC_NAME) {
+			return Utility::pairToStringTable(pkb.getAllCallS());
+		}
+		break;
+	}
+
+	throw std::domain_error("getEntityAndSecondaryAttribute(Entity): Entity type does not have Secondary Attribute!");
+}
 
 std::list<std::string> WithEvaluator::getEntityWithAttribute(Entity e, Entity constant) {
 	if (Utility::isSecondaryAttribute(e)) {
@@ -67,27 +110,17 @@ std::list<std::string> WithEvaluator::getEntityWithAttribute(Entity e, Entity co
 	bool is_true = false;
 	switch (e.getType()) {
 	case EntityType::STMT:
-	case EntityType::PROG_LINE: is_true = pkb.isStmt(std::stoi(constant.getValue()));
-		break;
-	case EntityType::READ: is_true = pkb.isRead(std::stoi(constant.getValue()));
-		break;
-	case EntityType::PRINT: is_true = pkb.isPrint(std::stoi(constant.getValue()));
-		break;
-	case EntityType::CALL: is_true = pkb.isCall(std::stoi(constant.getValue()));
-		break;
-	case EntityType::WHILE: is_true = pkb.isWhile(std::stoi(constant.getValue()));
-		break;
-	case EntityType::IF: is_true = pkb.isIf(std::stoi(constant.getValue()));
-		break;
-	case EntityType::ASSIGN: is_true = pkb.isAssign(std::stoi(constant.getValue()));
-		break;
-	case EntityType::VARIABLE: is_true = pkb.isVariable(constant.getValue());
-		break;
-	case EntityType::CONSTANT: is_true = pkb.isConstant(std::stoi(constant.getValue()));
-		break;
-	case EntityType::PROCEDURE: is_true = pkb.isProcedure(constant.getValue());
-		break;
-	default: throw std::domain_error("Entity type does not have Attribute!");
+	case EntityType::PROG_LINE: is_true = pkb.isStmt(std::stoi(constant.getValue())); break;
+	case EntityType::READ: is_true = pkb.isRead(std::stoi(constant.getValue())); break;
+	case EntityType::PRINT: is_true = pkb.isPrint(std::stoi(constant.getValue())); break;
+	case EntityType::CALL: is_true = pkb.isCall(std::stoi(constant.getValue())); break;
+	case EntityType::WHILE: is_true = pkb.isWhile(std::stoi(constant.getValue())); break;
+	case EntityType::IF: is_true = pkb.isIf(std::stoi(constant.getValue())); break;
+	case EntityType::ASSIGN: is_true = pkb.isAssign(std::stoi(constant.getValue())); break;
+	case EntityType::VARIABLE: is_true = pkb.isVariable(constant.getValue()); break;
+	case EntityType::CONSTANT: is_true = pkb.isConstant(std::stoi(constant.getValue())); break;
+	case EntityType::PROCEDURE: is_true = pkb.isProcedure(constant.getValue()); break;
+	default: throw std::domain_error("getEntityWithAttribute(Entity, Entity): Entity type does not have Attribute!");
 		break;
 	}
 	if (is_true) {
@@ -117,6 +150,6 @@ std::list<std::string> WithEvaluator::getEntityWithSecondaryAttribute(Entity con
 		break;
 	}
 
-	throw std::domain_error("Entity type does not have Secondary Attribute!");
+	throw std::domain_error("getEntityWithSecondaryAttribute(Entity): Entity type does not have Secondary Attribute!");
 }
 

@@ -86,6 +86,13 @@ namespace UnitTesting {
 		EXPECT_EQ(Utility::stmtIndexToStringList(a), b);
 	}
 
+	TEST(Utility, stringListToStringPair) {
+		std::list<std::string> a{ "1", "2", "3", "4" };
+		std::vector<std::pair<std::string, std::string>> b = { {"1", "1"},{"2", "2"},{"3", "3"},{"4", "4"} };
+		EXPECT_EQ(Utility::stringListToStringPair(a), b);
+	}
+
+
 	TEST(Utility, pairToStringTable) {
 		std::vector<std::pair<std::string, std::string>> p1 = { {"a", "b"},{"c", "d"} };
 		std::list<std::vector<std::string>> t1 = { {"a", "b"},{"c", "d"} };

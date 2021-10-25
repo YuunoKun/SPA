@@ -116,6 +116,7 @@
     </ClCompile>
     <ClCompile Include="QueryEvaluatorTupleTest.cpp">
       <Filter>PQL\QueryEvaluator</Filter>
+	</ClCompile>
     <ClCompile Include="NextTPreprocessorTest.cpp">
       <Filter>PKB\RelationsPreprocessor</Filter>
     </ClCompile>

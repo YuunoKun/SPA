@@ -34,6 +34,14 @@ std::list<std::string> Utility::stmtIndexToStringList(std::vector<stmt_index>& f
 	return to;
 }
 
+std::vector<std::pair<std::string, std::string>> Utility::stringListToStringPair(std::list<std::string>& from) {
+	std::vector<std::pair<std::string, std::string>> to;
+	for (auto& it : from) {
+		to.push_back({ it, it });
+	}
+	return to;
+}
+
 
 std::list<std::vector<std::string>> Utility::pairToStringTable(std::vector<std::pair<std::string, std::string>>& from) {
 	std::list< std::vector<std::string>> to;
