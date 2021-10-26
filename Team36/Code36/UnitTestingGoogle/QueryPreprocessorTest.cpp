@@ -374,6 +374,41 @@ namespace UnitTesting {
 		EXPECT_EQ(test.getSelected()[0], Entity(EntityType::BOOLEAN));
 	}
 
+	TEST(QueryPrecessor, selectBOOLEANAsSynonym) {
+		QueryPreprocessor qp;
+		Query test = qp.parse("procedure BOOLEAN; Select BOOLEAN");
+
+		Query q;
+		q.addEntity(Entity(EntityType::PROCEDURE, Synonym{ "BOOLEAN" }));
+		q.addSelected(Entity(EntityType::PROCEDURE, Synonym{ "BOOLEAN" }));
+
+		EXPECT_EQ(test, q);
+
+		Query test2 = qp.parse("stmt BOOLEAN; Select BOOLEAN");
+
+		Query q2;
+		q2.addEntity(Entity(EntityType::STMT, Synonym{ "BOOLEAN" }));
+		q2.addSelected(Entity(EntityType::STMT, Synonym{ "BOOLEAN" }));
+
+		EXPECT_EQ(test2, q2);
+
+		Query test3 = qp.parse("constant BOOLEAN; Select BOOLEAN");
+
+		Query q3;
+		q3.addEntity(Entity(EntityType::CONSTANT, Synonym{ "BOOLEAN" }));
+		q3.addSelected(Entity(EntityType::CONSTANT, Synonym{ "BOOLEAN" }));
+
+		EXPECT_EQ(test3, q3);
+
+		Query test4 = qp.parse("assign BOOLEAN; Select BOOLEAN");
+
+		Query q4;
+		q4.addEntity(Entity(EntityType::ASSIGN, Synonym{ "BOOLEAN" }));
+		q4.addSelected(Entity(EntityType::ASSIGN, Synonym{ "BOOLEAN" }));
+
+		EXPECT_EQ(test4, q4);
+	}
+
 	TEST(QueryPreprocessor, selectBOOLEANWithSuchThat) {
 		QueryPreprocessor qp;
 		Query test = qp.parse("procedure p; Select BOOLEAN such that Next*(2,9)");
