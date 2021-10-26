@@ -9,10 +9,8 @@
 
 class CFGRelationsManager {
 public:
-	static CFGRelationsManager& CFGRelationsManager::getInstance();
-	CFGRelationsManager(CFGRelationsManager const&) = delete;
-	void operator=(CFGRelationsManager const&) = delete;
-
+	CFGRelationsManager();
+	void update(); 
 	void reset();
 
 	bool isNextTEmpty();
@@ -48,7 +46,6 @@ public:
 	NextTPreprocessor getNextTProcessor();
 
 private:
-	NextTPreprocessor next_t_processor = NextTPreprocessor(PKB::getInstance().getNext(), PKB::getInstance().getStmts());
+	NextTPreprocessor next_t_processor;
 
-	CFGRelationsManager() {};
 };

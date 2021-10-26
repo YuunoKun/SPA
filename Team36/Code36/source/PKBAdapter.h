@@ -5,6 +5,7 @@
 
 #include "Stmt.h"
 #include "Common.h"
+#include "CFGRelationsManager.h"
 
 class PKBAdapter {
 public:
@@ -190,6 +191,9 @@ public:
 	std::vector<proc_name> getCalledS(stmt_index);
 	std::vector<proc_name> getCalledS();
 	std::vector<stmt_index> getCalleeS(proc_name);
+
+
+	CFGRelationsManager& getRelationManager();
 
 private:
 	std::vector<stmt_index> getAssignInfoFiltered(std::vector<stmt_index>&, expr, bool);

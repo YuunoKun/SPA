@@ -12,7 +12,6 @@ namespace UnitTesting {
 
 		virtual void SetUp() override {
 			PKB::getInstance().resetCache();
-			CFGRelationsManager::getInstance().reset();
 		}
 
 		PKBAdapter pkb;
@@ -25,10 +24,11 @@ namespace UnitTesting {
 		PKB::getInstance().addStmt(STMT_IF);
 		EXPECT_FALSE(evaluator.evaluateWildAndWild());
 		PKB::getInstance().addNext(1, 2);
+		pkb.getRelationManager().update();
 		EXPECT_TRUE(evaluator.evaluateWildAndWild());
 	}
 
-	/*
+	
 	TEST_F(NextTEvaluatorTest, evaluateConstantAndConstant) {
 		Entity e1 = { STMT, "1" };
 		Entity e2 = { STMT, "2" };
@@ -48,7 +48,7 @@ namespace UnitTesting {
 		PKB::getInstance().addProcContains(p, 2);
 		PKB::getInstance().addProcContains(p, 3);
 		PKB::getInstance().addProcContains(p, 4);
-		CFGRelationsManager::getInstance().generate();
+		pkb.getRelationManager().update();
 
 		EXPECT_TRUE(evaluator.evaluateConstantAndConstant(e1, e2));
 		EXPECT_TRUE(evaluator.evaluateConstantAndConstant(e1, e3));
@@ -67,7 +67,7 @@ namespace UnitTesting {
 		EXPECT_FALSE(evaluator.evaluateConstantAndConstant(e4, e3));
 		EXPECT_FALSE(evaluator.evaluateConstantAndConstant(e4, e4));
 	}
-	*/
+	
 	TEST_F(NextTEvaluatorTest, evaluateConstantAndWild) {
 		Entity e1 = { STMT, "1" };
 		Entity e2 = { STMT, "2" };
@@ -86,6 +86,7 @@ namespace UnitTesting {
 		PKB::getInstance().addProcContains(p, 2);
 		PKB::getInstance().addProcContains(p, 3);
 		PKB::getInstance().addProcContains(p, 4);
+		pkb.getRelationManager().update();
 
 		EXPECT_TRUE(evaluator.evaluateConstantAndWild(e1));
 		EXPECT_TRUE(evaluator.evaluateConstantAndWild(e2));
@@ -111,13 +112,14 @@ namespace UnitTesting {
 		PKB::getInstance().addProcContains(p, 2);
 		PKB::getInstance().addProcContains(p, 3);
 		PKB::getInstance().addProcContains(p, 4);
+		pkb.getRelationManager().update();
 
 		EXPECT_FALSE(evaluator.evaluateWildAndConstant(e1));
 		EXPECT_TRUE(evaluator.evaluateWildAndConstant(e2));
 		EXPECT_TRUE(evaluator.evaluateWildAndConstant(e3));
 		EXPECT_FALSE(evaluator.evaluateWildAndConstant(e4));
 	}
-	/*
+	
 	TEST_F(NextTEvaluatorTest, evaluateSynonymAndSynonym) {
 		StmtInfo p1{ 1, STMT_READ };
 		StmtInfo p2{ 2, STMT_PRINT };
@@ -136,9 +138,9 @@ namespace UnitTesting {
 		PKB::getInstance().addProcContains(p, 2);
 		PKB::getInstance().addProcContains(p, 3);
 		PKB::getInstance().addProcContains(p, 4);
-		CFGRelationsManager::getInstance().generate();
+		pkb.getRelationManager().update();
 
-		std::vector<std::pair<StmtInfo, StmtInfo>> v = pkb.getFollowsT();
+		std::vector<std::pair<StmtInfo, StmtInfo>> v = pkb.getRelationManager().getAllNextTRelation();
 		Entity left = { STMT, Synonym{"a"} };
 		Entity right = { STMT, Synonym{"b"} };
 		std::pair<Entity, Entity> header = { left, right };
@@ -192,7 +194,6 @@ namespace UnitTesting {
 		PKB::getInstance().addStmt(STMT_IF);
 		PKB::getInstance().addNext(1, 2);
 		PKB::getInstance().addNext(2, 3);
-		CFGRelationsManager::getInstance().generate();
 
 		proc_name p = "p";
 		PKB::getInstance().addProcedure(p);
@@ -200,8 +201,9 @@ namespace UnitTesting {
 		PKB::getInstance().addProcContains(p, 2);
 		PKB::getInstance().addProcContains(p, 3);
 		PKB::getInstance().addProcContains(p, 4);
+		pkb.getRelationManager().update();
 
-		std::vector<StmtInfo> v = pkb.getFollowingT();
+		std::vector<StmtInfo> v = pkb.getRelationManager().getNextT();
 		Entity header = { STMT, Synonym{"a"} };
 		ResultTable t(header, v);
 		EXPECT_EQ(evaluator.evaluateWildAndSynonym(header), t);
@@ -243,15 +245,9 @@ namespace UnitTesting {
 		PKB::getInstance().addStmt(STMT_IF);
 		PKB::getInstance().addNext(1, 2);
 		PKB::getInstance().addNext(2, 3);
-		proc_name p = "p";
-		PKB::getInstance().addProcedure(p);
-		PKB::getInstance().addProcContains(p, 1);
-		PKB::getInstance().addProcContains(p, 2);
-		PKB::getInstance().addProcContains(p, 3);
-		PKB::getInstance().addProcContains(p, 4);
-		CFGRelationsManager::getInstance().generate();
+		pkb.getRelationManager().update();
 
-		std::vector<StmtInfo> v = pkb.getFollowedT();
+		std::vector<StmtInfo> v = pkb.getRelationManager().getPreviousT();
 		Entity header = { STMT, Synonym{"a"} };
 		ResultTable t(header, v);
 		EXPECT_EQ(evaluator.evaluateSynonymAndWild(header), t);
@@ -293,13 +289,7 @@ namespace UnitTesting {
 		PKB::getInstance().addStmt(STMT_IF);
 		PKB::getInstance().addNext(1, 2);
 		PKB::getInstance().addNext(2, 3);
-		proc_name p = "p";
-		PKB::getInstance().addProcedure(p);
-		PKB::getInstance().addProcContains(p, 1);
-		PKB::getInstance().addProcContains(p, 2);
-		PKB::getInstance().addProcContains(p, 3);
-		PKB::getInstance().addProcContains(p, 4);
-		CFGRelationsManager::getInstance().generate();
+		pkb.getRelationManager().update();
 
 		std::vector<StmtInfo> v = { p2, p3 };
 		Entity header = { STMT, Synonym{"a"} };
@@ -372,9 +362,9 @@ namespace UnitTesting {
 		PKB::getInstance().addProcContains(p, 2);
 		PKB::getInstance().addProcContains(p, 3);
 		PKB::getInstance().addProcContains(p, 4);
-		CFGRelationsManager::getInstance().generate();
+		pkb.getRelationManager().update();
 
-		std::vector<StmtInfo> v = { p1, p2 };
+		std::vector<StmtInfo> v = { p2, p1 };
 		Entity header = { STMT, Synonym{"a"} };
 		Entity match = { STMT, "3" };
 		ResultTable t(header, v);
@@ -420,5 +410,5 @@ namespace UnitTesting {
 		t = ResultTable(header, v);
 		EXPECT_EQ(evaluator.evaluateSynonymAndConstant(header, match), t);
 	}
-*/
+
 }

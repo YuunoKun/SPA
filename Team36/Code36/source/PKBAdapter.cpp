@@ -231,7 +231,6 @@ bool PKBAdapter::isFollowTEmpty() {
 
 bool PKBAdapter::isFollowT(stmt_index index1, stmt_index index2) {
 	auto a = PKB::getInstance().PKB::getFollowsT();
-	//// Need better method to find stmt_info
 	StmtInfo s1 = getStmt(index1);
 	StmtInfo s2 = getStmt(index2);
 	return a.containsPair(s1, s2);
@@ -283,7 +282,6 @@ bool PKBAdapter::isParentEmpty() {
 
 bool PKBAdapter::isParent(stmt_index index1, stmt_index index2) {
 	auto a = PKB::getInstance().PKB::getParent();
-	//// Need better method to find stmt_info
 	StmtInfo s1 = getStmt(index1);
 	StmtInfo s2 = getStmt(index2);
 	return a.containsPair(s1, s2);
@@ -797,4 +795,9 @@ std::vector<proc_name> PKBAdapter::getCalledS() {
 std::vector<stmt_index> PKBAdapter::getCalleeS(proc_name proc) {
 	auto a = PKB::getInstance().PKB::getCallsS();
 	return a.getKeys(proc);
+}
+
+CFGRelationsManager& PKBAdapter::getRelationManager() {
+	static CFGRelationsManager relation_manager;
+	return relation_manager;
 }

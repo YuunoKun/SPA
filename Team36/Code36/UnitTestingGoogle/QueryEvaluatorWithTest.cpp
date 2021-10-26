@@ -127,10 +127,10 @@ namespace UnitTesting {
 
 		s = { PRINT, Synonym{"a"}, VAR_NAME };
 		q = initQuery({ WITH, { PRINT, s1, VAR_NAME } , s }, { s });
-		result = { "5" };
+		result = { s1 };
 		EXPECT_EQ(evaluator.evaluateQuery(q), result);
 		q = initQuery({ WITH, s, { PRINT, s2, VAR_NAME } }, { s });
-		result = { "6" };
+		result = { s2 };
 		EXPECT_EQ(evaluator.evaluateQuery(q), result);
 		q = initQuery({ WITH, { PRINT, s3, VAR_NAME } , s }, { s });
 		result = { };
@@ -149,10 +149,10 @@ namespace UnitTesting {
 
 		s = { READ, Synonym{"a"}, VAR_NAME };
 		q = initQuery({ WITH, { READ, s1, VAR_NAME  } , s }, { s });
-		result = { "7" };
+		result = { s1 };
 		EXPECT_EQ(evaluator.evaluateQuery(q), result);
 		q = initQuery({ WITH, s, { READ, s2, VAR_NAME  } }, { s });
-		result = { "8" };
+		result = { s2 };
 		EXPECT_EQ(evaluator.evaluateQuery(q), result);
 		q = initQuery({ WITH, { READ, s3, VAR_NAME } , s }, { s });
 		result = { };
@@ -171,10 +171,10 @@ namespace UnitTesting {
 
 		s = { CALL, Synonym{"a"}, PROC_NAME };
 		q = initQuery({ WITH, { CALL, s1, PROC_NAME } , s }, { s });
-		result = { "9" };
+		result = { s1 };
 		EXPECT_EQ(evaluator.evaluateQuery(q), result);
 		q = initQuery({ WITH, s, { CALL, s2, PROC_NAME } }, { s });
-		result = { "10" };
+		result = { s2 };
 		EXPECT_EQ(evaluator.evaluateQuery(q), result);
 		q = initQuery({ WITH, { CALL, s3, PROC_NAME } , s }, { s });
 		result = { };

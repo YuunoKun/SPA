@@ -15,7 +15,6 @@ std::list<std::string> QueryEvaluator::evaluateQuery(Query& query) {
 
 	evaluateClauses(query, result);
 
-	CFGRelationsManager::getInstance().reset();
 	return getResult(query, result);
 }
 

@@ -3,9 +3,12 @@
 #include "NextTPreprocessor.h"
 
 
-CFGRelationsManager& CFGRelationsManager::getInstance() {
-	static CFGRelationsManager relations_manager;
-	return relations_manager;
+CFGRelationsManager::CFGRelationsManager() {
+	next_t_processor = NextTPreprocessor(PKB::getInstance().getNext(), PKB::getInstance().getStmts());
+}
+
+void CFGRelationsManager::update() {
+	next_t_processor = NextTPreprocessor(PKB::getInstance().getNext(), PKB::getInstance().getStmts());
 }
 
 void CFGRelationsManager::reset() {
