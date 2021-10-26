@@ -4,66 +4,115 @@
 #include <assert.h>
 
 bool AffectsPreprocessor::evaluateWildAndWild() {
-	return !next_table.isEmpty();
+	if (!cache.isEmpty()) {
+		return true;
+	}
+	if (!isNonEmptyCalculated) {
+		std::vector<stmt_index> list_of_first_statements{};
+		for (proc_name proc : procS_table.getKeys()) {
+			list_of_first_statements.push_back(procS_table.getValues(proc)[0]);
+		}
+		isNonEmpty = solver.solveIfNonEmpty(list_of_first_statements);
+		isNonEmptyCalculated = true;
+	}
+	return isNonEmpty;
 }
 
 bool AffectsPreprocessor::evaluateConstantAndWild(int index) {
-	StmtInfo s1 = stmt_info_list[index - 1];
-	return next_table.containsKey(s1);
+	if (isAffecting[index - 1] != STATUS_UNKNOWN) {
+		return isAffecting[index - 1];
+	}
+	else {
+		bool isAffectingBool = solver.solveIfAffecting(index);
+		if (isAffectingBool) {
+			isAffecting[index - 1] = STATUS_TRUE;
+		}
+		else {
+			isAffecting[index - 1] = STATUS_FALSE;
+		}
+		return isAffectingBool;
+	}
 }
 
 bool AffectsPreprocessor::evaluateWildAndConstant(int index) {
-	StmtInfo s1 = stmt_info_list[index - 1];
-	return next_table.containsValue(s1);
+	if (isAffected[index - 1] != STATUS_UNKNOWN) {
+		return isAffecting[index - 1];
+	}
+	else {
+		bool isAffectedBool = solver.solveIfAffected(index);
+		if (isAffectedBool) {
+			isAffected[index - 1] = STATUS_TRUE;
+		}
+		else {
+			isAffected[index - 1] = STATUS_FALSE;
+		}
+		return isAffectedBool;
+	}
 }
 
 bool AffectsPreprocessor::evaluateConstantAndConstant(int index1, int index2) {
 	StmtInfo s1 = stmt_info_list[index1 - 1];
 	StmtInfo s2 = stmt_info_list[index2 - 1];
-	if (is_fully_populated || calculated_matrix[index1][index2]) {
-		return cache.containsPair(s1, s2);
-	}
-	else {
-		for (StmtInfo indirect_value : RelationsUtility<StmtInfo>::forwardDFS(cache, s1)) {
-			cache.insert(s1, indirect_value);
-			if (indirect_value == s2) {
-				return true;
-			}
+	if (!is_fully_populated && !calculated_matrix[index1 - 1][index2 - 1] &&
+		!calculated_dfs_forward[index1 - 1] && !calculated_dfs_backward[index2 - 1]) {
+		if (solver.solveIfAffectingAndAffected(index1, index2)) {
+			cache.insert(s1, s2);
 		}
-		calculated_matrix[index1][index2] = true;
-		return cache.containsPair(s1, s2);
+		calculated_matrix[index1 - 1][index2 - 1] = true;
 	}
+	return cache.containsPair(s1, s2);
 }
 
 std::vector<std::pair<StmtInfo, StmtInfo>> AffectsPreprocessor::evaluateSynonymAndSynonym() {
 	if (!is_fully_populated) {
-		std::vector<stmt_index> worklist_stmts{};
+		std::vector<stmt_index> list_of_first_statements{};
 		for (proc_name proc : procS_table.getKeys()) {
-			worklist_stmts.push_back(procS_table.getValues(proc)[0]);
+			list_of_first_statements.push_back(procS_table.getValues(proc)[0]);
 		}
 
-		std::vector<std::pair<StmtInfo, StmtInfo>> res = solver.solve(worklist_stmts);
-		updateCache(solver.getVisited(), res);
+		auto [visited, res] = solver.solve(list_of_first_statements);
+		updateCache(visited, res);
 		is_fully_populated = true;
 	}
 	return cache.getPairs();
 }
 
 std::vector<StmtInfo> AffectsPreprocessor::evaluateWildAndSynonym() {
-	return next_table.getValues();
+	if (!is_fully_populated) {
+		std::vector<stmt_index> list_of_first_statements{};
+		for (proc_name proc : procS_table.getKeys()) {
+			list_of_first_statements.push_back(procS_table.getValues(proc)[0]);
+		}
+
+		auto [visited, res] = solver.solve(list_of_first_statements);
+		updateCache(visited, res);
+		is_fully_populated = true;
+	}
+	return cache.getValues();
 }
 
 std::vector<StmtInfo> AffectsPreprocessor::evaluateSynonymAndWild() {
-	return next_table.getKeys();
+	if (!is_fully_populated) {
+		std::vector<stmt_index> list_of_first_statements{};
+		for (proc_name proc : procS_table.getKeys()) {
+			list_of_first_statements.push_back(procS_table.getValues(proc)[0]);
+		}
+
+		auto [visited, res] = solver.solve(list_of_first_statements);
+		updateCache(visited, res);
+		is_fully_populated = true;
+	}
+	return cache.getKeys();
 }
 
 std::vector<StmtInfo> AffectsPreprocessor::evaluateConstantAndSynonym(int index) {
 	StmtInfo s1 = stmt_info_list[index - 1];
 	if (!is_fully_populated && !calculated_dfs_forward[index - 1]) {
 		proc_name proc = procS_table.getKeys(index)[0];
-		std::vector<stmt_index> worklist_stmts{};
-		worklist_stmts.push_back(procS_table.getValues(proc)[0]);
-		solver.solve(worklist_stmts);
+		std::vector<stmt_index> list_of_first_statements{};
+		list_of_first_statements.push_back(procS_table.getValues(proc)[0]);
+		auto [visited, res] = solver.solve(list_of_first_statements);
+		updateCache(visited, res);
 	}
 	return cache.getValues(s1);
 }
@@ -72,10 +121,10 @@ std::vector<StmtInfo> AffectsPreprocessor::evaluateSynonymAndConstant(int index)
 	StmtInfo s1 = stmt_info_list[index - 1];
 	if (!is_fully_populated && !calculated_dfs_backward[index - 1]) {
 		proc_name proc = procS_table.getKeys(index)[0];
-		std::vector<stmt_index> worklist_stmts{};
-		worklist_stmts.push_back(procS_table.getValues(proc)[0]);
-		std::vector<std::pair<StmtInfo, StmtInfo>> res = solver.solve(worklist_stmts);
-		updateCache(solver.getVisited(), res);
+		std::vector<stmt_index> list_of_first_statements{};
+		list_of_first_statements.push_back(procS_table.getValues(proc)[0]);
+		auto [visited, res] = solver.solve(list_of_first_statements);
+		updateCache(visited, res);
 	}
 	return cache.getKeys(s1);
 }

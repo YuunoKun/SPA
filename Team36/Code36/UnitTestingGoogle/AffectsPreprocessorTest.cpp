@@ -114,76 +114,73 @@ namespace UnitTesting {
 	};
 
 	TEST_F(AffectsPreprocessorTest, evaluateWildAndWild) {
-		EXPECT_TRUE(processor.evaluateWildAndWild());
+		EXPECT_EQ(processor.evaluateWildAndWild(), !expected_pairs.empty());
 	}
 
 	TEST_F(AffectsPreprocessorTest, evaluateConstantAndWild) {
-		EXPECT_TRUE(processor.evaluateConstantAndWild(1));
-		EXPECT_TRUE(processor.evaluateConstantAndWild(2));
-		EXPECT_TRUE(processor.evaluateConstantAndWild(3));
-		EXPECT_TRUE(processor.evaluateConstantAndWild(4));
-		EXPECT_TRUE(processor.evaluateConstantAndWild(5));
-		EXPECT_FALSE(processor.evaluateConstantAndWild(6));
+		std::vector<StmtInfo> true_list, false_list;
+		std::set<StmtInfo> set;
+		for (auto& pair : expected_pairs) {
+			set.emplace(pair.first);
+		}
+		true_list.assign(set.begin(), set.end());
+
+		std::sort(true_list.begin(), true_list.end());
+		std::sort(stmt_list.begin(), stmt_list.end());
+
+		std::set_difference(stmt_list.begin(), stmt_list.end(), true_list.begin(), true_list.end(), std::inserter(false_list, false_list.begin()));
+
+		for (auto& stmt : true_list) {
+			EXPECT_TRUE(processor.evaluateConstantAndWild(stmt.stmt_index)) << "Expected true but fail at " << stmt.stmt_index;
+		}
+		for (auto& stmt : false_list) {
+			EXPECT_FALSE(processor.evaluateConstantAndWild(stmt.stmt_index)) << "Expected false but fail at " << stmt.stmt_index;
+		}
 	}
 
 	TEST_F(AffectsPreprocessorTest, evaluateWildAndConstant) {
-		EXPECT_FALSE(processor.evaluateWildAndConstant(1));
-		EXPECT_TRUE(processor.evaluateWildAndConstant(2));
-		EXPECT_TRUE(processor.evaluateWildAndConstant(3));
-		EXPECT_TRUE(processor.evaluateWildAndConstant(4));
-		EXPECT_TRUE(processor.evaluateWildAndConstant(5));
-		EXPECT_TRUE(processor.evaluateWildAndConstant(6));
+		std::vector<StmtInfo> true_list, false_list;
+		std::set<StmtInfo> set;
+		for (auto& pair : expected_pairs) {
+			set.emplace(pair.second);
+		}
+		true_list.assign(set.begin(), set.end());
+
+		std::sort(true_list.begin(), true_list.end());
+		std::sort(stmt_list.begin(), stmt_list.end());
+
+		std::set_difference(stmt_list.begin(), stmt_list.end(), true_list.begin(), true_list.end(), std::inserter(false_list, false_list.begin()));
+
+		for (auto& stmt : true_list) {
+			EXPECT_TRUE(processor.evaluateWildAndConstant(stmt.stmt_index)) << "Expected true but fail at " << stmt.stmt_index;
+		}
+		for (auto& stmt : false_list) {
+			EXPECT_FALSE(processor.evaluateWildAndConstant(stmt.stmt_index)) << "Expected false but fail at " << stmt.stmt_index;
+		}
 	}
 
 	TEST_F(AffectsPreprocessorTest, evaluateConstantAndConstant) {
-		EXPECT_FALSE(processor.evaluateConstantAndConstant(1, 1));
-		EXPECT_TRUE(processor.evaluateConstantAndConstant(1, 2));
-		EXPECT_TRUE(processor.evaluateConstantAndConstant(1, 3));
-		EXPECT_TRUE(processor.evaluateConstantAndConstant(1, 4));
-		EXPECT_TRUE(processor.evaluateConstantAndConstant(1, 5));
-		EXPECT_TRUE(processor.evaluateConstantAndConstant(1, 6));
+		std::vector < std::pair<StmtInfo, StmtInfo>> true_list = expected_pairs, false_list, all_list;
+		std::set<StmtInfo> set;
+		for (auto& s1 : stmt_list) {
+			for (auto& s2 : stmt_list) {
+				all_list.push_back({ s1, s2 });
+			}
+		}
 
-		EXPECT_FALSE(processor.evaluateConstantAndConstant(2, 1));
-		EXPECT_TRUE(processor.evaluateConstantAndConstant(2, 2));
-		EXPECT_TRUE(processor.evaluateConstantAndConstant(2, 3));
-		EXPECT_TRUE(processor.evaluateConstantAndConstant(2, 4));
-		EXPECT_TRUE(processor.evaluateConstantAndConstant(2, 5));
-		EXPECT_TRUE(processor.evaluateConstantAndConstant(2, 6));
+		std::sort(true_list.begin(), true_list.end());
+		std::sort(all_list.begin(), all_list.end());
 
-		EXPECT_FALSE(processor.evaluateConstantAndConstant(3, 1));
-		EXPECT_TRUE(processor.evaluateConstantAndConstant(3, 2));
-		EXPECT_TRUE(processor.evaluateConstantAndConstant(3, 3));
-		EXPECT_TRUE(processor.evaluateConstantAndConstant(3, 4));
-		EXPECT_TRUE(processor.evaluateConstantAndConstant(3, 5));
-		EXPECT_TRUE(processor.evaluateConstantAndConstant(3, 6));
+		std::set_difference(all_list.begin(), all_list.end(), true_list.begin(), true_list.end(), std::inserter(false_list, false_list.begin()));
 
-		EXPECT_FALSE(processor.evaluateConstantAndConstant(4, 1));
-		EXPECT_TRUE(processor.evaluateConstantAndConstant(4, 2));
-		EXPECT_TRUE(processor.evaluateConstantAndConstant(4, 3));
-		EXPECT_TRUE(processor.evaluateConstantAndConstant(4, 4));
-		EXPECT_TRUE(processor.evaluateConstantAndConstant(4, 5));
-		EXPECT_TRUE(processor.evaluateConstantAndConstant(4, 6));
-
-		EXPECT_FALSE(processor.evaluateConstantAndConstant(5, 1));
-		EXPECT_TRUE(processor.evaluateConstantAndConstant(5, 2));
-		EXPECT_TRUE(processor.evaluateConstantAndConstant(5, 3));
-		EXPECT_TRUE(processor.evaluateConstantAndConstant(5, 4));
-		EXPECT_TRUE(processor.evaluateConstantAndConstant(5, 5));
-		EXPECT_TRUE(processor.evaluateConstantAndConstant(5, 6));
-
-		EXPECT_FALSE(processor.evaluateConstantAndConstant(6, 1));
-		EXPECT_FALSE(processor.evaluateConstantAndConstant(6, 2));
-		EXPECT_FALSE(processor.evaluateConstantAndConstant(6, 3));
-		EXPECT_FALSE(processor.evaluateConstantAndConstant(6, 4));
-		EXPECT_FALSE(processor.evaluateConstantAndConstant(6, 5));
-		EXPECT_FALSE(processor.evaluateConstantAndConstant(6, 6));
-
-		EXPECT_FALSE(processor.evaluateConstantAndConstant(1, 1));
-		EXPECT_TRUE(processor.evaluateConstantAndConstant(1, 2));
-		EXPECT_TRUE(processor.evaluateConstantAndConstant(1, 3));
-		EXPECT_TRUE(processor.evaluateConstantAndConstant(1, 4));
-		EXPECT_TRUE(processor.evaluateConstantAndConstant(1, 5));
-		EXPECT_TRUE(processor.evaluateConstantAndConstant(1, 6));
+		for (auto& pair : true_list) {
+			EXPECT_TRUE(processor.evaluateConstantAndConstant(pair.first.stmt_index, pair.second.stmt_index)) << "Expected true but fail at " <<
+				pair.first.stmt_index << " and" << pair.second.stmt_index;
+		}
+		for (auto& pair : false_list) {
+			EXPECT_FALSE(processor.evaluateConstantAndConstant(pair.first.stmt_index, pair.second.stmt_index)) << "Expected false but fail at " <<
+				pair.first.stmt_index << " and" << pair.second.stmt_index;
+		}
 	}
 
 	TEST_F(AffectsPreprocessorTest, evaluateSynonymAndSynonym) {
@@ -285,7 +282,7 @@ namespace UnitTesting {
 		}
 		processor.evaluateSynonymAndSynonym();
 		EXPECT_TRUE(processor.isFullyPopulated());
-		EXPECT_TRUE(processor.isCacheInitialized());
+		EXPECT_FALSE(processor.isCacheInitialized());
 		processor.reset();
 		EXPECT_FALSE(processor.isFullyPopulated());
 		EXPECT_FALSE(processor.isCacheInitialized());

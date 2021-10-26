@@ -149,9 +149,14 @@ bool RelationTable<T, S>::containsValue(S value) const {
 }
 
 template <class T, class S>
-bool RelationTable<T, S>::containsPair(T key, S value) {
-	auto s = lookup_table[key];
-	return containsKey(key) && s.find(value) != s.end();
+bool RelationTable<T, S>::containsPair(T key, S value) const {
+	try {
+		auto s = lookup_table.at(key);
+		return containsKey(key) && s.find(value) != s.end();
+	}
+	catch (std::out_of_range& oor) {
+		return false;
+	}
 }
 
 template <class T, class S>

@@ -32,7 +32,7 @@ public:
 	std::vector<std::pair<T, S>> getPairs() const;
 	bool containsKey(T) const;
 	bool containsValue(S) const;
-	bool containsPair(T, S);
+	bool containsPair(T, S) const;
 
 	RelationTable<T, S> copy() const;
 

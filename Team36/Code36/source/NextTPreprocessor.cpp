@@ -21,14 +21,14 @@ bool NextTPreprocessor::evaluateConstantAndConstant(int index1, int index2) {
 	checkCache();
 	StmtInfo s1 = stmt_info_list[index1 - 1];
 	StmtInfo s2 = stmt_info_list[index2 - 1];
-	if (is_fully_populated || calculated_matrix[index1][index2]) {
+	if (is_fully_populated || calculated_matrix[index1 - 1][index2 - 1]) {
 		return cache.containsPair(s1, s2);
 	}
 	else {
 		auto dfs = RelationsUtility<StmtInfo>::forwardDFS(cache, s1);
 		for (StmtInfo indirect_value : dfs) {
 			cache.insert(s1, indirect_value);
-			calculated_matrix[s1.stmt_index][s2.stmt_index] = true;
+			calculated_matrix[s1.stmt_index - 1][s2.stmt_index - 1] = true;
 			if (indirect_value == s2) {
 				return true;
 			}

@@ -10,8 +10,7 @@ IterativeDataflowSolver::IterativeDataflowSolver(
 	modifiesS_table(modifiesS_table),
 	useS_table(useS_table),
 	procS_table(procS_table),
-	stmt_info_list(v)
-{
+	stmt_info_list(v) {
 	int size = stmt_info_list.size();
 	kill_list.resize(size, {});
 	gen_list.resize(size, {});
@@ -21,10 +20,11 @@ IterativeDataflowSolver::IterativeDataflowSolver(
 	succ_list.resize(size, {});
 }
 
-std::vector<std::pair<StmtInfo, StmtInfo>> IterativeDataflowSolver::solve(std::vector<stmt_index> starting_worklist) {
+std::pair<std::set<stmt_index>, std::vector<std::pair<StmtInfo, StmtInfo>>> IterativeDataflowSolver::solve(std::vector<stmt_index> starting_worklist) {
 	populateDataflowSets();
 	std::stack<stmt_index> worklist;
-	std::vector<std::pair<StmtInfo, StmtInfo>> res;
+	std::set<stmt_index> visited{};
+
 	for (auto& stmt_index : starting_worklist) {
 		worklist.push(stmt_index);
 	}
@@ -36,24 +36,8 @@ std::vector<std::pair<StmtInfo, StmtInfo>> IterativeDataflowSolver::solve(std::v
 		int index = curr - 1;
 		int old_out_size = out_list[curr - 1].size();
 
-		std::set<ModifiesTuple> new_in_list{};
-
-		for (stmt_index pred : pred_list[index]) {
-			std::set_union(out_list[pred - 1].begin(), out_list[pred - 1].end(),
-				in_list[index].begin(), in_list[index].end(),
-				std::inserter(new_in_list, new_in_list.begin()));
-		}
-
-		in_list[index] = new_in_list;
-
-		std::set<ModifiesTuple> new_out_list{};
-		std::set_difference(new_in_list.begin(), new_in_list.end(),
-			kill_list[index].begin(), kill_list[index].end(),
-			std::inserter(new_out_list, new_out_list.begin()));
-
-		std::set_union(new_out_list.begin(), new_out_list.end(),
-			gen_list[index].begin(), gen_list[index].end(),
-			std::inserter(out_list[index], out_list[index].begin()));
+		processInSet(index);
+		processOutSet(index);
 
 		if (out_list[index].size() != old_out_size) {
 			for (auto& succ : succ_list[index]) {
@@ -61,7 +45,188 @@ std::vector<std::pair<StmtInfo, StmtInfo>> IterativeDataflowSolver::solve(std::v
 			}
 		}
 	}
+	resetOutSet();
+	return { visited, findResults(visited) };
+}
 
+bool IterativeDataflowSolver::solveIfAffectingAndAffected(stmt_index affecting, stmt_index affected) {
+	// Check beforehand that both are assignments and Next*(affecting, affected)
+	populateDataflowSets();
+	std::stack<stmt_index> worklist;
+	std::set<stmt_index> visited{};
+
+	worklist.push(affecting);
+
+	while (!worklist.empty()) {
+		stmt_index curr = worklist.top();
+		visited.emplace(curr);
+		worklist.pop();
+		int index = curr - 1;
+		int old_out_size = out_list[curr - 1].size();
+
+		processInSet(index);
+
+		// Early termination if Affects(affecting, affected) is found
+		StmtInfo curr_stmt_info = stmt_info_list[index];
+		if (curr_stmt_info.stmt_type != STMT_ASSIGN) {
+		}
+		else {
+			if (curr == affected) {
+				for (ModifiesTuple tuple : in_list[index]) {
+					if (tuple.stmt_index == affecting) {
+						StmtInfo stmt_info = stmt_info_list[index];
+						if (useS_table.containsPair(stmt_info, tuple.var_name)) {
+							resetOutSet();
+							return true;
+						}
+					}
+				}
+			}
+		}
+
+		processOutSet(index);
+
+		if (out_list[index].size() != old_out_size) {
+			for (auto& succ : succ_list[index]) {
+				worklist.push(succ);
+			}
+		}
+	}
+	resetOutSet();
+	return false;
+}
+
+bool IterativeDataflowSolver::solveIfAffecting(stmt_index affecting) {
+	// Check beforehand that affecting is assignment
+	populateDataflowSets();
+	std::stack<stmt_index> worklist;
+	std::set<stmt_index> visited{};
+
+	worklist.push(affecting);
+
+	while (!worklist.empty()) {
+		stmt_index curr = worklist.top();
+		visited.emplace(curr);
+		worklist.pop();
+		int index = curr - 1;
+		int old_out_size = out_list[curr - 1].size();
+
+		processInSet(index);
+
+		// Early termination if Affects(affecting, _) is found
+		StmtInfo curr_stmt_info = stmt_info_list[index];
+		if (curr_stmt_info.stmt_type == STMT_ASSIGN) {
+			for (ModifiesTuple tuple : in_list[index]) {
+				if (tuple.stmt_index == affecting) {
+					if (useS_table.containsPair(curr_stmt_info, tuple.var_name)) {
+						resetOutSet();
+						return true;
+					}
+				}
+			}
+		}
+
+		processOutSet(index);
+
+		if (out_list[index].size() != old_out_size) {
+			for (auto& succ : succ_list[index]) {
+				worklist.push(succ);
+			}
+		}
+	}
+	resetOutSet();
+	return false;
+}
+
+bool IterativeDataflowSolver::solveIfAffected(stmt_index affected) {
+	// Check beforehand that affected is assignment
+	populateDataflowSets();
+	std::stack<stmt_index> worklist;
+	std::set<stmt_index> visited{};
+
+	proc_name proc = procS_table.getKeys(affected)[0];
+	stmt_index first_statement = procS_table.getValues(proc)[0];
+
+	worklist.push(first_statement);
+
+	while (!worklist.empty()) {
+		stmt_index curr = worklist.top();
+		visited.emplace(curr);
+		worklist.pop();
+		int index = curr - 1;
+		int old_out_size = out_list[curr - 1].size();
+
+		processInSet(index);
+
+		// Early termination if a tuple in affected's in set is used by affected
+		if (curr == affected) {
+			StmtInfo curr_stmt_info = stmt_info_list[index];
+			if (curr_stmt_info.stmt_type == STMT_ASSIGN) {
+				for (ModifiesTuple tuple : in_list[index]) {
+					StmtInfo stmt_info = stmt_info_list[index];
+					if (useS_table.containsPair(stmt_info, tuple.var_name)) {
+						resetOutSet();
+						return true;
+					}
+				}
+			}
+		}
+
+		processOutSet(index);
+
+		if (out_list[index].size() != old_out_size) {
+			for (auto& succ : succ_list[index]) {
+				worklist.push(succ);
+			}
+		}
+	}
+	resetOutSet();
+	return false;
+}
+
+bool IterativeDataflowSolver::solveIfNonEmpty(std::vector<stmt_index> first_statements) {
+	// Check beforehand that affected is assignment
+	populateDataflowSets();
+	std::stack<stmt_index> worklist;
+	std::set<stmt_index> visited{};
+
+	proc_name proc = procS_table.getKeys()[0];
+	for (auto& stmt_index : first_statements) {
+		worklist.push(stmt_index);
+	}
+
+	while (!worklist.empty()) {
+		stmt_index curr = worklist.top();
+		visited.emplace(curr);
+		worklist.pop();
+		int index = curr - 1;
+		int old_out_size = out_list[curr - 1].size();
+
+		processInSet(index);
+
+		// Early termination if a tuple in the current statement's in set is used by it
+		for (ModifiesTuple tuple : in_list[index]) {
+			StmtInfo stmt_info = stmt_info_list[index];
+			if (useS_table.containsPair(stmt_info, tuple.var_name)) {
+				resetOutSet();
+				return true;
+			}
+		}
+
+		processOutSet(index);
+
+		if (out_list[index].size() != old_out_size) {
+			for (auto& succ : succ_list[index]) {
+				worklist.push(succ);
+			}
+		}
+	}
+	resetOutSet();
+	return false;
+}
+
+std::vector<std::pair<StmtInfo, StmtInfo>> IterativeDataflowSolver::findResults(std::set<stmt_index> visited) {
+	std::vector<std::pair<StmtInfo, StmtInfo>> res;
 	for (auto& affected_index : visited) {
 		StmtInfo statement_affected = stmt_info_list[affected_index - 1];
 		if (statement_affected.stmt_type != STMT_ASSIGN) {
@@ -78,7 +243,6 @@ std::vector<std::pair<StmtInfo, StmtInfo>> IterativeDataflowSolver::solve(std::v
 			}
 		}
 	}
-
 	return res;
 }
 
@@ -113,6 +277,33 @@ void IterativeDataflowSolver::populateDataflowSets() {
 	is_dataflow_sets_populated = true;
 }
 
-std::set<stmt_index> IterativeDataflowSolver::getVisited() {
-	return visited;
+void IterativeDataflowSolver::processInSet(stmt_index index) {
+	std::set<ModifiesTuple> new_in_list{};
+
+	for (stmt_index pred : pred_list[index]) {
+		std::set_union(out_list[pred - 1].begin(), out_list[pred - 1].end(),
+			in_list[index].begin(), in_list[index].end(),
+			std::inserter(new_in_list, new_in_list.begin()));
+	}
+
+	in_list[index] = new_in_list;
+}
+
+void IterativeDataflowSolver::processOutSet(stmt_index index) {
+	std::set<ModifiesTuple> new_out_list{};
+
+	std::set_difference(in_list[index].begin(), in_list[index].end(),
+		kill_list[index].begin(), kill_list[index].end(),
+		std::inserter(new_out_list, new_out_list.begin()));
+
+	std::set_union(new_out_list.begin(), new_out_list.end(),
+		gen_list[index].begin(), gen_list[index].end(),
+		std::inserter(out_list[index], out_list[index].begin()));
+}
+
+void IterativeDataflowSolver::resetOutSet() {
+	auto size = out_list.size();
+	//no memory allocating
+	out_list.resize(0);
+	out_list.resize(size, {});
 }

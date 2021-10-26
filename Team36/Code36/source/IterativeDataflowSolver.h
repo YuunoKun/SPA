@@ -4,7 +4,6 @@
 
 #include "PKB.h"
 #include "Common.h"
-#include "Stmt.h"
 #include "RelationTable.h"
 #include "RelationTable.cpp"
 
@@ -34,8 +33,11 @@ namespace std {
 class IterativeDataflowSolver
 {
 public:
-	std::set<stmt_index> getVisited();
-	std::vector<std::pair<StmtInfo, StmtInfo>> solve(std::vector<stmt_index>);
+	std::pair<std::set<stmt_index>, std::vector<std::pair<StmtInfo, StmtInfo>>> solve(std::vector<stmt_index> starting_statements);
+	bool solveIfAffectingAndAffected(stmt_index affecting, stmt_index affected);
+	bool solveIfAffecting(stmt_index affecting);
+	bool solveIfAffected(stmt_index affected);
+	bool solveIfNonEmpty(std::vector<stmt_index> first_statements);
 
 	IterativeDataflowSolver(
 		const RelationTable<StmtInfo, StmtInfo>& next_table_,
@@ -46,9 +48,13 @@ public:
 
 private:
 	void populateDataflowSets();
+	void processInSet(stmt_index index);
+	void processOutSet(stmt_index index);
+	void resetOutSet();
+
+	std::vector<std::pair<StmtInfo, StmtInfo>> findResults(std::set<stmt_index>);
 
 	bool is_dataflow_sets_populated = false;
-	std::set<stmt_index> visited{};
 
 	std::vector<std::set<ModifiesTuple>> kill_list;
 	std::vector<std::set<ModifiesTuple>> gen_list;
