@@ -49,6 +49,7 @@
     <ClCompile Include="ExprParserTest.cpp" />
     <ClCompile Include="FSMTest.cpp" />
     <ClCompile Include="NextEvaluatorTest.cpp" />
+    <ClCompile Include="NextTEvaluatorTest.cpp" />
     <ClCompile Include="NextTPreprocessorTest.cpp" />
     <ClCompile Include="ParserTest.cpp" />
     <ClCompile Include="PatternAssignEvaluatorTest.cpp" />
