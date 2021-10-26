@@ -16,6 +16,10 @@
 #include "NextTEvaluator.h"
 #include "AffectEvaluator.h"
 #include "AffectTEvaluator.h"
+#include "NextBipEvaluator.h"
+#include "NextBipTEvaluator.h"
+#include "AffectBipEvaluator.h"
+#include "AffectBipTEvaluator.h"
 
 void RelationsEvaluator::evaluateRelation(QueryResult& result, RelRef& relation) {
 	switch (relation.getType()) {
@@ -34,6 +38,10 @@ void RelationsEvaluator::evaluateRelation(QueryResult& result, RelRef& relation)
 	case RelType::NEXT_T: evaluateRelation(result, relation, NextTEvaluator()); break;
 	case RelType::AFFECT: evaluateRelation(result, relation, AffectEvaluator()); break;
 	case RelType::AFFECT_T: evaluateRelation(result, relation, AffectTEvaluator()); break;
+	case RelType::NEXT_BIP: evaluateRelation(result, relation, NextBipEvaluator()); break;
+	case RelType::NEXT_BIP_T: evaluateRelation(result, relation, NextBipTEvaluator()); break;
+	case RelType::AFFECT_BIP: evaluateRelation(result, relation, AffectBipEvaluator()); break;
+	case RelType::AFFECT_BIP_T: evaluateRelation(result, relation, AffectBipTEvaluator()); break;
 	default: throw std::domain_error("Some Relation is not being handle!!!!");
 	}
 }
