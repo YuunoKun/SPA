@@ -1,4 +1,6 @@
 #include "NextTPreprocessor.h"
+#include "RelationsUtility.cpp"
+
 #include <assert.h>
 
 bool NextTPreprocessor::evaluateWildAndWild() {
@@ -23,19 +25,21 @@ bool NextTPreprocessor::evaluateConstantAndConstant(int index1, int index2) {
 		return cache.containsPair(s1, s2);
 	}
 	else {
-		for (StmtInfo indirect_value : cache.forwardDFS(s1)) {
+		auto dfs = RelationsUtility<StmtInfo>::forwardDFS(cache, s1);
+		for (StmtInfo indirect_value : dfs) {
+			cache.insert(s1, indirect_value);
+			calculated_matrix[s1.stmt_index][s2.stmt_index] = true;
 			if (indirect_value == s2) {
 				return true;
 			}
 		}
-		calculated_matrix[index1][index2] = true;
 		return cache.containsPair(s1, s2);
 	}
 }
 
 std::vector<std::pair<StmtInfo, StmtInfo>> NextTPreprocessor::evaluateSynonymAndSynonym() {
 	checkCache();
-	cache = next_table.findTransitiveClosure();
+	cache = RelationsUtility<StmtInfo>::findTransitiveClosure(next_table);
 	is_fully_populated = true;
 	return cache.getPairs();
 }
@@ -55,7 +59,10 @@ std::vector<StmtInfo> NextTPreprocessor::evaluateConstantAndSynonym(int index) {
 		return cache.getValues(s1);
 	}
 	else {
-		std::vector<StmtInfo> res = cache.forwardDFS(s1);
+		std::vector<StmtInfo> res = RelationsUtility<StmtInfo>::forwardDFS(cache, s1);
+		for (auto& s2 : res) {
+			cache.insert(s1, s2);
+		}
 		setDFSForwardTrue(index);
 		return res;
 	}
@@ -68,7 +75,10 @@ std::vector<StmtInfo> NextTPreprocessor::evaluateSynonymAndConstant(int index) {
 		return cache.getKeys(s1);
 	}
 	else {
-		std::vector<StmtInfo> res = cache.backwardDFS(s1);
+		std::vector<StmtInfo> res = RelationsUtility<StmtInfo>::backwardDFS(cache, s1);
+		for (auto& s2 : res) {
+			cache.insert(s2, s2);
+		}
 		setDFSBackwardTrue(index);
 		return res;
 	}

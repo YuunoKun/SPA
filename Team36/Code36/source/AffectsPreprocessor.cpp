@@ -1,4 +1,6 @@
 #include "AffectsPreprocessor.h"
+#include "RelationsUtility.h"
+
 #include <assert.h>
 
 bool AffectsPreprocessor::evaluateWildAndWild() {
@@ -22,7 +24,8 @@ bool AffectsPreprocessor::evaluateConstantAndConstant(int index1, int index2) {
 		return cache.containsPair(s1, s2);
 	}
 	else {
-		for (StmtInfo indirect_value : cache.forwardDFS(s1)) {
+		for (StmtInfo indirect_value : RelationsUtility<StmtInfo>::forwardDFS(cache, s1)) {
+			cache.insert(s1, indirect_value);
 			if (indirect_value == s2) {
 				return true;
 			}
@@ -91,7 +94,6 @@ void AffectsPreprocessor::populateDataflowSets() {
 				}
 				if (s.stmt_type == STMT_ASSIGN) {
 					gen_list[i].emplace(ModifiesTuple{ s.stmt_index, var });
-					//out_list[i].emplace(ModifiesTuple{ s.stmt_index, var });
 				}
 			}
 		}
@@ -143,7 +145,6 @@ void AffectsPreprocessor::iterativeDataFlowAnalysis(std::vector<stmt_index> stmt
 		worklist.pop();
 		int index = curr - 1;
 		int old_out_size = out_list[curr - 1].size();
-		//int old_in_size = in_list[curr - 1].size();
 
 		std::vector<StmtInfo> predecessors = next_table.getKeys(stmt_info_list[index]);
 		std::set<ModifiesTuple> new_in_list{};
@@ -156,9 +157,8 @@ void AffectsPreprocessor::iterativeDataFlowAnalysis(std::vector<stmt_index> stmt
 
 		in_list[index] = new_in_list;
 
-		std::set<ModifiesTuple> filtered{ in_list[index] };
 		std::set<ModifiesTuple> new_out_list{};
-		std::set_difference(filtered.begin(), filtered.end(),
+		std::set_difference(new_in_list.begin(), new_in_list.end(),
 			kill_list[index].begin(), kill_list[index].end(),
 			std::inserter(new_out_list, new_out_list.begin()));
 

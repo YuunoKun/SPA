@@ -14,6 +14,16 @@ std::unordered_map<S, std::vector<T>> RelationTable<T, S>::getTableBackward() {
 	return backward_table;
 }
 
+template<class T, class S>
+void RelationTable<T, S>::sort() {
+	for (auto& pair : forward_table) {
+		std::sort(pair.second.begin(), pair.second.end());
+	}
+	for (auto& pair : backward_table) {
+		std::sort(pair.second.begin(), pair.second.end());
+	}
+}
+
 template <class T, class S>
 bool RelationTable<T, S>::isUniqueKey() const {
 	return uniqueKey;
@@ -144,80 +154,6 @@ bool RelationTable<T, S>::containsPair(T key, S value) {
 	return containsKey(key) && s.find(value) != s.end();
 }
 
-template<class T, class S>
-std::vector<S> RelationTable<T, S>::forwardDFS(T key) {
-	static_assert(std::is_same<T, S>::value, "DFS must be used with a table with columns of same datatype");
-	if (calculated_dfs_forward.count(key)) {
-		return getValues(key);
-	}
-	std::unordered_set<T> visited;
-	std::stack<T> stack;
-
-	for (auto it : getValues(key)) {
-		stack.push(it);
-	}
-
-	while (!stack.empty()) {
-		T s = stack.top();
-		stack.pop();
-		if (calculated_dfs_forward.count(s)) {
-			visited.emplace(s);
-			for (auto it : getValues(s)) {
-				insert(key, it);
-			}
-		}
-		if (!visited.count(s)) {
-			visited.emplace(s);
-			insert(key, s);
-		}
-
-		for (auto it : getValues(s)) {
-			if (!visited.count(it)) {
-				stack.push(it);
-			}
-		}
-	}
-	calculated_dfs_forward.emplace(key);
-	return getValues(key);
-}
-
-template<class T, class S>
-std::vector<T> RelationTable<T, S>::backwardDFS(S value) {
-	static_assert(std::is_same<T, S>::value, "DFS must be used with a table with columns of same datatype");
-	if (calculated_dfs_backward.count(value)) {
-		return getValues(value);
-	}
-	std::unordered_set<S> visited;
-	std::stack<S> stack;
-
-	for (auto it : getKeys(value)) {
-		stack.push(it);
-	}
-
-	while (!stack.empty()) {
-		S s = stack.top();
-		stack.pop();
-		if (calculated_dfs_backward.count(s)) {
-			visited.emplace(s);
-			for (auto it : getKeys(s)) {
-				insert(it, value);
-			}
-		}
-		if (!visited.count(s)) {
-			visited.emplace(s);
-			insert(s, value);
-		}
-
-		for (auto it : getKeys(s)) {
-			if (!visited.count(it)) {
-				stack.push(it);
-			}
-		}
-	}
-	calculated_dfs_backward.emplace(value);
-	return getKeys(value);
-}
-
 template <class T, class S>
 RelationTable<T, S> RelationTable<T, S>::copy() const {
 	RelationTable<T, S> res;
@@ -227,28 +163,6 @@ RelationTable<T, S> RelationTable<T, S>::copy() const {
 		for (auto const& value : v1) {
 			res.insert(key, value);
 		}
-	}
-	return res;
-}
-
-template <class T, class S>
-RelationTable<T, S> RelationTable<T, S>::findTransitiveClosure() const {
-	static_assert(std::is_same<T, S>::value, "Transitive closure must be used with a table with columns of same datatype");
-	RelationTable<T, S> res = copy();
-	std::vector<T> keys = res.getKeys();
-	if (keys.size() == 0) {
-		return res;
-	}
-
-	std::reverse(keys.begin(), keys.end());
-	for (auto const& value : keys) {
-		res.forwardDFS(value);
-	}
-	for (auto& pair : res.forward_table) {
-		std::sort(pair.second.begin(), pair.second.end());
-	}
-	for (auto& pair : res.backward_table) {
-		std::sort(pair.second.begin(), pair.second.end());
 	}
 	return res;
 }

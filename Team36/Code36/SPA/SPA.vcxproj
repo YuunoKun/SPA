@@ -19,6 +19,7 @@
     <ClCompile Include="..\source\Parser.cpp" />
     <ClCompile Include="..\source\Procedure.cpp" />
     <ClCompile Include="..\source\RelationPreprocessor.cpp" />
+    <ClCompile Include="..\source\RelationsUtility.cpp" />
     <ClCompile Include="..\source\RelationTable.cpp" />
     <ClCompile Include="..\source\PKB.cpp" />
     <ClCompile Include="..\source\Statement.cpp" />
@@ -85,6 +86,7 @@
     <ClInclude Include="..\source\Parser.h" />
     <ClInclude Include="..\source\Procedure.h" />
     <ClInclude Include="..\source\KnowledgeBase.h" />
+    <ClInclude Include="..\source\RelationsUtility.h" />
     <ClInclude Include="..\source\RelationTable.h" />
     <ClInclude Include="..\source\Statement.h" />
     <ClInclude Include="..\source\Common.h" />

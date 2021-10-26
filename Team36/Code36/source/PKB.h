@@ -11,6 +11,7 @@
 #include "Common.h"
 #include "KnowledgeBase.h"
 #include "RelationTable.h"
+#include "RelationsUtility.h"
 
 class PKB : public KnowledgeBase {
 public:
