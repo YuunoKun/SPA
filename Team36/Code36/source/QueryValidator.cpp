@@ -70,6 +70,10 @@ void QueryValidator::validateQuery(Query& query, bool& endOfCurrentClauses) {
 
 	// Final check
 
+	if (query.getIsSemanticError() != "") {
+		throw SemanticErrorException(query.getIsSemanticError(), query);
+	}
+
 	for (std::pair<std::string, Entity> ent : query.getEntities()) {
 		if (ent.second.getType() != EntityType::STMT &&
 			ent.second.getType() != EntityType::PROCEDURE &&

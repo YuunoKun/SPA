@@ -397,21 +397,21 @@ void QueryPreprocessor::addPatternToQuery(QueryToken& token) {
 void QueryPreprocessor::addSelectedToQuery(QueryToken& token) {
 	Entity ent;
 	bool isValid = false;
-	if (token.token_value == "BOOLEAN" && this->query.getSelected().size() == 0) {
+
+	for (QueryToken each : this->output) {
+		if (token.token_value == each.token_value) {
+			selected.push_back({ each.type, token.token_value });
+			Synonym synonym;
+			synonym.name = token.token_value;
+			EntityType entityType = Utility::queryTokenTypeToEntityType(each.type);
+			ent = { entityType, synonym };
+			isValid = true;
+		}
+	}
+
+	if (!isValid && token.token_value == "BOOLEAN" && this->query.getSelected().size() == 0) {
 		ent = { EntityType::BOOLEAN };
 		isValid = true;
-	}
-	else {
-		for (QueryToken each : this->output) {
-			if (token.token_value == each.token_value) {
-				selected.push_back({ each.type, token.token_value });
-				Synonym synonym;
-				synonym.name = token.token_value;
-				EntityType entityType = Utility::queryTokenTypeToEntityType(each.type);
-				ent = { entityType, synonym };
-				isValid = true;
-			}
-		}
 	}
 
 	if (!isValid) {
@@ -463,11 +463,6 @@ void QueryPreprocessor::setQueryParameter() {
 
 Query QueryPreprocessor::returnAndResetQuery() {
 	Query query_result = this->query;
-
-	if (query_result.getIsSemanticError() != "") {
-		//returnEmptyResult(query.getSelected().front());
-		throw SemanticErrorException(query.getIsSemanticError(), query);
-	}
 
 	// Reset variables
 	QueryPreprocessor::resetQuery();
