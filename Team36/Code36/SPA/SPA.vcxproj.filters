@@ -279,6 +279,9 @@
     <ClCompile Include="..\source\RelationsUtility.cpp">
       <Filter>Source Files\PKB</Filter>
     </ClCompile>
+    <ClCompile Include="..\source\IterativeDataflowSolver.cpp">
+      <Filter>Source Files\PKB\RelationPreprocessor</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\source\Parser.h">
@@ -499,6 +502,9 @@
     </ClInclude>
     <ClInclude Include="..\source\RelationsUtility.h">
       <Filter>Header Files\PKB</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\IterativeDataflowSolver.h">
+      <Filter>Header Files\PKB\RelationPreprocessor</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

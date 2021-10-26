@@ -16,6 +16,7 @@
     <ClCompile Include="..\source\ExprNode.cpp" />
     <ClCompile Include="..\source\ExprParser.cpp" />
     <ClCompile Include="..\source\FSM.cpp" />
+    <ClCompile Include="..\source\IterativeDataflowSolver.cpp" />
     <ClCompile Include="..\source\Parser.cpp" />
     <ClCompile Include="..\source\Procedure.cpp" />
     <ClCompile Include="..\source\RelationPreprocessor.cpp" />
@@ -82,6 +83,7 @@
     <ClInclude Include="..\source\Extractor.h" />
     <ClInclude Include="..\source\FSM.h" />
     <ClInclude Include="..\source\AffectsPreprocessor.h" />
+    <ClInclude Include="..\source\IterativeDataflowSolver.h" />
     <ClInclude Include="..\source\PKB.h" />
     <ClInclude Include="..\source\Parser.h" />
     <ClInclude Include="..\source\Procedure.h" />
