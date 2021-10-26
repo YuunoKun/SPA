@@ -57,6 +57,7 @@
     <ClCompile Include="PatternsEvaluatorTest.cpp" />
     <ClCompile Include="PatternWhileEvaluatorTest.cpp" />
     <ClCompile Include="PKBAdapterTest.cpp" />
+    <ClCompile Include="QueryEvaluatorCFGRelationTest.cpp" />
     <ClCompile Include="QueryEvaluatorMultiClausesTest.cpp" />
     <ClCompile Include="QueryEvaluatorPatternTest.cpp" />
     <ClCompile Include="QueryEvaluatorRelationTest.cpp" />

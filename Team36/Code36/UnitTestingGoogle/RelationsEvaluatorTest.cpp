@@ -9,14 +9,19 @@ namespace UnitTesting {
 	//Type 1 test relation that take in stmt (left) and stmt (right)
 	//The following relations is tested : FOLLOWS, PARENT, FOLLOWS_T, PARENT_T, NEXT
 	TEST(RelationsEvaluatorTest, evaluateRelationType1) {
+		PKBAdapter pkb;
+
 		PKB::getInstance().resetCache();
 		PKB::getInstance().addStmt(STMT_IF);
 		PKB::getInstance().addStmt(STMT_WHILE);
+		proc_name p = "p";
+		PKB::getInstance().addProcedure(p);
+		pkb.getRelationManager().update();
 
 		RelationsEvaluator evaluator;
 		QueryResult result;
 
-		std::vector<RelType> types = { FOLLOWS, PARENT, FOLLOWS_T, PARENT_T, NEXT };
+		std::vector<RelType> types = { FOLLOWS, PARENT, FOLLOWS_T, PARENT_T, NEXT, NEXT_T };
 
 		//Negative Test Case
 		for (auto type : types) {
@@ -35,7 +40,7 @@ namespace UnitTesting {
 			for (unsigned int i = 0; i < relations.size(); i++) {
 				QueryResult result;
 				evaluator.evaluateRelation(result, relations[i]);
-				EXPECT_FALSE(result.haveResult()) << "ERROR AT RELATION : " << i + 1;
+				EXPECT_FALSE(result.haveResult()) << type << "  ERROR AT RELATION : " << i + 1;
 			}
 		}
 		PKB::getInstance().addFollows(1, 2);
@@ -43,6 +48,9 @@ namespace UnitTesting {
 		PKB::getInstance().addNext(1, 2);
 		PKB::getInstance().generateFollowsT();
 		PKB::getInstance().generateParentT();
+		PKB::getInstance().addProcContains(p, 1);
+		PKB::getInstance().addProcContains(p, 2);
+		pkb.getRelationManager().update();
 
 		//Positive Test Case
 		for (auto type : types) {

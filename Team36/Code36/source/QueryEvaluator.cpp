@@ -14,7 +14,8 @@ std::list<std::string> QueryEvaluator::evaluateQuery(Query& query) {
 	QueryResult result;
 
 	evaluateClauses(query, result);
-
+	PKBAdapter adapter;
+	adapter.getRelationManager().reset();
 	return getResult(query, result);
 }
 

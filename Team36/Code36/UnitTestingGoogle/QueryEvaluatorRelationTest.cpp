@@ -728,8 +728,8 @@ namespace UnitTesting {
 		selected_list.push_back({ CALL, COMMON_SYNONYM1 });
 
 		//Test case for Select selected such that FollowT(selected, a)
-		std::list<std::string> result1 = { FOLLOW_LEFT1, FOLLOW_LEFT2 };
-		std::list<std::string> result2 = { FOLLOW_LEFT1, FOLLOW_LEFT2 };
+		std::list<std::string> result1 = { left1, left2 };
+		std::list<std::string> result2 = { left1, left2 };
 		std::list<std::string> result3 = { };
 		std::list<std::string> result4 = { };
 		std::list<std::string> result5 = { };
