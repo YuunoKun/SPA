@@ -99,6 +99,14 @@ std::string QueryEvaluator::getEntitySecondaryAttribute(std::string primary, Ent
 	throw std::domain_error("Selected Entity type does not have Secondary Attribute!");
 }
 
+std::list<std::string> QueryEvaluator::convertToSecondaryAttribute(std::list<std::string> table, Entity type) {
+	std::list<std::string> results;
+	for (auto row : table) {
+		results.emplace_back(getEntitySecondaryAttribute(row, type));
+	}
+	return results;
+}
+
 std::list<std::string> QueryEvaluator::mergeResultTables(std::list<std::list<std::string>> table, std::vector<Entity> selected) {
 
 	std::list<std::string> results;
@@ -169,5 +177,8 @@ std::list<std::string> QueryEvaluator::getResult(Query& query, QueryResult& resu
 		return getRawResult(query.getSelected()[0]);
 	}
 
+	if (Utility::isSecondaryAttribute(query.getSelected()[0])) {
+		return convertToSecondaryAttribute(result.getResult(query.getSelected()[0]), query.getSelected()[0]);
+	}
 	return result.getResult(query.getSelected()[0]);
 }
