@@ -344,7 +344,7 @@ void QueryPreprocessor::setIdentifierToQueryTokenType(QueryToken& token) {
 		else if (token.token_value == "constant") {
 			declarationType = { QueryToken::QueryTokenType::CONSTANT, "constant" };
 		}
-		else if (token.token_value == "prog_line") {
+		else if (token.type == QueryToken::QueryTokenType::PROG_LINE) {
 			declarationType = { QueryToken::QueryTokenType::PROG_LINE, "prog_line" };
 		}
 		// Need to enforce that Select must only come after a terminator
