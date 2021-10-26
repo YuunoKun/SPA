@@ -20,7 +20,7 @@ private:
 
 	std::string getEntitySecondaryAttribute(std::string, Entity);
 
-	std::list<std::string> converToSecondaryAttribute(std::list<std::string>, Entity);
+	std::list<std::string> convertToSecondaryAttribute(std::list<std::string>, Entity);
 
 
 

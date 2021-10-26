@@ -4,6 +4,7 @@
 #include "ResultTable.h"
 #include "RelationsEvaluator.h"
 #include "PatternsEvaluator.h"
+#include "CFGRelationsManager.h"
 #include "Clause.h"
 
 QueryEvaluator::QueryEvaluator() {
@@ -14,6 +15,7 @@ std::list<std::string> QueryEvaluator::evaluateQuery(Query& query) {
 
 	evaluateClauses(query, result);
 
+	CFGRelationsManager::getInstance().reset();
 	return getResult(query, result);
 }
 

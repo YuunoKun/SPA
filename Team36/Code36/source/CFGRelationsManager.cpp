@@ -2,6 +2,12 @@
 
 #include "NextTPreprocessor.h"
 
+
+CFGRelationsManager& CFGRelationsManager::getInstance() {
+	static CFGRelationsManager relations_manager;
+	return relations_manager;
+}
+
 void CFGRelationsManager::reset() {
 	next_t_processor.reset();
 }

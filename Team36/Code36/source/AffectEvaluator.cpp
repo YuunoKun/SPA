@@ -4,55 +4,47 @@
 #include "QueryResult.h"
 #include "PKBAdapter.h"
 #include "AffectEvaluator.h"
+#include "CFGRelationsManager.h"
 
 
 bool AffectEvaluator::evaluateWildAndWild() {
-	//Todo Evaluator
-	return !pkb.isFollowEmpty();
+	return !CFGRelationsManager::getInstance().isAffectsEmpty();
 }
 
 bool AffectEvaluator::evaluateConstantAndConstant(Entity e1, Entity e2) {
-	//Todo Evaluator
 	stmt_index c1 = stoi(e1.getValue());
 	stmt_index c2 = stoi(e2.getValue());
-	return pkb.isFollow(c1, c2);;
+	return CFGRelationsManager::getInstance().isAffects(c1, c2);;
 }
 
 bool AffectEvaluator::evaluateConstantAndWild(Entity e) {
-	//Todo Evaluator
 	stmt_index c = stoi(e.getValue());
-	return pkb.isFollowed(c);
+	return CFGRelationsManager::getInstance().isAffector(c);
 }
 
 bool AffectEvaluator::evaluateWildAndConstant(Entity e) {
-	//Todo Evaluator
 	stmt_index c = stoi(e.getValue());
-	return pkb.isFollowing(c);
+	return CFGRelationsManager::getInstance().isAffected(c);
 }
 
 ResultTable AffectEvaluator::evaluateSynonymAndSynonym(Entity left, Entity right) {
-	//Todo Evaluator
-	return ResultTable({ left, right }, pkb.getFollows());
+	return ResultTable({ left, right }, CFGRelationsManager::getInstance().getAllAffectsRelation());
 }
 
 ResultTable AffectEvaluator::evaluateWildAndSynonym(Entity header) {
-	//Todo Evaluator
-	return ResultTable(header, pkb.getFollowing());
+	return ResultTable(header, CFGRelationsManager::getInstance().getAffected());
 }
 
 ResultTable AffectEvaluator::evaluateSynonymAndWild(Entity header) {
-	//Todo Evaluator
-	return ResultTable(header, pkb.getFollowed());
+	return ResultTable(header, CFGRelationsManager::getInstance().getAffector());
 }
 
 ResultTable AffectEvaluator::evaluateConstantAndSynonym(Entity constant, Entity header) {
-	//Todo Evaluator
 	stmt_index c = stoi(constant.getValue());
-	return ResultTable(header, pkb.getFollowing(c));
+	return ResultTable(header, CFGRelationsManager::getInstance().getAffected(c));
 }
 
 ResultTable AffectEvaluator::evaluateSynonymAndConstant(Entity header, Entity constant) {
-	//Todo Evaluator
 	stmt_index c = stoi(constant.getValue());
-	return ResultTable(header, pkb.getFollowed(c));
+	return ResultTable(header, CFGRelationsManager::getInstance().getAffector(c));
 }

@@ -4,54 +4,46 @@
 #include "QueryResult.h"
 #include "PKBAdapter.h"
 #include "NextTEvaluator.h"
+#include "CFGRelationsManager.h"
 
 bool NextTEvaluator::evaluateWildAndWild() {
-	//Todo Evaluator
-	return !pkb.isFollowEmpty();
+	return !CFGRelationsManager::getInstance().isNextTEmpty();
 }
 
 bool NextTEvaluator::evaluateConstantAndConstant(Entity e1, Entity e2) {
-	//Todo Evaluator
-	stmt_index c1 = stoi(e1.getValue());
-	stmt_index c2 = stoi(e2.getValue());
-	return pkb.isFollow(c1, c2);;
+	prog_line c1 = stoi(e1.getValue());
+	prog_line c2 = stoi(e2.getValue());
+	return CFGRelationsManager::getInstance().isNextT(c1, c2);;
 }
 
 bool NextTEvaluator::evaluateConstantAndWild(Entity e) {
-	//Todo Evaluator
-	stmt_index c = stoi(e.getValue());
-	return pkb.isFollowed(c);
+	prog_line c = stoi(e.getValue());
+	return CFGRelationsManager::getInstance().isPreviousT(c);
 }
 
 bool NextTEvaluator::evaluateWildAndConstant(Entity e) {
-	//Todo Evaluator
-	stmt_index c = stoi(e.getValue());
-	return pkb.isFollowing(c);
+	prog_line c = stoi(e.getValue());
+	return CFGRelationsManager::getInstance().isNextT(c);
 }
 
 ResultTable NextTEvaluator::evaluateSynonymAndSynonym(Entity left, Entity right) {
-	//Todo Evaluator
-	return ResultTable({ left, right }, pkb.getFollows());
+	return ResultTable({ left, right }, CFGRelationsManager::getInstance().getAllNextTRelation());
 }
 
 ResultTable NextTEvaluator::evaluateWildAndSynonym(Entity header) {
-	//Todo Evaluator
-	return ResultTable(header, pkb.getFollowing());
+	return ResultTable(header, CFGRelationsManager::getInstance().getNextT());
 }
 
 ResultTable NextTEvaluator::evaluateSynonymAndWild(Entity header) {
-	//Todo Evaluator
-	return ResultTable(header, pkb.getFollowed());
+	return ResultTable(header, CFGRelationsManager::getInstance().getPreviousT());
 }
 
 ResultTable NextTEvaluator::evaluateConstantAndSynonym(Entity constant, Entity header) {
-	//Todo Evaluator
-	stmt_index c = stoi(constant.getValue());
-	return ResultTable(header, pkb.getFollowing(c));
+	prog_line c = stoi(constant.getValue());
+	return ResultTable(header, CFGRelationsManager::getInstance().getNextT(c));
 }
 
 ResultTable NextTEvaluator::evaluateSynonymAndConstant(Entity header, Entity constant) {
-	//Todo Evaluator
-	stmt_index c = stoi(constant.getValue());
-	return ResultTable(header, pkb.getFollowed(c));
+	prog_line c = stoi(constant.getValue());
+	return ResultTable(header, CFGRelationsManager::getInstance().getPreviousT(c));
 }
