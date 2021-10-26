@@ -46,9 +46,12 @@ public:
 	static bool isStmtRef(Query&, std::vector<QueryToken>);
 	static bool isEntRef(Query&, std::vector<QueryToken>);
 	static bool isLineRef(Query&, std::vector<QueryToken>);
+	static bool isRef(Query&, std::vector<QueryToken>);
 	static bool isExpr(std::vector<QueryToken>);
 	static bool isCorrectSynEntRef(Query&, std::vector<QueryToken>, EntityType);
 	static bool isWildCard(std::vector<QueryToken>);
+	static bool isStringRefType(Query&, std::vector<QueryToken>);
+	static bool isIntRefType(Query&, std::vector<QueryToken>);
 	static Entity setStmtRef(Query&, QueryToken);
 	static Entity setEntRef(Query&, std::vector<QueryToken>, EntityType);
 	static Entity setLineRef(Query&, QueryToken);

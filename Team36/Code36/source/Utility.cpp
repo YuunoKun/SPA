@@ -399,7 +399,6 @@ bool Utility::isLineRef(Query& query, std::vector<QueryToken> token_chain) {
 		throw SyntacticErrorException("Invalid lineRef arguments");
 	}
 
-	// more than 1 args found. possible entref
 	if (token_chain.size() > 1) {
 		return false;
 	}
@@ -434,6 +433,70 @@ bool Utility::isLineRef(Query& query, std::vector<QueryToken> token_chain) {
 		}
 	}
 	return false;
+}
+
+bool Utility::isRef(Query& query, std::vector<QueryToken> token_chain) {
+	// entRef : synonym | ‘_’ | ‘"’ IDENT ‘"’ | synonym"."attrName
+	
+	std::unordered_map<std::string, Entity> ent_chain = query.getEntities();
+
+	if (token_chain.size() == 0) {
+		throw SyntacticErrorException("Invalid entRef arguments");
+	}
+	else if (token_chain.size() == 1) {
+		QueryToken token = token_chain[0];
+		if (token.type == QueryToken::CONSTANT) {
+			return true;
+		}
+		else if (token.type == QueryToken::IDENTIFIER) {
+			// check synonym if is declared
+
+			if (ent_chain.find(token.token_value) != ent_chain.end()) {
+				return ent_chain.at(token.token_value).getType() == EntityType::PROG_LINE;
+			}
+			else {
+				// Undeclared Syn, Cannot find Entity in Query
+				throw SyntacticErrorException("Undeclared ref");
+			}
+		}
+		else {
+			return false;
+		}
+
+	}
+	else if (token_chain.size() == 3) {
+		//checking for " IDENT " 
+		if (token_chain[0].type == QueryToken::QUOTATION_OPEN &&
+			token_chain[1].type == QueryToken::IDENTIFIER &&
+			token_chain[2].type == QueryToken::QUOTATION_CLOSE) {
+			return true;
+		}
+		else if (token_chain[0].type == QueryToken::IDENTIFIER &&
+			token_chain[1].type == QueryToken::DOT &&
+			token_chain[2].type == QueryToken::PROC_NAME ||
+			token_chain[2].type == QueryToken::VAR_NAME ||
+			token_chain[2].type == QueryToken::VALUE ||
+			token_chain[2].type == QueryToken::STMT_INDEX) {
+
+			return ent_chain.at(token_chain[0].token_value).getType() == EntityType::STMT ||
+				ent_chain.at(token_chain[0].token_value).getType() == EntityType::READ ||
+				ent_chain.at(token_chain[0].token_value).getType() == EntityType::PRINT ||
+				ent_chain.at(token_chain[0].token_value).getType() == EntityType::CALL ||
+				ent_chain.at(token_chain[0].token_value).getType() == EntityType::WHILE ||
+				ent_chain.at(token_chain[0].token_value).getType() == EntityType::IF ||
+				ent_chain.at(token_chain[0].token_value).getType() == EntityType::ASSIGN ||
+				ent_chain.at(token_chain[0].token_value).getType() == EntityType::VARIABLE ||
+				ent_chain.at(token_chain[0].token_value).getType() == EntityType::CONSTANT ||
+				ent_chain.at(token_chain[0].token_value).getType() == EntityType::PROCEDURE;
+
+		}
+		else {
+			throw SyntacticErrorException("Invalid ref arguments");
+		}
+	}
+	else {
+		throw SyntacticErrorException("Invalid ref arguments");
+	}
 }
 
 bool Utility::isExpr(std::vector<QueryToken> token_chain) {
@@ -502,6 +565,95 @@ bool Utility::isWildCard(std::vector<QueryToken> token_chain) {
 		return false;
 	}
 }
+
+bool Utility::isStringRefType(Query& query, std::vector<QueryToken> token_chain) {
+
+	std::unordered_map<std::string, Entity> ent_chain = query.getEntities();
+	if (token_chain.size() == 3) {
+		//checking for " IDENT " 
+		if (token_chain[0].type == QueryToken::QUOTATION_OPEN &&
+			token_chain[1].type == QueryToken::IDENTIFIER &&
+			token_chain[2].type == QueryToken::QUOTATION_CLOSE) {
+			return true;
+		}
+		else if (token_chain[0].type == QueryToken::IDENTIFIER &&
+			token_chain[1].type == QueryToken::DOT &&
+			token_chain[2].type == QueryToken::VAR_NAME && 
+			ent_chain.at(token_chain[0].token_value).getType() == EntityType::READ ||
+			ent_chain.at(token_chain[0].token_value).getType() == EntityType::PRINT) {
+
+			return true;
+		}
+		else if (token_chain[0].type == QueryToken::IDENTIFIER &&
+			token_chain[1].type == QueryToken::DOT &&
+			token_chain[2].type == QueryToken::PROC_NAME && 
+			ent_chain.at(token_chain[0].token_value).getType() == EntityType::CALL ||
+			ent_chain.at(token_chain[0].token_value).getType() == EntityType::PROCEDURE) {
+
+			return true;
+		} 
+		else if (token_chain[0].type == QueryToken::IDENTIFIER &&
+			token_chain[1].type == QueryToken::DOT &&
+			token_chain[2].type == QueryToken::STMT_INDEX ||
+			token_chain[2].type == QueryToken::VALUE) {
+			return false;
+		}
+		else {
+			throw SemanticErrorException("ref has no string value");
+		}
+	}
+	else {
+		return false;
+	}
+}
+
+static bool isIntRefType(Query& query, std::vector<QueryToken> token_chain) {
+	std::unordered_map<std::string, Entity> ent_chain = query.getEntities();
+	if (token_chain.size() == 1) {
+		if (token_chain[0].type == QueryToken::CONSTANT) {
+			return true;
+		}
+		else if (token_chain[0].type == QueryToken::IDENTIFIER &&
+			ent_chain.at(token_chain[0].token_value).getType() == EntityType::PROG_LINE) {
+
+			return true;
+		}
+	} else if (token_chain.size() == 3) {
+		if (token_chain[0].type == QueryToken::IDENTIFIER &&
+			token_chain[1].type == QueryToken::DOT &&
+			token_chain[2].type == QueryToken::STMT_INDEX &&
+			ent_chain.at(token_chain[0].token_value).getType() == EntityType::STMT ||
+			ent_chain.at(token_chain[0].token_value).getType() == EntityType::READ ||
+			ent_chain.at(token_chain[0].token_value).getType() == EntityType::PRINT || 
+			ent_chain.at(token_chain[0].token_value).getType() == EntityType::CALL || 
+			ent_chain.at(token_chain[0].token_value).getType() == EntityType::WHILE || 
+			ent_chain.at(token_chain[0].token_value).getType() == EntityType::IF || 
+			ent_chain.at(token_chain[0].token_value).getType() == EntityType::ASSIGN) {
+
+			return true;
+		}
+		else if (token_chain[0].type == QueryToken::IDENTIFIER &&
+			token_chain[1].type == QueryToken::DOT &&
+			token_chain[2].type == QueryToken::VALUE &&
+			ent_chain.at(token_chain[0].token_value).getType() == EntityType::CONSTANT) {
+
+			return true;
+		}
+		else if (token_chain[0].type == QueryToken::IDENTIFIER &&
+			token_chain[1].type == QueryToken::DOT &&
+			token_chain[2].type == QueryToken::VAR_NAME ||
+			token_chain[2].type == QueryToken::PROC_NAME) {
+			return false;
+		}
+		else {
+			throw SemanticErrorException("ref has no int value");
+		}
+	}
+	else {
+		return false;
+	}
+}
+
 
 Entity Utility::setStmtRef(Query& query, QueryToken token) {
 	// synonym | ‘_’ | INTEGER
