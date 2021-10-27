@@ -43,7 +43,7 @@ namespace UnitTesting {
 		//07                print a;
 		//              }
 		//08            x = x + 2 * y;
-		//09            call Third;
+		//09            call Second;
 		//10            i = i - 1;
 		//          }
 		//11        if (x == 1) then {
@@ -152,10 +152,18 @@ namespace UnitTesting {
 		std::set_difference(stmt_list.begin(), stmt_list.end(), true_list.begin(), true_list.end(), std::inserter(false_list, false_list.begin()));
 
 		for (auto& stmt : true_list) {
+			EXPECT_EQ(processor.getAffected()[stmt.stmt_index - 1], STATUS_UNKNOWN);
 			EXPECT_TRUE(processor.evaluateWildAndConstant(stmt.stmt_index)) << "Expected true but fail at " << stmt.stmt_index;
+			EXPECT_EQ(processor.getAffected()[stmt.stmt_index - 1], STATUS_TRUE);
+			EXPECT_TRUE(processor.evaluateWildAndConstant(stmt.stmt_index)) << "Expected true but fail at " << stmt.stmt_index;
+			EXPECT_EQ(processor.getAffected()[stmt.stmt_index - 1], STATUS_TRUE);
 		}
 		for (auto& stmt : false_list) {
+			EXPECT_EQ(processor.getAffected()[stmt.stmt_index - 1], STATUS_UNKNOWN);
 			EXPECT_FALSE(processor.evaluateWildAndConstant(stmt.stmt_index)) << "Expected false but fail at " << stmt.stmt_index;
+			EXPECT_EQ(processor.getAffected()[stmt.stmt_index - 1], STATUS_FALSE);
+			EXPECT_FALSE(processor.evaluateWildAndConstant(stmt.stmt_index)) << "Expected false but fail at " << stmt.stmt_index;
+			EXPECT_EQ(processor.getAffected()[stmt.stmt_index - 1], STATUS_FALSE);
 		}
 	}
 
@@ -176,8 +184,14 @@ namespace UnitTesting {
 		for (auto& pair : true_list) {
 			EXPECT_TRUE(processor.evaluateConstantAndConstant(pair.first.stmt_index, pair.second.stmt_index)) << "Expected true but fail at " <<
 				pair.first.stmt_index << " and" << pair.second.stmt_index;
+			EXPECT_EQ(processor.getCalculatedMatrix()[pair.first.stmt_index - 1][pair.second.stmt_index - 1], 1);
+			EXPECT_TRUE(processor.evaluateConstantAndConstant(pair.first.stmt_index, pair.second.stmt_index)) << "Expected true but fail at " <<
+				pair.first.stmt_index << " and" << pair.second.stmt_index;
 		}
 		for (auto& pair : false_list) {
+			EXPECT_FALSE(processor.evaluateConstantAndConstant(pair.first.stmt_index, pair.second.stmt_index)) << "Expected false but fail at " <<
+				pair.first.stmt_index << " and" << pair.second.stmt_index;
+			EXPECT_EQ(processor.getCalculatedMatrix()[pair.first.stmt_index - 1][pair.second.stmt_index - 1], 1);
 			EXPECT_FALSE(processor.evaluateConstantAndConstant(pair.first.stmt_index, pair.second.stmt_index)) << "Expected false but fail at " <<
 				pair.first.stmt_index << " and" << pair.second.stmt_index;
 		}
@@ -188,6 +202,7 @@ namespace UnitTesting {
 		std::sort(v1.begin(), v1.end());
 		EXPECT_EQ(v1, expected_pairs);
 		EXPECT_TRUE(processor.isFullyPopulated());
+		EXPECT_EQ(v1, expected_pairs);
 	}
 
 	TEST_F(AffectsPreprocessorTest, evaluateWildAndSynonym) {
@@ -202,6 +217,7 @@ namespace UnitTesting {
 		std::copy(set.begin(), set.end(), v2.begin());
 		std::sort(v2.begin(), v2.end());
 		EXPECT_EQ(v1, v2);
+		EXPECT_TRUE(processor.isFullyPopulated());
 	}
 
 	TEST_F(AffectsPreprocessorTest, evaluateSynonymAndWild) {
@@ -216,6 +232,7 @@ namespace UnitTesting {
 		std::copy(set.begin(), set.end(), v2.begin());
 		std::sort(v2.begin(), v2.end());
 		EXPECT_EQ(v1, v2);
+		EXPECT_TRUE(processor.isFullyPopulated());
 	}
 
 	TEST_F(AffectsPreprocessorTest, evaluateConstantAndSynonym) {
@@ -232,7 +249,7 @@ namespace UnitTesting {
 			EXPECT_EQ(v1, v2);
 			for (int i = 0; i < PKB::getInstance().getStmts().size(); i++) {
 				EXPECT_TRUE(processor.getCalculatedMatrix()[stmt.stmt_index - 1][i]);
-				EXPECT_TRUE(processor.getDFSForwardComputedList()[stmt.stmt_index - 1]);
+				EXPECT_TRUE(processor.isDFSForwardComputed(stmt.stmt_index));
 			}
 		}
 	}
@@ -251,9 +268,94 @@ namespace UnitTesting {
 			EXPECT_EQ(v1, v2);
 			for (int i = 0; i < PKB::getInstance().getStmts().size(); i++) {
 				EXPECT_TRUE(processor.getCalculatedMatrix()[i][stmt.stmt_index - 1]);
-				EXPECT_TRUE(processor.getDFSBackwardComputedList()[stmt.stmt_index - 1]);
+				EXPECT_TRUE(processor.isDFSBackwardComputed(stmt.stmt_index));
 			}
 		}
+	}
+
+	TEST_F(AffectsPreprocessorTest, combinations) {
+		// (s1, s2)
+
+		auto v1 = processor.evaluateSynonymAndSynonym();
+		std::sort(v1.begin(), v1.end());
+		EXPECT_EQ(v1, expected_pairs);
+		EXPECT_TRUE(processor.isFullyPopulated());
+
+		// (s1, c)
+
+		for (auto& stmt : stmt_list) {
+			auto v1 = processor.evaluateSynonymAndConstant(stmt.stmt_index);
+			std::sort(v1.begin(), v1.end());
+
+			std::vector<StmtInfo> v2;
+			for (auto& pair : expected_pairs) {
+				if (pair.second == stmt) {
+					v2.push_back(pair.first);
+				}
+			}
+			EXPECT_EQ(v1, v2);
+			for (int i = 0; i < PKB::getInstance().getStmts().size(); i++) {
+				EXPECT_TRUE(processor.getCalculatedMatrix()[i][stmt.stmt_index - 1]);
+				EXPECT_TRUE(processor.isDFSBackwardComputed(stmt.stmt_index));
+			}
+		}
+
+		// (c1, c2)
+		std::vector < std::pair<StmtInfo, StmtInfo>> true_list2 = expected_pairs, false_list2, all_list2;
+		for (auto& s1 : stmt_list) {
+			for (auto& s2 : stmt_list) {
+				all_list2.push_back({ s1, s2 });
+			}
+		}
+
+		std::sort(true_list2.begin(), true_list2.end());
+		std::sort(all_list2.begin(), all_list2.end());
+
+		std::set_difference(all_list2.begin(), all_list2.end(), true_list2.begin(), true_list2.end(), std::inserter(false_list2, false_list2.begin()));
+
+		for (auto& pair : true_list2) {
+			EXPECT_TRUE(processor.evaluateConstantAndConstant(pair.first.stmt_index, pair.second.stmt_index)) << "Expected true but fail at " <<
+				pair.first.stmt_index << " and" << pair.second.stmt_index;
+		}
+		for (auto& pair : false_list2) {
+			EXPECT_FALSE(processor.evaluateConstantAndConstant(pair.first.stmt_index, pair.second.stmt_index)) << "Expected false but fail at " <<
+				pair.first.stmt_index << " and" << pair.second.stmt_index;
+		}
+
+		// (c, _)
+
+		std::vector<StmtInfo> true_list, false_list;
+		std::set<StmtInfo> set;
+		for (auto& pair : expected_pairs) {
+			set.emplace(pair.first);
+		}
+		true_list.assign(set.begin(), set.end());
+
+		std::sort(true_list.begin(), true_list.end());
+		std::sort(stmt_list.begin(), stmt_list.end());
+
+		std::set_difference(stmt_list.begin(), stmt_list.end(), true_list.begin(), true_list.end(), std::inserter(false_list, false_list.begin()));
+
+		for (auto& stmt : true_list) {
+			EXPECT_TRUE(processor.evaluateConstantAndWild(stmt.stmt_index)) << "Expected true but fail at " << stmt.stmt_index;
+		}
+		for (auto& stmt : false_list) {
+			EXPECT_FALSE(processor.evaluateConstantAndWild(stmt.stmt_index)) << "Expected false but fail at " << stmt.stmt_index;
+		}
+
+		// (s1, _)
+		auto v3 = processor.evaluateSynonymAndWild();
+		std::sort(v3.begin(), v3.end());
+
+		std::unordered_set<StmtInfo> set2;
+		for (auto& pair : expected_pairs) {
+			set2.emplace(pair.first);
+		}
+		std::vector<StmtInfo> v4(set.size());
+		std::copy(set2.begin(), set2.end(), v4.begin());
+		std::sort(v4.begin(), v4.end());
+		EXPECT_EQ(v3, v4);
+		EXPECT_TRUE(processor.isFullyPopulated());
 	}
 
 	TEST_F(AffectsPreprocessorTest, reset) {
@@ -261,23 +363,23 @@ namespace UnitTesting {
 			processor.evaluateSynonymAndConstant(stmt.stmt_index);
 			for (int i = 0; i < PKB::getInstance().getStmts().size(); i++) {
 				EXPECT_TRUE(processor.getCalculatedMatrix()[i][stmt.stmt_index - 1]);
-				EXPECT_TRUE(processor.getDFSBackwardComputedList()[stmt.stmt_index - 1]);
+				EXPECT_TRUE(processor.isDFSBackwardComputed(stmt.stmt_index));
 			}
 		}
 		for (auto& stmt : stmt_list) {
 			processor.evaluateConstantAndSynonym(stmt.stmt_index);
 			for (int i = 0; i < PKB::getInstance().getStmts().size(); i++) {
 				EXPECT_TRUE(processor.getCalculatedMatrix()[stmt.stmt_index - 1][i]);
-				EXPECT_TRUE(processor.getDFSForwardComputedList()[stmt.stmt_index - 1]);
+				EXPECT_TRUE(processor.isDFSForwardComputed(stmt.stmt_index));
 			}
 		}
 		processor.reset();
 		for (auto& stmt : stmt_list) {
 			for (int i = 0; i < PKB::getInstance().getStmts().size(); i++) {
 				EXPECT_FALSE(processor.getCalculatedMatrix()[i][stmt.stmt_index - 1]);
-				EXPECT_FALSE(processor.getDFSBackwardComputedList()[stmt.stmt_index - 1]);
+				EXPECT_TRUE(processor.isDFSBackwardComputed(stmt.stmt_index));
 				EXPECT_FALSE(processor.getCalculatedMatrix()[stmt.stmt_index - 1][i]);
-				EXPECT_FALSE(processor.getDFSForwardComputedList()[stmt.stmt_index - 1]);
+				EXPECT_TRUE(processor.isDFSForwardComputed(stmt.stmt_index));
 			}
 		}
 		processor.evaluateSynonymAndSynonym();

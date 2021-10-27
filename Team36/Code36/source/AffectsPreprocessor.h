@@ -9,12 +9,6 @@
 #include "RelationPreprocessor.h"
 #include "IterativeDataflowSolver.h"
 
-enum BooleanStatus {
-	STATUS_UNKNOWN = 2,
-	STATUS_TRUE = 1,
-	STATUS_FALSE = 0
-};
-
 class AffectsPreprocessor : public RelationPreprocessor
 {
 public:
@@ -27,6 +21,11 @@ public:
 	std::vector<StmtInfo> evaluateSynonymAndWild() override;
 	std::vector<StmtInfo> evaluateConstantAndSynonym(int) override;
 	std::vector<StmtInfo> evaluateSynonymAndConstant(int) override;
+	std::vector<BooleanStatus> getAffecting();
+	std::vector<BooleanStatus> getAffected();
+	BooleanStatus isNonEmpty();
+
+	void reset();
 
 	AffectsPreprocessor(
 		const MonotypeRelationTable<StmtInfo>& next_table,
@@ -37,6 +36,7 @@ public:
 	AffectsPreprocessor() = default;
 private:
 	void updateCache(std::set<stmt_index>, std::vector<std::pair<StmtInfo, StmtInfo>>);
+	bool inSameProc(stmt_index index1, stmt_index index2);
 
 	const std::vector<StmtInfo>& stmt_info_list;
 	const MonotypeRelationTable<StmtInfo>& next_table;
@@ -45,8 +45,7 @@ private:
 	const RelationTable<proc_name, stmt_index>& procS_table;
 	IterativeDataflowSolver solver{ next_table , useS_table, modifiesS_table, procS_table, stmt_info_list };
 
-	bool isNonEmptyCalculated = false;
-	bool isNonEmpty = false;
-	std::vector<BooleanStatus> isAffecting{ stmt_info_list.size(), STATUS_UNKNOWN };
-	std::vector<BooleanStatus> isAffected{ stmt_info_list.size(), STATUS_UNKNOWN };
+	BooleanStatus is_non_empty = STATUS_UNKNOWN;
+	std::vector<BooleanStatus> is_affecting{ stmt_info_list.size(), STATUS_UNKNOWN };
+	std::vector<BooleanStatus> is_affected{ stmt_info_list.size(), STATUS_UNKNOWN };
 };

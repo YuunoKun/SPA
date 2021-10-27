@@ -628,27 +628,6 @@ namespace UnitTesting {
 		PKB::getInstance().resetCache();
 	}
 
-	TEST(PKB, inSameProc) {
-		PKB::getInstance().resetCache();
-
-		proc_name first = "first";
-		proc_name second = "second";
-
-		PKB::getInstance().addStmt(STMT_CALL);
-		PKB::getInstance().addStmt(STMT_ASSIGN);
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addProcedure(first);
-		PKB::getInstance().addProcedure(second);
-		PKB::getInstance().addProcContains(first, 1);
-		PKB::getInstance().addProcContains(first, 2);
-		PKB::getInstance().addProcContains(second, 3);
-		EXPECT_TRUE(PKB::getInstance().inSameProc(1, 2));
-		EXPECT_FALSE(PKB::getInstance().inSameProc(2, 3));
-		EXPECT_FALSE(PKB::getInstance().inSameProc(1, 3));
-
-		PKB::getInstance().resetCache();
-	}
-
 	TEST(PKB, resetCache) {
 		PKB::getInstance().resetCache();
 

@@ -6,6 +6,7 @@
 #include "RelationTable.h"
 #include "RelationTable.cpp"
 #include "NextTPreprocessor.h"
+#include "AffectsPreprocessor.h"
 
 class CFGRelationsManager
 {
@@ -43,7 +44,11 @@ public:
 	std::vector<StmtInfo> getAffectorT(stmt_index index);
 
 	NextTPreprocessor getNextTProcessor();
+	AffectsPreprocessor getAffectsProcessor();
 
 private:
 	NextTPreprocessor next_t_processor = NextTPreprocessor(PKB::getInstance().getNext(), PKB::getInstance().getStmts());
+	AffectsPreprocessor affects_processor = AffectsPreprocessor(
+		PKB::getInstance().getNext(), PKB::getInstance().getUsesS(), PKB::getInstance().getModifiesS(),
+		PKB::getInstance().getProcContains(), PKB::getInstance().getStmts());
 };

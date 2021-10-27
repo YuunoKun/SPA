@@ -38,6 +38,7 @@ public:
 	bool solveIfAffecting(stmt_index affecting);
 	bool solveIfAffected(stmt_index affected);
 	bool solveIfNonEmpty(std::vector<stmt_index> first_statements);
+	void reset();
 
 	IterativeDataflowSolver(
 		const MonotypeRelationTable<StmtInfo>& next_table,
@@ -51,6 +52,7 @@ private:
 	void processInSet(stmt_index index);
 	void processOutSet(stmt_index index);
 	void resetOutSet();
+	void resetInSet();
 
 	std::vector<std::pair<StmtInfo, StmtInfo>> findResults(std::set<stmt_index>);
 

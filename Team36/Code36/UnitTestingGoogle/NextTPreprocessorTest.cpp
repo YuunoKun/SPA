@@ -168,7 +168,7 @@ namespace UnitTesting {
 			EXPECT_EQ(v1, v2);
 			for (int i = 0; i < PKB::getInstance().getStmts().size(); i++) {
 				EXPECT_TRUE(processor.getCalculatedMatrix()[stmt.stmt_index - 1][i]);
-				EXPECT_TRUE(processor.getDFSForwardComputedList()[stmt.stmt_index - 1]);
+				EXPECT_TRUE(processor.isDFSForwardComputed(stmt.stmt_index));
 			}
 		}
 	}
@@ -187,7 +187,7 @@ namespace UnitTesting {
 			EXPECT_EQ(v1, v2);
 			for (int i = 0; i < PKB::getInstance().getStmts().size(); i++) {
 				EXPECT_TRUE(processor.getCalculatedMatrix()[i][stmt.stmt_index - 1]);
-				EXPECT_TRUE(processor.getDFSBackwardComputedList()[stmt.stmt_index - 1]);
+				EXPECT_TRUE(processor.isDFSBackwardComputed(stmt.stmt_index));
 			}
 		}
 	}
@@ -197,30 +197,30 @@ namespace UnitTesting {
 			processor.evaluateSynonymAndConstant(stmt.stmt_index);
 			for (int i = 0; i < PKB::getInstance().getStmts().size(); i++) {
 				EXPECT_TRUE(processor.getCalculatedMatrix()[i][stmt.stmt_index - 1]);
-				EXPECT_TRUE(processor.getDFSBackwardComputedList()[stmt.stmt_index - 1]);
+				EXPECT_TRUE(processor.isDFSBackwardComputed(stmt.stmt_index));
 			}
 		}
 		for (auto& stmt : s) {
 			processor.evaluateConstantAndSynonym(stmt.stmt_index);
 			for (int i = 0; i < PKB::getInstance().getStmts().size(); i++) {
 				EXPECT_TRUE(processor.getCalculatedMatrix()[stmt.stmt_index - 1][i]);
-				EXPECT_TRUE(processor.getDFSForwardComputedList()[stmt.stmt_index - 1]);
+				EXPECT_TRUE(processor.isDFSForwardComputed(stmt.stmt_index));
 			}
 		}
 		processor.reset();
 		for (auto& stmt : s) {
 			for (int i = 0; i < PKB::getInstance().getStmts().size(); i++) {
 				EXPECT_FALSE(processor.getCalculatedMatrix()[i][stmt.stmt_index - 1]);
-				EXPECT_FALSE(processor.getDFSBackwardComputedList()[stmt.stmt_index - 1]);
+				EXPECT_FALSE(processor.isDFSBackwardComputed(stmt.stmt_index));
 				EXPECT_FALSE(processor.getCalculatedMatrix()[stmt.stmt_index - 1][i]);
-				EXPECT_FALSE(processor.getDFSForwardComputedList()[stmt.stmt_index - 1]);
+				EXPECT_FALSE(processor.isDFSForwardComputed(stmt.stmt_index));
 			}
 		}
 		processor.evaluateSynonymAndSynonym();
 		EXPECT_TRUE(processor.isFullyPopulated());
-		EXPECT_TRUE(processor.isCacheInitialized());
+		EXPECT_FALSE(processor.isCacheEmpty());
 		processor.reset();
 		EXPECT_FALSE(processor.isFullyPopulated());
-		EXPECT_FALSE(processor.isCacheInitialized());
+		EXPECT_TRUE(processor.isCacheEmpty());
 	}
 }

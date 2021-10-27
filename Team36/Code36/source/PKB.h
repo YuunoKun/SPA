@@ -50,7 +50,6 @@ public:
 	const var_name getAssignment(stmt_index stmt_index) override;
 	expr getExpression(stmt_index stmt_index) override;
 	const std::vector<constant> getConstants() override;
-	const bool inSameProc(stmt_index, stmt_index) override;
 	const RelationTable<stmt_index, var_name>& getAssigns();
 	const MonotypeRelationTable<StmtInfo>& getFollows() override;
 	const MonotypeRelationTable<StmtInfo>& getParent() override;

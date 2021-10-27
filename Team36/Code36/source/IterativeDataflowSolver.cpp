@@ -50,7 +50,6 @@ std::pair<std::set<stmt_index>, std::vector<std::pair<StmtInfo, StmtInfo>>> Iter
 }
 
 bool IterativeDataflowSolver::solveIfAffectingAndAffected(stmt_index affecting, stmt_index affected) {
-	// Check beforehand that both are assignments and Next*(affecting, affected)
 	populateDataflowSets();
 	std::stack<stmt_index> worklist;
 	std::set<stmt_index> visited{};
@@ -97,7 +96,6 @@ bool IterativeDataflowSolver::solveIfAffectingAndAffected(stmt_index affecting, 
 }
 
 bool IterativeDataflowSolver::solveIfAffecting(stmt_index affecting) {
-	// Check beforehand that affecting is assignment
 	populateDataflowSets();
 	std::stack<stmt_index> worklist;
 	std::set<stmt_index> visited{};
@@ -139,7 +137,6 @@ bool IterativeDataflowSolver::solveIfAffecting(stmt_index affecting) {
 }
 
 bool IterativeDataflowSolver::solveIfAffected(stmt_index affected) {
-	// Check beforehand that affected is assignment
 	populateDataflowSets();
 	std::stack<stmt_index> worklist;
 	std::set<stmt_index> visited{};
@@ -185,7 +182,6 @@ bool IterativeDataflowSolver::solveIfAffected(stmt_index affected) {
 }
 
 bool IterativeDataflowSolver::solveIfNonEmpty(std::vector<stmt_index> first_statements) {
-	// Check beforehand that affected is assignment
 	populateDataflowSets();
 	std::stack<stmt_index> worklist;
 	std::set<stmt_index> visited{};
@@ -303,7 +299,17 @@ void IterativeDataflowSolver::processOutSet(stmt_index index) {
 
 void IterativeDataflowSolver::resetOutSet() {
 	auto size = out_list.size();
-	//no memory allocating
 	out_list.resize(0);
 	out_list.resize(size, {});
+}
+
+void IterativeDataflowSolver::resetInSet() {
+	auto size = in_list.size();
+	in_list.resize(0);
+	in_list.resize(size, {});
+}
+
+void IterativeDataflowSolver::reset() {
+	resetOutSet();
+	resetInSet();
 }

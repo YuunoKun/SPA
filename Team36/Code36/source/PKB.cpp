@@ -344,11 +344,6 @@ const std::vector<constant> PKB::getConstants() {
 	return v;
 }
 
-const bool PKB::inSameProc(stmt_index index1, stmt_index index2) {
-	std::vector<proc_name> v = procS_table.getKeys(index1);
-	return procS_table.containsPair(v[0], index2);
-}
-
 const RelationTable<stmt_index, var_name>& PKB::getAssigns() {
 	return assignment_table;
 }

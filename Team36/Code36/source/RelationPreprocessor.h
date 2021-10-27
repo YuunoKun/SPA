@@ -2,6 +2,12 @@
 
 #include "PKB.h"
 
+enum BooleanStatus {
+	STATUS_UNKNOWN = 2,
+	STATUS_TRUE = 1,
+	STATUS_FALSE = 0
+};
+
 class RelationPreprocessor {
 public:
 	virtual bool evaluateWildAndWild() = 0;
@@ -21,9 +27,10 @@ public:
 	bool isFullyPopulated();
 	bool isCacheInitialized();
 	const MonotypeRelationTable<StmtInfo>& getCache();
+	bool isCacheEmpty();
 	std::vector<std::vector<bool>> getCalculatedMatrix();
-	std::vector<bool> getDFSForwardComputedList();
-	std::vector<bool> getDFSBackwardComputedList();
+	bool isDFSForwardComputed(int);
+	bool isDFSBackwardComputed(int);
 
 protected:
 	bool is_cache_initialized = false;

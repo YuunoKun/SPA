@@ -45,7 +45,6 @@ public:
 	virtual const StmtInfo getStmt(stmt_index stmt_index) = 0;
 	virtual const var_name getAssignment(stmt_index stmt_index) = 0;
 	virtual expr getExpression(stmt_index stmt_index) = 0;
-	virtual const bool inSameProc(stmt_index, stmt_index) = 0;
 	virtual const std::vector<constant> getConstants() = 0;
 
 	virtual const RelationTable<stmt_index, var_name>& getAssigns() = 0;

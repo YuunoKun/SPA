@@ -40,14 +40,18 @@ const MonotypeRelationTable<StmtInfo>& RelationPreprocessor::getCache() {
 	return cache;
 }
 
+bool RelationPreprocessor::isCacheEmpty() {
+	return cache.isEmpty();
+}
+
 std::vector<std::vector<bool>> RelationPreprocessor::getCalculatedMatrix() {
 	return calculated_matrix;
 }
 
-std::vector<bool> RelationPreprocessor::getDFSForwardComputedList() {
-	return calculated_dfs_forward;
+bool RelationPreprocessor::isDFSForwardComputed(int index) {
+	return calculated_dfs_forward[index - 1];
 }
 
-std::vector<bool> RelationPreprocessor::getDFSBackwardComputedList() {
-	return calculated_dfs_backward;
+bool RelationPreprocessor::isDFSBackwardComputed(int index) {
+	return calculated_dfs_backward[index - 1];
 }
