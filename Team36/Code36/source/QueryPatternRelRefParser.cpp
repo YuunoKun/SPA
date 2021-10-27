@@ -96,3 +96,9 @@ void QueryPatternRelRefParser::parseParameterPattern(
     }
 
 }
+
+void QueryPatternRelRefParser::parseWith(Query& query, std::vector
+    <QueryToken> token_chain) {
+    WithParser parser;
+    parser.parse(query, token_chain);
+}
