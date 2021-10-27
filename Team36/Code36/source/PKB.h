@@ -13,8 +13,6 @@
 #include "RelationTable.h"
 #include "MonotypeRelationTable.h"
 
-#include "RelationsUtility.h"
-
 class PKB : public KnowledgeBase {
 public:
 	static PKB& PKB::getInstance();
