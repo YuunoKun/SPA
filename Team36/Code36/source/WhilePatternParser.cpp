@@ -24,13 +24,13 @@ void WhilePatternParser::parse(Query& query, Entity& entity, std::vector<QueryTo
         }
     }
 
-    if (!Utility::isEntRef(query, temp_token_chain_1) || !Utility::isWildCard(temp_token_chain_2)) {
-        throw SemanticErrorException("Invalid parameters for while pattern");
-    }
+	if (!parser.isEntRef(query, temp_token_chain_1) || !parser.isWildCard(temp_token_chain_2)) {
+		query.setIsSemanticError("Invalid parameters for while pattern");
+	}
 
-    if (!Utility::isCorrectSynEntRef(query, temp_token_chain_1, EntityType::VARIABLE)) {
-        throw SemanticErrorException("Invalid parameters for while");
-    }
+	if (!parser.isCorrectSynEntRef(query, temp_token_chain_1, EntityType::VARIABLE)) {
+		query.setIsSemanticError("Invalid parameters for while");
+	}
 
     query.addPattern(Pattern(entity, Utility::setEntRef(query, temp_token_chain_1, EntityType::VARIABLE)));
 }

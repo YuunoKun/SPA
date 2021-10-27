@@ -24,18 +24,18 @@ void IfPatternParser::parse(Query& query, Entity& entity, std::vector<QueryToken
             temp_token_chain_3.push_back(token_chain[0]);
             token_chain.erase(token_chain.begin());
         } else {
-            throw SyntacticErrorException("Invalid parameters for if pattern");
+            query.setIsSemanticError("Invalid parameters for if pattern");
         }
     }
 
     if (!Utility::isEntRef(query, temp_token_chain_1) ||
         !Utility::isWildCard(temp_token_chain_2) ||
         !Utility::isWildCard(temp_token_chain_3)) {
-        throw SemanticErrorException("Invalid parameters for if pattern");
+        query.setIsSemanticError("Invalid parameters for if pattern");
     }
 
     if (!Utility::isCorrectSynEntRef(query, temp_token_chain_1, EntityType::VARIABLE)) {
-        throw SemanticErrorException("Invalid parameters for if");
+        query.setIsSemanticError("Invalid parameters for if");
     }
 
     query.addPattern(Pattern(entity, Utility::setEntRef(query, temp_token_chain_1, EntityType::VARIABLE)));

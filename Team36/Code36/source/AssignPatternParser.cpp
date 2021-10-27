@@ -1,7 +1,7 @@
 #include "AssignPatternParser.h"
 
 bool AssignPatternParser::isWild(std::vector<QueryToken> token_chain) {
-    return token_chain[0].type == QueryToken::WILDCARD;
+	return token_chain[0].type == QueryToken::WILDCARD;
 }
 
 void AssignPatternParser::parse(Query& query, Entity& entity, std::vector<QueryToken> token_chain) {
@@ -28,14 +28,14 @@ void AssignPatternParser::parse(Query& query, Entity& entity, std::vector<QueryT
     }
 
     if (!Utility::isEntRef(query, temp_token_chain_1) || !Utility::isExpr(temp_token_chain_2)) {
-        throw SemanticErrorException("Invalid parameters for assign pattern");
+        query.setIsSemanticError("Invalid parameters for assign pattern");
     }
 
     if (!Utility::isCorrectSynEntRef(query, temp_token_chain_1, EntityType::VARIABLE)) {
-        throw SemanticErrorException("Invalid Left expression for pattern");
+        query.setIsSemanticError("Invalid Left expression for pattern");
     }
 
-    is_wild = isWild(temp_token_chain_2);
+	is_wild = isWild(temp_token_chain_2);
 
     query.addPattern(Pattern(entity, Utility::setEntRef(query, temp_token_chain_1, EntityType::VARIABLE),
         Utility::setExpr(temp_token_chain_2), is_wild));

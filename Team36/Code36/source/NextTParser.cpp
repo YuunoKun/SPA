@@ -25,12 +25,12 @@ void NextTParser::parse(Query& query, std::vector<QueryToken> token_chain) {
     }
 
     if (!Utility::isLineRef(query, temp_token_chain_1) || !Utility::isLineRef(query, temp_token_chain_2)) {
-        throw SemanticErrorException("Invalid parameters for Next*");
+        query.setIsSemanticError("Invalid parameters for Next*");
     }
 
-    QueryToken stmt = temp_token_chain_1[0];
+	QueryToken stmt = temp_token_chain_1[0];
 
-    QueryToken stmt2 = temp_token_chain_2[0];
+	QueryToken stmt2 = temp_token_chain_2[0];
 
     query.addRelation(RelRef(RelType::NEXT_T,
         Utility::setLineRef(query, stmt),

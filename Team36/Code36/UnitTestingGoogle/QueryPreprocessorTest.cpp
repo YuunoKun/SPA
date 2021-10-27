@@ -374,6 +374,52 @@ namespace UnitTesting {
 		EXPECT_EQ(test.getSelected()[0], Entity(EntityType::BOOLEAN));
 	}
 
+	TEST(QueryPrecessor, selectBOOLEANAsSynonym) {
+		QueryPreprocessor qp;
+		Query test = qp.parse("procedure BOOLEAN; Select BOOLEAN");
+
+		Query q;
+		q.addEntity(Entity(EntityType::PROCEDURE, Synonym{ "BOOLEAN" }));
+		q.addSelected(Entity(EntityType::PROCEDURE, Synonym{ "BOOLEAN" }));
+
+		EXPECT_EQ(test, q);
+
+		Query test2 = qp.parse("stmt BOOLEAN; Select BOOLEAN");
+
+		Query q2;
+		q2.addEntity(Entity(EntityType::STMT, Synonym{ "BOOLEAN" }));
+		q2.addSelected(Entity(EntityType::STMT, Synonym{ "BOOLEAN" }));
+
+		EXPECT_EQ(test2, q2);
+
+		Query test3 = qp.parse("constant BOOLEAN; Select BOOLEAN");
+
+		Query q3;
+		q3.addEntity(Entity(EntityType::CONSTANT, Synonym{ "BOOLEAN" }));
+		q3.addSelected(Entity(EntityType::CONSTANT, Synonym{ "BOOLEAN" }));
+
+		EXPECT_EQ(test3, q3);
+
+		Query test4 = qp.parse("assign BOOLEAN; Select BOOLEAN");
+
+		Query q4;
+		q4.addEntity(Entity(EntityType::ASSIGN, Synonym{ "BOOLEAN" }));
+		q4.addSelected(Entity(EntityType::ASSIGN, Synonym{ "BOOLEAN" }));
+
+		EXPECT_EQ(test4, q4);
+	}
+
+	TEST(QueryPreprocessor, selectBOOLEANWithSuchThat) {
+		QueryPreprocessor qp;
+		Query test = qp.parse("procedure p; Select BOOLEAN such that Next*(2,9)");
+
+		EXPECT_EQ(test.getSelected()[0], Entity(EntityType::BOOLEAN));
+
+		Query test2 = qp.parse("procedure p; Select BOOLEAN such that Next*(2,8) and Next*(8,9)");
+
+		EXPECT_EQ(test2.getSelected()[0], Entity(EntityType::BOOLEAN));
+	}
+
 	TEST(QueryPreprocessor, oneSuchThatClause) {
 		QueryPreprocessor qp;
 		Query test = qp.parse("stmt s; Select s such that Follows* (6, s)");
@@ -570,6 +616,85 @@ namespace UnitTesting {
 
 		Query test12 = qp.parse("assign a; Select a.stmt#");
 		EXPECT_EQ(test12.getSelected()[0].getAttribute(), AttrRef{ STMT_INDEX });
+	}
+
+	TEST(QueryPreprocessor, selectWithInvalidEntityTypeForAttribute) {
+		QueryPreprocessor qp;
+
+		EXPECT_THROW(qp.parse("procedure p; call c; variable v; read r; print pr; constant co; stmt s; while w; if ifs; assign a; Select v.procName"), SemanticErrorException);
+		qp.resetQuery();
+
+		EXPECT_THROW(qp.parse("procedure p; call c; variable v; read r; print pr; constant co; stmt s; while w; if ifs; assign a; Select r.procName"), SemanticErrorException);
+		qp.resetQuery();
+
+		EXPECT_THROW(qp.parse("procedure p; call c; variable v; read r; print pr; constant co; stmt s; while w; if ifs; assign a; Select pr.procName"), SemanticErrorException);
+		qp.resetQuery();
+
+		EXPECT_THROW(qp.parse("procedure p; call c; variable v; read r; print pr; constant co; stmt s; while w; if ifs; assign a; Select co.procName"), SemanticErrorException);
+		qp.resetQuery();
+
+		EXPECT_THROW(qp.parse("procedure p; call c; variable v; read r; print pr; constant co; stmt s; while w; if ifs; assign a; Select w.procName"), SemanticErrorException);
+		qp.resetQuery();
+
+		EXPECT_THROW(qp.parse("procedure p; call c; variable v; read r; print pr; constant co; stmt s; while w; if ifs; assign a; Select ifs.procName"), SemanticErrorException);
+		qp.resetQuery();
+
+		EXPECT_THROW(qp.parse("procedure p; call c; variable v; read r; print pr; constant co; stmt s; while w; if ifs; assign a; Select a.procName"), SemanticErrorException);
+		qp.resetQuery();
+
+		EXPECT_THROW(qp.parse("procedure p; call c; variable v; read r; print pr; constant co; stmt s; while w; if ifs; assign a; Select p.varName"), SemanticErrorException);
+		qp.resetQuery();
+
+		EXPECT_THROW(qp.parse("procedure p; call c; variable v; read r; print pr; constant co; stmt s; while w; if ifs; assign a; Select c.varName"), SemanticErrorException);
+		qp.resetQuery();
+
+		EXPECT_THROW(qp.parse("procedure p; call c; variable v; read r; print pr; constant co; stmt s; while w; if ifs; assign a; Select co.varName"), SemanticErrorException);
+		qp.resetQuery();
+
+		EXPECT_THROW(qp.parse("procedure p; call c; variable v; read r; print pr; constant co; stmt s; while w; if ifs; assign a; Select s.varName"), SemanticErrorException);
+		qp.resetQuery();
+
+		EXPECT_THROW(qp.parse("procedure p; call c; variable v; read r; print pr; constant co; stmt s; while w; if ifs; assign a; Select w.varName"), SemanticErrorException);
+		qp.resetQuery();
+
+		EXPECT_THROW(qp.parse("procedure p; call c; variable v; read r; print pr; constant co; stmt s; while w; if ifs; assign a; Select ifs.varName"), SemanticErrorException);
+		qp.resetQuery();
+
+		EXPECT_THROW(qp.parse("procedure p; call c; variable v; read r; print pr; constant co; stmt s; while w; if ifs; assign a; Select a.varName"), SemanticErrorException);
+		qp.resetQuery();
+
+		EXPECT_THROW(qp.parse("procedure p; call c; variable v; read r; print pr; constant co; stmt s; while w; if ifs; assign a; Select v.value"), SemanticErrorException);
+		qp.resetQuery();
+
+		EXPECT_THROW(qp.parse("procedure p; call c; variable v; read r; print pr; constant co; stmt s; while w; if ifs; assign a; Select r.value"), SemanticErrorException);
+		qp.resetQuery();
+
+		EXPECT_THROW(qp.parse("procedure p; call c; variable v; read r; print pr; constant co; stmt s; while w; if ifs; assign a; Select pr.value"), SemanticErrorException);
+		qp.resetQuery();
+
+		EXPECT_THROW(qp.parse("procedure p; call c; variable v; read r; print pr; constant co; stmt s; while w; if ifs; assign a; Select p.value"), SemanticErrorException);
+		qp.resetQuery();
+
+		EXPECT_THROW(qp.parse("procedure p; call c; variable v; read r; print pr; constant co; stmt s; while w; if ifs; assign a; Select c.value"), SemanticErrorException);
+		qp.resetQuery();
+
+		EXPECT_THROW(qp.parse("procedure p; call c; variable v; read r; print pr; constant co; stmt s; while w; if ifs; assign a; Select w.value"), SemanticErrorException);
+		qp.resetQuery();
+
+		EXPECT_THROW(qp.parse("procedure p; call c; variable v; read r; print pr; constant co; stmt s; while w; if ifs; assign a; Select ifs.value"), SemanticErrorException);
+		qp.resetQuery();
+
+		EXPECT_THROW(qp.parse("procedure p; call c; variable v; read r; print pr; constant co; stmt s; while w; if ifs; assign a; Select a.value"), SemanticErrorException);
+		qp.resetQuery();
+
+		EXPECT_THROW(qp.parse("procedure p; call c; variable v; read r; print pr; constant co; stmt s; while w; if ifs; assign a; Select v.stmt#"), SemanticErrorException);
+		qp.resetQuery();
+
+		EXPECT_THROW(qp.parse("procedure p; call c; variable v; read r; print pr; constant co; stmt s; while w; if ifs; assign a; Select co.stmt#"), SemanticErrorException);
+		qp.resetQuery();
+
+		EXPECT_THROW(qp.parse("procedure p; call c; variable v; read r; print pr; constant co; stmt s; while w; if ifs; assign a; Select p.stmt#"), SemanticErrorException);
+		qp.resetQuery();
 	}
 
 	TEST(QueryPreprocessor, selectMultipleClauses) {
@@ -1032,6 +1157,145 @@ namespace UnitTesting {
 		q3.addPattern(Pattern(Entity(EntityType::ASSIGN, Synonym{ "a1" }), Entity(EntityType::VARIABLE, Synonym{ "v" }), "", true));
 
 		EXPECT_EQ(test3, q3);
+
+		Query test4 = qp.parse("stmt s; assign a, a1; variable v; Select a pattern a(\"q\", _\"p\"_) and a1(v, _) such that Parent(s, a) and Uses(a, v)");
+
+		Query q4;
+		q4.addEntity(Entity(EntityType::STMT, Synonym{ "s" }));
+		q4.addEntity(Entity(EntityType::ASSIGN, Synonym{ "a" }));
+		q4.addEntity(Entity(EntityType::ASSIGN, Synonym{ "a1" }));
+		q4.addEntity(Entity(EntityType::VARIABLE, Synonym{ "v" }));
+		q4.addSelected(Entity(EntityType::ASSIGN, Synonym{ "a" }));
+		q4.addPattern(Pattern(Entity(EntityType::ASSIGN, Synonym{ "a" }), Entity(EntityType::VARIABLE, "q"), "p", true));
+		q4.addPattern(Pattern(Entity(EntityType::ASSIGN, Synonym{ "a1" }), Entity(EntityType::VARIABLE, Synonym{ "v" }), "", true));
+		q4.addRelation(RelRef(RelType::PARENT, Entity(EntityType::STMT, Synonym{ "s" }), Entity(EntityType::ASSIGN, Synonym{ "a" })));
+		q4.addRelation(RelRef(RelType::USES_S, Entity(EntityType::ASSIGN, Synonym{ "a" }), Entity(EntityType::VARIABLE, Synonym{ "v" })));
+
+		EXPECT_EQ(test4, q4);
+	}
+
+	TEST(QueryPreprocessor, tupleSelect) {
+		QueryPreprocessor qp;
+
+		Query test1 = qp.parse("procedure p, q; Select <p,q>");
+
+		Query q1;
+		q1.addEntity(Entity(EntityType::PROCEDURE, Synonym{ "p" }));
+		q1.addEntity(Entity(EntityType::PROCEDURE, Synonym{ "q" }));
+		q1.addSelected(Entity(EntityType::PROCEDURE, Synonym{ "p" }));
+		q1.addSelected(Entity(EntityType::PROCEDURE, Synonym{ "q" }));
+
+		EXPECT_EQ(test1, q1);
+	}
+
+	TEST(QueryPreprocessor, tupleSelectWithSuchThat) {
+		QueryPreprocessor qp;
+
+		Query test1 = qp.parse("procedure p, q; Select <p,q> such that Calls (p,q)");
+
+		Query q1;
+		q1.addEntity(Entity(EntityType::PROCEDURE, Synonym{ "p" }));
+		q1.addEntity(Entity(EntityType::PROCEDURE, Synonym{ "q" }));
+		q1.addSelected(Entity(EntityType::PROCEDURE, Synonym{ "p" }));
+		q1.addSelected(Entity(EntityType::PROCEDURE, Synonym{ "q" }));
+		q1.addRelation(RelRef(RelType::CALLS, Entity(EntityType::PROCEDURE, Synonym{ "p" }), Entity(EntityType::PROCEDURE, Synonym{ "q" })));
+
+		EXPECT_EQ(test1, q1);
+	}
+
+	TEST(QueryPreprocessor, tupleSelectAnd) {
+		QueryPreprocessor qp;
+		Query test1 = qp.parse("while w1, w2, w3; Select <w1, w2, w3> such that Parent*(w1, w2) and Parent*(w2, w3)");
+
+		Query q1;
+		q1.addEntity(Entity(EntityType::WHILE, Synonym{ "w1" }));
+		q1.addEntity(Entity(EntityType::WHILE, Synonym{ "w2" }));
+		q1.addEntity(Entity(EntityType::WHILE, Synonym{ "w3" }));
+		q1.addSelected(Entity(EntityType::WHILE, Synonym{ "w1" }));
+		q1.addSelected(Entity(EntityType::WHILE, Synonym{ "w2" }));
+		q1.addSelected(Entity(EntityType::WHILE, Synonym{ "w3" }));
+		q1.addRelation(RelRef(RelType::PARENT_T, Entity(EntityType::WHILE, Synonym{ "w1" }), Entity(EntityType::WHILE, Synonym{ "w2" })));
+		q1.addRelation(RelRef(RelType::PARENT_T, Entity(EntityType::WHILE, Synonym{ "w2" }), Entity(EntityType::WHILE, Synonym{ "w3" })));
+
+		EXPECT_EQ(test1, q1);
+	}
+
+	TEST(QueryPreprocessor, tupleWithAttributes) {
+		QueryPreprocessor qp;
+		Query test1 = qp.parse("assign a1, a2; Select <a1.stmt#, a2>");
+
+		Query q1;
+		q1.addEntity(Entity(EntityType::ASSIGN, Synonym{ "a1" }));
+		q1.addEntity(Entity(EntityType::ASSIGN, Synonym{ "a2" }));
+		q1.addSelected(Entity(EntityType::ASSIGN, Synonym{ "a1" }, AttrRef::STMT_INDEX));
+		q1.addSelected(Entity(EntityType::ASSIGN, Synonym{ "a2" }));
+
+		EXPECT_EQ(test1, q1);
+	}
+
+	TEST(QueryPreprocessor, tupleWithAttributesAndRelations) {
+		QueryPreprocessor qp;
+		Query test1 = qp.parse("assign a1, a2; stmt s; Select <a1.stmt#, a2> such that Follows(s,a1)");
+
+		Query q1;
+		q1.addEntity(Entity(EntityType::ASSIGN, Synonym{ "a1" }));
+		q1.addEntity(Entity(EntityType::ASSIGN, Synonym{ "a2" }));
+		q1.addEntity(Entity(EntityType::STMT, Synonym{ "s" }));
+		q1.addSelected(Entity(EntityType::ASSIGN, Synonym{ "a1" }, AttrRef::STMT_INDEX));
+		q1.addSelected(Entity(EntityType::ASSIGN, Synonym{ "a2" }));
+		q1.addRelation(RelRef(RelType::FOLLOWS, Entity(EntityType::STMT, Synonym{ "s" }), Entity(EntityType::ASSIGN, Synonym{ "a1" })));
+
+		EXPECT_EQ(test1, q1);
+	}
+
+	TEST(QueryPreprocessor, tupleWithAttributesAndMultipleRelations) {
+		QueryPreprocessor qp;
+		Query test1 = qp.parse("assign a1, a2; stmt s; while w1, w2; Select <a1.stmt#, a2> such that Follows(s,a1) and Parent(w1, w2)");
+
+		Query q1;
+		q1.addEntity(Entity(EntityType::ASSIGN, Synonym{ "a1" }));
+		q1.addEntity(Entity(EntityType::ASSIGN, Synonym{ "a2" }));
+		q1.addEntity(Entity(EntityType::STMT, Synonym{ "s" }));
+		q1.addEntity(Entity(EntityType::WHILE, Synonym{ "w1" }));
+		q1.addEntity(Entity(EntityType::WHILE, Synonym{ "w2" }));
+		q1.addSelected(Entity(EntityType::ASSIGN, Synonym{ "a1" }, AttrRef::STMT_INDEX));
+		q1.addSelected(Entity(EntityType::ASSIGN, Synonym{ "a2" }));
+		q1.addRelation(RelRef(RelType::FOLLOWS, Entity(EntityType::STMT, Synonym{ "s" }), Entity(EntityType::ASSIGN, Synonym{ "a1" })));
+		q1.addRelation(RelRef(RelType::PARENT, Entity(EntityType::WHILE, Synonym{ "w1" }), Entity(EntityType::WHILE, Synonym{ "w2" })));
+
+		EXPECT_EQ(test1, q1);
+	}
+
+	TEST(QueryPreprocessor, tupleWithAttributesAndPattern) {
+		QueryPreprocessor qp;
+		Query test1 = qp.parse("assign a1, a2; stmt s; Select <a1.stmt#, a2> pattern a1(\"q\", _\"p\"_)");
+
+		Query q1;
+		q1.addEntity(Entity(EntityType::ASSIGN, Synonym{ "a1" }));
+		q1.addEntity(Entity(EntityType::ASSIGN, Synonym{ "a2" }));
+		q1.addEntity(Entity(EntityType::STMT, Synonym{ "s" }));
+		q1.addSelected(Entity(EntityType::ASSIGN, Synonym{ "a1" }, AttrRef::STMT_INDEX));
+		q1.addSelected(Entity(EntityType::ASSIGN, Synonym{ "a2" }));
+		q1.addPattern(Pattern(Entity(EntityType::ASSIGN, Synonym{ "a1" }), Entity(EntityType::VARIABLE, "q"), "p", true));
+
+		EXPECT_EQ(test1, q1);
+	}
+
+	TEST(QueryPreprocessor, tupleWithAttributesAndMultiplePatterns) {
+		QueryPreprocessor qp;
+		Query test1 = qp.parse("assign a1, a2; stmt s; variable v; Select <a1.stmt#, a2> pattern a1(\"q\", _\"p\"_) and a2(v, _)");
+
+		Query q1;
+		q1.addEntity(Entity(EntityType::ASSIGN, Synonym{ "a1" }));
+		q1.addEntity(Entity(EntityType::ASSIGN, Synonym{ "a2" }));
+		q1.addEntity(Entity(EntityType::STMT, Synonym{ "s" }));
+		q1.addEntity(Entity(EntityType::VARIABLE, Synonym{ "v" }));
+		q1.addSelected(Entity(EntityType::ASSIGN, Synonym{ "a1" }, AttrRef::STMT_INDEX));
+		q1.addSelected(Entity(EntityType::ASSIGN, Synonym{ "a2" }));
+		q1.addPattern(Pattern(Entity(EntityType::ASSIGN, Synonym{ "a1" }), Entity(EntityType::VARIABLE, "q"), "p", true));
+		q1.addPattern(Pattern(Entity(EntityType::ASSIGN, Synonym{ "a2" }), Entity(EntityType::VARIABLE, Synonym{ "v" }), "", true));
+
+		EXPECT_EQ(test1, q1);
 	}
 
 	TEST(QueryPreprocessor, invalidSyntax) {
@@ -1313,4 +1577,21 @@ namespace UnitTesting {
 		EXPECT_THROW(qp.parse("stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; Select s such that Uses(s,c)"), SemanticErrorException);
 		qp.resetQuery();
 	}
+}
+
+TEST(QueryPreprocessor, invalidBOOLEANSemanticError) {
+	QueryPreprocessor qp;
+
+	EXPECT_THROW(qp.parse("stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; Select BOOLEAN pattern co(_,_)"), SemanticErrorException);
+	qp.resetQuery();
+}
+
+TEST(QueryPreprocessor, invalidSyntaxPrecendenceSemanticError) {
+	QueryPreprocessor qp;
+
+	EXPECT_THROW(qp.parse("stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; Select asdf such that Uses(s,,)"), SyntacticErrorException);
+	qp.resetQuery();
+
+	EXPECT_THROW(qp.parse("stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; Select BOOLEAN pattern co(_,_,,,)"), SemanticErrorException);
+	qp.resetQuery();
 }

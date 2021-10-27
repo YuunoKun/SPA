@@ -3,6 +3,7 @@
 #include <vector>
 
 Query::Query() {
+	this->isSemanticError = "";
 }
 
 std::unordered_map<std::string, Entity> Query::getEntities() {
@@ -40,6 +41,14 @@ void Query::addPattern(Pattern& pattern) {
 
 void Query::setClauses(std::vector<Clause> clauses) {
 	this->clauses = clauses;
+}
+
+void Query::setIsSemanticError(std::string error) {
+	this->isSemanticError = error;
+}
+
+std::string Query::getIsSemanticError() {
+	return this->isSemanticError;
 }
 
 bool Query::operator==(const Query& query) const {

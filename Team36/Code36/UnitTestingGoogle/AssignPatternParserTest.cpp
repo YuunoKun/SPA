@@ -111,7 +111,6 @@ namespace UnitTesting {
 		EXPECT_TRUE(query.getClauses()[0].getPattern() == expected_pat);
 	}
 
-
 	TEST(AssignPatternParserTest, AssignIdentWildCardTest) {
 		QueryPatternRelRefParser validator;
 
@@ -281,7 +280,7 @@ namespace UnitTesting {
 
 		EXPECT_TRUE(query.getClauses()[0].getPattern() == expected_pat);
 	}
-	
+
 	TEST(AssignPatternParserTest, AssignSynIdentTest) {
 		QueryPatternRelRefParser validator;
 
@@ -327,7 +326,7 @@ namespace UnitTesting {
 
 		EXPECT_TRUE(query.getClauses()[0].getPattern() == expected_pat);
 	}
-	
+
 	TEST(AssignPatternParserTest, AssignSynIdentWildCardTest) {
 		QueryPatternRelRefParser validator;
 
@@ -535,7 +534,5 @@ namespace UnitTesting {
 		query.addEntity(expected_2);
 
 		EXPECT_THROW(validator.parseParameterPattern(query, expected_declared_assign, temp_token_chain), SemanticErrorException);
-
 	}
-
 }
