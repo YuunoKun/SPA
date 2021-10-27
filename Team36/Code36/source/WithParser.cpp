@@ -3,8 +3,8 @@
 void WithParser::parse(Query& query, std::vector<QueryToken> token_chain) {
     std::vector<QueryToken> temp_token_chain_1;
     std::vector<QueryToken> temp_token_chain_2;
-    EntityType ident_type;
-    AttrRef attr_name;
+    EntityType ident_type = EntityType::NONE_ENTITY;
+    AttrRef attr_name = AttrRef::NONE;
     std::unordered_map<std::string, Entity> ent_chain = query.getEntities();
     int comma_count = 0;
     size_t token_chain_size = token_chain.size();
@@ -28,7 +28,7 @@ void WithParser::parse(Query& query, std::vector<QueryToken> token_chain) {
         }
     }
 
-    if (!Utility::isRef(query, temp_token_chain_1) || !Utility::isRef(query, temp_token_chain_2)) {
+     if (!Utility::isRef(query, temp_token_chain_1) || !Utility::isRef(query, temp_token_chain_2)) {
         throw SemanticErrorException("Invalid parameters for With");
     }
 
