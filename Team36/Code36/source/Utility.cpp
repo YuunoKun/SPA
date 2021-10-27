@@ -438,7 +438,7 @@ bool Utility::isRef(Query& query, std::vector<QueryToken> token_chain) {
 	std::unordered_map<std::string, Entity> ent_chain = query.getEntities();
 
 	if (token_chain.size() == 0) {
-		throw SyntacticErrorException("Invalid entRef arguments");
+		throw SyntacticErrorException("Invalid Ref arguments");
 	}
 	else if (token_chain.size() == 1) {
 		QueryToken token = token_chain[0];
@@ -457,7 +457,7 @@ bool Utility::isRef(Query& query, std::vector<QueryToken> token_chain) {
 			}
 		}
 		else {
-			throw SyntacticErrorException("Invalid lineRef arguments");
+			throw SyntacticErrorException("Invalid Ref arguments");
 		}
 
 	}
@@ -468,36 +468,40 @@ bool Utility::isRef(Query& query, std::vector<QueryToken> token_chain) {
 			token_chain[2].type == QueryToken::QUOTATION_CLOSE) {
 			return true;
 		}
+		else if (token_chain[0].type != QueryToken::IDENTIFIER) {
+			throw SyntacticErrorException("Invalid AttrRef");
+
+		}
 		else if (ent_chain.find(token_chain[0].token_value) == ent_chain.end()) {
 			return false;
 		}
 		else if (token_chain[0].type == QueryToken::IDENTIFIER &&
 			token_chain[1].type == QueryToken::DOT &&
 			token_chain[2].type == QueryToken::VAR_NAME &&
-			ent_chain.at(token_chain[0].token_value).getType() == EntityType::VARIABLE ||
+			(ent_chain.at(token_chain[0].token_value).getType() == EntityType::VARIABLE ||
 			ent_chain.at(token_chain[0].token_value).getType() == EntityType::READ ||
-			ent_chain.at(token_chain[0].token_value).getType() == EntityType::PRINT) {
+			ent_chain.at(token_chain[0].token_value).getType() == EntityType::PRINT)) {
 
 			return true;
 		}
 		else if (token_chain[0].type == QueryToken::IDENTIFIER &&
 			token_chain[1].type == QueryToken::DOT &&
 			token_chain[2].type == QueryToken::PROC_NAME &&
-			ent_chain.at(token_chain[0].token_value).getType() == EntityType::CALL ||
-			ent_chain.at(token_chain[0].token_value).getType() == EntityType::PROCEDURE) {
+			(ent_chain.at(token_chain[0].token_value).getType() == EntityType::CALL ||
+			ent_chain.at(token_chain[0].token_value).getType() == EntityType::PROCEDURE)) {
 
 			return true;
 		}
 		else if (token_chain[0].type == QueryToken::IDENTIFIER &&
 				token_chain[1].type == QueryToken::DOT &&
 				token_chain[2].type == QueryToken::STMT_INDEX &&
-				ent_chain.at(token_chain[0].token_value).getType() == EntityType::STMT ||
+				(ent_chain.at(token_chain[0].token_value).getType() == EntityType::STMT ||
 				ent_chain.at(token_chain[0].token_value).getType() == EntityType::READ ||
 				ent_chain.at(token_chain[0].token_value).getType() == EntityType::PRINT ||
 				ent_chain.at(token_chain[0].token_value).getType() == EntityType::CALL ||
 				ent_chain.at(token_chain[0].token_value).getType() == EntityType::WHILE ||
 				ent_chain.at(token_chain[0].token_value).getType() == EntityType::IF ||
-				ent_chain.at(token_chain[0].token_value).getType() == EntityType::ASSIGN) {
+				ent_chain.at(token_chain[0].token_value).getType() == EntityType::ASSIGN)) {
 
 				return true;
 		}
@@ -509,7 +513,7 @@ bool Utility::isRef(Query& query, std::vector<QueryToken> token_chain) {
 			return true;
 		}
 		else {
-			throw SyntacticErrorException("Invalid ref arguments");
+			return false;
 		}
 	}
 	else {
@@ -638,34 +642,28 @@ bool Utility::isIntRefType(Query& query, std::vector<QueryToken> token_chain) {
 			return true;
 		}
 	} else if (token_chain.size() == 3) {
-		if (token_chain[0].type == QueryToken::IDENTIFIER &&
-			token_chain[1].type == QueryToken::DOT &&
-			token_chain[2].type == QueryToken::STMT_INDEX &&
-			ent_chain.at(token_chain[0].token_value).getType() == EntityType::STMT ||
+		if (token_chain[0].type != QueryToken::IDENTIFIER &&
+			token_chain[1].type != QueryToken::DOT) {
+			return false;
+		}
+		if (token_chain[2].type == QueryToken::STMT_INDEX &&
+			(ent_chain.at(token_chain[0].token_value).getType() == EntityType::STMT ||
 			ent_chain.at(token_chain[0].token_value).getType() == EntityType::READ ||
 			ent_chain.at(token_chain[0].token_value).getType() == EntityType::PRINT || 
 			ent_chain.at(token_chain[0].token_value).getType() == EntityType::CALL || 
 			ent_chain.at(token_chain[0].token_value).getType() == EntityType::WHILE || 
 			ent_chain.at(token_chain[0].token_value).getType() == EntityType::IF || 
-			ent_chain.at(token_chain[0].token_value).getType() == EntityType::ASSIGN) {
+			ent_chain.at(token_chain[0].token_value).getType() == EntityType::ASSIGN)) {
 
 			return true;
 		}
-		else if (token_chain[0].type == QueryToken::IDENTIFIER &&
-			token_chain[1].type == QueryToken::DOT &&
-			token_chain[2].type == QueryToken::VALUE &&
+		else if (token_chain[2].type == QueryToken::VALUE &&
 			ent_chain.at(token_chain[0].token_value).getType() == EntityType::CONSTANT) {
 
 			return true;
 		}
-		else if (token_chain[0].type == QueryToken::IDENTIFIER &&
-			token_chain[1].type == QueryToken::DOT &&
-			token_chain[2].type == QueryToken::VAR_NAME ||
-			token_chain[2].type == QueryToken::PROC_NAME) {
-			return false;
-		}
 		else {
-			query.setIsSemanticError("ref has no int value");
+			return false;
 		}
 	}
 	else {

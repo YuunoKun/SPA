@@ -990,4 +990,830 @@ namespace UnitTesting {
 		EXPECT_TRUE(query.getClauses()[0].getRelation() == expected_rel);
 	}
 
+	//syntactic tests ----------------------------------------------------------------------------------------------------------------------------------
+	TEST(WithParserTest, SyntacticInvalidCharTest) {
+		Query query;
+
+		Synonym synonym2;
+		synonym2.name = "c";
+		Entity expected_2 = Entity(EntityType::CONSTANT, synonym2);
+		expected_2.setAttribute(AttrRef::VALUE);
+		query.addEntity(expected_2);
+
+		//Result
+		QueryPatternRelRefParser validator;
+		std::vector<QueryToken> temp_token_chain;
+		temp_token_chain.push_back({ QueryToken::COMMA, "" });
+		//temp_token_chain.push_back({ QueryToken::DOT, "" });
+		//temp_token_chain.push_back({ QueryToken::VALUE, "" });
+		temp_token_chain.push_back({ QueryToken::EQUAL, "" });
+		temp_token_chain.push_back({ QueryToken::IDENTIFIER, "c" });
+		temp_token_chain.push_back({ QueryToken::DOT, "" });
+		temp_token_chain.push_back({ QueryToken::VALUE, "" });
+
+		EXPECT_THROW(validator.parseWith(query, temp_token_chain), SyntacticErrorException);
+	}
+
+	TEST(WithParserTest, SyntacInvalidAttrRefTest) {
+		Query query;
+		//Expected
+
+		Synonym synonym2;
+		synonym2.name = "c";
+		Entity expected_2 = Entity(EntityType::CONSTANT, synonym2);
+		expected_2.setAttribute(AttrRef::VALUE);
+		query.addEntity(expected_2);
+
+		//Result
+		QueryPatternRelRefParser validator;
+		std::vector<QueryToken> temp_token_chain;
+		temp_token_chain.push_back({ QueryToken::QUOTATION_OPEN, "" });
+		temp_token_chain.push_back({ QueryToken::IDENTIFIER, "var" });
+		temp_token_chain.push_back({ QueryToken::QUOTATION_CLOSE, "" });
+		temp_token_chain.push_back({ QueryToken::DOT, "" });
+		temp_token_chain.push_back({ QueryToken::PROC_NAME, "" });
+		temp_token_chain.push_back({ QueryToken::EQUAL, "" });
+		temp_token_chain.push_back({ QueryToken::IDENTIFIER, "c" });
+		temp_token_chain.push_back({ QueryToken::DOT, "" });
+		temp_token_chain.push_back({ QueryToken::VALUE, "" });
+
+		EXPECT_THROW(validator.parseWith(query, temp_token_chain), SyntacticErrorException);
+	}
+
+	TEST(WithParserTest, SyntacInvalidAttrRefTest2) {
+		Query query;
+		//Expected
+
+		Synonym synonym2;
+		synonym2.name = "c";
+		Entity expected_2 = Entity(EntityType::CONSTANT, synonym2);
+		expected_2.setAttribute(AttrRef::VALUE);
+		query.addEntity(expected_2);
+
+		//Result
+		QueryPatternRelRefParser validator;
+		std::vector<QueryToken> temp_token_chain;
+		temp_token_chain.push_back({ QueryToken::CONSTANT, "5" });
+		temp_token_chain.push_back({ QueryToken::DOT, "" });
+		temp_token_chain.push_back({ QueryToken::VALUE, "" });
+		temp_token_chain.push_back({ QueryToken::EQUAL, "" });
+		temp_token_chain.push_back({ QueryToken::IDENTIFIER, "c" });
+		temp_token_chain.push_back({ QueryToken::DOT, "" });
+		temp_token_chain.push_back({ QueryToken::VALUE, "" });
+
+		EXPECT_THROW(validator.parseWith(query, temp_token_chain), SyntacticErrorException);
+	}
+
+	TEST(WithParserTest, SyntacInvalidAttrRefTest3) {
+		Query query;
+		//Expected
+
+		Synonym synonym2;
+		synonym2.name = "c";
+		Entity expected_2 = Entity(EntityType::CONSTANT, synonym2);
+		expected_2.setAttribute(AttrRef::VALUE);
+		query.addEntity(expected_2);
+
+		//Result
+		QueryPatternRelRefParser validator;
+		std::vector<QueryToken> temp_token_chain;
+		temp_token_chain.push_back({ QueryToken::CONSTANT, "5" });
+		temp_token_chain.push_back({ QueryToken::DOT, "" });
+		temp_token_chain.push_back({ QueryToken::STMT_INDEX, "" });
+		temp_token_chain.push_back({ QueryToken::EQUAL, "" });
+		temp_token_chain.push_back({ QueryToken::IDENTIFIER, "c" });
+		temp_token_chain.push_back({ QueryToken::DOT, "" });
+		temp_token_chain.push_back({ QueryToken::VALUE, "" });
+
+		EXPECT_THROW(validator.parseWith(query, temp_token_chain), SyntacticErrorException);
+	}
+
+	//semantic test ==========================================================================================================================================
+	TEST(WithParserTest, SemanticIntStrTest) {
+		Query query;
+
+		//Result
+		QueryPatternRelRefParser validator;
+		std::vector<QueryToken> temp_token_chain;
+		temp_token_chain.push_back({ QueryToken::CONSTANT, "9" });
+		//temp_token_chain.push_back({ QueryToken::DOT, "" });
+		//temp_token_chain.push_back({ QueryToken::VALUE, "" });
+		temp_token_chain.push_back({ QueryToken::EQUAL, "" });
+		temp_token_chain.push_back({ QueryToken::QUOTATION_OPEN, "" });
+		temp_token_chain.push_back({ QueryToken::IDENTIFIER, "iAmANumber" });
+		temp_token_chain.push_back({ QueryToken::QUOTATION_CLOSE, "" });
+		
+		validator.parseWith(query, temp_token_chain);
+		EXPECT_TRUE(Utility::checkIsSemanticError(query));
+	}
+
+	TEST(WithParserTest, SemanticIntStrTest2) {
+		Query query;
+
+		Synonym synonym2;
+		synonym2.name = "p";
+		Entity expected_2 = Entity(EntityType::PROCEDURE, synonym2);
+		expected_2.setAttribute(AttrRef::PROC_NAME);
+		query.addEntity(expected_2);
+
+		//RelRef expected_rel = RelRef(RelType::WITH, expected_1, expected_2);
+
+		//Result
+		QueryPatternRelRefParser validator;
+		std::vector<QueryToken> temp_token_chain;
+		temp_token_chain.push_back({ QueryToken::CONSTANT, "9" });
+		//temp_token_chain.push_back({ QueryToken::DOT, "" });
+		//temp_token_chain.push_back({ QueryToken::VALUE, "" });
+		temp_token_chain.push_back({ QueryToken::EQUAL, "" });
+		temp_token_chain.push_back({ QueryToken::IDENTIFIER, "p" });
+		temp_token_chain.push_back({ QueryToken::DOT, "" });
+		temp_token_chain.push_back({ QueryToken::PROC_NAME, "" });
+
+		validator.parseWith(query, temp_token_chain);
+		EXPECT_TRUE(Utility::checkIsSemanticError(query));
+	}
+
+	TEST(WithParserTest, SemanticIntStrTest3) {
+		Query query;
+
+		Synonym synonym2;
+		synonym2.name = "v";
+		Entity expected_2 = Entity(EntityType::VARIABLE, synonym2);
+		expected_2.setAttribute(AttrRef::VAR_NAME);
+		query.addEntity(expected_2);
+
+		//RelRef expected_rel = RelRef(RelType::WITH, expected_1, expected_2);
+
+		//Result
+		QueryPatternRelRefParser validator;
+		std::vector<QueryToken> temp_token_chain;
+		temp_token_chain.push_back({ QueryToken::CONSTANT, "9" });
+		//temp_token_chain.push_back({ QueryToken::DOT, "" });
+		//temp_token_chain.push_back({ QueryToken::VALUE, "" });
+		temp_token_chain.push_back({ QueryToken::EQUAL, "" });
+		temp_token_chain.push_back({ QueryToken::IDENTIFIER, "v" });
+		temp_token_chain.push_back({ QueryToken::DOT, "" });
+		temp_token_chain.push_back({ QueryToken::VAR_NAME, "" });
+
+		validator.parseWith(query, temp_token_chain);
+		EXPECT_TRUE(Utility::checkIsSemanticError(query));
+	}
+
+	TEST(WithParserTest, SemanticIntStrTest4) {
+		Query query;
+		//Result
+		QueryPatternRelRefParser validator;
+		std::vector<QueryToken> temp_token_chain;
+		temp_token_chain.push_back({ QueryToken::CONSTANT, "9" });
+		//temp_token_chain.push_back({ QueryToken::DOT, "" });
+		//temp_token_chain.push_back({ QueryToken::VALUE, "" });
+		temp_token_chain.push_back({ QueryToken::EQUAL, "" });
+		temp_token_chain.push_back({ QueryToken::IDENTIFIER, "print" });
+		temp_token_chain.push_back({ QueryToken::DOT, "" });
+		temp_token_chain.push_back({ QueryToken::VAR_NAME, "" });
+
+		validator.parseWith(query, temp_token_chain);
+		EXPECT_TRUE(Utility::checkIsSemanticError(query));
+	}
+
+	TEST(WithParserTest, SemanticIntStrTest5) {
+		Query query;
+
+		Synonym synonym2;
+		synonym2.name = "p";
+		Entity expected_2 = Entity(EntityType::PROG_LINE, synonym2);
+		expected_2.setAttribute(AttrRef::STMT_INDEX);
+		query.addEntity(expected_2);
+
+		//Result
+		QueryPatternRelRefParser validator;
+		std::vector<QueryToken> temp_token_chain;
+		temp_token_chain.push_back({ QueryToken::IDENTIFIER, "p" });
+		temp_token_chain.push_back({ QueryToken::EQUAL, "" });
+		temp_token_chain.push_back({ QueryToken::QUOTATION_OPEN, "" });
+		temp_token_chain.push_back({ QueryToken::IDENTIFIER, "iAmANumber" });
+		temp_token_chain.push_back({ QueryToken::QUOTATION_CLOSE, "" });
+
+		validator.parseWith(query, temp_token_chain);
+		EXPECT_TRUE(Utility::checkIsSemanticError(query));
+	}
+
+	TEST(WithParserTest, SemanticIntStrTest6) {
+		Query query;
+
+		Synonym synonym1;
+		synonym1.name = "p";
+		Entity expected_1 = Entity(EntityType::PROG_LINE, synonym1);
+		expected_1.setAttribute(AttrRef::STMT_INDEX);
+		query.addEntity(expected_1);
+
+		Synonym synonym2;
+		synonym2.name = "pr";
+		Entity expected_2 = Entity(EntityType::PROCEDURE, synonym2);
+		expected_2.setAttribute(AttrRef::PROC_NAME);
+		query.addEntity(expected_2);
+
+		//Result
+		QueryPatternRelRefParser validator;
+		std::vector<QueryToken> temp_token_chain;
+		temp_token_chain.push_back({ QueryToken::IDENTIFIER, "p" });
+		temp_token_chain.push_back({ QueryToken::EQUAL, "" });
+		temp_token_chain.push_back({ QueryToken::IDENTIFIER, "pr" });
+		temp_token_chain.push_back({ QueryToken::DOT, "" });
+		temp_token_chain.push_back({ QueryToken::PROC_NAME, "" });
+
+		validator.parseWith(query, temp_token_chain);
+		EXPECT_TRUE(Utility::checkIsSemanticError(query));
+	}
+
+	TEST(WithParserTest, SemanticIntStrTest7) {
+		Query query;
+
+		Synonym synonym1;
+		synonym1.name = "p";
+		Entity expected_1 = Entity(EntityType::PROG_LINE, synonym1);
+		expected_1.setAttribute(AttrRef::STMT_INDEX);
+		query.addEntity(expected_1);
+
+		Synonym synonym2;
+		synonym2.name = "v";
+		Entity expected_2 = Entity(EntityType::VARIABLE, synonym2);
+		expected_2.setAttribute(AttrRef::VAR_NAME);
+		query.addEntity(expected_2);
+
+		//Result
+		QueryPatternRelRefParser validator;
+		std::vector<QueryToken> temp_token_chain;
+		temp_token_chain.push_back({ QueryToken::IDENTIFIER, "p" });
+		temp_token_chain.push_back({ QueryToken::EQUAL, "" });
+		temp_token_chain.push_back({ QueryToken::IDENTIFIER, "v" });
+		temp_token_chain.push_back({ QueryToken::DOT, "" });
+		temp_token_chain.push_back({ QueryToken::VAR_NAME, "" });
+
+		validator.parseWith(query, temp_token_chain);
+		EXPECT_TRUE(Utility::checkIsSemanticError(query));
+	}
+
+	TEST(WithParserTest, SemanticIntStrTest8) {
+		Query query;
+
+		Synonym synonym1;
+		synonym1.name = "p";
+		Entity expected_1 = Entity(EntityType::PROG_LINE, synonym1);
+		expected_1.setAttribute(AttrRef::STMT_INDEX);
+		query.addEntity(expected_1);
+
+		Synonym synonym2;
+		synonym2.name = "pr";
+		Entity expected_2 = Entity(EntityType::PRINT, synonym2);
+		expected_2.setAttribute(AttrRef::VAR_NAME);
+		query.addEntity(expected_2);
+
+		//Result
+		QueryPatternRelRefParser validator;
+		std::vector<QueryToken> temp_token_chain;
+		temp_token_chain.push_back({ QueryToken::IDENTIFIER, "p" });
+		temp_token_chain.push_back({ QueryToken::EQUAL, "" });
+		temp_token_chain.push_back({ QueryToken::IDENTIFIER, "pr" });
+		temp_token_chain.push_back({ QueryToken::DOT, "" });
+		temp_token_chain.push_back({ QueryToken::VAR_NAME, "" });
+
+		validator.parseWith(query, temp_token_chain);
+		EXPECT_TRUE(Utility::checkIsSemanticError(query));
+	}
+
+	TEST(WithParserTest, SemanticIntStrTest9) {
+		Query query;
+
+		Synonym synonym2;
+		synonym2.name = "ifs";
+		Entity expected_2 = Entity(EntityType::IF, synonym2);
+		expected_2.setAttribute(AttrRef::STMT_INDEX);
+		query.addEntity(expected_2);
+
+		//Result
+		QueryPatternRelRefParser validator;
+		std::vector<QueryToken> temp_token_chain;
+		temp_token_chain.push_back({ QueryToken::IDENTIFIER, "ifs" });
+		temp_token_chain.push_back({ QueryToken::EQUAL, "" });
+		temp_token_chain.push_back({ QueryToken::QUOTATION_OPEN, "" });
+		temp_token_chain.push_back({ QueryToken::IDENTIFIER, "iAmANumber" });
+		temp_token_chain.push_back({ QueryToken::QUOTATION_CLOSE, "" });
+
+		validator.parseWith(query, temp_token_chain);
+		EXPECT_TRUE(Utility::checkIsSemanticError(query));
+	}
+
+	TEST(WithParserTest, SemanticIntStrTest10) {
+		Query query;
+
+		Synonym synonym1;
+		synonym1.name = "ifs";
+		Entity expected_1 = Entity(EntityType::IF, synonym1);
+		expected_1.setAttribute(AttrRef::STMT_INDEX);
+		query.addEntity(expected_1);
+
+		Synonym synonym2;
+		synonym2.name = "pr";
+		Entity expected_2 = Entity(EntityType::PROCEDURE, synonym2);
+		expected_2.setAttribute(AttrRef::PROC_NAME);
+		query.addEntity(expected_2);
+
+		//Result
+		QueryPatternRelRefParser validator;
+		std::vector<QueryToken> temp_token_chain;
+		temp_token_chain.push_back({ QueryToken::IDENTIFIER, "ifs" });
+		temp_token_chain.push_back({ QueryToken::EQUAL, "" });
+		temp_token_chain.push_back({ QueryToken::IDENTIFIER, "pr" });
+		temp_token_chain.push_back({ QueryToken::DOT, "" });
+		temp_token_chain.push_back({ QueryToken::PROC_NAME, "" });
+
+		validator.parseWith(query, temp_token_chain);
+		EXPECT_TRUE(Utility::checkIsSemanticError(query));
+	}
+
+	TEST(WithParserTest, SemanticIntStrTest11) {
+		Query query;
+
+		Synonym synonym1;
+		synonym1.name = "ifs";
+		Entity expected_1 = Entity(EntityType::IF, synonym1);
+		expected_1.setAttribute(AttrRef::STMT_INDEX);
+		query.addEntity(expected_1);
+
+		Synonym synonym2;
+		synonym2.name = "v";
+		Entity expected_2 = Entity(EntityType::VARIABLE, synonym2);
+		expected_2.setAttribute(AttrRef::VAR_NAME);
+		query.addEntity(expected_2);
+
+		//Result
+		QueryPatternRelRefParser validator;
+		std::vector<QueryToken> temp_token_chain;
+		temp_token_chain.push_back({ QueryToken::IDENTIFIER, "ifs" });
+		temp_token_chain.push_back({ QueryToken::EQUAL, "" });
+		temp_token_chain.push_back({ QueryToken::IDENTIFIER, "v" });
+		temp_token_chain.push_back({ QueryToken::DOT, "" });
+		temp_token_chain.push_back({ QueryToken::VAR_NAME, "" });
+
+		validator.parseWith(query, temp_token_chain);
+		EXPECT_TRUE(Utility::checkIsSemanticError(query));
+	}
+
+	TEST(WithParserTest, SemanticIntStrTest12) {
+		Query query;
+
+		Synonym synonym1;
+		synonym1.name = "ifs";
+		Entity expected_1 = Entity(EntityType::IF, synonym1);
+		expected_1.setAttribute(AttrRef::STMT_INDEX);
+		query.addEntity(expected_1);
+
+		Synonym synonym2;
+		synonym2.name = "pr";
+		Entity expected_2 = Entity(EntityType::PRINT, synonym2);
+		expected_2.setAttribute(AttrRef::VAR_NAME);
+		query.addEntity(expected_2);
+
+		//Result
+		QueryPatternRelRefParser validator;
+		std::vector<QueryToken> temp_token_chain;
+		temp_token_chain.push_back({ QueryToken::IDENTIFIER, "ifs" });
+		temp_token_chain.push_back({ QueryToken::EQUAL, "" });
+		temp_token_chain.push_back({ QueryToken::IDENTIFIER, "pr" });
+		temp_token_chain.push_back({ QueryToken::DOT, "" });
+		temp_token_chain.push_back({ QueryToken::VAR_NAME, "" });
+
+		validator.parseWith(query, temp_token_chain);
+		EXPECT_TRUE(Utility::checkIsSemanticError(query));
+	}
+
+	TEST(WithParserTest, SemanticIntStrTest13) {
+		Query query;
+
+		Synonym synonym2;
+		synonym2.name = "c";
+		Entity expected_2 = Entity(EntityType::CONSTANT, synonym2);
+		expected_2.setAttribute(AttrRef::VALUE);
+		query.addEntity(expected_2);
+
+		//Result
+		QueryPatternRelRefParser validator;
+		std::vector<QueryToken> temp_token_chain;
+		temp_token_chain.push_back({ QueryToken::IDENTIFIER, "c" });
+		temp_token_chain.push_back({ QueryToken::DOT, "" });
+		temp_token_chain.push_back({ QueryToken::VALUE, "" });
+		temp_token_chain.push_back({ QueryToken::EQUAL, "" });
+		temp_token_chain.push_back({ QueryToken::QUOTATION_OPEN, "" });
+		temp_token_chain.push_back({ QueryToken::IDENTIFIER, "iAmANumber" });
+		temp_token_chain.push_back({ QueryToken::QUOTATION_CLOSE, "" });
+
+		validator.parseWith(query, temp_token_chain);
+		EXPECT_TRUE(Utility::checkIsSemanticError(query));
+	}
+
+	TEST(WithParserTest, SemanticIntStrTest14) {
+		Query query;
+
+		Synonym synonym1;
+		synonym1.name = "c";
+		Entity expected_1 = Entity(EntityType::CONSTANT, synonym1);
+		expected_1.setAttribute(AttrRef::VALUE);
+		query.addEntity(expected_1);
+
+		Synonym synonym2;
+		synonym2.name = "pr";
+		Entity expected_2 = Entity(EntityType::PROCEDURE, synonym2);
+		expected_2.setAttribute(AttrRef::PROC_NAME);
+		query.addEntity(expected_2);
+
+		//Result
+		QueryPatternRelRefParser validator;
+		std::vector<QueryToken> temp_token_chain;
+
+		temp_token_chain.push_back({ QueryToken::IDENTIFIER, "c" });
+		temp_token_chain.push_back({ QueryToken::DOT, "" });
+		temp_token_chain.push_back({ QueryToken::VALUE, "" });		
+		temp_token_chain.push_back({ QueryToken::EQUAL, "" });
+		temp_token_chain.push_back({ QueryToken::IDENTIFIER, "pr" });
+		temp_token_chain.push_back({ QueryToken::DOT, "" });
+		temp_token_chain.push_back({ QueryToken::PROC_NAME, "" });
+
+		validator.parseWith(query, temp_token_chain);
+		EXPECT_TRUE(Utility::checkIsSemanticError(query));
+	}
+
+	TEST(WithParserTest, SemanticIntStrTest15) {
+		Query query;
+
+		Synonym synonym1;
+		synonym1.name = "c";
+		Entity expected_1 = Entity(EntityType::CONSTANT, synonym1);
+		expected_1.setAttribute(AttrRef::VALUE);
+		query.addEntity(expected_1);
+
+		Synonym synonym2;
+		synonym2.name = "v";
+		Entity expected_2 = Entity(EntityType::VARIABLE, synonym2);
+		expected_2.setAttribute(AttrRef::VAR_NAME);
+		query.addEntity(expected_2);
+
+		//Result
+		QueryPatternRelRefParser validator;
+		std::vector<QueryToken> temp_token_chain;
+		temp_token_chain.push_back({ QueryToken::IDENTIFIER, "c" });
+		temp_token_chain.push_back({ QueryToken::DOT, "" });
+		temp_token_chain.push_back({ QueryToken::VALUE, "" });
+		temp_token_chain.push_back({ QueryToken::EQUAL, "" });
+		temp_token_chain.push_back({ QueryToken::IDENTIFIER, "v" });
+		temp_token_chain.push_back({ QueryToken::DOT, "" });
+		temp_token_chain.push_back({ QueryToken::VAR_NAME, "" });
+
+		validator.parseWith(query, temp_token_chain);
+		EXPECT_TRUE(Utility::checkIsSemanticError(query));
+	}
+
+	TEST(WithParserTest, SemanticIntStrTest16) {
+		Query query;
+
+		Synonym synonym1;
+		synonym1.name = "c";
+		Entity expected_1 = Entity(EntityType::CONSTANT, synonym1);
+		expected_1.setAttribute(AttrRef::VALUE);
+		query.addEntity(expected_1);
+
+		Synonym synonym2;
+		synonym2.name = "pr";
+		Entity expected_2 = Entity(EntityType::PRINT, synonym2);
+		expected_2.setAttribute(AttrRef::VAR_NAME);
+		query.addEntity(expected_2);
+
+		//Result
+		QueryPatternRelRefParser validator;
+		std::vector<QueryToken> temp_token_chain;
+		temp_token_chain.push_back({ QueryToken::IDENTIFIER, "c" });
+		temp_token_chain.push_back({ QueryToken::DOT, "" });
+		temp_token_chain.push_back({ QueryToken::VALUE, "" });
+		temp_token_chain.push_back({ QueryToken::EQUAL, "" });
+		temp_token_chain.push_back({ QueryToken::IDENTIFIER, "pr" });
+		temp_token_chain.push_back({ QueryToken::DOT, "" });
+		temp_token_chain.push_back({ QueryToken::VAR_NAME, "" });
+
+		validator.parseWith(query, temp_token_chain);
+		EXPECT_TRUE(Utility::checkIsSemanticError(query));
+	}
+
+	TEST(WithParserTest, SemanticAttrNameTest1) {
+		Query query;
+		//Expected
+		Synonym synonym1;
+		synonym1.name = "progline1";
+		Entity expected_1 = Entity(EntityType::PROG_LINE, synonym1);
+		expected_1.setAttribute(AttrRef::STMT_INDEX);
+		query.addEntity(expected_1);
+
+		Synonym synonym2;
+		synonym2.name = "ifs";
+		Entity expected_2 = Entity(EntityType::IF, synonym2);
+		expected_2.setAttribute(AttrRef::STMT_INDEX);
+		query.addEntity(expected_2);
+
+		RelRef expected_rel = RelRef(RelType::WITH, expected_1, expected_2);
+
+		//Result
+		QueryPatternRelRefParser validator;
+		std::vector<QueryToken> temp_token_chain;
+		temp_token_chain.push_back({ QueryToken::IDENTIFIER, "progline1" });
+		temp_token_chain.push_back({ QueryToken::DOT, "" });
+		temp_token_chain.push_back({ QueryToken::STMT_INDEX, "" });
+		temp_token_chain.push_back({ QueryToken::EQUAL, "" });
+		temp_token_chain.push_back({ QueryToken::IDENTIFIER, "ifs" });
+		temp_token_chain.push_back({ QueryToken::DOT, "" });
+		temp_token_chain.push_back({ QueryToken::STMT_INDEX, "" });
+		
+		validator.parseWith(query, temp_token_chain);
+		EXPECT_TRUE(Utility::checkIsSemanticError(query));
+	}
+
+	TEST(WithParserTest, SemanticAttrNameTest2) {
+		Query query;
+		//Expected
+		Synonym synonym1;
+		synonym1.name = "progline1";
+		Entity expected_1 = Entity(EntityType::PROG_LINE, synonym1);
+		expected_1.setAttribute(AttrRef::STMT_INDEX);
+		query.addEntity(expected_1);
+
+		Synonym synonym2;
+		synonym2.name = "ifs";
+		Entity expected_2 = Entity(EntityType::IF, synonym2);
+		expected_2.setAttribute(AttrRef::STMT_INDEX);
+		query.addEntity(expected_2);
+
+		RelRef expected_rel = RelRef(RelType::WITH, expected_1, expected_2);
+
+		//Result
+		QueryPatternRelRefParser validator;
+		std::vector<QueryToken> temp_token_chain;
+		temp_token_chain.push_back({ QueryToken::IDENTIFIER, "progline1" });
+		temp_token_chain.push_back({ QueryToken::DOT, "" });
+		temp_token_chain.push_back({ QueryToken::PROC_NAME, "" });
+		temp_token_chain.push_back({ QueryToken::EQUAL, "" });
+		temp_token_chain.push_back({ QueryToken::IDENTIFIER, "ifs" });
+		temp_token_chain.push_back({ QueryToken::DOT, "" });
+		temp_token_chain.push_back({ QueryToken::STMT_INDEX, "" });
+
+		validator.parseWith(query, temp_token_chain);
+		EXPECT_TRUE(Utility::checkIsSemanticError(query));
+	}
+
+	TEST(WithParserTest, SemanticAttrNameTest3) {
+		Query query;
+		//Expected
+		Synonym synonym1;
+		synonym1.name = "progline1";
+		Entity expected_1 = Entity(EntityType::PROG_LINE, synonym1);
+		expected_1.setAttribute(AttrRef::STMT_INDEX);
+		query.addEntity(expected_1);
+
+		Synonym synonym2;
+		synonym2.name = "ifs";
+		Entity expected_2 = Entity(EntityType::IF, synonym2);
+		expected_2.setAttribute(AttrRef::STMT_INDEX);
+		query.addEntity(expected_2);
+
+		RelRef expected_rel = RelRef(RelType::WITH, expected_1, expected_2);
+
+		//Result
+		QueryPatternRelRefParser validator;
+		std::vector<QueryToken> temp_token_chain;
+		temp_token_chain.push_back({ QueryToken::IDENTIFIER, "progline1" });
+		temp_token_chain.push_back({ QueryToken::DOT, "" });
+		temp_token_chain.push_back({ QueryToken::VAR_NAME, "" });
+		temp_token_chain.push_back({ QueryToken::EQUAL, "" });
+		temp_token_chain.push_back({ QueryToken::IDENTIFIER, "ifs" });
+		temp_token_chain.push_back({ QueryToken::DOT, "" });
+		temp_token_chain.push_back({ QueryToken::STMT_INDEX, "" });
+
+		validator.parseWith(query, temp_token_chain);
+		EXPECT_TRUE(Utility::checkIsSemanticError(query));
+	}
+
+	TEST(WithParserTest, SemanticAttrNameTest4) {
+		Query query;
+		//Expected
+		Synonym synonym1;
+		synonym1.name = "progline1";
+		Entity expected_1 = Entity(EntityType::PROG_LINE, synonym1);
+		expected_1.setAttribute(AttrRef::STMT_INDEX);
+		query.addEntity(expected_1);
+
+		Synonym synonym2;
+		synonym2.name = "ifs";
+		Entity expected_2 = Entity(EntityType::IF, synonym2);
+		expected_2.setAttribute(AttrRef::STMT_INDEX);
+		query.addEntity(expected_2);
+
+		RelRef expected_rel = RelRef(RelType::WITH, expected_1, expected_2);
+
+		//Result
+		QueryPatternRelRefParser validator;
+		std::vector<QueryToken> temp_token_chain;
+		temp_token_chain.push_back({ QueryToken::IDENTIFIER, "progline1" });
+		temp_token_chain.push_back({ QueryToken::DOT, "" });
+		temp_token_chain.push_back({ QueryToken::VALUE, "" });
+		temp_token_chain.push_back({ QueryToken::EQUAL, "" });
+		temp_token_chain.push_back({ QueryToken::IDENTIFIER, "ifs" });
+		temp_token_chain.push_back({ QueryToken::DOT, "" });
+		temp_token_chain.push_back({ QueryToken::STMT_INDEX, "" });
+
+		validator.parseWith(query, temp_token_chain);
+		EXPECT_TRUE(Utility::checkIsSemanticError(query));
+	}
+
+	TEST(WithParserTest, SemanticAttrNameTest5) {
+		Query query;
+		//Expected
+		Synonym synonym1;
+		synonym1.name = "con";
+		Entity expected_1 = Entity(EntityType::CONSTANT, synonym1);
+		expected_1.setAttribute(AttrRef::VALUE);
+		query.addEntity(expected_1);
+
+		Synonym synonym2;
+		synonym2.name = "ifs";
+		Entity expected_2 = Entity(EntityType::IF, synonym2);
+		expected_2.setAttribute(AttrRef::STMT_INDEX);
+		query.addEntity(expected_2);
+
+		RelRef expected_rel = RelRef(RelType::WITH, expected_1, expected_2);
+
+		//Result
+		QueryPatternRelRefParser validator;
+		std::vector<QueryToken> temp_token_chain;
+		temp_token_chain.push_back({ QueryToken::IDENTIFIER, "con" });
+		temp_token_chain.push_back({ QueryToken::DOT, "" });
+		temp_token_chain.push_back({ QueryToken::STMT_INDEX, "" });
+		temp_token_chain.push_back({ QueryToken::EQUAL, "" });
+		temp_token_chain.push_back({ QueryToken::IDENTIFIER, "ifs" });
+		temp_token_chain.push_back({ QueryToken::DOT, "" });
+		temp_token_chain.push_back({ QueryToken::STMT_INDEX, "" });
+
+		validator.parseWith(query, temp_token_chain);
+		EXPECT_TRUE(Utility::checkIsSemanticError(query));
+	}
+
+	TEST(WithParserTest, SemanticAttrNameTest6) {
+		Query query;
+		//Expected
+		Synonym synonym1;
+		synonym1.name = "ifs";
+		Entity expected_1 = Entity(EntityType::IF, synonym1);
+		expected_1.setAttribute(AttrRef::STMT_INDEX);
+		query.addEntity(expected_1);
+
+		Synonym synonym2;
+		synonym2.name = "ifs";
+		Entity expected_2 = Entity(EntityType::IF, synonym2);
+		expected_2.setAttribute(AttrRef::STMT_INDEX);
+		query.addEntity(expected_2);
+
+		RelRef expected_rel = RelRef(RelType::WITH, expected_1, expected_2);
+
+		//Result
+		QueryPatternRelRefParser validator;
+		std::vector<QueryToken> temp_token_chain;
+		temp_token_chain.push_back({ QueryToken::IDENTIFIER, "ifs" });
+		temp_token_chain.push_back({ QueryToken::DOT, "" });
+		temp_token_chain.push_back({ QueryToken::VAR_NAME, "" });
+		temp_token_chain.push_back({ QueryToken::EQUAL, "" });
+		temp_token_chain.push_back({ QueryToken::IDENTIFIER, "ifs" });
+		temp_token_chain.push_back({ QueryToken::DOT, "" });
+		temp_token_chain.push_back({ QueryToken::STMT_INDEX, "" });
+
+		validator.parseWith(query, temp_token_chain);
+		EXPECT_TRUE(Utility::checkIsSemanticError(query));
+	}
+
+	TEST(WithParserTest, SemanticAttrNameTest7) {
+		Query query;
+		//Expected
+		Synonym synonym1;
+		synonym1.name = "read";
+		Entity expected_1 = Entity(EntityType::READ, synonym1);
+		expected_1.setAttribute(AttrRef::VAR_NAME);
+		query.addEntity(expected_1);
+
+		Synonym synonym2;
+		synonym2.name = "ifs";
+		Entity expected_2 = Entity(EntityType::IF, synonym2);
+		expected_2.setAttribute(AttrRef::STMT_INDEX);
+		query.addEntity(expected_2);
+
+		RelRef expected_rel = RelRef(RelType::WITH, expected_1, expected_2);
+
+		//Result
+		QueryPatternRelRefParser validator;
+		std::vector<QueryToken> temp_token_chain;
+		temp_token_chain.push_back({ QueryToken::IDENTIFIER, "read" });
+		temp_token_chain.push_back({ QueryToken::DOT, "" });
+		temp_token_chain.push_back({ QueryToken::PROC_NAME, "" });
+		temp_token_chain.push_back({ QueryToken::EQUAL, "" });
+		temp_token_chain.push_back({ QueryToken::IDENTIFIER, "ifs" });
+		temp_token_chain.push_back({ QueryToken::DOT, "" });
+		temp_token_chain.push_back({ QueryToken::STMT_INDEX, "" });
+
+		validator.parseWith(query, temp_token_chain);
+		EXPECT_TRUE(Utility::checkIsSemanticError(query));
+	}
+
+	TEST(WithParserTest, SemanticSynReadTest) {
+		Query query;
+		//Expected
+		Synonym synonym1;
+		synonym1.name = "read";
+		Entity expected_1 = Entity(EntityType::READ, synonym1);
+		expected_1.setAttribute(AttrRef::VAR_NAME);
+		query.addEntity(expected_1);
+
+		Synonym synonym2;
+		synonym2.name = "ifs";
+		Entity expected_2 = Entity(EntityType::IF, synonym2);
+		expected_2.setAttribute(AttrRef::STMT_INDEX);
+		query.addEntity(expected_2);
+
+		RelRef expected_rel = RelRef(RelType::WITH, expected_1, expected_2);
+
+		//Result
+		QueryPatternRelRefParser validator;
+		std::vector<QueryToken> temp_token_chain;
+		temp_token_chain.push_back({ QueryToken::IDENTIFIER, "read" });
+		temp_token_chain.push_back({ QueryToken::EQUAL, "" });
+		temp_token_chain.push_back({ QueryToken::IDENTIFIER, "ifs" });
+		temp_token_chain.push_back({ QueryToken::DOT, "" });
+		temp_token_chain.push_back({ QueryToken::STMT_INDEX, "" });
+
+		validator.parseWith(query, temp_token_chain);
+		EXPECT_TRUE(Utility::checkIsSemanticError(query));
+	}
+
+	TEST(WithParserTest, SemanticSynCallTest) {
+		Query query;
+		//Expected
+		Synonym synonym1;
+		synonym1.name = "call";
+		Entity expected_1 = Entity(EntityType::CALL, synonym1);
+		expected_1.setAttribute(AttrRef::STMT_INDEX);
+		query.addEntity(expected_1);
+
+		Synonym synonym2;
+		synonym2.name = "ifs";
+		Entity expected_2 = Entity(EntityType::IF, synonym2);
+		expected_2.setAttribute(AttrRef::STMT_INDEX);
+		query.addEntity(expected_2);
+
+		RelRef expected_rel = RelRef(RelType::WITH, expected_1, expected_2);
+
+		//Result
+		QueryPatternRelRefParser validator;
+		std::vector<QueryToken> temp_token_chain;
+		temp_token_chain.push_back({ QueryToken::IDENTIFIER, "call" });
+		temp_token_chain.push_back({ QueryToken::EQUAL, "" });
+		temp_token_chain.push_back({ QueryToken::IDENTIFIER, "ifs" });
+		temp_token_chain.push_back({ QueryToken::DOT, "" });
+		temp_token_chain.push_back({ QueryToken::STMT_INDEX, "" });
+
+		validator.parseWith(query, temp_token_chain);
+		EXPECT_TRUE(Utility::checkIsSemanticError(query));
+	}
+
+	TEST(WithParserTest, SemanticSynVarTest) {
+		Query query;
+		//Expected
+		Synonym synonym1;
+		synonym1.name = "v";
+		Entity expected_1 = Entity(EntityType::VARIABLE, synonym1);
+		expected_1.setAttribute(AttrRef::VAR_NAME);
+		query.addEntity(expected_1);
+
+		Synonym synonym2;
+		synonym2.name = "ifs";
+		Entity expected_2 = Entity(EntityType::IF, synonym2);
+		expected_2.setAttribute(AttrRef::STMT_INDEX);
+		query.addEntity(expected_2);
+
+		RelRef expected_rel = RelRef(RelType::WITH, expected_1, expected_2);
+
+		//Result
+		QueryPatternRelRefParser validator;
+		std::vector<QueryToken> temp_token_chain;
+		temp_token_chain.push_back({ QueryToken::IDENTIFIER, "v" });
+		temp_token_chain.push_back({ QueryToken::EQUAL, "" });
+		temp_token_chain.push_back({ QueryToken::IDENTIFIER, "ifs" });
+		temp_token_chain.push_back({ QueryToken::DOT, "" });
+		temp_token_chain.push_back({ QueryToken::STMT_INDEX, "" });
+
+		validator.parseWith(query, temp_token_chain);
+		EXPECT_TRUE(Utility::checkIsSemanticError(query));
+	}
 }

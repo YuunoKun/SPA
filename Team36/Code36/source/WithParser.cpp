@@ -37,40 +37,40 @@ void WithParser::parse(Query& query, std::vector<QueryToken> token_chain) {
         query.setIsSemanticError("Invalid parameters for With");
     }
 
-    EntityType ent_type_1 = getEntityType(query, temp_token_chain_1);
-    EntityType ent_type_2 = getEntityType(query, temp_token_chain_2);
-
-    if (ent_type_1 == EntityType::NONE_ENTITY &&
-        ent_type_2 == EntityType::NONE_ENTITY) {
-        ident_type = EntityType::BOOLEAN;
-    }
-    else if (ent_type_1 == EntityType::NONE_ENTITY) {
-        ident_type = ent_type_2;
-    }
-    else if (ent_type_2 == EntityType::NONE_ENTITY) {
-        ident_type = ent_type_1;
-    }
-
-    AttrRef attr_name_1 = getAttrName(query, temp_token_chain_1);
-    AttrRef attr_name_2 = getAttrName(query, temp_token_chain_2);
-
-    if (attr_name_1 == AttrRef::NONE &&
-        attr_name_2 == AttrRef::NONE) {
-        attr_name = NONE;
-    }
-    else if (attr_name_1 == AttrRef::NONE) {
-        attr_name = attr_name_2;
-    }
-    else if (attr_name_2 == AttrRef::NONE) {
-        attr_name = attr_name_1;
-    }
-
     if (!Utility::checkIsSemanticError(query)) {
+
+        EntityType ent_type_1 = getEntityType(query, temp_token_chain_1);
+        EntityType ent_type_2 = getEntityType(query, temp_token_chain_2);
+
+        if (ent_type_1 == EntityType::NONE_ENTITY &&
+            ent_type_2 == EntityType::NONE_ENTITY) {
+            ident_type = EntityType::BOOLEAN;
+        }
+        else if (ent_type_1 == EntityType::NONE_ENTITY) {
+            ident_type = ent_type_2;
+        }
+        else if (ent_type_2 == EntityType::NONE_ENTITY) {
+            ident_type = ent_type_1;
+        }
+
+        AttrRef attr_name_1 = getAttrName(query, temp_token_chain_1);
+        AttrRef attr_name_2 = getAttrName(query, temp_token_chain_2);
+
+        if (attr_name_1 == AttrRef::NONE &&
+            attr_name_2 == AttrRef::NONE) {
+            attr_name = NONE;
+        }
+        else if (attr_name_1 == AttrRef::NONE) {
+            attr_name = attr_name_2;
+        }
+        else if (attr_name_2 == AttrRef::NONE) {
+            attr_name = attr_name_1;
+        }
+
         query.addRelation(RelRef(RelType::WITH,
             Utility::setRef(query, temp_token_chain_1, ident_type, attr_name),
             Utility::setRef(query, temp_token_chain_2, ident_type, attr_name)));
     }
-
 }
 
 bool WithParser::isSameRefType(Query& query, std::vector<QueryToken> token_chain_1, std::vector<QueryToken> token_chain_2) {
