@@ -173,7 +173,7 @@ namespace UnitTesting {
 		StmtInfo p1{ 1, STMT_READ };
 		StmtInfo p2{ 2, STMT_PRINT };
 		StmtInfo p3{ 3, STMT_READ };
-		UniqueRelationTable<StmtInfo, StmtInfo> expected_table;
+		RelationTable<StmtInfo, StmtInfo> expected_table;
 		expected_table.insert(p1, p2);
 		expected_table.insert(p2, p3);
 
@@ -181,7 +181,6 @@ namespace UnitTesting {
 		PKB::getInstance().addStmt(STMT_PRINT);
 		PKB::getInstance().addStmt(STMT_READ);
 		PKB::getInstance().addFollows(1, 2);
-		PKB::getInstance().addFollows(1, 3);
 		PKB::getInstance().addFollows(2, 3);
 		EXPECT_EQ(expected_table, PKB::getInstance().getFollows());
 		PKB::getInstance().resetCache();
@@ -493,7 +492,7 @@ namespace UnitTesting {
 
 		var_name x = "x";
 		var_name y = "y";
-		UniqueRelationTable<stmt_index, var_name> expected_table;
+		RelationTable<stmt_index, var_name> expected_table;
 		expected_table.insert(1, x);
 
 		PKB::getInstance().addStmt(STMT_ASSIGN);
@@ -529,7 +528,7 @@ namespace UnitTesting {
 
 		var_name x = "x";
 		var_name y = "y";
-		UniqueRelationTable<stmt_index, var_name> expected_table;
+		RelationTable<stmt_index, var_name> expected_table;
 		expected_table.insert(1, x);
 
 		PKB::getInstance().addStmt(STMT_ASSIGN);
@@ -549,7 +548,7 @@ namespace UnitTesting {
 
 		var_name x = "x";
 		var_name y = "y";
-		UniqueRelationTable<stmt_index, var_name> expected_table;
+		RelationTable<stmt_index, var_name> expected_table;
 		expected_table.insert(1, x);
 
 		PKB::getInstance().addStmt(STMT_READ);
@@ -569,7 +568,7 @@ namespace UnitTesting {
 
 		var_name x = "x";
 		var_name y = "y";
-		UniqueRelationTable<stmt_index, var_name> expected_table;
+		RelationTable<stmt_index, var_name> expected_table;
 		expected_table.insert(1, x);
 
 		PKB::getInstance().addStmt(STMT_PRINT);
@@ -589,7 +588,7 @@ namespace UnitTesting {
 
 		proc_name first = "first";
 		proc_name second = "second";
-		UniqueRelationTable<stmt_index, proc_name> expected_table;
+		RelationTable<stmt_index, proc_name> expected_table;
 		expected_table.insert(1, first);
 
 		PKB::getInstance().addStmt(STMT_CALL);

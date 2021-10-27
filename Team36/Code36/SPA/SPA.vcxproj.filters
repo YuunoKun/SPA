@@ -85,13 +85,16 @@
     <Filter Include="Header Files\PKB\RelationPreprocessor">
       <UniqueIdentifier>{e2572ef7-b040-4343-a034-7c18e6de7970}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\PKB\RelationTables">
+      <UniqueIdentifier>{f957a021-55f2-4b7b-9944-6a4eca9469b3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\PKB\RelationTables">
+      <UniqueIdentifier>{1dfc2e37-cdb3-4da1-a698-b0ffca623e2b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\source\QuerySystem.cpp">
       <Filter>Source Files\PQL</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\RelationTable.cpp">
-      <Filter>Source Files\PKB</Filter>
     </ClCompile>
     <ClCompile Include="..\source\PKB.cpp">
       <Filter>Source Files\PKB</Filter>
@@ -282,6 +285,12 @@
     <ClCompile Include="..\source\IterativeDataflowSolver.cpp">
       <Filter>Source Files\PKB\RelationPreprocessor</Filter>
     </ClCompile>
+    <ClCompile Include="..\source\RelationTable.cpp">
+      <Filter>Source Files\PKB\RelationTables</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\MonotypeRelationTable.cpp">
+      <Filter>Source Files\PKB\RelationTables</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\source\Parser.h">
@@ -315,9 +324,6 @@
       <Filter>Header Files\Common</Filter>
     </ClInclude>
     <ClInclude Include="..\source\PKB.h">
-      <Filter>Header Files\PKB</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\RelationTable.h">
       <Filter>Header Files\PKB</Filter>
     </ClInclude>
     <ClInclude Include="..\source\KnowledgeBase.h">
@@ -505,6 +511,12 @@
     </ClInclude>
     <ClInclude Include="..\source\IterativeDataflowSolver.h">
       <Filter>Header Files\PKB\RelationPreprocessor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\MonotypeRelationTable.h">
+      <Filter>Header Files\PKB\RelationTables</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\RelationTable.h">
+      <Filter>Header Files\PKB\RelationTables</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -23,6 +23,7 @@
     <ClCompile Include="..\source\RelationsUtility.cpp" />
     <ClCompile Include="..\source\RelationTable.cpp" />
     <ClCompile Include="..\source\PKB.cpp" />
+    <ClCompile Include="..\source\MonotypeRelationTable.cpp" />
     <ClCompile Include="..\source\Statement.cpp" />
     <ClCompile Include="..\source\Entity.cpp" />
     <ClCompile Include="..\source\Pattern.cpp" />
@@ -84,6 +85,7 @@
     <ClInclude Include="..\source\FSM.h" />
     <ClInclude Include="..\source\AffectsPreprocessor.h" />
     <ClInclude Include="..\source\IterativeDataflowSolver.h" />
+    <ClInclude Include="..\source\MonotypeRelationTable.h" />
     <ClInclude Include="..\source\PKB.h" />
     <ClInclude Include="..\source\Parser.h" />
     <ClInclude Include="..\source\Procedure.h" />

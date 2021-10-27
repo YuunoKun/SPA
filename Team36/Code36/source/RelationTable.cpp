@@ -25,11 +25,6 @@ void RelationTable<T, S>::sort() {
 }
 
 template <class T, class S>
-bool RelationTable<T, S>::isUniqueKey() const {
-	return uniqueKey;
-}
-
-template <class T, class S>
 void RelationTable<T, S>::clear() {
 	forward_table.clear();
 	backward_table.clear();
@@ -174,41 +169,10 @@ RelationTable<T, S> RelationTable<T, S>::copy() const {
 
 template <class T, class S>
 bool RelationTable<T, S>::operator==(const RelationTable& other_table) const {
-	return (uniqueKey == other_table.uniqueKey) && (forward_table == other_table.forward_table) && (backward_table == other_table.backward_table);
+	return (forward_table == other_table.forward_table) && (backward_table == other_table.backward_table);
 }
 
 template <class T, class S>
 bool RelationTable<T, S>::operator!=(const RelationTable& other_table) const {
-	return (uniqueKey != other_table.uniqueKey) || (forward_table != other_table.forward_table) || (backward_table != other_table.backward_table);
-}
-
-template <class T, class S>
-bool UniqueRelationTable<T, S>::insert(T key, S value) {
-	auto iter_forward = forward_table.find(key);
-	auto iter_backward = backward_table.find(value);
-	bool keyExistsForward = iter_forward != forward_table.end();
-	bool valueExistsBackward = iter_backward != backward_table.end();
-
-	// only add if key is unique
-	if (keyExistsForward) {
-		return false;
-	}
-	else {
-		std::vector<S> newV;
-		newV.push_back(value);
-		forward_table.emplace(key, newV);
-
-		std::unordered_set<S> new_set({ value });;
-		lookup_table.emplace(key, new_set);
-
-		if (valueExistsBackward) {
-			backward_table[value].push_back(key);
-		}
-		else {
-			std::vector<T> new_backward_v;
-			new_backward_v.push_back(key);
-			backward_table.emplace(value, new_backward_v);
-		}
-		return true;
-	}
+	return (forward_table != other_table.forward_table) || (backward_table != other_table.backward_table);
 }

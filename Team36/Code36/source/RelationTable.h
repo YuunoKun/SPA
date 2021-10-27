@@ -12,16 +12,12 @@
 template <class T, class S>
 class RelationTable {
 public:
-	RelationTable() {
-		uniqueKey = false;
-	};
+	RelationTable() {};
 	RelationTable(std::vector<std::pair<T, S>> input) {
 		for (auto& pair : input) {
 			insert(pair.first, pair.second);
 		}
-		uniqueKey = false;
 	};
-	bool isUniqueKey() const;
 	void clear();
 	bool isEmpty() const;
 	bool insert(T key, S value);
@@ -47,14 +43,4 @@ protected:
 	std::unordered_map<T, std::vector<S>> forward_table;
 	std::unordered_map<S, std::vector<T>> backward_table;
 	std::unordered_map<T, std::unordered_set<S>> lookup_table;
-	bool uniqueKey;
-};
-
-template <class T, class S>
-class UniqueRelationTable : public RelationTable<T, S> {
-public:
-	UniqueRelationTable() {
-		uniqueKey = true;
-	};
-	bool insert(T key, S value);
 };

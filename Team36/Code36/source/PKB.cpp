@@ -8,7 +8,7 @@
 #include "RelationTable.h"
 // need to include this .cpp for template classes
 #include "RelationTable.cpp"
-#include "RelationsUtility.cpp"
+#include "MonotypeRelationTable.cpp"
 
 PKB& PKB::getInstance() {
 	static PKB pkb;
@@ -241,15 +241,15 @@ void PKB::addProcContains(proc_name proc, stmt_index index) {
 }
 
 void PKB::generateParentT() {
-	parentT_table = RelationsUtility<StmtInfo>::findTransitiveClosure(parent_table);
+	parentT_table = parent_table.findTransitiveClosure();
 }
 
 void PKB::generateFollowsT() {
-	followsT_table = RelationsUtility<StmtInfo>::findTransitiveClosure(follows_table);
+	followsT_table = follows_table.findTransitiveClosure();
 }
 
 void PKB::generateCallsPT() {
-	callsPT_table = RelationsUtility<proc_name>::findTransitiveClosure(callsP_table);
+	callsPT_table = callsP_table.findTransitiveClosure();
 }
 
 void PKB::resetCache() {
@@ -349,7 +349,7 @@ const bool PKB::inSameProc(stmt_index index1, stmt_index index2) {
 	return procS_table.containsPair(v[0], index2);
 }
 
-const UniqueRelationTable<stmt_index, var_name>& PKB::getAssigns() {
+const RelationTable<stmt_index, var_name>& PKB::getAssigns() {
 	return assignment_table;
 }
 
@@ -357,7 +357,7 @@ const std::unordered_map<stmt_index, expr>& PKB::getExpr() {
 	return expr_table;
 }
 
-const UniqueRelationTable<StmtInfo, StmtInfo>& PKB::getFollows() {
+const RelationTable<StmtInfo, StmtInfo>& PKB::getFollows() {
 	return follows_table;
 }
 
@@ -397,11 +397,11 @@ const RelationTable<proc_name, proc_name>& PKB::getCallsPT() {
 	return callsPT_table;
 }
 
-const UniqueRelationTable<stmt_index, var_name>& PKB::getRead() {
+const RelationTable<stmt_index, var_name>& PKB::getRead() {
 	return read_table;
 }
 
-const UniqueRelationTable<stmt_index, var_name>& PKB::getPrint() {
+const RelationTable<stmt_index, var_name>& PKB::getPrint() {
 	return print_table;
 }
 

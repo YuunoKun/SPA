@@ -49,6 +49,7 @@
     <ClCompile Include="ExprNodeTest.cpp" />
     <ClCompile Include="ExprParserTest.cpp" />
     <ClCompile Include="FSMTest.cpp" />
+    <ClCompile Include="MonotypeRelationTableTest.cpp" />
     <ClCompile Include="NextEvaluatorTest.cpp" />
     <ClCompile Include="NextTPreprocessorTest.cpp" />
     <ClCompile Include="ParserTest.cpp" />

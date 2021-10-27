@@ -11,6 +11,8 @@
 #include "Common.h"
 #include "KnowledgeBase.h"
 #include "RelationTable.h"
+#include "MonotypeRelationTable.h"
+
 #include "RelationsUtility.h"
 
 class PKB : public KnowledgeBase {
@@ -51,8 +53,8 @@ public:
 	expr getExpression(stmt_index stmt_index) override;
 	const std::vector<constant> getConstants() override;
 	const bool inSameProc(stmt_index, stmt_index) override;
-	const UniqueRelationTable<stmt_index, var_name>& getAssigns();
-	const UniqueRelationTable<StmtInfo, StmtInfo>& getFollows() override;
+	const RelationTable<stmt_index, var_name>& getAssigns();
+	const RelationTable<StmtInfo, StmtInfo>& getFollows() override;
 	const RelationTable<StmtInfo, StmtInfo>& getParent() override;
 	const RelationTable<StmtInfo, StmtInfo>& getFollowsT() override;
 	const RelationTable<StmtInfo, StmtInfo>& getParentT() override;
@@ -62,8 +64,8 @@ public:
 	const RelationTable<proc_name, var_name>& getModifiesP() override;
 	const RelationTable<proc_name, proc_name>& getCallsP() override;
 	const RelationTable<proc_name, proc_name>& getCallsPT() override;
-	const UniqueRelationTable<stmt_index, var_name>& getRead() override;
-	const UniqueRelationTable<stmt_index, var_name>& getPrint() override;
+	const RelationTable<stmt_index, var_name>& getRead() override;
+	const RelationTable<stmt_index, var_name>& getPrint() override;
 	const RelationTable<stmt_index, proc_name>& getCallsS() override;
 	const RelationTable<stmt_index, var_name>& getIf() override;
 	const RelationTable<stmt_index, var_name>& getWhile() override;
@@ -79,23 +81,23 @@ private:
 	std::vector<StmtInfo> stmt_table;
 	std::unordered_set<constant> const_table;
 	std::unordered_map<stmt_index, expr> expr_table;
-	UniqueRelationTable<stmt_index, var_name> assignment_table;
-	UniqueRelationTable<StmtInfo, StmtInfo> follows_table;
-	RelationTable<StmtInfo, StmtInfo> parent_table;
-	RelationTable<StmtInfo, StmtInfo> followsT_table;
-	RelationTable<StmtInfo, StmtInfo> parentT_table;
+	RelationTable<stmt_index, var_name> assignment_table;
+	MonotypeRelationTable<StmtInfo> follows_table;
+	MonotypeRelationTable<StmtInfo> parent_table;
+	MonotypeRelationTable<StmtInfo> followsT_table;
+	MonotypeRelationTable<StmtInfo> parentT_table;
 	RelationTable<StmtInfo, var_name> usesS_table;
 	RelationTable<StmtInfo, var_name> modifiesS_table;
 	RelationTable<proc_name, var_name> usesP_table;
 	RelationTable<proc_name, var_name> modifiesP_table;
-	RelationTable<proc_name, proc_name> callsP_table;
-	RelationTable<proc_name, proc_name> callsPT_table;
-	UniqueRelationTable<stmt_index, var_name> read_table;
-	UniqueRelationTable<stmt_index, var_name> print_table;
-	UniqueRelationTable<stmt_index, proc_name> callsS_table;
+	MonotypeRelationTable<proc_name> callsP_table;
+	MonotypeRelationTable<proc_name> callsPT_table;
+	RelationTable<stmt_index, var_name> read_table;
+	RelationTable<stmt_index, var_name> print_table;
+	RelationTable<stmt_index, proc_name> callsS_table;
 	RelationTable<stmt_index, var_name> while_table;
 	RelationTable<stmt_index, var_name> if_table;
-	RelationTable<StmtInfo, StmtInfo> next_table;
+	MonotypeRelationTable<StmtInfo> next_table;
 	RelationTable<proc_name, stmt_index> procS_table;
 
 	PKB() {};

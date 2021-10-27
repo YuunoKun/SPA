@@ -126,6 +126,9 @@
     <ClCompile Include="RelationsUtilityTest.cpp">
       <Filter>PKB</Filter>
     </ClCompile>
+    <ClCompile Include="MonotypeRelationTableTest.cpp">
+      <Filter>PKB</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />

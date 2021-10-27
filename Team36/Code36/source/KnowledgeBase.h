@@ -46,8 +46,8 @@ public:
 	virtual expr getExpression(stmt_index stmt_index) = 0;
 	virtual const bool inSameProc(stmt_index, stmt_index) = 0;
 	virtual const std::vector<constant> getConstants() = 0;
-	virtual const UniqueRelationTable<stmt_index, var_name>& getAssigns() = 0;
-	virtual const UniqueRelationTable<StmtInfo, StmtInfo>& getFollows() = 0;
+	virtual const RelationTable<stmt_index, var_name>& getAssigns() = 0;
+	virtual const RelationTable<StmtInfo, StmtInfo>& getFollows() = 0;
 	virtual const RelationTable<StmtInfo, StmtInfo>& getParent() = 0;
 	virtual const RelationTable<StmtInfo, StmtInfo>& getFollowsT() = 0;
 	virtual const RelationTable<StmtInfo, StmtInfo>& getParentT() = 0;
@@ -58,8 +58,8 @@ public:
 	virtual const RelationTable<proc_name, proc_name>& getCallsP() = 0;
 	virtual const RelationTable<proc_name, proc_name>& getCallsPT() = 0;
 	virtual const RelationTable<stmt_index, proc_name>& getCallsS() = 0;
-	virtual const UniqueRelationTable<stmt_index, var_name>& getRead() = 0;
-	virtual const UniqueRelationTable<stmt_index, var_name>& getPrint() = 0;
+	virtual const RelationTable<stmt_index, var_name>& getRead() = 0;
+	virtual const RelationTable<stmt_index, var_name>& getPrint() = 0;
 	virtual const RelationTable<stmt_index, var_name>& getIf() = 0;
 	virtual const RelationTable<stmt_index, var_name>& getWhile() = 0;
 	virtual const RelationTable<StmtInfo, StmtInfo>& getNext() = 0;
