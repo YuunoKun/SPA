@@ -2345,7 +2345,8 @@ namespace UnitTesting {
 		temp_token_chain.push_back({ QueryToken::IDENTIFIER, "p" });
 		temp_token_chain.push_back({ QueryToken::COMMA, "" });
 		temp_token_chain.push_back({ QueryToken::IDENTIFIER, "s" });
-		EXPECT_THROW(validator.parseParameterSuchThat(query, QueryToken::CALLS, temp_token_chain), SemanticErrorException);
+		validator.parseParameterSuchThat(query, QueryToken::CALLS, temp_token_chain);
+		EXPECT_TRUE(query.getIsSemanticError() != "");
 
 	}
 

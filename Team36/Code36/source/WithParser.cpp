@@ -29,12 +29,12 @@ void WithParser::parse(Query& query, std::vector<QueryToken> token_chain) {
     }
 
      if (!Utility::isRef(query, temp_token_chain_1) || !Utility::isRef(query, temp_token_chain_2)) {
-        throw SemanticErrorException("Invalid parameters for With");
+        query.setIsSemanticError("Invalid parameters for With");
     }
 
 
     if (!isSameRefType(query, temp_token_chain_1, temp_token_chain_2)) {
-        throw SemanticErrorException("Invalid parameters for With");
+        query.setIsSemanticError("Invalid parameters for With");
     }
 
     EntityType ent_type_1 = getEntityType(query, temp_token_chain_1);
@@ -51,8 +51,8 @@ void WithParser::parse(Query& query, std::vector<QueryToken> token_chain) {
         ident_type = ent_type_1;
     }
 
-    AttrRef attr_name_1 = getAttrName(temp_token_chain_1);
-    AttrRef attr_name_2 = getAttrName(temp_token_chain_2);
+    AttrRef attr_name_1 = getAttrName(query, temp_token_chain_1);
+    AttrRef attr_name_2 = getAttrName(query, temp_token_chain_2);
 
     if (attr_name_1 == AttrRef::NONE &&
         attr_name_2 == AttrRef::NONE) {
@@ -109,7 +109,7 @@ EntityType WithParser::getEntityType(Query& query, std::vector<QueryToken> token
 
 }
 
-AttrRef WithParser::getAttrName(std::vector<QueryToken> token_chain) {
+AttrRef WithParser::getAttrName(Query& query, std::vector<QueryToken> token_chain) {
 
     if (token_chain.size() == 1) {
         if (token_chain[0].type == QueryToken::CONSTANT) {
@@ -135,7 +135,7 @@ AttrRef WithParser::getAttrName(std::vector<QueryToken> token_chain) {
                 break;
             case QueryToken::VALUE: return AttrRef::VALUE;
                 break;
-            default: throw SemanticErrorException("Unknown AttrRef for with cl");
+            default: query.setIsSemanticError("Unknown AttrRef for with cl");
                 break;
             }
 

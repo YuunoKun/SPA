@@ -33,7 +33,7 @@ void UsesParser::parse(Query& query, std::vector<QueryToken> token_chain) {
         //is stmRef (WILDCARD incld)
         if (temp_token_chain_1[0].type == QueryToken::WILDCARD) {
             //Throw semantic erros
-            throw SemanticErrorException("Invalid parameters for Uses");
+            query.setIsSemanticError("Invalid parameters for Uses");
         }
     }
     else {
@@ -42,23 +42,23 @@ void UsesParser::parse(Query& query, std::vector<QueryToken> token_chain) {
             is_USES_S = false;
         }
         else {
-            throw SemanticErrorException("Invalid parameters for Uses");
+            query.setIsSemanticError("Invalid parameters for Uses");
         }
 
         //check if is PROCEDURE only
         if (!Utility::isCorrectSynEntRef(query, temp_token_chain_1, EntityType::PROCEDURE)) {
-            throw SemanticErrorException("Invalid parameters for Modifies");
+            query.setIsSemanticError("Invalid parameters for Modifies");
         }
 
     }
 
     //Validate second param
     if (!Utility::isEntRef(query, temp_token_chain_2)) {
-        throw SemanticErrorException("Invalid parameters for Uses");
+        query.setIsSemanticError("Invalid parameters for Uses");
     }
     // check if VARIABLE only
     if (!Utility::isCorrectSynEntRef(query, temp_token_chain_2, EntityType::VARIABLE)) {
-        throw SemanticErrorException("Invalid parameters for Modifies");
+        query.setIsSemanticError("Invalid parameters for Modifies");
     }
 
     if (is_USES_S) {

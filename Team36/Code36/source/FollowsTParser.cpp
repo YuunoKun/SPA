@@ -28,7 +28,7 @@ void FollowsTParser::parse(Query& query, std::vector<QueryToken> token_chain) {
     }
 
     if (!Utility::isStmtRef(query, temp_token_chain_1) || !Utility::isStmtRef(query, temp_token_chain_2)) {
-        throw SemanticErrorException("Invalid parameters for Follows*");
+        query.setIsSemanticError("Invalid parameters for Follows*");
     }
 
     QueryToken stmt = temp_token_chain_1[0];

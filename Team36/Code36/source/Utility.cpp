@@ -621,7 +621,7 @@ bool Utility::isStringRefType(Query& query, std::vector<QueryToken> token_chain)
 			return false;
 		}
 		else {
-			throw SemanticErrorException("ref has no string value");
+			query.setIsSemanticError("ref has no string value");
 		}
 	}
 	else {
@@ -668,7 +668,7 @@ bool Utility::isIntRefType(Query& query, std::vector<QueryToken> token_chain) {
 			return false;
 		}
 		else {
-			throw SemanticErrorException("ref has no int value");
+			query.setIsSemanticError("ref has no int value");
 		}
 	}
 	else {
@@ -695,7 +695,7 @@ Entity Utility::setStmtRef(Query& query, QueryToken token) {
 		return ent_chain.at(token.token_value);
 	}
 
-	throw SemanticErrorException("Unknown stmtRef");
+	query.setIsSemanticError("Unknown stmtRef");
 }
 
 Entity Utility::setEntRef(Query& query,
@@ -722,7 +722,7 @@ Entity Utility::setEntRef(Query& query,
 	}
 
 
-	throw SemanticErrorException("Unknown entRef");
+	query.setIsSemanticError("Unknown entRef");
 }
 
 Entity Utility::setLineRef(Query& query, QueryToken token) {
@@ -745,7 +745,7 @@ Entity Utility::setLineRef(Query& query, QueryToken token) {
 		return ent_chain.at(token.token_value);
 	}
 
-	throw SemanticErrorException("Unknown lineRef");
+	query.setIsSemanticError("Unknown lineRef");
 }
 
 Entity Utility::setRef(Query& query,
@@ -795,7 +795,7 @@ Entity Utility::setRef(Query& query,
 	}
 
 
-	throw SemanticErrorException("Unknown Ref");
+	query.setIsSemanticError("Unknown Ref");
 }
 
 std::string Utility::setExpr(std::vector<QueryToken> token_chain) {

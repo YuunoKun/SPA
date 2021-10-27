@@ -32,7 +32,7 @@ void ModifiesParser::parse(Query& query, std::vector<QueryToken> token_chain) {
     //Validate first param
     if (Utility::isStmtRef(query, temp_token_chain_1)) {
         if (temp_token_chain_1[0].type == QueryToken::WILDCARD) {
-            throw SemanticErrorException("Invalid parameters for Modifies");
+            query.setIsSemanticError("Invalid parameters for Modifies");
         }
     }
     else {
@@ -42,22 +42,22 @@ void ModifiesParser::parse(Query& query, std::vector<QueryToken> token_chain) {
         }
         else {
             //Not stmtRef or entRef
-            throw SemanticErrorException("Invalid parameters for Modifies");
+            query.setIsSemanticError("Invalid parameters for Modifies");
         }
 
         //check if is PROCEDURE only
         if (!Utility::isCorrectSynEntRef(query, temp_token_chain_1, EntityType::PROCEDURE)) {
-            throw SemanticErrorException("Invalid parameters for Modifies");
+            query.setIsSemanticError("Invalid parameters for Modifies");
         }
     }
 
     //Validate second param
     if (!Utility::isEntRef(query, temp_token_chain_2)) {
-        throw SemanticErrorException("Invalid parameters for Modifies");
+        query.setIsSemanticError("Invalid parameters for Modifies");
     }
     // check if VARIABLE only
     if (!Utility::isCorrectSynEntRef(query, temp_token_chain_2, EntityType::VARIABLE)) {
-        throw SemanticErrorException("Invalid parameters for Modifies");
+        query.setIsSemanticError("Invalid parameters for Modifies");
     }
 
     if (is_MODIFIES_S) {

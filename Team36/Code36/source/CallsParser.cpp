@@ -29,12 +29,12 @@ void CallsParser::parse(Query& query, std::vector<QueryToken> token_chain) {
     }
 
     if (!Utility::isEntRef(query, temp_token_chain_1) || !Utility::isEntRef(query, temp_token_chain_2)) {
-        throw SemanticErrorException("Invalid parameters for Calls");
+        query.setIsSemanticError("Invalid parameters for Calls");
     }
     // Check if both args are PROCEDURE
     if (!Utility::isCorrectSynEntRef(query, temp_token_chain_1, EntityType::PROCEDURE) ||
         !Utility::isCorrectSynEntRef(query, temp_token_chain_2, EntityType::PROCEDURE)) {
-        throw SemanticErrorException("Invalid parameters for Calls");
+        query.setIsSemanticError("Invalid parameters for Calls");
     }
 
     query.addRelation(RelRef(RelType::CALLS,
