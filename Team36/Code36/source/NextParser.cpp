@@ -32,9 +32,11 @@ void NextParser::parse(Query& query, std::vector<QueryToken> token_chain) {
 
 	QueryToken stmt2 = temp_token_chain_2[0];
 
-    query.addRelation(RelRef(RelType::NEXT,
-        Utility::setLineRef(query, stmt),
-        Utility::setLineRef(query, stmt2)));
+    if (!Utility::checkIsSemanticError(query)) {
+        query.addRelation(RelRef(RelType::NEXT,
+            Utility::setLineRef(query, stmt),
+            Utility::setLineRef(query, stmt2)));
+    }
 
 }
 

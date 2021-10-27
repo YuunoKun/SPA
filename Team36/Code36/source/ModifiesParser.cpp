@@ -62,12 +62,15 @@ void ModifiesParser::parse(Query& query, std::vector<QueryToken> token_chain) {
 
     if (is_MODIFIES_S) {
         QueryToken stmt = temp_token_chain_1[0];
-
-        query.addRelation(RelRef(RelType::MODIFIES_S, Utility::setStmtRef(query, stmt),
-            Utility::setEntRef(query, temp_token_chain_2, EntityType::VARIABLE)));
+        if (!Utility::checkIsSemanticError(query)) {
+            query.addRelation(RelRef(RelType::MODIFIES_S, Utility::setStmtRef(query, stmt),
+                Utility::setEntRef(query, temp_token_chain_2, EntityType::VARIABLE)));
+        }
     }
     else {
-        query.addRelation(RelRef(RelType::MODIFIES_P, Utility::setEntRef(query, temp_token_chain_1, EntityType::VARIABLE),
-            Utility::setEntRef(query, temp_token_chain_2, EntityType::VARIABLE)));
+        if (!Utility::checkIsSemanticError(query)) {
+            query.addRelation(RelRef(RelType::MODIFIES_P, Utility::setEntRef(query, temp_token_chain_1, EntityType::VARIABLE),
+                Utility::setEntRef(query, temp_token_chain_2, EntityType::VARIABLE)));
+        }
     }
 }

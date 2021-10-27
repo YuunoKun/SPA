@@ -32,5 +32,7 @@ void WhilePatternParser::parse(Query& query, Entity& entity, std::vector<QueryTo
 		query.setIsSemanticError("Invalid parameters for while");
 	}
 
-    query.addPattern(Pattern(entity, Utility::setEntRef(query, temp_token_chain_1, EntityType::VARIABLE)));
+    if (!Utility::checkIsSemanticError(query)) {
+        query.addPattern(Pattern(entity, Utility::setEntRef(query, temp_token_chain_1, EntityType::VARIABLE)));
+    }
 }

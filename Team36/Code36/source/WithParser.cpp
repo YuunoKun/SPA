@@ -65,9 +65,11 @@ void WithParser::parse(Query& query, std::vector<QueryToken> token_chain) {
         attr_name = attr_name_1;
     }
 
-    query.addRelation(RelRef(RelType::WITH,
-        Utility::setRef(query, temp_token_chain_1, ident_type, attr_name),
-        Utility::setRef(query, temp_token_chain_2, ident_type, attr_name)));
+    if (!Utility::checkIsSemanticError(query)) {
+        query.addRelation(RelRef(RelType::WITH,
+            Utility::setRef(query, temp_token_chain_1, ident_type, attr_name),
+            Utility::setRef(query, temp_token_chain_2, ident_type, attr_name)));
+    }
 
 }
 

@@ -37,7 +37,9 @@ void CallsParser::parse(Query& query, std::vector<QueryToken> token_chain) {
         query.setIsSemanticError("Invalid parameters for Calls");
     }
 
-    query.addRelation(RelRef(RelType::CALLS,
-        Utility::setEntRef(query, temp_token_chain_1, EntityType::PROCEDURE),
-        Utility::setEntRef(query, temp_token_chain_2, EntityType::PROCEDURE)));
+    if (!Utility::checkIsSemanticError(query)) {
+        query.addRelation(RelRef(RelType::CALLS,
+            Utility::setEntRef(query, temp_token_chain_1, EntityType::PROCEDURE),
+            Utility::setEntRef(query, temp_token_chain_2, EntityType::PROCEDURE)));
+    }
 }

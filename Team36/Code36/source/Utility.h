@@ -57,6 +57,7 @@ public:
 	static Entity setLineRef(Query&, QueryToken);
 	static Entity setRef(Query&, std::vector<QueryToken>, EntityType, AttrRef);
 	static std::string setExpr(std::vector<QueryToken>);
+	static bool checkIsSemanticError(Query&);
 private:
 	static bool isStmt(EntityType);
 };

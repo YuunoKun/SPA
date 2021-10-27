@@ -52,6 +52,7 @@ void UsesParser::parse(Query& query, std::vector<QueryToken> token_chain) {
 
     }
 
+
     //Validate second param
     if (!Utility::isEntRef(query, temp_token_chain_2)) {
         query.setIsSemanticError("Invalid parameters for Uses");
@@ -63,12 +64,15 @@ void UsesParser::parse(Query& query, std::vector<QueryToken> token_chain) {
 
     if (is_USES_S) {
         QueryToken stmt = temp_token_chain_1[0];
-
-        query.addRelation(RelRef(RelType::USES_S, Utility::setStmtRef(query, stmt),
-            Utility::setEntRef(query, temp_token_chain_2, EntityType::VARIABLE)));
+        if (!Utility::checkIsSemanticError(query)) {
+            query.addRelation(RelRef(RelType::USES_S, Utility::setStmtRef(query, stmt),
+                Utility::setEntRef(query, temp_token_chain_2, EntityType::VARIABLE)));
+        }
     }
     else {
-        query.addRelation(RelRef(RelType::USES_P, Utility::setEntRef(query, temp_token_chain_1, EntityType::VARIABLE),
-            Utility::setEntRef(query, temp_token_chain_2, EntityType::VARIABLE)));
+        if (!Utility::checkIsSemanticError(query)) {
+            query.addRelation(RelRef(RelType::USES_P, Utility::setEntRef(query, temp_token_chain_1, EntityType::VARIABLE),
+                Utility::setEntRef(query, temp_token_chain_2, EntityType::VARIABLE)));
+        }
     }
 }

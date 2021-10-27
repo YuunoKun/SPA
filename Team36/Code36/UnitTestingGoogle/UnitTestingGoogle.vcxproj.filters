@@ -115,6 +115,14 @@
       <Filter>Common</Filter>
     </ClCompile>
     <ClCompile Include="WithParserTest.cpp" />
+    <ClCompile Include="ModifiesParserTest.cpp" />
+    <ClCompile Include="UsesParserTest.cpp" />
+    <ClCompile Include="FollowsParserTest.cpp" />
+    <ClCompile Include="ParentParserTest.cpp" />
+    <ClCompile Include="ParentTParserTest.cpp" />
+    <ClCompile Include="FollowsTParserTest.cpp" />
+    <ClCompile Include="CallsParserTest.cpp" />
+    <ClCompile Include="CallsTParserTest.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />

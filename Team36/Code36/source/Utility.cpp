@@ -315,7 +315,6 @@ bool Utility::isStmtRef(Query& query, std::vector<QueryToken> token_chain) {
 
 	QueryToken token = token_chain[0];
 
-	//if integer, return true
 	if (token.type == QueryToken::CONSTANT) {
 		return true;
 	}
@@ -337,13 +336,13 @@ bool Utility::isStmtRef(Query& query, std::vector<QueryToken> token_chain) {
 				ent_chain.at(token.token_value).getType() == EntityType::ASSIGN;
 		}
 		else {
-			// Undeclared Syn, Cannot find Entity in Query
-			throw SyntacticErrorException("Undeclared stmtRef");
+			// undeclared synonym
+			return false;
 		}
 	}
 
-	// false will either be semantic errors OR will go to entRef(for Modifies and Uses)
-	return false;
+	// unknown query token
+	throw SyntacticErrorException("Invalid stmtRef arguments");
 }
 
 bool Utility::isEntRef(Query& query, std::vector<QueryToken> token_chain) {
@@ -368,11 +367,12 @@ bool Utility::isEntRef(Query& query, std::vector<QueryToken> token_chain) {
 			}
 			else {
 				// Undeclared Syn, Cannot find Entity in Query
-				throw SyntacticErrorException("Undeclared entRef");
+				return false;
 			}
 		}
 		else {
-			return false;
+			// unknown character
+			throw SyntacticErrorException("Invalid entRef arguments");
 		}
 
 	}
@@ -395,12 +395,8 @@ bool Utility::isEntRef(Query& query, std::vector<QueryToken> token_chain) {
 bool Utility::isLineRef(Query& query, std::vector<QueryToken> token_chain) {
 
 	// no args found, throw syntax errors
-	if (token_chain.size() == 0) {
+	if (token_chain.size() != 1) {
 		throw SyntacticErrorException("Invalid lineRef arguments");
-	}
-
-	if (token_chain.size() > 1) {
-		return false;
 	}
 
 	QueryToken token = token_chain[0];
@@ -409,13 +405,11 @@ bool Utility::isLineRef(Query& query, std::vector<QueryToken> token_chain) {
 	if (token.type == QueryToken::CONSTANT) {
 		return true;
 	}
-
-	if (token.type == QueryToken::WILDCARD) {
+	else if (token.type == QueryToken::WILDCARD) {
 		return true;
 	}
-
 	// check synonym if is program lines
-	if (token.type == QueryToken::IDENTIFIER) {
+	else if (token.type == QueryToken::IDENTIFIER) {
 		std::unordered_map<std::string, Entity> ent_chain = query.getEntities();
 		if (ent_chain.find(token.token_value) != ent_chain.end()) {
 			return ent_chain.at(token.token_value).getType() == EntityType::STMT ||
@@ -429,10 +423,13 @@ bool Utility::isLineRef(Query& query, std::vector<QueryToken> token_chain) {
 		}
 		else {
 			// Undeclared Syn, Cannot find Entity in Query
-			throw SyntacticErrorException("Undeclared lineRef");
+			return false;
 		}
 	}
-	return false;
+	else {
+		// unknown character
+		throw SyntacticErrorException("Invalid lineRef arguments");
+	}
 }
 
 bool Utility::isRef(Query& query, std::vector<QueryToken> token_chain) {
@@ -456,11 +453,11 @@ bool Utility::isRef(Query& query, std::vector<QueryToken> token_chain) {
 			}
 			else {
 				// Undeclared Syn, Cannot find Entity in Query
-				throw SyntacticErrorException("Undeclared ref");
+				return false;
 			}
 		}
 		else {
-			return false;
+			throw SyntacticErrorException("Invalid lineRef arguments");
 		}
 
 	}
@@ -512,7 +509,7 @@ bool Utility::isRef(Query& query, std::vector<QueryToken> token_chain) {
 			return true;
 		}
 		else {
-			return false;
+			throw SyntacticErrorException("Invalid ref arguments");
 		}
 	}
 	else {
@@ -525,7 +522,7 @@ bool Utility::isExpr(std::vector<QueryToken> token_chain) {
 	size_t token_chain_size = token_chain.size();
 
 	if (token_chain_size == 0) {
-		throw SyntacticErrorException("Invalid entRef arguments");
+		throw SyntacticErrorException("Invalid expr arguments");
 
 	}
 	else if (token_chain_size == 1) {
@@ -550,7 +547,7 @@ bool Utility::isExpr(std::vector<QueryToken> token_chain) {
 
 	}
 	else {
-		return false;
+		throw SyntacticErrorException("Invalid expr arguments");
 	}
 }
 
@@ -830,8 +827,11 @@ std::string Utility::setExpr(std::vector<QueryToken> token_chain) {
 
 }
 
+bool Utility::checkIsSemanticError(Query& query) {
+	return query.getIsSemanticError() != "";
+}
 
-bool Utility::isStmt(EntityType e) {
+bool Utility::Utility::isStmt(EntityType e) {
 	return e == EntityType::STMT || e == EntityType::PROG_LINE;
 }
 

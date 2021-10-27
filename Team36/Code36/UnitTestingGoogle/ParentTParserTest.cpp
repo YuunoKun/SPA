@@ -5,9 +5,9 @@
 #include <iostream>
 
 namespace UnitTesting {
-	class NextParserTest : public ::testing::Test {
+	class ParentTParserTest : public ::testing::Test {
 	protected:
-		NextParserTest() {
+		ParentTParserTest() {
 		}
 
 		// If the constructor and destructor are not enough for setting up
@@ -27,38 +27,37 @@ namespace UnitTesting {
 		// for Foo.
 	};
 
-	TEST(NextParserTest, NextSynSynTest) {
+	// PARENT_T
+	TEST(ParentTParserTest, ParentTSynSynTest) {
 		Query query;
 
-		//Synonym
 		//Expected
 		Synonym synonym;
 		synonym.name = "s";
-		Entity expected_1 = Entity(EntityType::STMT, synonym);
-		query.addEntity(expected_1);
+		Entity expected_stmt_1 = Entity(EntityType::STMT, synonym);
+		query.addEntity(expected_stmt_1);
 
 		Synonym synonym2;
-		synonym2.name = "a";
-		Entity expected_2 = Entity(EntityType::ASSIGN, synonym2);
-		query.addEntity(expected_2);
+		synonym2.name = "s1";
+		Entity expected_stmt_2 = Entity(EntityType::STMT, synonym2);
+		query.addEntity(expected_stmt_2);
 
-		RelRef expected_rel = RelRef(RelType::NEXT, expected_1, expected_2);
+		RelRef expected_rel = RelRef(RelType::PARENT_T, expected_stmt_1, expected_stmt_2);
 
 		//Result
 		QueryPatternRelRefParser validator;
 		std::vector<QueryToken> temp_token_chain;
 		temp_token_chain.push_back({ QueryToken::IDENTIFIER, "s" });
 		temp_token_chain.push_back({ QueryToken::COMMA, "" });
-		temp_token_chain.push_back({ QueryToken::IDENTIFIER, "a" });
-		validator.parseParameterSuchThat(query, QueryToken::NEXT, temp_token_chain);
+		temp_token_chain.push_back({ QueryToken::IDENTIFIER, "s1" });
+		validator.parseParameterSuchThat(query, QueryToken::PARENT_T, temp_token_chain);
 
 		EXPECT_TRUE(query.getClauses()[0].getRelation() == expected_rel);
 	}
 
-	TEST(NextParserTest, NextSynWildTest) {
+	TEST(ParentTParserTest, ParentTSynWildTest) {
 		Query query;
 
-		//Synonym
 		//Expected
 		Synonym synonym;
 		synonym.name = "s";
@@ -67,7 +66,7 @@ namespace UnitTesting {
 
 		Entity expected_stmt_2 = Entity(EntityType::WILD);
 
-		RelRef expected_rel = RelRef(RelType::NEXT, expected_stmt_1, expected_stmt_2);
+		RelRef expected_rel = RelRef(RelType::PARENT_T, expected_stmt_1, expected_stmt_2);
 
 		//Result
 		QueryPatternRelRefParser validator;
@@ -75,12 +74,12 @@ namespace UnitTesting {
 		temp_token_chain.push_back({ QueryToken::IDENTIFIER, "s" });
 		temp_token_chain.push_back({ QueryToken::COMMA, "" });
 		temp_token_chain.push_back({ QueryToken::WILDCARD, "" });
-		validator.parseParameterSuchThat(query, QueryToken::NEXT, temp_token_chain);
+		validator.parseParameterSuchThat(query, QueryToken::PARENT_T, temp_token_chain);
 
 		EXPECT_TRUE(query.getClauses()[0].getRelation() == expected_rel);
 	}
 
-	TEST(NextParserTest, NextSynIntTest) {
+	TEST(ParentTParserTest, ParentTSynIntTest) {
 		Query query;
 
 		//Synonym
@@ -92,7 +91,7 @@ namespace UnitTesting {
 
 		Entity expected_stmt_2 = Entity(EntityType::CONSTANT, "3");
 
-		RelRef expected_rel = RelRef(RelType::NEXT, expected_stmt_1, expected_stmt_2);
+		RelRef expected_rel = RelRef(RelType::PARENT_T, expected_stmt_1, expected_stmt_2);
 
 		//Result
 		QueryPatternRelRefParser validator;
@@ -100,12 +99,12 @@ namespace UnitTesting {
 		temp_token_chain.push_back({ QueryToken::IDENTIFIER, "s" });
 		temp_token_chain.push_back({ QueryToken::COMMA, "" });
 		temp_token_chain.push_back({ QueryToken::CONSTANT, "3" });
-		validator.parseParameterSuchThat(query, QueryToken::NEXT, temp_token_chain);
+		validator.parseParameterSuchThat(query, QueryToken::PARENT_T, temp_token_chain);
 
 		EXPECT_TRUE(query.getClauses()[0].getRelation() == expected_rel);
 	}
 
-	TEST(NextParserTest, NextWildSynTest) {
+	TEST(ParentTParserTest, ParentTWildSynTest) {
 		Query query;
 
 		//Synonym
@@ -117,7 +116,7 @@ namespace UnitTesting {
 		Entity expected_stmt_2 = Entity(EntityType::STMT, synonym);
 		query.addEntity(expected_stmt_2);
 
-		RelRef expected_rel = RelRef(RelType::NEXT, expected_stmt_1, expected_stmt_2);
+		RelRef expected_rel = RelRef(RelType::PARENT_T, expected_stmt_1, expected_stmt_2);
 
 		//Result
 		QueryPatternRelRefParser validator;
@@ -125,12 +124,12 @@ namespace UnitTesting {
 		temp_token_chain.push_back({ QueryToken::WILDCARD, "" });
 		temp_token_chain.push_back({ QueryToken::COMMA, "" });
 		temp_token_chain.push_back({ QueryToken::IDENTIFIER, "s" });
-		validator.parseParameterSuchThat(query, QueryToken::NEXT, temp_token_chain);
+		validator.parseParameterSuchThat(query, QueryToken::PARENT_T, temp_token_chain);
 
 		EXPECT_TRUE(query.getClauses()[0].getRelation() == expected_rel);
 	}
 
-	TEST(NextParserTest, NextWildWildTest) {
+	TEST(ParentTParserTest, ParentTWildWildTest) {
 		Query query;
 
 		//Expected
@@ -138,7 +137,7 @@ namespace UnitTesting {
 
 		Entity expected_stmt_2 = Entity(EntityType::WILD);
 
-		RelRef expected_rel = RelRef(RelType::NEXT, expected_stmt_1, expected_stmt_2);
+		RelRef expected_rel = RelRef(RelType::PARENT_T, expected_stmt_1, expected_stmt_2);
 
 		//Result
 		QueryPatternRelRefParser validator;
@@ -146,12 +145,12 @@ namespace UnitTesting {
 		temp_token_chain.push_back({ QueryToken::WILDCARD, "" });
 		temp_token_chain.push_back({ QueryToken::COMMA, "" });
 		temp_token_chain.push_back({ QueryToken::WILDCARD, "" });
-		validator.parseParameterSuchThat(query, QueryToken::NEXT, temp_token_chain);
+		validator.parseParameterSuchThat(query, QueryToken::PARENT_T, temp_token_chain);
 
 		EXPECT_TRUE(query.getClauses()[0].getRelation() == expected_rel);
 	}
 
-	TEST(NextParserTest, NextWildIntTest) {
+	TEST(ParentTParserTest, ParentTWildIntTest) {
 		Query query;
 
 		//Expected
@@ -159,7 +158,7 @@ namespace UnitTesting {
 
 		Entity expected_stmt_2 = Entity(EntityType::CONSTANT, "3");
 
-		RelRef expected_rel = RelRef(RelType::NEXT, expected_stmt_1, expected_stmt_2);
+		RelRef expected_rel = RelRef(RelType::PARENT_T, expected_stmt_1, expected_stmt_2);
 
 		//Result
 		QueryPatternRelRefParser validator;
@@ -167,12 +166,12 @@ namespace UnitTesting {
 		temp_token_chain.push_back({ QueryToken::WILDCARD, "" });
 		temp_token_chain.push_back({ QueryToken::COMMA, "" });
 		temp_token_chain.push_back({ QueryToken::CONSTANT, "3" });
-		validator.parseParameterSuchThat(query, QueryToken::NEXT, temp_token_chain);
+		validator.parseParameterSuchThat(query, QueryToken::PARENT_T, temp_token_chain);
 
 		EXPECT_TRUE(query.getClauses()[0].getRelation() == expected_rel);
 	}
 
-	TEST(NextParserTest, NextIntSynTest) {
+	TEST(ParentTParserTest, ParentTIntSynTest) {
 		Query query;
 
 		//Expected
@@ -183,7 +182,7 @@ namespace UnitTesting {
 		Entity expected_stmt_2 = Entity(EntityType::STMT, synonym);
 		query.addEntity(expected_stmt_2);
 
-		RelRef expected_rel = RelRef(RelType::NEXT, expected_stmt_1, expected_stmt_2);
+		RelRef expected_rel = RelRef(RelType::PARENT_T, expected_stmt_1, expected_stmt_2);
 
 		//Result
 		QueryPatternRelRefParser validator;
@@ -191,12 +190,12 @@ namespace UnitTesting {
 		temp_token_chain.push_back({ QueryToken::CONSTANT, "3" });
 		temp_token_chain.push_back({ QueryToken::COMMA, "" });
 		temp_token_chain.push_back({ QueryToken::IDENTIFIER, "s" });
-		validator.parseParameterSuchThat(query, QueryToken::NEXT, temp_token_chain);
+		validator.parseParameterSuchThat(query, QueryToken::PARENT_T, temp_token_chain);
 
 		EXPECT_TRUE(query.getClauses()[0].getRelation() == expected_rel);
 	}
 
-	TEST(NextParserTest, NextIntWildTest) {
+	TEST(ParentTParserTest, ParentTIntWildTest) {
 		Query query;
 
 		//Expected
@@ -204,7 +203,7 @@ namespace UnitTesting {
 
 		Entity expected_stmt_2 = Entity(EntityType::WILD);
 
-		RelRef expected_rel = RelRef(RelType::NEXT, expected_stmt_1, expected_stmt_2);
+		RelRef expected_rel = RelRef(RelType::PARENT_T, expected_stmt_1, expected_stmt_2);
 
 		//Result
 		QueryPatternRelRefParser validator;
@@ -212,12 +211,12 @@ namespace UnitTesting {
 		temp_token_chain.push_back({ QueryToken::CONSTANT, "3" });
 		temp_token_chain.push_back({ QueryToken::COMMA, "" });
 		temp_token_chain.push_back({ QueryToken::WILDCARD, "" });
-		validator.parseParameterSuchThat(query, QueryToken::NEXT, temp_token_chain);
+		validator.parseParameterSuchThat(query, QueryToken::PARENT_T, temp_token_chain);
 
 		EXPECT_TRUE(query.getClauses()[0].getRelation() == expected_rel);
 	}
 
-	TEST(NextParserTest, NextIntIntTest) {
+	TEST(ParentTParserTest, ParentTIntIntTest) {
 		Query query;
 
 		//Expected
@@ -225,7 +224,7 @@ namespace UnitTesting {
 
 		Entity expected_stmt_2 = Entity(EntityType::CONSTANT, "4");
 
-		RelRef expected_rel = RelRef(RelType::NEXT, expected_stmt_1, expected_stmt_2);
+		RelRef expected_rel = RelRef(RelType::PARENT_T, expected_stmt_1, expected_stmt_2);
 
 		//Result
 		QueryPatternRelRefParser validator;
@@ -233,42 +232,8 @@ namespace UnitTesting {
 		temp_token_chain.push_back({ QueryToken::CONSTANT, "3" });
 		temp_token_chain.push_back({ QueryToken::COMMA, "" });
 		temp_token_chain.push_back({ QueryToken::CONSTANT, "4" });
-		validator.parseParameterSuchThat(query, QueryToken::NEXT, temp_token_chain);
+		validator.parseParameterSuchThat(query, QueryToken::PARENT_T, temp_token_chain);
 
 		EXPECT_TRUE(query.getClauses()[0].getRelation() == expected_rel);
-	}
-
-	//Invalid
-
-	TEST(NextParserTest, syntacticInvalidNextIdentWildTest) {
-		QueryPatternRelRefParser validator;
-
-		Query query;
-		std::vector<QueryToken> temp_token_chain;
-		temp_token_chain.push_back({ QueryToken::QUOTATION_OPEN, "" });
-		temp_token_chain.push_back({ QueryToken::IDENTIFIER, "ident" });
-		temp_token_chain.push_back({ QueryToken::QUOTATION_CLOSE, "" });
-		temp_token_chain.push_back({ QueryToken::COMMA, "" });
-		temp_token_chain.push_back({ QueryToken::WILDCARD, "" });
-
-		EXPECT_THROW(validator.parseParameterSuchThat(query, QueryToken::NEXT, temp_token_chain), SyntacticErrorException);
-	}
-
-	TEST(NextParserTest, semanticInvalidNextVarWildTest) {
-		QueryPatternRelRefParser validator;
-
-		Query query;
-		Synonym synonym;
-		synonym.name = "v";
-		Entity declared_stmt = Entity(EntityType::VARIABLE, synonym);
-		query.addEntity(declared_stmt);
-
-		std::vector<QueryToken> temp_token_chain;
-		temp_token_chain.push_back({ QueryToken::IDENTIFIER, "v" });
-		temp_token_chain.push_back({ QueryToken::COMMA, "" });
-		temp_token_chain.push_back({ QueryToken::WILDCARD, "" });
-		validator.parseParameterSuchThat(query, QueryToken::NEXT, temp_token_chain);
-
-		EXPECT_TRUE(Utility::checkIsSemanticError(query));
 	}
 }

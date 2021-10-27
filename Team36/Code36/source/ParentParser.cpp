@@ -27,6 +27,10 @@ void ParentParser::parse(Query& query, std::vector<QueryToken> token_chain) {
         }
     }
 
+    if (temp_token_chain_1.size() != 1 || temp_token_chain_2.size() != 1) {
+        throw SyntacticErrorException("Invalid parameters for Parent");
+    }
+
     if (!Utility::isStmtRef(query, temp_token_chain_1) || !Utility::isStmtRef(query, temp_token_chain_2)) {
         query.setIsSemanticError("Invalid parameters for Parent");
     }
@@ -35,7 +39,9 @@ void ParentParser::parse(Query& query, std::vector<QueryToken> token_chain) {
 
     QueryToken stmt2 = temp_token_chain_2[0];
 
-    query.addRelation(RelRef(RelType::PARENT,
-        Utility::setStmtRef(query, stmt),
-        Utility::setStmtRef(query, stmt2)));
+    if (!Utility::checkIsSemanticError(query)) {
+        query.addRelation(RelRef(RelType::PARENT,
+            Utility::setStmtRef(query, stmt),
+            Utility::setStmtRef(query, stmt2)));
+    }
 }

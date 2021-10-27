@@ -532,7 +532,7 @@ namespace UnitTesting {
 		synonym2.name = "procName";
 		Entity expected_2 = Entity(EntityType::PRINT, synonym2);
 		query.addEntity(expected_2);
-
-		EXPECT_THROW(validator.parseParameterPattern(query, expected_declared_assign, temp_token_chain), SemanticErrorException);
+		validator.parseParameterPattern(query, expected_declared_assign, temp_token_chain);
+		EXPECT_TRUE(Utility::checkIsSemanticError(query));
 	}
 }
