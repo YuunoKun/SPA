@@ -749,6 +749,11 @@ std::vector<var_name> PKBAdapter::getPrintVar() {
 	return a.getValues();
 }
 
+bool PKBAdapter::isPrintVar(var_name v) {
+	auto a = PKB::getInstance().PKB::getPrint();
+	return a.containsValue(v);
+}
+
 std::vector<stmt_index> PKBAdapter::getPrint(var_name var) {
 	auto a = PKB::getInstance().PKB::getPrint();
 	return a.getKeys(var);
@@ -767,6 +772,11 @@ std::vector<var_name> PKBAdapter::getReadVar(stmt_index index) {
 std::vector<var_name> PKBAdapter::getReadVar() {
 	auto a = PKB::getInstance().PKB::getRead();
 	return a.getValues();
+}
+
+bool PKBAdapter::isReadVar(var_name v) {
+	auto a = PKB::getInstance().PKB::getRead();
+	return a.containsValue(v);
 }
 
 std::vector<stmt_index> PKBAdapter::getRead(var_name var) {
@@ -789,6 +799,11 @@ std::vector<proc_name> PKBAdapter::getCalledS(stmt_index index) {
 std::vector<proc_name> PKBAdapter::getCalledS() {
 	auto a = PKB::getInstance().PKB::getCallsS();
 	return a.getValues();
+}
+
+bool PKBAdapter::isCalledS(proc_name p) {
+	auto a = PKB::getInstance().PKB::getCallsS();
+	return a.containsValue(p);
 }
 
 

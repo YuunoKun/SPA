@@ -179,17 +179,20 @@ public:
 	std::vector<std::pair<stmt_index, var_name>> getAllReadVars();
 	std::vector<var_name> getReadVar(stmt_index);
 	std::vector<var_name> getReadVar();
+	bool isReadVar(var_name);
 	std::vector<stmt_index> getRead(var_name);
 	// Print stmt - var relation
 	std::vector<std::pair<stmt_index, var_name>> getAllPrintVars();
 	std::vector<var_name> getPrintVar(stmt_index);
 	std::vector<var_name> getPrintVar();
+	bool isPrintVar(var_name);
 	std::vector<stmt_index> getPrint(var_name);
 
 	// Call stmt - procname relation
 	std::vector<std::pair<stmt_index, proc_name>> getAllCallS();
 	std::vector<proc_name> getCalledS(stmt_index);
 	std::vector<proc_name> getCalledS();
+	bool isCalledS(proc_name);
 	std::vector<stmt_index> getCalleeS(proc_name);
 
 
