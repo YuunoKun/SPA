@@ -29,7 +29,7 @@ public:
 	std::vector<StmtInfo> evaluateSynonymAndConstant(int) override;
 
 	AffectsPreprocessor(
-		const RelationTable<StmtInfo, StmtInfo>& next_table,
+		const MonotypeRelationTable<StmtInfo>& next_table,
 		const RelationTable<StmtInfo, var_name>& useS_table,
 		const RelationTable<StmtInfo, var_name>& modifiesS_table,
 		const RelationTable<proc_name, stmt_index>& procS_table,
@@ -39,7 +39,7 @@ private:
 	void updateCache(std::set<stmt_index>, std::vector<std::pair<StmtInfo, StmtInfo>>);
 
 	const std::vector<StmtInfo>& stmt_info_list;
-	const RelationTable<StmtInfo, StmtInfo>& next_table;
+	const MonotypeRelationTable<StmtInfo>& next_table;
 	const RelationTable<StmtInfo, var_name>& useS_table;
 	const RelationTable<StmtInfo, var_name>& modifiesS_table;
 	const RelationTable<proc_name, stmt_index>& procS_table;

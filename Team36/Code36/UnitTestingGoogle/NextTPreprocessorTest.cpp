@@ -22,7 +22,7 @@ namespace UnitTesting {
 			{s1, s2}, {s2, s3}, {s3, s4}, {s3, s5}, {s4, s2},
 			{s5, s2}, {s2, s6}
 		};
-		RelationTable<StmtInfo, StmtInfo> test = RelationTable<StmtInfo, StmtInfo>(test_input);
+		MonotypeRelationTable<StmtInfo> test = MonotypeRelationTable<StmtInfo>(test_input);
 
 		NextTPreprocessor processor = NextTPreprocessor(test, s);
 

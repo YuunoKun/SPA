@@ -143,7 +143,7 @@ void AffectsPreprocessor::updateCache(std::set<stmt_index> visited, std::vector<
 }
 
 AffectsPreprocessor::AffectsPreprocessor(
-	const RelationTable<StmtInfo, StmtInfo>& next_table,
+	const MonotypeRelationTable<StmtInfo>& next_table,
 	const RelationTable<StmtInfo, var_name>& useS_table,
 	const RelationTable<StmtInfo, var_name>& modifiesS_table,
 	const RelationTable<proc_name, stmt_index>& procS_table,

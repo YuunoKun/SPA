@@ -123,9 +123,6 @@
     <ClCompile Include="AffectsPreprocessorTest.cpp">
       <Filter>PKB\RelationsPreprocessor</Filter>
     </ClCompile>
-    <ClCompile Include="RelationsUtilityTest.cpp">
-      <Filter>PKB</Filter>
-    </ClCompile>
     <ClCompile Include="MonotypeRelationTableTest.cpp">
       <Filter>PKB</Filter>
     </ClCompile>

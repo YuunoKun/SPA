@@ -1,6 +1,5 @@
 #include "NextTPreprocessor.h"
-#include "RelationsUtility.cpp"
-
+#include "MonotypeRelationTable.cpp"
 #include <assert.h>
 
 bool NextTPreprocessor::evaluateWildAndWild() {
@@ -25,7 +24,7 @@ bool NextTPreprocessor::evaluateConstantAndConstant(int index1, int index2) {
 		return cache.containsPair(s1, s2);
 	}
 	else {
-		auto dfs = RelationsUtility<StmtInfo>::forwardDFS(cache, s1);
+		auto dfs = cache.forwardDFS(s1);
 		for (StmtInfo indirect_value : dfs) {
 			cache.insert(s1, indirect_value);
 			calculated_matrix[s1.stmt_index - 1][s2.stmt_index - 1] = true;
@@ -39,7 +38,7 @@ bool NextTPreprocessor::evaluateConstantAndConstant(int index1, int index2) {
 
 std::vector<std::pair<StmtInfo, StmtInfo>> NextTPreprocessor::evaluateSynonymAndSynonym() {
 	checkCache();
-	cache = RelationsUtility<StmtInfo>::findTransitiveClosure(next_table);
+	cache = next_table.findTransitiveClosure();
 	is_fully_populated = true;
 	return cache.getPairs();
 }
@@ -59,7 +58,7 @@ std::vector<StmtInfo> NextTPreprocessor::evaluateConstantAndSynonym(int index) {
 		return cache.getValues(s1);
 	}
 	else {
-		std::vector<StmtInfo> res = RelationsUtility<StmtInfo>::forwardDFS(cache, s1);
+		std::vector<StmtInfo> res = cache.forwardDFS(s1);
 		for (auto& s2 : res) {
 			cache.insert(s1, s2);
 		}
@@ -75,7 +74,7 @@ std::vector<StmtInfo> NextTPreprocessor::evaluateSynonymAndConstant(int index) {
 		return cache.getKeys(s1);
 	}
 	else {
-		std::vector<StmtInfo> res = RelationsUtility<StmtInfo>::backwardDFS(cache, s1);
+		std::vector<StmtInfo> res = cache.backwardDFS(s1);
 		for (auto& s2 : res) {
 			cache.insert(s2, s2);
 		}
@@ -91,7 +90,7 @@ void NextTPreprocessor::checkCache() {
 	}
 }
 
-NextTPreprocessor::NextTPreprocessor(const RelationTable<StmtInfo, StmtInfo>& table, const std::vector<StmtInfo> v) :
+NextTPreprocessor::NextTPreprocessor(const MonotypeRelationTable<StmtInfo>& table, const std::vector<StmtInfo> v) :
 	next_table(table) {
 	stmt_info_list = v;
 	int size = stmt_info_list.size();

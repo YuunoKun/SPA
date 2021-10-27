@@ -20,10 +20,10 @@ public:
 	std::vector<StmtInfo> evaluateConstantAndSynonym(int) override;
 	std::vector<StmtInfo> evaluateSynonymAndConstant(int) override;
 
-	NextTPreprocessor(const RelationTable<StmtInfo, StmtInfo>&, const std::vector<StmtInfo>);
+	NextTPreprocessor(const MonotypeRelationTable<StmtInfo>&, const std::vector<StmtInfo>);
 	NextTPreprocessor() = default;
 private:
-	const RelationTable<StmtInfo, StmtInfo>& next_table;
+	const MonotypeRelationTable<StmtInfo>& next_table;
 	std::vector<StmtInfo> stmt_info_list;
 
 	void checkCache();

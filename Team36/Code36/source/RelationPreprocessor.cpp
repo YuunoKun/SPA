@@ -11,7 +11,7 @@ void RelationPreprocessor::reset() {
 			calculated_matrix[i][j] = false;
 		}
 	}
-	cache = RelationTable<StmtInfo, StmtInfo>();
+	cache = MonotypeRelationTable<StmtInfo>();
 }
 
 void RelationPreprocessor::setDFSForwardTrue(int index) {
@@ -36,7 +36,7 @@ bool RelationPreprocessor::isCacheInitialized() {
 	return is_cache_initialized;
 }
 
-const RelationTable<StmtInfo, StmtInfo>& RelationPreprocessor::getCache() {
+const MonotypeRelationTable<StmtInfo>& RelationPreprocessor::getCache() {
 	return cache;
 }
 

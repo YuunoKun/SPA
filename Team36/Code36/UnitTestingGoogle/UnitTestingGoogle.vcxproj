@@ -77,7 +77,6 @@
     <ClCompile Include="NextTParserTest.cpp" />
     <ClCompile Include="AssignPatternParserTest.cpp" />
     <ClCompile Include="IfPatternParserTest.cpp" />
-    <ClCompile Include="RelationsUtilityTest.cpp" />
     <ClCompile Include="WhilePatternParserTest.cpp" />
     <ClCompile Include="QueryOptimizerTest.cpp" />
     <ClCompile Include="CFGNodeTest.cpp" />

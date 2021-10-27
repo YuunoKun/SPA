@@ -116,7 +116,7 @@ namespace UnitTesting {
 		StmtInfo p1{ 1, STMT_WHILE };
 		StmtInfo p2{ 2, STMT_IF };
 		StmtInfo p3{ 3, STMT_READ };
-		RelationTable<StmtInfo, StmtInfo> expected_table;
+		MonotypeRelationTable<StmtInfo> expected_table;
 		expected_table.insert(p1, p2);
 		expected_table.insert(p2, p3);
 
@@ -141,7 +141,7 @@ namespace UnitTesting {
 		StmtInfo p5{ 5, STMT_IF };
 		StmtInfo p6{ 6, STMT_READ };
 
-		RelationTable<StmtInfo, StmtInfo> expected_table;
+		MonotypeRelationTable<StmtInfo> expected_table;
 		expected_table.insert(p2, p3);
 		expected_table.insert(p2, p4);
 		expected_table.insert(p2, p5);
@@ -173,7 +173,7 @@ namespace UnitTesting {
 		StmtInfo p1{ 1, STMT_READ };
 		StmtInfo p2{ 2, STMT_PRINT };
 		StmtInfo p3{ 3, STMT_READ };
-		RelationTable<StmtInfo, StmtInfo> expected_table;
+		MonotypeRelationTable<StmtInfo> expected_table;
 		expected_table.insert(p1, p2);
 		expected_table.insert(p2, p3);
 
@@ -197,7 +197,7 @@ namespace UnitTesting {
 		StmtInfo p5{ 5, STMT_IF };
 		StmtInfo p6{ 6, STMT_READ };
 
-		RelationTable<StmtInfo, StmtInfo> expected_table;
+		MonotypeRelationTable<StmtInfo> expected_table;
 		expected_table.insert(p1, p2);
 		expected_table.insert(p3, p4);
 		expected_table.insert(p3, p5);
@@ -452,7 +452,7 @@ namespace UnitTesting {
 	TEST(PKB, getNext) {
 		PKB::getInstance().resetCache();
 
-		RelationTable<StmtInfo, StmtInfo> expected_table;
+		MonotypeRelationTable<StmtInfo> expected_table;
 		StmtInfo s1{ 1, STMT_WHILE };
 		StmtInfo s2{ 2, STMT_IF };
 		StmtInfo s3{ 3, STMT_PRINT };

@@ -357,19 +357,19 @@ const std::unordered_map<stmt_index, expr>& PKB::getExpr() {
 	return expr_table;
 }
 
-const RelationTable<StmtInfo, StmtInfo>& PKB::getFollows() {
+const MonotypeRelationTable<StmtInfo>& PKB::getFollows() {
 	return follows_table;
 }
 
-const RelationTable<StmtInfo, StmtInfo>& PKB::getParent() {
+const MonotypeRelationTable<StmtInfo>& PKB::getParent() {
 	return parent_table;
 }
 
-const RelationTable<StmtInfo, StmtInfo>& PKB::getFollowsT() {
+const MonotypeRelationTable<StmtInfo>& PKB::getFollowsT() {
 	return followsT_table;
 }
 
-const RelationTable<StmtInfo, StmtInfo>& PKB::getParentT() {
+const MonotypeRelationTable<StmtInfo>& PKB::getParentT() {
 	return parentT_table;
 }
 
@@ -389,11 +389,11 @@ const RelationTable<proc_name, var_name>& PKB::getModifiesP() {
 	return modifiesP_table;
 }
 
-const RelationTable<proc_name, proc_name>& PKB::getCallsP() {
+const MonotypeRelationTable<proc_name>& PKB::getCallsP() {
 	return callsP_table;
 }
 
-const RelationTable<proc_name, proc_name>& PKB::getCallsPT() {
+const MonotypeRelationTable<proc_name>& PKB::getCallsPT() {
 	return callsPT_table;
 }
 
@@ -417,7 +417,7 @@ const RelationTable<stmt_index, var_name>& PKB::getWhile() {
 	return while_table;
 }
 
-const RelationTable<StmtInfo, StmtInfo>& PKB::getNext() {
+const MonotypeRelationTable<StmtInfo>& PKB::getNext() {
 	return next_table;
 }
 

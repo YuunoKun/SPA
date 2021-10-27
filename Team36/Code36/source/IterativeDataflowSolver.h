@@ -40,7 +40,7 @@ public:
 	bool solveIfNonEmpty(std::vector<stmt_index> first_statements);
 
 	IterativeDataflowSolver(
-		const RelationTable<StmtInfo, StmtInfo>& next_table_,
+		const MonotypeRelationTable<StmtInfo>& next_table,
 		const RelationTable<StmtInfo, var_name>& useS_table_,
 		const RelationTable<StmtInfo, var_name>& modifiesS_table,
 		const RelationTable<proc_name, stmt_index>& procS_table_,
@@ -63,7 +63,7 @@ private:
 	std::vector<std::set<stmt_index>> pred_list;
 	std::vector<std::set<stmt_index>> succ_list;
 
-	const RelationTable<StmtInfo, StmtInfo>& next_table;
+	const MonotypeRelationTable<StmtInfo>& next_table;
 	const RelationTable<StmtInfo, var_name>& useS_table;
 	const RelationTable<StmtInfo, var_name>& modifiesS_table;
 	const RelationTable<proc_name, stmt_index>& procS_table;

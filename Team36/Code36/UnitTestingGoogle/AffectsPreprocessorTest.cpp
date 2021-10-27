@@ -73,7 +73,7 @@ namespace UnitTesting {
 			{s11, s13}, {s12, s14}, {s13, s14}, {s14, s15}, {s15, s16}, {s17, s18},
 			{s18, s19}
 		};
-		RelationTable<StmtInfo, StmtInfo> test_next_table = RelationTable<StmtInfo, StmtInfo>(test_next_list);
+		MonotypeRelationTable<StmtInfo> test_next_table = MonotypeRelationTable<StmtInfo>(test_next_list);
 
 		std::vector<std::pair<StmtInfo, var_name>> test_usesS_list = {
 			{s3, "i"}, {s4, "a"}, {s5, "x"}, {s5, "a"}, {s7, "a"}, {s8, "x"}, {s8, "y"}, {s9, "v"},

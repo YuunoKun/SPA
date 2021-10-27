@@ -20,7 +20,7 @@ public:
 	void setDFSBackwardTrue(int);
 	bool isFullyPopulated();
 	bool isCacheInitialized();
-	const RelationTable<StmtInfo, StmtInfo>& getCache();
+	const MonotypeRelationTable<StmtInfo>& getCache();
 	std::vector<std::vector<bool>> getCalculatedMatrix();
 	std::vector<bool> getDFSForwardComputedList();
 	std::vector<bool> getDFSBackwardComputedList();
@@ -28,7 +28,7 @@ public:
 protected:
 	bool is_cache_initialized = false;
 	bool is_fully_populated = false;
-	RelationTable<StmtInfo, StmtInfo> cache;
+	MonotypeRelationTable<StmtInfo> cache;
 	std::vector<std::vector<bool>> calculated_matrix;
 	std::vector<bool> calculated_dfs_forward;
 	std::vector<bool> calculated_dfs_backward;
