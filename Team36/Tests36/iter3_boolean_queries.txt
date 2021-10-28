@@ -98,3 +98,13 @@ while w;
 Select BOOLEAN such that Uses("myFirst", "b") and pattern w("b", _)
 none
 5000
+21 - valid with clause
+call c; procedure p;
+Select BOOLEAN with c.procName = p.procName
+TRUE
+5000
+22 - valid with clause, no result
+assign a; read r;
+Selectc BOOLEAN with a.stmt# = r.stmt#
+FALSE
+5000
