@@ -20,13 +20,13 @@ Select <r, r, r>
 5000
 5 - such that parent, same type
 stmt s1, s2;
-Select <s1, s2> such that Parent<s1, s2>
+Select <s1, s2> such that Parent(s1, s2)
 6 7, 6 8, 8 9, 8 10, 8 11, 8 12, 8 16, 8 17, 8 18, 12 13, 12 14, 12 15, 19 20, 19 28, 19 29, 20 21, 20 22, 20 23, 20 26, 20 27, 23 24, 23 25, 30 31, 31 32, 31 33, 31 34, 31 35, 31 36, 31 37, 31 38, 38 39, 38 40, 42 43, 42 45, 43 44, 45 46
 5000
 6 - such that Modifies, different types
 procedure p; variable v;
 Select <p, v> such that Modifies(p, v)
-myFirst a, myFirst b, myFirst c, myFirst d, myFirst f, myFirst g, myFirst h, myFirst i, myFirst j, myFirst k, mySecond h, mySecond i, mySecond j, myThird k, myThird a, myThird d, myThird h, myThird i, myThird j, myFourth d, myFourth h, myFourth i, myFourth j
+myFirst a, myFirst b, myFirst c, myFirst d, myFirst e, myFirst f, myFirst g, myFirst h, myFirst i, myFirst j, myFirst k, mySecond h, mySecond i, mySecond j, myThird k, myThird a, myThird d, myThird h, myThird i, myThird j, myFourth d, myFourth h, myFourth i, myFourth j
 5000
 7 - multi-clauses
 procedure p, q; if ifs; assign a; variable v1, v2;
@@ -90,6 +90,6 @@ none
 5000
 19 - nested
 stmt s1, s2, s3;
-Select <s1, s2, s3> such that Parent*(s1, s2) and Parent*(s2, s3)
+Select <s1, s2, s3> such that Parent*(s1, s2) and Parent*(s2, s3) and Parent*(s3, _)
 6 8 12, 19 20 23, 30 31 38
 5000
