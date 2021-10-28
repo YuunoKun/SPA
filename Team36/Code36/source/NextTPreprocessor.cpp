@@ -19,7 +19,7 @@ bool NextTPreprocessor::evaluateConstantAndConstant(int index1, int index2) {
 	checkCache();
 	StmtInfo s1 = stmt_info_list[index1 - 1];
 	StmtInfo s2 = stmt_info_list[index2 - 1];
-	if (is_fully_populated || calculated_matrix[index1][index2]) {
+	if (is_fully_populated || calculated_matrix[index1 - 1][index2 - 1]) {
 		return cache.containsPair(s1, s2);
 	}
 	else {
@@ -28,7 +28,7 @@ bool NextTPreprocessor::evaluateConstantAndConstant(int index1, int index2) {
 				return true;
 			}
 		}
-		calculated_matrix[index1][index2] = true;
+		calculated_matrix[index1 - 1][index2 - 1] = true;
 		return cache.containsPair(s1, s2);
 	}
 }

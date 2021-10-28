@@ -345,6 +345,9 @@ const std::vector<constant> PKB::getConstants() {
 
 const bool PKB::inSameProc(stmt_index index1, stmt_index index2) {
 	std::vector<proc_name> v = procS_table.getKeys(index1);
+	if (v.empty()) {
+		return false;
+	}
 	return procS_table.containsPair(v[0], index2);
 }
 

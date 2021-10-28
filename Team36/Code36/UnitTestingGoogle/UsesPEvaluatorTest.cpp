@@ -18,14 +18,6 @@ namespace UnitTesting {
 	};
 
 	TEST_F(UsesPEvaluatorTest, evaluateWildAndWild) {
-		proc_name main1 = "main1";
-		var_name x = "x";
-		PKB::getInstance().addProcedure(main1);
-		PKB::getInstance().addVariable(x);
-
-		EXPECT_THROW(evaluator.evaluateWildAndWild(), std::invalid_argument);
-
-		PKB::getInstance().addUsesP(main1, x);
 		EXPECT_THROW(evaluator.evaluateWildAndWild(), std::invalid_argument);
 	}
 
@@ -97,29 +89,8 @@ namespace UnitTesting {
 	}
 
 	TEST_F(UsesPEvaluatorTest, evaluateWildAndConstant) {
-		proc_name main1 = "main1";
-		proc_name sub1 = "sub1";
-		proc_name main2 = "main2";
-		proc_name sub2 = "sub2";
-		var_name x = "x";
-		var_name y = "y";
-		var_name z = "z";
-		Entity v1 = { VARIABLE, "x" };
-		Entity v2 = { VARIABLE, "y" };
-		Entity v3 = { VARIABLE, "z" };
-
-		PKB::getInstance().addProcedure(main1);
-		PKB::getInstance().addProcedure(main2);
-		PKB::getInstance().addProcedure(sub1);
-		PKB::getInstance().addProcedure(sub2);
-		PKB::getInstance().addVariable(x);
-		PKB::getInstance().addUsesP(main1, x);
-		PKB::getInstance().addVariable(y);
-		PKB::getInstance().addUsesP(main2, y);
-
+		Entity v1 = { VARIABLE, "v"};
 		EXPECT_THROW(evaluator.evaluateWildAndConstant(v1), std::invalid_argument);
-		EXPECT_THROW(evaluator.evaluateWildAndConstant(v2), std::invalid_argument);
-		EXPECT_THROW(evaluator.evaluateWildAndConstant(v3), std::invalid_argument);
 	}
 
 	TEST_F(UsesPEvaluatorTest, evaluateSynonymAndSynonym) {
@@ -149,23 +120,6 @@ namespace UnitTesting {
 	}
 
 	TEST_F(UsesPEvaluatorTest, evaluateWildAndSynonym) {
-		proc_name main1 = "main1";
-		proc_name sub1 = "sub1";
-		proc_name main2 = "main2";
-		proc_name sub2 = "sub2";
-		var_name x = "x";
-		var_name y = "y";
-		var_name z = "z";
-
-		PKB::getInstance().addProcedure(main1);
-		PKB::getInstance().addProcedure(main2);
-		PKB::getInstance().addProcedure(sub1);
-		PKB::getInstance().addProcedure(sub2);
-		PKB::getInstance().addVariable(x);
-		PKB::getInstance().addUsesP(main1, x);
-		PKB::getInstance().addVariable(y);
-		PKB::getInstance().addUsesP(main2, y);
-
 		Entity header = { VARIABLE, Synonym{"a"} };
 		EXPECT_THROW(evaluator.evaluateWildAndSynonym(header), std::invalid_argument);
 	}

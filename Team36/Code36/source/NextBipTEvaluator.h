@@ -6,7 +6,7 @@
 #include "QueryResult.h"
 #include "PKBAdapter.h"
 
-class WithEvaluator : public RelationEvaluatorInterface {
+class NextBipTEvaluator : public RelationEvaluatorInterface {
 public:
 	bool evaluateWildAndWild() override;
 	bool evaluateConstantAndConstant(Entity, Entity) override;
@@ -17,12 +17,4 @@ public:
 	ResultTable evaluateSynonymAndWild(Entity) override;
 	ResultTable evaluateConstantAndSynonym(Entity, Entity) override;
 	ResultTable evaluateSynonymAndConstant(Entity, Entity) override;
-
-private:
-	std::list<std::vector<std::string>> getEntity(Entity);
-	std::list<std::vector<std::string>> getEntityAndSecondaryAttribute(Entity);
-
-
-	std::list<std::string> getEntityWithAttribute(Entity, Entity);
-	std::list<std::string> getEntityWithSecondaryAttribute(Entity);
 };

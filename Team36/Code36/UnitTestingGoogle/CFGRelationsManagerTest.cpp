@@ -35,6 +35,9 @@ namespace UnitTesting {
 
 			manager = new CFGRelationsManager();
 		}
+		~NextTPreprocessorTest_NextT() {
+			delete manager;
+		}
 
 		CFGRelationsManager* manager;
 

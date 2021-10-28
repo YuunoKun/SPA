@@ -7,9 +7,10 @@
 #include "RelationTable.cpp"
 #include "NextTPreprocessor.h"
 
-class CFGRelationsManager
-{
+class CFGRelationsManager {
 public:
+	CFGRelationsManager();
+	void update(); 
 	void reset();
 
 	bool isNextTEmpty();
@@ -45,5 +46,6 @@ public:
 	NextTPreprocessor getNextTProcessor();
 
 private:
-	NextTPreprocessor next_t_processor = NextTPreprocessor(PKB::getInstance().getNext(), PKB::getInstance().getStmts());
+	NextTPreprocessor next_t_processor;
+
 };

@@ -1,5 +1,6 @@
 #include "QueryResult.h"
 #include <stdexcept>
+#include "Utility.h"
 
 QueryResult::QueryResult() {
 	have_result = true;
@@ -14,7 +15,6 @@ void QueryResult::setNoResult() {
 }
 
 bool QueryResult::isInTables(std::vector<Entity> v) {
-	//for advance requirement
 	for (auto& it : v) {
 		if (isInTables(it)) {
 			return true;
@@ -53,11 +53,11 @@ void QueryResult::addResult(ResultTable t) {
 			have_result = false;
 			return;
 		}else if(!merged) {
-			new_results.push_back(r);
+			new_results.emplace_back(r);
 		}
 	}
 
-	new_results.push_back(t);
+	new_results.emplace_back(t);
 	results = new_results;
 }
 
@@ -67,8 +67,27 @@ void QueryResult::addHeader(std::vector<Entity> v) {
 	}
 }
 
-std::list<std::string> QueryResult::getResults(std::vector<Entity> e) {
-	return getResult(e[0]);
+ResultTable QueryResult::getResults(std::vector<Entity> selected) {
+	std::list<ResultTable> tables;
+	for (auto& result : results) {
+		std::vector<Entity> common = result.getCommonHeaders(selected);
+		if (common.empty()) {
+			continue;
+		}
+		selected = Utility::removeEntities(selected, common);
+		tables.emplace_back(result.getResultTable(common));
+	}
+	if (tables.size() == 1) {
+		return tables.front();
+	}
+	ResultTable resultTable = tables.front();
+	tables.pop_front();
+	while (!tables.empty()) {
+		resultTable.joinTable(tables.front());
+		tables.pop_front();
+	}
+
+	return resultTable;
 }
 
 std::list<std::string> QueryResult::getResult(Entity e) {

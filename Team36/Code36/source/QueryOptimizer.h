@@ -11,6 +11,7 @@ public:
 private:
 
 	bool checkConstantExist(Entity&);
+	bool checkSecondaryAttributeConstantExist(Entity&);
 
 	bool isComputeNextT(RelType, Entity&, Entity&);
 	bool isGraphSearchNextNoSynonym(RelType, Entity&, Entity&);

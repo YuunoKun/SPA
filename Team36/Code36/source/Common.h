@@ -42,7 +42,9 @@ typedef std::pair<stmt_index, var_name> pattern_info;
 
 struct Synonym {
 	std::string name;
-	Synonym() {};
+	Synonym() { 
+		name = "_"; 
+	};
 	Synonym(std::string name) {
 		if (name.size() == 0 || !isalpha(name[0])) {
 			throw std::invalid_argument("Invalid synonym");
