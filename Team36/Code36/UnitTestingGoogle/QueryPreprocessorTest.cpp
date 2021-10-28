@@ -699,9 +699,19 @@ namespace UnitTesting {
 
 	TEST(QueryPreprocessor, selectMultipleClauses) {
 		QueryPreprocessor qp;
-		Query test1 = qp.parse("assign a1, a2; Select <a1.procName, a2>");
+		Query test1 = qp.parse("call c1, c2; Select <c1.procName, c2>");
 		EXPECT_EQ(test1.getSelected()[0].getAttribute(), AttrRef{ PROC_NAME });
 		EXPECT_EQ(test1.getSelected()[1].getAttribute(), AttrRef{ STMT_INDEX });
+
+		Query test2 = qp.parse("call c1, c2; Select <c1.procName, c2.stmt#>");
+		EXPECT_EQ(test2.getSelected()[0].getAttribute(), AttrRef{ PROC_NAME });
+		EXPECT_EQ(test2.getSelected()[1].getAttribute(), AttrRef{ STMT_INDEX });
+
+		Query test3 = qp.parse("call c1, c2; procedure p; constant co; Select <c1.procName, c2.stmt#, p.procName, co.value>");
+		EXPECT_EQ(test3.getSelected()[0].getAttribute(), AttrRef{ PROC_NAME });
+		EXPECT_EQ(test3.getSelected()[1].getAttribute(), AttrRef{ STMT_INDEX });
+		EXPECT_EQ(test3.getSelected()[2].getAttribute(), AttrRef{ PROC_NAME });
+		EXPECT_EQ(test3.getSelected()[3].getAttribute(), AttrRef{ VALUE });
 	}
 
 	TEST(QueryPreprocessor, onePatternClause) {
@@ -1361,12 +1371,6 @@ namespace UnitTesting {
 		EXPECT_THROW(qp.parse("assign a; stmt s; Select s such that Follows(1,2) such That Follows(s,a)"), SyntacticErrorException);
 		qp.resetQuery();
 
-		EXPECT_THROW(qp.parse("stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; Select s such that Follows(x,y)"), SyntacticErrorException);
-		qp.resetQuery();
-
-		EXPECT_THROW(qp.parse("stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; Select s such that Follows(x,2)"), SyntacticErrorException);
-		qp.resetQuery();
-
 		EXPECT_THROW(qp.parse("stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; Select s such that Follows(1,\")"), SyntacticErrorException);
 		qp.resetQuery();
 
@@ -1501,6 +1505,12 @@ namespace UnitTesting {
 		qp.resetQuery();
 
 		EXPECT_THROW(qp.parse("stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; Select s such that Follows*(pr, s)"), SemanticErrorException);
+		qp.resetQuery();
+
+		EXPECT_THROW(qp.parse("stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; Select s such that Follows(x,y)"), SemanticErrorException);
+		qp.resetQuery();
+
+		EXPECT_THROW(qp.parse("stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; Select s such that Follows(x,2)"), SemanticErrorException);
 		qp.resetQuery();
 	}
 
