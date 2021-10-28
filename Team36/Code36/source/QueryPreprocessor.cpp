@@ -284,11 +284,12 @@ void QueryPreprocessor::handleWithinParameter(QueryToken& token) {
 			token.token_value != "with" &&
 			token.token_value != "pattern" &&
 			token.type != QueryToken::QueryTokenType::SUCH_THAT))) {
+		QueryPatternRelRefParser validator;
 		parameterClause.push_back(token);
+
 		// add call jiyu method
 				// TODO: call jiyu's method
-		if (patternOrSuchThat.type == QueryToken::QueryTokenType::WITH && this->nextToken.type == QueryToken::QueryTokenType::WHITESPACE) {
-			QueryPatternRelRefParser validator;
+		if (patternOrSuchThat.type == QueryToken::QueryTokenType::WITH && (this->nextToken.type == QueryToken::QueryTokenType::WHITESPACE || this->nextToken.token_value == "and")) {
 			validator.parseWith(query, parameterClause);
 			parameterClause.clear();
 			isParameter = false;

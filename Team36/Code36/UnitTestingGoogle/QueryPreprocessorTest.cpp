@@ -1332,29 +1332,33 @@ namespace UnitTesting {
 		EXPECT_EQ(test2, q2);
 	}
 
-	TEST(QueryPreprocessor, withClauseFollows) {
+	TEST(QueryPreprocessor, multipleWithClauses) {
 		QueryPreprocessor qp;
-		Query test1 = qp.parse("prog_line n; stmt s; Select s.stmt# such that Follows* (s, n) with n=10");
+
+		Query test1 = qp.parse("prog_line n; stmt s, s1; Select s.stmt# with s1.stmt#=n and n=10");
 
 		Query q1;
 		q1.addEntity(Entity(EntityType::PROG_LINE, Synonym{ "n" }));
 		q1.addEntity(Entity(EntityType::STMT, Synonym{ "s" }));
+		q1.addEntity(Entity(EntityType::STMT, Synonym{ "s1" }));
 		q1.addSelected(Entity(EntityType::STMT, Synonym{ "s" }));
-		q1.addRelation(RelRef(RelType::FOLLOWS_T, Entity(EntityType::STMT, Synonym{ "s" }), Entity(EntityType::PROG_LINE, Synonym{ "n" })));
-		q1.addRelation(RelRef(RelType::WITH, Entity(EntityType::PROG_LINE, Synonym{ "n" }), Entity(EntityType::CONSTANT, Synonym{ "10" })));
+		q1.addRelation(RelRef(RelType::WITH, Entity(EntityType::STMT, Synonym{ "s1" }), Entity(EntityType::PROG_LINE, Synonym{ "n" })));
+		q1.addRelation(RelRef(RelType::WITH, Entity(EntityType::PROG_LINE, Synonym{ "n" }), Entity(EntityType::PROG_LINE, "10")));
 
 		EXPECT_EQ(test1, q1);
 
-		//Query test2 = qp.parse("stmt s; procedure p; variable v; Select p with p.procName = v.varName");
+		Query test2 = qp.parse("prog_line n; stmt s, s1; Select s.stmt# such that Follows* (s, s1) with s1.stmt#=n and n=10");
 
-		//Query q2;
-		//q2.addEntity(Entity(EntityType::STMT, Synonym{ "s" }));
-		//q2.addEntity(Entity(EntityType::PROCEDURE, Synonym{ "p" }));
-		//q2.addEntity(Entity(EntityType::VARIABLE, Synonym{ "v" }));
-		//q2.addSelected(Entity(EntityType::PROCEDURE, Synonym{ "p" }));
-		//q2.addRelation(RelRef(RelType::WITH, Entity(EntityType::PROCEDURE, Synonym{ "p" }), Entity(EntityType::VARIABLE, Synonym{ "v" })));
+		Query q2;
+		q2.addEntity(Entity(EntityType::PROG_LINE, Synonym{ "n" }));
+		q2.addEntity(Entity(EntityType::STMT, Synonym{ "s" }));
+		q2.addEntity(Entity(EntityType::STMT, Synonym{ "s1" }));
+		q2.addSelected(Entity(EntityType::STMT, Synonym{ "s" }));
+		q2.addRelation(RelRef(RelType::FOLLOWS_T, Entity(EntityType::STMT, Synonym{ "s" }), Entity(EntityType::STMT, Synonym{ "s1" })));
+		q2.addRelation(RelRef(RelType::WITH, Entity(EntityType::STMT, Synonym{ "s1" }), Entity(EntityType::PROG_LINE, Synonym{ "n" })));
+		q2.addRelation(RelRef(RelType::WITH, Entity(EntityType::PROG_LINE, Synonym{ "n" }), Entity(EntityType::PROG_LINE, "10")));
 
-		//EXPECT_EQ(test2, q2);
+		EXPECT_EQ(test2, q2);
 	}
 
 	TEST(QueryPreprocessor, invalidSyntax) {
