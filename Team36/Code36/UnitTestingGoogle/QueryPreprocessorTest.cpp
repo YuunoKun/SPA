@@ -1308,6 +1308,7 @@ namespace UnitTesting {
 		EXPECT_EQ(test1, q1);
 	}
 
+
 	TEST(QueryPreprocessor, invalidSyntax) {
 		QueryPreprocessor qp;
 

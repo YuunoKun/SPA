@@ -52,8 +52,8 @@ void QueryValidator::validateSelecting(QueryToken& token, QueryToken& prevTokenS
 		(token.type != QueryToken::QueryTokenType::DOT &&
 			token.type != QueryToken::QueryTokenType::SUCH_THAT &&
 			token.type != QueryToken::QueryTokenType::PATTERN &&
-			token.type != QueryToken::QueryTokenType::WITH)) {
-		throw SyntacticErrorException("After selection needs to have such that or pattern clause");
+			token.token_value != "with")) {
+		throw SyntacticErrorException("After selection needs to have such that or pattern clause or with");
 	}
 }
 
