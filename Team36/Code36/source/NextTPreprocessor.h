@@ -24,7 +24,7 @@ public:
 	NextTPreprocessor() = default;
 
 private:
-	MonotypeRelationTable<StmtInfo> next_table;
+	const MonotypeRelationTable<StmtInfo>* next_table;
 	std::vector<StmtInfo> stmt_info_list;
 
 	void checkCache();

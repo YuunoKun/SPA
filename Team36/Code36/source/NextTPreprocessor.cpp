@@ -3,17 +3,17 @@
 #include <assert.h>
 
 bool NextTPreprocessor::evaluateWildAndWild() {
-	return !next_table.isEmpty();
+	return !next_table->isEmpty();
 }
 
 bool NextTPreprocessor::evaluateConstantAndWild(int index) {
 	StmtInfo s1 = stmt_info_list[index - 1];
-	return next_table.containsKey(s1);
+	return next_table->containsKey(s1);
 }
 
 bool NextTPreprocessor::evaluateWildAndConstant(int index) {
 	StmtInfo s1 = stmt_info_list[index - 1];
-	return next_table.containsValue(s1);
+	return next_table->containsValue(s1);
 }
 
 bool NextTPreprocessor::evaluateConstantAndConstant(int index1, int index2) {
@@ -38,17 +38,17 @@ bool NextTPreprocessor::evaluateConstantAndConstant(int index1, int index2) {
 
 std::vector<std::pair<StmtInfo, StmtInfo>> NextTPreprocessor::evaluateSynonymAndSynonym() {
 	checkCache();
-	cache = next_table.findTransitiveClosure();
+	cache = next_table->findTransitiveClosure();
 	is_fully_populated = true;
 	return cache.getPairs();
 }
 
 std::vector<StmtInfo> NextTPreprocessor::evaluateWildAndSynonym() {
-	return next_table.getValues();
+	return next_table->getValues();
 }
 
 std::vector<StmtInfo> NextTPreprocessor::evaluateSynonymAndWild() {
-	return next_table.getKeys();
+	return next_table->getKeys();
 }
 
 std::vector<StmtInfo> NextTPreprocessor::evaluateConstantAndSynonym(int index) {
@@ -85,13 +85,13 @@ std::vector<StmtInfo> NextTPreprocessor::evaluateSynonymAndConstant(int index) {
 
 void NextTPreprocessor::checkCache() {
 	if (is_cache_initialized == false) {
-		cache = next_table.copy();
+		cache = next_table->copy();
 		is_cache_initialized = true;
 	}
 }
 
 NextTPreprocessor::NextTPreprocessor(const MonotypeRelationTable<StmtInfo>& table, const std::vector<StmtInfo> v) :
-	next_table(table) {
+	next_table(&table) {
 	stmt_info_list = v;
 	int size = stmt_info_list.size();
 	calculated_matrix.resize(size, std::vector<bool>(size, false));

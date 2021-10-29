@@ -48,6 +48,8 @@ public:
 	AffectsPreprocessor getAffectsProcessor();
 
 private:
-	NextTPreprocessor next_t_processor;
-	AffectsPreprocessor affects_processor;
+	NextTPreprocessor next_t_processor = NextTPreprocessor(PKB::getInstance().getNext(), PKB::getInstance().getStmts());
+	AffectsPreprocessor affects_processor = AffectsPreprocessor(
+		PKB::getInstance().getNext(), PKB::getInstance().getUsesS(), PKB::getInstance().getModifiesS(),
+		PKB::getInstance().getProcContains(), PKB::getInstance().getStmts());
 };

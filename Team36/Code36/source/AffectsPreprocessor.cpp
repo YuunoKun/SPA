@@ -10,8 +10,8 @@ bool AffectsPreprocessor::evaluateWildAndWild() {
 	}
 	else {
 		std::vector<stmt_index> list_of_first_statements{};
-		for (proc_name proc : procS_table.getKeys()) {
-			list_of_first_statements.push_back(procS_table.getValues(proc)[0]);
+		for (proc_name proc : procS_table->getKeys()) {
+			list_of_first_statements.push_back(procS_table->getValues(proc)[0]);
 		}
 		bool is_non_empty_bool = solver.solveIfNonEmpty(list_of_first_statements);
 		if (is_non_empty_bool) {
@@ -93,8 +93,8 @@ bool AffectsPreprocessor::evaluateConstantAndConstant(int index1, int index2) {
 std::vector<std::pair<StmtInfo, StmtInfo>> AffectsPreprocessor::evaluateSynonymAndSynonym() {
 	if (!is_fully_populated) {
 		std::vector<stmt_index> list_of_first_statements{};
-		for (proc_name proc : procS_table.getKeys()) {
-			list_of_first_statements.push_back(procS_table.getValues(proc)[0]);
+		for (proc_name proc : procS_table->getKeys()) {
+			list_of_first_statements.push_back(procS_table->getValues(proc)[0]);
 		}
 
 		auto [visited, res] = solver.solve(list_of_first_statements);
@@ -107,8 +107,8 @@ std::vector<std::pair<StmtInfo, StmtInfo>> AffectsPreprocessor::evaluateSynonymA
 std::vector<StmtInfo> AffectsPreprocessor::evaluateWildAndSynonym() {
 	if (!is_fully_populated) {
 		std::vector<stmt_index> list_of_first_statements{};
-		for (proc_name proc : procS_table.getKeys()) {
-			list_of_first_statements.push_back(procS_table.getValues(proc)[0]);
+		for (proc_name proc : procS_table->getKeys()) {
+			list_of_first_statements.push_back(procS_table->getValues(proc)[0]);
 		}
 
 		auto [visited, res] = solver.solve(list_of_first_statements);
@@ -121,8 +121,8 @@ std::vector<StmtInfo> AffectsPreprocessor::evaluateWildAndSynonym() {
 std::vector<StmtInfo> AffectsPreprocessor::evaluateSynonymAndWild() {
 	if (!is_fully_populated) {
 		std::vector<stmt_index> list_of_first_statements{};
-		for (proc_name proc : procS_table.getKeys()) {
-			list_of_first_statements.push_back(procS_table.getValues(proc)[0]);
+		for (proc_name proc : procS_table->getKeys()) {
+			list_of_first_statements.push_back(procS_table->getValues(proc)[0]);
 		}
 
 		auto [visited, res] = solver.solve(list_of_first_statements);
@@ -139,9 +139,9 @@ std::vector<StmtInfo> AffectsPreprocessor::evaluateConstantAndSynonym(int index)
 	}
 	StmtInfo s1 = stmt_info_list[index - 1];
 	if (!is_fully_populated && !calculated_dfs_forward[index - 1]) {
-		proc_name proc = procS_table.getKeys(index)[0];
+		proc_name proc = procS_table->getKeys(index)[0];
 		std::vector<stmt_index> list_of_first_statements{};
-		list_of_first_statements.push_back(procS_table.getValues(proc)[0]);
+		list_of_first_statements.push_back(procS_table->getValues(proc)[0]);
 		auto [visited, res] = solver.solve(list_of_first_statements);
 		updateCache(visited, res);
 	}
@@ -155,9 +155,9 @@ std::vector<StmtInfo> AffectsPreprocessor::evaluateSynonymAndConstant(int index)
 	}
 	StmtInfo s1 = stmt_info_list[index - 1];
 	if (!is_fully_populated && !calculated_dfs_backward[index - 1]) {
-		proc_name proc = procS_table.getKeys(index)[0];
+		proc_name proc = procS_table->getKeys(index)[0];
 		std::vector<stmt_index> list_of_first_statements{};
-		list_of_first_statements.push_back(procS_table.getValues(proc)[0]);
+		list_of_first_statements.push_back(procS_table->getValues(proc)[0]);
 		auto [visited, res] = solver.solve(list_of_first_statements);
 		updateCache(visited, res);
 	}
@@ -190,8 +190,8 @@ void AffectsPreprocessor::updateCache(std::set<stmt_index> visited, std::vector<
 }
 
 bool AffectsPreprocessor::inSameProc(stmt_index index1, stmt_index index2) {
-	std::vector<proc_name> v = procS_table.getKeys(index1);
-	return procS_table.containsPair(v[0], index2);
+	std::vector<proc_name> v = procS_table->getKeys(index1);
+	return procS_table->containsPair(v[0], index2);
 }
 
 void AffectsPreprocessor::reset() {
@@ -218,14 +218,15 @@ AffectsPreprocessor::AffectsPreprocessor(
 	const RelationTable<StmtInfo, var_name>& modifiesS_table,
 	const RelationTable<proc_name, stmt_index>& procS_table,
 	const std::vector<StmtInfo> v) :
-	next_table(next_table),
-	modifiesS_table(modifiesS_table),
-	useS_table(useS_table),
-	procS_table(procS_table),
+	next_table(&next_table),
+	modifiesS_table(&modifiesS_table),
+	useS_table(&useS_table),
+	procS_table(&procS_table),
 	stmt_info_list(v) {
 	int size = stmt_info_list.size();
 	is_cache_initialized = true;
 	calculated_matrix.resize(size, std::vector<bool>(size, false));
 	calculated_dfs_forward.resize(size, false);
 	calculated_dfs_backward.resize(size, false);
+	solver = IterativeDataflowSolver(next_table, useS_table, modifiesS_table, procS_table, stmt_info_list);
 }

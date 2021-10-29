@@ -39,11 +39,11 @@ private:
 	bool inSameProc(stmt_index index1, stmt_index index2);
 
 	std::vector<StmtInfo> stmt_info_list;
-	MonotypeRelationTable<StmtInfo> next_table;
-	RelationTable<StmtInfo, var_name> useS_table;
-	RelationTable<StmtInfo, var_name> modifiesS_table;
-	RelationTable<proc_name, stmt_index> procS_table;
-	IterativeDataflowSolver solver{ next_table , useS_table, modifiesS_table, procS_table, stmt_info_list };
+	const MonotypeRelationTable<StmtInfo>* next_table;
+	const RelationTable<StmtInfo, var_name>* useS_table;
+	const RelationTable<StmtInfo, var_name>* modifiesS_table;
+	const RelationTable<proc_name, stmt_index>* procS_table;
+	IterativeDataflowSolver solver;
 
 	BooleanStatus is_non_empty = STATUS_UNKNOWN;
 	std::vector<BooleanStatus> is_affecting{ stmt_info_list.size(), STATUS_UNKNOWN };

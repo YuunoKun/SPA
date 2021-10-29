@@ -4,8 +4,8 @@
 #include "AffectsPreprocessor.h"
 
 CFGRelationsManager::CFGRelationsManager() {
-	next_t_processor = NextTPreprocessor(PKB::getInstance().getNext(), PKB::getInstance().getStmts());
-	affects_processor = AffectsPreprocessor(
+	NextTPreprocessor next_t_processor = NextTPreprocessor(PKB::getInstance().getNext(), PKB::getInstance().getStmts());
+	AffectsPreprocessor affects_processor = AffectsPreprocessor(
 		PKB::getInstance().getNext(), PKB::getInstance().getUsesS(), PKB::getInstance().getModifiesS(),
 		PKB::getInstance().getProcContains(), PKB::getInstance().getStmts());
 }

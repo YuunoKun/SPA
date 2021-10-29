@@ -1,15 +1,15 @@
 #include "IterativeDataflowSolver.h"
 
 IterativeDataflowSolver::IterativeDataflowSolver(
-	MonotypeRelationTable<StmtInfo>& next_table,
-	RelationTable<StmtInfo, var_name>& useS_table,
-	RelationTable<StmtInfo, var_name>& modifiesS_table,
-	RelationTable<proc_name, stmt_index>& procS_table,
+	const MonotypeRelationTable<StmtInfo>& next_table,
+	const RelationTable<StmtInfo, var_name>& useS_table,
+	const RelationTable<StmtInfo, var_name>& modifiesS_table,
+	const RelationTable<proc_name, stmt_index>& procS_table,
 	std::vector<StmtInfo> v) :
-	next_table(next_table),
-	modifiesS_table(modifiesS_table),
-	useS_table(useS_table),
-	procS_table(procS_table),
+	next_table(&next_table),
+	modifiesS_table(&modifiesS_table),
+	useS_table(&useS_table),
+	procS_table(&procS_table),
 	stmt_info_list(v) {
 	int size = stmt_info_list.size();
 	kill_list.resize(size, {});
@@ -74,7 +74,7 @@ bool IterativeDataflowSolver::solveIfAffectingAndAffected(stmt_index affecting, 
 				for (ModifiesTuple tuple : in_list[index]) {
 					if (tuple.stmt_index == affecting) {
 						StmtInfo stmt_info = stmt_info_list[index];
-						if (useS_table.containsPair(stmt_info, tuple.var_name)) {
+						if (useS_table->containsPair(stmt_info, tuple.var_name)) {
 							resetOutSet();
 							return true;
 						}
@@ -116,7 +116,7 @@ bool IterativeDataflowSolver::solveIfAffecting(stmt_index affecting) {
 		if (curr_stmt_info.stmt_type == STMT_ASSIGN) {
 			for (ModifiesTuple tuple : in_list[index]) {
 				if (tuple.stmt_index == affecting) {
-					if (useS_table.containsPair(curr_stmt_info, tuple.var_name)) {
+					if (useS_table->containsPair(curr_stmt_info, tuple.var_name)) {
 						resetOutSet();
 						return true;
 					}
@@ -141,8 +141,8 @@ bool IterativeDataflowSolver::solveIfAffected(stmt_index affected) {
 	std::stack<stmt_index> worklist;
 	std::set<stmt_index> visited{};
 
-	proc_name proc = procS_table.getKeys(affected)[0];
-	stmt_index first_statement = procS_table.getValues(proc)[0];
+	proc_name proc = procS_table->getKeys(affected)[0];
+	stmt_index first_statement = procS_table->getValues(proc)[0];
 
 	worklist.push(first_statement);
 
@@ -161,7 +161,7 @@ bool IterativeDataflowSolver::solveIfAffected(stmt_index affected) {
 			if (curr_stmt_info.stmt_type == STMT_ASSIGN) {
 				for (ModifiesTuple tuple : in_list[index]) {
 					StmtInfo stmt_info = stmt_info_list[index];
-					if (useS_table.containsPair(stmt_info, tuple.var_name)) {
+					if (useS_table->containsPair(stmt_info, tuple.var_name)) {
 						resetOutSet();
 						return true;
 					}
@@ -186,7 +186,7 @@ bool IterativeDataflowSolver::solveIfNonEmpty(std::vector<stmt_index> first_stat
 	std::stack<stmt_index> worklist;
 	std::set<stmt_index> visited{};
 
-	proc_name proc = procS_table.getKeys()[0];
+	proc_name proc = procS_table->getKeys()[0];
 	for (auto& stmt_index : first_statements) {
 		worklist.push(stmt_index);
 	}
@@ -203,7 +203,7 @@ bool IterativeDataflowSolver::solveIfNonEmpty(std::vector<stmt_index> first_stat
 		// Early termination if a tuple in the current statement's in set is used by it
 		for (ModifiesTuple tuple : in_list[index]) {
 			StmtInfo stmt_info = stmt_info_list[index];
-			if (useS_table.containsPair(stmt_info, tuple.var_name)) {
+			if (useS_table->containsPair(stmt_info, tuple.var_name)) {
 				resetOutSet();
 				return true;
 			}
@@ -230,7 +230,7 @@ std::vector<std::pair<StmtInfo, StmtInfo>> IterativeDataflowSolver::findResults(
 		}
 		for (auto& tuple : in_list[affected_index - 1]) {
 			StmtInfo statement_affecting = stmt_info_list[tuple.stmt_index - 1];
-			for (auto& var_used : useS_table.getValues(statement_affected)) {
+			for (auto& var_used : useS_table->getValues(statement_affected)) {
 				bool var_matched = tuple.var_name == var_used;
 				if (var_matched) {
 					res.push_back({ statement_affecting, statement_affected });
@@ -250,9 +250,9 @@ void IterativeDataflowSolver::populateDataflowSets() {
 		StmtInfo s = stmt_info_list[i];
 		if (s.stmt_type == STMT_ASSIGN || s.stmt_type == STMT_READ ||
 			s.stmt_type == STMT_CALL) {
-			std::vector<var_name> var_modified_by_s = modifiesS_table.getValues(s);
+			std::vector<var_name> var_modified_by_s = modifiesS_table->getValues(s);
 			for (auto& var : var_modified_by_s) {
-				std::vector<StmtInfo> other_stmts_modify_var = modifiesS_table.getKeys(var);
+				std::vector<StmtInfo> other_stmts_modify_var = modifiesS_table->getKeys(var);
 				for (auto& other_stmt : other_stmts_modify_var) {
 					kill_list[i].emplace(ModifiesTuple{ other_stmt.stmt_index, var });
 				}
@@ -261,11 +261,11 @@ void IterativeDataflowSolver::populateDataflowSets() {
 				}
 			}
 		}
-		std::vector<StmtInfo> predecessor_stmts = next_table.getKeys(s);
+		std::vector<StmtInfo> predecessor_stmts = next_table->getKeys(s);
 		for (auto& pred : predecessor_stmts) {
 			pred_list[s.stmt_index - 1].emplace(pred.stmt_index);
 		}
-		std::vector<StmtInfo> successor_stmts = next_table.getValues(s);
+		std::vector<StmtInfo> successor_stmts = next_table->getValues(s);
 		for (auto& succ : successor_stmts) {
 			succ_list[s.stmt_index - 1].emplace(succ.stmt_index);
 		}
