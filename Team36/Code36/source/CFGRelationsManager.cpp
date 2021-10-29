@@ -1,11 +1,11 @@
 #include "CFGRelationsManager.h"
 
 CFGRelationsManager::CFGRelationsManager() {
-	NextTPreprocessor next_t_processor = NextTPreprocessor(PKB::getInstance().getNext(), PKB::getInstance().getStmts());
-	AffectsPreprocessor affects_processor = AffectsPreprocessor(
+	next_t_processor = NextTPreprocessor(PKB::getInstance().getNext(), PKB::getInstance().getStmts());
+	affects_processor = AffectsPreprocessor(
 		PKB::getInstance().getNext(), PKB::getInstance().getUsesS(), PKB::getInstance().getModifiesS(),
 		PKB::getInstance().getProcContains(), PKB::getInstance().getStmts());
-	AffectsTPreprocessor affectsT_processor = AffectsTPreprocessor(
+	affectsT_processor = AffectsTPreprocessor(
 		affects_processor.getCache(), PKB::getInstance().getStmts());
 }
 
@@ -14,7 +14,7 @@ void CFGRelationsManager::update() {
 	affects_processor = AffectsPreprocessor(
 		PKB::getInstance().getNext(), PKB::getInstance().getUsesS(), PKB::getInstance().getModifiesS(),
 		PKB::getInstance().getProcContains(), PKB::getInstance().getStmts());
-	AffectsTPreprocessor affectsT_processor = AffectsTPreprocessor(
+	affectsT_processor = AffectsTPreprocessor(
 		affects_processor.getCache(), PKB::getInstance().getStmts());
 }
 
@@ -165,7 +165,7 @@ std::vector<StmtInfo> CFGRelationsManager::getAffectedT(stmt_index index) {
 	}
 	else {
 		affects_processor.fullyPopulate();
-		return affectsT_processor.evaluateSynonymAndConstant(index);
+		return affectsT_processor.evaluateConstantAndSynonym(index);
 	}
 }
 
@@ -176,7 +176,7 @@ std::vector<StmtInfo> CFGRelationsManager::getAffectingT(stmt_index index) {
 	}
 	else {
 		affects_processor.fullyPopulate();
-		return affectsT_processor.evaluateConstantAndSynonym(index);
+		return affectsT_processor.evaluateSynonymAndConstant(index);
 	}
 }
 

@@ -36,8 +36,7 @@ bool AffectsTPreprocessor::evaluateConstantAndConstant(int index1, int index2) {
 }
 
 std::vector<std::pair<StmtInfo, StmtInfo>> AffectsTPreprocessor::evaluateSynonymAndSynonym() {
-	checkCache();
-	cache = affects_table->findTransitiveClosure();
+	fullyPopulate();
 	is_fully_populated = true;
 	return cache.getPairs();
 }

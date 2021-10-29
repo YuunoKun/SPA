@@ -1,10 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="AffectsPreprocessorTest.cpp" />
     <ClCompile Include="CallsEvaluatorTest.cpp" />
     <ClCompile Include="CallsTEvaluatorTest.cpp" />
-    <ClCompile Include="CFGRelationsManagerTest.cpp" />
     <ClCompile Include="ClauseTest.cpp" />
     <ClCompile Include="DesignExtractorTest.cpp" />
     <ClCompile Include="EntityTest.cpp" />
@@ -14,7 +12,6 @@
     <ClCompile Include="MonotypeRelationTableTest.cpp" />
     <ClCompile Include="NextEvaluatorTest.cpp" />
     <ClCompile Include="NextTEvaluatorTest.cpp" />
-    <ClCompile Include="NextTPreprocessorTest.cpp" />
     <ClCompile Include="ParserTest.cpp" />
     <ClCompile Include="PatternAssignEvaluatorTest.cpp" />
     <ClCompile Include="PatternIfEvaluatorTest.cpp" />
@@ -58,12 +55,34 @@
     <ClCompile Include="QueryTokenizerTest.cpp" />
     <ClCompile Include="TokenizerTest.cpp" />
     <ClCompile Include="WithEvaluatorTest.cpp" />
-    <ClCompile Include="AffectsTPreprocessorTest.cpp" />
+    <ClCompile Include="AffectsTPreprocessorTest.cpp">
+      <Filter>RelationsPreprocessors</Filter>
+    </ClCompile>
+    <ClCompile Include="AffectsPreprocessorTest.cpp">
+      <Filter>RelationsPreprocessors</Filter>
+    </ClCompile>
+    <ClCompile Include="NextTPreprocessorTest.cpp">
+      <Filter>RelationsPreprocessors</Filter>
+    </ClCompile>
+    <ClCompile Include="CFGRelationsManagerTest_NextT.cpp">
+      <Filter>RelationsPreprocessors</Filter>
+    </ClCompile>
+    <ClCompile Include="CFGRelationManagerTest_Affects.cpp">
+      <Filter>RelationsPreprocessors</Filter>
+    </ClCompile>
+    <ClCompile Include="CFGRelationsManagerTest_AffectsT.cpp">
+      <Filter>RelationsPreprocessors</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="RelationsPreprocessors">
+      <UniqueIdentifier>{fed53e8e-549c-4df6-a463-14299ad5d6b9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
 </Project>

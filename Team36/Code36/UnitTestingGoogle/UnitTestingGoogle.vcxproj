@@ -43,7 +43,9 @@
     <ClCompile Include="AffectsTPreprocessorTest.cpp" />
     <ClCompile Include="CallsEvaluatorTest.cpp" />
     <ClCompile Include="CallsTEvaluatorTest.cpp" />
-    <ClCompile Include="CFGRelationsManagerTest.cpp" />
+    <ClCompile Include="CFGRelationManagerTest_Affects.cpp" />
+    <ClCompile Include="CFGRelationsManagerTest_AffectsT.cpp" />
+    <ClCompile Include="CFGRelationsManagerTest_NextT.cpp" />
     <ClCompile Include="ClauseTest.cpp" />
     <ClCompile Include="DesignExtractorTest.cpp" />
     <ClCompile Include="EntityTest.cpp" />
