@@ -308,6 +308,8 @@ std::string Utility::queryTokenTypeToExprString(std::vector<QueryToken> token_ch
 		switch (q.type) {
 		case QueryToken::IDENTIFIER:
 		case QueryToken::CONSTANT:
+			//white space added for every token to prevent 2 separate constants/identifiers in becoming one
+			result += ' ';
 			result += q.token_value;
 			break;
 		case QueryToken::PARENTHESIS_OPEN:
