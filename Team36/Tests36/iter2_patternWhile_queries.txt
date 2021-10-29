@@ -1,7 +1,7 @@
 1 - while pattern, first argument variable
 while w; variable v;
 Select w pattern w(v,_)
-6, 12, 30, 31, 38, 43, 45
+6, 12, 31, 38, 43, 45
 5000
 2 - while pattern, first argument variable
 while w; variable v;
@@ -11,7 +11,7 @@ a, c, b, k, d
 3 - while pattern, first argument wildcard
 while w; variable v;
 Select w pattern w(_,_)
-6, 12, 30, 31, 38, 43, 45
+6, 12, 31, 38, 43, 45
 5000
 4 - while pattern, first argument ident
 while w; variable v;
@@ -46,7 +46,7 @@ Select w pattern w("a",_) such that Modifies(p, "c")
 10 - while pattern such that ModifiesP, 1 common synonym
 while w; variable v; procedure p;
 Select w pattern w(v,_) such that Modifies(p, v)
-6, 12, 30, 31, 38, 43, 45
+6, 12, 31, 38, 43, 45
 5000
 11 - while pattern such that ModifiesP, 1 common synonym
 while w; variable v; procedure p;
@@ -71,17 +71,17 @@ Select w pattern w("a",_) such that Uses(p, "i")
 15 - while pattern such that UsesP, 1 common synonym
 while w; variable v; procedure p;
 Select w pattern w(v,_) such that Uses(p, v)
-6, 12, 30, 31, 38, 43, 45
+6, 12, 31, 38, 43, 45
 5000
 16 - while pattern such that Parent
 while w; stmt s;
 Select w pattern w(_,_) such that Parent(20, s)
-6, 12, 30, 31, 38, 43, 45
+6, 12, 31, 38, 43, 45
 5000
 17 - while pattern such that ParentT
 while w; stmt s;
 Select w pattern w(_,_) such that Parent*(20, 25)
-6, 12, 30, 31, 38, 43, 45
+6, 12, 31, 38, 43, 45
 5000
 18 - while pattern such that Follows
 while w; stmt s;
@@ -96,7 +96,7 @@ Select w pattern w(_,_) such that Follows*(36, w)
 20 - while pattern such that Calls
 while w; procedure p, q;
 Select w pattern w(_,_) such that Calls(p, "mySecond")
-6, 12, 30, 31, 38, 43, 45
+6, 12, 31, 38, 43, 45
 5000
 21 - while pattern such that CallsT
 while w; procedure p, q;
@@ -108,42 +108,7 @@ while w; prog_lin n;
 Select w pattern w(_,_) such that Next(29, n)
 none
 5000
-23 - while pattern and while pattern, no common synonym
-while w1, w2;
-Select w1 pattern w1("a",_) and w2("b",_)
-6, 12, 43
-5000
-24 - while pattern and while pattern, 1 common synonym
-while w1, w2; variable v;
-Select w1 pattern w1(v,_) and w2(v,_)
-6, 12, 30, 31, 38, 43, 45
-5000
-25 - while pattern and while pattern, 1 common synonym
-while w1, w2; variable v;
-Select v pattern w1(v,_) and w2(v,_)
-a, c, b, k, d
-5000
-26 - while pattern and assign pattern, no common synonym
-while w; assign a;
-Select w pattern w("c",_) and a("i", _"i/c"_)
-12, 31, 43, 45
-5000
-27 - while pattern and assign pattern, 1 common synonym
-while w; assign a; variable v;
-Select w pattern w(v,_) and a(v, _"i/c"_)
-none
-5000
-28 - while pattern and if pattern, no common synonym
-while w; if ifs;
-Select w pattern w("b",_) and ifs("a",_,_)
-30, 31, 43, 45
-5000
-29 - while pattern and if pattern, 1 common synonym
-while w; if ifs; variable v;
-Select w pattern w(v,_) and ifs(v,_,_)
-6, 12, 30, 31, 38, 43, 45
-5000
-30 - while pattern const
+23 - while pattern const
 while w;
 Select w pattern w("0", _)
 none

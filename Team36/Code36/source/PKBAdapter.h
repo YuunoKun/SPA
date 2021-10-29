@@ -5,6 +5,7 @@
 
 #include "Stmt.h"
 #include "Common.h"
+#include "CFGRelationsManager.h"
 
 class PKBAdapter {
 public:
@@ -177,17 +178,25 @@ public:
 	// Read stmt - var relation
 	std::vector<std::pair<stmt_index, var_name>> getAllReadVars();
 	std::vector<var_name> getReadVar(stmt_index);
-	bool isReadVar(stmt_index, var_name);
-
+	std::vector<var_name> getReadVar();
+	bool isReadVar(var_name);
+	std::vector<stmt_index> getRead(var_name);
 	// Print stmt - var relation
 	std::vector<std::pair<stmt_index, var_name>> getAllPrintVars();
 	std::vector<var_name> getPrintVar(stmt_index);
-	bool isPrintVar(stmt_index, var_name);
+	std::vector<var_name> getPrintVar();
+	bool isPrintVar(var_name);
+	std::vector<stmt_index> getPrint(var_name);
 
 	// Call stmt - procname relation
 	std::vector<std::pair<stmt_index, proc_name>> getAllCallS();
 	std::vector<proc_name> getCalledS(stmt_index);
-	bool isCallS(stmt_index, proc_name);
+	std::vector<proc_name> getCalledS();
+	bool isCalledS(proc_name);
+	std::vector<stmt_index> getCalleeS(proc_name);
+
+
+	CFGRelationsManager& getRelationManager();
 
 private:
 	std::vector<stmt_index> getAssignInfoFiltered(std::vector<stmt_index>&, expr, bool);

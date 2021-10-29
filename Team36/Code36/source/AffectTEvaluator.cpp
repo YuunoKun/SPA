@@ -4,54 +4,46 @@
 #include "QueryResult.h"
 #include "PKBAdapter.h"
 #include "AffectTEvaluator.h"
+#include "CFGRelationsManager.h"
 
 bool AffectTEvaluator::evaluateWildAndWild() {
-	//Todo Evaluator
-	return !pkb.isFollowEmpty();
+	return !pkb.getRelationManager().isAffectsTEmpty();
 }
 
 bool AffectTEvaluator::evaluateConstantAndConstant(Entity e1, Entity e2) {
-	//Todo Evaluator
 	stmt_index c1 = stoi(e1.getValue());
 	stmt_index c2 = stoi(e2.getValue());
-	return pkb.isFollow(c1, c2);;
+	return pkb.getRelationManager().isAffectsT(c1, c2);;
 }
 
 bool AffectTEvaluator::evaluateConstantAndWild(Entity e) {
-	//Todo Evaluator
 	stmt_index c = stoi(e.getValue());
-	return pkb.isFollowed(c);
+	return pkb.getRelationManager().isAffectorT(c);
 }
 
 bool AffectTEvaluator::evaluateWildAndConstant(Entity e) {
-	//Todo Evaluator
 	stmt_index c = stoi(e.getValue());
-	return pkb.isFollowing(c);
+	return pkb.getRelationManager().isAffectedT(c);
 }
 
 ResultTable AffectTEvaluator::evaluateSynonymAndSynonym(Entity left, Entity right) {
-	//Todo Evaluator
-	return ResultTable({ left, right }, pkb.getFollows());
+	return ResultTable({ left, right }, pkb.getRelationManager().getAllAffectsTRelation());
 }
 
 ResultTable AffectTEvaluator::evaluateWildAndSynonym(Entity header) {
-	//Todo Evaluator
-	return ResultTable(header, pkb.getFollowing());
+	return ResultTable(header, pkb.getRelationManager().getAffectedT());
 }
 
 ResultTable AffectTEvaluator::evaluateSynonymAndWild(Entity header) {
-	//Todo Evaluator
-	return ResultTable(header, pkb.getFollowed());
+	return ResultTable(header, pkb.getRelationManager().getAffectorT());
 }
 
 ResultTable AffectTEvaluator::evaluateConstantAndSynonym(Entity constant, Entity header) {
-	//Todo Evaluator
 	stmt_index c = stoi(constant.getValue());
-	return ResultTable(header, pkb.getFollowing(c));
+	return ResultTable(header, pkb.getRelationManager().getAffectedT(c));
 }
 
 ResultTable AffectTEvaluator::evaluateSynonymAndConstant(Entity header, Entity constant) {
-	//Todo Evaluator
 	stmt_index c = stoi(constant.getValue());
-	return ResultTable(header, pkb.getFollowed(c));
+	return ResultTable(header, pkb.getRelationManager().getAffectorT(c));
 }

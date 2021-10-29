@@ -17,4 +17,12 @@ public:
 	ResultTable evaluateSynonymAndWild(Entity) override;
 	ResultTable evaluateConstantAndSynonym(Entity, Entity) override;
 	ResultTable evaluateSynonymAndConstant(Entity, Entity) override;
+
+private:
+	std::list<std::vector<std::string>> getEntity(Entity);
+	std::list<std::vector<std::string>> getEntityAndSecondaryAttribute(Entity);
+
+
+	std::list<std::string> getEntityWithAttribute(Entity, Entity);
+	std::list<std::string> getEntityWithSecondaryAttribute(Entity);
 };

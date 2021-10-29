@@ -11,7 +11,7 @@ procedure Gandulf {
     while (f > 10) {
       read g;
       f = ring + 4 + g * a * 2 * 1 + shine;
-      call Frodo;
+      call Sam;
     }
     d = 2;
   }
@@ -40,4 +40,9 @@ procedure Aragon {
       w = 1;
     }
   }
+}
+procedure Sam {
+    read i;
+    i = a;
+    call Frodo;
 }

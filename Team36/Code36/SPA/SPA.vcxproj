@@ -17,6 +17,7 @@
     <ClCompile Include="..\source\FSM.cpp" />
     <ClCompile Include="..\source\Parser.cpp" />
     <ClCompile Include="..\source\Procedure.cpp" />
+    <ClCompile Include="..\source\RelationPreprocessor.cpp" />
     <ClCompile Include="..\source\RelationTable.cpp" />
     <ClCompile Include="..\source\PKB.cpp" />
     <ClCompile Include="..\source\Statement.cpp" />
@@ -50,6 +51,10 @@
     <ClCompile Include="..\source\AffectEvaluator.cpp" />
     <ClCompile Include="..\source\AffectTEvaluator.cpp" />
     <ClCompile Include="..\source\WithEvaluator.cpp" />
+    <ClCompile Include="..\source\NextBipEvaluator.cpp" />
+    <ClCompile Include="..\source\NextBipTEvaluator.cpp" />
+    <ClCompile Include="..\source\AffectBipEvaluator.cpp" />
+    <ClCompile Include="..\source\AffectBipTEvaluator.cpp" />
     <ClCompile Include="..\source\PatternsEvaluator.cpp" />
     <ClCompile Include="..\source\PatternAssignEvaluator.cpp" />
     <ClCompile Include="..\source\PatternIfEvaluator.cpp" />
@@ -59,7 +64,6 @@
     <ClCompile Include="..\source\QueryPatternRelRefParser.cpp" />
     <ClCompile Include="..\source\Clause.cpp" />
     <ClCompile Include="..\source\QueryOptimizer.cpp" />
-    <ClCompile Include="..\source\ResultProjector.cpp" />
     <ClCompile Include="..\source\SemanticErrorException.cpp" />
     <ClCompile Include="..\source\SyntacticErrorException.cpp" />
     <ClCompile Include="..\source\CFGNode.cpp" />
@@ -80,6 +84,8 @@
 	<ClCompile Include="..\source\AffectsParser.cpp" />
 	<ClCompile Include="..\source\AffectsTParser.cpp" />
 	<ClCompile Include="..\source\WithParser.cpp" />
+    <ClCompile Include="..\source\CFGRelationsManager.cpp" />
+    <ClCompile Include="..\source\NextTPreprocessor.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\source\DesignExtractor.h" />
@@ -130,12 +136,15 @@
     <ClInclude Include="..\source\AffectEvaluator.h" />
     <ClInclude Include="..\source\AffectTEvaluator.h" />
     <ClInclude Include="..\source\WithEvaluator.h" />
+    <ClInclude Include="..\source\NextBipEvaluator.h" />
+    <ClInclude Include="..\source\NextBipTEvaluator.h" />
+    <ClInclude Include="..\source\AffectBipEvaluator.h" />
+    <ClInclude Include="..\source\AffectBipTEvaluator.h" />
     <ClInclude Include="..\source\ResultTable.h" />
     <ClInclude Include="..\source\Utility.h" />
     <ClInclude Include="..\source\QueryPatternRelRefParser.h" />
     <ClInclude Include="..\source\Clause.h" />
     <ClInclude Include="..\source\QueryOptimizer.h" />
-    <ClInclude Include="..\source\ResultProjector.h" />
     <ClInclude Include="..\source\SyntacticErrorException.h" />
     <ClInclude Include="..\source\SemanticErrorException.h" />
     <ClInclude Include="..\source\CFGNode.h" />
@@ -158,6 +167,9 @@
 	<ClInclude Include="..\source\WithParser.h" />
 	<ClInclude Include="..\source\RelationParserInterface.h" />
 	<ClInclude Include="..\source\PatternParserInterface.h" />
+    <ClInclude Include="..\source\CFGRelationsManager.h" />
+    <ClInclude Include="..\source\NextTPreprocessor.h" />
+    <ClInclude Include="..\source\RelationPreprocessor.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{DC21A1EA-D2C6-4D14-A2B4-E025B64BDE81}</ProjectGuid>

@@ -1,6 +1,6 @@
 #include "QueryOptimizer.h"
 #include "Entity.h"
-#pragma once
+#include "Utility.h"
 
 //Re-order the clauses in the following order
 //1. clauses with no synonym
@@ -67,6 +67,10 @@ bool QueryOptimizer::checkConstantExist(Entity& e) {
 	if (e.isSynonym() || e.getType() == EntityType::WILD) {
 		return true;
 	}
+	if (Utility::isSecondaryAttribute(e)) {
+		return checkSecondaryAttributeConstantExist(e);
+	}
+
 	switch (e.getType()) {
 	case EntityType::STMT:
 	case EntityType::PROG_LINE: return pkb.isStmt(std::stoi(e.getValue()));
@@ -81,6 +85,30 @@ bool QueryOptimizer::checkConstantExist(Entity& e) {
 	case EntityType::PROCEDURE: return pkb.isProcedure(e.getValue());
 	default: throw std::domain_error("Some constant has not been checked!!");
 	}
+	return false;
+}
+
+bool QueryOptimizer::checkSecondaryAttributeConstantExist(Entity& e) {
+
+	switch (e.getType()) {
+	case EntityType::READ:
+		if (e.getAttribute() == AttrRef::VAR_NAME) {
+			return pkb.isReadVar(e.getValue());
+		}
+		break;
+	case EntityType::PRINT:
+		if (e.getAttribute() == AttrRef::VAR_NAME) {
+			return pkb.isPrintVar(e.getValue());
+		}
+		break;
+	case EntityType::CALL:
+		if (e.getAttribute() == AttrRef::PROC_NAME) {
+			return pkb.isCalledS(e.getValue());
+		}
+		break;
+	}
+
+	throw std::domain_error("checkSecondaryAttributeConstantExist(Entity): Entity type does not have Secondary Attribute!");
 	return false;
 }
 

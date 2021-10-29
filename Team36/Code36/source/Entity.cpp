@@ -30,6 +30,13 @@ Entity::Entity(EntityType entity_type, Synonym synonym, AttrRef attribute) {
 	this->attribute = attribute;
 }
 
+Entity::Entity(EntityType entity_type, std::string value, AttrRef attribute) {
+	this->entity_type = entity_type;
+	this->value = value;
+	this->is_synonym = false;
+	this->attribute = attribute;
+}
+
 EntityType Entity::getType() {
 	return entity_type;
 }
