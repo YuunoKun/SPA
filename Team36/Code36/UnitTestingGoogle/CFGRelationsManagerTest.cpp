@@ -364,7 +364,7 @@ namespace UnitTesting {
 		EXPECT_TRUE(manager->getAffectsProcessor().isNonEmpty());
 	}
 
-	TEST_F(CFGRelationsManagerTest_Affects, isAffector_identifier) {
+	TEST_F(CFGRelationsManagerTest_Affects, isAffecting_identifier) {
 		std::vector<StmtInfo> true_list, false_list;
 		std::set<StmtInfo> set;
 		for (auto& pair : expected_pairs) {
@@ -378,11 +378,11 @@ namespace UnitTesting {
 		std::set_difference(stmt_list.begin(), stmt_list.end(), true_list.begin(), true_list.end(), std::inserter(false_list, false_list.begin()));
 
 		for (auto& stmt : true_list) {
-			EXPECT_TRUE(manager->isAffector(stmt.stmt_index)) << "Expected true but fail at " << stmt.stmt_index;
+			EXPECT_TRUE(manager->isAffecting(stmt.stmt_index)) << "Expected true but fail at " << stmt.stmt_index;
 			EXPECT_TRUE(manager->getAffectsProcessor().getAffecting()[stmt.stmt_index - 1]);
 		}
 		for (auto& stmt : false_list) {
-			EXPECT_FALSE(manager->isAffector(stmt.stmt_index)) << "Expected false but fail at " << stmt.stmt_index;
+			EXPECT_FALSE(manager->isAffecting(stmt.stmt_index)) << "Expected false but fail at " << stmt.stmt_index;
 			EXPECT_FALSE(manager->getAffectsProcessor().getAffecting()[stmt.stmt_index - 1]);
 		}
 	}
@@ -448,7 +448,7 @@ namespace UnitTesting {
 	}
 
 	TEST_F(CFGRelationsManagerTest_Affects, getAffecting_all) {
-		auto v1 = manager->getAffector();
+		auto v1 = manager->getAffecting();
 		std::sort(v1.begin(), v1.end());
 
 		std::unordered_set<StmtInfo> set;
@@ -493,7 +493,7 @@ namespace UnitTesting {
 
 	TEST_F(CFGRelationsManagerTest_Affects, getAffecting_identifier) {
 		for (auto& stmt : stmt_list) {
-			auto v1 = manager->getAffector(stmt.stmt_index);
+			auto v1 = manager->getAffecting(stmt.stmt_index);
 			std::sort(v1.begin(), v1.end());
 
 			std::vector<StmtInfo> v2;

@@ -216,7 +216,7 @@
     <ClCompile Include="..\source\WithEvaluator.cpp">
       <Filter>Source Files\PQL\QueryEvaluator\RelationEvaluator</Filter>
     </ClCompile>
-	<ClCompile Include="..\source\NextBipEvaluator.cpp">
+    <ClCompile Include="..\source\NextBipEvaluator.cpp">
       <Filter>Source Files\PQL\QueryEvaluator\RelationEvaluator</Filter>
     </ClCompile>
     <ClCompile Include="..\source\NextBipTEvaluator.cpp">
@@ -225,7 +225,7 @@
     <ClCompile Include="..\source\AffectBipEvaluator.cpp">
       <Filter>Source Files\PQL\QueryEvaluator\RelationEvaluator</Filter>
     </ClCompile>
-	<ClCompile Include="..\source\AffectBipTEvaluator.cpp">
+    <ClCompile Include="..\source\AffectBipTEvaluator.cpp">
       <Filter>Source Files\PQL\QueryEvaluator\RelationEvaluator</Filter>
     </ClCompile>
     <ClCompile Include="..\source\SemanticErrorException.cpp">
@@ -276,9 +276,6 @@
     <ClCompile Include="..\source\PatternsEvaluator.cpp">
       <Filter>Source Files\PQL\QueryEvaluator</Filter>
     </ClCompile>
-    <ClCompile Include="..\source\AssignPatternParser.h">
-      <Filter>Header Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\source\CFGRelationsManager.cpp">
       <Filter>Source Files\PKB</Filter>
     </ClCompile>
@@ -299,6 +296,9 @@
     </ClCompile>
     <ClCompile Include="..\source\MonotypeRelationTable.cpp">
       <Filter>Source Files\PKB\RelationTables</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\AffectsTPreprocessor.cpp">
+      <Filter>Source Files\PKB\RelationPreprocessor</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -452,13 +452,13 @@
     <ClInclude Include="..\source\NextBipEvaluator.h">
       <Filter>Header Files\PQL\QueryEvaluator\RelationEvaluator</Filter>
     </ClInclude>
-	<ClInclude Include="..\source\NextBipTEvaluator.h">
+    <ClInclude Include="..\source\NextBipTEvaluator.h">
       <Filter>Header Files\PQL\QueryEvaluator\RelationEvaluator</Filter>
     </ClInclude>
     <ClInclude Include="..\source\AffectBipEvaluator.h">
       <Filter>Header Files\PQL\QueryEvaluator\RelationEvaluator</Filter>
     </ClInclude>
-	<ClInclude Include="..\source\AffectBipTEvaluator.h">
+    <ClInclude Include="..\source\AffectBipTEvaluator.h">
       <Filter>Header Files\PQL\QueryEvaluator\RelationEvaluator</Filter>
     </ClInclude>
     <ClInclude Include="..\source\SyntacticErrorException.h">
@@ -532,6 +532,9 @@
     </ClInclude>
     <ClInclude Include="..\source\RelationTable.h">
       <Filter>Header Files\PKB\RelationTables</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\AffectsTPreprocessor.h">
+      <Filter>Header Files\PKB\RelationPreprocessor</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -91,44 +91,17 @@ bool AffectsPreprocessor::evaluateConstantAndConstant(int index1, int index2) {
 }
 
 std::vector<std::pair<StmtInfo, StmtInfo>> AffectsPreprocessor::evaluateSynonymAndSynonym() {
-	if (!is_fully_populated) {
-		std::vector<stmt_index> list_of_first_statements{};
-		for (proc_name proc : procS_table->getKeys()) {
-			list_of_first_statements.push_back(procS_table->getValues(proc)[0]);
-		}
-
-		auto [visited, res] = solver.solve(list_of_first_statements);
-		updateCache(visited, res);
-		is_fully_populated = true;
-	}
+	fullyPopulate();
 	return cache.getPairs();
 }
 
 std::vector<StmtInfo> AffectsPreprocessor::evaluateWildAndSynonym() {
-	if (!is_fully_populated) {
-		std::vector<stmt_index> list_of_first_statements{};
-		for (proc_name proc : procS_table->getKeys()) {
-			list_of_first_statements.push_back(procS_table->getValues(proc)[0]);
-		}
-
-		auto [visited, res] = solver.solve(list_of_first_statements);
-		updateCache(visited, res);
-		is_fully_populated = true;
-	}
+	fullyPopulate();
 	return cache.getValues();
 }
 
 std::vector<StmtInfo> AffectsPreprocessor::evaluateSynonymAndWild() {
-	if (!is_fully_populated) {
-		std::vector<stmt_index> list_of_first_statements{};
-		for (proc_name proc : procS_table->getKeys()) {
-			list_of_first_statements.push_back(procS_table->getValues(proc)[0]);
-		}
-
-		auto [visited, res] = solver.solve(list_of_first_statements);
-		updateCache(visited, res);
-		is_fully_populated = true;
-	}
+	fullyPopulate();
 	return cache.getKeys();
 }
 
@@ -140,9 +113,9 @@ std::vector<StmtInfo> AffectsPreprocessor::evaluateConstantAndSynonym(int index)
 	StmtInfo s1 = stmt_info_list[index - 1];
 	if (!is_fully_populated && !calculated_dfs_forward[index - 1]) {
 		proc_name proc = procS_table->getKeys(index)[0];
-		std::vector<stmt_index> list_of_first_statements{};
-		list_of_first_statements.push_back(procS_table->getValues(proc)[0]);
-		auto [visited, res] = solver.solve(list_of_first_statements);
+		std::vector<stmt_index> first_stmt_of_curr_proc{};
+		first_stmt_of_curr_proc.push_back(procS_table->getValues(proc)[0]);
+		auto [visited, res] = solver.solve(first_stmt_of_curr_proc);
 		updateCache(visited, res);
 	}
 	return cache.getValues(s1);
@@ -156,9 +129,9 @@ std::vector<StmtInfo> AffectsPreprocessor::evaluateSynonymAndConstant(int index)
 	StmtInfo s1 = stmt_info_list[index - 1];
 	if (!is_fully_populated && !calculated_dfs_backward[index - 1]) {
 		proc_name proc = procS_table->getKeys(index)[0];
-		std::vector<stmt_index> list_of_first_statements{};
-		list_of_first_statements.push_back(procS_table->getValues(proc)[0]);
-		auto [visited, res] = solver.solve(list_of_first_statements);
+		std::vector<stmt_index> first_stmt_of_curr_proc{};
+		first_stmt_of_curr_proc.push_back(procS_table->getValues(proc)[0]);
+		auto [visited, res] = solver.solve(first_stmt_of_curr_proc);
 		updateCache(visited, res);
 	}
 	return cache.getKeys(s1);
@@ -196,7 +169,6 @@ bool AffectsPreprocessor::inSameProc(stmt_index index1, stmt_index index2) {
 
 void AffectsPreprocessor::reset() {
 	is_fully_populated = false;
-	is_cache_initialized = false;
 	int size = calculated_matrix.size();
 	for (int i = 0; i < size; i++) {
 		calculated_dfs_forward[i] = false;
@@ -212,6 +184,19 @@ void AffectsPreprocessor::reset() {
 	cache = MonotypeRelationTable<StmtInfo>();
 }
 
+void AffectsPreprocessor::fullyPopulate() {
+	if (!is_fully_populated) {
+		std::vector<stmt_index> list_of_first_statements{};
+		for (proc_name proc : procS_table->getKeys()) {
+			list_of_first_statements.push_back(procS_table->getValues(proc)[0]);
+		}
+
+		auto [visited, res] = solver.solve(list_of_first_statements);
+		updateCache(visited, res);
+		is_fully_populated = true;
+	}
+}
+
 AffectsPreprocessor::AffectsPreprocessor(
 	const MonotypeRelationTable<StmtInfo>& next_table,
 	const RelationTable<StmtInfo, var_name>& useS_table,
@@ -224,7 +209,6 @@ AffectsPreprocessor::AffectsPreprocessor(
 	procS_table(&procS_table),
 	stmt_info_list(v) {
 	int size = stmt_info_list.size();
-	is_cache_initialized = true;
 	calculated_matrix.resize(size, std::vector<bool>(size, false));
 	calculated_dfs_forward.resize(size, false);
 	calculated_dfs_backward.resize(size, false);

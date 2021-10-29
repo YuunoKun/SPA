@@ -12,6 +12,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\source\AffectsPreprocessor.cpp" />
+    <ClCompile Include="..\source\AffectsTPreprocessor.cpp" />
     <ClCompile Include="..\source\DesignExtractor.cpp" />
     <ClCompile Include="..\source\ExprNode.cpp" />
     <ClCompile Include="..\source\ExprParser.cpp" />
@@ -80,6 +81,7 @@
     <ClCompile Include="..\source\NextTPreprocessor.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\source\AffectsTPreprocessor.h" />
     <ClInclude Include="..\source\DesignExtractor.h" />
     <ClInclude Include="..\source\ExprNode.h" />
     <ClInclude Include="..\source\ExprParser.h" />

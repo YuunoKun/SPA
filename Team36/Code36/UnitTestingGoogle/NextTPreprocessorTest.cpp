@@ -138,6 +138,7 @@ namespace UnitTesting {
 		std::copy(set.begin(), set.end(), v2.begin());
 		std::sort(v2.begin(), v2.end());
 		EXPECT_EQ(v1, v2);
+		EXPECT_FALSE(processor.isFullyPopulated());
 	}
 
 	TEST_F(NextTPreprocessorTest, evaluateSynonymAndWild) {
@@ -152,6 +153,7 @@ namespace UnitTesting {
 		std::copy(set.begin(), set.end(), v2.begin());
 		std::sort(v2.begin(), v2.end());
 		EXPECT_EQ(v1, v2);
+		EXPECT_FALSE(processor.isFullyPopulated());
 	}
 
 	TEST_F(NextTPreprocessorTest, evaluateConstantAndSynonym) {
@@ -171,6 +173,7 @@ namespace UnitTesting {
 				EXPECT_TRUE(processor.isDFSForwardComputed(stmt.stmt_index));
 			}
 		}
+		EXPECT_FALSE(processor.isFullyPopulated());
 	}
 
 	TEST_F(NextTPreprocessorTest, evaluateSynonymAndConstant) {
@@ -190,6 +193,7 @@ namespace UnitTesting {
 				EXPECT_TRUE(processor.isDFSBackwardComputed(stmt.stmt_index));
 			}
 		}
+		EXPECT_FALSE(processor.isFullyPopulated());
 	}
 
 	TEST_F(NextTPreprocessorTest, reset) {

@@ -2,7 +2,6 @@
 
 void RelationPreprocessor::reset() {
 	is_fully_populated = false;
-	is_cache_initialized = false;
 	int size = calculated_matrix.size();
 	for (int i = 0; i < size; i++) {
 		calculated_dfs_forward[i] = false;
@@ -30,10 +29,6 @@ void RelationPreprocessor::setDFSBackwardTrue(int index) {
 
 bool RelationPreprocessor::isFullyPopulated() {
 	return is_fully_populated;
-}
-
-bool RelationPreprocessor::isCacheInitialized() {
-	return is_cache_initialized;
 }
 
 const MonotypeRelationTable<StmtInfo>& RelationPreprocessor::getCache() {

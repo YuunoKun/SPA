@@ -21,11 +21,11 @@ public:
 	virtual std::vector<StmtInfo> evaluateSynonymAndConstant(int) = 0;
 
 	virtual void reset();
+	virtual void fullyPopulate() = 0;
 
 	void setDFSForwardTrue(int);
 	void setDFSBackwardTrue(int);
 	bool isFullyPopulated();
-	bool isCacheInitialized();
 	const MonotypeRelationTable<StmtInfo>& getCache();
 	bool isCacheEmpty();
 	std::vector<std::vector<bool>> getCalculatedMatrix();
@@ -33,7 +33,6 @@ public:
 	bool isDFSBackwardComputed(int);
 
 protected:
-	bool is_cache_initialized = false;
 	bool is_fully_populated = false;
 	MonotypeRelationTable<StmtInfo> cache;
 	std::vector<std::vector<bool>> calculated_matrix;

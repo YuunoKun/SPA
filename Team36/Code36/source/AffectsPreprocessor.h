@@ -26,6 +26,7 @@ public:
 	BooleanStatus isNonEmpty();
 
 	void reset();
+	void fullyPopulate();
 
 	AffectsPreprocessor(
 		const MonotypeRelationTable<StmtInfo>& next_table,

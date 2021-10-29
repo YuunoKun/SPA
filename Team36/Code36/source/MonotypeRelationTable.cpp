@@ -6,6 +6,9 @@ std::vector<T> MonotypeRelationTable<T>::forwardDFS(T key) {
 	if (calculated_dfs_forward.count(key)) {
 		return getValues(key);
 	}
+	if (!containsKey(key)) {
+		return {};
+	}
 	std::unordered_set<T> visited;
 	std::stack<T> stack;
 
@@ -41,6 +44,9 @@ template<class T>
 std::vector<T> MonotypeRelationTable<T>::backwardDFS(T value) {
 	if (calculated_dfs_backward.count(value)) {
 		return getValues(value);
+	}
+	if (!containsValue(value)) {
+		return {};
 	}
 	std::unordered_set<T> visited;
 	std::stack<T> stack;

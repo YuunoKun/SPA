@@ -40,6 +40,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AffectsPreprocessorTest.cpp" />
+    <ClCompile Include="AffectsTPreprocessorTest.cpp" />
     <ClCompile Include="CallsEvaluatorTest.cpp" />
     <ClCompile Include="CallsTEvaluatorTest.cpp" />
     <ClCompile Include="CFGRelationsManagerTest.cpp" />
