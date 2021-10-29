@@ -288,7 +288,92 @@ stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co;
 Select BOOLEAN such that Follows(c, c1)
 TRUE
 5000
-TRUE - valid Follows*
+59 - valid Follows
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that Follows(pl, _)
+TRUE
+5000
+60 - valid Follows
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that Follows(pl, s)
+TRUE
+5000
+61 - valid Follows
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that Follows(pl, r)
+TRUE
+5000
+62 - valid Follows
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that Follows(pl, p)
+TRUE
+5000
+63 - valid Follows
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that Follows(pl, w)
+TRUE
+5000
+64 - valid Follows
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that Follows(pl, ifs)
+TRUE
+5000
+65 - valid Follows
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that Follows(pl, a)
+TRUE
+5000
+66 - valid Follows
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c, c1; prog_line pl;
+Select BOOLEAN such that Follows(pl, c1)
+TRUE
+5000
+67 - valid Follows
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that Follows(_, pl)
+TRUE
+5000
+68 - valid Follows
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that Follows(s, pl)
+TRUE
+5000
+69 - valid Follows
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that Follows(r, pl)
+TRUE
+5000
+70 - valid Follows
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that Follows(p, pl)
+TRUE
+5000
+71 - valid Follows
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that Follows(w, pl)
+TRUE
+5000
+72 - valid Follows
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that Follows(ifs, pl)
+TRUE
+5000
+73 - valid Follows
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that Follows(a, pl)
+TRUE
+5000
+74 - valid Follows
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c, c1; prog_line pl;
+Select BOOLEAN such that Follows(c, pl)
+TRUE
+5000
+75 - valid Follows
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c, c1; prog_line pl, pl1;
+Select BOOLEAN such that Follows(pl, pl1)
+TRUE
+5000
+1 - valid Follows*
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
 Select BOOLEAN such that Follows*(1, 2)
 TRUE
@@ -578,7 +663,92 @@ stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co;
 Select BOOLEAN such that Follows*(c, c1)
 TRUE
 5000
-TRUE - valid Parent
+59 - valid Follows*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that Follows**(pl, _)
+TRUE
+5000
+60 - valid Follows*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that Follows*(pl, s)
+TRUE
+5000
+61 - valid Follows*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that Follows*(pl, r)
+TRUE
+5000
+62 - valid Follows*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that Follows*(pl, p)
+TRUE
+5000
+63 - valid Follows*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that Follows*(pl, w)
+TRUE
+5000
+64 - valid Follows*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that Follows*(pl, ifs)
+TRUE
+5000
+65 - valid Follows*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that Follows*(pl, a)
+TRUE
+5000
+66 - valid Follows*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c, c1; prog_line pl;
+Select BOOLEAN such that Follows*(pl, c1)
+TRUE
+5000
+67 - valid Follows*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that Follows*(_, pl)
+TRUE
+5000
+68 - valid Follows*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that Follows*(s, pl)
+TRUE
+5000
+69 - valid Follows*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that Follows*(r, pl)
+TRUE
+5000
+70 - valid Follows*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that Follows*(p, pl)
+TRUE
+5000
+71 - valid Follows*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that Follows*(w, pl)
+TRUE
+5000
+72 - valid Follows*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that Follows*(ifs, pl)
+TRUE
+5000
+73 - valid Follows*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that Follows*(a, pl)
+TRUE
+5000
+74 - valid Follows*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c, c1; prog_line pl;
+Select BOOLEAN such that Follows*(c, pl)
+TRUE
+5000
+75 - valid Follows*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c, c1; prog_line pl, pl1;
+Select BOOLEAN such that Follows*(pl, pl1)
+TRUE
+5000
+1 - valid Parent
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
 Select BOOLEAN such that Parent(9, 10)
 TRUE
@@ -668,7 +838,137 @@ stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co;
 Select BOOLEAN such that Parent(ifs, c)
 TRUE
 5000
-TRUE - valid Parent*
+19 - valid Parent
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c, c1; prog_line pl;
+Select BOOLEAN such that Parent(_, pl)
+TRUE
+5000
+20 - valid Parent
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that Parent(_, s)
+TRUE
+5000
+21 - valid Parent
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that Parent(_, r)
+TRUE
+5000
+22 - valid Parent
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that Parent(_, p)
+TRUE
+5000
+23 - valid Parent
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that Parent(_, w)
+TRUE
+5000
+24 - valid Parent
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that Parent(_, ifs)
+TRUE
+5000
+25 - valid Parent
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that Parent(_, a)
+TRUE
+5000
+26 - valid Parent
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c, c1; prog_line pl;
+Select BOOLEAN such that Parent(_, c)
+TRUE
+5000
+27 - valid Parent
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that Parent*(pl, _)
+TRUE
+5000
+28 - valid Parent
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that Parent(pl, s)
+TRUE
+5000
+29 - valid Parent
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that Parent(pl, r)
+TRUE
+5000
+30 - valid Parent
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that Parent(pl, p)
+TRUE
+5000
+31 - valid Parent
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that Parent(pl, w)
+TRUE
+5000
+32 - valid Parent
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that Parent(pl, ifs)
+TRUE
+5000
+33 - valid Parent
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that Parent(pl, a)
+TRUE
+5000
+34 - valid Parent
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c, c1; prog_line pl;
+Select BOOLEAN such that Parent(pl, c)
+TRUE
+5000
+35 - valid Parent
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that Parent*(s, _)
+TRUE
+5000
+36 - valid Parent
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that Parent(s, s)
+TRUE
+5000
+37 - valid Parent
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that Parent(s, r)
+TRUE
+5000
+38 - valid Parent
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that Parent(s, p)
+TRUE
+5000
+39 - valid Parent
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that Parent(s, w)
+TRUE
+5000
+40 - valid Parent
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that Parent(s, ifs)
+TRUE
+5000
+41 - valid Parent
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that Parent(s, a)
+TRUE
+5000
+42 - valid Parent
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c, c1; prog_line pl;
+Select BOOLEAN such that Parent(s, c1)
+TRUE
+5000
+43 - valid Parent
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that Parent(w, pl)
+TRUE
+5000
+44 - valid Parent
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c, c1; prog_line pl;
+Select BOOLEAN such that Parent(ifs, pl)
+TRUE
+5000
+1 - valid Parent*
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
 Select BOOLEAN such that Parent*(9, 10)
 TRUE
@@ -758,7 +1058,137 @@ stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co;
 Select BOOLEAN such that Parent*(ifs, c)
 TRUE
 5000
-TRUE - valid Modifies
+19 - valid Parent*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c, c1; prog_line pl;
+Select BOOLEAN such that Parent*(_, pl)
+TRUE
+5000
+20 - valid Parent*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that Parent*(_, s)
+TRUE
+5000
+21 - valid Parent*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that Parent*(_, r)
+TRUE
+5000
+22 - valid Parent*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that Parent*(_, p)
+TRUE
+5000
+23 - valid Parent*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that Parent*(_, w)
+TRUE
+5000
+24 - valid Parent*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that Parent*(_, ifs)
+TRUE
+5000
+25 - valid Parent*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that Parent*(_, a)
+TRUE
+5000
+26 - valid Parent*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c, c1; prog_line pl;
+Select BOOLEAN such that Parent*(_, c)
+TRUE
+5000
+27 - valid Parent*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that Parent**(pl, _)
+TRUE
+5000
+28 - valid Parent*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that Parent*(pl, s)
+TRUE
+5000
+29 - valid Parent*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that Parent*(pl, r)
+TRUE
+5000
+30 - valid Parent*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that Parent*(pl, p)
+TRUE
+5000
+31 - valid Parent*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that Parent*(pl, w)
+TRUE
+5000
+32 - valid Parent*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that Parent*(pl, ifs)
+TRUE
+5000
+33 - valid Parent*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that Parent*(pl, a)
+TRUE
+5000
+34 - valid Parent*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c, c1; prog_line pl;
+Select BOOLEAN such that Parent*(pl, c)
+TRUE
+5000
+35 - valid Parent*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that Parent**(s, _)
+TRUE
+5000
+36 - valid Parent*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that Parent*(s, s)
+TRUE
+5000
+37 - valid Parent*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that Parent*(s, r)
+TRUE
+5000
+38 - valid Parent*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that Parent*(s, p)
+TRUE
+5000
+39 - valid Parent*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that Parent*(s, w)
+TRUE
+5000
+40 - valid Parent*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that Parent*(s, ifs)
+TRUE
+5000
+41 - valid Parent*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that Parent*(s, a)
+TRUE
+5000
+42 - valid Parent*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c, c1; prog_line pl;
+Select BOOLEAN such that Parent*(s, c1)
+TRUE
+5000
+43 - valid Parent*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that Parent*(w, pl)
+TRUE
+5000
+44 - valid Parent*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c, c1; prog_line pl;
+Select BOOLEAN such that Parent*(ifs, pl)
+TRUE
+5000
+1 - valid Modifies
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
 Select BOOLEAN such that Modifies(s, _)
 TRUE
@@ -818,7 +1248,27 @@ stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co;
 Select BOOLEAN such that Modifies(c, v)
 TRUE
 5000
-TRUE - valid Uses
+13 - valid Modifies
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that Modifies(pl, _)
+TRUE
+5000
+14 - valid Modifies
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that Modifies(pl, v)
+TRUE
+5000
+15 - valid Modifies
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that Modifies(pr, _)
+TRUE
+5000
+16 - valid Modifies
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that Modifies(pr, v)
+TRUE
+5000
+1 - valid Uses
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
 Select BOOLEAN such that Uses(s, _)
 TRUE
@@ -876,5 +1326,2207 @@ TRUE
 12 - valid Uses
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
 Select BOOLEAN such that Uses(c, v)
+TRUE
+5000
+13 - valid Uses
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that Uses(pl, _)
+TRUE
+5000
+14 - valid Modifies
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that Uses(pl, v)
+TRUE
+5000
+15 - valid Modifies
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that Uses(pr, _)
+TRUE
+5000
+16 - valid Modifies
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that Uses(pr, v)
+TRUE
+5000
+1 - valid Call
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr, pr1; call c;
+Select BOOLEAN such that Call(pr, pr1)
+TRUE
+5000
+2 - valid Call
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Call(pr, _)
+TRUE
+5000
+3 - valid Call
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Call(_, pr)
+TRUE
+5000
+4 - valid Call
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Call(_, _)
+TRUE
+5000
+5 - valid Call
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Call(_, "prints")
+TRUE
+5000
+6 - valid Call
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Call("reads", _)
+TRUE
+5000
+7 - valid Call
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Call("reads", "prints")
+TRUE
+5000
+1 - valid Call*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr, pr1; call c;
+Select BOOLEAN such that Call*(pr, pr1)
+TRUE
+5000
+2 - valid Call*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Call*(pr, _)
+TRUE
+5000
+3 - valid Call*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Call*(_, pr)
+TRUE
+5000
+4 - valid Call*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Call*(_, _)
+TRUE
+5000
+5 - valid Call*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Call*(_, "prints")
+TRUE
+5000
+6 - valid Call*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Call*("reads", _)
+TRUE
+5000
+7 - valid Call*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Call*("reads", "prints")
+TRUE
+5000
+1 - valid Next
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Next(1, 2)
+TRUE
+5000
+2 - valid Next
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Next(_, _)
+TRUE
+5000
+3 - valid Next
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Next(s, _)
+TRUE
+5000
+4 - valid Next
+stmt sc, s, s1; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Next(s, s1)
+TRUE
+5000
+5 - valid Next
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Next(s, r)
+TRUE
+5000
+6 - valid Next
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Next(s, p)
+TRUE
+5000
+7 - valid Next
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Next(s, w)
+TRUE
+5000
+8 - valid Next
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Next(s, ifs)
+TRUE
+5000
+9 - valid Next
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Next(s, a)
+TRUE
+5000
+10 - valid Next
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Next(s, c)
+TRUE
+5000
+11 - valid Next
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Next(r, _)
+TRUE
+5000
+12 - valid Next
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Next(r, s)
+TRUE
+5000
+13 - valid Next
+stmt sc, s; read r, r1; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Next(r, r1)
+TRUE
+5000
+14 - valid Next
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Next(r, p)
+TRUE
+5000
+15 - valid Next
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Next(r, w)
+TRUE
+5000
+16 - valid Next
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Next(r, ifs)
+TRUE
+5000
+17 - valid Next
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Next(r, a)
+TRUE
+5000
+18 - valid Next
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Next(r, c)
+TRUE
+5000
+19 - valid Next
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Next(p, _)
+TRUE
+5000
+20 - valid Next
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Next(p, s)
+TRUE
+5000
+21 - valid Next
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Next(p, r)
+TRUE
+5000
+22 - valid Next
+stmt sc, s; read r; print p, p1; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Next(p, p1)
+TRUE
+5000
+23 - valid Next
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Next(p, w)
+TRUE
+5000
+24 - valid Next
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Next(p, ifs)
+TRUE
+5000
+25 - valid Next
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Next(p, a)
+TRUE
+5000
+26 - valid Next
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Next(p, c)
+TRUE
+5000
+27 - valid Next
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Next(w, _)
+TRUE
+5000
+28 - valid Next
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Next(w, s)
+TRUE
+5000
+29 - valid Next
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Next(w, r)
+TRUE
+5000
+30 - valid Next
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Next(w, p)
+TRUE
+5000
+31 - valid Next
+stmt sc, s; read r; print p; while w, w1; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Next(w, w1)
+TRUE
+5000
+32 - valid Next
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Next(w, ifs)
+TRUE
+5000
+33 - valid Next
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Next(w, a)
+TRUE
+5000
+34 - valid Next
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Next(w, c)
+TRUE
+5000
+35 - valid Next
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Next(ifs, _)
+TRUE
+5000
+36 - valid Next
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Next(ifs, s)
+TRUE
+5000
+37 - valid Next
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Next(ifs, r)
+TRUE
+5000
+38 - valid Next
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Next(ifs, p)
+TRUE
+5000
+39 - valid Next
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Next(ifs, w)
+TRUE
+5000
+40 - valid Next
+stmt sc, s; read r; print p; while w; if ifs, ifs1; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Next(ifs, ifs1)
+TRUE
+5000
+41 - valid Next
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Next(ifs, a)
+TRUE
+5000
+42 - valid Next
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Next(ifs, c)
+TRUE
+5000
+43 - valid Next
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Next(a, _)
+TRUE
+5000
+44 - valid Next
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Next(a, s)
+TRUE
+5000
+45 - valid Next
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Next(a, r)
+TRUE
+5000
+46 - valid Next
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Next(a, p)
+TRUE
+5000
+47 - valid Next
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Next(a, w)
+TRUE
+5000
+48 - valid Next
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Next(a, ifs)
+TRUE
+5000
+49 - valid Next
+stmt sc, s; read r; print p; while w; if ifs; assign a, a1; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Next(a, a1)
+TRUE
+5000
+50 - valid Next
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Next(a, c)
+TRUE
+5000
+51 - valid Next
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Next(c, _)
+TRUE
+5000
+52 - valid Next
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Next(c, s)
+TRUE
+5000
+53 - valid Next
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Next(c, r)
+TRUE
+5000
+54 - valid Next
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Next(c, p)
+TRUE
+5000
+55 - valid Next
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Next(c, w)
+TRUE
+5000
+56 - valid Next
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Next(c, ifs)
+TRUE
+5000
+57 - valid Next
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Next(c, a)
+TRUE
+5000
+58 - valid Next
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c, c1;
+Select BOOLEAN such that Next(c, c1)
+TRUE
+5000
+59 - valid Next
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that Next(pl, _)
+TRUE
+5000
+60 - valid Next
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that Next(pl, s)
+TRUE
+5000
+61 - valid Next
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that Next(pl, r)
+TRUE
+5000
+62 - valid Next
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that Next(pl, p)
+TRUE
+5000
+63 - valid Next
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that Next(pl, w)
+TRUE
+5000
+64 - valid Next
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that Next(pl, ifs)
+TRUE
+5000
+65 - valid Next
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that Next(pl, a)
+TRUE
+5000
+66 - valid Next
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c, c1; prog_line pl;
+Select BOOLEAN such that Next(pl, c1)
+TRUE
+5000
+67 - valid Next
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that Next(_, pl)
+TRUE
+5000
+68 - valid Next
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that Next(s, pl)
+TRUE
+5000
+69 - valid Next
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that Next(r, pl)
+TRUE
+5000
+70 - valid Next
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that Next(p, pl)
+TRUE
+5000
+71 - valid Next
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that Next(w, pl)
+TRUE
+5000
+72 - valid Next
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that Next(ifs, pl)
+TRUE
+5000
+73 - valid Next
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that Next(a, pl)
+TRUE
+5000
+74 - valid Next
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c, c1; prog_line pl;
+Select BOOLEAN such that Next(c, pl)
+TRUE
+5000
+75 - valid Next
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c, c1; prog_line pl, pl1;
+Select BOOLEAN such that Next(pl, pl1)
+TRUE
+5000
+1 - valid Next*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Next*(1, 2)
+TRUE
+5000
+2 - valid Next*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Next*(_, _)
+TRUE
+5000
+3 - valid Next*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Next(s, _)
+TRUE
+5000
+4 - valid Next*
+stmt sc, s, s1; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Next*(s, s1)
+TRUE
+5000
+5 - valid Next*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Next*(s, r)
+TRUE
+5000
+6 - valid Next*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Next*(s, p)
+TRUE
+5000
+7 - valid Next*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Next*(s, w)
+TRUE
+5000
+8 - valid Next*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Next*(s, ifs)
+TRUE
+5000
+9 - valid Next*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Next*(s, a)
+TRUE
+5000
+10 - valid Next*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Next*(s, c)
+TRUE
+5000
+11 - valid Next*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Next*(r, _)
+TRUE
+5000
+12 - valid Next*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Next*(r, s)
+TRUE
+5000
+13 - valid Next*
+stmt sc, s; read r, r1; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Next*(r, r1)
+TRUE
+5000
+14 - valid Next*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Next*(r, p)
+TRUE
+5000
+15 - valid Next*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Next*(r, w)
+TRUE
+5000
+16 - valid Next*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Next*(r, ifs)
+TRUE
+5000
+17 - valid Next*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Next*(r, a)
+TRUE
+5000
+18 - valid Next*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Next*(r, c)
+TRUE
+5000
+19 - valid Next*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Next*(p, _)
+TRUE
+5000
+20 - valid Next*
+stmt sc, s; read r; print p, p1; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Next*(p, s)
+TRUE
+5000
+21 - valid Next*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Next*(p, r)
+TRUE
+5000
+22 - valid Next*
+stmt sc, s; read r; print p, p1; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Next*(p, p1)
+TRUE
+5000
+23 - valid Next*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Next*(p, w)
+TRUE
+5000
+24 - valid Next*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Next*(p, ifs)
+TRUE
+5000
+25 - valid Next*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Next*(p, a)
+TRUE
+5000
+26 - valid Next*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Next*(p, c)
+TRUE
+5000
+27 - valid Next*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Next*(w, _)
+TRUE
+5000
+28 - valid Next*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Next*(w, s)
+TRUE
+5000
+29 - valid Next*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Next*(w, r)
+TRUE
+5000
+30 - valid Next*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Next*(w, p)
+TRUE
+5000
+31 - valid Next*
+stmt sc, s; read r; print p; while w, w1; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Next*(w, w1)
+TRUE
+5000
+32 - valid Next*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Next*(w, ifs)
+TRUE
+5000
+33 - valid Next*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Next*(w, a)
+TRUE
+5000
+34 - valid Next*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Next*(w, c)
+TRUE
+5000
+35 - valid Next*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Next*(ifs, _)
+TRUE
+5000
+36 - valid Next*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Next*(ifs, s)
+TRUE
+5000
+37 - valid Next*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Next*(ifs, r)
+TRUE
+5000
+38 - valid Next*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Next*(ifs, p)
+TRUE
+5000
+39 - valid Next*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Next*(ifs, w)
+TRUE
+5000
+40 - valid Next*
+stmt sc, s; read r; print p; while w; if ifs, ifs1; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Next*(ifs, ifs1)
+TRUE
+5000
+41 - valid Next*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Next*(ifs, a)
+TRUE
+5000
+42 - valid Next*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Next*(ifs, c)
+TRUE
+5000
+43 - valid Next*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Next*(a, _)
+TRUE
+5000
+44 - valid Next*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Next*(a, s)
+TRUE
+5000
+45 - valid Next*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Next*(a, r)
+TRUE
+5000
+46 - valid Next*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Next*(a, p)
+TRUE
+5000
+47 - valid Next*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Next*(a, w)
+TRUE
+5000
+48 - valid Next*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Next*(a, ifs)
+TRUE
+5000
+49 - valid Next*
+stmt sc, s; read r; print p; while w; if ifs; assign a, a1; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Next*(a, a1)
+TRUE
+5000
+50 - valid Next*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Next*(a, c)
+TRUE
+5000
+51 - valid Next*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Next*(c, _)
+TRUE
+5000
+52 - valid Next*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Next*(c, s)
+TRUE
+5000
+53 - valid Next*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Next*(c, r)
+TRUE
+5000
+54 - valid Next*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Next*(c, p)
+TRUE
+5000
+55 - valid Next*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Next*(c, w)
+TRUE
+5000
+56 - valid Next*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Next*(c, ifs)
+TRUE
+5000
+57 - valid Next*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Next*(c, a)
+TRUE
+5000
+58 - valid Next*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c, c1;
+Select BOOLEAN such that Next*(c, c1)
+TRUE
+5000
+59 - valid Next*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that Next**(pl, _)
+TRUE
+5000
+60 - valid Next*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that Next*(pl, s)
+TRUE
+5000
+61 - valid Next*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that Next*(pl, r)
+TRUE
+5000
+62 - valid Next*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that Next*(pl, p)
+TRUE
+5000
+63 - valid Next*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that Next*(pl, w)
+TRUE
+5000
+64 - valid Next*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that Next*(pl, ifs)
+TRUE
+5000
+65 - valid Next*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that Next*(pl, a)
+TRUE
+5000
+66 - valid Next*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c, c1; prog_line pl;
+Select BOOLEAN such that Next*(pl, c1)
+TRUE
+5000
+67 - valid Next*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that Next*(_, pl)
+TRUE
+5000
+68 - valid Next*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that Next*(s, pl)
+TRUE
+5000
+69 - valid Next*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that Next*(r, pl)
+TRUE
+5000
+70 - valid Next*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that Next*(p, pl)
+TRUE
+5000
+71 - valid Next*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that Next*(w, pl)
+TRUE
+5000
+72 - valid Next*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that Next*(ifs, pl)
+TRUE
+5000
+73 - valid Next*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that Next*(a, pl)
+TRUE
+5000
+74 - valid Next*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c, c1; prog_line pl;
+Select BOOLEAN such that Next*(c, pl)
+TRUE
+5000
+75 - valid Next*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c, c1; prog_line pl, pl1;
+Select BOOLEAN such that Next*(pl, pl1)
+TRUE
+5000
+1 - valid Affect
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Affect(1, 2)
+TRUE
+5000
+2 - valid Affect
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Affect(_, _)
+TRUE
+5000
+3 - valid Affect
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Affect(s, _)
+TRUE
+5000
+4 - valid Affect
+stmt sc, s, s1; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Affect(s, s1)
+TRUE
+5000
+5 - valid Affect
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that Affect(s, pl)
+TRUE
+5000
+6 - valid Affect
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Affect(s, a)
+TRUE
+5000
+7 - valid Affect
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Affect(a, _)
+TRUE
+5000
+8 - valid Affect
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Affect(a, s)
+TRUE
+5000
+9 - valid Affect
+stmt sc, s; read r; print p; while w; if ifs; assign a, a1; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Affect(a, a1)
+TRUE
+5000
+10 - valid Affect
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that Affect(a, pl)
+TRUE
+5000
+11 - valid Affect
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that Affect(pl, _)
+TRUE
+5000
+12 - valid Affect
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that Affect(pl, s)
+TRUE
+5000
+13 - valid Affect
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that Affect(pl, a)
+TRUE
+5000
+14 - valid Affect
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c, c1; prog_line pl, pl1;
+Select BOOLEAN such that Affect(pl, pl1)
+TRUE
+15 - valid Affect
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that Affect(_, s)
+TRUE
+5000
+16 - valid Affect
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that Affect(_, pl)
+TRUE
+5000
+17 - valid Affect
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that Affect(_, a)
+TRUE
+5000
+1 - valid Affect*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Affect*(1, 2)
+TRUE
+5000
+2 - valid Affect*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Affect*(_, _)
+TRUE
+5000
+3 - valid Affect*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Affect*(s, _)
+TRUE
+5000
+4 - valid Affect*
+stmt sc, s, s1; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Affect*(s, s1)
+TRUE
+5000
+5 - valid Affect*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that Affect*(s, pl)
+TRUE
+5000
+6 - valid Affect*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Affect*(s, a)
+TRUE
+5000
+7 - valid Affect*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Affect*(a, _)
+TRUE
+5000
+8 - valid Affect*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Affect*(a, s)
+TRUE
+5000
+9 - valid Affect*
+stmt sc, s; read r; print p; while w; if ifs; assign a, a1; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Affect*(a, a1)
+TRUE
+5000
+10 - valid Affect*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that Affect*(a, pl)
+TRUE
+5000
+11 - valid Affect*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that Affect*(pl, _)
+TRUE
+5000
+12 - valid Affect*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that Affect*(pl, s)
+TRUE
+5000
+13 - valid Affect*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that Affect*(pl, a)
+TRUE
+5000
+14 - valid Affect*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c, c1; prog_line pl, pl1;
+Select BOOLEAN such that Affect*(pl, pl1)
+TRUE
+15 - valid Affect*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that Affect*(_, s)
+TRUE
+5000
+16 - valid Affect*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that Affect*(_, pl)
+TRUE
+5000
+17 - valid Affect*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that Affect*(_, a)
+TRUE
+5000
+
+1 - valid NextBip
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that NextBip(1, 2)
+TRUE
+5000
+2 - valid NextBip
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that NextBip(_, _)
+TRUE
+5000
+3 - valid NextBip
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that NextBip(s, _)
+TRUE
+5000
+4 - valid NextBip
+stmt sc, s, s1; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that NextBip(s, s1)
+TRUE
+5000
+5 - valid NextBip
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that NextBip(s, r)
+TRUE
+5000
+6 - valid NextBip
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that NextBip(s, p)
+TRUE
+5000
+7 - valid NextBip
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that NextBip(s, w)
+TRUE
+5000
+8 - valid NextBip
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that NextBip(s, ifs)
+TRUE
+5000
+9 - valid NextBip
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that NextBip(s, a)
+TRUE
+5000
+10 - valid NextBip
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that NextBip(s, c)
+TRUE
+5000
+11 - valid NextBip
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that NextBip(r, _)
+TRUE
+5000
+12 - valid NextBip
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that NextBip(r, s)
+TRUE
+5000
+13 - valid NextBip
+stmt sc, s; read r, r1; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that NextBip(r, r1)
+TRUE
+5000
+14 - valid NextBip
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that NextBip(r, p)
+TRUE
+5000
+15 - valid NextBip
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that NextBip(r, w)
+TRUE
+5000
+16 - valid NextBip
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that NextBip(r, ifs)
+TRUE
+5000
+17 - valid NextBip
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that NextBip(r, a)
+TRUE
+5000
+18 - valid NextBip
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that NextBip(r, c)
+TRUE
+5000
+19 - valid NextBip
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that NextBip(p, _)
+TRUE
+5000
+20 - valid NextBip
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that NextBip(p, s)
+TRUE
+5000
+21 - valid NextBip
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that NextBip(p, r)
+TRUE
+5000
+22 - valid NextBip
+stmt sc, s; read r; print p, p1; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that NextBip(p, p1)
+TRUE
+5000
+23 - valid NextBip
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that NextBip(p, w)
+TRUE
+5000
+24 - valid NextBip
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that NextBip(p, ifs)
+TRUE
+5000
+25 - valid NextBip
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that NextBip(p, a)
+TRUE
+5000
+26 - valid NextBip
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that NextBip(p, c)
+TRUE
+5000
+27 - valid NextBip
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that NextBip(w, _)
+TRUE
+5000
+28 - valid NextBip
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that NextBip(w, s)
+TRUE
+5000
+29 - valid NextBip
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that NextBip(w, r)
+TRUE
+5000
+30 - valid NextBip
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that NextBip(w, p)
+TRUE
+5000
+31 - valid NextBip
+stmt sc, s; read r; print p; while w, w1; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that NextBip(w, w1)
+TRUE
+5000
+32 - valid NextBip
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that NextBip(w, ifs)
+TRUE
+5000
+33 - valid NextBip
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that NextBip(w, a)
+TRUE
+5000
+34 - valid NextBip
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that NextBip(w, c)
+TRUE
+5000
+35 - valid NextBip
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that NextBip(ifs, _)
+TRUE
+5000
+36 - valid NextBip
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that NextBip(ifs, s)
+TRUE
+5000
+37 - valid NextBip
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that NextBip(ifs, r)
+TRUE
+5000
+38 - valid NextBip
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that NextBip(ifs, p)
+TRUE
+5000
+39 - valid NextBip
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that NextBip(ifs, w)
+TRUE
+5000
+40 - valid NextBip
+stmt sc, s; read r; print p; while w; if ifs, ifs1; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that NextBip(ifs, ifs1)
+TRUE
+5000
+41 - valid NextBip
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that NextBip(ifs, a)
+TRUE
+5000
+42 - valid NextBip
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that NextBip(ifs, c)
+TRUE
+5000
+43 - valid NextBip
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that NextBip(a, _)
+TRUE
+5000
+44 - valid NextBip
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that NextBip(a, s)
+TRUE
+5000
+45 - valid NextBip
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that NextBip(a, r)
+TRUE
+5000
+46 - valid NextBip
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that NextBip(a, p)
+TRUE
+5000
+47 - valid NextBip
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that NextBip(a, w)
+TRUE
+5000
+48 - valid NextBip
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that NextBip(a, ifs)
+TRUE
+5000
+49 - valid NextBip
+stmt sc, s; read r; print p; while w; if ifs; assign a, a1; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that NextBip(a, a1)
+TRUE
+5000
+50 - valid NextBip
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that NextBip(a, c)
+TRUE
+5000
+51 - valid NextBip
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that NextBip(c, _)
+TRUE
+5000
+52 - valid NextBip
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that NextBip(c, s)
+TRUE
+5000
+53 - valid NextBip
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that NextBip(c, r)
+TRUE
+5000
+54 - valid NextBip
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that NextBip(c, p)
+TRUE
+5000
+55 - valid NextBip
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that NextBip(c, w)
+TRUE
+5000
+56 - valid NextBip
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that NextBip(c, ifs)
+TRUE
+5000
+57 - valid NextBip
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that NextBip(c, a)
+TRUE
+5000
+58 - valid NextBip
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c, c1;
+Select BOOLEAN such that NextBip(c, c1)
+TRUE
+5000
+59 - valid NextBip
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that NextBip(pl, _)
+TRUE
+5000
+60 - valid NextBip
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that NextBip(pl, s)
+TRUE
+5000
+61 - valid NextBip
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that NextBip(pl, r)
+TRUE
+5000
+62 - valid NextBip
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that NextBip(pl, p)
+TRUE
+5000
+63 - valid NextBip
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that NextBip(pl, w)
+TRUE
+5000
+64 - valid NextBip
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that NextBip(pl, ifs)
+TRUE
+5000
+65 - valid NextBip
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that NextBip(pl, a)
+TRUE
+5000
+66 - valid NextBip
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c, c1; prog_line pl;
+Select BOOLEAN such that NextBip(pl, c1)
+TRUE
+5000
+67 - valid NextBip
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that NextBip(_, pl)
+TRUE
+5000
+68 - valid NextBip
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that NextBip(s, pl)
+TRUE
+5000
+69 - valid NextBip
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that NextBip(r, pl)
+TRUE
+5000
+70 - valid NextBip
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that NextBip(p, pl)
+TRUE
+5000
+71 - valid NextBip
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that NextBip(w, pl)
+TRUE
+5000
+72 - valid NextBip
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that NextBip(ifs, pl)
+TRUE
+5000
+73 - valid NextBip
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that NextBip(a, pl)
+TRUE
+5000
+74 - valid NextBip
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c, c1; prog_line pl;
+Select BOOLEAN such that NextBip(c, pl)
+TRUE
+5000
+75 - valid NextBip
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c, c1; prog_line pl, pl1;
+Select BOOLEAN such that NextBip(pl, pl1)
+TRUE
+5000
+1 - valid NextBip*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that NextBip*(1, 2)
+TRUE
+5000
+2 - valid NextBip*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that NextBip*(_, _)
+TRUE
+5000
+3 - valid NextBip*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that NextBip(s, _)
+TRUE
+5000
+4 - valid NextBip*
+stmt sc, s, s1; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that NextBip*(s, s1)
+TRUE
+5000
+5 - valid NextBip*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that NextBip*(s, r)
+TRUE
+5000
+6 - valid NextBip*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that NextBip*(s, p)
+TRUE
+5000
+7 - valid NextBip*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that NextBip*(s, w)
+TRUE
+5000
+8 - valid NextBip*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that NextBip*(s, ifs)
+TRUE
+5000
+9 - valid NextBip*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that NextBip*(s, a)
+TRUE
+5000
+10 - valid NextBip*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that NextBip*(s, c)
+TRUE
+5000
+11 - valid NextBip*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that NextBip*(r, _)
+TRUE
+5000
+12 - valid NextBip*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that NextBip*(r, s)
+TRUE
+5000
+13 - valid NextBip*
+stmt sc, s; read r, r1; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that NextBip*(r, r1)
+TRUE
+5000
+14 - valid NextBip*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that NextBip*(r, p)
+TRUE
+5000
+15 - valid NextBip*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that NextBip*(r, w)
+TRUE
+5000
+16 - valid NextBip*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that NextBip*(r, ifs)
+TRUE
+5000
+17 - valid NextBip*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that NextBip*(r, a)
+TRUE
+5000
+18 - valid NextBip*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that NextBip*(r, c)
+TRUE
+5000
+19 - valid NextBip*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that NextBip*(p, _)
+TRUE
+5000
+20 - valid NextBip*
+stmt sc, s; read r; print p, p1; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that NextBip*(p, s)
+TRUE
+5000
+21 - valid NextBip*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that NextBip*(p, r)
+TRUE
+5000
+22 - valid NextBip*
+stmt sc, s; read r; print p, p1; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that NextBip*(p, p1)
+TRUE
+5000
+23 - valid NextBip*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that NextBip*(p, w)
+TRUE
+5000
+24 - valid NextBip*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that NextBip*(p, ifs)
+TRUE
+5000
+25 - valid NextBip*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that NextBip*(p, a)
+TRUE
+5000
+26 - valid NextBip*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that NextBip*(p, c)
+TRUE
+5000
+27 - valid NextBip*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that NextBip*(w, _)
+TRUE
+5000
+28 - valid NextBip*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that NextBip*(w, s)
+TRUE
+5000
+29 - valid NextBip*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that NextBip*(w, r)
+TRUE
+5000
+30 - valid NextBip*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that NextBip*(w, p)
+TRUE
+5000
+31 - valid NextBip*
+stmt sc, s; read r; print p; while w, w1; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that NextBip*(w, w1)
+TRUE
+5000
+32 - valid NextBip*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that NextBip*(w, ifs)
+TRUE
+5000
+33 - valid NextBip*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that NextBip*(w, a)
+TRUE
+5000
+34 - valid NextBip*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that NextBip*(w, c)
+TRUE
+5000
+35 - valid NextBip*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that NextBip*(ifs, _)
+TRUE
+5000
+36 - valid NextBip*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that NextBip*(ifs, s)
+TRUE
+5000
+37 - valid NextBip*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that NextBip*(ifs, r)
+TRUE
+5000
+38 - valid NextBip*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that NextBip*(ifs, p)
+TRUE
+5000
+39 - valid NextBip*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that NextBip*(ifs, w)
+TRUE
+5000
+40 - valid NextBip*
+stmt sc, s; read r; print p; while w; if ifs, ifs1; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that NextBip*(ifs, ifs1)
+TRUE
+5000
+41 - valid NextBip*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that NextBip*(ifs, a)
+TRUE
+5000
+42 - valid NextBip*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that NextBip*(ifs, c)
+TRUE
+5000
+43 - valid NextBip*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that NextBip*(a, _)
+TRUE
+5000
+44 - valid NextBip*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that NextBip*(a, s)
+TRUE
+5000
+45 - valid NextBip*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that NextBip*(a, r)
+TRUE
+5000
+46 - valid NextBip*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that NextBip*(a, p)
+TRUE
+5000
+47 - valid NextBip*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that NextBip*(a, w)
+TRUE
+5000
+48 - valid NextBip*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that NextBip*(a, ifs)
+TRUE
+5000
+49 - valid NextBip*
+stmt sc, s; read r; print p; while w; if ifs; assign a, a1; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that NextBip*(a, a1)
+TRUE
+5000
+50 - valid NextBip*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that NextBip*(a, c)
+TRUE
+5000
+51 - valid NextBip*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that NextBip*(c, _)
+TRUE
+5000
+52 - valid NextBip*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that NextBip*(c, s)
+TRUE
+5000
+53 - valid NextBip*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that NextBip*(c, r)
+TRUE
+5000
+54 - valid NextBip*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that NextBip*(c, p)
+TRUE
+5000
+55 - valid NextBip*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that NextBip*(c, w)
+TRUE
+5000
+56 - valid NextBip*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that NextBip*(c, ifs)
+TRUE
+5000
+57 - valid NextBip*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that NextBip*(c, a)
+TRUE
+5000
+58 - valid NextBip*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c, c1;
+Select BOOLEAN such that NextBip*(c, c1)
+TRUE
+5000
+59 - valid NextBip*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that NextBip**(pl, _)
+TRUE
+5000
+60 - valid NextBip*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that NextBip*(pl, s)
+TRUE
+5000
+61 - valid NextBip*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that NextBip*(pl, r)
+TRUE
+5000
+62 - valid NextBip*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that NextBip*(pl, p)
+TRUE
+5000
+63 - valid NextBip*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that NextBip*(pl, w)
+TRUE
+5000
+64 - valid NextBip*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that NextBip*(pl, ifs)
+TRUE
+5000
+65 - valid NextBip*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that NextBip*(pl, a)
+TRUE
+5000
+66 - valid NextBip*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c, c1; prog_line pl;
+Select BOOLEAN such that NextBip*(pl, c1)
+TRUE
+5000
+67 - valid NextBip*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that NextBip*(_, pl)
+TRUE
+5000
+68 - valid NextBip*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that NextBip*(s, pl)
+TRUE
+5000
+69 - valid NextBip*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that NextBip*(r, pl)
+TRUE
+5000
+70 - valid NextBip*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that NextBip*(p, pl)
+TRUE
+5000
+71 - valid NextBip*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that NextBip*(w, pl)NextBip
+TRUE
+5000
+72 - valid NextBip*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that NextBip*(ifs, pl)
+TRUE
+5000
+73 - valid NextBip*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that NextBip*(a, pl)
+TRUE
+5000
+74 - valid NextBip*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c, c1; prog_line pl;
+Select BOOLEAN such that NextBip*(c, pl)
+TRUE
+5000
+75 - valid NextBip*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c, c1; prog_line pl, pl1;
+Select BOOLEAN such that NextBip*(pl, pl1)
+TRUE
+5000
+1 - valid AffectBip
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that AffectBip(1, 2)
+TRUE
+5000
+2 - valid AffectBip
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that AffectBip(_, _)
+TRUE
+5000
+3 - valid AffectBip
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that AffectBip(s, _)
+TRUE
+5000
+4 - valid AffectBip
+stmt sc, s, s1; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that AffectBip(s, s1)
+TRUE
+5000
+5 - valid AffectBip
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that AffectBip(s, pl)
+TRUE
+5000
+6 - valid AffectBip
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that AffectBip(s, a)
+TRUE
+5000
+7 - valid AffectBip
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that AffectBip(a, _)
+TRUE
+5000
+8 - valid AffectBip
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that AffectBip(a, s)
+TRUE
+5000
+9 - valid AffectBip
+stmt sc, s; read r; print p; while w; if ifs; assign a, a1; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that AffectBip(a, a1)
+TRUE
+5000
+10 - valid AffectBip
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that AffectBip(a, pl)
+TRUE
+5000
+11 - valid AffectBip
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that AffectBip(pl, _)
+TRUE
+5000
+12 - valid AffectBip
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that AffectBip(pl, s)
+TRUE
+5000
+13 - valid AffectBip
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that AffectBip(pl, a)
+TRUE
+5000
+14 - valid AffectBip
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c, c1; prog_line pl, pl1;
+Select BOOLEAN such that AffectBip(pl, pl1)
+TRUE
+15 - valid AffectBip
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that AffectBip(_, s)
+TRUE
+5000
+16 - valid AffectBip
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that AffectBip(_, pl)
+TRUE
+5000
+17 - valid AffectBip
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that AffectBip(_, a)
+TRUE
+5000
+1 - valid AffectBip*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that AffectBip*(1, 2)
+TRUE
+5000
+2 - valid AffectBip*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that AffectBip*(_, _)
+TRUE
+5000
+3 - valid AffectBip*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that AffectBip*(s, _)
+TRUE
+5000
+4 - valid AffectBip*
+stmt sc, s, s1; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that AffectBip*(s, s1)
+TRUE
+5000
+5 - valid AffectBip*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that AffectBip*(s, pl)
+TRUE
+5000
+6 - valid AffectBip*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that AffectBip*(s, a)
+TRUE
+5000
+7 - valid AffectBip*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that AffectBip*(a, _)
+TRUE
+5000
+8 - valid AffectBip*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that AffectBip*(a, s)
+TRUE
+5000
+9 - valid AffectBip*
+stmt sc, s; read r; print p; while w; if ifs; assign a, a1; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that AffectBip*(a, a1)
+TRUE
+5000
+10 - valid AffectBip*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that AffectBip*(a, pl)
+TRUE
+5000
+11 - valid AffectBip*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that AffectBip*(pl, _)
+TRUE
+5000
+12 - valid AffectBip*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that AffectBip*(pl, s)
+TRUE
+5000
+13 - valid AffectBip*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that AffectBip*(pl, a)
+TRUE
+5000
+14 - valid AffectBip*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c, c1; prog_line pl, pl1;
+Select BOOLEAN such that AffectBip*(pl, pl1)
+TRUE
+15 - valid AffectBip*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that AffectBip*(_, s)
+TRUE
+5000
+16 - valid AffectBip*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that AffectBip*(_, pl)
+TRUE
+5000
+17 - valid AffectBip*
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN such that AffectBip*(_, a)
+TRUE
+5000
+1 - valid pattern
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN pattern a(v, _)
+TRUE
+5000
+2 - valid pattern
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN pattern a(_, _)
+TRUE
+5000
+3 - valid pattern
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN pattern a("x", _)
+TRUE
+5000
+4 - valid pattern
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN pattern w(v, _)
+TRUE
+5000
+5 - valid pattern
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN pattern w(_, _)
+TRUE
+5000
+6 - valid pattern
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN pattern w("z", _)
+TRUE
+5000
+7 - valid pattern
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN pattern ifs(v, _, _)
+TRUE
+5000
+8 - valid pattern
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN pattern ifs(_, _, _)
+TRUE
+5000
+9 - valid pattern
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN pattern ifs("q", _, _)
+TRUE
+5000
+1 - valid with
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN with pl = pl
+TRUE
+5000
+2 - valid with
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN with 1 = 1
+TRUE
+5000
+1 - valid with
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN with "x" = "x"
+TRUE
+5000
+3 - valid with
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN with pl = s.stmt#
+TRUE
+5000
+4 - valid with
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN with pl = r.stmt#
+TRUE
+5000
+5 - valid with
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN with pl = p.stmt#
+TRUE
+5000
+6 - valid with
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN with pl = w.stmt#
+TRUE
+5000
+7 - valid with
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN with pl = ifs.stmt#
+TRUE
+5000
+8 - valid with
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN with pl = a.stmt#
+TRUE
+5000
+9 - valid with
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN with pl = co.value
+TRUE
+5000
+10 - valid with
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN with s.stmt# = pl
+TRUE
+5000
+11 - valid with
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN with r.stmt# = pl
+TRUE
+5000
+12 - valid with
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN with p.stmt# = pl
+TRUE
+5000
+13 - valid with
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN with w.stmt# = pl
+TRUE
+5000
+14 - valid with
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN with ifs.stmt# = pl
+TRUE
+5000
+15 - valid with
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN with a.stmt# = pl
+TRUE
+5000
+16 - valid with
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN with co.value = pl
+TRUE
+5000
+17 - valid with
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN with c.procName = pr.procName
+TRUE
+5000
+18 - valid with
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN with v.varName = read.varName
+TRUE
+5000
+19 - valid with
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN with v.varName = print.varName
+TRUE
+5000
+20 - valid with
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN with v.varName = "x"
+TRUE
+5000
+21 - valid with
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN with  "x" = v.varName
+TRUE
+5000
+22 - valid with
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN with p.varName = "x"
+TRUE
+5000
+23 - valid with
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN with  "x" = p.varName
+TRUE
+5000
+24 - valid with
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN with r.varName = "x"
+TRUE
+5000
+25 - valid with
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN with  "x" = r.varName
+TRUE
+5000
+26 - valid with
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN with s.stmt# = 1
+TRUE
+5000
+27 - valid with
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN with  1 = s.stmt#
+TRUE
+5000
+28 - valid with
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN with pl = 1
+TRUE
+5000
+29 - valid with
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN with  1 = pl
+TRUE
+5000
+30 - valid with
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN with r.stmt# = 3
+TRUE
+5000
+31 - valid with
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN with 3 = r.stmt#
+TRUE
+5000
+32 - valid with
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN with p.stmt# = 5
+TRUE
+5000
+33 - valid with
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN with 5 = p.stmt#
+TRUE
+5000
+34 - valid with
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN with w.stmt# = 13
+TRUE
+5000
+35 - valid with
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN with 13 = w.stmt#
+TRUE
+5000
+36 - valid with
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN with ifs.stmt# = 9
+TRUE
+5000
+37 - valid with
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN with 9 = ifs.stmt#
+TRUE
+5000
+38 - valid with
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN with a.stmt# = 1
+TRUE
+5000
+39 - valid with
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN with 1 = a.stmt# 
+TRUE
+5000
+40 - valid with
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN with co.value = 1
+TRUE
+5000
+41 - valid with
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN with 1 = co.value
+TRUE
+5000
+42 - valid with
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN with c.procName = "prints"
+TRUE
+5000
+43 - valid with
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN with "prints" = c.procName
+TRUE
+5000
+44 - valid with
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN with pr.procName = "prints"
+TRUE
+5000
+45 - valid with
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN with "prints" = pr.procName
 TRUE
 5000
