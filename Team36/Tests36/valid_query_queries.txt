@@ -1,880 +1,880 @@
 1 - valid Follows
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Follows(1, 2)
-1
+Select BOOLEAN such that Follows(1, 2)
+TRUE
 5000
 2 - valid Follows
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Follows(_, _)
-1
+Select BOOLEAN such that Follows(_, _)
+TRUE
 5000
 3 - valid Follows
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Follows(s, _)
-1
+Select BOOLEAN such that Follows(s, _)
+TRUE
 5000
 4 - valid Follows
 stmt sc, s, s1; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Follows(s, s1)
-1
+Select BOOLEAN such that Follows(s, s1)
+TRUE
 5000
 5 - valid Follows
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Follows(s, r)
-1
+Select BOOLEAN such that Follows(s, r)
+TRUE
 5000
 6 - valid Follows
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Follows(s, p)
-1
+Select BOOLEAN such that Follows(s, p)
+TRUE
 5000
 7 - valid Follows
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Follows(s, w)
-1
+Select BOOLEAN such that Follows(s, w)
+TRUE
 5000
 8 - valid Follows
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Follows(s, ifs)
-1
+Select BOOLEAN such that Follows(s, ifs)
+TRUE
 5000
 9 - valid Follows
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Follows(s, a)
-1
+Select BOOLEAN such that Follows(s, a)
+TRUE
 5000
 10 - valid Follows
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Follows(s, c)
-1
+Select BOOLEAN such that Follows(s, c)
+TRUE
 5000
 11 - valid Follows
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Follows(r, _)
-1
+Select BOOLEAN such that Follows(r, _)
+TRUE
 5000
 12 - valid Follows
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Follows(r, s)
-1
+Select BOOLEAN such that Follows(r, s)
+TRUE
 5000
 13 - valid Follows
 stmt sc, s; read r, r1; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Follows(r, r1)
-1
+Select BOOLEAN such that Follows(r, r1)
+TRUE
 5000
 14 - valid Follows
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Follows(r, p)
-1
+Select BOOLEAN such that Follows(r, p)
+TRUE
 5000
 15 - valid Follows
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Follows(r, w)
-1
+Select BOOLEAN such that Follows(r, w)
+TRUE
 5000
 16 - valid Follows
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Follows(r, ifs)
-1
+Select BOOLEAN such that Follows(r, ifs)
+TRUE
 5000
 17 - valid Follows
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Follows(r, a)
-1
+Select BOOLEAN such that Follows(r, a)
+TRUE
 5000
 18 - valid Follows
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Follows(r, c)
-1
+Select BOOLEAN such that Follows(r, c)
+TRUE
 5000
 19 - valid Follows
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Follows(p, _)
-1
+Select BOOLEAN such that Follows(p, _)
+TRUE
 5000
 20 - valid Follows
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Follows(p, s)
-1
+Select BOOLEAN such that Follows(p, s)
+TRUE
 5000
 21 - valid Follows
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Follows(p, r)
-1
+Select BOOLEAN such that Follows(p, r)
+TRUE
 5000
 22 - valid Follows
 stmt sc, s; read r; print p, p1; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Follows(p, p1)
-1
+Select BOOLEAN such that Follows(p, p1)
+TRUE
 5000
 23 - valid Follows
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Follows(p, w)
-1
+Select BOOLEAN such that Follows(p, w)
+TRUE
 5000
 24 - valid Follows
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Follows(p, ifs)
-1
+Select BOOLEAN such that Follows(p, ifs)
+TRUE
 5000
 25 - valid Follows
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Follows(p, a)
-1
+Select BOOLEAN such that Follows(p, a)
+TRUE
 5000
 26 - valid Follows
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Follows(p, c)
-1
+Select BOOLEAN such that Follows(p, c)
+TRUE
 5000
 27 - valid Follows
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Follows(w, _)
-1
+Select BOOLEAN such that Follows(w, _)
+TRUE
 5000
 28 - valid Follows
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Follows(w, s)
-1
+Select BOOLEAN such that Follows(w, s)
+TRUE
 5000
 29 - valid Follows
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Follows(w, r)
-1
+Select BOOLEAN such that Follows(w, r)
+TRUE
 5000
 30 - valid Follows
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Follows(w, p)
-1
+Select BOOLEAN such that Follows(w, p)
+TRUE
 5000
 31 - valid Follows
 stmt sc, s; read r; print p; while w, w1; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Follows(w, w1)
-1
+Select BOOLEAN such that Follows(w, w1)
+TRUE
 5000
 32 - valid Follows
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Follows(w, ifs)
-1
+Select BOOLEAN such that Follows(w, ifs)
+TRUE
 5000
 33 - valid Follows
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Follows(w, a)
-1
+Select BOOLEAN such that Follows(w, a)
+TRUE
 5000
 34 - valid Follows
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Follows(w, c)
-1
+Select BOOLEAN such that Follows(w, c)
+TRUE
 5000
 35 - valid Follows
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Follows(ifs, _)
-1
+Select BOOLEAN such that Follows(ifs, _)
+TRUE
 5000
 36 - valid Follows
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Follows(ifs, s)
-1
+Select BOOLEAN such that Follows(ifs, s)
+TRUE
 5000
 37 - valid Follows
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Follows(ifs, r)
-1
+Select BOOLEAN such that Follows(ifs, r)
+TRUE
 5000
 38 - valid Follows
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Follows(ifs, p)
-1
+Select BOOLEAN such that Follows(ifs, p)
+TRUE
 5000
 39 - valid Follows
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Follows(ifs, w)
-1
+Select BOOLEAN such that Follows(ifs, w)
+TRUE
 5000
 40 - valid Follows
 stmt sc, s; read r; print p; while w; if ifs, ifs1; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Follows(ifs, ifs1)
-1
+Select BOOLEAN such that Follows(ifs, ifs1)
+TRUE
 5000
 41 - valid Follows
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Follows(ifs, a)
-1
+Select BOOLEAN such that Follows(ifs, a)
+TRUE
 5000
 42 - valid Follows
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Follows(ifs, c)
-1
+Select BOOLEAN such that Follows(ifs, c)
+TRUE
 5000
 43 - valid Follows
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Follows(a, _)
-1
+Select BOOLEAN such that Follows(a, _)
+TRUE
 5000
 44 - valid Follows
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Follows(a, s)
-1
+Select BOOLEAN such that Follows(a, s)
+TRUE
 5000
 45 - valid Follows
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Follows(a, r)
-1
+Select BOOLEAN such that Follows(a, r)
+TRUE
 5000
 46 - valid Follows
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Follows(a, p)
-1
+Select BOOLEAN such that Follows(a, p)
+TRUE
 5000
 47 - valid Follows
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Follows(a, w)
-1
+Select BOOLEAN such that Follows(a, w)
+TRUE
 5000
 48 - valid Follows
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Follows(a, ifs)
-1
+Select BOOLEAN such that Follows(a, ifs)
+TRUE
 5000
 49 - valid Follows
 stmt sc, s; read r; print p; while w; if ifs; assign a, a1; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Follows(a, a1)
-1
+Select BOOLEAN such that Follows(a, a1)
+TRUE
 5000
 50 - valid Follows
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Follows(a, c)
-1
+Select BOOLEAN such that Follows(a, c)
+TRUE
 5000
 51 - valid Follows
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Follows(c, _)
-1
+Select BOOLEAN such that Follows(c, _)
+TRUE
 5000
 52 - valid Follows
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Follows(c, s)
-1
+Select BOOLEAN such that Follows(c, s)
+TRUE
 5000
 53 - valid Follows
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Follows(c, r)
-1
+Select BOOLEAN such that Follows(c, r)
+TRUE
 5000
 54 - valid Follows
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Follows(c, p)
-1
+Select BOOLEAN such that Follows(c, p)
+TRUE
 5000
 55 - valid Follows
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Follows(c, w)
-1
+Select BOOLEAN such that Follows(c, w)
+TRUE
 5000
 56 - valid Follows
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Follows(c, ifs)
-1
+Select BOOLEAN such that Follows(c, ifs)
+TRUE
 5000
 57 - valid Follows
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Follows(c, a)
-1
+Select BOOLEAN such that Follows(c, a)
+TRUE
 5000
 58 - valid Follows
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c, c1;
-Select sc such that Follows(sc, 2) such that Follows(c, c1)
-1
+Select BOOLEAN such that Follows(c, c1)
+TRUE
 5000
-1 - valid Follows*
+TRUE - valid Follows*
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Follows*(1, 2)
-1
+Select BOOLEAN such that Follows*(1, 2)
+TRUE
 5000
 2 - valid Follows*
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Follows*(_, _)
-1
+Select BOOLEAN such that Follows*(_, _)
+TRUE
 5000
 3 - valid Follows*
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Follows(s, _)
-1
+Select BOOLEAN such that Follows(s, _)
+TRUE
 5000
 4 - valid Follows*
 stmt sc, s, s1; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Follows*(s, s1)
-1
+Select BOOLEAN such that Follows*(s, s1)
+TRUE
 5000
 5 - valid Follows*
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Follows*(s, r)
-1
+Select BOOLEAN such that Follows*(s, r)
+TRUE
 5000
 6 - valid Follows*
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Follows*(s, p)
-1
+Select BOOLEAN such that Follows*(s, p)
+TRUE
 5000
 7 - valid Follows*
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Follows*(s, w)
-1
+Select BOOLEAN such that Follows*(s, w)
+TRUE
 5000
 8 - valid Follows*
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Follows*(s, ifs)
-1
+Select BOOLEAN such that Follows*(s, ifs)
+TRUE
 5000
 9 - valid Follows*
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Follows*(s, a)
-1
+Select BOOLEAN such that Follows*(s, a)
+TRUE
 5000
 10 - valid Follows*
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Follows*(s, c)
-1
+Select BOOLEAN such that Follows*(s, c)
+TRUE
 5000
 11 - valid Follows*
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Follows*(r, _)
-1
+Select BOOLEAN such that Follows*(r, _)
+TRUE
 5000
 12 - valid Follows*
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Follows*(r, s)
-1
+Select BOOLEAN such that Follows*(r, s)
+TRUE
 5000
 13 - valid Follows*
 stmt sc, s; read r, r1; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Follows*(r, r1)
-1
+Select BOOLEAN such that Follows*(r, r1)
+TRUE
 5000
 14 - valid Follows*
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Follows*(r, p)
-1
+Select BOOLEAN such that Follows*(r, p)
+TRUE
 5000
 15 - valid Follows*
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Follows*(r, w)
-1
+Select BOOLEAN such that Follows*(r, w)
+TRUE
 5000
 16 - valid Follows*
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Follows*(r, ifs)
-1
+Select BOOLEAN such that Follows*(r, ifs)
+TRUE
 5000
 17 - valid Follows*
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Follows*(r, a)
-1
+Select BOOLEAN such that Follows*(r, a)
+TRUE
 5000
 18 - valid Follows*
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Follows*(r, c)
-1
+Select BOOLEAN such that Follows*(r, c)
+TRUE
 5000
 19 - valid Follows*
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Follows*(p, _)
-1
+Select BOOLEAN such that Follows*(p, _)
+TRUE
 5000
 20 - valid Follows*
 stmt sc, s; read r; print p, p1; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Follows*(p, s)
-1
+Select BOOLEAN such that Follows*(p, s)
+TRUE
 5000
 21 - valid Follows*
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Follows*(p, r)
-1
+Select BOOLEAN such that Follows*(p, r)
+TRUE
 5000
 22 - valid Follows*
 stmt sc, s; read r; print p, p1; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Follows*(p, p1)
-1
+Select BOOLEAN such that Follows*(p, p1)
+TRUE
 5000
 23 - valid Follows*
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Follows*(p, w)
-1
+Select BOOLEAN such that Follows*(p, w)
+TRUE
 5000
 24 - valid Follows*
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Follows*(p, ifs)
-1
+Select BOOLEAN such that Follows*(p, ifs)
+TRUE
 5000
 25 - valid Follows*
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Follows*(p, a)
-1
+Select BOOLEAN such that Follows*(p, a)
+TRUE
 5000
 26 - valid Follows*
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Follows*(p, c)
-1
+Select BOOLEAN such that Follows*(p, c)
+TRUE
 5000
 27 - valid Follows*
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Follows*(w, _)
-1
+Select BOOLEAN such that Follows*(w, _)
+TRUE
 5000
 28 - valid Follows*
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Follows*(w, s)
-1
+Select BOOLEAN such that Follows*(w, s)
+TRUE
 5000
 29 - valid Follows*
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Follows*(w, r)
-1
+Select BOOLEAN such that Follows*(w, r)
+TRUE
 5000
 30 - valid Follows*
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Follows*(w, p)
-1
+Select BOOLEAN such that Follows*(w, p)
+TRUE
 5000
 31 - valid Follows*
 stmt sc, s; read r; print p; while w, w1; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Follows*(w, w1)
-1
+Select BOOLEAN such that Follows*(w, w1)
+TRUE
 5000
 32 - valid Follows*
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Follows*(w, ifs)
-1
+Select BOOLEAN such that Follows*(w, ifs)
+TRUE
 5000
 33 - valid Follows*
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Follows*(w, a)
-1
+Select BOOLEAN such that Follows*(w, a)
+TRUE
 5000
 34 - valid Follows*
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Follows*(w, c)
-1
+Select BOOLEAN such that Follows*(w, c)
+TRUE
 5000
 35 - valid Follows*
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Follows*(ifs, _)
-1
+Select BOOLEAN such that Follows*(ifs, _)
+TRUE
 5000
 36 - valid Follows*
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Follows*(ifs, s)
-1
+Select BOOLEAN such that Follows*(ifs, s)
+TRUE
 5000
 37 - valid Follows*
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Follows*(ifs, r)
-1
+Select BOOLEAN such that Follows*(ifs, r)
+TRUE
 5000
 38 - valid Follows*
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Follows*(ifs, p)
-1
+Select BOOLEAN such that Follows*(ifs, p)
+TRUE
 5000
 39 - valid Follows*
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Follows*(ifs, w)
-1
+Select BOOLEAN such that Follows*(ifs, w)
+TRUE
 5000
 40 - valid Follows*
 stmt sc, s; read r; print p; while w; if ifs, ifs1; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Follows*(ifs, ifs1)
-1
+Select BOOLEAN such that Follows*(ifs, ifs1)
+TRUE
 5000
 41 - valid Follows*
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Follows*(ifs, a)
-1
+Select BOOLEAN such that Follows*(ifs, a)
+TRUE
 5000
 42 - valid Follows*
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Follows*(ifs, c)
-1
+Select BOOLEAN such that Follows*(ifs, c)
+TRUE
 5000
 43 - valid Follows*
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Follows*(a, _)
-1
+Select BOOLEAN such that Follows*(a, _)
+TRUE
 5000
 44 - valid Follows*
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Follows*(a, s)
-1
+Select BOOLEAN such that Follows*(a, s)
+TRUE
 5000
 45 - valid Follows*
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Follows*(a, r)
-1
+Select BOOLEAN such that Follows*(a, r)
+TRUE
 5000
 46 - valid Follows*
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Follows*(a, p)
-1
+Select BOOLEAN such that Follows*(a, p)
+TRUE
 5000
 47 - valid Follows*
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Follows*(a, w)
-1
+Select BOOLEAN such that Follows*(a, w)
+TRUE
 5000
 48 - valid Follows*
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Follows*(a, ifs)
-1
+Select BOOLEAN such that Follows*(a, ifs)
+TRUE
 5000
 49 - valid Follows*
 stmt sc, s; read r; print p; while w; if ifs; assign a, a1; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Follows*(a, a1)
-1
+Select BOOLEAN such that Follows*(a, a1)
+TRUE
 5000
 50 - valid Follows*
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Follows*(a, c)
-1
+Select BOOLEAN such that Follows*(a, c)
+TRUE
 5000
 51 - valid Follows*
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Follows*(c, _)
-1
+Select BOOLEAN such that Follows*(c, _)
+TRUE
 5000
 52 - valid Follows*
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Follows*(c, s)
-1
+Select BOOLEAN such that Follows*(c, s)
+TRUE
 5000
 53 - valid Follows*
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Follows*(c, r)
-1
+Select BOOLEAN such that Follows*(c, r)
+TRUE
 5000
 54 - valid Follows*
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Follows*(c, p)
-1
+Select BOOLEAN such that Follows*(c, p)
+TRUE
 5000
 55 - valid Follows*
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Follows*(c, w)
-1
+Select BOOLEAN such that Follows*(c, w)
+TRUE
 5000
 56 - valid Follows*
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Follows*(c, ifs)
-1
+Select BOOLEAN such that Follows*(c, ifs)
+TRUE
 5000
 57 - valid Follows*
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Follows*(c, a)
-1
+Select BOOLEAN such that Follows*(c, a)
+TRUE
 5000
 58 - valid Follows*
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c, c1;
-Select sc such that Follows(sc, 2) such that Follows*(c, c1)
-1
+Select BOOLEAN such that Follows*(c, c1)
+TRUE
 5000
-1 - valid Parent
+TRUE - valid Parent
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Parent(9, 10)
-1
+Select BOOLEAN such that Parent(9, 10)
+TRUE
 5000
 2 - valid Parent
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Parent(_, _)
-1
+Select BOOLEAN such that Parent(_, _)
+TRUE
 5000
 3 - valid Parent
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Parent(w, _)
-1
+Select BOOLEAN such that Parent(w, _)
+TRUE
 5000
 4 - valid Parent
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Parent(w, s)
-1
+Select BOOLEAN such that Parent(w, s)
+TRUE
 5000
 5 - valid Parent
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Parent(w, r)
-1
+Select BOOLEAN such that Parent(w, r)
+TRUE
 5000
 6 - valid Parent
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Parent(w, p)
-1
+Select BOOLEAN such that Parent(w, p)
+TRUE
 5000
 7 - valid Parent
 stmt sc, s; read r; print p; while w, w1; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Parent(w, w1)
-1
+Select BOOLEAN such that Parent(w, w1)
+TRUE
 5000
 8 - valid Parent
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Parent(w, ifs)
-1
+Select BOOLEAN such that Parent(w, ifs)
+TRUE
 5000
 9 - valid Parent
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Parent(w, a)
-1
+Select BOOLEAN such that Parent(w, a)
+TRUE
 5000
 10 - valid Parent
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Parent(w, c)
-1
+Select BOOLEAN such that Parent(w, c)
+TRUE
 5000
 11 - valid Parent
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Parent(ifs, _)
-1
+Select BOOLEAN such that Parent(ifs, _)
+TRUE
 5000
 12 - valid Parent
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Parent(ifs, s)
-1
+Select BOOLEAN such that Parent(ifs, s)
+TRUE
 5000
 13 - valid Parent
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Parent(ifs, r)
-1
+Select BOOLEAN such that Parent(ifs, r)
+TRUE
 5000
 14 - valid Parent
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Parent(ifs, p)
-1
+Select BOOLEAN such that Parent(ifs, p)
+TRUE
 5000
 15 - valid Parent
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Parent(ifs, w)
-1
+Select BOOLEAN such that Parent(ifs, w)
+TRUE
 5000
 16 - valid Parent
 stmt sc, s; read r; print p; while w; if ifs, ifs1; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Parent(ifs, ifs1)
-1
+Select BOOLEAN such that Parent(ifs, ifs1)
+TRUE
 5000
 17 - valid Parent
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Parent(ifs, a)
-1
+Select BOOLEAN such that Parent(ifs, a)
+TRUE
 5000
 18 - valid Parent
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Parent(ifs, c)
-1
+Select BOOLEAN such that Parent(ifs, c)
+TRUE
 5000
-1 - valid Parent*
+TRUE - valid Parent*
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Parent*(9, 10)
-1
+Select BOOLEAN such that Parent*(9, 10)
+TRUE
 5000
 2 - valid Parent*
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Parent*(_, _)
-1
+Select BOOLEAN such that Parent*(_, _)
+TRUE
 5000
 3 - valid Parent*
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Parent*(w, _)
-1
+Select BOOLEAN such that Parent*(w, _)
+TRUE
 5000
 4 - valid Parent*
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Parent*(w, s)
-1
+Select BOOLEAN such that Parent*(w, s)
+TRUE
 5000
 5 - valid Parent*
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Parent*(w, r)
-1
+Select BOOLEAN such that Parent*(w, r)
+TRUE
 5000
 6 - valid Parent*
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Parent*(w, p)
-1
+Select BOOLEAN such that Parent*(w, p)
+TRUE
 5000
 7 - valid Parent*
 stmt sc, s; read r; print p; while w, w1; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Parent*(w, w1)
-1
+Select BOOLEAN such that Parent*(w, w1)
+TRUE
 5000
 8 - valid Parent*
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Parent*(w, ifs)
-1
+Select BOOLEAN such that Parent*(w, ifs)
+TRUE
 5000
 9 - valid Parent*
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Parent*(w, a)
-1
+Select BOOLEAN such that Parent*(w, a)
+TRUE
 5000
 10 - valid Parent*
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Parent*(w, c)
-1
+Select BOOLEAN such that Parent*(w, c)
+TRUE
 5000
 11 - valid Parent*
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Parent*(ifs, _)
-1
+Select BOOLEAN such that Parent*(ifs, _)
+TRUE
 5000
 12 - valid Parent*
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Parent*(ifs, s)
-1
+Select BOOLEAN such that Parent*(ifs, s)
+TRUE
 5000
 13 - valid Parent*
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Parent*(ifs, r)
-1
+Select BOOLEAN such that Parent*(ifs, r)
+TRUE
 5000
 14 - valid Parent*
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Parent*(ifs, p)
-1
+Select BOOLEAN such that Parent*(ifs, p)
+TRUE
 5000
 15 - valid Parent*
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Parent*(ifs, w)
-1
+Select BOOLEAN such that Parent*(ifs, w)
+TRUE
 5000
 16 - valid Parent*
 stmt sc, s; read r; print p; while w; if ifs, ifs1; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Parent*(ifs, ifs1)
-1
+Select BOOLEAN such that Parent*(ifs, ifs1)
+TRUE
 5000
 17 - valid Parent*
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Parent*(ifs, a)
-1
+Select BOOLEAN such that Parent*(ifs, a)
+TRUE
 5000
 18 - valid Parent*
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Parent*(ifs, c)
-1
+Select BOOLEAN such that Parent*(ifs, c)
+TRUE
 5000
-1 - valid Modifies
+TRUE - valid Modifies
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Modifies(s, _)
-1
+Select BOOLEAN such that Modifies(s, _)
+TRUE
 5000
 2 - valid Modifies
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Modifies(s, v)
-1
+Select BOOLEAN such that Modifies(s, v)
+TRUE
 5000
 3 - valid Modifies
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Modifies(a, _)
-1
+Select BOOLEAN such that Modifies(a, _)
+TRUE
 5000
 4 - valid Modifies
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Modifies(a, v)
-1
+Select BOOLEAN such that Modifies(a, v)
+TRUE
 5000
 5 - valid Modifies
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Modifies(r, _)
-1
+Select BOOLEAN such that Modifies(r, _)
+TRUE
 5000
 6 - valid Modifies
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Modifies(r, v)
-1
+Select BOOLEAN such that Modifies(r, v)
+TRUE
 5000
 7 - valid Modifies
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Modifies(w, _)
-1
+Select BOOLEAN such that Modifies(w, _)
+TRUE
 5000
 8 - valid Modifies
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Modifies(w, v)
-1
+Select BOOLEAN such that Modifies(w, v)
+TRUE
 5000
 9 - valid Modifies
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Modifies(ifs, _)
-1
+Select BOOLEAN such that Modifies(ifs, _)
+TRUE
 5000
 10 - valid Modifies
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Modifies(ifs, v)
-1
+Select BOOLEAN such that Modifies(ifs, v)
+TRUE
 5000
 11 - valid Modifies
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Modifies(c, _)
-1
+Select BOOLEAN such that Modifies(c, _)
+TRUE
 5000
 12 - valid Modifies
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Modifies(c, v)
-1
+Select BOOLEAN such that Modifies(c, v)
+TRUE
 5000
-1 - valid Uses
+TRUE - valid Uses
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Uses(s, _)
-1
+Select BOOLEAN such that Uses(s, _)
+TRUE
 5000
 2 - valid Uses
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Uses(s, v)
-1
+Select BOOLEAN such that Uses(s, v)
+TRUE
 5000
 3 - valid Uses
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Uses(a, _)
-1
+Select BOOLEAN such that Uses(a, _)
+TRUE
 5000
 4 - valid Uses
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Uses(a, v)
-1
+Select BOOLEAN such that Uses(a, v)
+TRUE
 5000
 5 - valid Uses
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Uses(p, _)
-1
+Select BOOLEAN such that Uses(p, _)
+TRUE
 5000
 6 - valid Uses
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Uses(p, v)
-1
+Select BOOLEAN such that Uses(p, v)
+TRUE
 5000
 7 - valid Uses
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Uses(w, _)
-1
+Select BOOLEAN such that Uses(w, _)
+TRUE
 5000
 8 - valid Uses
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Uses(w, v)
-1
+Select BOOLEAN such that Uses(w, v)
+TRUE
 5000
 9 - valid Uses
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Uses(ifs, _)
-1
+Select BOOLEAN such that Uses(ifs, _)
+TRUE
 5000
 10 - valid Uses
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Uses(ifs, v)
-1
+Select BOOLEAN such that Uses(ifs, v)
+TRUE
 5000
 11 - valid Uses
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Uses(c, _)
-1
+Select BOOLEAN such that Uses(c, _)
+TRUE
 5000
 12 - valid Uses
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select sc such that Follows(sc, 2) such that Uses(c, v)
-1
+Select BOOLEAN such that Uses(c, v)
+TRUE
 5000
