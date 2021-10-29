@@ -131,7 +131,7 @@ namespace UnitTesting {
 		std::vector<QueryToken> temp_token_chain;
 
 		//Expected
-		std::string expect_expr = "s";
+		std::string expect_expr = " s";
 
 		//Result
 		QueryToken stmt_s_token = QueryToken(QueryToken::IDENTIFIER, "s");
