@@ -93,6 +93,9 @@ Query QueryPreprocessor::parse(std::string str) {
 			if (i < tokens.size() - 1) {
 				nextToken = tokens[i + 1];
 			}
+			else {
+				nextToken = QueryToken();
+			}
 			handleSelection(tokens[i]);
 		}
 	}
@@ -208,9 +211,6 @@ void QueryPreprocessor::handleSelection(QueryToken& token) {
 				token.type == QueryToken::QueryTokenType::SUCH_THAT)) {
 				isParameter = false;
 				endOfCurrentClauses = true;
-				// TODO: call jiyu's method
-				// validator.parseWith(query, parameterClause);
-				parameterClause.clear();
 			}
 		}
 		else {
@@ -223,7 +223,7 @@ void QueryPreprocessor::handleSelection(QueryToken& token) {
 void QueryPreprocessor::handleIsSelecting(QueryToken& token) {
 	QueryValidator queryValidator = QueryValidator();
 	// Check next token, if its pattern or such that, go out from is_selecting
-	if (nextToken.type != QueryToken::QueryTokenType::WHITESPACE && (nextToken.token_value == "pattern" || nextToken.type == QueryToken::QueryTokenType::SUCH_THAT)) {
+	if (nextToken.type != QueryToken::QueryTokenType::WHITESPACE && (nextToken.token_value == "pattern" || nextToken.type == QueryToken::QueryTokenType::SUCH_THAT || nextToken.token_value == "with")) {
 		status = ParseStatus::NEUTRAL;
 	}
 
@@ -284,7 +284,17 @@ void QueryPreprocessor::handleWithinParameter(QueryToken& token) {
 			token.token_value != "with" &&
 			token.token_value != "pattern" &&
 			token.type != QueryToken::QueryTokenType::SUCH_THAT))) {
+		QueryPatternRelRefParser validator;
 		parameterClause.push_back(token);
+
+		// add call jiyu method
+				// TODO: call jiyu's method
+		if (patternOrSuchThat.type == QueryToken::QueryTokenType::WITH && (this->nextToken.type == QueryToken::QueryTokenType::WHITESPACE || this->nextToken.token_value == "and")) {
+			validator.parseWith(query, parameterClause);
+			parameterClause.clear();
+			isParameter = false;
+			endOfCurrentClauses = true;
+		}
 	}
 	if (parenthesis_counter == 0 && token.type == QueryToken::QueryTokenType::PARENTHESIS_CLOSE) {
 		if (patternOrSuchThat.type == QueryToken::QueryTokenType::PATTERN) {

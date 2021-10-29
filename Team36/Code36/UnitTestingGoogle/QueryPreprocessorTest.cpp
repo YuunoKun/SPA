@@ -699,9 +699,19 @@ namespace UnitTesting {
 
 	TEST(QueryPreprocessor, selectMultipleClauses) {
 		QueryPreprocessor qp;
-		Query test1 = qp.parse("assign a1, a2; Select <a1.procName, a2>");
+		Query test1 = qp.parse("call c1, c2; Select <c1.procName, c2>");
 		EXPECT_EQ(test1.getSelected()[0].getAttribute(), AttrRef{ PROC_NAME });
 		EXPECT_EQ(test1.getSelected()[1].getAttribute(), AttrRef{ STMT_INDEX });
+
+		Query test2 = qp.parse("call c1, c2; Select <c1.procName, c2.stmt#>");
+		EXPECT_EQ(test2.getSelected()[0].getAttribute(), AttrRef{ PROC_NAME });
+		EXPECT_EQ(test2.getSelected()[1].getAttribute(), AttrRef{ STMT_INDEX });
+
+		Query test3 = qp.parse("call c1, c2; procedure p; constant co; Select <c1.procName, c2.stmt#, p.procName, co.value>");
+		EXPECT_EQ(test3.getSelected()[0].getAttribute(), AttrRef{ PROC_NAME });
+		EXPECT_EQ(test3.getSelected()[1].getAttribute(), AttrRef{ STMT_INDEX });
+		EXPECT_EQ(test3.getSelected()[2].getAttribute(), AttrRef{ PROC_NAME });
+		EXPECT_EQ(test3.getSelected()[3].getAttribute(), AttrRef{ VALUE });
 	}
 
 	TEST(QueryPreprocessor, onePatternClause) {
@@ -1298,6 +1308,59 @@ namespace UnitTesting {
 		EXPECT_EQ(test1, q1);
 	}
 
+	TEST(QueryPreprocessor, withClause) {
+		QueryPreprocessor qp;
+		Query test1 = qp.parse("stmt s; constant c; Select s with s.stmt# = c.value");
+
+		Query q1;
+		q1.addEntity(Entity(EntityType::STMT, Synonym{ "s" }));
+		q1.addEntity(Entity(EntityType::CONSTANT, Synonym{ "c" }));
+		q1.addSelected(Entity(EntityType::STMT, Synonym{ "s" }));
+		q1.addRelation(RelRef(RelType::WITH, Entity(EntityType::STMT, Synonym{ "s" }), Entity(EntityType::CONSTANT, Synonym{ "c" })));
+
+		EXPECT_EQ(test1, q1);
+
+		Query test2 = qp.parse("stmt s; procedure p; variable v; Select p with p.procName = v.varName");
+
+		Query q2;
+		q2.addEntity(Entity(EntityType::STMT, Synonym{ "s" }));
+		q2.addEntity(Entity(EntityType::PROCEDURE, Synonym{ "p" }));
+		q2.addEntity(Entity(EntityType::VARIABLE, Synonym{ "v" }));
+		q2.addSelected(Entity(EntityType::PROCEDURE, Synonym{ "p" }));
+		q2.addRelation(RelRef(RelType::WITH, Entity(EntityType::PROCEDURE, Synonym{ "p" }), Entity(EntityType::VARIABLE, Synonym{ "v" })));
+
+		EXPECT_EQ(test2, q2);
+	}
+
+	TEST(QueryPreprocessor, multipleWithClauses) {
+		QueryPreprocessor qp;
+
+		Query test1 = qp.parse("prog_line n; stmt s, s1; Select s.stmt# with s1.stmt#=n and n=10");
+
+		Query q1;
+		q1.addEntity(Entity(EntityType::PROG_LINE, Synonym{ "n" }));
+		q1.addEntity(Entity(EntityType::STMT, Synonym{ "s" }));
+		q1.addEntity(Entity(EntityType::STMT, Synonym{ "s1" }));
+		q1.addSelected(Entity(EntityType::STMT, Synonym{ "s" }));
+		q1.addRelation(RelRef(RelType::WITH, Entity(EntityType::STMT, Synonym{ "s1" }), Entity(EntityType::PROG_LINE, Synonym{ "n" })));
+		q1.addRelation(RelRef(RelType::WITH, Entity(EntityType::PROG_LINE, Synonym{ "n" }), Entity(EntityType::PROG_LINE, "10")));
+
+		EXPECT_EQ(test1, q1);
+
+		Query test2 = qp.parse("prog_line n; stmt s, s1; Select s.stmt# such that Follows* (s, s1) with s1.stmt#=n and n=10");
+
+		Query q2;
+		q2.addEntity(Entity(EntityType::PROG_LINE, Synonym{ "n" }));
+		q2.addEntity(Entity(EntityType::STMT, Synonym{ "s" }));
+		q2.addEntity(Entity(EntityType::STMT, Synonym{ "s1" }));
+		q2.addSelected(Entity(EntityType::STMT, Synonym{ "s" }));
+		q2.addRelation(RelRef(RelType::FOLLOWS_T, Entity(EntityType::STMT, Synonym{ "s" }), Entity(EntityType::STMT, Synonym{ "s1" })));
+		q2.addRelation(RelRef(RelType::WITH, Entity(EntityType::STMT, Synonym{ "s1" }), Entity(EntityType::PROG_LINE, Synonym{ "n" })));
+		q2.addRelation(RelRef(RelType::WITH, Entity(EntityType::PROG_LINE, Synonym{ "n" }), Entity(EntityType::PROG_LINE, "10")));
+
+		EXPECT_EQ(test2, q2);
+	}
+
 	TEST(QueryPreprocessor, invalidSyntax) {
 		QueryPreprocessor qp;
 
@@ -1359,12 +1422,6 @@ namespace UnitTesting {
 		qp.resetQuery();
 
 		EXPECT_THROW(qp.parse("assign a; stmt s; Select s such that Follows(1,2) such That Follows(s,a)"), SyntacticErrorException);
-		qp.resetQuery();
-
-		EXPECT_THROW(qp.parse("stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; Select s such that Follows(x,y)"), SyntacticErrorException);
-		qp.resetQuery();
-
-		EXPECT_THROW(qp.parse("stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; Select s such that Follows(x,2)"), SyntacticErrorException);
 		qp.resetQuery();
 
 		EXPECT_THROW(qp.parse("stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; Select s such that Follows(1,\")"), SyntacticErrorException);
@@ -1501,6 +1558,12 @@ namespace UnitTesting {
 		qp.resetQuery();
 
 		EXPECT_THROW(qp.parse("stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; Select s such that Follows*(pr, s)"), SemanticErrorException);
+		qp.resetQuery();
+
+		EXPECT_THROW(qp.parse("stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; Select s such that Follows(x,y)"), SemanticErrorException);
+		qp.resetQuery();
+
+		EXPECT_THROW(qp.parse("stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; Select s such that Follows(x,2)"), SemanticErrorException);
 		qp.resetQuery();
 	}
 
