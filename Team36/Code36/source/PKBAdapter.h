@@ -196,7 +196,7 @@ public:
 	std::vector<stmt_index> getCalleeS(proc_name);
 
 
-	CFGRelationsManager& getRelationManager();
+	static CFGRelationsManager& getRelationManager();
 
 private:
 	std::vector<stmt_index> getAssignInfoFiltered(std::vector<stmt_index>&, expr, bool);
