@@ -1182,6 +1182,24 @@ namespace UnitTesting {
 		q4.addRelation(RelRef(RelType::USES_S, Entity(EntityType::ASSIGN, Synonym{ "a" }), Entity(EntityType::VARIABLE, Synonym{ "v" })));
 
 		EXPECT_EQ(test4, q4);
+
+		Query test5 = qp.parse("prog_line n; stmt s; assign a, a1; variable v; Select a pattern a(\"q\", _\"p\"_) and a1(v, _) such that Parent(s, a) and Uses(a, v) with s.stmt# = n and n = 10");
+
+		Query q5;
+		q5.addEntity(Entity(EntityType::PROG_LINE, Synonym{ "n" }));
+		q5.addEntity(Entity(EntityType::STMT, Synonym{ "s" }));
+		q5.addEntity(Entity(EntityType::ASSIGN, Synonym{ "a" }));
+		q5.addEntity(Entity(EntityType::ASSIGN, Synonym{ "a1" }));
+		q5.addEntity(Entity(EntityType::VARIABLE, Synonym{ "v" }));
+		q5.addSelected(Entity(EntityType::ASSIGN, Synonym{ "a" }));
+		q5.addPattern(Pattern(Entity(EntityType::ASSIGN, Synonym{ "a" }), Entity(EntityType::VARIABLE, "q"), "p", true));
+		q5.addPattern(Pattern(Entity(EntityType::ASSIGN, Synonym{ "a1" }), Entity(EntityType::VARIABLE, Synonym{ "v" }), "", true));
+		q5.addRelation(RelRef(RelType::PARENT, Entity(EntityType::STMT, Synonym{ "s" }), Entity(EntityType::ASSIGN, Synonym{ "a" })));
+		q5.addRelation(RelRef(RelType::USES_S, Entity(EntityType::ASSIGN, Synonym{ "a" }), Entity(EntityType::VARIABLE, Synonym{ "v" })));
+		q5.addRelation(RelRef(RelType::WITH, Entity(EntityType::STMT, Synonym{ "s" }), Entity(EntityType::PROG_LINE, Synonym{ "n" })));
+		q5.addRelation(RelRef(RelType::WITH, Entity(EntityType::PROG_LINE, Synonym{ "n" }), Entity(EntityType::PROG_LINE, "10")));
+
+		EXPECT_EQ(test5, q5);
 	}
 
 	TEST(QueryPreprocessor, tupleSelect) {
