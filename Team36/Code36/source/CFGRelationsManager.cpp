@@ -1,6 +1,21 @@
 #include "CFGRelationsManager.h"
 
 #include "NextTPreprocessor.h"
+#include "AffectsPreprocessor.h"
+
+CFGRelationsManager::CFGRelationsManager() {
+	next_t_processor = NextTPreprocessor(PKB::getInstance().getNext(), PKB::getInstance().getStmts());
+	affects_processor = AffectsPreprocessor(
+		PKB::getInstance().getNext(), PKB::getInstance().getUsesS(), PKB::getInstance().getModifiesS(),
+		PKB::getInstance().getProcContains(), PKB::getInstance().getStmts());
+}
+
+void CFGRelationsManager::update() {
+	next_t_processor = NextTPreprocessor(PKB::getInstance().getNext(), PKB::getInstance().getStmts());
+	affects_processor = AffectsPreprocessor(
+		PKB::getInstance().getNext(), PKB::getInstance().getUsesS(), PKB::getInstance().getModifiesS(),
+		PKB::getInstance().getProcContains(), PKB::getInstance().getStmts());
+}
 
 void CFGRelationsManager::reset() {
 	next_t_processor.reset();

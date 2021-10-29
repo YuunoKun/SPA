@@ -34,6 +34,10 @@ namespace UnitTesting {
 			PKB::getInstance().addProcContains(second, 7);
 
 			manager = new CFGRelationsManager();
+			manager->update();
+		}
+		~CFGRelationsManagerTest_NextT() {
+			delete manager;
 		}
 
 		CFGRelationsManager* manager;
@@ -250,6 +254,7 @@ namespace UnitTesting {
 			}
 
 			manager = new CFGRelationsManager();
+			manager->update();
 		}
 
 		CFGRelationsManager* manager;

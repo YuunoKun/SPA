@@ -192,9 +192,6 @@
     <ClCompile Include="..\source\QueryOptimizer.cpp">
       <Filter>Source Files\PQL</Filter>
     </ClCompile>
-    <ClCompile Include="..\source\ResultProjector.cpp">
-      <Filter>Source Files\PQL</Filter>
-    </ClCompile>
     <ClCompile Include="..\source\Clause.cpp">
       <Filter>Source Files\PQL\QueryObject</Filter>
     </ClCompile>
@@ -217,6 +214,18 @@
       <Filter>Source Files\PQL\QueryEvaluator\RelationEvaluator</Filter>
     </ClCompile>
     <ClCompile Include="..\source\WithEvaluator.cpp">
+      <Filter>Source Files\PQL\QueryEvaluator\RelationEvaluator</Filter>
+    </ClCompile>
+	<ClCompile Include="..\source\NextBipEvaluator.cpp">
+      <Filter>Source Files\PQL\QueryEvaluator\RelationEvaluator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\NextBipTEvaluator.cpp">
+      <Filter>Source Files\PQL\QueryEvaluator\RelationEvaluator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\AffectBipEvaluator.cpp">
+      <Filter>Source Files\PQL\QueryEvaluator\RelationEvaluator</Filter>
+    </ClCompile>
+	<ClCompile Include="..\source\AffectBipTEvaluator.cpp">
       <Filter>Source Files\PQL\QueryEvaluator\RelationEvaluator</Filter>
     </ClCompile>
     <ClCompile Include="..\source\SemanticErrorException.cpp">
@@ -266,6 +275,9 @@
     </ClCompile>
     <ClCompile Include="..\source\PatternsEvaluator.cpp">
       <Filter>Source Files\PQL\QueryEvaluator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\AssignPatternParser.h">
+      <Filter>Header Files</Filter>
     </ClCompile>
     <ClCompile Include="..\source\CFGRelationsManager.cpp">
       <Filter>Source Files\PKB</Filter>
@@ -410,9 +422,6 @@
     <ClInclude Include="..\source\QueryOptimizer.h">
       <Filter>Header Files\PQL</Filter>
     </ClInclude>
-    <ClInclude Include="..\source\ResultProjector.h">
-      <Filter>Header Files\PQL</Filter>
-    </ClInclude>
     <ClInclude Include="..\source\KnowledgeBase.h">
       <Filter>Header Files\PKB</Filter>
     </ClInclude>
@@ -438,6 +447,18 @@
       <Filter>Header Files\PQL\QueryEvaluator\RelationEvaluator</Filter>
     </ClInclude>
     <ClInclude Include="..\source\WithEvaluator.h">
+      <Filter>Header Files\PQL\QueryEvaluator\RelationEvaluator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\NextBipEvaluator.h">
+      <Filter>Header Files\PQL\QueryEvaluator\RelationEvaluator</Filter>
+    </ClInclude>
+	<ClInclude Include="..\source\NextBipTEvaluator.h">
+      <Filter>Header Files\PQL\QueryEvaluator\RelationEvaluator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\AffectBipEvaluator.h">
+      <Filter>Header Files\PQL\QueryEvaluator\RelationEvaluator</Filter>
+    </ClInclude>
+	<ClInclude Include="..\source\AffectBipTEvaluator.h">
       <Filter>Header Files\PQL\QueryEvaluator\RelationEvaluator</Filter>
     </ClInclude>
     <ClInclude Include="..\source\SyntacticErrorException.h">

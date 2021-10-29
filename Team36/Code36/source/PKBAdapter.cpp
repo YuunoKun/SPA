@@ -230,7 +230,6 @@ bool PKBAdapter::isFollowTEmpty() {
 
 bool PKBAdapter::isFollowT(stmt_index index1, stmt_index index2) {
 	auto a = PKB::getInstance().PKB::getFollowsT();
-	//// Need better method to find stmt_info
 	StmtInfo s1 = getStmt(index1);
 	StmtInfo s2 = getStmt(index2);
 	return a.containsPair(s1, s2);
@@ -282,7 +281,6 @@ bool PKBAdapter::isParentEmpty() {
 
 bool PKBAdapter::isParent(stmt_index index1, stmt_index index2) {
 	auto a = PKB::getInstance().PKB::getParent();
-	//// Need better method to find stmt_info
 	StmtInfo s1 = getStmt(index1);
 	StmtInfo s2 = getStmt(index2);
 	return a.containsPair(s1, s2);
@@ -745,9 +743,19 @@ std::vector<var_name> PKBAdapter::getPrintVar(stmt_index index) {
 	return a.getValues(index);
 }
 
-bool PKBAdapter::isPrintVar(stmt_index index, var_name var) {
+std::vector<var_name> PKBAdapter::getPrintVar() {
 	auto a = PKB::getInstance().PKB::getPrint();
-	return a.containsPair(index, var);
+	return a.getValues();
+}
+
+bool PKBAdapter::isPrintVar(var_name v) {
+	auto a = PKB::getInstance().PKB::getPrint();
+	return a.containsValue(v);
+}
+
+std::vector<stmt_index> PKBAdapter::getPrint(var_name var) {
+	auto a = PKB::getInstance().PKB::getPrint();
+	return a.getKeys(var);
 }
 
 std::vector<std::pair<stmt_index, var_name>> PKBAdapter::getAllReadVars() {
@@ -760,10 +768,21 @@ std::vector<var_name> PKBAdapter::getReadVar(stmt_index index) {
 	return a.getValues(index);
 }
 
-bool PKBAdapter::isReadVar(stmt_index index, var_name var) {
+std::vector<var_name> PKBAdapter::getReadVar() {
 	auto a = PKB::getInstance().PKB::getRead();
-	return a.containsPair(index, var);
+	return a.getValues();
 }
+
+bool PKBAdapter::isReadVar(var_name v) {
+	auto a = PKB::getInstance().PKB::getRead();
+	return a.containsValue(v);
+}
+
+std::vector<stmt_index> PKBAdapter::getRead(var_name var) {
+	auto a = PKB::getInstance().PKB::getRead();
+	return a.getKeys(var);
+}
+
 
 std::vector<std::pair<stmt_index, proc_name>> PKBAdapter::getAllCallS() {
 	auto a = PKB::getInstance().PKB::getCallsS();
@@ -775,7 +794,24 @@ std::vector<proc_name> PKBAdapter::getCalledS(stmt_index index) {
 	return a.getValues(index);
 }
 
-bool PKBAdapter::isCallS(stmt_index index, proc_name proc) {
+
+std::vector<proc_name> PKBAdapter::getCalledS() {
 	auto a = PKB::getInstance().PKB::getCallsS();
-	return a.containsPair(index, proc);
+	return a.getValues();
+}
+
+bool PKBAdapter::isCalledS(proc_name p) {
+	auto a = PKB::getInstance().PKB::getCallsS();
+	return a.containsValue(p);
+}
+
+
+std::vector<stmt_index> PKBAdapter::getCalleeS(proc_name proc) {
+	auto a = PKB::getInstance().PKB::getCallsS();
+	return a.getKeys(proc);
+}
+
+CFGRelationsManager& PKBAdapter::getRelationManager() {
+	static CFGRelationsManager relation_manager;
+	return relation_manager;
 }

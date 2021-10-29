@@ -32,17 +32,17 @@ public:
 		const RelationTable<StmtInfo, var_name>& useS_table,
 		const RelationTable<StmtInfo, var_name>& modifiesS_table,
 		const RelationTable<proc_name, stmt_index>& procS_table,
-		const std::vector<StmtInfo>& v);
+		const std::vector<StmtInfo> v);
 	AffectsPreprocessor() = default;
 private:
 	void updateCache(std::set<stmt_index>, std::vector<std::pair<StmtInfo, StmtInfo>>);
 	bool inSameProc(stmt_index index1, stmt_index index2);
 
-	const std::vector<StmtInfo>& stmt_info_list;
-	const MonotypeRelationTable<StmtInfo>& next_table;
-	const RelationTable<StmtInfo, var_name>& useS_table;
-	const RelationTable<StmtInfo, var_name>& modifiesS_table;
-	const RelationTable<proc_name, stmt_index>& procS_table;
+	std::vector<StmtInfo> stmt_info_list;
+	MonotypeRelationTable<StmtInfo> next_table;
+	RelationTable<StmtInfo, var_name> useS_table;
+	RelationTable<StmtInfo, var_name> modifiesS_table;
+	RelationTable<proc_name, stmt_index> procS_table;
 	IterativeDataflowSolver solver{ next_table , useS_table, modifiesS_table, procS_table, stmt_info_list };
 
 	BooleanStatus is_non_empty = STATUS_UNKNOWN;

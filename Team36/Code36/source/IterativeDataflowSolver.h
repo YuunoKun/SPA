@@ -41,11 +41,11 @@ public:
 	void reset();
 
 	IterativeDataflowSolver(
-		const MonotypeRelationTable<StmtInfo>& next_table,
-		const RelationTable<StmtInfo, var_name>& useS_table_,
-		const RelationTable<StmtInfo, var_name>& modifiesS_table,
-		const RelationTable<proc_name, stmt_index>& procS_table_,
-		const std::vector<StmtInfo> v);
+		MonotypeRelationTable<StmtInfo>& next_table,
+		RelationTable<StmtInfo, var_name>& useS_table_,
+		RelationTable<StmtInfo, var_name>& modifiesS_table,
+		RelationTable<proc_name, stmt_index>& procS_table_,
+		std::vector<StmtInfo> v);
 
 private:
 	void populateDataflowSets();
@@ -65,9 +65,9 @@ private:
 	std::vector<std::set<stmt_index>> pred_list;
 	std::vector<std::set<stmt_index>> succ_list;
 
-	const MonotypeRelationTable<StmtInfo>& next_table;
-	const RelationTable<StmtInfo, var_name>& useS_table;
-	const RelationTable<StmtInfo, var_name>& modifiesS_table;
-	const RelationTable<proc_name, stmt_index>& procS_table;
-	const std::vector<StmtInfo> stmt_info_list{};
+	MonotypeRelationTable<StmtInfo> next_table;
+	RelationTable<StmtInfo, var_name> useS_table;
+	RelationTable<StmtInfo, var_name> modifiesS_table;
+	RelationTable<proc_name, stmt_index> procS_table;
+	std::vector<StmtInfo> stmt_info_list{};
 };

@@ -114,6 +114,9 @@
     <ClCompile Include="ExprParserTest.cpp">
       <Filter>Common</Filter>
     </ClCompile>
+    <ClCompile Include="QueryEvaluatorTupleTest.cpp">
+      <Filter>PQL\QueryEvaluator</Filter>
+    </ClCompile>
     <ClCompile Include="NextTPreprocessorTest.cpp">
       <Filter>PKB\RelationsPreprocessor</Filter>
     </ClCompile>
@@ -125,6 +128,17 @@
     </ClCompile>
     <ClCompile Include="MonotypeRelationTableTest.cpp">
       <Filter>PKB</Filter>
+    <ClCompile Include="QueryEvaluatorWithTest.cpp">
+      <Filter>PQL\QueryEvaluator</Filter>
+    </ClCompile>
+    <ClCompile Include="WithEvaluatorTest.cpp">
+      <Filter>PQL\QueryEvaluator\RelationEvaluator</Filter>
+    </ClCompile>
+    <ClCompile Include="NextTEvaluatorTest.cpp">
+      <Filter>PQL\QueryEvaluator\RelationEvaluator</Filter>
+    </ClCompile>
+    <ClCompile Include="QueryEvaluatorCFGRelationTest.cpp">
+      <Filter>PQL\QueryEvaluator</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

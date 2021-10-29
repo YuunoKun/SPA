@@ -1,10 +1,10 @@
 #include "IterativeDataflowSolver.h"
 
 IterativeDataflowSolver::IterativeDataflowSolver(
-	const MonotypeRelationTable<StmtInfo>& next_table,
-	const RelationTable<StmtInfo, var_name>& useS_table,
-	const RelationTable<StmtInfo, var_name>& modifiesS_table,
-	const RelationTable<proc_name, stmt_index>& procS_table,
+	MonotypeRelationTable<StmtInfo>& next_table,
+	RelationTable<StmtInfo, var_name>& useS_table,
+	RelationTable<StmtInfo, var_name>& modifiesS_table,
+	RelationTable<proc_name, stmt_index>& procS_table,
 	std::vector<StmtInfo> v) :
 	next_table(next_table),
 	modifiesS_table(modifiesS_table),

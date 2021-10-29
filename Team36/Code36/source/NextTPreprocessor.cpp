@@ -27,11 +27,11 @@ bool NextTPreprocessor::evaluateConstantAndConstant(int index1, int index2) {
 		auto dfs = cache.forwardDFS(s1);
 		for (StmtInfo indirect_value : dfs) {
 			cache.insert(s1, indirect_value);
-			calculated_matrix[s1.stmt_index - 1][s2.stmt_index - 1] = true;
 			if (indirect_value == s2) {
 				return true;
 			}
 		}
+		calculated_matrix[s1.stmt_index - 1][s2.stmt_index - 1] = true;
 		return cache.containsPair(s1, s2);
 	}
 }
@@ -76,7 +76,7 @@ std::vector<StmtInfo> NextTPreprocessor::evaluateSynonymAndConstant(int index) {
 	else {
 		std::vector<StmtInfo> res = cache.backwardDFS(s1);
 		for (auto& s2 : res) {
-			cache.insert(s2, s2);
+			cache.insert(s2, s1);
 		}
 		setDFSBackwardTrue(index);
 		return res;

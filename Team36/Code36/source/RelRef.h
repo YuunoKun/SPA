@@ -20,7 +20,11 @@ enum RelType {
 	NEXT_T,
 	AFFECT,
 	AFFECT_T,
-	WITH
+	WITH,
+	NEXT_BIP,
+	NEXT_BIP_T,
+	AFFECT_BIP,
+	AFFECT_BIP_T,
 };
 
 class RelRef {

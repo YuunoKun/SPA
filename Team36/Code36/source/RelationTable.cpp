@@ -3,6 +3,7 @@
 #include <queue>
 #include "RelationTable.h"
 #include <stack>
+#include <unordered_map>
 
 template <class T, class S>
 std::unordered_map<T, std::vector<S>> RelationTable<T, S>::getTableForward() {
@@ -145,13 +146,11 @@ bool RelationTable<T, S>::containsValue(S value) const {
 
 template <class T, class S>
 bool RelationTable<T, S>::containsPair(T key, S value) const {
-	try {
+	if (containsKey(key)) {
 		auto s = lookup_table.at(key);
-		return containsKey(key) && s.find(value) != s.end();
+		return s.find(value) != s.end();
 	}
-	catch (std::out_of_range& oor) {
-		return false;
-	}
+	return false;
 }
 
 template <class T, class S>

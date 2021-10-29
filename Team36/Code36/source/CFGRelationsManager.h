@@ -8,9 +8,10 @@
 #include "NextTPreprocessor.h"
 #include "AffectsPreprocessor.h"
 
-class CFGRelationsManager
-{
+class CFGRelationsManager {
 public:
+	CFGRelationsManager();
+	void update();
 	void reset();
 
 	bool isNextTEmpty();
@@ -47,8 +48,6 @@ public:
 	AffectsPreprocessor getAffectsProcessor();
 
 private:
-	NextTPreprocessor next_t_processor = NextTPreprocessor(PKB::getInstance().getNext(), PKB::getInstance().getStmts());
-	AffectsPreprocessor affects_processor = AffectsPreprocessor(
-		PKB::getInstance().getNext(), PKB::getInstance().getUsesS(), PKB::getInstance().getModifiesS(),
-		PKB::getInstance().getProcContains(), PKB::getInstance().getStmts());
+	NextTPreprocessor next_t_processor;
+	AffectsPreprocessor affects_processor;
 };

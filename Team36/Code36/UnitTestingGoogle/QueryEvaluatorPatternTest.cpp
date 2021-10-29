@@ -78,9 +78,9 @@ namespace UnitTesting {
 			for (unsigned int i = 0; i < patterns.size(); i++) {
 				for (unsigned int j = 0; j < ALL_SELECT.size(); j++) {
 					Query q = initQuery(patterns[i], ALL_SELECT[j]);
-					EXPECT_EQ(evaluator.evaluateQuery(q).front(), ALL_RESULT[j]) << "Error at results : " << i + 1 << " : " << j + 1;
+					EXPECT_EQ(evaluator.evaluateQuery(q), ALL_RESULT[j]) << "Error at results : " << i + 1 << " : " << j + 1;
 					q = initQuery(patterns[i], SELECT_BOOLEAN);
-					EXPECT_EQ(evaluator.evaluateQuery(q).front(), BOOLEAN_TRUE_RESULT) << "Error at results : " << i + 1 << " : " << j + 1;
+					EXPECT_EQ(evaluator.evaluateQuery(q), BOOLEAN_TRUE_RESULT) << "Error at results : " << i + 1 << " : " << j + 1;
 				}
 			}
 		}
@@ -90,9 +90,9 @@ namespace UnitTesting {
 			for (unsigned int i = 0; i < patterns.size(); i++) {
 				for (unsigned int j = 0; j < ALL_SELECT.size(); j++) {
 					Query q = initQuery(patterns[i], ALL_SELECT[j]);
-					EXPECT_EQ(evaluator.evaluateQuery(q).front(), EMPTY_RESULT) << "Error at results : " << i + 1 << " : " << j + 1;
+					EXPECT_EQ(evaluator.evaluateQuery(q), EMPTY_RESULT) << "Error at results : " << i + 1 << " : " << j + 1;
 					q = initQuery(patterns[i], SELECT_BOOLEAN);
-					EXPECT_EQ(evaluator.evaluateQuery(q).front(), BOOLEAN_FALSE_RESULT) << "Error at results : " << i + 1 << " : " << j + 1;
+					EXPECT_EQ(evaluator.evaluateQuery(q), BOOLEAN_FALSE_RESULT) << "Error at results : " << i + 1 << " : " << j + 1;
 				}
 			}
 		}
@@ -426,7 +426,7 @@ namespace UnitTesting {
 
 		for (unsigned int i = 0; i < patterns.size(); i++) {
 			Query q = initQuery(patterns[i], selected[i]);
-			std::list<std::string> result = evaluator.evaluateQuery(q).front();
+			std::list<std::string> result = evaluator.evaluateQuery(q);
 			result.sort();
 			results[i].sort();
 			EXPECT_EQ(result, results[i]) << "ERROR AT " << i + 1;
@@ -508,7 +508,7 @@ namespace UnitTesting {
 
 		for (unsigned int i = 0; i < patterns.size(); i++) {
 			Query q = initQuery(patterns[i], selected[i]);
-			std::list<std::string> result = evaluator.evaluateQuery(q).front();
+			std::list<std::string> result = evaluator.evaluateQuery(q);
 			result.sort();
 			results[i].sort();
 			EXPECT_EQ(result, results[i]) << "ERROR AT " << i + 1;
@@ -589,7 +589,7 @@ namespace UnitTesting {
 
 		for (unsigned int i = 0; i < patterns.size(); i++) {
 			Query q = initQuery(patterns[i], selected[i]);
-			std::list<std::string> result = evaluator.evaluateQuery(q).front();
+			std::list<std::string> result = evaluator.evaluateQuery(q);
 			result.sort();
 			results[i].sort();
 			EXPECT_EQ(result, results[i]) << "ERROR AT " << i + 1;

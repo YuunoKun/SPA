@@ -2633,18 +2633,21 @@ namespace UnitTesting {
 		PKB::getInstance().addModifiesS(2, x);
 		PKB::getInstance().addModifiesS(2, y);
 		PKB::getInstance().addModifiesS(3, y);
-		EXPECT_TRUE(pkb.isReadVar(1, x));
-		EXPECT_FALSE(pkb.isReadVar(1, y));
-		EXPECT_FALSE(pkb.isReadVar(2, x));
-		EXPECT_FALSE(pkb.isReadVar(2, y));
-		EXPECT_FALSE(pkb.isReadVar(3, x));
-		EXPECT_TRUE(pkb.isReadVar(3, y));
 
-		std::vector<var_name> v1 = { "x" };
+
+		EXPECT_TRUE(pkb.isReadVar(x));
+		EXPECT_TRUE(pkb.isReadVar(y));
+		EXPECT_FALSE(pkb.isReadVar("z"));
+
+		std::vector<stmt_index> s1 = { 1 };
+		std::vector<stmt_index> s2 = pkb.getRead(x);
+		EXPECT_EQ(s1, s2);
+
+		std::vector<var_name> v1 = { x };
 		std::vector<var_name> v2 = pkb.getReadVar(1);
 		EXPECT_EQ(v1, v2);
 
-		v1 = { "y" };
+		v1 = { y };
 		v2 = pkb.getReadVar(3);
 		EXPECT_EQ(v1, v2);
 
@@ -2669,18 +2672,21 @@ namespace UnitTesting {
 		PKB::getInstance().addUsesS(2, x);
 		PKB::getInstance().addUsesS(2, y);
 		PKB::getInstance().addUsesS(3, y);
-		EXPECT_TRUE(pkb.isPrintVar(1, x));
-		EXPECT_FALSE(pkb.isPrintVar(1, y));
-		EXPECT_FALSE(pkb.isPrintVar(2, x));
-		EXPECT_FALSE(pkb.isPrintVar(2, y));
-		EXPECT_FALSE(pkb.isPrintVar(3, x));
-		EXPECT_TRUE(pkb.isPrintVar(3, y));
 
-		std::vector<var_name> v1 = { "x" };
+
+		EXPECT_TRUE(pkb.isPrintVar(x));
+		EXPECT_TRUE(pkb.isPrintVar(y));
+		EXPECT_FALSE(pkb.isPrintVar("z"));
+
+		std::vector<stmt_index> s1 = { 1 };
+		std::vector<stmt_index> s2 = pkb.getPrint(x);
+		EXPECT_EQ(s1, s2);
+
+		std::vector<var_name> v1 = { x };
 		std::vector<var_name> v2 = pkb.getPrintVar(1);
 		EXPECT_EQ(v1, v2);
 
-		v1 = { "y" };
+		v1 = { y };
 		v2 = pkb.getPrintVar(3);
 		EXPECT_EQ(v1, v2);
 
@@ -2704,12 +2710,14 @@ namespace UnitTesting {
 		PKB::getInstance().addProcedure(second);
 		PKB::getInstance().addCallsS(1, first);
 		PKB::getInstance().addCallsS(2, second);
-		EXPECT_TRUE(pkb.isCallS(1, first));
-		EXPECT_FALSE(pkb.isCallS(1, second));
-		EXPECT_FALSE(pkb.isCallS(2, first));
-		EXPECT_TRUE(pkb.isCallS(2, second));
-		EXPECT_FALSE(pkb.isCallS(3, first));
-		EXPECT_FALSE(pkb.isCallS(3, second));
+
+		EXPECT_TRUE(pkb.isCalledS(first));
+		EXPECT_TRUE(pkb.isCalledS(second));
+		EXPECT_FALSE(pkb.isCalledS(third));
+
+		std::vector<stmt_index> s1 = { 1 };
+		std::vector<stmt_index> s2 = pkb.getCalleeS(first);
+		EXPECT_EQ(s1, s2);
 
 		std::vector<var_name> v1 = { first };
 		std::vector<var_name> v2 = pkb.getCalledS(1);

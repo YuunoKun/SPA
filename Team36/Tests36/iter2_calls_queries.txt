@@ -48,248 +48,108 @@ procedure p, q;
 Select p such that Calls(_, _)
 first, second, third, fourth, fifth
 5000 
-11 - callsT, LHS ident, RHS ident
-procedure p, q;
-Select p such that Calls*("first", "third")
-first, second, third, fourth, fifth
-5000
-12 - callsT, LHS ident, RHS synonym
-procedure p, q;
-Select q such that Calls*("first", q)
-second, third, fourth, fifth
-5000
-13 - callsT, LHS synonym, RHS ident
-procedure p, q;
-Select p such that Calls*(p, "fourth")
-first, second, third
-5000
-14 - callsT, LHS synonym, RHS synonym
-procedure p, q;
-Select p such that Calls*(p, q)
-first, second, third, fourth
-5000
-15 - callsT, LHS synonym, RHS synonym
-procedure p, q;
-Select q such that Calls*(p, q)
-second, third, fourth, fifth
-5000
-16 - callsT, LHS wildcard, RHS ident
-procedure p, q;
-Select p such that Calls*(_, "fifth")
-first, second, third, fourth, fifth
-5000
-17 - callsT, LHS wildcard, RHS synonym
-procedure p, q;
-Select q such that Calls*(_, q)
-second, third, fourth, fifth
-5000
-18 - callsT, LHS ident, RHS wildcard
-procedure p, q;
-Select p such that Calls*("fifth", _)
-none
-5000
-19 - callsT, LHS synonym, RHS wildcard
-procedure p, q;
-Select p such that Calls*(p, _)
-first, second, third, fourth
-5000
-20 - callsT, LHS wildcard, RHS wildcard
-procedure p, q;
-Select p such that Calls*(_, _)
-first, second, third, fourth, fifth
-5000
-21 - calls, wrong procedure
+11 - calls, wrong procedure
 procedure p, q;
 Select p such that Calls("firstProcedure", "secondProcedure")
 none
 5000
-22 - calls, wrong procedure
+12 - calls, wrong procedure
 procedure p, q;
 Select p such that Calls(p, "secondProcedure")
 none
 5000
-23 - calls, wrong procedure
+13 - calls, wrong procedure
 procedure p, q;
 Select q such that Calls("firstProcedure", q)
 none
 5000
-24 - invalid calls, wrong param variable
+14 - invalid calls, wrong param variable
 procedure p, q; variable v;
 Select p such that Calls(p, v)
 none
 5000
-25 - invalid calls, wrong param variable
+15 - invalid calls, wrong param variable
 procedure p, q; variable v;
 Select q such that Calls(v, q)
 none
 5000
-26 - invalid calls, wrong param assign
+16 - invalid calls, wrong param assign
 procedure p, q; assign a;
 Select p such that Calls(p, a)
 none
 5000
-27 - invalid calls, wrong param assign
+17 - invalid calls, wrong param assign
 procedure p, q; assign a;
 Select q such that Calls(a, q)
 none
 5000
-28 - invalid calls, wrong param stmt
+18 - invalid calls, wrong param stmt
 procedure p, q; stmt s;
 Select p such that Calls(p, s)
 none
 5000
-29 - invalid calls, wrong param stmt
+19 - invalid calls, wrong param stmt
 procedure p, q; stmt s;
 Select q such that Calls(s, q)
 none
 5000
-30 - invalid calls, wrong param read
+20 - invalid calls, wrong param read
 procedure p, q; read r;
 Select p such that Calls(p, r)
 none
 5000
-31 - invalid calls, wrong param read
+21 - invalid calls, wrong param read
 procedure p, q; read r;
 Select q such that Calls(r, q)
 none
 5000
-32 - invalid calls, wrong param print
+22 - invalid calls, wrong param print
 procedure p, q; print pn;
 Select p such that Calls(p, pn)
 none
 5000
-33 - invalid calls, wrong param print
+23 - invalid calls, wrong param print
 procedure p, q; print pn;
 Select q such that Calls(pn, q)
 none
 5000
-34 - invalid calls, wrong param if
+24 - invalid calls, wrong param if
 procedure p, q; if ifs;
 Select p such that Calls(p, ifs)
 none
 5000
-35 - invalid calls, wrong param if
+25 - invalid calls, wrong param if
 procedure p, q; if ifs;
 Select q such that Calls(ifs, q)
 none
 5000
-36 - invalid calls, wrong param while
+26 - invalid calls, wrong param while
 procedure p, q; while w;
 Select p such that Calls(p, w)
 none
 5000
-37 - invalid calls, wrong param while
+27 - invalid calls, wrong param while
 procedure p, q; while w;
 Select q such that Calls(w, q)
 none
 5000
-38 - invalid calls, wrong param call
+28 - invalid calls, wrong param call
 procedure p, q; call c;
 Select p such that Calls(p, c)
 none
 5000
-39 - invalid calls, wrong param call
+29 - invalid calls, wrong param call
 procedure p, q; call c;
 Select q such that Calls(c, q)
 none
 5000
-40 - invalid calls, wrong param constant
+30 - invalid calls, wrong param constant
 procedure p, q; constant c;
 Select p such that Calls(p, c)
 none
 5000
-41 - invalid calls, wrong param constant
+31 - invalid calls, wrong param constant
 procedure p, q; constant c;
 Select q such that Calls(c, q)
-none
-5000
-42 - invalid calls, wrong param variable
-procedure p, q; variable v;
-Select p such that Calls*(p, v)
-none
-5000
-43 - invalid calls, wrong param variable
-procedure p, q; variable v;
-Select q such that Calls*(v, q)
-none
-5000
-44 - invalid calls, wrong param assign
-procedure p, q; assign a;
-Select p such that Calls*(p, a)
-none
-5000
-45 - invalid calls, wrong param assign
-procedure p, q; assign a;
-Select q such that Calls*(a, q)
-none
-5000
-46 - invalid calls, wrong param stmt
-procedure p, q; stmt s;
-Select p such that Calls*(p, s)
-none
-5000
-47 - invalid calls, wrong param stmt
-procedure p, q; stmt s;
-Select q such that Calls*(s, q)
-none
-5000
-48 - invalid calls, wrong param read
-procedure p, q; read r;
-Select p such that Calls*(p, r)
-none
-5000
-49 - invalid calls, wrong param read
-procedure p, q; read r;
-Select q such that Calls*(r, q)
-none
-5000
-50 - invalid calls, wrong param print
-procedure p, q; print pn;
-Select p such that Calls*(p, pn)
-none
-5000
-51- invalid calls, wrong param print
-procedure p, q; print pn;
-Select q such that Calls*(pn, q)
-none
-5000
-52 - invalid calls, wrong param if
-procedure p, q; if ifs;
-Select p such that Calls*(p, ifs)
-none
-5000
-53 - invalid calls, wrong param if
-procedure p, q; if ifs;
-Select q such that Calls*(ifs, q)
-none
-5000
-54 - invalid calls, wrong param while
-procedure p, q; while w;
-Select p such that Calls*(p, w)
-none
-5000
-55 - invalid calls, wrong param while
-procedure p, q; while w;
-Select q such that Calls*(w, q)
-none
-5000
-56 - invalid calls, wrong param call
-procedure p, q; call c;
-Select p such that Calls*(p, c)
-none
-5000
-57 - invalid calls, wrong param call
-procedure p, q; call c;
-Select q such that Calls*(c, q)
-none
-5000
-58 - invalid calls, wrong param constant
-procedure p, q; constant c;
-Select p such that Calls*(p, c)
-none
-5000
-59 - invalid calls, wrong param constant
-procedure p, q; constant c;
-Select q such that Calls*(c, q)
 none
 5000
