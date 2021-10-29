@@ -26,7 +26,13 @@ std::list<std::string> QuerySystem::processQuery(std::string input) {
 	}
 	catch (SemanticErrorException& err)
 	{
-		returnEmptyResult(err.getQuery().getSelected().front());
+		if (err.getQuery().getSelected().size() == 0) {
+			return {};
+		}
+		else {
+			returnEmptyResult(err.getQuery().getSelected().front());
+		}
+
 		preprocessor.resetQuery();
 	}
 	catch (std::exception& e)

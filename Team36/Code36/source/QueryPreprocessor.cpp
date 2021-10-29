@@ -163,7 +163,9 @@ void QueryPreprocessor::handleSelection(QueryToken& token) {
 		else if (token.type == QueryToken::QueryTokenType::IDENTIFIER &&
 			token.token_value == "and") {
 			queryValidator.validateAnd(patternOrSuchThat);
-			if (patternOrSuchThat.type == QueryToken::QueryTokenType::PATTERN) {
+			if (patternOrSuchThat.type == QueryToken::QueryTokenType::PATTERN ||
+				patternOrSuchThat.type == QueryToken::QueryTokenType::SUCH_THAT ||
+				patternOrSuchThat.type == QueryToken::QueryTokenType::WITH) {
 				if (nextToken.token_value == "pattern") {
 					throw SyntacticErrorException("and pattern is a syntax error");
 				}
@@ -427,7 +429,9 @@ void QueryPreprocessor::addSelectedToQuery(QueryToken& token) {
 	if (!isValid) {
 		this->query.setIsSemanticError("Select variable content has not been declared");
 	}
-	this->query.addSelected(ent);
+	else {
+		this->query.addSelected(ent);
+	}
 }
 
 void QueryPreprocessor::setQueryParameter() {
