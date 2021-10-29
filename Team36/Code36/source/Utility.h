@@ -42,6 +42,7 @@ public:
 
 	static EntityType queryTokenTypeToEntityType(QueryToken::QueryTokenType&);
 	static AttrRef queryTokenTypeToAttrRef(QueryToken::QueryTokenType&);
+	static std::string Utility::queryTokenTypeToExprString(std::vector<QueryToken>);
 	
 	static bool isStmtRef(Query&, std::vector<QueryToken>);
 	static bool isEntRef(Query&, std::vector<QueryToken>);

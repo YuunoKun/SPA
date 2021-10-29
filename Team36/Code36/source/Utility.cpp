@@ -3,6 +3,7 @@
 
 #include "Utility.h"
 
+
 std::list<std::string> Utility::constantsToStringList(std::vector<constant>& from) {
 	std::list<std::string> to;
 	for (auto& it : from) {
@@ -299,6 +300,44 @@ AttrRef Utility::queryTokenTypeToAttrRef(QueryToken::QueryTokenType& query_token
 	else if (query_token_type == QueryToken::QueryTokenType::STMT_INDEX) {
 		return AttrRef::STMT_INDEX;
 	}
+}
+
+std::string Utility::queryTokenTypeToExprString(std::vector<QueryToken> token_chain) {
+	std::string result = "";
+	for (QueryToken q : token_chain) {
+		switch (q.type) {
+		case QueryToken::IDENTIFIER:
+		case QueryToken::CONSTANT:
+			result += q.token_value;
+			break;
+		case QueryToken::PARENTHESIS_OPEN:
+			result += '(';
+			break;
+		case QueryToken::PARENTHESIS_CLOSE:
+			result += ')';
+			break;
+		case QueryToken::PLUS:
+			result += '+';
+			break;
+		case QueryToken::MINUS:
+			result += '-';
+			break;
+		case QueryToken::MUL:
+			result += '*';
+			break;
+		case QueryToken::DIV:
+			result += '/';
+			break;
+		case QueryToken::MOD:
+			result += '%';
+			break;
+		default:
+			throw SyntacticErrorException("Not handled by Expr");
+		}
+
+	}
+	return result;
+
 }
 
 bool Utility::isStmtRef(Query& query, std::vector<QueryToken> token_chain) {
@@ -796,34 +835,24 @@ Entity Utility::setRef(Query& query,
 
 std::string Utility::setExpr(std::vector<QueryToken> token_chain) {
 	// expression-spec : ‘"‘ expr’"’ | ‘_’ ‘"’ expr ‘"’ ‘_’ | ‘_’
+	int wildcard_count = 0;
+	bool is_quotation_open = false;
+	bool is_quotation_close = false;
 	std::string result = "";
 	if (token_chain.size() == 1 && token_chain[0].type == QueryToken::WILDCARD) {
 		return result;
 	}
 	else {
-		for (size_t i = 0; i < token_chain.size(); i++) {
-			if (token_chain[i].type == QueryToken::IDENTIFIER || token_chain[i].type == QueryToken::CONSTANT) {
-				result += token_chain[i].token_value;
-			}
-			else if (token_chain[i].type == QueryToken::PLUS) {
-				result += "+";
-			}
-			else if (token_chain[i].type == QueryToken::MINUS) {
-				result += "-";
-			}
-			else if (token_chain[i].type == QueryToken::MUL) {
-				result += "*";
-			}
-			else if (token_chain[i].type == QueryToken::DIV) {
-				result += "/";
-			}
-			else if (token_chain[i].type == QueryToken::MOD) {
-				result += "%";
-			}
+		if (token_chain[0].type == QueryToken::WILDCARD) {
+			token_chain.erase(token_chain.begin() + token_chain.size() - 1);
+			token_chain.erase(token_chain.begin());
 		}
-		return result;
+		if (token_chain[0].type == QueryToken::QUOTATION_OPEN) {
+			token_chain.erase(token_chain.begin() + token_chain.size() - 1);
+			token_chain.erase(token_chain.begin());
+		}
 	}
-
+	return Utility::queryTokenTypeToExprString(token_chain);
 }
 
 bool Utility::checkIsSemanticError(Query& query) {
