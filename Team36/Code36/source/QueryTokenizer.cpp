@@ -8,7 +8,7 @@ QueryTokenizer::QueryTokenizer() {
 	query_token_cache = {};
 }
 
-void QueryTokenizer::parse_into_query_tokens(std::string input) {
+void QueryTokenizer::parse_into_query_tokens(Query& query, std::string input) {
 	QueryToken curr_query_token;
 	QueryToken temp_query_token;
 
@@ -219,13 +219,7 @@ void QueryTokenizer::parse_into_query_tokens(std::string input) {
 			break;
 		default:
 			if (isdigit(c)) {
-				if (curr_query_token.type == QueryToken::IDENTIFIER) {
-					curr_query_token.token_value.push_back(c);
-				}
-				else if (curr_query_token.type == QueryToken::WHITESPACE || curr_query_token.type == QueryToken::CONSTANT) {
-					curr_query_token.type = QueryToken::CONSTANT;
-					curr_query_token.token_value.push_back(c);
-				}
+				handleDigit(query, c, curr_query_token);
 			}
 			else if (isalpha(c)) {
 				if (curr_query_token.type == QueryToken::IDENTIFIER || curr_query_token.type == QueryToken::WHITESPACE) {
@@ -259,6 +253,24 @@ void QueryTokenizer::parse_into_query_tokens(std::string input) {
 
 std::vector<QueryToken> QueryTokenizer::get_query_token_chain() {
 	return query_token_cache;
+}
+
+void QueryTokenizer::handleDigit(Query& query, char c, QueryToken& curr_query_token) {
+	if (curr_query_token.type == QueryToken::IDENTIFIER) {
+		curr_query_token.token_value.push_back(c);
+	}
+	else if (curr_query_token.type == QueryToken::WHITESPACE) {
+		if (c == '0') {
+			// throw semantic err
+			query.setIsSemanticError("Semantic error: No leading '0's allowed ");
+		}
+		curr_query_token.type = QueryToken::CONSTANT;
+		curr_query_token.token_value.push_back(c);
+	}
+	else if (curr_query_token.type == QueryToken::CONSTANT) {
+		curr_query_token.type = QueryToken::CONSTANT;
+		curr_query_token.token_value.push_back(c);
+	}
 }
 
 void QueryTokenizer::add_query_token(QueryToken& query_token) {
