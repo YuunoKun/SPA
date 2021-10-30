@@ -53,14 +53,19 @@ stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; pro
 ;Select BOOLEAN
 none
 5000
-12 - Syntactically invalid double declaration
-stmt s, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select BOOLEAN
+162 - Syntactically invalid declaration (does not start with a letter)
+stmt 1s;
+Select 1s
 none
 5000
-13 - Syntactically invalid double declaration
-stmt s; read s; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select BOOLEAN
+163 - Syntactically invalid declaration (contains special characters)
+stmt a>b;
+Select a>b
+none
+5000
+164 - Syntactically invalid declaration (procedure with underscore)
+procedure _p; 
+Select _p
 none
 5000
 14 - Syntactically invalid missing semi colon
@@ -726,371 +731,6 @@ none
 146 - Syntactically invalid Uses
 stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
 Select BOOLEAN such that Uses()
-none
-5000
-147 - Syntactically invalid pattern
-stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select BOOLEAN such that pattern a1(v,_)
-none
-5000
-148 - Syntactically invalid pattern
-stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select BOOLEAN such that pattern a(v1,_)
-none
-5000
-149 - Syntactically invalid pattern
-stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select BOOLEAN such that pattern a(v,"")
-none
-5000
-150 - Syntactically invalid pattern
-stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select BOOLEAN such that pattern a(v,")
-none
-5000
-151 - Syntactically invalid pattern
-stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select BOOLEAN such that pattern a(v,1")
-none
-5000
-152 - Syntactically invalid pattern
-stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select BOOLEAN such that pattern a(v,"1)
-none
-5000
-153 - Syntactically invalid pattern
-stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select BOOLEAN such that pattern a(v,"1"_)
-none
-5000
-154 - Syntactically invalid pattern
-stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select BOOLEAN such that pattern a(v,_"1")
-none
-5000
-155 - Syntactically invalid pattern
-stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select BOOLEAN such that pattern a(v,x")
-none
-5000
-156 - Syntactically invalid pattern
-stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select BOOLEAN such that pattern a(v,"x)
-none
-5000
-157 - Syntactically invalid pattern
-stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select BOOLEAN such that pattern a(v,"x"_)
-none
-5000
-158 - Syntactically invalid pattern
-stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select BOOLEAN such that pattern a(v,_"x")
-none
-5000
-159 - Syntactically invalid pattern
-stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select BOOLEAN such that pattern a("1,_)
-none
-5000
-160 - Syntactically invalid pattern
-stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select BOOLEAN such that pattern a(1",_)
-none
-5000
-161 - Syntactically invalid pattern
-stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select BOOLEAN such that pattern a(1,_)
-none
-5000
-162 - Syntactically invalid declaration (does not start with a letter)
-stmt 1s;
-Select 1s
-none
-5000
-163 - Syntactically invalid declaration (contains special characters)
-stmt a>b;
-Select a>b
-none
-5000
-164 - Syntactically invalid declaration (procedure with underscore)
-procedure _p; 
-Select _p
-none
-5000
-165 - Syntactically invalid double declaration
-read s; stmt s;
-Select BOOLEAN
-none
-5000
-166 - Syntactically invalid pattern (additional underscore)
-assign a; variable v;
-Select BOOLEAN pattern a(v, __"x"_)
-none
-5000
-167 - Syntactically invalid pattern (missing pattern)
-assign a; variable v;
-Select BOOLEAN a(v, _"x"_)
-none
-5000
-168 - Syntactically invalid pattern (additional and)
-assign a; variable v;
-Select BOOLEAN and pattern a(v, _"x"_)
-none
-5000
-169 - Syntactically invalid pattern (missing parentheses)
-assign a; variable v;
-Select BOOLEAN pattern a(v, _"x"_
-none
-5000
-170 - Syntactically invalid pattern (double synoym)
-assign a; variable v;
-Select BOOLEAN pattern a(v v, _"x"_)
-none
-5000
-170 - Syntactically invalid pattern (double synoym)
-assign a; variable v;
-Select BOOLEAN pattern a(_ v, _"x"_)
-none
-5000
-170 - Syntactically invalid pattern (double synoym)
-assign a; variable v;
-Select BOOLEAN pattern a(_ _, _"x"_)
-none
-5000
-170 - Syntactically invalid pattern (double synoym)
-assign a; variable v;
-Select BOOLEAN pattern a("a" v, _"x"_)
-none
-5000
-170 - Syntactically invalid pattern (double synoym)
-assign a; variable v;
-Select BOOLEAN pattern a("a" "a"", _"x"_)
-none
-5000
-170 - Syntactically invalid pattern (double synoym)
-assign a, a1; variable v;
-Select BOOLEAN pattern a a1("a" "a"", _"x"_)
-none
-5000
-171 - Syntactically invalid pattern (double expr)
-assign a; variable v;
-Select BOOLEAN pattern a(v , _"x"_ _"x"_)
-none
-5000
-172 - Syntactically invalid pattern (double expr)
-assign a; variable v;
-Select BOOLEAN pattern a(v, "x" "x")
-none
-5000
-173 - Syntactically invalid pattern (double expr)
-assign a; variable v;
-Select BOOLEAN pattern a(v, "x" _)
-none
-5000
-174 - Syntactically invalid pattern (double expr)
-assign a; variable v;
-Select BOOLEAN pattern a(v, _ _)
-none
-5000
-175 - Syntactically invalid pattern (double expr)
-assign a; variable v;
-Select BOOLEAN pattern a(v, _ _)
-none
-5000
-176 - Syntactically invalid relations (double param)
-stmts s1, s2, s3;
-Select BOOLEAN Follows(s1 s2, s3)
-none
-5000
-177 - Syntactically invalid relations (double param)
-stmts s1, s2, s3;
-Select BOOLEAN Follows(s1 _, s3)
-none
-5000
-178 - Syntactically invalid relations (double param)
-stmts s1, s2, s3;
-Select BOOLEAN Follows(s1 1, s3)
-none
-5000
-179 - Syntactically invalid relations (double param)
-stmts s1, s2, s3;
-Select BOOLEAN Follows(1 1, s3)
-none
-5000
-180 - Syntactically invalid relations (double param)
-stmts s1, s2, s3;
-Select BOOLEAN Follows(1 s1, s3)
-none
-5000
-181 - Syntactically invalid relations (double param)
-stmts s1, s2, s3;
-Select BOOLEAN Follows(1 _, s3)
-none
-5000
-182 - Syntactically invalid relations (double param)
-stmts s1, s2, s3;
-Select BOOLEAN Follows(_ 1, s3)
-none
-5000
-183 - Syntactically invalid relations (double param)
-stmts s1, s2, s3;
-Select BOOLEAN Follows(_ s1, s3)
-none
-5000
-184 - Syntactically invalid relations (double param)
-stmts s1, s2, s3;
-Select BOOLEAN Follows(_ _, s3)
-none
-5000
-185 - Syntactically invalid relations (double param)
-stmts s1, s2, s3;
-Select BOOLEAN Follows(s1, s2 s3)
-none
-5000
-186 - Syntactically invalid relations (double param)
-stmts s1, s2, s3;
-Select BOOLEAN Follows(s1, s2 1)
-none
-5000
-187 - Syntactically invalid relations (double param)
-stmts s1, s2, s3;
-Select BOOLEAN Follows(s1, s2 _)
-none
-5000
-188 - Syntactically invalid relations (double param)
-stmts s1, s2, s3;
-Select BOOLEAN Follows(s1, 1 s3)
-none
-5000
-189 - Syntactically invalid relations (double param)
-stmts s1, s2, s3;
-Select BOOLEAN Follows(s1, 1 1)
-none
-5000
-190 - Syntactically invalid relations (double param)
-stmts s1, s2, s3;
-Select BOOLEAN Follows(s1, 1 _)
-none
-5000
-191 - Syntactically invalid relations (double param)
-stmts s1, s2, s3;
-Select BOOLEAN Follows(s1, _ s3)
-none
-5000
-192 - Syntactically invalid relations (double param)
-stmts s1, s2, s3;
-Select BOOLEAN Follows(s1, _ 1)
-none
-5000
-193 - Syntactically invalid relations (double param)
-stmts s1, s2, s3;
-Select BOOLEAN Follows(s1, _ _)
-none
-5000
-194 - Syntactically invalid partial relation declartion
-stmts s1, s2, s3;
-Select BOOLEAN Follows
-none
-5000
-195 - Syntactically invalid partial relation declartion
-stmts s1, s2, s3;
-Select BOOLEAN Follows(
-none
-5000
-196 - Syntactically invalid partial relation declartion
-stmts s1, s2, s3;
-Select BOOLEAN Follows(s1
-none
-5000
-197 - Syntactically invalid partial relation declartion
-stmts s1, s2, s3;
-Select BOOLEAN Follows(s1,
-none
-5000
-198 - Syntactically invalid partial relation declartion
-stmts s1, s2, s3;
-Select BOOLEAN Follows(s1,s2
-none
-5000
-199 - Syntactically invalid partial pattern declartion
-assign a; variable v;
-Select BOOLEAN pattern
-none
-5000
-200 - Syntactically invalid partial pattern declartion
-assign a; variable v;
-Select BOOLEAN pattern a
-none
-5000
-201 - Syntactically invalid partial pattern declartion
-assign a; variable v;
-Select BOOLEAN pattern a(
-none
-5000
-202 - Syntactically invalid partial pattern declartion
-assign a; variable v;
-Select BOOLEAN pattern a(v
-none
-5000
-203 - Syntactically invalid partial pattern declartion
-assign a; variable v;
-Select BOOLEAN pattern a(v,
-none
-5000
-204 - Syntactically invalid partial pattern declartion
-assign a; variable v;
-Select BOOLEAN pattern a(v,_
-none
-5000
-205 - Syntactically invalid partial pattern declartion
-assign a; variable v;
-Select BOOLEAN pattern a(v,_"
-none
-5000
-206 - Syntactically invalid partial pattern declartion
-assign a; variable v;
-Select BOOLEAN pattern a(v,_"x
-none
-5000
-207 - Syntactically invalid partial pattern declartion
-assign a; variable v;
-Select BOOLEAN pattern a(v,_"x"
-none
-5000
-208 - Syntactically invalid partial pattern declartion
-assign a; variable v;
-Select BOOLEAN pattern a(v,_"x"_
-none
-5000
-209 - Syntactically invalid extra declartion
-assign a; variable v;
-Select BOOLEAN pattern a(v,_"x"_) s
-none
-5000
-210 - Syntactically invalid declaration (number)
-assign 1;
-Select 1
-none
-5000
-212 - Syntactically invalid declaration (number)
-assign 12;
-Select 12
-none
-5000
-213 - Syntactically invalid declaration (double such that)
-assign a; stmt s;
-Select BOOLEAN such that such that Follows(s,a)
-none
-5000
-214 - Syntactically invalid pattern
-assign a; variable v;
-Select BOOLEAN pattern a(v,_, v)
-none
-5000
-215 - Syntactically invalid pattern
-assign a; v
-Select BOOLEAN pattern a(v,_, _, _)
 none
 5000
 216 - Syntactically invalid Calls
@@ -1941,6 +1581,366 @@ none
 385 - Syntactically invalid AffectsBip*
 stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
 Select BOOLEAN such that AffectsBip*()
+none
+5000
+147 - Syntactically invalid pattern
+stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that pattern a1(v,_)
+none
+5000
+148 - Syntactically invalid pattern
+stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that pattern a(v1,_)
+none
+5000
+149 - Syntactically invalid pattern
+stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that pattern a(v,"")
+none
+5000
+150 - Syntactically invalid pattern
+stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that pattern a(v,")
+none
+5000
+151 - Syntactically invalid pattern
+stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that pattern a(v,1")
+none
+5000
+152 - Syntactically invalid pattern
+stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that pattern a(v,"1)
+none
+5000
+153 - Syntactically invalid pattern
+stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that pattern a(v,"1"_)
+none
+5000
+154 - Syntactically invalid pattern
+stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that pattern a(v,_"1")
+none
+5000
+155 - Syntactically invalid pattern
+stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that pattern a(v,x")
+none
+5000
+156 - Syntactically invalid pattern
+stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that pattern a(v,"x)
+none
+5000
+157 - Syntactically invalid pattern
+stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that pattern a(v,"x"_)
+none
+5000
+158 - Syntactically invalid pattern
+stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that pattern a(v,_"x")
+none
+5000
+159 - Syntactically invalid pattern
+stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that pattern a("1,_)
+none
+5000
+160 - Syntactically invalid pattern
+stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that pattern a(1",_)
+none
+5000
+161 - Syntactically invalid pattern
+stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that pattern a(1,_)
+none
+5000
+166 - Syntactically invalid pattern (additional underscore)
+assign a; variable v;
+Select BOOLEAN pattern a(v, __"x"_)
+none
+5000
+167 - Syntactically invalid pattern (missing pattern)
+assign a; variable v;
+Select BOOLEAN a(v, _"x"_)
+none
+5000
+168 - Syntactically invalid pattern (additional and)
+assign a; variable v;
+Select BOOLEAN and pattern a(v, _"x"_)
+none
+5000
+169 - Syntactically invalid pattern (missing parentheses)
+assign a; variable v;
+Select BOOLEAN pattern a(v, _"x"_
+none
+5000
+170 - Syntactically invalid pattern (double synoym)
+assign a; variable v;
+Select BOOLEAN pattern a(v v, _"x"_)
+none
+5000
+170 - Syntactically invalid pattern (double synoym)
+assign a; variable v;
+Select BOOLEAN pattern a(_ v, _"x"_)
+none
+5000
+170 - Syntactically invalid pattern (double synoym)
+assign a; variable v;
+Select BOOLEAN pattern a(_ _, _"x"_)
+none
+5000
+170 - Syntactically invalid pattern (double synoym)
+assign a; variable v;
+Select BOOLEAN pattern a("a" v, _"x"_)
+none
+5000
+170 - Syntactically invalid pattern (double synoym)
+assign a; variable v;
+Select BOOLEAN pattern a("a" "a"", _"x"_)
+none
+5000
+170 - Syntactically invalid pattern (double synoym)
+assign a, a1; variable v;
+Select BOOLEAN pattern a a1("a" "a"", _"x"_)
+none
+5000
+171 - Syntactically invalid pattern (double expr)
+assign a; variable v;
+Select BOOLEAN pattern a(v , _"x"_ _"x"_)
+none
+5000
+172 - Syntactically invalid pattern (double expr)
+assign a; variable v;
+Select BOOLEAN pattern a(v, "x" "x")
+none
+5000
+173 - Syntactically invalid pattern (double expr)
+assign a; variable v;
+Select BOOLEAN pattern a(v, "x" _)
+none
+5000
+174 - Syntactically invalid pattern (double expr)
+assign a; variable v;
+Select BOOLEAN pattern a(v, _ _)
+none
+5000
+175 - Syntactically invalid pattern (double expr)
+assign a; variable v;
+Select BOOLEAN pattern a(v, _ _)
+none
+5000
+176 - Syntactically invalid relations (double param)
+stmts s1, s2, s3;
+Select BOOLEAN Follows(s1 s2, s3)
+none
+5000
+177 - Syntactically invalid relations (double param)
+stmts s1, s2, s3;
+Select BOOLEAN Follows(s1 _, s3)
+none
+5000
+178 - Syntactically invalid relations (double param)
+stmts s1, s2, s3;
+Select BOOLEAN Follows(s1 1, s3)
+none
+5000
+179 - Syntactically invalid relations (double param)
+stmts s1, s2, s3;
+Select BOOLEAN Follows(1 1, s3)
+none
+5000
+180 - Syntactically invalid relations (double param)
+stmts s1, s2, s3;
+Select BOOLEAN Follows(1 s1, s3)
+none
+5000
+181 - Syntactically invalid relations (double param)
+stmts s1, s2, s3;
+Select BOOLEAN Follows(1 _, s3)
+none
+5000
+182 - Syntactically invalid relations (double param)
+stmts s1, s2, s3;
+Select BOOLEAN Follows(_ 1, s3)
+none
+5000
+183 - Syntactically invalid relations (double param)
+stmts s1, s2, s3;
+Select BOOLEAN Follows(_ s1, s3)
+none
+5000
+184 - Syntactically invalid relations (double param)
+stmts s1, s2, s3;
+Select BOOLEAN Follows(_ _, s3)
+none
+5000
+185 - Syntactically invalid relations (double param)
+stmts s1, s2, s3;
+Select BOOLEAN Follows(s1, s2 s3)
+none
+5000
+186 - Syntactically invalid relations (double param)
+stmts s1, s2, s3;
+Select BOOLEAN Follows(s1, s2 1)
+none
+5000
+187 - Syntactically invalid relations (double param)
+stmts s1, s2, s3;
+Select BOOLEAN Follows(s1, s2 _)
+none
+5000
+188 - Syntactically invalid relations (double param)
+stmts s1, s2, s3;
+Select BOOLEAN Follows(s1, 1 s3)
+none
+5000
+189 - Syntactically invalid relations (double param)
+stmts s1, s2, s3;
+Select BOOLEAN Follows(s1, 1 1)
+none
+5000
+190 - Syntactically invalid relations (double param)
+stmts s1, s2, s3;
+Select BOOLEAN Follows(s1, 1 _)
+none
+5000
+191 - Syntactically invalid relations (double param)
+stmts s1, s2, s3;
+Select BOOLEAN Follows(s1, _ s3)
+none
+5000
+192 - Syntactically invalid relations (double param)
+stmts s1, s2, s3;
+Select BOOLEAN Follows(s1, _ 1)
+none
+5000
+193 - Syntactically invalid relations (double param)
+stmts s1, s2, s3;
+Select BOOLEAN Follows(s1, _ _)
+none
+5000
+194 - Syntactically invalid partial relation declartion
+stmts s1, s2, s3;
+Select BOOLEAN Follows
+none
+5000
+195 - Syntactically invalid partial relation declartion
+stmts s1, s2, s3;
+Select BOOLEAN Follows(
+none
+5000
+196 - Syntactically invalid partial relation declartion
+stmts s1, s2, s3;
+Select BOOLEAN Follows(s1
+none
+5000
+197 - Syntactically invalid partial relation declartion
+stmts s1, s2, s3;
+Select BOOLEAN Follows(s1,
+none
+5000
+198 - Syntactically invalid partial relation declartion
+stmts s1, s2, s3;
+Select BOOLEAN Follows(s1,s2
+none
+5000
+199 - Syntactically invalid partial pattern declartion
+assign a; variable v;
+Select BOOLEAN pattern
+none
+5000
+200 - Syntactically invalid partial pattern declartion
+assign a; variable v;
+Select BOOLEAN pattern a
+none
+5000
+201 - Syntactically invalid partial pattern declartion
+assign a; variable v;
+Select BOOLEAN pattern a(
+none
+5000
+202 - Syntactically invalid partial pattern declartion
+assign a; variable v;
+Select BOOLEAN pattern a(v
+none
+5000
+203 - Syntactically invalid partial pattern declartion
+assign a; variable v;
+Select BOOLEAN pattern a(v,
+none
+5000
+204 - Syntactically invalid partial pattern declartion
+assign a; variable v;
+Select BOOLEAN pattern a(v,_
+none
+5000
+205 - Syntactically invalid partial pattern declartion
+assign a; variable v;
+Select BOOLEAN pattern a(v,_"
+none
+5000
+206 - Syntactically invalid partial pattern declartion
+assign a; variable v;
+Select BOOLEAN pattern a(v,_"x
+none
+5000
+207 - Syntactically invalid partial pattern declartion
+assign a; variable v;
+Select BOOLEAN pattern a(v,_"x"
+none
+5000
+208 - Syntactically invalid partial pattern declartion
+assign a; variable v;
+Select BOOLEAN pattern a(v,_"x"_
+none
+5000
+209 - Syntactically invalid extra declartion
+assign a; variable v;
+Select BOOLEAN pattern a(v,_"x"_) s
+none
+5000
+210 - Syntactically invalid declaration (number)
+assign 1;
+Select 1
+none
+5000
+212 - Syntactically invalid declaration (number)
+assign 12;
+Select 12
+none
+5000
+213 - Syntactically invalid declaration (double such that)
+assign a; stmt s;
+Select BOOLEAN such that such that Follows(s,a)
+none
+5000
+214 - Syntactically invalid pattern
+assign a; variable v;
+Select BOOLEAN pattern a(v,_, v)
+none
+5000
+215 - Syntactically invalid pattern
+assign a; v
+Select BOOLEAN pattern a(v,_, _, _)
+none
+5000
+12 - Semantically invalid double declaration
+stmt s, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN
+none
+5000
+13 - Semantically invalid double declaration
+stmt s; read s; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN
+none
+5000
+165 - Semantically invalid double declaration
+read s; stmt s;
+Select BOOLEAN
 none
 5000
 386 - Syntactically invalid with
