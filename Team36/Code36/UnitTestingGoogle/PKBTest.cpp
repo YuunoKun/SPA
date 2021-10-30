@@ -116,7 +116,7 @@ namespace UnitTesting {
 		StmtInfo p1{ 1, STMT_WHILE };
 		StmtInfo p2{ 2, STMT_IF };
 		StmtInfo p3{ 3, STMT_READ };
-		RelationTable<StmtInfo, StmtInfo> expected_table;
+		MonotypeRelationTable<StmtInfo> expected_table;
 		expected_table.insert(p1, p2);
 		expected_table.insert(p2, p3);
 
@@ -141,7 +141,7 @@ namespace UnitTesting {
 		StmtInfo p5{ 5, STMT_IF };
 		StmtInfo p6{ 6, STMT_READ };
 
-		RelationTable<StmtInfo, StmtInfo> expected_table;
+		MonotypeRelationTable<StmtInfo> expected_table;
 		expected_table.insert(p2, p3);
 		expected_table.insert(p2, p4);
 		expected_table.insert(p2, p5);
@@ -173,7 +173,7 @@ namespace UnitTesting {
 		StmtInfo p1{ 1, STMT_READ };
 		StmtInfo p2{ 2, STMT_PRINT };
 		StmtInfo p3{ 3, STMT_READ };
-		UniqueRelationTable<StmtInfo, StmtInfo> expected_table;
+		MonotypeRelationTable<StmtInfo> expected_table;
 		expected_table.insert(p1, p2);
 		expected_table.insert(p2, p3);
 
@@ -181,7 +181,6 @@ namespace UnitTesting {
 		PKB::getInstance().addStmt(STMT_PRINT);
 		PKB::getInstance().addStmt(STMT_READ);
 		PKB::getInstance().addFollows(1, 2);
-		PKB::getInstance().addFollows(1, 3);
 		PKB::getInstance().addFollows(2, 3);
 		EXPECT_EQ(expected_table, PKB::getInstance().getFollows());
 		PKB::getInstance().resetCache();
@@ -198,7 +197,7 @@ namespace UnitTesting {
 		StmtInfo p5{ 5, STMT_IF };
 		StmtInfo p6{ 6, STMT_READ };
 
-		RelationTable<StmtInfo, StmtInfo> expected_table;
+		MonotypeRelationTable<StmtInfo> expected_table;
 		expected_table.insert(p1, p2);
 		expected_table.insert(p3, p4);
 		expected_table.insert(p3, p5);
@@ -453,7 +452,7 @@ namespace UnitTesting {
 	TEST(PKB, getNext) {
 		PKB::getInstance().resetCache();
 
-		RelationTable<StmtInfo, StmtInfo> expected_table;
+		MonotypeRelationTable<StmtInfo> expected_table;
 		StmtInfo s1{ 1, STMT_WHILE };
 		StmtInfo s2{ 2, STMT_IF };
 		StmtInfo s3{ 3, STMT_PRINT };
@@ -493,7 +492,7 @@ namespace UnitTesting {
 
 		var_name x = "x";
 		var_name y = "y";
-		UniqueRelationTable<stmt_index, var_name> expected_table;
+		RelationTable<stmt_index, var_name> expected_table;
 		expected_table.insert(1, x);
 
 		PKB::getInstance().addStmt(STMT_ASSIGN);
@@ -529,7 +528,7 @@ namespace UnitTesting {
 
 		var_name x = "x";
 		var_name y = "y";
-		UniqueRelationTable<stmt_index, var_name> expected_table;
+		RelationTable<stmt_index, var_name> expected_table;
 		expected_table.insert(1, x);
 
 		PKB::getInstance().addStmt(STMT_ASSIGN);
@@ -549,7 +548,7 @@ namespace UnitTesting {
 
 		var_name x = "x";
 		var_name y = "y";
-		UniqueRelationTable<stmt_index, var_name> expected_table;
+		RelationTable<stmt_index, var_name> expected_table;
 		expected_table.insert(1, x);
 
 		PKB::getInstance().addStmt(STMT_READ);
@@ -569,7 +568,7 @@ namespace UnitTesting {
 
 		var_name x = "x";
 		var_name y = "y";
-		UniqueRelationTable<stmt_index, var_name> expected_table;
+		RelationTable<stmt_index, var_name> expected_table;
 		expected_table.insert(1, x);
 
 		PKB::getInstance().addStmt(STMT_PRINT);
@@ -589,7 +588,7 @@ namespace UnitTesting {
 
 		proc_name first = "first";
 		proc_name second = "second";
-		UniqueRelationTable<stmt_index, proc_name> expected_table;
+		RelationTable<stmt_index, proc_name> expected_table;
 		expected_table.insert(1, first);
 
 		PKB::getInstance().addStmt(STMT_CALL);
@@ -629,25 +628,18 @@ namespace UnitTesting {
 		PKB::getInstance().resetCache();
 	}
 
-	TEST(PKB, inSameProc) {
+	TEST(PKB, getCFGBips) {
 		PKB::getInstance().resetCache();
 
-		proc_name first = "first";
-		proc_name second = "second";
+		CFG* cfg_pointer = new CFG();
+		std::vector<CFG*> cfg_bips{ cfg_pointer };
+		std::vector<CFG*> empty_list{ };
 
-		PKB::getInstance().addStmt(STMT_CALL);
-		PKB::getInstance().addStmt(STMT_ASSIGN);
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addProcedure(first);
-		PKB::getInstance().addProcedure(second);
-		PKB::getInstance().addProcContains(first, 1);
-		PKB::getInstance().addProcContains(first, 2);
-		PKB::getInstance().addProcContains(second, 3);
-		EXPECT_TRUE(PKB::getInstance().inSameProc(1, 2));
-		EXPECT_FALSE(PKB::getInstance().inSameProc(2, 3));
-		EXPECT_FALSE(PKB::getInstance().inSameProc(1, 3));
+		PKB::getInstance().addCFGBip(cfg_pointer);
+		EXPECT_EQ(cfg_bips, PKB::getInstance().getCFGBips());
 
 		PKB::getInstance().resetCache();
+		EXPECT_EQ(empty_list, PKB::getInstance().getCFGBips());
 	}
 
 	TEST(PKB, resetCache) {

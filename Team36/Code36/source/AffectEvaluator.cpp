@@ -6,7 +6,6 @@
 #include "AffectEvaluator.h"
 #include "CFGRelationsManager.h"
 
-
 bool AffectEvaluator::evaluateWildAndWild() {
 	return !pkb.getRelationManager().isAffectsEmpty();
 }
@@ -19,7 +18,7 @@ bool AffectEvaluator::evaluateConstantAndConstant(Entity e1, Entity e2) {
 
 bool AffectEvaluator::evaluateConstantAndWild(Entity e) {
 	stmt_index c = stoi(e.getValue());
-	return pkb.getRelationManager().isAffector(c);
+	return pkb.getRelationManager().isAffecting(c);
 }
 
 bool AffectEvaluator::evaluateWildAndConstant(Entity e) {
@@ -36,7 +35,7 @@ ResultTable AffectEvaluator::evaluateWildAndSynonym(Entity header) {
 }
 
 ResultTable AffectEvaluator::evaluateSynonymAndWild(Entity header) {
-	return ResultTable(header, pkb.getRelationManager().getAffector());
+	return ResultTable(header, pkb.getRelationManager().getAffecting());
 }
 
 ResultTable AffectEvaluator::evaluateConstantAndSynonym(Entity constant, Entity header) {
@@ -46,5 +45,5 @@ ResultTable AffectEvaluator::evaluateConstantAndSynonym(Entity constant, Entity 
 
 ResultTable AffectEvaluator::evaluateSynonymAndConstant(Entity header, Entity constant) {
 	stmt_index c = stoi(constant.getValue());
-	return ResultTable(header, pkb.getRelationManager().getAffector(c));
+	return ResultTable(header, pkb.getRelationManager().getAffecting(c));
 }

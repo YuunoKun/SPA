@@ -7,7 +7,7 @@
 #include "RelationTable.cpp"
 #include "RelationPreprocessor.h"
 
-class NextTPreprocessor : public RelationPreprocessor
+class AffectsTPreprocessor : public RelationPreprocessor
 {
 public:
 	bool evaluateWildAndWild() override;
@@ -21,11 +21,11 @@ public:
 	std::vector<StmtInfo> evaluateSynonymAndConstant(int) override;
 	void fullyPopulate() override;
 
-	NextTPreprocessor(const MonotypeRelationTable<StmtInfo>&, const std::vector<StmtInfo>);
-	NextTPreprocessor() = default;
+	AffectsTPreprocessor(const MonotypeRelationTable<StmtInfo>&, const std::vector<StmtInfo>);
+	AffectsTPreprocessor() = default;
 
 private:
-	const MonotypeRelationTable<StmtInfo>* next_table;
+	const MonotypeRelationTable<StmtInfo>* affects_table;
 	std::vector<StmtInfo> stmt_info_list;
 
 	void checkCache();

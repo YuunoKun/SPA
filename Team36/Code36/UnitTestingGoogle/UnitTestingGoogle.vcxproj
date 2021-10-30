@@ -39,11 +39,15 @@
     <ClInclude Include="pch.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AffectsPreprocessorTest.cpp" />
+    <ClCompile Include="AffectsTPreprocessorTest.cpp" />
     <ClCompile Include="CallsEvaluatorTest.cpp" />
     <ClCompile Include="CallsParserTest.cpp" />
     <ClCompile Include="CallsTEvaluatorTest.cpp" />
-    <ClCompile Include="CFGRelationsManagerTest.cpp" />
     <ClCompile Include="CallsTParserTest.cpp" />
+    <ClCompile Include="CFGRelationManagerTest_Affects.cpp" />
+    <ClCompile Include="CFGRelationsManagerTest_AffectsT.cpp" />
+    <ClCompile Include="CFGRelationsManagerTest_NextT.cpp" />
     <ClCompile Include="ClauseTest.cpp" />
     <ClCompile Include="DesignExtractorTest.cpp" />
     <ClCompile Include="EntityTest.cpp" />
@@ -52,6 +56,7 @@
     <ClCompile Include="FollowsParserTest.cpp" />
     <ClCompile Include="FollowsTParserTest.cpp" />
     <ClCompile Include="FSMTest.cpp" />
+    <ClCompile Include="MonotypeRelationTableTest.cpp" />
     <ClCompile Include="NextEvaluatorTest.cpp" />
     <ClCompile Include="ParentParserTest.cpp" />
     <ClCompile Include="ParentTParserTest.cpp" />

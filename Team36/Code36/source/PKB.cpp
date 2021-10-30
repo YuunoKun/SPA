@@ -8,10 +8,17 @@
 #include "RelationTable.h"
 // need to include this .cpp for template classes
 #include "RelationTable.cpp"
+#include "MonotypeRelationTable.cpp"
 
 PKB& PKB::getInstance() {
 	static PKB pkb;
 	return pkb;
+}
+
+PKB::~PKB() {
+	for (auto& cfg : cfgs_to_destroy) {
+		delete cfg;
+	}
 }
 
 void PKB::addConstant(constant constant) {
@@ -239,6 +246,14 @@ void PKB::addProcContains(proc_name proc, stmt_index index) {
 	}
 }
 
+void PKB::addCFGsToDestroy(std::vector<CFG*> cfgs) {
+	cfgs_to_destroy = cfgs;
+}
+
+void PKB::addCFGBip(CFG* new_cfg) {
+	cfg_bips.push_back(new_cfg);
+}
+
 void PKB::generateParentT() {
 	parentT_table = parent_table.findTransitiveClosure();
 }
@@ -275,6 +290,10 @@ void PKB::resetCache() {
 	print_table.clear();
 	expr_table.clear();
 	procS_table.clear();
+	for (auto& cfg : cfgs_to_destroy) {
+		delete cfg;
+	}
+	cfg_bips = {};
 }
 
 void PKB::resetEntities() {
@@ -343,15 +362,7 @@ const std::vector<constant> PKB::getConstants() {
 	return v;
 }
 
-const bool PKB::inSameProc(stmt_index index1, stmt_index index2) {
-	std::vector<proc_name> v = procS_table.getKeys(index1);
-	if (v.empty()) {
-		return false;
-	}
-	return procS_table.containsPair(v[0], index2);
-}
-
-const UniqueRelationTable<stmt_index, var_name>& PKB::getAssigns() {
+const RelationTable<stmt_index, var_name>& PKB::getAssigns() {
 	return assignment_table;
 }
 
@@ -359,19 +370,19 @@ const std::unordered_map<stmt_index, expr>& PKB::getExpr() {
 	return expr_table;
 }
 
-const UniqueRelationTable<StmtInfo, StmtInfo>& PKB::getFollows() {
+const MonotypeRelationTable<StmtInfo>& PKB::getFollows() {
 	return follows_table;
 }
 
-const RelationTable<StmtInfo, StmtInfo>& PKB::getParent() {
+const MonotypeRelationTable<StmtInfo>& PKB::getParent() {
 	return parent_table;
 }
 
-const RelationTable<StmtInfo, StmtInfo>& PKB::getFollowsT() {
+const MonotypeRelationTable<StmtInfo>& PKB::getFollowsT() {
 	return followsT_table;
 }
 
-const RelationTable<StmtInfo, StmtInfo>& PKB::getParentT() {
+const MonotypeRelationTable<StmtInfo>& PKB::getParentT() {
 	return parentT_table;
 }
 
@@ -391,19 +402,19 @@ const RelationTable<proc_name, var_name>& PKB::getModifiesP() {
 	return modifiesP_table;
 }
 
-const RelationTable<proc_name, proc_name>& PKB::getCallsP() {
+const MonotypeRelationTable<proc_name>& PKB::getCallsP() {
 	return callsP_table;
 }
 
-const RelationTable<proc_name, proc_name>& PKB::getCallsPT() {
+const MonotypeRelationTable<proc_name>& PKB::getCallsPT() {
 	return callsPT_table;
 }
 
-const UniqueRelationTable<stmt_index, var_name>& PKB::getRead() {
+const RelationTable<stmt_index, var_name>& PKB::getRead() {
 	return read_table;
 }
 
-const UniqueRelationTable<stmt_index, var_name>& PKB::getPrint() {
+const RelationTable<stmt_index, var_name>& PKB::getPrint() {
 	return print_table;
 }
 
@@ -419,10 +430,14 @@ const RelationTable<stmt_index, var_name>& PKB::getWhile() {
 	return while_table;
 }
 
-const RelationTable<StmtInfo, StmtInfo>& PKB::getNext() {
+const MonotypeRelationTable<StmtInfo>& PKB::getNext() {
 	return next_table;
 }
 
 const RelationTable<proc_name, stmt_index>& PKB::getProcContains() {
 	return procS_table;
+}
+
+std::vector<CFG*> PKB::getCFGBips() {
+	return cfg_bips;
 }
