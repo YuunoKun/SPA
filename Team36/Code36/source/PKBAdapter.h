@@ -153,26 +153,10 @@ public:
 	std::vector<stmt_index> getIfUses();
 	std::vector<stmt_index> getIfUses(var_name);
 
-	//Todo before submitting in itr3 if not used at all in the future
-	bool isIfEmpty();
-	bool isIfUses(stmt_index, var_name);
-	bool isIfUses(stmt_index);
-	bool isIfUsed(var_name);
-	std::vector<var_name> getIfUsed();
-	std::vector<var_name> getIfUsed(stmt_index);
-
 	//While stmt-controlvar relation Function
 	std::vector<std::pair<stmt_index, var_name>> getAllWhileUses();
 	std::vector<stmt_index> getWhileUses();
 	std::vector<stmt_index> getWhileUses(var_name);
-
-	//Todo before submitting in itr3 if not used at all in the future
-	bool isWhileEmpty();
-	bool isWhileUses(stmt_index, var_name);
-	bool isWhileUses(stmt_index);
-	bool isWhileUsed(var_name);
-	std::vector<var_name> getWhileUsed();
-	std::vector<var_name> getWhileUsed(stmt_index);
 
 	// Read stmt - var relation
 	std::vector<std::pair<stmt_index, var_name>> getAllReadVars();

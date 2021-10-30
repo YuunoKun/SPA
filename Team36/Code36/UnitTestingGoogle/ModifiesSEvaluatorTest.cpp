@@ -10,7 +10,7 @@ namespace UnitTesting {
 			PKB::getInstance().resetCache();
 			PKB::getInstance().addStmt(STMT_READ);
 			PKB::getInstance().addStmt(STMT_PRINT);
-			PKB::getInstance().addStmt(STMT_READ);
+			PKB::getInstance().addStmt(STMT_IF);
 			PKB::getInstance().addStmt(STMT_PRINT);
 			PKB::getInstance().addVariable(x);
 			PKB::getInstance().addVariable(y);
