@@ -56,6 +56,7 @@ public:
 	static std::string Utility::queryTokenTypeToExprString(std::vector<QueryToken>);
 	
 	static bool isStmtRef(Query&, std::vector<QueryToken>);
+	static bool isStmtRef(Query&, std::vector<QueryToken>, EntityType);
 	static bool isEntRef(Query&, std::vector<QueryToken>);
 	static bool isLineRef(Query&, std::vector<QueryToken>);
 	static bool isRef(Query&, std::vector<QueryToken>);
@@ -64,12 +65,13 @@ public:
 	static bool isWildCard(std::vector<QueryToken>);
 	static bool isStringRefType(Query&, std::vector<QueryToken>);
 	static bool isIntRefType(Query&, std::vector<QueryToken>);
-	static Entity setStmtRef(Query&, QueryToken);
+	static Entity setStmtRef(Query&, QueryToken, EntityType);
 	static Entity setEntRef(Query&, std::vector<QueryToken>, EntityType);
 	static Entity setLineRef(Query&, QueryToken);
 	static Entity setRef(Query&, std::vector<QueryToken>, EntityType, AttrRef);
 	static std::string setExpr(std::vector<QueryToken>);
 	static bool checkIsSemanticError(Query&);
+	static std::vector<std::vector<QueryToken>> splitTokenChain(int, QueryToken::QueryTokenType, std::vector<QueryToken>);
 private:
 	static bool isStmt(EntityType);
 

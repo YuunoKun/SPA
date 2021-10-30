@@ -5,12 +5,12 @@
 #include "CFGRelationsManager.h"
 
 namespace UnitTesting {
-	class NextTPreprocessorTest_NextT : public testing::Test {
+	class CFGRelationsManagerTest_NextT : public testing::Test {
 	protected:
-		NextTPreprocessorTest_NextT() {
+		CFGRelationsManagerTest_NextT() {
 			PKB::getInstance().resetCache();
 
-			for (auto& stmt : s) {
+			for (auto& stmt : stmt_list) {
 				PKB::getInstance().addStmt(stmt.stmt_type);
 			}
 
@@ -34,8 +34,9 @@ namespace UnitTesting {
 			PKB::getInstance().addProcContains(second, 7);
 
 			manager = new CFGRelationsManager();
+			manager->update();
 		}
-		~NextTPreprocessorTest_NextT() {
+		~CFGRelationsManagerTest_NextT() {
 			delete manager;
 		}
 
@@ -48,7 +49,7 @@ namespace UnitTesting {
 		StmtInfo s5{ 5, STMT_READ };
 		StmtInfo s6{ 6, STMT_READ };
 		StmtInfo s7{ 7, STMT_READ };
-		std::vector<StmtInfo> s = { s1, s2, s3, s4, s5, s6, s7 };
+		std::vector<StmtInfo> stmt_list = { s1, s2, s3, s4, s5, s6, s7 };
 
 		proc_name first = "first";
 		proc_name second = "second";
@@ -63,22 +64,18 @@ namespace UnitTesting {
 		};
 
 		virtual void SetUp() override {
-			// Code here will be called immediately after the constructor (right
-			// before each test).
 		}
 
 		void TearDown() override {
-			// Code here will be called immediately after each test (right
-			// before the destructor).
 			manager->reset();
 		}
 	};
 
-	TEST_F(NextTPreprocessorTest_NextT, isNextTEmpty) {
+	TEST_F(CFGRelationsManagerTest_NextT, isNextTEmpty) {
 		EXPECT_FALSE(manager->isNextTEmpty());
 	}
 
-	TEST_F(NextTPreprocessorTest_NextT, isPreviousT) {
+	TEST_F(CFGRelationsManagerTest_NextT, isPreviousT) {
 		EXPECT_TRUE(manager->isPreviousT(1));
 		EXPECT_TRUE(manager->isPreviousT(2));
 		EXPECT_TRUE(manager->isPreviousT(3));
@@ -87,7 +84,7 @@ namespace UnitTesting {
 		EXPECT_FALSE(manager->isPreviousT(6));
 	}
 
-	TEST_F(NextTPreprocessorTest_NextT, isNextT_identifier) {
+	TEST_F(CFGRelationsManagerTest_NextT, isNextT_identifier) {
 		EXPECT_FALSE(manager->isNextT(1));
 		EXPECT_TRUE(manager->isNextT(2));
 		EXPECT_TRUE(manager->isNextT(3));
@@ -96,7 +93,7 @@ namespace UnitTesting {
 		EXPECT_TRUE(manager->isNextT(6));
 	}
 
-	TEST_F(NextTPreprocessorTest_NextT, isNextT_all) {
+	TEST_F(CFGRelationsManagerTest_NextT, isNextT_all) {
 		EXPECT_FALSE(manager->isNextT(1, 1));
 		EXPECT_TRUE(manager->isNextT(1, 2));
 		EXPECT_TRUE(manager->isNextT(1, 3));
@@ -146,14 +143,13 @@ namespace UnitTesting {
 		EXPECT_TRUE(manager->isNextT(1, 5));
 		EXPECT_TRUE(manager->isNextT(1, 6));
 	}
-
-	TEST_F(NextTPreprocessorTest_NextT, getAllNextTRelation) {
+	TEST_F(CFGRelationsManagerTest_NextT, getAllNextTRelation) {
 		auto v1 = manager->getAllNextTRelation();
 		std::sort(v1.begin(), v1.end());
 		EXPECT_EQ(v1, expected_pairs);
 	}
 
-	TEST_F(NextTPreprocessorTest_NextT, getNextT_all) {
+	TEST_F(CFGRelationsManagerTest_NextT, getNextT_double_identifier) {
 		auto v1 = manager->getNextT();
 		std::sort(v1.begin(), v1.end());
 
@@ -167,7 +163,7 @@ namespace UnitTesting {
 		EXPECT_EQ(v1, v2);
 	}
 
-	TEST_F(NextTPreprocessorTest_NextT, getPreviousT_all) {
+	TEST_F(CFGRelationsManagerTest_NextT, getPreviousT_all) {
 		auto v1 = manager->getPreviousT();
 		std::sort(v1.begin(), v1.end());
 
@@ -181,8 +177,8 @@ namespace UnitTesting {
 		EXPECT_EQ(v1, v2);
 	}
 
-	TEST_F(NextTPreprocessorTest_NextT, getNextT_identifier) {
-		for (auto& stmt : s) {
+	TEST_F(CFGRelationsManagerTest_NextT, getNextT_identifier) {
+		for (auto& stmt : stmt_list) {
 			auto v1 = manager->getNextT(stmt.stmt_index);
 			std::sort(v1.begin(), v1.end());
 
@@ -196,8 +192,8 @@ namespace UnitTesting {
 		}
 	}
 
-	TEST_F(NextTPreprocessorTest_NextT, getPreviousT_identifier) {
-		for (auto& stmt : s) {
+	TEST_F(CFGRelationsManagerTest_NextT, getPreviousT_identifier) {
+		for (auto& stmt : stmt_list) {
 			auto v1 = manager->getPreviousT(stmt.stmt_index);
 			std::sort(v1.begin(), v1.end());
 
@@ -211,10 +207,12 @@ namespace UnitTesting {
 		}
 	}
 
-	TEST_F(NextTPreprocessorTest_NextT, reset) {
+	TEST_F(CFGRelationsManagerTest_NextT, reset) {
 		manager->getAllNextTRelation();
 		EXPECT_TRUE(manager->getNextTProcessor().isFullyPopulated());
+		EXPECT_FALSE(manager->getNextTProcessor().isCacheEmpty());
 		manager->reset();
 		EXPECT_FALSE(manager->getNextTProcessor().isFullyPopulated());
+		EXPECT_TRUE(manager->getNextTProcessor().isCacheEmpty());
 	}
 }

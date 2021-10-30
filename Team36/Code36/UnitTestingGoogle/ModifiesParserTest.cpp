@@ -10,21 +10,12 @@ namespace UnitTesting {
 		ModifiesParserTest() {
 		}
 
-		// If the constructor and destructor are not enough for setting up
-		// and cleaning up each test, you can define the following methods:
-
 		virtual void SetUp() override {
-			// Code here will be called immediately after the constructor (right
-			// before each test).
 		}
 
 		void TearDown() override {
-			// Code here will be called immediately after each test (right
-			// before the destructor).
 		}
 
-		// Class members declared here can be used by all tests in the test suite
-		// for Foo.
 	};
 
 	//MODIFIES_S
@@ -114,7 +105,7 @@ namespace UnitTesting {
 		Query query;
 
 		//Expected
-		Entity expected_stmt_1 = Entity(EntityType::CONSTANT, "5");
+		Entity expected_stmt_1 = Entity(EntityType::STMT, "5");
 
 		Synonym synonym2;
 		synonym2.name = "v";
@@ -138,7 +129,7 @@ namespace UnitTesting {
 		Query query;
 
 		//Expected
-		Entity expected_stmt_1 = Entity(EntityType::CONSTANT, "5");
+		Entity expected_stmt_1 = Entity(EntityType::STMT, "5");
 
 		Entity expected_stmt_2 = Entity(EntityType::WILD);
 
@@ -159,7 +150,7 @@ namespace UnitTesting {
 		Query query;
 
 		//Expected
-		Entity expected_1 = Entity(EntityType::CONSTANT, "5");
+		Entity expected_1 = Entity(EntityType::STMT, "5");
 
 		Entity expected_2 = Entity(EntityType::VARIABLE, "var");
 

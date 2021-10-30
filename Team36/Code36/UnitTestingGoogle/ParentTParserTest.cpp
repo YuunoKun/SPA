@@ -10,21 +10,12 @@ namespace UnitTesting {
 		ParentTParserTest() {
 		}
 
-		// If the constructor and destructor are not enough for setting up
-		// and cleaning up each test, you can define the following methods:
-
 		virtual void SetUp() override {
-			// Code here will be called immediately after the constructor (right
-			// before each test).
 		}
 
 		void TearDown() override {
-			// Code here will be called immediately after each test (right
-			// before the destructor).
 		}
 
-		// Class members declared here can be used by all tests in the test suite
-		// for Foo.
 	};
 
 	// PARENT_T
@@ -89,7 +80,7 @@ namespace UnitTesting {
 		Entity expected_stmt_1 = Entity(EntityType::STMT, synonym);
 		query.addEntity(expected_stmt_1);
 
-		Entity expected_stmt_2 = Entity(EntityType::CONSTANT, "3");
+		Entity expected_stmt_2 = Entity(EntityType::STMT, "3");
 
 		RelRef expected_rel = RelRef(RelType::PARENT_T, expected_stmt_1, expected_stmt_2);
 
@@ -156,7 +147,7 @@ namespace UnitTesting {
 		//Expected
 		Entity expected_stmt_1 = Entity(EntityType::WILD);
 
-		Entity expected_stmt_2 = Entity(EntityType::CONSTANT, "3");
+		Entity expected_stmt_2 = Entity(EntityType::STMT, "3");
 
 		RelRef expected_rel = RelRef(RelType::PARENT_T, expected_stmt_1, expected_stmt_2);
 
@@ -175,7 +166,7 @@ namespace UnitTesting {
 		Query query;
 
 		//Expected
-		Entity expected_stmt_1 = Entity(EntityType::CONSTANT, "3");
+		Entity expected_stmt_1 = Entity(EntityType::STMT, "3");
 
 		Synonym synonym;
 		synonym.name = "s";
@@ -199,7 +190,7 @@ namespace UnitTesting {
 		Query query;
 
 		//Expected
-		Entity expected_stmt_1 = Entity(EntityType::CONSTANT, "3");
+		Entity expected_stmt_1 = Entity(EntityType::STMT, "3");
 
 		Entity expected_stmt_2 = Entity(EntityType::WILD);
 
@@ -220,9 +211,9 @@ namespace UnitTesting {
 		Query query;
 
 		//Expected
-		Entity expected_stmt_1 = Entity(EntityType::CONSTANT, "3");
+		Entity expected_stmt_1 = Entity(EntityType::STMT, "3");
 
-		Entity expected_stmt_2 = Entity(EntityType::CONSTANT, "4");
+		Entity expected_stmt_2 = Entity(EntityType::STMT, "4");
 
 		RelRef expected_rel = RelRef(RelType::PARENT_T, expected_stmt_1, expected_stmt_2);
 

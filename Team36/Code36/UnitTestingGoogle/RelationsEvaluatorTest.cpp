@@ -16,6 +16,8 @@ namespace UnitTesting {
 		PKB::getInstance().addStmt(STMT_WHILE);
 		proc_name p = "p";
 		PKB::getInstance().addProcedure(p);
+		PKB::getInstance().addProcContains(p, 1);
+		PKB::getInstance().addProcContains(p, 2);
 		pkb.getRelationManager().update();
 
 		RelationsEvaluator evaluator;

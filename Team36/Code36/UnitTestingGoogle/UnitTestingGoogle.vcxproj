@@ -39,11 +39,18 @@
     <ClInclude Include="pch.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AffectsBipParserTest.cpp" />
+    <ClCompile Include="AffectsBipTParserTest.cpp" />
+    <ClCompile Include="AffectsTParserTest.cpp" />
+    <ClCompile Include="AffectsPreprocessorTest.cpp" />
+    <ClCompile Include="AffectsTPreprocessorTest.cpp" />
     <ClCompile Include="CallsEvaluatorTest.cpp" />
     <ClCompile Include="CallsParserTest.cpp" />
     <ClCompile Include="CallsTEvaluatorTest.cpp" />
-    <ClCompile Include="CFGRelationsManagerTest.cpp" />
     <ClCompile Include="CallsTParserTest.cpp" />
+    <ClCompile Include="CFGRelationManagerTest_Affects.cpp" />
+    <ClCompile Include="CFGRelationsManagerTest_AffectsT.cpp" />
+    <ClCompile Include="CFGRelationsManagerTest_NextT.cpp" />
     <ClCompile Include="ClauseTest.cpp" />
     <ClCompile Include="DesignExtractorTest.cpp" />
     <ClCompile Include="EntityTest.cpp" />
@@ -52,6 +59,9 @@
     <ClCompile Include="FollowsParserTest.cpp" />
     <ClCompile Include="FollowsTParserTest.cpp" />
     <ClCompile Include="FSMTest.cpp" />
+    <ClCompile Include="NextBipParserTest.cpp" />
+    <ClCompile Include="NextBipTParserTest.cpp" />
+    <ClCompile Include="MonotypeRelationTableTest.cpp" />
     <ClCompile Include="NextEvaluatorTest.cpp" />
     <ClCompile Include="ParentParserTest.cpp" />
     <ClCompile Include="ParentTParserTest.cpp" />
@@ -86,6 +96,7 @@
     <ClCompile Include="AssignPatternParserTest.cpp" />
     <ClCompile Include="IfPatternParserTest.cpp" />
     <ClCompile Include="ModifiesParserTest.cpp" />
+    <ClCompile Include="AffectsParserTest.cpp" />
     <ClCompile Include="UsesParserTest.cpp" />
     <ClCompile Include="WithParserTest.cpp" />
     <ClCompile Include="WhilePatternParserTest.cpp" />

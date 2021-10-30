@@ -22,7 +22,7 @@ namespace UnitTesting {
 			{s1, s2}, {s2, s3}, {s3, s4}, {s3, s5}, {s4, s2},
 			{s5, s2}, {s2, s6}
 		};
-		RelationTable<StmtInfo, StmtInfo> test = RelationTable<StmtInfo, StmtInfo>(test_input);
+		MonotypeRelationTable<StmtInfo> test = MonotypeRelationTable<StmtInfo>(test_input);
 
 		NextTPreprocessor processor = NextTPreprocessor(test, s);
 
@@ -35,13 +35,9 @@ namespace UnitTesting {
 		};
 
 		virtual void SetUp() override {
-			// Code here will be called immediately after the constructor (right
-			// before each test).
 		}
 
 		void TearDown() override {
-			// Code here will be called immediately after each test (right
-			// before the destructor).
 			processor.reset();
 		}
 	};
@@ -138,6 +134,7 @@ namespace UnitTesting {
 		std::copy(set.begin(), set.end(), v2.begin());
 		std::sort(v2.begin(), v2.end());
 		EXPECT_EQ(v1, v2);
+		EXPECT_FALSE(processor.isFullyPopulated());
 	}
 
 	TEST_F(NextTPreprocessorTest, evaluateSynonymAndWild) {
@@ -152,6 +149,7 @@ namespace UnitTesting {
 		std::copy(set.begin(), set.end(), v2.begin());
 		std::sort(v2.begin(), v2.end());
 		EXPECT_EQ(v1, v2);
+		EXPECT_FALSE(processor.isFullyPopulated());
 	}
 
 	TEST_F(NextTPreprocessorTest, evaluateConstantAndSynonym) {
@@ -168,9 +166,10 @@ namespace UnitTesting {
 			EXPECT_EQ(v1, v2);
 			for (int i = 0; i < PKB::getInstance().getStmts().size(); i++) {
 				EXPECT_TRUE(processor.getCalculatedMatrix()[stmt.stmt_index - 1][i]);
-				EXPECT_TRUE(processor.getDFSForwardComputedList()[stmt.stmt_index - 1]);
+				EXPECT_TRUE(processor.isDFSForwardComputed(stmt.stmt_index));
 			}
 		}
+		EXPECT_FALSE(processor.isFullyPopulated());
 	}
 
 	TEST_F(NextTPreprocessorTest, evaluateSynonymAndConstant) {
@@ -187,9 +186,10 @@ namespace UnitTesting {
 			EXPECT_EQ(v1, v2);
 			for (int i = 0; i < PKB::getInstance().getStmts().size(); i++) {
 				EXPECT_TRUE(processor.getCalculatedMatrix()[i][stmt.stmt_index - 1]);
-				EXPECT_TRUE(processor.getDFSBackwardComputedList()[stmt.stmt_index - 1]);
+				EXPECT_TRUE(processor.isDFSBackwardComputed(stmt.stmt_index));
 			}
 		}
+		EXPECT_FALSE(processor.isFullyPopulated());
 	}
 
 	TEST_F(NextTPreprocessorTest, reset) {
@@ -197,30 +197,30 @@ namespace UnitTesting {
 			processor.evaluateSynonymAndConstant(stmt.stmt_index);
 			for (int i = 0; i < PKB::getInstance().getStmts().size(); i++) {
 				EXPECT_TRUE(processor.getCalculatedMatrix()[i][stmt.stmt_index - 1]);
-				EXPECT_TRUE(processor.getDFSBackwardComputedList()[stmt.stmt_index - 1]);
+				EXPECT_TRUE(processor.isDFSBackwardComputed(stmt.stmt_index));
 			}
 		}
 		for (auto& stmt : s) {
 			processor.evaluateConstantAndSynonym(stmt.stmt_index);
 			for (int i = 0; i < PKB::getInstance().getStmts().size(); i++) {
 				EXPECT_TRUE(processor.getCalculatedMatrix()[stmt.stmt_index - 1][i]);
-				EXPECT_TRUE(processor.getDFSForwardComputedList()[stmt.stmt_index - 1]);
+				EXPECT_TRUE(processor.isDFSForwardComputed(stmt.stmt_index));
 			}
 		}
 		processor.reset();
 		for (auto& stmt : s) {
 			for (int i = 0; i < PKB::getInstance().getStmts().size(); i++) {
 				EXPECT_FALSE(processor.getCalculatedMatrix()[i][stmt.stmt_index - 1]);
-				EXPECT_FALSE(processor.getDFSBackwardComputedList()[stmt.stmt_index - 1]);
+				EXPECT_FALSE(processor.isDFSBackwardComputed(stmt.stmt_index));
 				EXPECT_FALSE(processor.getCalculatedMatrix()[stmt.stmt_index - 1][i]);
-				EXPECT_FALSE(processor.getDFSForwardComputedList()[stmt.stmt_index - 1]);
+				EXPECT_FALSE(processor.isDFSForwardComputed(stmt.stmt_index));
 			}
 		}
 		processor.evaluateSynonymAndSynonym();
 		EXPECT_TRUE(processor.isFullyPopulated());
-		EXPECT_TRUE(processor.isCacheInitialized());
+		EXPECT_FALSE(processor.isCacheEmpty());
 		processor.reset();
 		EXPECT_FALSE(processor.isFullyPopulated());
-		EXPECT_FALSE(processor.isCacheInitialized());
+		EXPECT_TRUE(processor.isCacheEmpty());
 	}
 }

@@ -18,7 +18,7 @@ bool AffectTEvaluator::evaluateConstantAndConstant(Entity e1, Entity e2) {
 
 bool AffectTEvaluator::evaluateConstantAndWild(Entity e) {
 	stmt_index c = stoi(e.getValue());
-	return pkb.getRelationManager().isAffectorT(c);
+	return pkb.getRelationManager().isAffectingT(c);
 }
 
 bool AffectTEvaluator::evaluateWildAndConstant(Entity e) {
@@ -35,7 +35,7 @@ ResultTable AffectTEvaluator::evaluateWildAndSynonym(Entity header) {
 }
 
 ResultTable AffectTEvaluator::evaluateSynonymAndWild(Entity header) {
-	return ResultTable(header, pkb.getRelationManager().getAffectorT());
+	return ResultTable(header, pkb.getRelationManager().getAffectingT());
 }
 
 ResultTable AffectTEvaluator::evaluateConstantAndSynonym(Entity constant, Entity header) {
@@ -45,5 +45,5 @@ ResultTable AffectTEvaluator::evaluateConstantAndSynonym(Entity constant, Entity
 
 ResultTable AffectTEvaluator::evaluateSynonymAndConstant(Entity header, Entity constant) {
 	stmt_index c = stoi(constant.getValue());
-	return ResultTable(header, pkb.getRelationManager().getAffectorT(c));
+	return ResultTable(header, pkb.getRelationManager().getAffectingT(c));
 }

@@ -10,7 +10,6 @@ namespace UnitTesting {
 	protected:
 
 		PQLPKBTest() {
-			// You can do set-up work for each test here.
 			PKB::getInstance().resetCache();
 			PKB::getInstance().addVariable({ x });
 			PKB::getInstance().addVariable({ y });
@@ -77,10 +76,6 @@ namespace UnitTesting {
 				EXPECT_EQ(*expected_it, *result_it);
 			}
 
-			//for (auto const& i: expected) {
-			//	EXPECT_TRUE(i == *result_it);
-			//	result_it++;
-			//}
 		}
 
 		const var_name x = "x";
@@ -257,17 +252,17 @@ namespace UnitTesting {
 
 		const std::list<std::string> EMPTY_RESULT = {};
 
-		// If the constructor and destructor are not enough for setting up
+
 		// and cleaning up each test, you can define the following methods:
 
 		virtual void SetUp() override {
-			// Code here will be called immediately after the constructor (right
-			// before each test).
+
+
 		}
 
 		void TearDown() override {
-			// Code here will be called immediately after each test (right
-			// before the destructor).
+
+
 		}
 	};
 

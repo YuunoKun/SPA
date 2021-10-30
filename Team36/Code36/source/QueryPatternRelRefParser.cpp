@@ -47,16 +47,6 @@ void QueryPatternRelRefParser::parseParameterSuchThat(
         callsTParser.parse(query, token_chain);
         break;
     }
-    case QueryToken::AFFECTS: {
-        // stmtRef , stmtRef
-
-        break;
-    }
-    case QueryToken::AFFECTS_T: {
-        // stmtRef , stmtRef
-
-        break;
-    }
     case QueryToken::NEXT: {
         NextParser nextParser;
         nextParser.parse(query, token_chain);
@@ -65,6 +55,36 @@ void QueryPatternRelRefParser::parseParameterSuchThat(
     case QueryToken::NEXT_T: {
         NextTParser nextTParser;
         nextTParser.parse(query, token_chain);
+        break;
+    }
+    case QueryToken::NEXT_BIP: {
+        NextBipParser nextBipParser;
+        nextBipParser.parse(query, token_chain);
+        break;
+    }
+    case QueryToken::NEXT_BIP_T: {
+        NextBipTParser nextBipTParser;
+        nextBipTParser.parse(query, token_chain);
+        break;
+    }
+    case QueryToken::AFFECTS: {
+        AffectsParser affectsParser;
+        affectsParser.parse(query, token_chain);
+        break;
+    }
+    case QueryToken::AFFECTS_T: {
+        AffectsTParser affectsTParser;
+        affectsTParser.parse(query, token_chain);
+        break;
+    }
+    case QueryToken::AFFECTS_BIP: {
+        AffectsBipParser affectsBipParser;
+        affectsBipParser.parse(query, token_chain);
+        break;
+    }
+    case QueryToken::AFFECTS_BIP_T: {
+        AffectsBipTParser affectsBipTParser;
+        affectsBipTParser.parse(query, token_chain);
         break;
     }
     default:

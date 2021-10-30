@@ -374,7 +374,8 @@ namespace UnitTesting {
 		header = { STMT, Synonym{"a"} };
 		match = { STMT, "2" };
 		t = ResultTable(header, v);
-		EXPECT_EQ(evaluator.evaluateSynonymAndConstant(header, match), t);
+		auto res = evaluator.evaluateSynonymAndConstant(header, match);
+		EXPECT_EQ(res, t);
 
 		v = { p1 };
 		header = { READ, Synonym{"a"} };
