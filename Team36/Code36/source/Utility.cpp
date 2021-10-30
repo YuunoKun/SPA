@@ -802,7 +802,7 @@ Entity Utility::setStmtRef(Query& query, QueryToken token) {
 
 	// is INTEGER, constant type
 	if (token.type == QueryToken::CONSTANT) {
-		return Entity(EntityType::CONSTANT, token.token_value);
+		return Entity(EntityType::STMT, token.token_value);
 	}
 
 	// synonym check
@@ -851,7 +851,7 @@ Entity Utility::setLineRef(Query& query, QueryToken token) {
 
 	// is INTEGER, constant type
 	if (token.type == QueryToken::CONSTANT) {
-		return Entity(EntityType::CONSTANT, token.token_value);
+		return Entity(EntityType::PROG_LINE, token.token_value);
 	}
 
 	// synonym check
