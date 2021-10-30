@@ -3395,12 +3395,12 @@ TRUE
 5000
 18 - valid with
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
-Select BOOLEAN with v.varName = read.varName
+Select BOOLEAN with v.varName = r.varName
 TRUE
 5000
 19 - valid with
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
-Select BOOLEAN with v.varName = print.varName
+Select BOOLEAN with v.varName = p.varName
 TRUE
 5000
 20 - valid with
@@ -3531,5 +3531,10 @@ TRUE
 45 - valid with
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
 Select BOOLEAN with "prints" = pr.procName
+TRUE
+5000
+46 - valid with
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN with r.varName = p.varName
 TRUE
 5000
