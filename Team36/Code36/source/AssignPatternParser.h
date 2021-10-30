@@ -3,6 +3,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include "PatternParserInterface.h"
 #include "Entity.h"
 #include "Query.h"
 #include "QueryToken.h"
@@ -11,12 +12,9 @@
 #include "SyntacticErrorException.h"
 #include "Utility.h"
 
-class AssignPatternParser {
+class AssignPatternParser : public PatternParserInterface {
 public:
-    AssignPatternParser();
-
-    void parseAssign(Query&, Entity&, std::vector<QueryToken>);
-
+    void parse(Query&, Entity&, std::vector<QueryToken>) override;
 private:
     bool isWild(std::vector<QueryToken>);
 };

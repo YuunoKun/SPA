@@ -18,6 +18,7 @@ enum EntityType {
 	WILD,
 	BOOLEAN,
 	PROG_LINE,
+	NONE_ENTITY
 };
 
 enum AttrRef {
@@ -42,7 +43,7 @@ public:
 	std::string getSynonym();
 	std::string getValue();
 	AttrRef getAttribute();
-	void setAttribute(AttrRef&);
+	void setAttribute(AttrRef);
 	bool isSynonym();
 
 	bool operator==(const Entity&) const;
