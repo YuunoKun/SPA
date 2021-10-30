@@ -2237,6 +2237,7 @@ TRUE
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c, c1; prog_line pl, pl1;
 Select BOOLEAN such that Affects(pl, pl1)
 TRUE
+5000
 15 - valid Affects
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
 Select BOOLEAN such that Affects(_, s)
@@ -2321,6 +2322,7 @@ TRUE
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c, c1; prog_line pl, pl1;
 Select BOOLEAN such that Affects*(pl, pl1)
 TRUE
+5000
 15 - valid Affects*
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
 Select BOOLEAN such that Affects*(_, s)
@@ -3155,6 +3157,7 @@ TRUE
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c, c1; prog_line pl, pl1;
 Select BOOLEAN such that AffectsBip(pl, pl1)
 TRUE
+5000
 15 - valid AffectsBip
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
 Select BOOLEAN such that AffectsBip(_, s)
@@ -3239,6 +3242,7 @@ TRUE
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c, c1; prog_line pl, pl1;
 Select BOOLEAN such that AffectsBip*(pl, pl1)
 TRUE
+5000
 15 - valid AffectsBip*
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
 Select BOOLEAN such that AffectsBip*(_, s)
