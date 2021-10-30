@@ -9,34 +9,35 @@ namespace UnitTesting {
 	class PatternAssignEvaluatorTest : public testing::Test {
 	protected:
 		PatternAssignEvaluatorTest() {
-		}
-
-		virtual void SetUp() override {
 			PKB::getInstance().resetCache();
+			PKB::getInstance().addStmt(STMT_ASSIGN);
+			PKB::getInstance().addStmt(STMT_ASSIGN);
+			PKB::getInstance().addStmt(STMT_ASSIGN);
+			PKB::getInstance().addStmt(STMT_ASSIGN);
+			PKB::getInstance().addVariable(x);
+			PKB::getInstance().addVariable(y);
+			PKB::getInstance().addVariable(z);
+			PKB::getInstance().addModifiesS(1, x);
+			PKB::getInstance().addModifiesS(3, y);
+			PKB::getInstance().addExprTree(1, expr_parser.parse(x));
+			PKB::getInstance().addExprTree(3, expr_parser.parse(y));
 		}
 
 		PKBAdapter pkb;
 		PatternAssignEvaluator evaluator;
 		ExprParser expr_parser;
-	};
 
-	TEST_F(PatternAssignEvaluatorTest, evaluateSynonym) {
+
 		var_name x = "x";
 		var_name y = "y";
 		var_name z = "z";
 
-		PKB::getInstance().addStmt(STMT_ASSIGN);
-		PKB::getInstance().addStmt(STMT_ASSIGN);
-		PKB::getInstance().addStmt(STMT_ASSIGN);
-		PKB::getInstance().addStmt(STMT_ASSIGN);
-		PKB::getInstance().addVariable(x);
-		PKB::getInstance().addVariable(y);
-		PKB::getInstance().addVariable(z);
-		PKB::getInstance().addModifiesS(1, x);
-		PKB::getInstance().addExprTree(1, expr_parser.parse(x));
-		PKB::getInstance().addExprTree(3, expr_parser.parse(y));
-		PKB::getInstance().addModifiesS(3, y);
+		Entity v1 = { VARIABLE, x };
+		Entity v2 = { VARIABLE, y };
+		Entity v3 = { VARIABLE, z };
+	};
 
+	TEST_F(PatternAssignEvaluatorTest, evaluateSynonym) {
 		std::vector<std::pair<stmt_index, var_name>> v = pkb.getAssignInfo();
 		Entity left = { ASSIGN, Synonym{"a"} };
 		Entity right = { VARIABLE, Synonym{"b"} };
@@ -53,25 +54,6 @@ namespace UnitTesting {
 	}
 
 	TEST_F(PatternAssignEvaluatorTest, evaluateConstant) {
-		var_name x = "x";
-		var_name y = "y";
-		var_name z = "z";
-		Entity v1 = { VARIABLE, "x" };
-		Entity v2 = { VARIABLE, "y" };
-		Entity v3 = { VARIABLE, "z" };
-
-		PKB::getInstance().addStmt(STMT_ASSIGN);
-		PKB::getInstance().addStmt(STMT_ASSIGN);
-		PKB::getInstance().addStmt(STMT_ASSIGN);
-		PKB::getInstance().addStmt(STMT_ASSIGN);
-		PKB::getInstance().addVariable(x);
-		PKB::getInstance().addVariable(y);
-		PKB::getInstance().addVariable(z);
-		PKB::getInstance().addModifiesS(1, x);
-		PKB::getInstance().addModifiesS(3, y);
-		PKB::getInstance().addExprTree(1, expr_parser.parse(x));
-		PKB::getInstance().addExprTree(3, expr_parser.parse(y));
-
 		std::vector<stmt_index> v = { 1 };
 		Entity left = { ASSIGN, Synonym{"a"} };
 		Entity match = v1;
@@ -93,26 +75,6 @@ namespace UnitTesting {
 	}
 
 	TEST_F(PatternAssignEvaluatorTest, evaluateWild) {
-		StmtInfo p1{ 1, STMT_ASSIGN };
-		StmtInfo p2{ 2, STMT_ASSIGN };
-		StmtInfo p3{ 3, STMT_ASSIGN };
-		StmtInfo p4{ 4, STMT_ASSIGN };
-		var_name x = "x";
-		var_name y = "y";
-		var_name z = "z";
-
-		PKB::getInstance().addStmt(STMT_ASSIGN);
-		PKB::getInstance().addStmt(STMT_ASSIGN);
-		PKB::getInstance().addStmt(STMT_ASSIGN);
-		PKB::getInstance().addStmt(STMT_ASSIGN);
-		PKB::getInstance().addVariable(x);
-		PKB::getInstance().addVariable(y);
-		PKB::getInstance().addVariable(z);
-		PKB::getInstance().addModifiesS(1, x);
-		PKB::getInstance().addModifiesS(3, y);
-		PKB::getInstance().addExprTree(1, expr_parser.parse(x));
-		PKB::getInstance().addExprTree(3, expr_parser.parse(y));
-
 		std::vector<stmt_index> v = { 1, 3 };
 		Entity left = { ASSIGN, Synonym{"a"} };
 		ResultTable t(left, v);
