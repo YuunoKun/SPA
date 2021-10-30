@@ -41,7 +41,7 @@ namespace UnitTesting {
 		//Synonym
 		//Result
 		QueryToken stmt_s_token = QueryToken(QueryToken::IDENTIFIER, "s");
-		Entity ent_stmt = Utility::setStmtRef(query, stmt_s_token);
+		Entity ent_stmt = Utility::setStmtRef(query, stmt_s_token, EntityType::STMT);
 
 		EXPECT_TRUE(ent_stmt == declared_stmt);
 
@@ -50,7 +50,7 @@ namespace UnitTesting {
 		//WILDCARD
 		//Result
 		QueryToken wildcard_token = QueryToken(QueryToken::WILDCARD, "_");
-		Entity ent_wildacrd = Utility::setStmtRef(query, wildcard_token);
+		Entity ent_wildacrd = Utility::setStmtRef(query, wildcard_token, EntityType::STMT);
 
 		//Expected
 		Entity expected_ent_wildcard = Entity(EntityType::WILD);
@@ -62,7 +62,7 @@ namespace UnitTesting {
 		//CONSTANT
 		//Result
 		QueryToken constant_token = QueryToken(QueryToken::CONSTANT, "9");
-		Entity ent_constant = Utility::setStmtRef(query, constant_token);
+		Entity ent_constant = Utility::setStmtRef(query, constant_token, EntityType::STMT);
 
 		////Expected
 		Entity expected_ent_constant = Entity(EntityType::CONSTANT, "9");

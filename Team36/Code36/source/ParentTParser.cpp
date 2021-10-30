@@ -41,7 +41,7 @@ void ParentTParser::parse(Query& query, std::vector<QueryToken> token_chain) {
 
     if (!Utility::checkIsSemanticError(query)) {
         query.addRelation(RelRef(RelType::PARENT_T,
-            Utility::setStmtRef(query, stmt),
-            Utility::setStmtRef(query, stmt2)));
+            Utility::setStmtRef(query, stmt, EntityType::STMT),
+            Utility::setStmtRef(query, stmt2, EntityType::STMT)));
     }
 }

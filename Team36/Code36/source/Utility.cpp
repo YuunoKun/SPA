@@ -466,6 +466,45 @@ bool Utility::isStmtRef(Query& query, std::vector<QueryToken> token_chain) {
 	throw SyntacticErrorException("Invalid stmtRef arguments");
 }
 
+bool Utility::isStmtRef(Query& query, std::vector<QueryToken> token_chain, EntityType entity_type) {
+
+	// no args found, throw syntax errors
+	if (token_chain.size() == 0) {
+		throw SyntacticErrorException("Invalid stmtRef arguments");
+	}
+
+	// more than 1 args found. possible entref
+	if (token_chain.size() > 1) {
+		return false;
+	}
+
+	QueryToken token = token_chain[0];
+
+	if (token.type == QueryToken::CONSTANT) {
+		return true;
+	}
+
+	if (token.type == QueryToken::WILDCARD) {
+		return true;
+	}
+
+	// check synonym if is the given entity type
+	if (token.type == QueryToken::IDENTIFIER) {
+		std::unordered_map<std::string, Entity> ent_chain = query.getEntities();
+		if (ent_chain.find(token.token_value) != ent_chain.end()) {
+			return ent_chain.at(token.token_value).getType() == entity_type;
+		}
+		else {
+			// undeclared synonym
+			return false;
+		}
+	}
+
+	// unknown query token
+	throw SyntacticErrorException("Invalid stmtRef arguments");
+}
+
+
 bool Utility::isEntRef(Query& query, std::vector<QueryToken> token_chain) {
 	// entRef : synonym | ‘_’ | ‘"’ IDENT ‘"’
 
@@ -792,7 +831,7 @@ bool Utility::isIntRefType(Query& query, std::vector<QueryToken> token_chain) {
 	}
 }
 
-Entity Utility::setStmtRef(Query& query, QueryToken token) {
+Entity Utility::setStmtRef(Query& query, QueryToken token, EntityType ident_type) {
 	// synonym | ‘_’ | INTEGER
 
 	// wild card check

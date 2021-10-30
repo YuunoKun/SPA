@@ -65,7 +65,7 @@ void UsesParser::parse(Query& query, std::vector<QueryToken> token_chain) {
     if (is_USES_S) {
         QueryToken stmt = temp_token_chain_1[0];
         if (!Utility::checkIsSemanticError(query)) {
-            query.addRelation(RelRef(RelType::USES_S, Utility::setStmtRef(query, stmt),
+            query.addRelation(RelRef(RelType::USES_S, Utility::setStmtRef(query, stmt, EntityType::STMT),
                 Utility::setEntRef(query, temp_token_chain_2, EntityType::VARIABLE)));
         }
     }
