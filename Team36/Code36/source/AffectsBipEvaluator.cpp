@@ -4,55 +4,46 @@
 #include "QueryResult.h"
 #include "PKBAdapter.h"
 #include "AffectsBipEvaluator.h"
-
+#include "CFGRelationsManager.h"
 
 bool AffectsBipEvaluator::evaluateWildAndWild() {
-	//Todo Evaluator
-	return !pkb.isFollowEmpty();
+	return !pkb.getRelationManager().isAffectsBipEmpty();
 }
 
 bool AffectsBipEvaluator::evaluateConstantAndConstant(Entity e1, Entity e2) {
-	//Todo Evaluator
 	stmt_index c1 = stoi(e1.getValue());
 	stmt_index c2 = stoi(e2.getValue());
-	return pkb.isFollow(c1, c2);;
+	return pkb.getRelationManager().isAffectsBip(c1, c2);;
 }
 
 bool AffectsBipEvaluator::evaluateConstantAndWild(Entity e) {
-	//Todo Evaluator
 	stmt_index c = stoi(e.getValue());
-	return pkb.isFollowed(c);
+	return pkb.getRelationManager().isAffectingBip(c);
 }
 
 bool AffectsBipEvaluator::evaluateWildAndConstant(Entity e) {
-	//Todo Evaluator
 	stmt_index c = stoi(e.getValue());
-	return pkb.isFollowing(c);
+	return pkb.getRelationManager().isAffectedBip(c);
 }
 
 ResultTable AffectsBipEvaluator::evaluateSynonymAndSynonym(Entity left, Entity right) {
-	//Todo Evaluator
-	return ResultTable({ left, right }, pkb.getFollows());
+	return ResultTable({ left, right }, pkb.getRelationManager().getAllAffectsBipRelation());
 }
 
 ResultTable AffectsBipEvaluator::evaluateWildAndSynonym(Entity header) {
-	//Todo Evaluator
-	return ResultTable(header, pkb.getFollowing());
+	return ResultTable(header, pkb.getRelationManager().getAffectedBip());
 }
 
 ResultTable AffectsBipEvaluator::evaluateSynonymAndWild(Entity header) {
-	//Todo Evaluator
-	return ResultTable(header, pkb.getFollowed());
+	return ResultTable(header, pkb.getRelationManager().getAffectingBip());
 }
 
 ResultTable AffectsBipEvaluator::evaluateConstantAndSynonym(Entity constant, Entity header) {
-	//Todo Evaluator
 	stmt_index c = stoi(constant.getValue());
-	return ResultTable(header, pkb.getFollowing(c));
+	return ResultTable(header, pkb.getRelationManager().getAffectedBip(c));
 }
 
 ResultTable AffectsBipEvaluator::evaluateSynonymAndConstant(Entity header, Entity constant) {
-	//Todo Evaluator
 	stmt_index c = stoi(constant.getValue());
-	return ResultTable(header, pkb.getFollowed(c));
+	return ResultTable(header, pkb.getRelationManager().getAffectingBip(c));
 }

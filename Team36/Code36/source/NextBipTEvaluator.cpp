@@ -4,55 +4,46 @@
 #include "QueryResult.h"
 #include "PKBAdapter.h"
 #include "NextBipTEvaluator.h"
-
+#include "CFGRelationsManager.h"
 
 bool NextBipTEvaluator::evaluateWildAndWild() {
-	//Todo Evaluator
-	return !pkb.isFollowEmpty();
+	return !pkb.getRelationManager().isNextBipTEmpty();
 }
 
 bool NextBipTEvaluator::evaluateConstantAndConstant(Entity e1, Entity e2) {
-	//Todo Evaluator
-	stmt_index c1 = stoi(e1.getValue());
-	stmt_index c2 = stoi(e2.getValue());
-	return pkb.isFollow(c1, c2);;
+	prog_line c1 = stoi(e1.getValue());
+	prog_line c2 = stoi(e2.getValue());
+	return pkb.getRelationManager().isNextBipT(c1, c2);;
 }
 
 bool NextBipTEvaluator::evaluateConstantAndWild(Entity e) {
-	//Todo Evaluator
-	stmt_index c = stoi(e.getValue());
-	return pkb.isFollowed(c);
+	prog_line c = stoi(e.getValue());
+	return pkb.getRelationManager().isPreviousBipT(c);
 }
 
 bool NextBipTEvaluator::evaluateWildAndConstant(Entity e) {
-	//Todo Evaluator
-	stmt_index c = stoi(e.getValue());
-	return pkb.isFollowing(c);
+	prog_line c = stoi(e.getValue());
+	return pkb.getRelationManager().isNextBipT(c);
 }
 
 ResultTable NextBipTEvaluator::evaluateSynonymAndSynonym(Entity left, Entity right) {
-	//Todo Evaluator
-	return ResultTable({ left, right }, pkb.getFollows());
+	return ResultTable({ left, right }, pkb.getRelationManager().getAllNextBipTRelation());
 }
 
 ResultTable NextBipTEvaluator::evaluateWildAndSynonym(Entity header) {
-	//Todo Evaluator
-	return ResultTable(header, pkb.getFollowing());
+	return ResultTable(header, pkb.getRelationManager().getNextBipT());
 }
 
 ResultTable NextBipTEvaluator::evaluateSynonymAndWild(Entity header) {
-	//Todo Evaluator
-	return ResultTable(header, pkb.getFollowed());
+	return ResultTable(header, pkb.getRelationManager().getPreviousBipT());
 }
 
 ResultTable NextBipTEvaluator::evaluateConstantAndSynonym(Entity constant, Entity header) {
-	//Todo Evaluator
-	stmt_index c = stoi(constant.getValue());
-	return ResultTable(header, pkb.getFollowing(c));
+	prog_line c = stoi(constant.getValue());
+	return ResultTable(header, pkb.getRelationManager().getNextBipT(c));
 }
 
 ResultTable NextBipTEvaluator::evaluateSynonymAndConstant(Entity header, Entity constant) {
-	//Todo Evaluator
-	stmt_index c = stoi(constant.getValue());
-	return ResultTable(header, pkb.getFollowed(c));
+	prog_line c = stoi(constant.getValue());
+	return ResultTable(header, pkb.getRelationManager().getPreviousBipT(c));
 }

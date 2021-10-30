@@ -222,6 +222,21 @@
     <ClCompile Include="AffectsEvaluatorTest.cpp">
       <Filter>PQL\QueryEvaluator\RelationEvaluator</Filter>
     </ClCompile>
+    <ClCompile Include="AffectsBipEvaluatorTest.cpp">
+      <Filter>PQL\QueryEvaluator\RelationEvaluator</Filter>
+    </ClCompile>
+    <ClCompile Include="AffectsBipTEvaluatorTest.cpp">
+      <Filter>PQL\QueryEvaluator\RelationEvaluator</Filter>
+    </ClCompile>
+    <ClCompile Include="NextBipEvaluatorTest.cpp">
+      <Filter>PQL\QueryEvaluator\RelationEvaluator</Filter>
+    </ClCompile>
+    <ClCompile Include="NextBipTEvaluatorTest.cpp">
+      <Filter>PQL\QueryEvaluator\RelationEvaluator</Filter>
+    </ClCompile>
+    <ClCompile Include="QueryEvaluatorCFGBipRelationTest.cpp">
+      <Filter>PQL\QueryEvaluator</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
