@@ -63,13 +63,9 @@ namespace UnitTesting {
 		};
 
 		virtual void SetUp() override {
-			// Code here will be called immediately after the constructor (right
-			// before each test).
 		}
 
 		void TearDown() override {
-			// Code here will be called immediately after each test (right
-			// before the destructor).
 			manager->reset();
 		}
 	};
