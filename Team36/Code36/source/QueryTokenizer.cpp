@@ -156,11 +156,20 @@ void QueryTokenizer::parse_into_query_tokens(std::string input) {
 					curr_query_token.type = QueryToken::NEXT_T;
 					curr_query_token.token_value = "";
 					add_query_token(curr_query_token);
+				} else if (curr_query_token.token_value == "NextBip") {
+					curr_query_token.type = QueryToken::NEXT_BIP_T;
+					curr_query_token.token_value = "";
+					add_query_token(curr_query_token);
 				} else if (curr_query_token.token_value == "Affects") {
 					curr_query_token.type = QueryToken::AFFECTS_T;
 					curr_query_token.token_value = "";
 					add_query_token(curr_query_token);
-				} 
+				} else if (curr_query_token.token_value == "AffectsBip") {
+					curr_query_token.type = QueryToken::AFFECTS_BIP_T;
+					curr_query_token.token_value = "";
+					add_query_token(curr_query_token);
+				}
+
 				break;
 			}
 			else {
