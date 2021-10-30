@@ -163,9 +163,7 @@ void QueryPreprocessor::handleSelection(QueryToken& token) {
 		else if (token.type == QueryToken::QueryTokenType::IDENTIFIER &&
 			token.token_value == "and") {
 			queryValidator.validateAnd(patternOrSuchThat);
-			if (patternOrSuchThat.type == QueryToken::QueryTokenType::PATTERN ||
-				patternOrSuchThat.type == QueryToken::QueryTokenType::SUCH_THAT ||
-				patternOrSuchThat.type == QueryToken::QueryTokenType::WITH) {
+			if (patternOrSuchThat.type == QueryToken::QueryTokenType::PATTERN) {
 				if (nextToken.token_value == "pattern") {
 					throw SyntacticErrorException("and pattern is a syntax error");
 				}
