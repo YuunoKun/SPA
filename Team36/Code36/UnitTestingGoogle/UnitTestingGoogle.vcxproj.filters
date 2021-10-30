@@ -146,6 +146,10 @@
     </ClCompile>
     <ClCompile Include="AffectsParserTest.cpp" />
     <ClCompile Include="AffectsTParserTest.cpp" />
+    <ClCompile Include="NextBipParserTest.cpp" />
+    <ClCompile Include="NextBipTParserTest.cpp" />
+    <ClCompile Include="AffectsBipParserTest.cpp" />
+    <ClCompile Include="AffectsBipTParserTest.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />

@@ -39,6 +39,8 @@
     <ClInclude Include="pch.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AffectsBipParserTest.cpp" />
+    <ClCompile Include="AffectsBipTParserTest.cpp" />
     <ClCompile Include="AffectsTParserTest.cpp" />
     <ClCompile Include="CallsEvaluatorTest.cpp" />
     <ClCompile Include="CallsParserTest.cpp" />
@@ -53,6 +55,8 @@
     <ClCompile Include="FollowsParserTest.cpp" />
     <ClCompile Include="FollowsTParserTest.cpp" />
     <ClCompile Include="FSMTest.cpp" />
+    <ClCompile Include="NextBipParserTest.cpp" />
+    <ClCompile Include="NextBipTParserTest.cpp" />
     <ClCompile Include="NextEvaluatorTest.cpp" />
     <ClCompile Include="ParentParserTest.cpp" />
     <ClCompile Include="ParentTParserTest.cpp" />

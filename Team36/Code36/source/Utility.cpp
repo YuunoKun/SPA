@@ -1007,5 +1007,3 @@ bool Utility::checkIsSemanticError(Query& query) {
 bool Utility::Utility::isStmt(EntityType e) {
 	return e == EntityType::STMT || e == EntityType::PROG_LINE;
 }
-
-
