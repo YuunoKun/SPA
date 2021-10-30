@@ -61,14 +61,14 @@ bool AffectsPreprocessor::evaluateWildAndConstant(int index) {
 		return false;
 	}
 	else {
-		bool isAffectedBool = solver.solveIfAffected(index);
-		if (isAffectedBool) {
+		bool isAffected = solver.solveIfAffected(index);
+		if (isAffected) {
 			is_affected[index - 1] = STATUS_TRUE;
 		}
 		else {
 			is_affected[index - 1] = STATUS_FALSE;
 		}
-		return isAffectedBool;
+		return isAffected;
 	}
 }
 
