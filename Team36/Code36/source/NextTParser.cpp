@@ -1,10 +1,6 @@
-#include "QueryPatternRelRefParser.h"
 #include "NextTParser.h"
 
-NextTParser::NextTParser() {}
-
-void NextTParser::parseNextT(Query& query, std::vector<QueryToken> token_chain) {
-    QueryPatternRelRefParser parser;
+void NextTParser::parse(Query& query, std::vector<QueryToken> token_chain) {
     std::vector<QueryToken> temp_token_chain_1;
     std::vector<QueryToken> temp_token_chain_2;
     int comma_count = 0;
@@ -28,17 +24,19 @@ void NextTParser::parseNextT(Query& query, std::vector<QueryToken> token_chain) 
         }
     }
 
-    if (!parser.isLineRef(query, temp_token_chain_1) || !parser.isLineRef(query, temp_token_chain_2)) {
-        throw SemanticErrorException("Invalid parameters for Next*");
+    if (!Utility::isLineRef(query, temp_token_chain_1) || !Utility::isLineRef(query, temp_token_chain_2)) {
+        query.setIsSemanticError("Invalid parameters for Next*");
     }
 
-    QueryToken stmt = temp_token_chain_1[0];
+	QueryToken stmt = temp_token_chain_1[0];
 
-    QueryToken stmt2 = temp_token_chain_2[0];
+	QueryToken stmt2 = temp_token_chain_2[0];
 
-    query.addRelation(RelRef(RelType::NEXT_T,
-        parser.setLineRef(query, stmt),
-        parser.setLineRef(query, stmt2)));
+    if (!Utility::checkIsSemanticError(query)) {
+        query.addRelation(RelRef(RelType::NEXT_T,
+            Utility::setLineRef(query, stmt),
+            Utility::setLineRef(query, stmt2)));
+    }
 
 }
 

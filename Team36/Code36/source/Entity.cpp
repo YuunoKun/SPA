@@ -53,7 +53,7 @@ AttrRef Entity::getAttribute() {
 	return attribute;
 }
 
-void Entity::setAttribute(AttrRef& attrRef) {
+void Entity::setAttribute(AttrRef attrRef) {
 	this->attribute = attrRef;
 }
 
