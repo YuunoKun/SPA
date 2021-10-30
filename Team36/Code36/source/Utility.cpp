@@ -120,10 +120,8 @@ StmtType Utility::convertType(EntityType e) {
 	case EntityType::PRINT: return StmtType::STMT_PRINT;
 	case EntityType::CALL: return StmtType::STMT_CALL;
 	case EntityType::ASSIGN: return StmtType::STMT_ASSIGN;
-	default: throw std::invalid_argument("convert(): only does not support this type " + e);
+	default: throw std::invalid_argument("convert(): does not support this type " + e);
 	}
-
-	return StmtType();
 }
 
 std::vector<StmtInfo> Utility::filterResult(EntityType e, std::vector<StmtInfo>& v) {
