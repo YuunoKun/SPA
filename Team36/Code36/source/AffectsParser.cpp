@@ -1,6 +1,5 @@
 #include "AffectsParser.h"
 
-
 void AffectsParser::parse(Query& query, std::vector<QueryToken> token_chain) {
     // stmtRef , stmtRef //assign stmt only
 
