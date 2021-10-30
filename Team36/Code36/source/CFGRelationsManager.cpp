@@ -73,8 +73,8 @@ bool CFGRelationsManager::isAffectsEmpty() {
 }
 
 bool CFGRelationsManager::isAffects(stmt_index index1, stmt_index index2) {
-	bool isNextTCalculated = next_t_processor.isFullyPopulated() || next_t_processor.getCalculatedMatrix()[index1 - 1][index2 - 1];
-	if (isNextTCalculated && !isNextT(index1, index2)) {
+	bool is_nextT_calculated = next_t_processor.isFullyPopulated() || next_t_processor.getCalculatedMatrix()[index1 - 1][index2 - 1];
+	if (is_nextT_calculated && !isNextT(index1, index2)) {
 		return false;
 	}
 	else {
@@ -127,8 +127,8 @@ bool CFGRelationsManager::isAffectsTEmpty() {
 }
 
 bool CFGRelationsManager::isAffectsT(stmt_index index1, stmt_index index2) {
-	bool isNextTCalculated = next_t_processor.isFullyPopulated() || next_t_processor.getCalculatedMatrix()[index1 - 1][index2 - 1];
-	if (isNextTCalculated && !isNextT(index1, index2)) {
+	bool is_nextT_calculated = next_t_processor.isFullyPopulated() || next_t_processor.getCalculatedMatrix()[index1 - 1][index2 - 1];
+	if (is_nextT_calculated && !isNextT(index1, index2)) {
 		return false;
 	}
 	else {

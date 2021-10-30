@@ -37,14 +37,14 @@ bool AffectsPreprocessor::evaluateConstantAndWild(int index) {
 		return false;
 	}
 	else {
-		bool is_affecting_bool = solver.solveIfAffecting(index);
-		if (is_affecting_bool) {
+		bool is_index_affecting = solver.solveIfAffecting(index);
+		if (is_index_affecting) {
 			is_affecting[index - 1] = STATUS_TRUE;
 		}
 		else {
 			is_affecting[index - 1] = STATUS_FALSE;
 		}
-		return is_affecting_bool;
+		return is_index_affecting;
 	}
 }
 
@@ -61,14 +61,14 @@ bool AffectsPreprocessor::evaluateWildAndConstant(int index) {
 		return false;
 	}
 	else {
-		bool isAffected = solver.solveIfAffected(index);
-		if (isAffected) {
+		bool is_index_affected = solver.solveIfAffected(index);
+		if (is_index_affected) {
 			is_affected[index - 1] = STATUS_TRUE;
 		}
 		else {
 			is_affected[index - 1] = STATUS_FALSE;
 		}
-		return isAffected;
+		return is_index_affected;
 	}
 }
 
