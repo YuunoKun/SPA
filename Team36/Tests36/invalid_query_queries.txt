@@ -143,21 +143,6 @@ stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; pro
 Select BOOLEAN such that Follows(1,2) that Follows(s,a)
 none
 5000 
-29 - Syntactically invalid Follows
-stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select BOOLEAN such that Follows(x,y)
-none
-5000
-30 - Syntactically invalid Follows
-stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select BOOLEAN such that Follows(x,2)
-none
-5000
-31 - Syntactically invalid Follows
-stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select BOOLEAN such that Follows(1,y)
-none
-5000
 32 - Syntactically invalid Follows
 stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
 Select BOOLEAN such that Follows("1",1)
@@ -226,21 +211,6 @@ none
 45 - Syntactically invalid Follows
 stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
 Select BOOLEAN such that Follows()
-none
-5000
-46 - Syntactically invalid Follows*
-stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select BOOLEAN such that Follows*(x,y)
-none
-5000
-47 - Syntactically invalid Follows*
-stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select BOOLEAN such that Follows*(x,2)
-none
-5000
-48 - Syntactically invalid Follows*
-stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select BOOLEAN such that Follows*(1,y)
 none
 5000
 49 - Syntactically invalid Follows*
@@ -328,21 +298,6 @@ stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; pro
 Select BOOLEAN such that Follows***(1,2)
 none
 5000
-66 - Syntactically invalid Parent
-stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select BOOLEAN such that Parent(x,y)
-none
-5000
-67 - Syntactically invalid Parent
-stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select BOOLEAN such that Parent(x,2)
-none
-5000
-68 - Syntactically invalid Parent
-stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select BOOLEAN such that Parent(1,y)
-none
-5000
 69 - Syntactically invalid Parent
 stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
 Select BOOLEAN such that Parent("1,1)
@@ -411,21 +366,6 @@ none
 82 - Syntactically invalid Parent
 stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
 Select BOOLEAN such that Parent()
-none
-5000
-83 - Syntactically invalid Parent*
-stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select BOOLEAN such that Parent*(x,y)
-none
-5000
-84 - Syntactically invalid Parent*
-stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select BOOLEAN such that Parent*(x,2)
-none
-5000
-85 - Syntactically invalid Parent*
-stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select BOOLEAN such that Parent*(1,y)
 none
 5000
 86 - Syntactically invalid Parent*
@@ -513,11 +453,6 @@ stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; pro
 Select BOOLEAN such that Parent***(1,2)
 none
 5000
-103 - Syntactically invalid Modifies
-stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select BOOLEAN such that Modifies(x,y)
-none
-5000
 104 - Syntactically invalid Modifies
 stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
 Select BOOLEAN such that Modifies(1,"1")
@@ -526,16 +461,6 @@ none
 105 - Syntactically invalid Modifies
 stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
 Select BOOLEAN such that Modifies(1,1)
-none
-5000
-106 - Syntactically invalid Modifies
-stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select BOOLEAN such that Modifies(1,y)
-none
-5000
-107 - Syntactically invalid Modifies
-stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select BOOLEAN such that Modifies(x,"a")
 none
 5000
 108 - Syntactically invalid Modifies
@@ -623,11 +548,6 @@ stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; pro
 Select BOOLEAN such that Modifies()
 none
 5000
-125 - Syntactically invalid Uses
-stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select BOOLEAN such that Uses(x,y)
-none
-5000
 126 - Syntactically invalid Uses
 stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
 Select BOOLEAN such that Uses(1,"1")
@@ -636,16 +556,6 @@ none
 127 - Syntactically invalid Uses
 stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
 Select BOOLEAN such that Uses(1,1)
-none
-5000
-128 - Syntactically invalid Uses
-stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select BOOLEAN such that Uses(1,y)
-none
-5000
-129 - Syntactically invalid Uses
-stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select BOOLEAN such that Uses(x,"a")
 none
 5000
 130 - Syntactically invalid Uses
@@ -658,11 +568,6 @@ stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; pro
 Select BOOLEAN such that Uses(x,a")
 none
 5000
-132 - Syntactically invalid Uses
-stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select BOOLEAN such that Uses(x,v)
-none
-5000
 133 - Syntactically invalid Uses
 stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
 Select BOOLEAN such that Uses(1,"")
@@ -671,11 +576,6 @@ none
 134 - Syntactically invalid Uses
 stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
 Select BOOLEAN such that Uses(1,")
-none
-5000
-135 - Syntactically invalid Uses
-stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select BOOLEAN such that Uses(1,d)
 none
 5000
 136 - Syntactically invalid Uses
@@ -731,16 +631,6 @@ none
 146 - Syntactically invalid Uses
 stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
 Select BOOLEAN such that Uses()
-none
-5000
-216 - Syntactically invalid Calls
-stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select BOOLEAN such that Calls(x,y)
-none
-5000
-217 - Syntactically invalid Calls
-stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select BOOLEAN such that Calls(x,2)
 none
 5000
 218 - Syntactically invalid Calls
@@ -818,16 +708,6 @@ stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; pro
 Select BOOLEAN such that Calls()
 none
 5000
-233 - Syntactically invalid Calls*
-stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select BOOLEAN such that Calls*(x,y)
-none
-5000
-234 - Syntactically invalid Calls*
-stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select BOOLEAN such that Calls*(x,2)
-none
-5000
 235 - Syntactically invalid Calls*
 stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
 Select BOOLEAN such that Calls*(1,y)
@@ -903,21 +783,6 @@ stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; pro
 Select BOOLEAN such that Calls*()
 none
 5000
-250 - Syntactically invalid Next
-stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select BOOLEAN such that Next(x,y)
-none
-5000
-251 - Syntactically invalid Next
-stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select BOOLEAN such that Next(x,2)
-none
-5000
-252 - Syntactically invalid Next
-stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select BOOLEAN such that Next(1,y)
-none
-5000
 253 - Syntactically invalid Next
 stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
 Select BOOLEAN such that Next("1",1)
@@ -988,21 +853,6 @@ stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; pro
 Select BOOLEAN such that Next()
 none
 5000
-267 - Syntactically invalid Next*
-stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select BOOLEAN such that Next*(x,y)
-none
-5000
-268 - Syntactically invalid Next*
-stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select BOOLEAN such that Next*(x,2)
-none
-5000
-269 - Syntactically invalid Next*
-stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select BOOLEAN such that Next*(1,y)
-none
-5000
 270 - Syntactically invalid Next*
 stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
 Select BOOLEAN such that Next*("1",1)
@@ -1071,26 +921,6 @@ none
 283 - Syntactically invalid Next*
 stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
 Select BOOLEAN such that Next*()
-none
-5000
-284 - Syntactically invalid Affects
-stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select BOOLEAN such that Affects(x,y)
-none
-5000
-285 - Syntactically invalid Affects
-stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select BOOLEAN such that Affects(x,2)
-none
-5000
-286 - Syntactically invalid Affects
-stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select BOOLEAN such that Affects(1,y)
-none
-5000
-287 - Syntactically invalid Affects
-stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select BOOLEAN such that Affects("1",1)
 none
 5000
 288 - Syntactically invalid Affects
@@ -2386,6 +2216,186 @@ FALSE
 69 - Semantically invalid Follows (stmtRef is out of range) 
 variable v; 
 Select BOOLEAN such that Follows(-1, v)
+FALSE
+5000
+29 - Semantically invalid Follows
+stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Follows(x,y)
+FALSE
+5000
+30 - Semantically invalid Follows
+stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Follows(x,2)
+FALSE
+5000
+31 - Semantically invalid Follows
+stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Follows(1,y)
+FALSE
+5000
+46 - Semantically invalid Follows*
+stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Follows*(x,y)
+FALSE
+5000
+47 - Semantically invalid Follows*
+stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Follows*(x,2)
+FALSE
+5000
+48 - Semantically invalid Follows*
+stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Follows*(1,y)
+FALSE
+5000
+66 - Semantically invalid Parent
+stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Parent(x,y)
+FALSE
+5000
+67 - Semantically invalid Parent
+stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Parent(x,2)
+FALSE
+5000
+68 - Semantically invalid Parent
+stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Parent(1,y)
+FALSE
+5000
+83 - Semantically invalid Parent*
+stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Parent*(x,y)
+FALSE
+5000
+84 - Semantically invalid Parent*
+stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Parent*(x,2)
+FALSE
+5000
+85 - Semantically invalid Parent*
+stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Parent*(1,y)
+FALSE
+5000
+103 - Semantically invalid Modifies
+stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Modifies(x,y)
+FALSE
+5000
+106 - Semantically invalid Modifies
+stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Modifies(1,y)
+FALSE
+5000
+107 - Semantically invalid Modifies
+stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Modifies(x,"a")
+FALSE
+5000
+110 - Semantically invalid Modifies
+stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Modifies(x,v)
+FALSE
+5000
+113 - Semantically invalid Modifies
+stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Modifies(1,d)
+FALSE
+5000
+125 - Semantically invalid Uses
+stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Uses(x,y)
+FALSE
+5000
+128 - Semantically invalid Uses
+stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Uses(1,y)
+FALSE
+5000
+129 - Semantically invalid Uses
+stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Uses(x,"a")
+FALSE
+5000
+132 - Semantically invalid Uses
+stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Uses(x,v)
+FALSE
+5000
+135 - Semantically invalid Uses
+stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Uses(1,d)
+FALSE
+5000
+216 - Semantically invalid Calls
+stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Calls(x,y)
+FALSE
+5000
+217 - Semantically invalid Calls
+stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Calls(x,2)
+FALSE
+5000
+233 - Semantically invalid Calls*
+stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Calls*(x,y)
+FALSE
+5000
+234 - Semantically invalid Calls*
+stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Calls*(x,2)
+FALSE
+5000
+250 - Semantically invalid Next
+stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Next(x,y)
+FALSE
+5000
+251 - Semantically invalid Next
+stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Next(x,2)
+FALSE
+5000
+252 - Semantically invalid Next
+stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Next(1,y)
+FALSE
+5000
+267 - Semantically invalid Next*
+stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Next*(x,y)
+FALSE
+5000
+268 - Semantically invalid Next*
+stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Next*(x,2)
+FALSE
+5000
+269 - Semantically invalid Next*
+stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Next*(1,y)
+FALSE
+5000
+284 - Semantically invalid Affects
+stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Affects(x,y)
+FALSE
+5000
+285 - Semantically invalid Affects
+stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Affects(x,2)
+FALSE
+5000
+286 - Semantically invalid Affects
+stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Affects(1,y)
+FALSE
+5000
+287 - Semantically invalid Affects
+stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Affects("1",1)
 FALSE
 5000
 70 - Semantically invalid pattern (v is not declared)
