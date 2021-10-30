@@ -3065,7 +3065,7 @@ TRUE
 5000
 71 - valid NextBip*
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
-Select BOOLEAN such that NextBip*(w, pl)NextBip
+Select BOOLEAN such that NextBip*(w, pl)
 TRUE
 5000
 72 - valid NextBip*

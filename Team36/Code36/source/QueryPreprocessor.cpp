@@ -287,8 +287,6 @@ void QueryPreprocessor::handleWithinParameter(QueryToken& token) {
 		QueryPatternRelRefParser validator;
 		parameterClause.push_back(token);
 
-		// add call jiyu method
-				// TODO: call jiyu's method
 		if (patternOrSuchThat.type == QueryToken::QueryTokenType::WITH && (this->nextToken.type == QueryToken::QueryTokenType::WHITESPACE || this->nextToken.token_value == "and")) {
 			validator.parseWith(query, parameterClause);
 			parameterClause.clear();
@@ -470,6 +468,18 @@ void QueryPreprocessor::setQueryParameter() {
 	}
 	else if (prevTokenSelect.token_value == "" && prevTokenSelect.type == QueryToken::QueryTokenType::AFFECTS_T) {
 		queryParameter = { QueryToken::QueryTokenType::AFFECTS_T, "" };
+	}
+	else if (prevTokenSelect.token_value == "AffectsBip" && prevTokenSelect.type == QueryToken::QueryTokenType::IDENTIFIER) {
+		queryParameter = { QueryToken::QueryTokenType::AFFECTS_BIP, "AffectsBip" };
+	}
+	else if (prevTokenSelect.token_value == "" && prevTokenSelect.type == QueryToken::QueryTokenType::AFFECTS_BIP_T) {
+		queryParameter = { QueryToken::QueryTokenType::AFFECTS_BIP_T, "" };
+	}
+	else if (prevTokenSelect.token_value == "NextBip" && prevTokenSelect.type == QueryToken::QueryTokenType::IDENTIFIER) {
+		queryParameter = { QueryToken::QueryTokenType::NEXT_BIP, "NextBip" };
+	}
+	else if (prevTokenSelect.token_value == "" && prevTokenSelect.type == QueryToken::QueryTokenType::NEXT_BIP_T) {
+		queryParameter = { QueryToken::QueryTokenType::NEXT_BIP_T, "" };
 	}
 }
 
