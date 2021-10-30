@@ -39,6 +39,7 @@
     <ClInclude Include="pch.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AffectsTParserTest.cpp" />
     <ClCompile Include="CallsEvaluatorTest.cpp" />
     <ClCompile Include="CallsParserTest.cpp" />
     <ClCompile Include="CallsTEvaluatorTest.cpp" />
@@ -86,6 +87,7 @@
     <ClCompile Include="AssignPatternParserTest.cpp" />
     <ClCompile Include="IfPatternParserTest.cpp" />
     <ClCompile Include="ModifiesParserTest.cpp" />
+    <ClCompile Include="AffectsParserTest.cpp" />
     <ClCompile Include="UsesParserTest.cpp" />
     <ClCompile Include="WithParserTest.cpp" />
     <ClCompile Include="WhilePatternParserTest.cpp" />

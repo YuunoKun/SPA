@@ -144,6 +144,8 @@
     <ClCompile Include="QueryEvaluatorCFGRelationTest.cpp">
       <Filter>PQL\QueryEvaluator</Filter>
     </ClCompile>
+    <ClCompile Include="AffectsParserTest.cpp" />
+    <ClCompile Include="AffectsTParserTest.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />

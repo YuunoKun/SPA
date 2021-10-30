@@ -841,7 +841,7 @@ Entity Utility::setStmtRef(Query& query, QueryToken token, EntityType ident_type
 
 	// is INTEGER, constant type
 	if (token.type == QueryToken::CONSTANT) {
-		return Entity(EntityType::STMT, token.token_value);
+		return Entity(ident_type, token.token_value);
 	}
 
 	// synonym check
