@@ -11,12 +11,31 @@ namespace UnitTesting {
 
 		virtual void SetUp() override {
 			PKB::getInstance().resetCache();
+
+			PKB::getInstance().addStmt(STMT_READ);
+			PKB::getInstance().addStmt(STMT_PRINT);
+			PKB::getInstance().addStmt(STMT_READ);
+			PKB::getInstance().addStmt(STMT_IF);
+			PKB::getInstance().addFollows(1, 2);
+			PKB::getInstance().addFollows(2, 3);
+			PKB::getInstance().generateFollowsT();
 		}
 
 		PKBAdapter pkb;
 		FollowsTEvaluator evaluator;
+
+		StmtInfo p1{ 1, STMT_READ };
+		StmtInfo p2{ 2, STMT_PRINT };
+		StmtInfo p3{ 3, STMT_READ };
+		StmtInfo p4{ 4, STMT_IF };
+
+		Entity e1 = { STMT, "1" };
+		Entity e2 = { STMT, "2" };
+		Entity e3 = { STMT, "3" };
+		Entity e4 = { STMT, "4" };
 	};
 	TEST_F(FollowsTEvaluatorTest, evaluateWildAndWild) {
+		PKB::getInstance().resetCache();
 		PKB::getInstance().addStmt(STMT_READ);
 		PKB::getInstance().addStmt(STMT_PRINT);
 		PKB::getInstance().addStmt(STMT_READ);
@@ -28,18 +47,6 @@ namespace UnitTesting {
 	}
 
 	TEST_F(FollowsTEvaluatorTest, evaluateConstantAndConstant) {
-		Entity e1 = { STMT, "1" };
-		Entity e2 = { STMT, "2" };
-		Entity e3 = { STMT, "3" };
-		Entity e4 = { STMT, "4" };
-
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_PRINT);
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_IF);
-		PKB::getInstance().addFollows(1, 2);
-		PKB::getInstance().addFollows(2, 3);
-		PKB::getInstance().generateFollowsT();
 		EXPECT_TRUE(evaluator.evaluateConstantAndConstant(e1, e2));
 		EXPECT_TRUE(evaluator.evaluateConstantAndConstant(e1, e3));
 		EXPECT_TRUE(evaluator.evaluateConstantAndConstant(e2, e3));
@@ -59,17 +66,6 @@ namespace UnitTesting {
 	}
 
 	TEST_F(FollowsTEvaluatorTest, evaluateConstantAndWild) {
-		Entity e1 = { STMT, "1" };
-		Entity e2 = { STMT, "2" };
-		Entity e3 = { STMT, "3" };
-		Entity e4 = { STMT, "4" };
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_PRINT);
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_IF);
-		PKB::getInstance().addFollows(1, 2);
-		PKB::getInstance().addFollows(2, 3);
-		PKB::getInstance().generateFollowsT();
 		EXPECT_TRUE(evaluator.evaluateConstantAndWild(e1));
 		EXPECT_TRUE(evaluator.evaluateConstantAndWild(e2));
 		EXPECT_FALSE(evaluator.evaluateConstantAndWild(e3));
@@ -77,17 +73,6 @@ namespace UnitTesting {
 	}
 
 	TEST_F(FollowsTEvaluatorTest, evaluateWildAndConstant) {
-		Entity e1 = { STMT, "1" };
-		Entity e2 = { STMT, "2" };
-		Entity e3 = { STMT, "3" };
-		Entity e4 = { STMT, "4" };
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_PRINT);
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_IF);
-		PKB::getInstance().addFollows(1, 2);
-		PKB::getInstance().addFollows(2, 3);
-		PKB::getInstance().generateFollowsT();
 		EXPECT_FALSE(evaluator.evaluateWildAndConstant(e1));
 		EXPECT_TRUE(evaluator.evaluateWildAndConstant(e2));
 		EXPECT_TRUE(evaluator.evaluateWildAndConstant(e3));
@@ -95,18 +80,6 @@ namespace UnitTesting {
 	}
 
 	TEST_F(FollowsTEvaluatorTest, evaluateSynonymAndSynonym) {
-		StmtInfo p1{ 1, STMT_READ };
-		StmtInfo p2{ 2, STMT_PRINT };
-		StmtInfo p3{ 3, STMT_READ };
-		StmtInfo p4{ 4, STMT_IF };
-
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_PRINT);
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_IF);
-		PKB::getInstance().addFollows(1, 2);
-		PKB::getInstance().addFollows(2, 3);
-		PKB::getInstance().generateFollowsT();
 
 		std::vector<std::pair<StmtInfo, StmtInfo>> v = pkb.getFollowsT();
 		Entity left = { STMT, Synonym{"a"} };
@@ -151,18 +124,6 @@ namespace UnitTesting {
 	}
 
 	TEST_F(FollowsTEvaluatorTest, evaluateWildAndSynonym) {
-		StmtInfo p1{ 1, STMT_READ };
-		StmtInfo p2{ 2, STMT_PRINT };
-		StmtInfo p3{ 3, STMT_READ };
-		StmtInfo p4{ 4, STMT_IF };
-
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_PRINT);
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_IF);
-		PKB::getInstance().addFollows(1, 2);
-		PKB::getInstance().addFollows(2, 3);
-		PKB::getInstance().generateFollowsT();
 
 		std::vector<StmtInfo> v = pkb.getFollowingT();
 		Entity header = { STMT, Synonym{"a"} };
@@ -195,18 +156,6 @@ namespace UnitTesting {
 	}
 
 	TEST_F(FollowsTEvaluatorTest, evaluateSynonymAndWild) {
-		StmtInfo p1{ 1, STMT_READ };
-		StmtInfo p2{ 2, STMT_PRINT };
-		StmtInfo p3{ 3, STMT_READ };
-		StmtInfo p4{ 4, STMT_IF };
-
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_PRINT);
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_IF);
-		PKB::getInstance().addFollows(1, 2);
-		PKB::getInstance().addFollows(2, 3);
-		PKB::getInstance().generateFollowsT();
 
 		std::vector<StmtInfo> v = pkb.getFollowedT();
 		Entity header = { STMT, Synonym{"a"} };
@@ -239,18 +188,6 @@ namespace UnitTesting {
 	}
 
 	TEST_F(FollowsTEvaluatorTest, evaluateConstantAndSynonym) {
-		StmtInfo p1{ 1, STMT_READ };
-		StmtInfo p2{ 2, STMT_PRINT };
-		StmtInfo p3{ 3, STMT_READ };
-		StmtInfo p4{ 4, STMT_IF };
-
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_PRINT);
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_IF);
-		PKB::getInstance().addFollows(1, 2);
-		PKB::getInstance().addFollows(2, 3);
-		PKB::getInstance().generateFollowsT();
 
 		std::vector<StmtInfo> v = { p2, p3 };
 		Entity header = { STMT, Synonym{"a"} };
@@ -306,18 +243,6 @@ namespace UnitTesting {
 	}
 
 	TEST_F(FollowsTEvaluatorTest, evaluateSynonymAndConstant) {
-		StmtInfo p1{ 1, STMT_READ };
-		StmtInfo p2{ 2, STMT_PRINT };
-		StmtInfo p3{ 3, STMT_READ };
-		StmtInfo p4{ 4, STMT_IF };
-
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_PRINT);
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_IF);
-		PKB::getInstance().addFollows(1, 2);
-		PKB::getInstance().addFollows(2, 3);
-		PKB::getInstance().generateFollowsT();
 
 		std::vector<StmtInfo> v = { p1, p2 };
 		Entity header = { STMT, Synonym{"a"} };
