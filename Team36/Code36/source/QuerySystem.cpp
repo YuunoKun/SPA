@@ -12,7 +12,7 @@ std::list<std::string> QuerySystem::processQuery(std::string input) {
 		Query query = preprocessor.parse(input);
 
 		if (!optimizer.checkAllConstantExist(query.getClauses())) {
-			returnEmptyResult(query.getSelected().front());
+			return returnEmptyResult(query.getSelected().front());
 		}
 
 		query.setClauses(optimizer.optimizeClausesOrder(query.getClauses()));
@@ -26,14 +26,15 @@ std::list<std::string> QuerySystem::processQuery(std::string input) {
 	}
 	catch (SemanticErrorException& err)
 	{
+		preprocessor.resetQuery();
+
 		if (err.getQuery().getSelected().size() == 0) {
 			return {};
 		}
 		else {
-			returnEmptyResult(err.getQuery().getSelected().front());
+			return returnEmptyResult(err.getQuery().getSelected().front());
 		}
 
-		preprocessor.resetQuery();
 	}
 	catch (std::exception& e)
 	{
