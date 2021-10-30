@@ -78,7 +78,7 @@ Query QueryPreprocessor::parse(std::string str) {
 	QueryTokenizer query_tokenizer;
 	QueryValidator queryValidator = QueryValidator();
 	//Query query
-	query_tokenizer.parse_into_query_tokens(this->query, str);
+	query_tokenizer.tokenize(this->query, str);
 
 	std::vector<QueryToken> tokens = query_tokenizer.get_query_token_chain();
 

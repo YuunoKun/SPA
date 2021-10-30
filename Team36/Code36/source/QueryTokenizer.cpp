@@ -8,7 +8,7 @@ QueryTokenizer::QueryTokenizer() {
 	query_token_cache = {};
 }
 
-void QueryTokenizer::parse_into_query_tokens(Query& query, std::string input) {
+void QueryTokenizer::tokenize(Query& query, std::string input) {
 	QueryToken curr_query_token;
 	QueryToken temp_query_token;
 

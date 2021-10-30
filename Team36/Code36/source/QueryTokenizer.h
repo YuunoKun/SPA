@@ -14,7 +14,7 @@ public:
 	QueryTokenizer();
 
 	//Tokenize for parser to convert to Entity/Pattern/RelRef
-	void parse_into_query_tokens(Query&, std::string);
+	void tokenize(Query&, std::string);
 
 	std::vector<QueryToken> get_query_token_chain();
 
