@@ -22,8 +22,7 @@ namespace IntegrationTesting {
 		}
 
 		template<typename T>
-		bool compare(std::vector<T> v1, std::vector<T> v2)
-		{
+		bool compare(std::vector<T> v1, std::vector<T> v2) {
 			std::sort(v1.begin(), v1.end());
 			std::sort(v2.begin(), v2.end());
 			return v1 == v2;
@@ -117,7 +116,7 @@ namespace IntegrationTesting {
 			{10, "count"}, {13, "flag"}, {14, "cenX"}, {15, "normSq"} };
 		std::sort(expected_assign.begin(), expected_assign.end());
 
-		UniqueRelationTable<stmt_index, var_name> table = PKB::getInstance().getAssigns();
+		RelationTable<stmt_index, var_name> table = PKB::getInstance().getAssigns();
 		std::vector<std::pair<stmt_index, var_name>> v = table.getPairs();
 		std::sort(v.begin(), v.end());
 		EXPECT_EQ(v, expected_assign);
@@ -158,7 +157,7 @@ namespace IntegrationTesting {
 			expected_follows_stmt.push_back({ ParserPKBTest::sample5_stmts[pair.first - 1], ParserPKBTest::sample5_stmts[pair.second - 1] });
 		}
 
-		UniqueRelationTable<StmtInfo, StmtInfo> table = PKB::getInstance().getFollows();
+		RelationTable<StmtInfo, StmtInfo> table = PKB::getInstance().getFollows();
 		auto v = table.getPairs();
 		std::sort(v.begin(), v.end());
 		EXPECT_EQ(v, expected_follows_stmt);
