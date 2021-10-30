@@ -252,7 +252,7 @@ namespace UnitTesting {
 		Query query;
 
 		//Expected
-		Entity expected_1 = Entity(EntityType::VARIABLE, "main");
+		Entity expected_1 = Entity(EntityType::PROCEDURE, "main");
 
 		Synonym synonym;
 		synonym.name = "v";
@@ -278,7 +278,7 @@ namespace UnitTesting {
 		Query query;
 
 		//Expected
-		Entity expected_1 = Entity(EntityType::VARIABLE, "main");
+		Entity expected_1 = Entity(EntityType::PROCEDURE, "main");
 
 		Entity expected_2 = Entity(EntityType::WILD);
 
@@ -302,7 +302,7 @@ namespace UnitTesting {
 
 		//Expected
 
-		Entity expected_1 = Entity(EntityType::VARIABLE, "main");
+		Entity expected_1 = Entity(EntityType::PROCEDURE, "main");
 
 		Entity expected_2 = Entity(EntityType::VARIABLE, "var");
 
