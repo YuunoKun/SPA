@@ -1,0 +1,15 @@
+1 - Stress test 1 Next
+prog_line l1, l2;
+Select BOOLEAN such that Next*(l1, l2);
+TRUE
+5000
+2 - Stress test 2 Next
+prog_line l1, l2, l3;
+Select BOOLEAN such that Next*(l1, l2) and Next*(l2, l3)
+TRUE
+5000
+2 - Stress test 3 Next
+prog_line l1, l2, l3, l4;
+Select BOOLEAN such that Next*(l1, l2) and Next*(l2, l3) and Next*(l3, l4)
+TRUE
+5000
