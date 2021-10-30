@@ -10,30 +10,27 @@
 #include "SemanticErrorException.h"
 #include "SyntacticErrorException.h"
 #include "Utility.h"
+#include "UsesParser.h"
+#include "ModifiesParser.h"
+#include "FollowsParser.h"
+#include "FollowsTParser.h"
+#include "ParentParser.h"
+#include "ParentTParser.h"
+#include "CallsParser.h"
+#include "CallsTParser.h"
 #include "NextParser.h"
 #include "NextTParser.h"
+#include "AffectsParser.h"
+#include "AffectsTParser.h"
 #include "AssignPatternParser.h"
 #include "IfPatternParser.h"
 #include "WhilePatternParser.h"
-
-
+#include "WithParser.h"
 
 class QueryPatternRelRefParser {
 public: 
 	QueryPatternRelRefParser();
-	
-	bool isStmtRef(Query&, std::vector<QueryToken>);
-	bool isEntRef(Query&, std::vector<QueryToken>);
-	bool isLineRef(Query&, std::vector<QueryToken>);
-	bool isExpr(std::vector<QueryToken>);
-	bool isCorrectSynEntRef(Query&, std::vector<QueryToken>, EntityType);
-	bool isWildCard(std::vector<QueryToken>);
-	Entity setStmtRef(Query&, QueryToken);
-	Entity setEntRef(Query&, std::vector<QueryToken>);
-	Entity setLineRef(Query&, QueryToken);
-	Entity setCallEntRef(Query&, std::vector<QueryToken>);
-	std::string setExpr(std::vector<QueryToken>);
 	void parseParameterSuchThat(Query&, QueryToken::QueryTokenType, std::vector<QueryToken>);
 	void parseParameterPattern(Query&, Entity&, std::vector<QueryToken>);
-
+	void parseWith(Query&, std::vector<QueryToken>);
 };

@@ -4,6 +4,7 @@
 #include "QueryToken.h"
 #include "SemanticErrorException.h"
 #include "SyntacticErrorException.h"
+#include "Utility.h"
 
 class QueryTokenizer
 {

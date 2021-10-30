@@ -12,7 +12,6 @@ typedef unsigned int prog_line;
 typedef unsigned int var_index;
 typedef unsigned int proc_index;
 
-
 static const std::string BOOLEAN_TRUE = "TRUE";
 static const std::string BOOLEAN_FALSE = "FALSE";
 
@@ -42,8 +41,8 @@ typedef std::pair<stmt_index, var_name> pattern_info;
 
 struct Synonym {
 	std::string name;
-	Synonym() { 
-		name = "_"; 
+	Synonym() {
+		name = "_";
 	};
 	Synonym(std::string name) {
 		if (name.size() == 0 || !isalpha(name[0])) {
@@ -68,6 +67,29 @@ namespace std {
 		size_t operator()(const StmtInfo& k) const {
 			// Compute individual hash values for two data members and combine them using XOR and bit shifting
 			return ((hash<int>()(k.stmt_index) ^ (hash<int>()(k.stmt_type) << 1)) >> 1);
+		}
+	};
+}
+
+struct LabelledProgLine {
+	prog_line program_line;
+	prog_line label;
+
+	bool operator==(const LabelledProgLine& labelled_progline) const {
+		return program_line == labelled_progline.program_line && label == labelled_progline.label;
+	}
+
+	bool operator < (const LabelledProgLine& st) const {
+		return (program_line < st.program_line);
+	}
+};
+
+namespace std {
+	template <>
+	struct hash<LabelledProgLine> {
+		size_t operator()(const LabelledProgLine& k) const {
+			// Compute individual hash values for two data members and combine them using XOR and bit shifting
+			return ((hash<int>()(k.program_line) ^ (hash<int>()(k.label) << 1)) >> 1);
 		}
 	};
 }
