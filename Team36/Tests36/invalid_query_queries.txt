@@ -1928,21 +1928,6 @@ assign a; v
 Select BOOLEAN pattern a(v,_, _, _)
 none
 5000
-12 - Semantically invalid double declaration
-stmt s, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select BOOLEAN
-none
-5000
-13 - Semantically invalid double declaration
-stmt s; read s; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select BOOLEAN
-none
-5000
-165 - Semantically invalid double declaration
-read s; stmt s;
-Select BOOLEAN
-none
-5000
 386 - Syntactically invalid with
 stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl
 Select BOOLEAN with pl = s
@@ -2041,6 +2026,21 @@ none
 405 - Syntactically invalid with
 stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl
 Select BOOLEAN with c = pl
+none
+5000
+12 - Semantically invalid double declaration
+stmt s, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN
+none
+5000
+13 - Semantically invalid double declaration
+stmt s; read s; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN
+none
+5000
+165 - Semantically invalid double declaration
+read s; stmt s;
+Select BOOLEAN
 none
 5000
 1 - Semantically invalid Follows
