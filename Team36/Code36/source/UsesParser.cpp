@@ -50,7 +50,7 @@ void UsesParser::parse(Query& query, std::vector<QueryToken> token_chain) {
     }
     else {
         if (!Utility::checkIsSemanticError(query)) {
-            query.addRelation(RelRef(RelType::USES_P, Utility::setEntRef(query, separated_params[0], EntityType::VARIABLE),
+            query.addRelation(RelRef(RelType::USES_P, Utility::setEntRef(query, separated_params[0], EntityType::PROCEDURE),
                 Utility::setEntRef(query, separated_params[1], EntityType::VARIABLE)));
         }
     }
