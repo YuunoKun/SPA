@@ -975,6 +975,31 @@ std::string Utility::setExpr(std::vector<QueryToken> token_chain) {
 	return Utility::queryTokenTypeToExprString(token_chain);
 }
 
+std::vector<std::vector<QueryToken>> Utility::splitTokenChain(int max_params, QueryToken::QueryTokenType delimiter, std::vector<QueryToken> token_chain) {
+	std::vector<std::vector<QueryToken>> separated_params;
+	for (int i = 0; i < max_params; i++) {
+		separated_params.push_back(std::vector<QueryToken>{});
+	}
+	int delimiter_count = 0;
+	size_t token_chain_size = token_chain.size();
+	for (size_t i = 0; i < token_chain_size; i++) {
+		if (token_chain[0].type == delimiter) {
+			token_chain.erase(token_chain.begin());
+			delimiter_count++;
+		}
+		else if (delimiter_count >= 0 && delimiter_count < max_params) {
+			// 1st param
+			separated_params[delimiter_count].push_back(token_chain[0]);
+			token_chain.erase(token_chain.begin());
+		}
+		else {
+			throw SyntacticErrorException("Invalid parameters");
+		}
+	}
+	return separated_params;
+}
+
+
 bool Utility::checkIsSemanticError(Query& query) {
 	return query.getIsSemanticError() != "";
 }

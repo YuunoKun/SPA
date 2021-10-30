@@ -71,6 +71,7 @@ public:
 	static Entity setRef(Query&, std::vector<QueryToken>, EntityType, AttrRef);
 	static std::string setExpr(std::vector<QueryToken>);
 	static bool checkIsSemanticError(Query&);
+	static std::vector<std::vector<QueryToken>> splitTokenChain(int, QueryToken::QueryTokenType, std::vector<QueryToken>);
 private:
 	static bool isStmt(EntityType);
 
