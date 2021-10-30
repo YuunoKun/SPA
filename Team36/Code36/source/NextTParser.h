@@ -1,7 +1,9 @@
 #pragma once
+
 #include <iostream>
 #include <string>
 #include <vector>
+#include "RelationParserInterface.h"
 #include "Entity.h"
 #include "Query.h"
 #include "QueryToken.h"
@@ -10,10 +12,7 @@
 #include "SyntacticErrorException.h"
 #include "Utility.h"
 
-class NextTParser {
+class NextTParser : public RelationParserInterface {
 public:
-    NextTParser();
-
-    void parseNextT(Query&, std::vector<QueryToken>);
-
+    void parse(Query&, std::vector<QueryToken>) override;
 };

@@ -121,8 +121,8 @@ void QueryTokenizer::parse_into_query_tokens(std::string input) {
 				break;
 			} else if (curr_query_token.type == QueryToken::IDENTIFIER
 				&& curr_query_token.token_value == "prog_line") { 
-				curr_query_token.type = QueryToken::IDENTIFIER;
-				curr_query_token.token_value = "prog_line";
+				curr_query_token.type = QueryToken::PROG_LINE;
+				curr_query_token.token_value = "";
 				add_query_token(curr_query_token);
 				is_prog_line = false;
 			}
