@@ -473,11 +473,6 @@ stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; pro
 Select BOOLEAN such that Modifies(x,a")
 none
 5000
-110 - Syntactically invalid Modifies
-stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select BOOLEAN such that Modifies(x,v)
-none
-5000
 111 - Syntactically invalid Modifies
 stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
 Select BOOLEAN such that Modifies(1,"")
@@ -486,11 +481,6 @@ none
 112 - Syntactically invalid Modifies
 stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
 Select BOOLEAN such that Modifies(1,")
-none
-5000
-113 - Syntactically invalid Modifies
-stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select BOOLEAN such that Modifies(1,d)
 none
 5000
 114 - Syntactically invalid Modifies
@@ -631,6 +621,16 @@ none
 146 - Syntactically invalid Uses
 stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
 Select BOOLEAN such that Uses()
+none
+5000
+147 - Syntactically invalid Modifies (stmtRef is out of range) 
+variable v; 
+Select BOOLEAN such that Modifies(-1, v)
+none
+5000
+148 - Syntactically invalid Follows (stmtRef is out of range) 
+variable v; 
+Select BOOLEAN such that Follows(-1, v)
 none
 5000
 218 - Syntactically invalid Calls
@@ -1488,6 +1488,11 @@ stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; pro
 Select BOOLEAN such that pattern a(1,_)
 none
 5000
+162 - Semantically invalid pattern
+stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN pattern ifs(_, _)
+none
+5000
 166 - Syntactically invalid pattern (additional underscore)
 assign a; variable v;
 Select BOOLEAN pattern a(v, __"x"_)
@@ -1861,17 +1866,17 @@ none
 12 - Semantically invalid double declaration
 stmt s, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
 Select BOOLEAN
-none
+FALSE
 5000
 13 - Semantically invalid double declaration
 stmt s; read s; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
 Select BOOLEAN
-none
+FALSE
 5000
 165 - Semantically invalid double declaration
 read s; stmt s;
 Select BOOLEAN
-none
+FALSE
 5000
 1 - Semantically invalid Follows
 stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
@@ -2106,7 +2111,7 @@ FALSE
 47 - Semantically invalid pattern
 stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
 Select r pattern s(_, _)
-FALSE
+none
 5000
 48 - Semantically invalid pattern
 stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
@@ -2121,11 +2126,6 @@ FALSE
 50 - Semantically invalid pattern
 stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
 Select BOOLEAN pattern *(_, _)
-FALSE
-5000
-51 - Semantically invalid pattern
-stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select BOOLEAN pattern ifs(_, _)
 FALSE
 5000
 52 - Semantically invalid pattern
@@ -2203,19 +2203,9 @@ variable v;
 Select BOOLEAN such that Uses(0, v)
 FALSE
 5000
-67 - Semantically invalid Modifies (stmtRef is out of range) 
-variable v; 
-Select BOOLEAN such that Modifies(-1, v)
-FALSE
-5000
 68 - Semantically invalid Parent (stmtRef is out of range) 
 variable v; 
 Select BOOLEAN such that Parent(0, v)
-FALSE
-5000
-69 - Semantically invalid Follows (stmtRef is out of range) 
-variable v; 
-Select BOOLEAN such that Follows(-1, v)
 FALSE
 5000
 29 - Semantically invalid Follows
