@@ -180,6 +180,156 @@ std::vector<StmtInfo> CFGRelationsManager::getAffectingT(stmt_index index) {
 	}
 }
 
+
+//Temp implementation
+bool CFGRelationsManager::isNextBipEmpty() {
+	return isNextTEmpty();
+}
+
+bool CFGRelationsManager::isNextBip(prog_line index1, prog_line index2) {
+	auto a = PKB::getInstance().PKB::getNext();
+	return a.containsPair(PKB::getInstance().PKB::getStmt(index1) , PKB::getInstance().PKB::getStmt(index2));
+}
+
+bool CFGRelationsManager::isPreviousBip(prog_line index) {
+	return isPreviousT(index);
+}
+
+bool CFGRelationsManager::isNextBip(prog_line index) {
+	return isNextT(index);
+}
+
+std::vector<std::pair<StmtInfo, StmtInfo>> CFGRelationsManager::getAllNextBipRelation() {
+	auto a = PKB::getInstance().PKB::getNext();
+	return a.getPairs();
+}
+
+std::vector<StmtInfo> CFGRelationsManager::getPreviousBip() {
+	return getPreviousT();
+}
+
+std::vector<StmtInfo> CFGRelationsManager::getNextBip() {
+	return getNextT();
+}
+
+std::vector<StmtInfo> CFGRelationsManager::getPreviousBip(prog_line index) {
+	auto a = PKB::getInstance().PKB::getNext();
+	return a.getKeys(PKB::getInstance().PKB::getStmt(index));
+}
+
+std::vector<StmtInfo> CFGRelationsManager::getNextBip(prog_line index) {
+	auto a = PKB::getInstance().PKB::getNext();
+	return a.getValues(PKB::getInstance().PKB::getStmt(index));
+}
+
+bool CFGRelationsManager::isNextBipTEmpty() {
+	return isNextTEmpty();
+}
+
+bool CFGRelationsManager::isNextBipT(prog_line index1, prog_line index2) {
+	return isNextT(index1, index2);
+}
+
+bool CFGRelationsManager::isPreviousBipT(prog_line index) {
+	return isPreviousT(index);
+}
+
+bool CFGRelationsManager::isNextBipT(prog_line index) {
+	return isNextT(index);
+}
+
+std::vector<std::pair<StmtInfo, StmtInfo>> CFGRelationsManager::getAllNextBipTRelation() {
+	return getAllNextTRelation();
+}
+
+std::vector<StmtInfo> CFGRelationsManager::getPreviousBipT() {
+	return getPreviousT();
+}
+
+std::vector<StmtInfo> CFGRelationsManager::getNextBipT() {
+	return getNextT();
+}
+
+std::vector<StmtInfo> CFGRelationsManager::getPreviousBipT(prog_line index) {
+	return getPreviousT(index);
+}
+
+std::vector<StmtInfo> CFGRelationsManager::getNextBipT(prog_line index) {
+	return getNextT(index);
+}
+
+bool CFGRelationsManager::isAffectsBipEmpty() {
+	return isAffectsEmpty();
+}
+
+bool CFGRelationsManager::isAffectsBip(stmt_index index1, stmt_index index2) {
+	return isAffects(index1, index2);
+}
+
+bool CFGRelationsManager::isAffectingBip(stmt_index index) {
+	return isAffecting(index);
+}
+
+bool CFGRelationsManager::isAffectedBip(stmt_index index) {
+	return isAffected(index);
+}
+
+std::vector<std::pair<StmtInfo, StmtInfo>> CFGRelationsManager::getAllAffectsBipRelation() {
+	return getAllAffectsRelation();
+}
+
+std::vector<StmtInfo> CFGRelationsManager::getAffectedBip() {
+	return getAffected();
+}
+
+std::vector<StmtInfo> CFGRelationsManager::getAffectingBip() {
+	return getAffecting();
+}
+
+std::vector<StmtInfo> CFGRelationsManager::getAffectedBip(stmt_index index) {
+	return getAffected(index);
+}
+
+std::vector<StmtInfo> CFGRelationsManager::getAffectingBip(stmt_index index) {
+	return getAffecting(index);
+}
+
+bool CFGRelationsManager::isAffectsBipTEmpty() {
+	return isAffectsTEmpty();
+}
+
+bool CFGRelationsManager::isAffectsBipT(stmt_index index1, stmt_index index2) {
+	return isAffectsT(index1, index2);
+}
+
+bool CFGRelationsManager::isAffectingBipT(stmt_index index) {
+	return isAffectingT(index);
+}
+
+bool CFGRelationsManager::isAffectedBipT(stmt_index index) {
+	return isAffectedT(index);
+}
+
+std::vector<std::pair<StmtInfo, StmtInfo>> CFGRelationsManager::getAllAffectsBipTRelation() {
+	return getAllAffectsTRelation();
+}
+
+std::vector<StmtInfo> CFGRelationsManager::getAffectedBipT() {
+	return getAffectedT();
+}
+
+std::vector<StmtInfo> CFGRelationsManager::getAffectingBipT() {
+	return getAffectingT();
+}
+
+std::vector<StmtInfo> CFGRelationsManager::getAffectedBipT(stmt_index index) {
+	return getAffectedT(index);
+}
+
+std::vector<StmtInfo> CFGRelationsManager::getAffectingBipT(stmt_index index) {
+	return getAffectingT(index);
+}
+
 NextTPreprocessor CFGRelationsManager::getNextTProcessor() {
 	return next_t_processor;
 }

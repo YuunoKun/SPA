@@ -11,13 +11,31 @@ namespace UnitTesting {
 
 		virtual void SetUp() override {
 			PKB::getInstance().resetCache();
+
+			PKB::getInstance().addStmt(STMT_READ);
+			PKB::getInstance().addStmt(STMT_PRINT);
+			PKB::getInstance().addStmt(STMT_READ);
+			PKB::getInstance().addStmt(STMT_IF);
+			PKB::getInstance().addNext(1, 2);
+			PKB::getInstance().addNext(2, 3);
 		}
 
 		PKBAdapter pkb;
 		NextEvaluator evaluator;
+
+		StmtInfo p1{ 1, STMT_READ };
+		StmtInfo p2{ 2, STMT_PRINT };
+		StmtInfo p3{ 3, STMT_READ };
+		StmtInfo p4{ 4, STMT_IF };
+
+		Entity e1 = { STMT, "1" };
+		Entity e2 = { STMT, "2" };
+		Entity e3 = { STMT, "3" };
+		Entity e4 = { STMT, "4" };
 	};
 
 	TEST_F(NextEvaluatorTest, evaluateWildAndWild) {
+		PKB::getInstance().resetCache();
 		PKB::getInstance().addStmt(STMT_READ);
 		PKB::getInstance().addStmt(STMT_PRINT);
 		PKB::getInstance().addStmt(STMT_READ);
@@ -28,17 +46,6 @@ namespace UnitTesting {
 	}
 
 	TEST_F(NextEvaluatorTest, evaluateConstantAndConstant) {
-		Entity e1 = { STMT, "1" };
-		Entity e2 = { STMT, "2" };
-		Entity e3 = { STMT, "3" };
-		Entity e4 = { STMT, "4" };
-
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_PRINT);
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_IF);
-		PKB::getInstance().addNext(1, 2);
-		PKB::getInstance().addNext(2, 3);
 		EXPECT_TRUE(evaluator.evaluateConstantAndConstant(e1, e2));
 		EXPECT_TRUE(evaluator.evaluateConstantAndConstant(e2, e3));
 		EXPECT_FALSE(evaluator.evaluateConstantAndConstant(e1, e1));
@@ -58,16 +65,6 @@ namespace UnitTesting {
 	}
 
 	TEST_F(NextEvaluatorTest, evaluateConstantAndWild) {
-		Entity e1 = { STMT, "1" };
-		Entity e2 = { STMT, "2" };
-		Entity e3 = { STMT, "3" };
-		Entity e4 = { STMT, "4" };
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_PRINT);
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_IF);
-		PKB::getInstance().addNext(1, 2);
-		PKB::getInstance().addNext(2, 3);
 		EXPECT_TRUE(evaluator.evaluateConstantAndWild(e1));
 		EXPECT_TRUE(evaluator.evaluateConstantAndWild(e2));
 		EXPECT_FALSE(evaluator.evaluateConstantAndWild(e3));
@@ -75,16 +72,6 @@ namespace UnitTesting {
 	}
 
 	TEST_F(NextEvaluatorTest, evaluateWildAndConstant) {
-		Entity e1 = { STMT, "1" };
-		Entity e2 = { STMT, "2" };
-		Entity e3 = { STMT, "3" };
-		Entity e4 = { STMT, "4" };
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_PRINT);
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_IF);
-		PKB::getInstance().addNext(1, 2);
-		PKB::getInstance().addNext(2, 3);
 		EXPECT_FALSE(evaluator.evaluateWildAndConstant(e1));
 		EXPECT_TRUE(evaluator.evaluateWildAndConstant(e2));
 		EXPECT_TRUE(evaluator.evaluateWildAndConstant(e3));
@@ -92,18 +79,6 @@ namespace UnitTesting {
 	}
 
 	TEST_F(NextEvaluatorTest, evaluateSynonymAndSynonym) {
-		StmtInfo p1{ 1, STMT_READ };
-		StmtInfo p2{ 2, STMT_PRINT };
-		StmtInfo p3{ 3, STMT_READ };
-		StmtInfo p4{ 4, STMT_IF };
-
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_PRINT);
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_IF);
-		PKB::getInstance().addNext(1, 2);
-		PKB::getInstance().addNext(2, 3);
-
 		std::vector<std::pair<StmtInfo, StmtInfo>> v = pkb.getAllNextRelation();
 		Entity left = { STMT, Synonym{"a"} };
 		Entity right = { STMT, Synonym{"b"} };
@@ -140,18 +115,6 @@ namespace UnitTesting {
 	}
 
 	TEST_F(NextEvaluatorTest, evaluateWildAndSynonym) {
-		StmtInfo p1{ 1, STMT_READ };
-		StmtInfo p2{ 2, STMT_PRINT };
-		StmtInfo p3{ 3, STMT_READ };
-		StmtInfo p4{ 4, STMT_IF };
-
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_PRINT);
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_IF);
-		PKB::getInstance().addNext(1, 2);
-		PKB::getInstance().addNext(2, 3);
-
 		std::vector<StmtInfo> v = pkb.getNext();
 		Entity header = { STMT, Synonym{"a"} };
 		ResultTable t(header, v);
@@ -183,18 +146,6 @@ namespace UnitTesting {
 	}
 
 	TEST_F(NextEvaluatorTest, evaluateSynonymAndWild) {
-		StmtInfo p1{ 1, STMT_READ };
-		StmtInfo p2{ 2, STMT_PRINT };
-		StmtInfo p3{ 3, STMT_READ };
-		StmtInfo p4{ 4, STMT_IF };
-
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_PRINT);
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_IF);
-		PKB::getInstance().addNext(1, 2);
-		PKB::getInstance().addNext(2, 3);
-
 		std::vector<StmtInfo> v = pkb.getPrevious();
 		Entity header = { STMT, Synonym{"a"} };
 		ResultTable t(header, v);
@@ -226,17 +177,6 @@ namespace UnitTesting {
 	}
 
 	TEST_F(NextEvaluatorTest, evaluateConstantAndSynonym) {
-		StmtInfo p1{ 1, STMT_READ };
-		StmtInfo p2{ 2, STMT_PRINT };
-		StmtInfo p3{ 3, STMT_READ };
-		StmtInfo p4{ 4, STMT_IF };
-
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_PRINT);
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_IF);
-		PKB::getInstance().addNext(1, 2);
-		PKB::getInstance().addNext(2, 3);
 
 		std::vector<StmtInfo> v = { p2 };
 		Entity header = { STMT, Synonym{"a"} };

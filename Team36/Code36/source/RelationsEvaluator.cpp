@@ -14,12 +14,12 @@
 #include "CallsTEvaluator.h"
 #include "NextEvaluator.h"
 #include "NextTEvaluator.h"
-#include "AffectEvaluator.h"
-#include "AffectTEvaluator.h"
+#include "AffectsEvaluator.h"
+#include "AffectsTEvaluator.h"
 #include "NextBipEvaluator.h"
 #include "NextBipTEvaluator.h"
-#include "AffectBipEvaluator.h"
-#include "AffectBipTEvaluator.h"
+#include "AffectsBipEvaluator.h"
+#include "AffectsBipTEvaluator.h"
 
 void RelationsEvaluator::evaluateRelation(QueryResult& result, RelRef& relation) {
 	switch (relation.getType()) {
@@ -36,12 +36,12 @@ void RelationsEvaluator::evaluateRelation(QueryResult& result, RelRef& relation)
 	case RelType::CALLS_T: evaluateRelation(result, relation, CallsTEvaluator()); break;
 	case RelType::NEXT: evaluateRelation(result, relation, NextEvaluator()); break;
 	case RelType::NEXT_T: evaluateRelation(result, relation, NextTEvaluator()); break;
-	case RelType::AFFECT: evaluateRelation(result, relation, AffectEvaluator()); break;
-	case RelType::AFFECT_T: evaluateRelation(result, relation, AffectTEvaluator()); break;
+	case RelType::AFFECT: evaluateRelation(result, relation, AffectsEvaluator()); break;
+	case RelType::AFFECT_T: evaluateRelation(result, relation, AffectsTEvaluator()); break;
 	case RelType::NEXT_BIP: evaluateRelation(result, relation, NextBipEvaluator()); break;
 	case RelType::NEXT_BIP_T: evaluateRelation(result, relation, NextBipTEvaluator()); break;
-	case RelType::AFFECT_BIP: evaluateRelation(result, relation, AffectBipEvaluator()); break;
-	case RelType::AFFECT_BIP_T: evaluateRelation(result, relation, AffectBipTEvaluator()); break;
+	case RelType::AFFECT_BIP: evaluateRelation(result, relation, AffectsBipEvaluator()); break;
+	case RelType::AFFECT_BIP_T: evaluateRelation(result, relation, AffectsBipTEvaluator()); break;
 	default: throw std::domain_error("Some Relation is not being handle!!!!");
 	}
 }

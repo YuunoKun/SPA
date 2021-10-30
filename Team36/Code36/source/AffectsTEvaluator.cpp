@@ -3,47 +3,47 @@
 #include "Query.h"
 #include "QueryResult.h"
 #include "PKBAdapter.h"
-#include "AffectTEvaluator.h"
+#include "AffectsTEvaluator.h"
 #include "CFGRelationsManager.h"
 
-bool AffectTEvaluator::evaluateWildAndWild() {
+bool AffectsTEvaluator::evaluateWildAndWild() {
 	return !pkb.getRelationManager().isAffectsTEmpty();
 }
 
-bool AffectTEvaluator::evaluateConstantAndConstant(Entity e1, Entity e2) {
+bool AffectsTEvaluator::evaluateConstantAndConstant(Entity e1, Entity e2) {
 	stmt_index c1 = stoi(e1.getValue());
 	stmt_index c2 = stoi(e2.getValue());
 	return pkb.getRelationManager().isAffectsT(c1, c2);;
 }
 
-bool AffectTEvaluator::evaluateConstantAndWild(Entity e) {
+bool AffectsTEvaluator::evaluateConstantAndWild(Entity e) {
 	stmt_index c = stoi(e.getValue());
 	return pkb.getRelationManager().isAffectingT(c);
 }
 
-bool AffectTEvaluator::evaluateWildAndConstant(Entity e) {
+bool AffectsTEvaluator::evaluateWildAndConstant(Entity e) {
 	stmt_index c = stoi(e.getValue());
 	return pkb.getRelationManager().isAffectedT(c);
 }
 
-ResultTable AffectTEvaluator::evaluateSynonymAndSynonym(Entity left, Entity right) {
+ResultTable AffectsTEvaluator::evaluateSynonymAndSynonym(Entity left, Entity right) {
 	return ResultTable({ left, right }, pkb.getRelationManager().getAllAffectsTRelation());
 }
 
-ResultTable AffectTEvaluator::evaluateWildAndSynonym(Entity header) {
+ResultTable AffectsTEvaluator::evaluateWildAndSynonym(Entity header) {
 	return ResultTable(header, pkb.getRelationManager().getAffectedT());
 }
 
-ResultTable AffectTEvaluator::evaluateSynonymAndWild(Entity header) {
+ResultTable AffectsTEvaluator::evaluateSynonymAndWild(Entity header) {
 	return ResultTable(header, pkb.getRelationManager().getAffectingT());
 }
 
-ResultTable AffectTEvaluator::evaluateConstantAndSynonym(Entity constant, Entity header) {
+ResultTable AffectsTEvaluator::evaluateConstantAndSynonym(Entity constant, Entity header) {
 	stmt_index c = stoi(constant.getValue());
 	return ResultTable(header, pkb.getRelationManager().getAffectedT(c));
 }
 
-ResultTable AffectTEvaluator::evaluateSynonymAndConstant(Entity header, Entity constant) {
+ResultTable AffectsTEvaluator::evaluateSynonymAndConstant(Entity header, Entity constant) {
 	stmt_index c = stoi(constant.getValue());
 	return ResultTable(header, pkb.getRelationManager().getAffectingT(c));
 }

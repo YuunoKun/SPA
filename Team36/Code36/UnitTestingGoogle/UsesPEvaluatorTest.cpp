@@ -7,21 +7,20 @@ namespace UnitTesting {
 	class UsesPEvaluatorTest : public testing::Test {
 	protected:
 		UsesPEvaluatorTest() {
-		}
-
-		virtual void SetUp() override {
 			PKB::getInstance().resetCache();
+			PKB::getInstance().addProcedure(main1);
+			PKB::getInstance().addProcedure(main2);
+			PKB::getInstance().addProcedure(sub1);
+			PKB::getInstance().addProcedure(sub2);
+			PKB::getInstance().addVariable(x);
+			PKB::getInstance().addUsesP(main1, x);
+			PKB::getInstance().addVariable(y);
+			PKB::getInstance().addUsesP(main2, y);
 		}
 
 		PKBAdapter pkb;
 		UsesPEvaluator evaluator;
-	};
 
-	TEST_F(UsesPEvaluatorTest, evaluateWildAndWild) {
-		EXPECT_THROW(evaluator.evaluateWildAndWild(), std::invalid_argument);
-	}
-
-	TEST_F(UsesPEvaluatorTest, evaluateConstantAndConstant) {
 		proc_name main1 = "main1";
 		proc_name sub1 = "sub1";
 		proc_name main2 = "main2";
@@ -33,19 +32,16 @@ namespace UnitTesting {
 		var_name x = "x";
 		var_name y = "y";
 		var_name z = "z";
-		Entity v1 = { VARIABLE, "x" };
-		Entity v2 = { VARIABLE, "y" };
-		Entity v3 = { VARIABLE, "z" };
+		Entity v1 = { VARIABLE, x };
+		Entity v2 = { VARIABLE, y };
+		Entity v3 = { VARIABLE, z };
+	};
 
-		PKB::getInstance().addProcedure(main1);
-		PKB::getInstance().addProcedure(main2);
-		PKB::getInstance().addProcedure(sub1);
-		PKB::getInstance().addProcedure(sub2);
-		PKB::getInstance().addVariable(x);
-		PKB::getInstance().addUsesP(main1, x);
-		PKB::getInstance().addVariable(y);
-		PKB::getInstance().addUsesP(main2, y);
+	TEST_F(UsesPEvaluatorTest, evaluateWildAndWild) {
+		EXPECT_THROW(evaluator.evaluateWildAndWild(), std::invalid_argument);
+	}
 
+	TEST_F(UsesPEvaluatorTest, evaluateConstantAndConstant) {
 		EXPECT_TRUE(evaluator.evaluateConstantAndConstant(e1, v1));
 		EXPECT_FALSE(evaluator.evaluateConstantAndConstant(e1, v2));
 		EXPECT_FALSE(evaluator.evaluateConstantAndConstant(e1, v3));
@@ -61,27 +57,6 @@ namespace UnitTesting {
 	}
 
 	TEST_F(UsesPEvaluatorTest, evaluateConstantAndWild) {
-		proc_name main1 = "main1";
-		proc_name sub1 = "sub1";
-		proc_name main2 = "main2";
-		proc_name sub2 = "sub2";
-		Entity e1 = { PROCEDURE, main1 };
-		Entity e2 = { PROCEDURE, sub1 };
-		Entity e3 = { PROCEDURE, main2 };
-		Entity e4 = { PROCEDURE, sub2 };
-		var_name x = "x";
-		var_name y = "y";
-		var_name z = "z";
-
-		PKB::getInstance().addProcedure(main1);
-		PKB::getInstance().addProcedure(main2);
-		PKB::getInstance().addProcedure(sub1);
-		PKB::getInstance().addProcedure(sub2);
-		PKB::getInstance().addVariable(x);
-		PKB::getInstance().addUsesP(main1, x);
-		PKB::getInstance().addVariable(y);
-		PKB::getInstance().addUsesP(main2, y);
-
 		EXPECT_TRUE(evaluator.evaluateConstantAndWild(e1));
 		EXPECT_FALSE(evaluator.evaluateConstantAndWild(e2));
 		EXPECT_TRUE(evaluator.evaluateConstantAndWild(e3));
@@ -94,23 +69,6 @@ namespace UnitTesting {
 	}
 
 	TEST_F(UsesPEvaluatorTest, evaluateSynonymAndSynonym) {
-		proc_name main1 = "main1";
-		proc_name sub1 = "sub1";
-		proc_name main2 = "main2";
-		proc_name sub2 = "sub2";
-		var_name x = "x";
-		var_name y = "y";
-		var_name z = "z";
-
-		PKB::getInstance().addProcedure(main1);
-		PKB::getInstance().addProcedure(main2);
-		PKB::getInstance().addProcedure(sub1);
-		PKB::getInstance().addProcedure(sub2);
-		PKB::getInstance().addVariable(x);
-		PKB::getInstance().addUsesP(main1, x);
-		PKB::getInstance().addVariable(y);
-		PKB::getInstance().addUsesP(main2, y);
-
 		std::vector<std::pair<proc_name, var_name>> v = pkb.getUsesPRelation();
 		Entity left = { PROCEDURE, Synonym{"a"} };
 		Entity right = { VARIABLE, Synonym{"b"} };
@@ -125,23 +83,6 @@ namespace UnitTesting {
 	}
 
 	TEST_F(UsesPEvaluatorTest, evaluateSynonymAndWild) {
-		proc_name main1 = "main1";
-		proc_name sub1 = "sub1";
-		proc_name main2 = "main2";
-		proc_name sub2 = "sub2";
-		var_name x = "x";
-		var_name y = "y";
-		var_name z = "z";
-
-		PKB::getInstance().addProcedure(main1);
-		PKB::getInstance().addProcedure(main2);
-		PKB::getInstance().addProcedure(sub1);
-		PKB::getInstance().addProcedure(sub2);
-		PKB::getInstance().addVariable(x);
-		PKB::getInstance().addUsesP(main1, x);
-		PKB::getInstance().addVariable(y);
-		PKB::getInstance().addUsesP(main2, y);
-
 		std::vector<proc_name> v = pkb.getUsesP();
 		Entity header = { PROCEDURE, Synonym{"a"} };
 		ResultTable t(header, v);
@@ -149,30 +90,6 @@ namespace UnitTesting {
 	}
 
 	TEST_F(UsesPEvaluatorTest, evaluateConstantAndSynonym) {
-		proc_name main1 = "main1";
-		proc_name sub1 = "sub1";
-		proc_name main2 = "main2";
-		proc_name sub2 = "sub2";
-		Entity e1 = { PROCEDURE, main1 };
-		Entity e2 = { PROCEDURE, sub1 };
-		Entity e3 = { PROCEDURE, main2 };
-		Entity e4 = { PROCEDURE, sub2 };
-		var_name x = "x";
-		var_name y = "y";
-		var_name z = "z";
-		Entity v1 = { VARIABLE, "x" };
-		Entity v2 = { VARIABLE, "y" };
-		Entity v3 = { VARIABLE, "z" };
-
-		PKB::getInstance().addProcedure(main1);
-		PKB::getInstance().addProcedure(main2);
-		PKB::getInstance().addProcedure(sub1);
-		PKB::getInstance().addProcedure(sub2);
-		PKB::getInstance().addVariable(x);
-		PKB::getInstance().addUsesP(main1, x);
-		PKB::getInstance().addVariable(y);
-		PKB::getInstance().addUsesP(main2, y);
-
 		std::vector<var_name> v = { x };
 		Entity header = { VARIABLE, Synonym{"a"} };
 		Entity match = e1;
@@ -196,30 +113,6 @@ namespace UnitTesting {
 	}
 
 	TEST_F(UsesPEvaluatorTest, evaluateSynonymAndConstant) {
-		proc_name main1 = "main1";
-		proc_name sub1 = "sub1";
-		proc_name main2 = "main2";
-		proc_name sub2 = "sub2";
-		Entity e1 = { PROCEDURE, main1 };
-		Entity e2 = { PROCEDURE, sub1 };
-		Entity e3 = { PROCEDURE, main2 };
-		Entity e4 = { PROCEDURE, sub2 };
-		var_name x = "x";
-		var_name y = "y";
-		var_name z = "z";
-		Entity v1 = { VARIABLE, "x" };
-		Entity v2 = { VARIABLE, "y" };
-		Entity v3 = { VARIABLE, "z" };
-
-		PKB::getInstance().addProcedure(main1);
-		PKB::getInstance().addProcedure(main2);
-		PKB::getInstance().addProcedure(sub1);
-		PKB::getInstance().addProcedure(sub2);
-		PKB::getInstance().addVariable(x);
-		PKB::getInstance().addUsesP(main1, x);
-		PKB::getInstance().addVariable(y);
-		PKB::getInstance().addUsesP(main2, y);
-
 		std::vector<proc_name> v = { main2 };
 		Entity header = { PROCEDURE, Synonym{"a"} };
 		Entity match = v2;

@@ -39,6 +39,10 @@
     <ClInclude Include="pch.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AffectsBipEvaluatorTest.cpp" />
+    <ClCompile Include="AffectsBipTEvaluatorTest.cpp" />
+    <ClCompile Include="AffectsEvaluatorTest.cpp" />
+    <ClCompile Include="AffectsTEvaluatorTest.cpp" />
     <ClCompile Include="AffectsPreprocessorTest.cpp" />
     <ClCompile Include="AffectsTPreprocessorTest.cpp" />
     <ClCompile Include="CallsEvaluatorTest.cpp" />
@@ -57,6 +61,8 @@
     <ClCompile Include="FollowsTParserTest.cpp" />
     <ClCompile Include="FSMTest.cpp" />
     <ClCompile Include="MonotypeRelationTableTest.cpp" />
+    <ClCompile Include="NextBipEvaluatorTest.cpp" />
+    <ClCompile Include="NextBipTEvaluatorTest.cpp" />
     <ClCompile Include="NextEvaluatorTest.cpp" />
     <ClCompile Include="ParentParserTest.cpp" />
     <ClCompile Include="ParentTParserTest.cpp" />
@@ -68,6 +74,7 @@
     <ClCompile Include="PatternsEvaluatorTest.cpp" />
     <ClCompile Include="PatternWhileEvaluatorTest.cpp" />
     <ClCompile Include="PKBAdapterTest.cpp" />
+    <ClCompile Include="QueryEvaluatorCFGBipRelationTest.cpp" />
     <ClCompile Include="QueryEvaluatorCFGRelationTest.cpp" />
     <ClCompile Include="QueryEvaluatorMultiClausesTest.cpp" />
     <ClCompile Include="QueryEvaluatorPatternTest.cpp" />
