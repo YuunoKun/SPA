@@ -243,25 +243,6 @@ namespace UnitTesting {
 		EXPECT_THROW(validator.parseParameterSuchThat(query, QueryToken::AFFECTS, temp_token_chain), SyntacticErrorException);
 	}
 
-	TEST(AffectsParserTest, semanticInvalidAffectsStmtWildTest) {
-		QueryPatternRelRefParser validator;
-
-		Query query;
-		Synonym synonym;
-		synonym.name = "v";
-		Entity declared_stmt = Entity(EntityType::STMT, synonym);
-		query.addEntity(declared_stmt);
-
-		std::vector<QueryToken> temp_token_chain;
-		temp_token_chain.push_back({ QueryToken::IDENTIFIER, "v" });
-		temp_token_chain.push_back({ QueryToken::COMMA, "" });
-		temp_token_chain.push_back({ QueryToken::WILDCARD, "" });
-
-		validator.parseParameterSuchThat(query, QueryToken::AFFECTS, temp_token_chain);
-		EXPECT_TRUE(Utility::checkIsSemanticError(query));
-	}
-
-
 	TEST(AffectsParserTest, semanticInvalidAffectsVarWildTest) {
 		QueryPatternRelRefParser validator;
 

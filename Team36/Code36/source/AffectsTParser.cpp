@@ -8,7 +8,7 @@ void AffectsTParser::parse(Query& query, std::vector<QueryToken> token_chain) {
         throw SyntacticErrorException("Invalid parameters for Affects*");
     }
 
-    if (!Utility::isStmtRef(query, separated_params[0], EntityType::ASSIGN) || !Utility::isStmtRef(query, separated_params[1], EntityType::ASSIGN)) {
+    if (!Utility::isStmtRef(query, separated_params[0]) || !Utility::isStmtRef(query, separated_params[1])) {
         query.setIsSemanticError("Invalid parameters for Affects*");
     }
 
