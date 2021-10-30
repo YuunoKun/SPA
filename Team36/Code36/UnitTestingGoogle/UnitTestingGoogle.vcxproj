@@ -39,7 +39,7 @@
     <ClInclude Include="pch.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="AffectsEvaluator.cpp" />
+    <ClCompile Include="AffectsEvaluatorTest.cpp" />
     <ClCompile Include="AffectsTEvaluatorTest.cpp" />
     <ClCompile Include="AffectsPreprocessorTest.cpp" />
     <ClCompile Include="AffectsTPreprocessorTest.cpp" />

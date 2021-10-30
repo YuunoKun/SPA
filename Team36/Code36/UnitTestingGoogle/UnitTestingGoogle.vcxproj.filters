@@ -219,7 +219,7 @@
     <ClCompile Include="AffectsTEvaluatorTest.cpp">
       <Filter>PQL\QueryEvaluator\RelationEvaluator</Filter>
     </ClCompile>
-    <ClCompile Include="AffectsEvaluator.cpp">
+    <ClCompile Include="AffectsEvaluatorTest.cpp">
       <Filter>PQL\QueryEvaluator\RelationEvaluator</Filter>
     </ClCompile>
   </ItemGroup>

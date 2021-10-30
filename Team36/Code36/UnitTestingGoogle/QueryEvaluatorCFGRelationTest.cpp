@@ -130,6 +130,255 @@ namespace UnitTesting {
 		std::vector<Entity> ALL_VARIABLES = { { VARIABLE, x }, { VARIABLE, y }, { VARIABLE, z } };
 	};
 
+
+	//Next Relation Test ----------------------------------------------------------------------------------------------------
+	TEST_F(QueryEvaluatorCFGRelationTest, evaluateQueryNextBooleanTrue) {
+		RelType type = NEXT;
+		std::string left1 = NEXT_LEFT1;
+		std::string left2 = NEXT_LEFT2;
+		std::string right1 = NEXT_RIGHT1;
+		std::string right2 = NEXT_RIGHT2;
+
+		std::vector<RelRef> relations;
+		//Test true boolean equation
+		relations.push_back(RelRef(type, WILD_CARD, WILD_CARD));
+		relations.push_back(RelRef(type, { STMT, left1 }, { STMT, right1 }));
+		relations.push_back(RelRef(type, { STMT, left2 }, { STMT, right2 }));
+		relations.push_back(RelRef(type, { STMT, left1 }, WILD_CARD));
+		relations.push_back(RelRef(type, { STMT, left2 }, WILD_CARD));
+		relations.push_back(RelRef(type, WILD_CARD, { STMT, right1 }));
+		relations.push_back(RelRef(type, WILD_CARD, { STMT, right2 }));
+
+		validateRelations(relations);
+	}
+	TEST_F(QueryEvaluatorCFGRelationTest, evaluateQueryNextBooleanFalse) {
+		RelType type = NEXT;
+		std::vector<std::string> lefts = NEXT_LEFTS;
+		std::vector<std::string> rights = NEXT_RIGHTS;
+		std::string left1 = NEXT_LEFT1;
+		std::string left2 = NEXT_LEFT2;
+		std::string right1 = NEXT_RIGHT1;
+		std::string right2 = NEXT_RIGHT2;
+
+		std::vector<RelRef> relations;
+		//Test false boolean equation
+		relations.push_back(RelRef(type, { STMT, left1 }, { STMT, right2 }));
+		relations.push_back(RelRef(type, { STMT, left2 }, { STMT, right1 }));
+
+		std::vector<Entity> invalid_lefts = getInvalidConstant(lefts);
+		for (unsigned int k = 0; k < invalid_lefts.size(); k++) {
+			for (unsigned int i = 0; i < VALID_CONSTANT_STMT_ENTITY.size(); i++) {
+				relations.push_back(RelRef(type, invalid_lefts[k], VALID_CONSTANT_STMT_ENTITY[i]));
+			}
+		}
+
+		std::vector<Entity> invalid_rights = getInvalidConstant(rights);
+		for (unsigned int k = 0; k < invalid_rights.size(); k++) {
+			for (unsigned int i = 0; i < VALID_CONSTANT_STMT_ENTITY.size(); i++) {
+				relations.push_back(RelRef(type, VALID_CONSTANT_STMT_ENTITY[i], invalid_rights[k]));
+			}
+		}
+
+		validateEmptyRelations(relations);
+	}
+	TEST_F(QueryEvaluatorCFGRelationTest, evaluateQueryNextFilterEmpty) {
+		RelType type = NEXT;
+		std::vector<RelRef> relations;
+		std::vector<std::string> lefts = NEXT_LEFTS;
+		std::vector<std::string> rights = NEXT_RIGHTS;
+
+		std::vector<Entity> invalid_lefts = getInvalidConstant(lefts);
+		for (Entity it : invalid_lefts) {
+			relations.push_back(RelRef(type, it, { STMT, Synonym{"a"} }));
+		}
+
+		std::vector<Entity> invalid_rights = getInvalidConstant(rights);
+		for (Entity it : invalid_rights) {
+			relations.push_back(RelRef(type, { STMT, Synonym{"a"} }, it));
+		}
+
+		validateEmptyRelations(relations);
+	}
+	TEST_F(QueryEvaluatorCFGRelationTest, evaluateQueryNextFilterNoCommonSynonymTrue) {
+		RelType type = NEXT;
+		std::vector<RelRef> relations;
+		std::string left1 = NEXT_LEFT1;
+		std::string left2 = NEXT_LEFT2;
+		std::string right1 = NEXT_RIGHT1;
+		std::string right2 = NEXT_RIGHT2;
+		//Have Result for matching header
+		relations.push_back(RelRef(type, { STMT, Synonym{"a"} }, { STMT, Synonym{"b"} }));
+		relations.push_back(RelRef(type, { ASSIGN, Synonym{"a"} }, { STMT, Synonym{"b"} }));
+		relations.push_back(RelRef(type, { STMT, Synonym{"a"} }, { ASSIGN, Synonym{"b"} }));
+		relations.push_back(RelRef(type, { ASSIGN, Synonym{"a"} }, { ASSIGN, Synonym{"b"} }));
+		relations.push_back(RelRef(type, WILD_CARD, { STMT, Synonym{"a"} }));
+		relations.push_back(RelRef(type, WILD_CARD, { ASSIGN, Synonym{"a"} }));
+		relations.push_back(RelRef(type, { STMT, Synonym{"a"} }, WILD_CARD));
+		relations.push_back(RelRef(type, { ASSIGN, Synonym{"a"} }, WILD_CARD));
+		relations.push_back(RelRef(type, { STMT, left1 }, { STMT, Synonym{"a"} }));
+		relations.push_back(RelRef(type, { STMT, left1 }, { ASSIGN, Synonym{"a"} }));
+		relations.push_back(RelRef(type, { STMT, left2 }, { STMT, Synonym{"a"} }));
+		relations.push_back(RelRef(type, { STMT, left2 }, { ASSIGN, Synonym{"a"} }));
+		relations.push_back(RelRef(type, { STMT, Synonym{"a"} }, { STMT, right1 }));
+		relations.push_back(RelRef(type, { ASSIGN, Synonym{"a"} }, { STMT, right1 }));
+		relations.push_back(RelRef(type, { STMT, Synonym{"a"} }, { STMT, right2 }));
+		relations.push_back(RelRef(type, { ASSIGN, Synonym{"a"} }, { STMT, right2 }));
+
+		validateRelations(relations);
+	}
+
+	TEST_F(QueryEvaluatorCFGRelationTest, evaluateQueryNextFilterNoCommonSynonymFalse) {
+		RelType type = NEXT;
+
+		std::vector<std::string> lefts = NEXT_LEFTS;
+		std::vector<std::string> rights = NEXT_RIGHTS;
+
+		std::vector<RelRef> relations;
+		//Empty result for non-matching header for double column
+		std::vector<Entity> synonyms;
+		synonyms.push_back({ PRINT, COMMON_SYNONYM1 });
+		synonyms.push_back({ READ, COMMON_SYNONYM1 });
+		synonyms.push_back({ IF, COMMON_SYNONYM1 });
+		synonyms.push_back({ CALL, COMMON_SYNONYM1 });
+
+		for (unsigned int k = 0; k < synonyms.size(); k++) {
+			for (unsigned int j = 0; j < synonyms.size(); j++) {
+				relations.push_back(RelRef(type, synonyms[k], synonyms[j]));
+			}
+		}
+
+		//Empty result for non-matching header for single column
+		for (unsigned int k = 0; k < synonyms.size(); k++) {
+			relations.push_back(RelRef(type, WILD_CARD, synonyms[k]));
+			relations.push_back(RelRef(type, { synonyms[k] }, WILD_CARD));
+			relations.push_back(RelRef(type, { synonyms[k] }, WILD_CARD));
+
+			for (auto valid : lefts) {
+				relations.push_back(RelRef(type, { STMT, valid }, { synonyms[k] }));
+			}
+
+			for (auto valid : rights) {
+				relations.push_back(RelRef(type, { synonyms[k] }, { STMT, valid }));
+			}
+		}
+
+		validateEmptyRelations(relations);
+	}
+	TEST_F(QueryEvaluatorCFGRelationTest, evaluateQueryNextFilterCommonSynonym) {
+		RelType type = NEXT;
+		std::vector<std::string> lefts = NEXT_LEFTS;
+		std::vector<std::string> rights = NEXT_RIGHTS;
+		std::string left1 = NEXT_LEFT1;
+		std::string left2 = NEXT_LEFT2;
+		std::string right1 = NEXT_RIGHT1;
+		std::string right2 = NEXT_RIGHT2;
+
+		std::vector<Entity> selected_list;
+		selected_list.push_back({ STMT, COMMON_SYNONYM1 });
+		selected_list.push_back({ ASSIGN, COMMON_SYNONYM1 });
+		selected_list.push_back({ WHILE, COMMON_SYNONYM1 });
+		selected_list.push_back({ PRINT, COMMON_SYNONYM1 });
+		selected_list.push_back({ READ, COMMON_SYNONYM1 });
+		selected_list.push_back({ IF, COMMON_SYNONYM1 });
+		selected_list.push_back({ CALL, COMMON_SYNONYM1 });
+
+		//Test case for Select selected such that Next(selected, a)
+		std::list<std::string> result1 = { left1, left2 };
+		std::list<std::string> result2 = { left1, left2 };
+		std::list<std::string> result3 = { };
+		std::list<std::string> result4 = { };
+		std::list<std::string> result5 = { };
+		std::list<std::string> result6 = { };
+		std::list<std::string> result7 = { };
+
+		std::vector<std::list<std::string>> result_list = { result1, result2, result3,
+			result4, result5, result6, result7 };
+		for (unsigned int i = 0; i < selected_list.size(); i++) {
+			RelRef relation(type, selected_list[i], { STMT, Synonym{"a"} });
+			Query q = initQuery(relation, selected_list[i]);
+			EXPECT_EQ(evaluator.evaluateQuery(q), result_list[i]) << "Error at results : " << i + 1;
+		}
+
+		//Test case for Select selected such that Next(selected, _)
+		for (unsigned int i = 0; i < selected_list.size(); i++) {
+			RelRef relation(type, selected_list[i], WILD_CARD);
+			Query q = initQuery(relation, selected_list[i]);
+			EXPECT_EQ(evaluator.evaluateQuery(q), result_list[i]) << "Error at results : " << i + 1;
+		}
+
+		//Test case for Select selected such that Next(a, selected)
+		result_list[0] = { right1, right2 };
+		result_list[1] = { right1, right2 };
+		for (unsigned int i = 0; i < selected_list.size(); i++) {
+			RelRef relation(type, { STMT, Synonym{"a"} }, selected_list[i]);
+			Query q = initQuery(relation, selected_list[i]);
+			EXPECT_EQ(evaluator.evaluateQuery(q), result_list[i]) << "Error at results : " << i + 1;
+		}
+
+		//Test case for Select selected such that Next(_, selected)
+		for (unsigned int i = 0; i < selected_list.size(); i++) {
+			RelRef relation(type, WILD_CARD, selected_list[i]);
+			Query q = initQuery(relation, selected_list[i]);
+			EXPECT_EQ(evaluator.evaluateQuery(q), result_list[i]) << "Error at results : " << i + 1;
+		}
+
+		//Test case for Select selected such that Next("1", selected)
+		result_list[0] = { right1 };
+		result_list[1] = { right1 };
+		for (unsigned int i = 0; i < selected_list.size(); i++) {
+			RelRef relation(type, { STMT, left1 }, selected_list[i]);
+			Query q = initQuery(relation, selected_list[i]);
+			EXPECT_EQ(evaluator.evaluateQuery(q), result_list[i]) << "Error at results : " << i + 1;
+		}
+
+		//Test case for Select selected such that Next("2", selected)
+		result_list[0] = { right2 };
+		result_list[1] = { right2 };
+		for (unsigned int i = 0; i < selected_list.size(); i++) {
+			RelRef relation(type, { STMT, left2 }, selected_list[i]);
+			Query q = initQuery(relation, selected_list[i]);
+			EXPECT_EQ(evaluator.evaluateQuery(q), result_list[i]) << "Error at results : " << i + 1;
+		}
+
+		//Test case for remaining Select selected such that Next(anyEmpty, selected)
+		std::vector<Entity> emptyList = getInvalidConstant(lefts);
+		for (unsigned int j = 0; j < emptyList.size(); j++) {
+			for (unsigned int i = 0; i < selected_list.size(); i++) {
+				RelRef relation(type, emptyList[j], selected_list[i]);
+				Query q = initQuery(relation, selected_list[i]);
+				EXPECT_EQ(evaluator.evaluateQuery(q), EMPTY_RESULT) << "Error at results : " << i + 1;
+			}
+		}
+
+		//Test case for Select selected such that Next(selected, "2")
+		result_list[0] = { left1 };
+		result_list[1] = { left1 };
+		for (unsigned int i = 0; i < selected_list.size(); i++) {
+			RelRef relation(type, selected_list[i], { STMT, right1 });
+			Query q = initQuery(relation, selected_list[i]);
+			EXPECT_EQ(evaluator.evaluateQuery(q), result_list[i]) << "Error at results : " << i + 1;
+		}
+
+		//Test case for Select selected such that Next(selected, "3")
+		result_list[0] = { left2 };
+		result_list[1] = { left2 };
+		for (unsigned int i = 0; i < selected_list.size(); i++) {
+			RelRef relation(type, selected_list[i], { STMT, right2 });
+			Query q = initQuery(relation, selected_list[i]);
+			EXPECT_EQ(evaluator.evaluateQuery(q), result_list[i]) << "Error at results : " << i + 1;
+		}
+
+		//Test case for remaining Select selected such that Next(selected, anyEmpty)
+		emptyList = getInvalidConstant(rights);
+		for (unsigned int j = 0; j < emptyList.size(); j++) {
+			for (unsigned int i = 0; i < selected_list.size(); i++) {
+				RelRef relation(type, selected_list[i], emptyList[j]);
+				Query q = initQuery(relation, selected_list[i]);
+				EXPECT_EQ(evaluator.evaluateQuery(q), EMPTY_RESULT) << "Error at results : " << i + 1;
+			}
+		}
+	}
+
 	//NEXT_T Relation Test ----------------------------------------------------------------------------------------------------
 	TEST_F(QueryEvaluatorCFGRelationTest, evaluateQueryNextTBooleanTrue) {
 		RelType type = NEXT_T;
