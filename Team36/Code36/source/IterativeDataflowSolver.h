@@ -52,8 +52,8 @@ private:
 	void populateDataflowSets();
 	void processInSet(stmt_index index);
 	void processOutSet(stmt_index index);
-	void resetOutSet();
-	void resetInSet();
+	void resetOutList();
+	void resetInList();
 
 	std::vector<std::pair<StmtInfo, StmtInfo>> findResults(std::set<stmt_index>);
 

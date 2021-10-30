@@ -22,7 +22,7 @@ IterativeDataflowSolver::IterativeDataflowSolver(
 
 std::pair<std::set<stmt_index>, std::vector<std::pair<StmtInfo, StmtInfo>>> IterativeDataflowSolver::solve(std::vector<stmt_index> starting_worklist) {
 	populateDataflowSets();
-	std::stack<stmt_index> worklist;
+	std::queue<stmt_index> worklist;
 	std::set<stmt_index> visited{};
 
 	for (auto& stmt_index : starting_worklist) {
@@ -30,7 +30,7 @@ std::pair<std::set<stmt_index>, std::vector<std::pair<StmtInfo, StmtInfo>>> Iter
 	}
 
 	while (!worklist.empty()) {
-		stmt_index curr = worklist.top();
+		stmt_index curr = worklist.front();
 		visited.emplace(curr);
 		worklist.pop();
 		int index = curr - 1;
@@ -45,19 +45,19 @@ std::pair<std::set<stmt_index>, std::vector<std::pair<StmtInfo, StmtInfo>>> Iter
 			}
 		}
 	}
-	resetOutSet();
+	resetOutList();
 	return { visited, findResults(visited) };
 }
 
 bool IterativeDataflowSolver::solveIfAffectingAndAffected(stmt_index affecting, stmt_index affected) {
 	populateDataflowSets();
-	std::stack<stmt_index> worklist;
+	std::queue<stmt_index> worklist;
 	std::set<stmt_index> visited{};
 
 	worklist.push(affecting);
 
 	while (!worklist.empty()) {
-		stmt_index curr = worklist.top();
+		stmt_index curr = worklist.front();
 		visited.emplace(curr);
 		worklist.pop();
 		int index = curr - 1;
@@ -75,7 +75,7 @@ bool IterativeDataflowSolver::solveIfAffectingAndAffected(stmt_index affecting, 
 					if (tuple.stmt_index == affecting) {
 						StmtInfo stmt_info = stmt_info_list[index];
 						if (useS_table->containsPair(stmt_info, tuple.var_name)) {
-							resetOutSet();
+							resetOutList();
 							return true;
 						}
 					}
@@ -91,19 +91,19 @@ bool IterativeDataflowSolver::solveIfAffectingAndAffected(stmt_index affecting, 
 			}
 		}
 	}
-	resetOutSet();
+	resetOutList();
 	return false;
 }
 
 bool IterativeDataflowSolver::solveIfAffecting(stmt_index affecting) {
 	populateDataflowSets();
-	std::stack<stmt_index> worklist;
+	std::queue<stmt_index> worklist;
 	std::set<stmt_index> visited{};
 
 	worklist.push(affecting);
 
 	while (!worklist.empty()) {
-		stmt_index curr = worklist.top();
+		stmt_index curr = worklist.front();
 		visited.emplace(curr);
 		worklist.pop();
 		int index = curr - 1;
@@ -117,7 +117,7 @@ bool IterativeDataflowSolver::solveIfAffecting(stmt_index affecting) {
 			for (ModifiesTuple tuple : in_list[index]) {
 				if (tuple.stmt_index == affecting) {
 					if (useS_table->containsPair(curr_stmt_info, tuple.var_name)) {
-						resetOutSet();
+						resetOutList();
 						return true;
 					}
 				}
@@ -132,13 +132,13 @@ bool IterativeDataflowSolver::solveIfAffecting(stmt_index affecting) {
 			}
 		}
 	}
-	resetOutSet();
+	resetOutList();
 	return false;
 }
 
 bool IterativeDataflowSolver::solveIfAffected(stmt_index affected) {
 	populateDataflowSets();
-	std::stack<stmt_index> worklist;
+	std::queue<stmt_index> worklist;
 	std::set<stmt_index> visited{};
 
 	proc_name proc = procS_table->getKeys(affected)[0];
@@ -147,7 +147,7 @@ bool IterativeDataflowSolver::solveIfAffected(stmt_index affected) {
 	worklist.push(first_statement);
 
 	while (!worklist.empty()) {
-		stmt_index curr = worklist.top();
+		stmt_index curr = worklist.front();
 		visited.emplace(curr);
 		worklist.pop();
 		int index = curr - 1;
@@ -162,7 +162,7 @@ bool IterativeDataflowSolver::solveIfAffected(stmt_index affected) {
 				for (ModifiesTuple tuple : in_list[index]) {
 					StmtInfo stmt_info = stmt_info_list[index];
 					if (useS_table->containsPair(stmt_info, tuple.var_name)) {
-						resetOutSet();
+						resetOutList();
 						return true;
 					}
 				}
@@ -177,13 +177,13 @@ bool IterativeDataflowSolver::solveIfAffected(stmt_index affected) {
 			}
 		}
 	}
-	resetOutSet();
+	resetOutList();
 	return false;
 }
 
 bool IterativeDataflowSolver::solveIfNonEmpty(std::vector<stmt_index> first_statements) {
 	populateDataflowSets();
-	std::stack<stmt_index> worklist;
+	std::queue<stmt_index> worklist;
 	std::set<stmt_index> visited{};
 
 	proc_name proc = procS_table->getKeys()[0];
@@ -192,7 +192,7 @@ bool IterativeDataflowSolver::solveIfNonEmpty(std::vector<stmt_index> first_stat
 	}
 
 	while (!worklist.empty()) {
-		stmt_index curr = worklist.top();
+		stmt_index curr = worklist.front();
 		visited.emplace(curr);
 		worklist.pop();
 		int index = curr - 1;
@@ -204,7 +204,7 @@ bool IterativeDataflowSolver::solveIfNonEmpty(std::vector<stmt_index> first_stat
 		for (ModifiesTuple tuple : in_list[index]) {
 			StmtInfo stmt_info = stmt_info_list[index];
 			if (useS_table->containsPair(stmt_info, tuple.var_name)) {
-				resetOutSet();
+				resetOutList();
 				return true;
 			}
 		}
@@ -217,7 +217,7 @@ bool IterativeDataflowSolver::solveIfNonEmpty(std::vector<stmt_index> first_stat
 			}
 		}
 	}
-	resetOutSet();
+	resetOutList();
 	return false;
 }
 
@@ -297,19 +297,19 @@ void IterativeDataflowSolver::processOutSet(stmt_index index) {
 		std::inserter(out_list[index], out_list[index].begin()));
 }
 
-void IterativeDataflowSolver::resetOutSet() {
+void IterativeDataflowSolver::resetOutList() {
 	auto size = out_list.size();
 	out_list.resize(0);
 	out_list.resize(size, {});
 }
 
-void IterativeDataflowSolver::resetInSet() {
+void IterativeDataflowSolver::resetInList() {
 	auto size = in_list.size();
 	in_list.resize(0);
 	in_list.resize(size, {});
 }
 
 void IterativeDataflowSolver::reset() {
-	resetOutSet();
-	resetInSet();
+	resetOutList();
+	resetInList();
 }
