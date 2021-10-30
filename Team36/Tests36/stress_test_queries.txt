@@ -1,15 +1,60 @@
 1 - Stress test 1 Next
-prog_line l1, l2;
-Select BOOLEAN such that Next*(l1, l2);
+stmt s1, s2;
+Select BOOLEAN such that Next*(s1, s2);
 TRUE
 5000
 2 - Stress test 2 Next
-prog_line l1, l2, l3;
-Select BOOLEAN such that Next*(l1, l2) and Next*(l2, l3)
+stmt s1, s2, s3;
+Select BOOLEAN such that Next*(s1, s2) and Next*(s2, s3)
 TRUE
 5000
-2 - Stress test 3 Next
-prog_line l1, l2, l3, l4;
-Select BOOLEAN such that Next*(l1, l2) and Next*(l2, l3) and Next*(l3, l4)
+3 - Stress test 2 Next
+stmt s1, s2, s3, s4;
+Select BOOLEAN such that Next*(s1, s2) and Next*(s3, s4)
+TRUE
+5000
+4 - Stress test 3 Next
+stmt s1, s2, s3, s4;
+Select BOOLEAN such that Next*(s1, s2) and Next*(s2, s3) and Next*(s3, s4)
+TRUE
+5000
+1 - Stress test 1 Affect
+stmt s1, s2;
+Select BOOLEAN such that Affect(s1, s2);
+TRUE
+5000
+2 - Stress test 2 Affect
+stmt s1, s2, s3;
+Select BOOLEAN such that Affect(s1, s2) and Affect(s2, s3)
+TRUE
+5000
+3 - Stress test 2 Affect
+stmt s1, s2, s3, s4;
+Select BOOLEAN such that Affect(s1, s2) and Affect(s3, s4)
+TRUE
+5000
+4 - Stress test 3 Affect
+stmt s1, s2, s3, s4;
+Select BOOLEAN such that Affect(s1, s2) and Affect(s2, s3) and Affect(s3, s4)
+TRUE
+5000
+1 - Stress test 1 Affect*
+stmt s1, s2;
+Select BOOLEAN such that Affect*(s1, s2);
+TRUE
+5000
+2 - Stress test 2 Affect*
+stmt s1, s2, s3;
+Select BOOLEAN such that Affect*(s1, s2) and Affect*(s2, s3)
+TRUE
+5000
+3 - Stress test 2 Affect*
+stmt s1, s2, s3, s4;
+Select BOOLEAN such that Affect*(s1, s2) and Affect*(s3, s4)
+TRUE
+5000
+4 - Stress test 3 Affect*
+stmt s1, s2, s3, s4;
+Select BOOLEAN such that Affect*(s1, s2) and Affect*(s2, s3) and Affect*(s3, s4)
 TRUE
 5000

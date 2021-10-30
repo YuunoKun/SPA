@@ -31,7 +31,9 @@ Debug\AutoTester.exe ..\Tests36\container_constants_source.txt ..\Tests36\contai
 Debug\AutoTester.exe ..\Tests36\multi_clauses_source.txt ..\Tests36\multi_clauses_queries.txt .\Tests\out-multi-clauses.xml
 Debug\AutoTester.exe ..\Tests36\valid_query_source.txt ..\Tests36\valid_query_queries.txt .\Tests\out-valid-query.xml
 Debug\AutoTester.exe ..\Tests36\invalid_query_source.txt ..\Tests36\invalid_query_queries.txt .\Tests\out-invalid-query.xml
-Debug\AutoTester.exe ..\Tests36\stress_test_source.txt ..\Tests36\stress_test_queries.txt .\Tests\stress-test-query.xml
+Debug\AutoTester.exe ..\Tests36\stress_test_50_source.txt ..\Tests36\stress_test_queries.txt .\Tests\stress-test-1-query.xml
+Debug\AutoTester.exe ..\Tests36\stress_test_250_source.txt ..\Tests36\stress_test_queries.txt .\Tests\stress-test-2-query.xml
+Debug\AutoTester.exe ..\Tests36\stress_test_500_source.txt ..\Tests36\stress_test_queries.txt .\Tests\stress-test-3-query.xml
 
 echo FINISHED
 pause
