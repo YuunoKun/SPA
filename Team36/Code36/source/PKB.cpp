@@ -15,6 +15,12 @@ PKB& PKB::getInstance() {
 	return pkb;
 }
 
+PKB::~PKB() {
+	for (auto& cfg : cfgs_to_destroy) {
+		delete cfg;
+	}
+}
+
 void PKB::addConstant(constant constant) {
 	const_table.emplace(constant);
 	return;
@@ -240,6 +246,14 @@ void PKB::addProcContains(proc_name proc, stmt_index index) {
 	}
 }
 
+void PKB::addCFGsToDestroy(std::vector<CFG*> cfgs) {
+	cfgs_to_destroy = cfgs;
+}
+
+void PKB::addCFGBip(CFG* new_cfg) {
+	cfg_bips.push_back(new_cfg);
+}
+
 void PKB::generateParentT() {
 	parentT_table = parent_table.findTransitiveClosure();
 }
@@ -276,6 +290,10 @@ void PKB::resetCache() {
 	print_table.clear();
 	expr_table.clear();
 	procS_table.clear();
+	for (auto& cfg : cfgs_to_destroy) {
+		delete cfg;
+	}
+	cfg_bips = {};
 }
 
 void PKB::resetEntities() {
@@ -418,4 +436,8 @@ const MonotypeRelationTable<StmtInfo>& PKB::getNext() {
 
 const RelationTable<proc_name, stmt_index>& PKB::getProcContains() {
 	return procS_table;
+}
+
+std::vector<CFG*> PKB::getCFGBips() {
+	return cfg_bips;
 }

@@ -18,6 +18,7 @@ public:
 	static PKB& PKB::getInstance();
 	PKB(PKB const&) = delete;
 	void operator=(PKB const&) = delete;
+	~PKB();
 
 	void addConstant(constant constant) override;
 	void addProcedure(proc_name proc_name) override;
@@ -37,6 +38,8 @@ public:
 	void addWhile(stmt_index while_stmt_index, var_name control_var) override;
 	void addNext(prog_line prog_line1, prog_line prog_line2) override;
 	void addProcContains(proc_name proc, stmt_index index) override;
+	void addCFGsToDestroy(std::vector<CFG*>) override;
+	void addCFGBip(CFG*) override;
 
 	void generateParentT() override;
 	void generateFollowsT() override;
@@ -68,6 +71,7 @@ public:
 	const RelationTable<stmt_index, var_name>& getWhile() override;
 	const MonotypeRelationTable<StmtInfo>& getNext() override;
 	const RelationTable<proc_name, stmt_index>& getProcContains() override;
+	std::vector<CFG*> getCFGBips() override;
 
 	void resetCache() override;
 	void resetEntities() override;
@@ -96,6 +100,8 @@ private:
 	RelationTable<stmt_index, var_name> if_table;
 	MonotypeRelationTable<StmtInfo> next_table;
 	RelationTable<proc_name, stmt_index> procS_table;
+	std::vector<CFG*> cfgs_to_destroy{};
+	std::vector<CFG*> cfg_bips{};
 
 	PKB() {};
 };

@@ -628,6 +628,20 @@ namespace UnitTesting {
 		PKB::getInstance().resetCache();
 	}
 
+	TEST(PKB, getCFGBips) {
+		PKB::getInstance().resetCache();
+
+		CFG* cfg_pointer = new CFG();
+		std::vector<CFG*> cfg_bips{ cfg_pointer };
+		std::vector<CFG*> empty_list{ };
+
+		PKB::getInstance().addCFGBip(cfg_pointer);
+		EXPECT_EQ(cfg_bips, PKB::getInstance().getCFGBips());
+
+		PKB::getInstance().resetCache();
+		EXPECT_EQ(empty_list, PKB::getInstance().getCFGBips());
+	}
+
 	TEST(PKB, resetCache) {
 		PKB::getInstance().resetCache();
 

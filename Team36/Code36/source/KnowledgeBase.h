@@ -11,6 +11,7 @@
 #include "PKB.h"
 #include "RelationTable.h"
 #include "MonotypeRelationTable.h"
+#include "CFG.h"
 
 class KnowledgeBase {
 public:
@@ -33,6 +34,9 @@ public:
 	virtual void addIf(stmt_index if_stmt_index, var_name control_var) = 0;
 	virtual void addWhile(stmt_index while_stmt_index, var_name control_var) = 0;
 	virtual void addProcContains(proc_name proc, stmt_index index) = 0;
+
+	virtual void addCFGsToDestroy(std::vector<CFG*>) = 0;
+	virtual void addCFGBip(CFG*) = 0;
 
 	virtual void generateParentT() = 0;
 	virtual void generateFollowsT() = 0;
@@ -65,6 +69,7 @@ public:
 	virtual const RelationTable<stmt_index, var_name>& getWhile() = 0;
 	virtual const MonotypeRelationTable<StmtInfo>& getNext() = 0;
 	virtual const RelationTable<proc_name, stmt_index>& getProcContains() = 0;
+	virtual std::vector<CFG*> getCFGBips() = 0;
 
 	virtual void resetCache() = 0;
 	virtual void resetEntities() = 0;
