@@ -988,21 +988,6 @@ stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; pro
 Select BOOLEAN such that Affects()
 none
 5000
-301 - Syntactically invalid Affects*
-stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select BOOLEAN such that Affects*(x,y)
-none
-5000
-302 - Syntactically invalid Affects*
-stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select BOOLEAN such that Affects*(x,2)
-none
-5000
-303 - Syntactically invalid Affects*
-stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select BOOLEAN such that Affects*(1,y)
-none
-5000
 304 - Syntactically invalid Affects*
 stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
 Select BOOLEAN such that Affects*("1",1)
@@ -2383,28 +2368,28 @@ stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; pro
 Select BOOLEAN such that Affects(1,y)
 FALSE
 5000
-287 - Semantically invalid Affects
+301 - Semantically invalid Affects*
 stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select BOOLEAN such that Affects("1",1)
+Select BOOLEAN such that Affects*(x,y)
 FALSE
 5000
-70 - Semantically invalid pattern (v is not declared)
-stmt s;
-Select BOOLEAN
+302 - Semantically invalid Affects*
+stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Affects*(x,2)
 FALSE
 5000
-71 - Semantically invalid pattern (v is not declared)
-stmt s;
-Select BOOLEAN
+303 - Semantically invalid Affects*
+stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN such that Affects*(1,y)
 FALSE
 5000
 72 - Semantically invalid pattern (v1 is not declared)
 assign a; variable v;
 Select v1 pattern a(v1, "z - 1")
-FALSE
+none
 5000
 73 - Semantically invalid Parent (w1 is not declared)
-stmt s; while w
+stmt s; while w;
 Select BOOLEAN such that Parent(s ,w1)
 FALSE
 5000
