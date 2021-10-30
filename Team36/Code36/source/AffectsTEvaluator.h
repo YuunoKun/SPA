@@ -6,7 +6,7 @@
 #include "QueryResult.h"
 #include "PKBAdapter.h"
 
-class AffectEvaluator : public RelationEvaluatorInterface {
+class AffectsTEvaluator : public RelationEvaluatorInterface {
 public:
 	bool evaluateWildAndWild() override;
 	bool evaluateConstantAndConstant(Entity, Entity) override;

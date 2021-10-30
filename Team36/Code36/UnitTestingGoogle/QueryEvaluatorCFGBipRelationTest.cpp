@@ -146,9 +146,9 @@ namespace UnitTesting {
 	};
 
 
-	//Next Relation Test ----------------------------------------------------------------------------------------------------
-	TEST_F(QueryEvaluatorCFGRelationTest, evaluateQueryNextBooleanTrue) {
-		RelType type = NEXT;
+	//NextBip Relation Test ----------------------------------------------------------------------------------------------------
+	TEST_F(QueryEvaluatorCFGRelationTest, evaluateQueryNextBipBooleanTrue) {
+		RelType type = NEXT_BIP;
 		std::string left1 = NEXT_LEFT1;
 		std::string left2 = NEXT_LEFT2;
 		std::string right1 = NEXT_RIGHT1;
@@ -166,8 +166,8 @@ namespace UnitTesting {
 
 		validateRelations(relations);
 	}
-	TEST_F(QueryEvaluatorCFGRelationTest, evaluateQueryNextBooleanFalse) {
-		RelType type = NEXT;
+	TEST_F(QueryEvaluatorCFGRelationTest, evaluateQueryNextBipBooleanFalse) {
+		RelType type = NEXT_BIP;
 		std::vector<std::string> lefts = NEXT_LEFTS;
 		std::vector<std::string> rights = NEXT_RIGHTS;
 		std::string left1 = NEXT_LEFT1;
@@ -196,8 +196,8 @@ namespace UnitTesting {
 
 		validateEmptyRelations(relations);
 	}
-	TEST_F(QueryEvaluatorCFGRelationTest, evaluateQueryNextFilterEmpty) {
-		RelType type = NEXT;
+	TEST_F(QueryEvaluatorCFGRelationTest, evaluateQueryNextBipFilterEmpty) {
+		RelType type = NEXT_BIP;
 		std::vector<RelRef> relations;
 		std::vector<std::string> lefts = NEXT_LEFTS;
 		std::vector<std::string> rights = NEXT_RIGHTS;
@@ -214,8 +214,8 @@ namespace UnitTesting {
 
 		validateEmptyRelations(relations);
 	}
-	TEST_F(QueryEvaluatorCFGRelationTest, evaluateQueryNextFilterNoCommonSynonymTrue) {
-		RelType type = NEXT;
+	TEST_F(QueryEvaluatorCFGRelationTest, evaluateQueryNextBipFilterNoCommonSynonymTrue) {
+		RelType type = NEXT_BIP;
 		std::vector<RelRef> relations;
 		std::string left1 = NEXT_LEFT1;
 		std::string left2 = NEXT_LEFT2;
@@ -242,8 +242,8 @@ namespace UnitTesting {
 		validateRelations(relations);
 	}
 
-	TEST_F(QueryEvaluatorCFGRelationTest, evaluateQueryNextFilterNoCommonSynonymFalse) {
-		RelType type = NEXT;
+	TEST_F(QueryEvaluatorCFGRelationTest, evaluateQueryNextBipFilterNoCommonSynonymFalse) {
+		RelType type = NEXT_BIP;
 
 		std::vector<std::string> lefts = NEXT_LEFTS;
 		std::vector<std::string> rights = NEXT_RIGHTS;
@@ -279,8 +279,8 @@ namespace UnitTesting {
 
 		validateEmptyRelations(relations);
 	}
-	TEST_F(QueryEvaluatorCFGRelationTest, evaluateQueryNextFilterCommonSynonym) {
-		RelType type = NEXT;
+	TEST_F(QueryEvaluatorCFGRelationTest, evaluateQueryNextBipFilterCommonSynonym) {
+		RelType type = NEXT_BIP;
 		std::vector<std::string> lefts = NEXT_LEFTS;
 		std::vector<std::string> rights = NEXT_RIGHTS;
 		std::string left1 = NEXT_LEFT1;
@@ -297,7 +297,7 @@ namespace UnitTesting {
 		selected_list.push_back({ IF, COMMON_SYNONYM1 });
 		selected_list.push_back({ CALL, COMMON_SYNONYM1 });
 
-		//Test case for Select selected such that Next(selected, a)
+		//Test case for Select selected such that NextBip(selected, a)
 		std::list<std::string> result1 = { left1, left2 };
 		std::list<std::string> result2 = { left1, left2 };
 		std::list<std::string> result3 = { };
@@ -314,14 +314,14 @@ namespace UnitTesting {
 			EXPECT_EQ(evaluator.evaluateQuery(q), result_list[i]) << "Error at results : " << i + 1;
 		}
 
-		//Test case for Select selected such that Next(selected, _)
+		//Test case for Select selected such that NextBip(selected, _)
 		for (unsigned int i = 0; i < selected_list.size(); i++) {
 			RelRef relation(type, selected_list[i], WILD_CARD);
 			Query q = initQuery(relation, selected_list[i]);
 			EXPECT_EQ(evaluator.evaluateQuery(q), result_list[i]) << "Error at results : " << i + 1;
 		}
 
-		//Test case for Select selected such that Next(a, selected)
+		//Test case for Select selected such that NextBip(a, selected)
 		result_list[0] = { right1, right2 };
 		result_list[1] = { right1, right2 };
 		for (unsigned int i = 0; i < selected_list.size(); i++) {
@@ -330,14 +330,14 @@ namespace UnitTesting {
 			EXPECT_EQ(evaluator.evaluateQuery(q), result_list[i]) << "Error at results : " << i + 1;
 		}
 
-		//Test case for Select selected such that Next(_, selected)
+		//Test case for Select selected such that NextBip(_, selected)
 		for (unsigned int i = 0; i < selected_list.size(); i++) {
 			RelRef relation(type, WILD_CARD, selected_list[i]);
 			Query q = initQuery(relation, selected_list[i]);
 			EXPECT_EQ(evaluator.evaluateQuery(q), result_list[i]) << "Error at results : " << i + 1;
 		}
 
-		//Test case for Select selected such that Next("1", selected)
+		//Test case for Select selected such that NextBip("1", selected)
 		result_list[0] = { right1 };
 		result_list[1] = { right1 };
 		for (unsigned int i = 0; i < selected_list.size(); i++) {
@@ -346,7 +346,7 @@ namespace UnitTesting {
 			EXPECT_EQ(evaluator.evaluateQuery(q), result_list[i]) << "Error at results : " << i + 1;
 		}
 
-		//Test case for Select selected such that Next("2", selected)
+		//Test case for Select selected such that NextBip("2", selected)
 		result_list[0] = { right2 };
 		result_list[1] = { right2 };
 		for (unsigned int i = 0; i < selected_list.size(); i++) {
@@ -355,7 +355,7 @@ namespace UnitTesting {
 			EXPECT_EQ(evaluator.evaluateQuery(q), result_list[i]) << "Error at results : " << i + 1;
 		}
 
-		//Test case for remaining Select selected such that Next(anyEmpty, selected)
+		//Test case for remaining Select selected such that NextBip(anyEmpty, selected)
 		std::vector<Entity> emptyList = getInvalidConstant(lefts);
 		for (unsigned int j = 0; j < emptyList.size(); j++) {
 			for (unsigned int i = 0; i < selected_list.size(); i++) {
@@ -365,7 +365,7 @@ namespace UnitTesting {
 			}
 		}
 
-		//Test case for Select selected such that Next(selected, "2")
+		//Test case for Select selected such that NextBip(selected, "2")
 		result_list[0] = { left1 };
 		result_list[1] = { left1 };
 		for (unsigned int i = 0; i < selected_list.size(); i++) {
@@ -374,7 +374,7 @@ namespace UnitTesting {
 			EXPECT_EQ(evaluator.evaluateQuery(q), result_list[i]) << "Error at results : " << i + 1;
 		}
 
-		//Test case for Select selected such that Next(selected, "3")
+		//Test case for Select selected such that NextBip(selected, "3")
 		result_list[0] = { left2 };
 		result_list[1] = { left2 };
 		for (unsigned int i = 0; i < selected_list.size(); i++) {
@@ -383,7 +383,7 @@ namespace UnitTesting {
 			EXPECT_EQ(evaluator.evaluateQuery(q), result_list[i]) << "Error at results : " << i + 1;
 		}
 
-		//Test case for remaining Select selected such that Next(selected, anyEmpty)
+		//Test case for remaining Select selected such that NextBip(selected, anyEmpty)
 		emptyList = getInvalidConstant(rights);
 		for (unsigned int j = 0; j < emptyList.size(); j++) {
 			for (unsigned int i = 0; i < selected_list.size(); i++) {
@@ -394,9 +394,9 @@ namespace UnitTesting {
 		}
 	}
 
-	//NEXT_T Relation Test ----------------------------------------------------------------------------------------------------
-	TEST_F(QueryEvaluatorCFGRelationTest, evaluateQueryNextTBooleanTrue) {
-		RelType type = NEXT_T;
+	//NEXT_BIP_T Relation Test ----------------------------------------------------------------------------------------------------
+	TEST_F(QueryEvaluatorCFGRelationTest, evaluateQueryNextBipTBooleanTrue) {
+		RelType type = NEXT_BIP_T;
 		std::string left1 = NEXT_LEFT1;
 		std::string left2 = NEXT_LEFT2;
 		std::string right1 = NEXT_RIGHT1;
@@ -416,8 +416,8 @@ namespace UnitTesting {
 		validateRelations(relations);
 	}
 
-	TEST_F(QueryEvaluatorCFGRelationTest, evaluateQueryNextTBooleanFalse) {
-		RelType type = NEXT_T;
+	TEST_F(QueryEvaluatorCFGRelationTest, evaluateQueryNextBipTBooleanFalse) {
+		RelType type = NEXT_BIP_T;
 		std::vector<std::string> lefts = NEXT_LEFTS;
 		std::vector<std::string> rights = NEXT_RIGHTS;
 		std::string left1 = NEXT_LEFT1;
@@ -446,8 +446,8 @@ namespace UnitTesting {
 		validateEmptyRelations(relations);
 	}
 
-	TEST_F(QueryEvaluatorCFGRelationTest, evaluateQueryNextTFilterEmpty) {
-		RelType type = NEXT_T;
+	TEST_F(QueryEvaluatorCFGRelationTest, evaluateQueryNextBipTFilterEmpty) {
+		RelType type = NEXT_BIP_T;
 		std::vector<RelRef> relations;
 		std::vector<std::string> lefts = NEXT_LEFTS;
 		std::vector<std::string> rights = NEXT_RIGHTS;
@@ -465,8 +465,8 @@ namespace UnitTesting {
 		validateEmptyRelations(relations);
 	}
 
-	TEST_F(QueryEvaluatorCFGRelationTest, evaluateQueryNextTFilterNoCommonSynonymTrue) {
-		RelType type = NEXT_T;
+	TEST_F(QueryEvaluatorCFGRelationTest, evaluateQueryNextBipTFilterNoCommonSynonymTrue) {
+		RelType type = NEXT_BIP_T;
 		std::string left1 = NEXT_LEFT1;
 		std::string left2 = NEXT_LEFT2;
 		std::string right1 = NEXT_RIGHT1;
@@ -485,8 +485,8 @@ namespace UnitTesting {
 		validateRelations(relations);
 	}
 
-	TEST_F(QueryEvaluatorCFGRelationTest, evaluateQueryNextTFilterCommonSynonym) {
-		RelType type = NEXT_T;
+	TEST_F(QueryEvaluatorCFGRelationTest, evaluateQueryNextBipTFilterCommonSynonym) {
+		RelType type = NEXT_BIP_T;
 		std::vector<std::string> lefts = NEXT_LEFTS;
 		std::vector<std::string> rights = NEXT_RIGHTS;
 		std::string left1 = NEXT_LEFT1;
@@ -497,36 +497,36 @@ namespace UnitTesting {
 
 		Entity selected_entity(STMT, COMMON_SYNONYM1);
 
-		//Test case for Select selected such that NextT(selected, a)
+		//Test case for Select selected such that NextBipT(selected, a)
 		std::list<std::string> result = { left1, left2 };
 
 		RelRef relation(type, selected_entity, { STMT, Synonym{"a"} });
 		EXPECT_EQ(evaluator.evaluateQuery(initQuery(relation, selected_entity)), result);
 
-		//Test case for Select selected such that NextT(selected, _)
+		//Test case for Select selected such that NextBipT(selected, _)
 		relation = RelRef(type, selected_entity, WILD_CARD);
 		EXPECT_EQ(evaluator.evaluateQuery(initQuery(relation, selected_entity)), result);
 
-		//Test case for Select selected such that NextT(a, selected)
+		//Test case for Select selected such that NextBipT(a, selected)
 		result = { right1, right2 };
 		relation = RelRef(type, { STMT, Synonym{"a"} }, selected_entity);
 		EXPECT_EQ(evaluator.evaluateQuery(initQuery(relation, selected_entity)), result);
 
-		//Test case for Select selected such that NextT(_, selected)
+		//Test case for Select selected such that NextBipT(_, selected)
 		relation = RelRef(type, WILD_CARD, selected_entity);
 		expectListEqual(evaluator.evaluateQuery(initQuery(relation, selected_entity)), result);
 
-		//Test case for Select selected such that NextT("1", selected)
+		//Test case for Select selected such that NextBipT("1", selected)
 		relation = RelRef(type, { STMT, left1 }, selected_entity);
 		EXPECT_EQ(evaluator.evaluateQuery(initQuery(relation, selected_entity)), result);
-		
-		//Test case for Select selected such that NextT("2", selected)
+
+		//Test case for Select selected such that NextBipT("2", selected)
 		result = { right2 };
 		relation = RelRef(type, { STMT, left2 }, selected_entity);
 		EXPECT_EQ(evaluator.evaluateQuery(initQuery(relation, selected_entity)), result);
 
 
-		//Test case for remaining Select selected such that NextT(anyEmpty, selected)
+		//Test case for remaining Select selected such that NextBipT(anyEmpty, selected)
 		std::vector<Entity> emptyList = getInvalidConstant(lefts);
 		for (unsigned int j = 0; j < emptyList.size(); j++) {
 			RelRef relation(type, emptyList[j], selected_entity);
@@ -534,18 +534,18 @@ namespace UnitTesting {
 			EXPECT_EQ(evaluator.evaluateQuery(q), EMPTY_RESULT) << "Error at results : " << j + 1;
 		}
 
-		//Test case for Select selected such that NextT(selected, "2")
+		//Test case for Select selected such that NextBipT(selected, "2")
 		result = { left1 };
 		relation = RelRef(type, selected_entity, { STMT, right1 });
 		EXPECT_EQ(evaluator.evaluateQuery(initQuery(relation, selected_entity)), result);
 
 
-		//Test case for Select selected such that NextT(selected, "3")
+		//Test case for Select selected such that NextBipT(selected, "3")
 		result = { left2, left1 };
 		relation = RelRef(type, selected_entity, { STMT, right2 });
 		EXPECT_EQ(evaluator.evaluateQuery(initQuery(relation, selected_entity)), result);
 
-		//Test case for remaining Select selected such that NextT(selected, anyEmpty)
+		//Test case for remaining Select selected such that NextBipT(selected, anyEmpty)
 		emptyList = getInvalidConstant(rights);
 		for (unsigned int j = 0; j < emptyList.size(); j++) {
 			RelRef relation(type, selected_entity, emptyList[j]);
@@ -556,9 +556,9 @@ namespace UnitTesting {
 
 
 
-	//Affects Relation Test ----------------------------------------------------------------------------------------------------
-	TEST_F(QueryEvaluatorCFGRelationTest, evaluateQueryAffectsBooleanTrue) {
-		RelType type = AFFECT;
+	//AffectsBip Relation Test ----------------------------------------------------------------------------------------------------
+	TEST_F(QueryEvaluatorCFGRelationTest, evaluateQueryAffectsBipBooleanTrue) {
+		RelType type = AFFECT_BIP;
 		std::string left1 = NEXT_LEFT1;
 		std::string left2 = AFFECTS_LEFT2;
 		std::string right1 = AFFECTS_RIGHT1;
@@ -576,8 +576,8 @@ namespace UnitTesting {
 
 		validateRelations(relations);
 	}
-	TEST_F(QueryEvaluatorCFGRelationTest, evaluateQueryAffectsBooleanFalse) {
-		RelType type = AFFECT;
+	TEST_F(QueryEvaluatorCFGRelationTest, evaluateQueryAffectsBipBooleanFalse) {
+		RelType type = AFFECT_BIP;
 		std::vector<std::string> lefts = AFFECTS_LEFTS;
 		std::vector<std::string> rights = AFFECTS_RIGHTS;
 		std::string left1 = AFFECTS_LEFT1;
@@ -606,8 +606,8 @@ namespace UnitTesting {
 
 		validateEmptyRelations(relations);
 	}
-	TEST_F(QueryEvaluatorCFGRelationTest, evaluateQueryAffectsFilterEmpty) {
-		RelType type = AFFECT;
+	TEST_F(QueryEvaluatorCFGRelationTest, evaluateQueryAffectsBipFilterEmpty) {
+		RelType type = AFFECT_BIP;
 		std::vector<RelRef> relations;
 		std::vector<std::string> lefts = AFFECTS_LEFTS;
 		std::vector<std::string> rights = AFFECTS_RIGHTS;
@@ -624,8 +624,8 @@ namespace UnitTesting {
 
 		validateEmptyRelations(relations);
 	}
-	TEST_F(QueryEvaluatorCFGRelationTest, evaluateQueryAffectsFilterNoCommonSynonymTrue) {
-		RelType type = AFFECT;
+	TEST_F(QueryEvaluatorCFGRelationTest, evaluateQueryAffectsBipFilterNoCommonSynonymTrue) {
+		RelType type = AFFECT_BIP;
 		std::vector<RelRef> relations;
 		std::string left1 = AFFECTS_LEFT1;
 		std::string left2 = AFFECTS_LEFT2;
@@ -652,8 +652,8 @@ namespace UnitTesting {
 		validateRelations(relations);
 	}
 
-	TEST_F(QueryEvaluatorCFGRelationTest, evaluateQueryAffectsFilterNoCommonSynonymFalse) {
-		RelType type = AFFECT;
+	TEST_F(QueryEvaluatorCFGRelationTest, evaluateQueryAffectsBipFilterNoCommonSynonymFalse) {
+		RelType type = AFFECT_BIP;
 
 		std::vector<std::string> lefts = AFFECTS_LEFTS;
 		std::vector<std::string> rights = AFFECTS_RIGHTS;
@@ -689,8 +689,8 @@ namespace UnitTesting {
 
 		validateEmptyRelations(relations);
 	}
-	TEST_F(QueryEvaluatorCFGRelationTest, evaluateQueryAffectsFilterCommonSynonym) {
-		RelType type = AFFECT;
+	TEST_F(QueryEvaluatorCFGRelationTest, evaluateQueryAffectsBipFilterCommonSynonym) {
+		RelType type = AFFECT_BIP;
 		std::vector<std::string> lefts = AFFECTS_LEFTS;
 		std::vector<std::string> rights = AFFECTS_RIGHTS;
 		std::string left1 = AFFECTS_LEFT1;
@@ -707,7 +707,7 @@ namespace UnitTesting {
 		selected_list.push_back({ IF, COMMON_SYNONYM1 });
 		selected_list.push_back({ CALL, COMMON_SYNONYM1 });
 
-		//Test case for Select selected such that Affects(selected, a)
+		//Test case for Select selected such that AffectsBip(selected, a)
 		std::list<std::string> result1 = { left1, left2 };
 		std::list<std::string> result2 = { left1, left2 };
 		std::list<std::string> result3 = { };
@@ -724,14 +724,14 @@ namespace UnitTesting {
 			EXPECT_EQ(evaluator.evaluateQuery(q), result_list[i]) << "Error at results : " << i + 1;
 		}
 
-		//Test case for Select selected such that Affects(selected, _)
+		//Test case for Select selected such that AffectsBip(selected, _)
 		for (unsigned int i = 0; i < selected_list.size(); i++) {
 			RelRef relation(type, selected_list[i], WILD_CARD);
 			Query q = initQuery(relation, selected_list[i]);
 			EXPECT_EQ(evaluator.evaluateQuery(q), result_list[i]) << "Error at results : " << i + 1;
 		}
 
-		//Test case for Select selected such that Affects(a, selected)
+		//Test case for Select selected such that AffectsBip(a, selected)
 		result_list[0] = { right1, right2 };
 		result_list[1] = { right1, right2 };
 		for (unsigned int i = 0; i < selected_list.size(); i++) {
@@ -740,14 +740,14 @@ namespace UnitTesting {
 			EXPECT_EQ(evaluator.evaluateQuery(q), result_list[i]) << "Error at results : " << i + 1;
 		}
 
-		//Test case for Select selected such that Affects(_, selected)
+		//Test case for Select selected such that AffectsBip(_, selected)
 		for (unsigned int i = 0; i < selected_list.size(); i++) {
 			RelRef relation(type, WILD_CARD, selected_list[i]);
 			Query q = initQuery(relation, selected_list[i]);
 			expectListEqual(evaluator.evaluateQuery(q), result_list[i]);
 		}
 
-		//Test case for Select selected such that Affects("1", selected)
+		//Test case for Select selected such that AffectsBip("1", selected)
 		result_list[0] = { right1 };
 		result_list[1] = { right1 };
 		for (unsigned int i = 0; i < selected_list.size(); i++) {
@@ -756,7 +756,7 @@ namespace UnitTesting {
 			EXPECT_EQ(evaluator.evaluateQuery(q), result_list[i]) << "Error at results : " << i + 1;
 		}
 
-		//Test case for Select selected such that Affects("2", selected)
+		//Test case for Select selected such that AffectsBip("2", selected)
 		result_list[0] = { right2 };
 		result_list[1] = { right2 };
 		for (unsigned int i = 0; i < selected_list.size(); i++) {
@@ -765,7 +765,7 @@ namespace UnitTesting {
 			EXPECT_EQ(evaluator.evaluateQuery(q), result_list[i]) << "Error at results : " << i + 1;
 		}
 
-		//Test case for remaining Select selected such that Affects(anyEmpty, selected)
+		//Test case for remaining Select selected such that AffectsBip(anyEmpty, selected)
 		std::vector<Entity> emptyList = getInvalidConstant(lefts);
 		for (unsigned int j = 0; j < emptyList.size(); j++) {
 			for (unsigned int i = 0; i < selected_list.size(); i++) {
@@ -775,7 +775,7 @@ namespace UnitTesting {
 			}
 		}
 
-		//Test case for Select selected such that Affects(selected, "2")
+		//Test case for Select selected such that AffectsBip(selected, "2")
 		result_list[0] = { left1 };
 		result_list[1] = { left1 };
 		for (unsigned int i = 0; i < selected_list.size(); i++) {
@@ -784,7 +784,7 @@ namespace UnitTesting {
 			EXPECT_EQ(evaluator.evaluateQuery(q), result_list[i]) << "Error at results : " << i + 1;
 		}
 
-		//Test case for Select selected such that Affects(selected, "3")
+		//Test case for Select selected such that AffectsBip(selected, "3")
 		result_list[0] = { left2 };
 		result_list[1] = { left2 };
 		for (unsigned int i = 0; i < selected_list.size(); i++) {
@@ -793,7 +793,7 @@ namespace UnitTesting {
 			EXPECT_EQ(evaluator.evaluateQuery(q), result_list[i]) << "Error at results : " << i + 1;
 		}
 
-		//Test case for remaining Select selected such that Affects(selected, anyEmpty)
+		//Test case for remaining Select selected such that AffectsBip(selected, anyEmpty)
 		emptyList = getInvalidConstant(rights);
 		for (unsigned int j = 0; j < emptyList.size(); j++) {
 			for (unsigned int i = 0; i < selected_list.size(); i++) {
@@ -804,9 +804,9 @@ namespace UnitTesting {
 		}
 	}
 
-	//AFFECT_T Relation Test ----------------------------------------------------------------------------------------------------
-	TEST_F(QueryEvaluatorCFGRelationTest, evaluateQueryAffectsTBooleanTrue) {
-		RelType type = AFFECT_T;
+	//AFFECT_BIP_T Relation Test ----------------------------------------------------------------------------------------------------
+	TEST_F(QueryEvaluatorCFGRelationTest, evaluateQueryAffectsBipTBooleanTrue) {
+		RelType type = AFFECT_BIP_T;
 		std::string left1 = AFFECTS_LEFT1;
 		std::string left2 = AFFECTS_LEFT2;
 		std::string right1 = AFFECTS_RIGHT1;
@@ -826,8 +826,8 @@ namespace UnitTesting {
 		validateRelations(relations);
 	}
 
-	TEST_F(QueryEvaluatorCFGRelationTest, evaluateQueryAffectsTBooleanFalse) {
-		RelType type = AFFECT_T;
+	TEST_F(QueryEvaluatorCFGRelationTest, evaluateQueryAffectsBipTBooleanFalse) {
+		RelType type = AFFECT_BIP_T;
 		std::vector<std::string> lefts = AFFECTS_LEFTS;
 		std::vector<std::string> rights = AFFECTS_RIGHTS;
 		std::string left1 = AFFECTS_LEFT1;
@@ -856,8 +856,8 @@ namespace UnitTesting {
 		validateEmptyRelations(relations);
 	}
 
-	TEST_F(QueryEvaluatorCFGRelationTest, evaluateQueryAffectsTFilterEmpty) {
-		RelType type = AFFECT_T;
+	TEST_F(QueryEvaluatorCFGRelationTest, evaluateQueryAffectsBipTFilterEmpty) {
+		RelType type = AFFECT_BIP_T;
 		std::vector<RelRef> relations;
 		std::vector<std::string> lefts = AFFECTS_LEFTS;
 		std::vector<std::string> rights = AFFECTS_RIGHTS;
@@ -875,8 +875,8 @@ namespace UnitTesting {
 		validateEmptyRelations(relations);
 	}
 
-	TEST_F(QueryEvaluatorCFGRelationTest, evaluateQueryAffectsTFilterNoCommonSynonymTrue) {
-		RelType type = AFFECT_T;
+	TEST_F(QueryEvaluatorCFGRelationTest, evaluateQueryAffectsBipTFilterNoCommonSynonymTrue) {
+		RelType type = AFFECT_BIP_T;
 		std::string left1 = AFFECTS_LEFT1;
 		std::string left2 = AFFECTS_LEFT2;
 		std::string right1 = AFFECTS_RIGHT1;
@@ -895,8 +895,8 @@ namespace UnitTesting {
 		validateRelations(relations);
 	}
 
-	TEST_F(QueryEvaluatorCFGRelationTest, evaluateQueryAffectsTFilterCommonSynonym) {
-		RelType type = AFFECT_T;
+	TEST_F(QueryEvaluatorCFGRelationTest, evaluateQueryAffectsBipTFilterCommonSynonym) {
+		RelType type = AFFECT_BIP_T;
 		std::vector<std::string> lefts = AFFECTS_LEFTS;
 		std::vector<std::string> rights = AFFECTS_RIGHTS;
 		std::string left1 = AFFECTS_LEFT1;
@@ -907,36 +907,36 @@ namespace UnitTesting {
 
 		Entity selected_entity(STMT, COMMON_SYNONYM1);
 
-		//Test case for Select selected such that AffectsT(selected, a)
+		//Test case for Select selected such that AffectsBipT(selected, a)
 		std::list<std::string> result = { left1, left2 };
 
 		RelRef relation(type, selected_entity, { STMT, Synonym{"a"} });
 		EXPECT_EQ(evaluator.evaluateQuery(initQuery(relation, selected_entity)), result);
 
-		//Test case for Select selected such that AffectsT(selected, _)
+		//Test case for Select selected such that AffectsBipT(selected, _)
 		relation = RelRef(type, selected_entity, WILD_CARD);
 		EXPECT_EQ(evaluator.evaluateQuery(initQuery(relation, selected_entity)), result);
 
-		//Test case for Select selected such that AffectsT(a, selected)
+		//Test case for Select selected such that AffectsBipT(a, selected)
 		result = { right1, right2 };
 		relation = RelRef(type, { STMT, Synonym{"a"} }, selected_entity);
 		EXPECT_EQ(evaluator.evaluateQuery(initQuery(relation, selected_entity)), result);
 
-		//Test case for Select selected such that AffectsT(_, selected)
+		//Test case for Select selected such that AffectsBipT(_, selected)
 		relation = RelRef(type, WILD_CARD, selected_entity);
 		expectListEqual(evaluator.evaluateQuery(initQuery(relation, selected_entity)), result);
 
-		//Test case for Select selected such that AffectsT("1", selected)
+		//Test case for Select selected such that AffectsBipT("1", selected)
 		relation = RelRef(type, { STMT, left1 }, selected_entity);
 		EXPECT_EQ(evaluator.evaluateQuery(initQuery(relation, selected_entity)), result);
 
-		//Test case for Select selected such that AffectsT("2", selected)
+		//Test case for Select selected such that AffectsBipT("2", selected)
 		result = { right2 };
 		relation = RelRef(type, { STMT, left2 }, selected_entity);
 		EXPECT_EQ(evaluator.evaluateQuery(initQuery(relation, selected_entity)), result);
 
 
-		//Test case for remaining Select selected such that AffectsT(anyEmpty, selected)
+		//Test case for remaining Select selected such that AffectsBipT(anyEmpty, selected)
 		std::vector<Entity> emptyList = getInvalidConstant(lefts);
 		for (unsigned int j = 0; j < emptyList.size(); j++) {
 			RelRef relation(type, emptyList[j], selected_entity);
@@ -944,18 +944,18 @@ namespace UnitTesting {
 			EXPECT_EQ(evaluator.evaluateQuery(q), EMPTY_RESULT) << "Error at results : " << j + 1;
 		}
 
-		//Test case for Select selected such that AffectsT(selected, "2")
+		//Test case for Select selected such that AffectsBipT(selected, "2")
 		result = { left1 };
 		relation = RelRef(type, selected_entity, { STMT, right1 });
 		EXPECT_EQ(evaluator.evaluateQuery(initQuery(relation, selected_entity)), result);
 
 
-		//Test case for Select selected such that AffectsT(selected, "3")
+		//Test case for Select selected such that AffectsBipT(selected, "3")
 		result = { left2, left1 };
 		relation = RelRef(type, selected_entity, { STMT, right2 });
 		EXPECT_EQ(evaluator.evaluateQuery(initQuery(relation, selected_entity)), result);
 
-		//Test case for remaining Select selected such that AffectsT(selected, anyEmpty)
+		//Test case for remaining Select selected such that AffectsBipT(selected, anyEmpty)
 		emptyList = getInvalidConstant(rights);
 		for (unsigned int j = 0; j < emptyList.size(); j++) {
 			RelRef relation(type, selected_entity, emptyList[j]);

@@ -12,12 +12,40 @@ namespace UnitTesting {
 
 		virtual void SetUp() override {
 			PKB::getInstance().resetCache();
+
+			PKB::getInstance().addStmt(STMT_READ);
+			PKB::getInstance().addStmt(STMT_PRINT);
+			PKB::getInstance().addStmt(STMT_READ);
+			PKB::getInstance().addStmt(STMT_IF);
+			PKB::getInstance().addNext(1, 2);
+			PKB::getInstance().addNext(2, 3);
+
+			PKB::getInstance().addProcedure(p);
+			PKB::getInstance().addProcContains(p, 1);
+			PKB::getInstance().addProcContains(p, 2);
+			PKB::getInstance().addProcContains(p, 3);
+			PKB::getInstance().addProcContains(p, 4);
+			pkb.getRelationManager().update();
 		}
 
 		PKBAdapter pkb;
 		NextTEvaluator evaluator;
+
+		StmtInfo p1{ 1, STMT_READ };
+		StmtInfo p2{ 2, STMT_PRINT };
+		StmtInfo p3{ 3, STMT_READ };
+		StmtInfo p4{ 4, STMT_IF };
+
+		Entity e1 = { STMT, "1" };
+		Entity e2 = { STMT, "2" };
+		Entity e3 = { STMT, "3" };
+		Entity e4 = { STMT, "4" };
+
+		proc_name p = "p";
+
 	};
 	TEST_F(NextTEvaluatorTest, evaluateWildAndWild) {
+		PKB::getInstance().resetCache();
 		PKB::getInstance().addStmt(STMT_READ);
 		PKB::getInstance().addStmt(STMT_PRINT);
 		PKB::getInstance().addStmt(STMT_READ);
@@ -30,25 +58,6 @@ namespace UnitTesting {
 
 	
 	TEST_F(NextTEvaluatorTest, evaluateConstantAndConstant) {
-		Entity e1 = { STMT, "1" };
-		Entity e2 = { STMT, "2" };
-		Entity e3 = { STMT, "3" };
-		Entity e4 = { STMT, "4" };
-
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_PRINT);
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_IF);
-		PKB::getInstance().addNext(1, 2);
-		PKB::getInstance().addNext(2, 3);
-
-		proc_name p = "p";
-		PKB::getInstance().addProcedure(p);
-		PKB::getInstance().addProcContains(p, 1);
-		PKB::getInstance().addProcContains(p, 2);
-		PKB::getInstance().addProcContains(p, 3);
-		PKB::getInstance().addProcContains(p, 4);
-		pkb.getRelationManager().update();
 
 		EXPECT_TRUE(evaluator.evaluateConstantAndConstant(e1, e2));
 		EXPECT_TRUE(evaluator.evaluateConstantAndConstant(e1, e3));
@@ -69,24 +78,6 @@ namespace UnitTesting {
 	}
 	
 	TEST_F(NextTEvaluatorTest, evaluateConstantAndWild) {
-		Entity e1 = { STMT, "1" };
-		Entity e2 = { STMT, "2" };
-		Entity e3 = { STMT, "3" };
-		Entity e4 = { STMT, "4" };
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_PRINT);
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_IF);
-		PKB::getInstance().addNext(1, 2);
-		PKB::getInstance().addNext(2, 3);
-
-		proc_name p = "p";
-		PKB::getInstance().addProcedure(p);
-		PKB::getInstance().addProcContains(p, 1);
-		PKB::getInstance().addProcContains(p, 2);
-		PKB::getInstance().addProcContains(p, 3);
-		PKB::getInstance().addProcContains(p, 4);
-		pkb.getRelationManager().update();
 
 		EXPECT_TRUE(evaluator.evaluateConstantAndWild(e1));
 		EXPECT_TRUE(evaluator.evaluateConstantAndWild(e2));
@@ -95,24 +86,6 @@ namespace UnitTesting {
 	}
 
 	TEST_F(NextTEvaluatorTest, evaluateWildAndConstant) {
-		Entity e1 = { STMT, "1" };
-		Entity e2 = { STMT, "2" };
-		Entity e3 = { STMT, "3" };
-		Entity e4 = { STMT, "4" };
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_PRINT);
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_IF);
-		PKB::getInstance().addNext(1, 2);
-		PKB::getInstance().addNext(2, 3);
-
-		proc_name p = "p";
-		PKB::getInstance().addProcedure(p);
-		PKB::getInstance().addProcContains(p, 1);
-		PKB::getInstance().addProcContains(p, 2);
-		PKB::getInstance().addProcContains(p, 3);
-		PKB::getInstance().addProcContains(p, 4);
-		pkb.getRelationManager().update();
 
 		EXPECT_FALSE(evaluator.evaluateWildAndConstant(e1));
 		EXPECT_TRUE(evaluator.evaluateWildAndConstant(e2));
@@ -121,24 +94,6 @@ namespace UnitTesting {
 	}
 	
 	TEST_F(NextTEvaluatorTest, evaluateSynonymAndSynonym) {
-		StmtInfo p1{ 1, STMT_READ };
-		StmtInfo p2{ 2, STMT_PRINT };
-		StmtInfo p3{ 3, STMT_READ };
-		StmtInfo p4{ 4, STMT_IF };
-
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_PRINT);
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_IF);
-		PKB::getInstance().addNext(1, 2);
-		PKB::getInstance().addNext(2, 3);
-		proc_name p = "p";
-		PKB::getInstance().addProcedure(p);
-		PKB::getInstance().addProcContains(p, 1);
-		PKB::getInstance().addProcContains(p, 2);
-		PKB::getInstance().addProcContains(p, 3);
-		PKB::getInstance().addProcContains(p, 4);
-		pkb.getRelationManager().update();
 
 		std::vector<std::pair<StmtInfo, StmtInfo>> v = pkb.getRelationManager().getAllNextTRelation();
 		Entity left = { STMT, Synonym{"a"} };
@@ -183,25 +138,6 @@ namespace UnitTesting {
 	}
 
 	TEST_F(NextTEvaluatorTest, evaluateWildAndSynonym) {
-		StmtInfo p1{ 1, STMT_READ };
-		StmtInfo p2{ 2, STMT_PRINT };
-		StmtInfo p3{ 3, STMT_READ };
-		StmtInfo p4{ 4, STMT_IF };
-
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_PRINT);
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_IF);
-		PKB::getInstance().addNext(1, 2);
-		PKB::getInstance().addNext(2, 3);
-
-		proc_name p = "p";
-		PKB::getInstance().addProcedure(p);
-		PKB::getInstance().addProcContains(p, 1);
-		PKB::getInstance().addProcContains(p, 2);
-		PKB::getInstance().addProcContains(p, 3);
-		PKB::getInstance().addProcContains(p, 4);
-		pkb.getRelationManager().update();
 
 		std::vector<StmtInfo> v = pkb.getRelationManager().getNextT();
 		Entity header = { STMT, Synonym{"a"} };
@@ -234,18 +170,6 @@ namespace UnitTesting {
 	}
 
 	TEST_F(NextTEvaluatorTest, evaluateSynonymAndWild) {
-		StmtInfo p1{ 1, STMT_READ };
-		StmtInfo p2{ 2, STMT_PRINT };
-		StmtInfo p3{ 3, STMT_READ };
-		StmtInfo p4{ 4, STMT_IF };
-
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_PRINT);
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_IF);
-		PKB::getInstance().addNext(1, 2);
-		PKB::getInstance().addNext(2, 3);
-		pkb.getRelationManager().update();
 
 		std::vector<StmtInfo> v = pkb.getRelationManager().getPreviousT();
 		Entity header = { STMT, Synonym{"a"} };
@@ -278,18 +202,6 @@ namespace UnitTesting {
 	}
 
 	TEST_F(NextTEvaluatorTest, evaluateConstantAndSynonym) {
-		StmtInfo p1{ 1, STMT_READ };
-		StmtInfo p2{ 2, STMT_PRINT };
-		StmtInfo p3{ 3, STMT_READ };
-		StmtInfo p4{ 4, STMT_IF };
-
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_PRINT);
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_IF);
-		PKB::getInstance().addNext(1, 2);
-		PKB::getInstance().addNext(2, 3);
-		pkb.getRelationManager().update();
 
 		std::vector<StmtInfo> v = { p2, p3 };
 		Entity header = { STMT, Synonym{"a"} };
@@ -345,24 +257,6 @@ namespace UnitTesting {
 	}
 
 	TEST_F(NextTEvaluatorTest, evaluateSynonymAndConstant) {
-		StmtInfo p1{ 1, STMT_READ };
-		StmtInfo p2{ 2, STMT_PRINT };
-		StmtInfo p3{ 3, STMT_READ };
-		StmtInfo p4{ 4, STMT_IF };
-
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_PRINT);
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_IF);
-		PKB::getInstance().addNext(1, 2);
-		PKB::getInstance().addNext(2, 3);
-		proc_name p = "p";
-		PKB::getInstance().addProcedure(p);
-		PKB::getInstance().addProcContains(p, 1);
-		PKB::getInstance().addProcContains(p, 2);
-		PKB::getInstance().addProcContains(p, 3);
-		PKB::getInstance().addProcContains(p, 4);
-		pkb.getRelationManager().update();
 
 		std::vector<StmtInfo> v = { p2, p1 };
 		Entity header = { STMT, Synonym{"a"} };

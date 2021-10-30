@@ -7,49 +7,44 @@ namespace UnitTesting {
 	class ModifiesSEvaluatorTest : public testing::Test {
 	protected:
 		ModifiesSEvaluatorTest() {
-		}
-
-		virtual void SetUp() override {
 			PKB::getInstance().resetCache();
+			PKB::getInstance().addStmt(STMT_READ);
+			PKB::getInstance().addStmt(STMT_PRINT);
+			PKB::getInstance().addStmt(STMT_IF);
+			PKB::getInstance().addStmt(STMT_PRINT);
+			PKB::getInstance().addVariable(x);
+			PKB::getInstance().addVariable(y);
+			PKB::getInstance().addVariable(z);
+			PKB::getInstance().addModifiesS(1, x);
+			PKB::getInstance().addModifiesS(3, y);
 		}
 
 		PKBAdapter pkb;
 		ModifiesSEvaluator evaluator;
-	};
-	TEST_F(ModifiesSEvaluatorTest, evaluateWildAndWild) {
-		var_name x = "x";
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addVariable(x);
 
-		EXPECT_THROW(evaluator.evaluateWildAndWild(), std::invalid_argument);
+		StmtInfo p1{ 1, STMT_READ };
+		StmtInfo p2{ 2, STMT_PRINT };
+		StmtInfo p3{ 3, STMT_IF };
+		StmtInfo p4{ 4, STMT_PRINT };
 
-		PKB::getInstance().addModifiesS(1, x);
-
-		EXPECT_THROW(evaluator.evaluateWildAndWild(), std::invalid_argument);
-	}
-
-	TEST_F(ModifiesSEvaluatorTest, evaluateConstantAndConstant) {
 		Entity e1 = { STMT, "1" };
 		Entity e2 = { STMT, "2" };
 		Entity e3 = { STMT, "3" };
 		Entity e4 = { STMT, "4" };
+
 		var_name x = "x";
 		var_name y = "y";
 		var_name z = "z";
-		Entity v1 = { VARIABLE, "x" };
-		Entity v2 = { VARIABLE, "y" };
-		Entity v3 = { VARIABLE, "z" };
 
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_PRINT);
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_PRINT);
-		PKB::getInstance().addVariable(x);
-		PKB::getInstance().addVariable(y);
-		PKB::getInstance().addVariable(z);
-		PKB::getInstance().addModifiesS(1, x);
-		PKB::getInstance().addModifiesS(3, y);
+		Entity v1 = { VARIABLE, x };
+		Entity v2 = { VARIABLE, y };
+		Entity v3 = { VARIABLE, z };
+	};
+	TEST_F(ModifiesSEvaluatorTest, evaluateWildAndWild) {
+		EXPECT_THROW(evaluator.evaluateWildAndWild(), std::invalid_argument);
+	}
 
+	TEST_F(ModifiesSEvaluatorTest, evaluateConstantAndConstant) {
 		EXPECT_TRUE(evaluator.evaluateConstantAndConstant(e1, v1));
 		EXPECT_FALSE(evaluator.evaluateConstantAndConstant(e1, v2));
 		EXPECT_FALSE(evaluator.evaluateConstantAndConstant(e1, v3));
@@ -65,27 +60,6 @@ namespace UnitTesting {
 	}
 
 	TEST_F(ModifiesSEvaluatorTest, evaluateConstantAndWild) {
-		Entity e1 = { STMT, "1" };
-		Entity e2 = { STMT, "2" };
-		Entity e3 = { STMT, "3" };
-		Entity e4 = { STMT, "4" };
-		var_name x = "x";
-		var_name y = "y";
-		var_name z = "z";
-		Entity v1 = { VARIABLE, "x" };
-		Entity v2 = { VARIABLE, "y" };
-		Entity v3 = { VARIABLE, "z" };
-
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_PRINT);
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_PRINT);
-		PKB::getInstance().addVariable(x);
-		PKB::getInstance().addVariable(y);
-		PKB::getInstance().addVariable(z);
-		PKB::getInstance().addModifiesS(1, x);
-		PKB::getInstance().addModifiesS(3, y);
-
 		EXPECT_TRUE(evaluator.evaluateConstantAndWild(e1));
 		EXPECT_FALSE(evaluator.evaluateConstantAndWild(e2));
 		EXPECT_TRUE(evaluator.evaluateConstantAndWild(e3));
@@ -93,55 +67,12 @@ namespace UnitTesting {
 	}
 
 	TEST_F(ModifiesSEvaluatorTest, evaluateWildAndConstant) {
-		Entity e1 = { STMT, "1" };
-		Entity e2 = { STMT, "2" };
-		Entity e3 = { STMT, "3" };
-		Entity e4 = { STMT, "4" };
-		var_name x = "x";
-		var_name y = "y";
-		var_name z = "z";
-		Entity v1 = { VARIABLE, "x" };
-		Entity v2 = { VARIABLE, "y" };
-		Entity v3 = { VARIABLE, "z" };
-
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_PRINT);
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_PRINT);
-		PKB::getInstance().addVariable(x);
-		PKB::getInstance().addVariable(y);
-		PKB::getInstance().addVariable(z);
-		PKB::getInstance().addModifiesS(1, x);
-		PKB::getInstance().addModifiesS(3, y);
-
-
 		EXPECT_THROW(evaluator.evaluateWildAndConstant(v1), std::invalid_argument);
 		EXPECT_THROW(evaluator.evaluateWildAndConstant(v2), std::invalid_argument);
 		EXPECT_THROW(evaluator.evaluateWildAndConstant(v3), std::invalid_argument);
 	}
 
 	TEST_F(ModifiesSEvaluatorTest, evaluateSynonymAndSynonym) {
-		StmtInfo p1{ 1, STMT_READ };
-		StmtInfo p2{ 2, STMT_PRINT };
-		StmtInfo p3{ 3, STMT_IF };
-		StmtInfo p4{ 4, STMT_PRINT };
-		var_name x = "x";
-		var_name y = "y";
-		var_name z = "z";
-		Entity v1 = { VARIABLE, "x" };
-		Entity v2 = { VARIABLE, "y" };
-		Entity v3 = { VARIABLE, "z" };
-
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_PRINT);
-		PKB::getInstance().addStmt(STMT_IF);
-		PKB::getInstance().addStmt(STMT_PRINT);
-		PKB::getInstance().addVariable(x);
-		PKB::getInstance().addVariable(y);
-		PKB::getInstance().addVariable(z);
-		PKB::getInstance().addModifiesS(1, x);
-		PKB::getInstance().addModifiesS(3, y);
-
 		std::vector<std::pair<StmtInfo, var_name>> v = pkb.getModifiesSRelation();
 		Entity left = { STMT, Synonym{"a"} };
 		Entity right = { VARIABLE, Synonym{"b"} };
@@ -178,54 +109,11 @@ namespace UnitTesting {
 	}
 
 	TEST_F(ModifiesSEvaluatorTest, evaluateWildAndSynonym) {
-		StmtInfo p1{ 1, STMT_READ };
-		StmtInfo p2{ 2, STMT_PRINT };
-		StmtInfo p3{ 3, STMT_IF };
-		StmtInfo p4{ 4, STMT_PRINT };
-		var_name x = "x";
-		var_name y = "y";
-		var_name z = "z";
-		Entity v1 = { VARIABLE, "x" };
-		Entity v2 = { VARIABLE, "y" };
-		Entity v3 = { VARIABLE, "z" };
-
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_PRINT);
-		PKB::getInstance().addStmt(STMT_IF);
-		PKB::getInstance().addStmt(STMT_PRINT);
-		PKB::getInstance().addVariable(x);
-		PKB::getInstance().addVariable(y);
-		PKB::getInstance().addVariable(z);
-		PKB::getInstance().addModifiesS(1, x);
-		PKB::getInstance().addModifiesS(3, y);
-
-
 		Entity header = { VARIABLE, Synonym{"a"} };
 		EXPECT_THROW(evaluator.evaluateWildAndSynonym(header), std::invalid_argument);
 	}
 
 	TEST_F(ModifiesSEvaluatorTest, evaluateSynonymAndWild) {
-		StmtInfo p1{ 1, STMT_READ };
-		StmtInfo p2{ 2, STMT_PRINT };
-		StmtInfo p3{ 3, STMT_IF };
-		StmtInfo p4{ 4, STMT_PRINT };
-		var_name x = "x";
-		var_name y = "y";
-		var_name z = "z";
-		Entity v1 = { VARIABLE, "x" };
-		Entity v2 = { VARIABLE, "y" };
-		Entity v3 = { VARIABLE, "z" };
-
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_PRINT);
-		PKB::getInstance().addStmt(STMT_IF);
-		PKB::getInstance().addStmt(STMT_PRINT);
-		PKB::getInstance().addVariable(x);
-		PKB::getInstance().addVariable(y);
-		PKB::getInstance().addVariable(z);
-		PKB::getInstance().addModifiesS(1, x);
-		PKB::getInstance().addModifiesS(3, y);
-
 		std::vector<StmtInfo> v = pkb.getModifiesS();
 		Entity header = { STMT, Synonym{"a"} };
 		ResultTable t(header, v);
@@ -257,27 +145,6 @@ namespace UnitTesting {
 	}
 
 	TEST_F(ModifiesSEvaluatorTest, evaluateConstantAndSynonym) {
-		StmtInfo p1{ 1, STMT_READ };
-		StmtInfo p2{ 2, STMT_PRINT };
-		StmtInfo p3{ 3, STMT_IF };
-		StmtInfo p4{ 4, STMT_PRINT };
-		var_name x = "x";
-		var_name y = "y";
-		var_name z = "z";
-		Entity v1 = { VARIABLE, "x" };
-		Entity v2 = { VARIABLE, "y" };
-		Entity v3 = { VARIABLE, "z" };
-
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_PRINT);
-		PKB::getInstance().addStmt(STMT_IF);
-		PKB::getInstance().addStmt(STMT_PRINT);
-		PKB::getInstance().addVariable(x);
-		PKB::getInstance().addVariable(y);
-		PKB::getInstance().addVariable(z);
-		PKB::getInstance().addModifiesS(1, x);
-		PKB::getInstance().addModifiesS(3, y);
-
 		std::vector<var_name> v = { x };
 		Entity header = { VARIABLE, Synonym{"a"} };
 		Entity match = { STMT, "1" };
@@ -308,27 +175,6 @@ namespace UnitTesting {
 	}
 
 	TEST_F(ModifiesSEvaluatorTest, evaluateSynonymAndConstant) {
-		StmtInfo p1{ 1, STMT_READ };
-		StmtInfo p2{ 2, STMT_PRINT };
-		StmtInfo p3{ 3, STMT_IF };
-		StmtInfo p4{ 4, STMT_PRINT };
-		var_name x = "x";
-		var_name y = "y";
-		var_name z = "z";
-		Entity v1 = { VARIABLE, "x" };
-		Entity v2 = { VARIABLE, "y" };
-		Entity v3 = { VARIABLE, "z" };
-
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_PRINT);
-		PKB::getInstance().addStmt(STMT_IF);
-		PKB::getInstance().addStmt(STMT_PRINT);
-		PKB::getInstance().addVariable(x);
-		PKB::getInstance().addVariable(y);
-		PKB::getInstance().addVariable(z);
-		PKB::getInstance().addModifiesS(1, x);
-		PKB::getInstance().addModifiesS(3, y);
-
 		std::vector<StmtInfo> v = { p3 };
 		Entity header = { STMT, Synonym{"a"} };
 		Entity match = { VARIABLE, "y" };

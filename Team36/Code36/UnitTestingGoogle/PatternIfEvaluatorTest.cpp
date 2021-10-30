@@ -9,31 +9,31 @@ namespace UnitTesting {
 	class PatternIfEvaluatorTest : public testing::Test {
 	protected:
 		PatternIfEvaluatorTest() {
-		}
-
-		virtual void SetUp() override {
 			PKB::getInstance().resetCache();
+			PKB::getInstance().addStmt(STMT_IF);
+			PKB::getInstance().addStmt(STMT_IF);
+			PKB::getInstance().addStmt(STMT_IF);
+			PKB::getInstance().addStmt(STMT_IF);
+			PKB::getInstance().addVariable(x);
+			PKB::getInstance().addVariable(y);
+			PKB::getInstance().addVariable(z);
+			PKB::getInstance().addIf(1, x);
+			PKB::getInstance().addIf(3, y);
 		}
 
 		PKBAdapter pkb;
 		PatternIfEvaluator evaluator;
-	};
 
-	TEST_F(PatternIfEvaluatorTest, evaluateSynonym) {
 		var_name x = "x";
 		var_name y = "y";
 		var_name z = "z";
 
-		PKB::getInstance().addStmt(STMT_IF);
-		PKB::getInstance().addStmt(STMT_IF);
-		PKB::getInstance().addStmt(STMT_IF);
-		PKB::getInstance().addStmt(STMT_IF);
-		PKB::getInstance().addVariable(x);
-		PKB::getInstance().addVariable(y);
-		PKB::getInstance().addVariable(z);
-		PKB::getInstance().addIf(1, x);
-		PKB::getInstance().addIf(3, y);
+		Entity v1 = { VARIABLE, x };
+		Entity v2 = { VARIABLE, y };
+		Entity v3 = { VARIABLE, z };
+	};
 
+	TEST_F(PatternIfEvaluatorTest, evaluateSynonym) {
 		std::vector<std::pair<stmt_index, var_name>> v = pkb.getAllIfUses();
 		Entity left = { IF, Synonym{"a"} };
 		Entity right = { VARIABLE, Synonym{"b"} };
@@ -44,23 +44,6 @@ namespace UnitTesting {
 	}
 
 	TEST_F(PatternIfEvaluatorTest, evaluateConstant) {
-		var_name x = "x";
-		var_name y = "y";
-		var_name z = "z";
-		Entity v1 = { VARIABLE, "x" };
-		Entity v2 = { VARIABLE, "y" };
-		Entity v3 = { VARIABLE, "z" };
-
-		PKB::getInstance().addStmt(STMT_IF);
-		PKB::getInstance().addStmt(STMT_IF);
-		PKB::getInstance().addStmt(STMT_IF);
-		PKB::getInstance().addStmt(STMT_IF);
-		PKB::getInstance().addVariable(x);
-		PKB::getInstance().addVariable(y);
-		PKB::getInstance().addVariable(z);
-		PKB::getInstance().addIf(1, x);
-		PKB::getInstance().addIf(3, y);
-
 		std::vector<stmt_index> v = { 1 };
 		Entity left = { IF, Synonym{"a"} };
 		Entity match = v1;
@@ -79,20 +62,6 @@ namespace UnitTesting {
 	}
 
 	TEST_F(PatternIfEvaluatorTest, evaluateWild) {
-		var_name x = "x";
-		var_name y = "y";
-		var_name z = "z";
-
-		PKB::getInstance().addStmt(STMT_IF);
-		PKB::getInstance().addStmt(STMT_IF);
-		PKB::getInstance().addStmt(STMT_IF);
-		PKB::getInstance().addStmt(STMT_IF);
-		PKB::getInstance().addVariable(x);
-		PKB::getInstance().addVariable(y);
-		PKB::getInstance().addVariable(z);
-		PKB::getInstance().addIf(1, x);
-		PKB::getInstance().addIf(3, y);
-
 		std::vector<stmt_index> v = { 1, 3 };
 		Entity left = { IF, Synonym{"a"} };
 		ResultTable t(left, v);
