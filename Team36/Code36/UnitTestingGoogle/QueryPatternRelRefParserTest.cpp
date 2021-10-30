@@ -65,7 +65,7 @@ namespace UnitTesting {
 		Entity ent_constant = Utility::setStmtRef(query, constant_token, EntityType::STMT);
 
 		////Expected
-		Entity expected_ent_constant = Entity(EntityType::CONSTANT, "9");
+		Entity expected_ent_constant = Entity(EntityType::STMT, "9");
 
 		EXPECT_TRUE(ent_constant == expected_ent_constant);
 	}

@@ -88,7 +88,7 @@ namespace UnitTesting {
 		Entity expected_stmt_1 = Entity(EntityType::STMT, synonym);
 		query.addEntity(expected_stmt_1);
 
-		Entity expected_stmt_2 = Entity(EntityType::CONSTANT, "3");
+		Entity expected_stmt_2 = Entity(EntityType::STMT, "3");
 
 		RelRef expected_rel = RelRef(RelType::FOLLOWS_T, expected_stmt_1, expected_stmt_2);
 
@@ -155,7 +155,7 @@ namespace UnitTesting {
 		//Expected
 		Entity expected_stmt_1 = Entity(EntityType::WILD);
 
-		Entity expected_stmt_2 = Entity(EntityType::CONSTANT, "3");
+		Entity expected_stmt_2 = Entity(EntityType::STMT, "3");
 
 		RelRef expected_rel = RelRef(RelType::FOLLOWS_T, expected_stmt_1, expected_stmt_2);
 
@@ -174,7 +174,7 @@ namespace UnitTesting {
 		Query query;
 
 		//Expected
-		Entity expected_stmt_1 = Entity(EntityType::CONSTANT, "3");
+		Entity expected_stmt_1 = Entity(EntityType::STMT, "3");
 
 		Synonym synonym;
 		synonym.name = "s";
@@ -198,7 +198,7 @@ namespace UnitTesting {
 		Query query;
 
 		//Expected
-		Entity expected_stmt_1 = Entity(EntityType::CONSTANT, "3");
+		Entity expected_stmt_1 = Entity(EntityType::STMT, "3");
 
 		Entity expected_stmt_2 = Entity(EntityType::WILD);
 
@@ -219,9 +219,9 @@ namespace UnitTesting {
 		Query query;
 
 		//Expected
-		Entity expected_stmt_1 = Entity(EntityType::CONSTANT, "3");
+		Entity expected_stmt_1 = Entity(EntityType::STMT, "3");
 
-		Entity expected_stmt_2 = Entity(EntityType::CONSTANT, "4");
+		Entity expected_stmt_2 = Entity(EntityType::STMT, "4");
 
 		RelRef expected_rel = RelRef(RelType::FOLLOWS_T, expected_stmt_1, expected_stmt_2);
 

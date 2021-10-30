@@ -113,7 +113,7 @@ namespace UnitTesting {
 		Query query;
 
 		//Expected
-		Entity expected_stmt_1 = Entity(EntityType::CONSTANT, "5");
+		Entity expected_stmt_1 = Entity(EntityType::STMT, "5");
 
 		Synonym synonym2;
 		synonym2.name = "v";
@@ -137,7 +137,7 @@ namespace UnitTesting {
 		Query query;
 
 		//Expected
-		Entity expected_stmt_1 = Entity(EntityType::CONSTANT, "5");
+		Entity expected_stmt_1 = Entity(EntityType::STMT, "5");
 
 		Entity expected_stmt_2 = Entity(EntityType::WILD);
 
@@ -158,7 +158,7 @@ namespace UnitTesting {
 		Query query;
 
 		//Expected
-		Entity expected_1 = Entity(EntityType::CONSTANT, "5");
+		Entity expected_1 = Entity(EntityType::STMT, "5");
 
 		Entity expected_2 = Entity(EntityType::VARIABLE, "var");
 
