@@ -10,12 +10,17 @@ public:
 
 private:
 
+	std::list<Clause> optimizeNextClausesOrder(std::list<Clause>&);
+	std::list<Clause> optimizeAffectClausesOrder(std::list<Clause>&);
+
 	bool checkConstantExist(Entity&);
 	bool checkSecondaryAttributeConstantExist(Entity&);
 
-	bool isComputeNextT(RelType, Entity&, Entity&);
-	bool isGraphSearchNextNoSynonym(RelType, Entity&, Entity&);
-	bool isGraphSearchNextOneSynonym(RelType, Entity&, Entity&);
+	bool isComputeAndCache(Entity&, Entity&);
+	bool isCFGSearchNoSynonym(Entity&, Entity&);
+	bool isCFGSearchOneSynonym(Entity&, Entity&);
+
+	bool isNextTWithCFGSearch(Entity&, Entity&);
 
 
 	Entity getLeftEntity(Clause&);

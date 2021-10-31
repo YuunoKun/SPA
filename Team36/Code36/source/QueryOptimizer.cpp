@@ -7,26 +7,15 @@
 //2. clauses with one synonym
 //3. clauses with two synonym
 std::vector<Clause> QueryOptimizer::optimizeClausesOrder(std::vector<Clause>& clauses) {
-	std::list<Clause> no_synonym_list, one_synonym_list, two_synonym_list, compute_next_graph, 
-		graph_search_next_t_no_synonym_list, graph_search_next_t_one_synonym_list, next_t_two_synonym_list_after_compute;
+	std::list<Clause> no_synonym_list, one_synonym_list, two_synonym_list, next_t_cfg_search_clauses, affects_clauses;
 	for (Clause c : clauses) {
 		ClauseType type = c.getType();
 		Entity left_entity = getLeftEntity(c);
 		Entity right_entity = getRightEntity(c);
 
-		if (type == ClauseType::RELATION && isComputeNextT(c.getRelation().getType(), left_entity, right_entity)) {
-			if (compute_next_graph.empty()) {
-				compute_next_graph.emplace_back(c);
-			} else {
-				next_t_two_synonym_list_after_compute.emplace_back(c);
-			}
-
-		}
-		else if (type == ClauseType::RELATION && isGraphSearchNextNoSynonym(c.getRelation().getType(), left_entity, right_entity)) {
-			graph_search_next_t_no_synonym_list.emplace_back(c);
-		}
-		else if (type == ClauseType::RELATION && isGraphSearchNextOneSynonym(c.getRelation().getType(), left_entity, right_entity)) {
-			graph_search_next_t_one_synonym_list.emplace_back(c);
+		if (type == ClauseType::RELATION && c.getRelation().getType() == NEXT_T 
+			&& isNextTWithCFGSearch(left_entity, right_entity)) {
+			next_t_cfg_search_clauses.emplace_back(c);
 		}
 		else if (left_entity.isSynonym() && right_entity.isSynonym()) {
 			two_synonym_list.emplace_back(c);
@@ -38,15 +27,15 @@ std::vector<Clause> QueryOptimizer::optimizeClausesOrder(std::vector<Clause>& cl
 			no_synonym_list.emplace_back(c);
 		}
 	}
+	next_t_cfg_search_clauses = optimizeNextClausesOrder(next_t_cfg_search_clauses);
+	affects_clauses = optimizeAffectClausesOrder(affects_clauses);
 
 	std::vector<Clause> reordered_clauses;
 	reordered_clauses.insert(reordered_clauses.end(), no_synonym_list.begin(), no_synonym_list.end());
 	reordered_clauses.insert(reordered_clauses.end(), one_synonym_list.begin(), one_synonym_list.end());
 	reordered_clauses.insert(reordered_clauses.end(), two_synonym_list.begin(), two_synonym_list.end());
-	reordered_clauses.insert(reordered_clauses.end(), compute_next_graph.begin(), compute_next_graph.end());
-	reordered_clauses.insert(reordered_clauses.end(), graph_search_next_t_no_synonym_list.begin(), graph_search_next_t_no_synonym_list.end());
-	reordered_clauses.insert(reordered_clauses.end(), graph_search_next_t_one_synonym_list.begin(), graph_search_next_t_one_synonym_list.end());
-	reordered_clauses.insert(reordered_clauses.end(), next_t_two_synonym_list_after_compute.begin(), next_t_two_synonym_list_after_compute.end());
+	reordered_clauses.insert(reordered_clauses.end(), next_t_cfg_search_clauses.begin(), next_t_cfg_search_clauses.end());
+	reordered_clauses.insert(reordered_clauses.end(), affects_clauses.begin(), affects_clauses.end());
 	return reordered_clauses;
 }
 
@@ -61,6 +50,46 @@ bool QueryOptimizer::checkAllConstantExist(std::vector<Clause>& clauses) {
 	}
 
 	return true;
+}
+
+std::list<Clause> QueryOptimizer::optimizeNextClausesOrder(std::list<Clause>& next_t_clauses) {
+
+	std::list<Clause> compute_next_graph, graph_search_next_t_no_synonym_list, 
+		graph_search_next_t_one_synonym_list, next_t_two_synonym_list_after_compute;
+
+	for (Clause c : next_t_clauses) {
+		ClauseType type = c.getType();
+		Entity left_entity = getLeftEntity(c);
+		Entity right_entity = getRightEntity(c);
+
+		if (isComputeAndCache(left_entity, right_entity)) {
+			if (compute_next_graph.empty()) {
+				compute_next_graph.emplace_back(c);
+			}
+			else {
+				next_t_two_synonym_list_after_compute.emplace_back(c);
+			}
+
+		}
+		else if (isGraphSearchNoSynonym(left_entity, right_entity)) {
+			graph_search_next_t_no_synonym_list.emplace_back(c);
+		}
+		else if (type == ClauseType::RELATION && isGraphSearchOneSynonym(left_entity, right_entity)) {
+			graph_search_next_t_one_synonym_list.emplace_back(c);
+		}
+
+	}
+
+	std::list<Clause> reordered_clauses;
+	reordered_clauses.insert(reordered_clauses.end(), compute_next_graph.begin(), compute_next_graph.end());
+	reordered_clauses.insert(reordered_clauses.end(), graph_search_next_t_no_synonym_list.begin(), graph_search_next_t_no_synonym_list.end());
+	reordered_clauses.insert(reordered_clauses.end(), graph_search_next_t_one_synonym_list.begin(), graph_search_next_t_one_synonym_list.end());
+	reordered_clauses.insert(reordered_clauses.end(), next_t_two_synonym_list_after_compute.begin(), next_t_two_synonym_list_after_compute.end());
+	return reordered_clauses;
+}
+
+std::list<Clause> QueryOptimizer::optimizeAffectClausesOrder(std::list<Clause>& affect_clauses) {
+	return std::list<Clause>();
 }
 
 bool QueryOptimizer::checkConstantExist(Entity& e) {
@@ -112,19 +141,22 @@ bool QueryOptimizer::checkSecondaryAttributeConstantExist(Entity& e) {
 	return false;
 }
 
-bool QueryOptimizer::isComputeNextT(RelType type, Entity& e1, Entity& e2) {
-	return type == RelType::NEXT_T && e1.isSynonym() && e2.isSynonym();
+bool QueryOptimizer::isComputeAndCache(Entity& e1, Entity& e2) {
+	return e1.isSynonym() && e2.isSynonym();
 }
 
-bool QueryOptimizer::isGraphSearchNextNoSynonym(RelType type, Entity& e1, Entity& e2) {
-	return type == RelType::NEXT_T && (!e1.isSynonym() && e1.getType() != EntityType::WILD) &&
+bool QueryOptimizer::isCFGSearchNoSynonym(Entity& e1, Entity& e2) {
+	return (!e1.isSynonym() && e1.getType() != EntityType::WILD) &&
 		(!e2.isSynonym() && e2.getType() != EntityType::WILD);
 }
 
-bool QueryOptimizer::isGraphSearchNextOneSynonym(RelType type, Entity& e1, Entity& e2) {
-	return type == RelType::NEXT_T && 
-		((e1.isSynonym() && (!e2.isSynonym() && e2.getType() != EntityType::WILD)) ||
+bool QueryOptimizer::isCFGSearchOneSynonym(Entity& e1, Entity& e2) {
+	return ((e1.isSynonym() && (!e2.isSynonym() && e2.getType() != EntityType::WILD)) ||
 		(e2.isSynonym() && (!e1.isSynonym() && e1.getType() != EntityType::WILD)));
+}
+
+bool QueryOptimizer::isNextTWithCFGSearch(Entity& e1, Entity& e2) {
+	return isComputeAndCache(e1, e2) || isCFGSearchNoSynonym(e1, e2) || isCFGSearchOneSynonym(e1, e2);
 }
 
 Entity QueryOptimizer::getLeftEntity(Clause& c) {
