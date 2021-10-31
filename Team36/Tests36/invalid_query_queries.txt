@@ -3243,3 +3243,123 @@ stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co;
 Select BOOLEAN with Megatron = pr.procName
 FALSE
 5000
+253 - Semantically invalid Attribute
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN with sc.value = 1
+FALSE
+5000
+254 - Semantically invalid Attribute
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN with r.value = 1
+FALSE
+5000
+255 - Semantically invalid Attribute
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN with p.value = 1
+FALSE
+5000
+256 - Semantically invalid Attribute
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN with w.value = 1
+FALSE
+5000
+257 - Semantically invalid Attribute
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN with ifs.value = 1
+FALSE
+5000
+258 - Semantically invalid Attribute
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN with a.value = 1
+FALSE
+5000
+259 - Semantically invalid Attribute
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN with v.value = 1
+FALSE
+5000
+260 - Semantically invalid Attribute
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN with pr.value = 1
+FALSE
+5000
+261 - Semantically invalid Attribute
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN with c.value = 1
+FALSE
+5000
+262 - Semantically invalid Attribute
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN with pl.value = 1
+FALSE
+5000
+263 - Semantically invalid Attribute
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN with sc.procName = "Megatron"
+FALSE
+5000
+264 - Semantically invalid Attribute
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN with r.procName = "Megatron"
+FALSE
+5000
+265 - Semantically invalid Attribute
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN with p.procName = "Megatron"
+FALSE
+5000
+266 - Semantically invalid Attribute
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN with w.procName = "Megatron"
+FALSE
+5000
+267 - Semantically invalid Attribute
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN with ifs.procName = "Megatron"
+FALSE
+5000
+268 - Semantically invalid Attribute
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN with a.procName = "Megatron"
+FALSE
+5000
+269 - Semantically invalid Attribute
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN with v.procName = "Megatron"
+FALSE
+5000
+270 - Semantically invalid Attribute
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN with co.procName = "Megatron"
+FALSE
+5000
+271 - Semantically invalid Attribute
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN with pl.procName = "Megatron"
+FALSE
+5000
+272 - Semantically invalid Attribute
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN with pr.varName = "x"
+FALSE
+5000
+273 - Semantically invalid Attribute
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN with co.varName = "x"
+FALSE
+5000
+274 - Semantically invalid Attribute
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN with c.varName = "x"
+FALSE
+5000
+275 - Semantically invalid Attribute
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN with pr.stmt# = 1
+FALSE
+5000
+276 - Semantically invalid Attribute
+stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
+Select BOOLEAN with co.stmt# = 1
+FALSE
+5000
