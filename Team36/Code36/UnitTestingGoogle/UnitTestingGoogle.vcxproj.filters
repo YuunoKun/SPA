@@ -20,7 +20,6 @@
     <ClCompile Include="DesignExtractorTest.cpp">
       <Filter>SP</Filter>
     </ClCompile>
-    <ClCompile Include="PKBTest.cpp" />
     <ClCompile Include="PKBTest.cpp">
       <Filter>PKB</Filter>
     </ClCompile>
@@ -105,6 +104,12 @@
     <ClCompile Include="QueryEvaluatorTupleTest.cpp">
       <Filter>PQL\QueryEvaluator</Filter>
     </ClCompile>
+    <ClCompile Include="AffectsParserTest.cpp" />
+    <ClCompile Include="AffectsTParserTest.cpp" />
+    <ClCompile Include="NextBipParserTest.cpp" />
+    <ClCompile Include="NextBipTParserTest.cpp" />
+    <ClCompile Include="AffectsBipParserTest.cpp" />
+    <ClCompile Include="AffectsBipTParserTest.cpp" />
     <ClCompile Include="NextEvaluatorTest.cpp">
       <Filter>PQL\QueryEvaluator\RelationEvaluator</Filter>
     </ClCompile>

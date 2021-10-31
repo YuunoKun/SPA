@@ -14,7 +14,6 @@ namespace UnitTesting {
 		virtual void SetUp() override {
 			PKB::getInstance().resetCache();
 		}
-
 		PKBAdapter pkb;
 	};
 

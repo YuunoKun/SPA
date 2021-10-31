@@ -43,7 +43,10 @@
     <ClCompile Include="AffectsBipPreprocessorTest.cpp" />
     <ClCompile Include="AffectsBipTEvaluatorTest.cpp" />
     <ClCompile Include="AffectsBipTPreprocessorTest.cpp" />
+    <ClCompile Include="AffectsBipParserTest.cpp" />
+    <ClCompile Include="AffectsBipTParserTest.cpp" />
     <ClCompile Include="AffectsEvaluatorTest.cpp" />
+    <ClCompile Include="AffectsTParserTest.cpp" />
     <ClCompile Include="AffectsTEvaluatorTest.cpp" />
     <ClCompile Include="AffectsPreprocessorTest.cpp" />
     <ClCompile Include="AffectsTPreprocessorTest.cpp" />
@@ -62,6 +65,8 @@
     <ClCompile Include="FollowsParserTest.cpp" />
     <ClCompile Include="FollowsTParserTest.cpp" />
     <ClCompile Include="FSMTest.cpp" />
+    <ClCompile Include="NextBipParserTest.cpp" />
+    <ClCompile Include="NextBipTParserTest.cpp" />
     <ClCompile Include="MonotypeRelationTableTest.cpp" />
     <ClCompile Include="NextBipEvaluatorTest.cpp" />
     <ClCompile Include="NextBipTEvaluatorTest.cpp" />
@@ -100,6 +105,7 @@
     <ClCompile Include="AssignPatternParserTest.cpp" />
     <ClCompile Include="IfPatternParserTest.cpp" />
     <ClCompile Include="ModifiesParserTest.cpp" />
+    <ClCompile Include="AffectsParserTest.cpp" />
     <ClCompile Include="UsesParserTest.cpp" />
     <ClCompile Include="WithParserTest.cpp" />
     <ClCompile Include="WhilePatternParserTest.cpp" />

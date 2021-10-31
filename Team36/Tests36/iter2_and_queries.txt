@@ -908,3 +908,68 @@ assign a; stmt s; variable v;
 Select a such that Modifies(s, v) and pattern a(v, _)
 none
 5000
+182 - with a.stmt# = n and n = 10
+assign a; prog_line n;
+Select a with a.stmt# = n and n = 10;
+10
+5000
+183 - with a.stmt# = s.stmt# and pn.varName = r.varName
+assign a; stmt s; read r; print pn;
+Select r with a.stmt# = s.stmt# and pn.varName = r.varName
+1, 4, 21, 25, 28
+5000
+184 - with pn.varName = r.varName and pn.stmt# = c.value
+print pn; read r; constant c;
+Select pn with pn.varName = r.varName and pn.stmt# = c.value
+none
+5000
+185 - with c1.procName = p.procName and c1.stmt# = c.value
+call c1; procedure p; constant c;
+Select c1 with c1.procName = p.procName and c1.stmt# = c.value
+7
+5000
+186 - with a.stmt# = s.stmt# and pn.varName = r.varName and pn.stmt# = 46
+assign a; stmt s; read r; print pn;
+Select r with a.stmt# = s.stmt# and pn.varName = r.varName and pn.stmt# = 46
+4
+5000
+187 - with c1.procName = p.procName and c1.stmt# = c.value and s.stmt# = 5
+call c1; procedure p; constant c; stmt s;
+Select c1 with c1.procName = p.procName and c1.stmt# = c.value and s.stmt# = 5
+7
+5000
+188 - such that FollowsT with s.stmt# = n and n = 12
+stmt s, s1; prog_line n;
+Select s such that Follows*(s, s1) with s1.stmt# = n and n = 12
+9, 10, 11
+5000
+189 - such that UsesP such that CallsT with c.procName = p.procName and p = "myThird"
+procedure p; call c;
+Select c such that Uses(c, "a") such that Calls*(p, _) with c.procName = p.procName and p = "myThird"
+13
+5000
+190 - such that UsesP such that CallsT with c.procName = p.procName and p = "mySecond"
+procedure p; call c;
+Select c such that Uses(c, "a") such that Calls*(p, _) with c.procName = p.procName and p = "mySecond"
+none
+5000
+191 - pattern a with a.stmt# = c.value and r.varName = "a"
+assign a; constant c; read r;
+Select a pattern a("b", _) with a.stmt# = c.value and r.varName = "a"
+3
+5000
+192 - pattern if with if.stmt# = n and n = 42
+if ifs; prog_line n; variable v;
+Select v pattern ifs(v, _, _) with ifs.stmt# = n and n = 42
+d
+5000
+193 - pattern while with w.stmt# = 30 and a.stmt# = r.stmt#
+while w; assign a; read r; variable v;
+Select w pattern w(v, _) with w.stmt# = 30 and a.stmt# = r.stmt#
+none
+5000
+194 - such that UsesP such that CallsT with c.procName = p.procName and p = "myThird" pattern assign
+procedure p; call c; assign a;
+Select c such that Uses(c, "a") such that Calls*(p, _) with c.procName = p.procName and p = "myThird" pattern a("k", _"a"_)
+13
+5000
