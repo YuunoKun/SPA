@@ -386,9 +386,9 @@ namespace UnitTesting {
 		for (auto& stmt : stmt_list) {
 			for (int i = 0; i < PKB::getInstance().getStmts().size(); i++) {
 				EXPECT_FALSE(processor.getCalculatedMatrix()[i][stmt.stmt_index - 1]);
-				EXPECT_TRUE(processor.isDFSBackwardComputed(stmt.stmt_index));
+				EXPECT_FALSE(processor.isDFSBackwardComputed(stmt.stmt_index));
 				EXPECT_FALSE(processor.getCalculatedMatrix()[stmt.stmt_index - 1][i]);
-				EXPECT_TRUE(processor.isDFSForwardComputed(stmt.stmt_index));
+				EXPECT_FALSE(processor.isDFSForwardComputed(stmt.stmt_index));
 			}
 		}
 		processor.evaluateSynonymAndSynonym();

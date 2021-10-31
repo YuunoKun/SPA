@@ -44,19 +44,19 @@ namespace UnitTesting {
 
 		std::vector<std::pair<StmtInfo, StmtInfo>> expected_pairs = {
 			{s1, s8}, {s1, s12}, {s1, s14}, {s1, s15}, {s1, s16}, {s2, s10}, {s4, s4 },
-			{s10, s10}, {s12, s14}, {s12, s15}, {s12, s16}, {s13, s14}, {s13, s15}, 
+			{s10, s10}, {s12, s14}, {s12, s15}, {s12, s16}, {s13, s14}, {s13, s15},
 			{s13, s16}, {s14, s15}, {s14, s16}, {s15, s16}
 		};
 
 		virtual void SetUp() override {
 			// Code here will be called immediately after the constructor (right
 			// before each test).
+			processor.reset();
 		}
 
 		void TearDown() override {
 			// Code here will be called immediately after each test (right
 			// before the destructor).
-			processor.reset();
 		}
 	};
 
@@ -190,7 +190,7 @@ namespace UnitTesting {
 				}
 			}
 			EXPECT_EQ(v1, v2);
-			for (int i = 0; i < PKB::getInstance().getStmts().size(); i++) {
+			for (int i = 0; i < stmt_list.size(); i++) {
 				EXPECT_TRUE(processor.getCalculatedMatrix()[stmt.stmt_index - 1][i]);
 				EXPECT_TRUE(processor.isDFSForwardComputed(stmt.stmt_index));
 			}
@@ -209,7 +209,7 @@ namespace UnitTesting {
 				}
 			}
 			EXPECT_EQ(v1, v2);
-			for (int i = 0; i < PKB::getInstance().getStmts().size(); i++) {
+			for (int i = 0; i < stmt_list.size(); i++) {
 				EXPECT_TRUE(processor.getCalculatedMatrix()[i][stmt.stmt_index - 1]);
 				EXPECT_TRUE(processor.isDFSBackwardComputed(stmt.stmt_index));
 			}
@@ -237,10 +237,6 @@ namespace UnitTesting {
 				}
 			}
 			EXPECT_EQ(v1, v2);
-			for (int i = 0; i < PKB::getInstance().getStmts().size(); i++) {
-				EXPECT_TRUE(processor.getCalculatedMatrix()[i][stmt.stmt_index - 1]);
-				EXPECT_TRUE(processor.isDFSBackwardComputed(stmt.stmt_index));
-			}
 		}
 
 		// (c1, c2)
@@ -304,21 +300,21 @@ namespace UnitTesting {
 	TEST_F(AffectsTPreprocessorTest, reset) {
 		for (auto& stmt : stmt_list) {
 			processor.evaluateSynonymAndConstant(stmt.stmt_index);
-			for (int i = 0; i < PKB::getInstance().getStmts().size(); i++) {
+			for (int i = 0; i < stmt_list.size(); i++) {
 				EXPECT_TRUE(processor.getCalculatedMatrix()[i][stmt.stmt_index - 1]);
 				EXPECT_TRUE(processor.isDFSBackwardComputed(stmt.stmt_index));
 			}
 		}
 		for (auto& stmt : stmt_list) {
 			processor.evaluateConstantAndSynonym(stmt.stmt_index);
-			for (int i = 0; i < PKB::getInstance().getStmts().size(); i++) {
+			for (int i = 0; i < stmt_list.size(); i++) {
 				EXPECT_TRUE(processor.getCalculatedMatrix()[stmt.stmt_index - 1][i]);
 				EXPECT_TRUE(processor.isDFSForwardComputed(stmt.stmt_index));
 			}
 		}
 		processor.reset();
 		for (auto& stmt : stmt_list) {
-			for (int i = 0; i < PKB::getInstance().getStmts().size(); i++) {
+			for (int i = 0; i < stmt_list.size(); i++) {
 				EXPECT_FALSE(processor.getCalculatedMatrix()[i][stmt.stmt_index - 1]);
 				EXPECT_FALSE(processor.isDFSBackwardComputed(stmt.stmt_index));
 				EXPECT_FALSE(processor.getCalculatedMatrix()[stmt.stmt_index - 1][i]);

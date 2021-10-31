@@ -38,4 +38,5 @@ protected:
 	std::vector<std::vector<bool>> calculated_matrix;
 	std::vector<bool> calculated_dfs_forward;
 	std::vector<bool> calculated_dfs_backward;
+	std::vector<StmtInfo> stmt_info_list;
 };

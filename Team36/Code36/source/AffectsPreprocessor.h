@@ -39,7 +39,6 @@ private:
 	void updateCache(std::set<stmt_index>, std::vector<std::pair<StmtInfo, StmtInfo>>);
 	bool inSameProc(stmt_index index1, stmt_index index2);
 
-	std::vector<StmtInfo> stmt_info_list;
 	const MonotypeRelationTable<StmtInfo>* next_table;
 	const RelationTable<StmtInfo, var_name>* useS_table;
 	const RelationTable<StmtInfo, var_name>* modifiesS_table;
@@ -47,6 +46,6 @@ private:
 	IterativeDataflowSolver solver;
 
 	BooleanStatus is_non_empty = STATUS_UNKNOWN;
-	std::vector<BooleanStatus> is_affecting{ stmt_info_list.size(), STATUS_UNKNOWN };
-	std::vector<BooleanStatus> is_affected{ stmt_info_list.size(), STATUS_UNKNOWN };
+	std::vector<BooleanStatus> is_affecting{};
+	std::vector<BooleanStatus> is_affected{};
 };

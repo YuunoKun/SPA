@@ -206,11 +206,13 @@ AffectsPreprocessor::AffectsPreprocessor(
 	next_table(&next_table),
 	modifiesS_table(&modifiesS_table),
 	useS_table(&useS_table),
-	procS_table(&procS_table),
-	stmt_info_list(v) {
+	procS_table(&procS_table) {
+	stmt_info_list = v;
 	int size = stmt_info_list.size();
 	calculated_matrix.resize(size, std::vector<bool>(size, false));
 	calculated_dfs_forward.resize(size, false);
 	calculated_dfs_backward.resize(size, false);
+	is_affecting.resize(size, STATUS_UNKNOWN);
+	is_affected.resize(size, STATUS_UNKNOWN);
 	solver = IterativeDataflowSolver(next_table, useS_table, modifiesS_table, procS_table, stmt_info_list);
 }
