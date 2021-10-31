@@ -1473,7 +1473,7 @@ stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; pro
 Select BOOLEAN such that pattern a(1,_)
 none
 5000
-162 - Semantically invalid pattern
+162 - Syntactically invalid pattern
 stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
 Select BOOLEAN pattern ifs(_, _)
 none
@@ -3073,18 +3073,16 @@ stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; pro
 Select BOOLEAN such that Modifies(s, pl)
 FALSE
 5000
-
 209 - Semantically invalid With
 stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
 Select BOOLEAN with 1 = "1"
 FALSE
 5000
-209 - Semantically invalid With
+210 - Semantically invalid With
 stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
 Select BOOLEAN with "1" = 1
 FALSE
 5000
-
 - Semantically invalid With
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;
 Select BOOLEAN with v.varName = x
