@@ -382,7 +382,11 @@ void DesignExtractor::populateNext(PKB& pkb) {
 			pkb.addNext(next_rel.first, next_rel.second);
 		}
 		delete cfg;
+		
 	}
+
+	//void addCFGBip(CFG*); // CFGBip
+	//void addCFGsToDestroy(std::vector<CFG*>); // CFGs for all procedures
 }
 
 void DesignExtractor::populateIfs(PKB& pkb) {
@@ -446,7 +450,7 @@ CFG* DesignExtractor::generateCFG(std::vector<stmt_index> indexes) {
 				}
 
 				if (split.size() != 2) {
-					throw runtime_error("CFG build failure. If statement not 2 splits.");
+					throw std::runtime_error("CFG build failure. If statement not 2 splits.");
 				}
 
 				stmt_index then_start = curr + 1;
@@ -475,7 +479,7 @@ CFG* DesignExtractor::generateCFG(std::vector<stmt_index> indexes) {
 				delete cfg_while;
 			}
 			else {
-				throw runtime_error("CFG build failure. Gap involved non-container statement.");
+				throw std::runtime_error("CFG build failure. Gap involved non-container statement.");
 			}
 		}
 		else {
