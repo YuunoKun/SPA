@@ -12,7 +12,6 @@ typedef unsigned int prog_line;
 typedef unsigned int var_index;
 typedef unsigned int proc_index;
 
-
 static const std::string BOOLEAN_TRUE = "TRUE";
 static const std::string BOOLEAN_FALSE = "FALSE";
 
@@ -42,8 +41,8 @@ typedef std::pair<stmt_index, var_name> pattern_info;
 
 struct Synonym {
 	std::string name;
-	Synonym() { 
-		name = "_"; 
+	Synonym() {
+		name = "_";
 	};
 	Synonym(std::string name) {
 		if (name.size() == 0 || !isalpha(name[0])) {

@@ -1,15 +1,10 @@
 #include "AssignPatternParser.h"
-#include "QueryPatternRelRefParser.h"
-
-
-AssignPatternParser::AssignPatternParser() {}
 
 bool AssignPatternParser::isWild(std::vector<QueryToken> token_chain) {
-    return token_chain[0].type == QueryToken::WILDCARD;
+	return token_chain[0].type == QueryToken::WILDCARD;
 }
 
-void AssignPatternParser::parseAssign(Query& query, Entity& entity, std::vector<QueryToken> token_chain) {
-    QueryPatternRelRefParser parser;
+void AssignPatternParser::parse(Query& query, Entity& entity, std::vector<QueryToken> token_chain) {
     std::vector<QueryToken> temp_token_chain_1;
     std::vector<QueryToken> temp_token_chain_2;
     int comma_count = 0;
@@ -32,16 +27,17 @@ void AssignPatternParser::parseAssign(Query& query, Entity& entity, std::vector<
         }
     }
 
-    if (!parser.isEntRef(query, temp_token_chain_1) || !parser.isExpr(temp_token_chain_2)) {
-        throw SemanticErrorException("Invalid parameters for assign pattern");
+    if (!Utility::isEntRef(query, temp_token_chain_1) || !Utility::isExpr(temp_token_chain_2)) {
+        query.setIsSemanticError("Invalid parameters for assign pattern");
     }
 
-    if (!parser.isCorrectSynEntRef(query, temp_token_chain_1, EntityType::VARIABLE)) {
-        throw SemanticErrorException("Invalid Left expression for pattern");
+    if (!Utility::isCorrectSynEntRef(query, temp_token_chain_1, EntityType::VARIABLE)) {
+        query.setIsSemanticError("Invalid Left expression for pattern");
     }
 
-    is_wild = isWild(temp_token_chain_2);
-
-    query.addPattern(Pattern(entity, parser.setEntRef(query, temp_token_chain_1),
-        parser.setExpr(temp_token_chain_2), is_wild));
+	is_wild = isWild(temp_token_chain_2);
+    if (!Utility::checkIsSemanticError(query)) {
+        query.addPattern(Pattern(entity, Utility::setEntRef(query, temp_token_chain_1, EntityType::VARIABLE),
+            Utility::setExpr(temp_token_chain_2), is_wild));
+    }
 }

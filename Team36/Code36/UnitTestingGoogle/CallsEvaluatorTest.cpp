@@ -11,14 +11,30 @@ namespace UnitTesting {
 
 		virtual void SetUp() override {
 			PKB::getInstance().resetCache();
+			PKB::getInstance().addProcedure(main1);
+			PKB::getInstance().addProcedure(main2);
+			PKB::getInstance().addProcedure(main3);
+			PKB::getInstance().addProcedure(main4);
+			PKB::getInstance().addCallsP(main1, main2);
+			PKB::getInstance().addCallsP(main2, main3);
 		}
 
 		PKBAdapter pkb;
 		CallsEvaluator evaluator;
-	};
-	TEST_F(CallsEvaluatorTest, evaluateWildAndWild) {
+
 		proc_name main1 = "main1";
 		proc_name main2 = "main2";
+		proc_name main3 = "main3";
+		proc_name main4 = "main4";
+		Entity e1 = { PROCEDURE, main1 };
+		Entity e2 = { PROCEDURE, main2 };
+		Entity e3 = { PROCEDURE, main3 };
+		Entity e4 = { PROCEDURE, main4 };
+
+	};
+	TEST_F(CallsEvaluatorTest, evaluateWildAndWild) {
+		PKB::getInstance().resetCache();
+
 		PKB::getInstance().addProcedure(main1);
 		PKB::getInstance().addProcedure(main2);
 
@@ -30,21 +46,6 @@ namespace UnitTesting {
 	}
 
 	TEST_F(CallsEvaluatorTest, evaluateConstantAndConstant) {
-		proc_name main1 = "main1";
-		proc_name main2 = "main2";
-		proc_name main3 = "main3";
-		proc_name main4 = "main4";
-		Entity e1 = { PROCEDURE, main1 };
-		Entity e2 = { PROCEDURE, main2 };
-		Entity e3 = { PROCEDURE, main3 };
-		Entity e4 = { PROCEDURE, main4 };
-
-		PKB::getInstance().addProcedure(main1);
-		PKB::getInstance().addProcedure(main2);
-		PKB::getInstance().addProcedure(main3);
-		PKB::getInstance().addProcedure(main4);
-		PKB::getInstance().addCallsP(main1, main2);
-		PKB::getInstance().addCallsP(main2, main3);
 
 		EXPECT_TRUE(evaluator.evaluateConstantAndConstant(e1, e2));
 		EXPECT_TRUE(evaluator.evaluateConstantAndConstant(e2, e3));
@@ -65,21 +66,6 @@ namespace UnitTesting {
 	}
 
 	TEST_F(CallsEvaluatorTest, evaluateConstantAndWild) {
-		proc_name main1 = "main1";
-		proc_name main2 = "main2";
-		proc_name main3 = "main3";
-		proc_name main4 = "main4";
-		Entity e1 = { PROCEDURE, main1 };
-		Entity e2 = { PROCEDURE, main2 };
-		Entity e3 = { PROCEDURE, main3 };
-		Entity e4 = { PROCEDURE, main4 };
-
-		PKB::getInstance().addProcedure(main1);
-		PKB::getInstance().addProcedure(main2);
-		PKB::getInstance().addProcedure(main3);
-		PKB::getInstance().addProcedure(main4);
-		PKB::getInstance().addCallsP(main1, main2);
-		PKB::getInstance().addCallsP(main2, main3);
 
 		EXPECT_TRUE(evaluator.evaluateConstantAndWild(e1));
 		EXPECT_TRUE(evaluator.evaluateConstantAndWild(e2));
@@ -88,21 +74,6 @@ namespace UnitTesting {
 	}
 
 	TEST_F(CallsEvaluatorTest, evaluateWildAndConstant) {
-		proc_name main1 = "main1";
-		proc_name main2 = "main2";
-		proc_name main3 = "main3";
-		proc_name main4 = "main4";
-		Entity e1 = { PROCEDURE, main1 };
-		Entity e2 = { PROCEDURE, main2 };
-		Entity e3 = { PROCEDURE, main3 };
-		Entity e4 = { PROCEDURE, main4 };
-
-		PKB::getInstance().addProcedure(main1);
-		PKB::getInstance().addProcedure(main2);
-		PKB::getInstance().addProcedure(main3);
-		PKB::getInstance().addProcedure(main4);
-		PKB::getInstance().addCallsP(main1, main2);
-		PKB::getInstance().addCallsP(main2, main3);
 
 		EXPECT_FALSE(evaluator.evaluateWildAndConstant(e1));
 		EXPECT_TRUE(evaluator.evaluateWildAndConstant(e2));
@@ -111,17 +82,6 @@ namespace UnitTesting {
 	}
 
 	TEST_F(CallsEvaluatorTest, evaluateSynonymAndSynonym) {
-		proc_name main1 = "main1";
-		proc_name main2 = "main2";
-		proc_name main3 = "main3";
-		proc_name main4 = "main4";
-
-		PKB::getInstance().addProcedure(main1);
-		PKB::getInstance().addProcedure(main2);
-		PKB::getInstance().addProcedure(main3);
-		PKB::getInstance().addProcedure(main4);
-		PKB::getInstance().addCallsP(main1, main2);
-		PKB::getInstance().addCallsP(main2, main3);
 
 		std::vector<std::pair<proc_name, var_name>> v = pkb.getCallsPRelation();
 		Entity left = { PROCEDURE, Synonym{"a"} };
@@ -132,17 +92,6 @@ namespace UnitTesting {
 	}
 
 	TEST_F(CallsEvaluatorTest, evaluateWildAndSynonym) {
-		proc_name main1 = "main1";
-		proc_name main2 = "main2";
-		proc_name main3 = "main3";
-		proc_name main4 = "main4";
-
-		PKB::getInstance().addProcedure(main1);
-		PKB::getInstance().addProcedure(main2);
-		PKB::getInstance().addProcedure(main3);
-		PKB::getInstance().addProcedure(main4);
-		PKB::getInstance().addCallsP(main1, main2);
-		PKB::getInstance().addCallsP(main2, main3);
 
 		std::vector<std::string> v = pkb.getCalleeP();
 		Entity header = { PROCEDURE, Synonym{"a"} };
@@ -151,17 +100,6 @@ namespace UnitTesting {
 	}
 
 	TEST_F(CallsEvaluatorTest, evaluateSynonymAndWild) {
-		proc_name main1 = "main1";
-		proc_name main2 = "main2";
-		proc_name main3 = "main3";
-		proc_name main4 = "main4";
-
-		PKB::getInstance().addProcedure(main1);
-		PKB::getInstance().addProcedure(main2);
-		PKB::getInstance().addProcedure(main3);
-		PKB::getInstance().addProcedure(main4);
-		PKB::getInstance().addCallsP(main1, main2);
-		PKB::getInstance().addCallsP(main2, main3);
 
 		std::vector<std::string> v = pkb.getCallerP();
 		Entity header = { PROCEDURE, Synonym{"a"} };
@@ -170,21 +108,6 @@ namespace UnitTesting {
 	}
 
 	TEST_F(CallsEvaluatorTest, evaluateConstantAndSynonym) {
-		proc_name main1 = "main1";
-		proc_name main2 = "main2";
-		proc_name main3 = "main3";
-		proc_name main4 = "main4";
-		Entity e1 = { PROCEDURE, main1 };
-		Entity e2 = { PROCEDURE, main2 };
-		Entity e3 = { PROCEDURE, main3 };
-		Entity e4 = { PROCEDURE, main4 };
-
-		PKB::getInstance().addProcedure(main1);
-		PKB::getInstance().addProcedure(main2);
-		PKB::getInstance().addProcedure(main3);
-		PKB::getInstance().addProcedure(main4);
-		PKB::getInstance().addCallsP(main1, main2);
-		PKB::getInstance().addCallsP(main2, main3);
 
 		std::vector<proc_name> v = { main2 };
 		Entity header = { PROCEDURE, Synonym{"a"} };
@@ -209,22 +132,6 @@ namespace UnitTesting {
 	}
 
 	TEST_F(CallsEvaluatorTest, evaluateSynonymAndConstant) {
-		proc_name main1 = "main1";
-		proc_name main2 = "main2";
-		proc_name main3 = "main3";
-		proc_name main4 = "main4";
-		Entity e1 = { PROCEDURE, main1 };
-		Entity e2 = { PROCEDURE, main2 };
-		Entity e3 = { PROCEDURE, main3 };
-		Entity e4 = { PROCEDURE, main4 };
-
-		PKB::getInstance().addProcedure(main1);
-		PKB::getInstance().addProcedure(main2);
-		PKB::getInstance().addProcedure(main3);
-		PKB::getInstance().addProcedure(main4);
-		PKB::getInstance().addCallsP(main1, main2);
-		PKB::getInstance().addCallsP(main2, main3);
-
 
 		std::vector<proc_name> v = { main1 };
 		Entity header = { PROCEDURE, Synonym{"a"} };

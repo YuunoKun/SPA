@@ -240,7 +240,7 @@ namespace UnitTesting {
 
 	//Invalid
 
-	TEST(NextTParserTest, semanticInvalidNextTIdentWildTest) {
+	TEST(NextTParserTest, syntacticInvalidNextTIdentWildTest) {
 		QueryPatternRelRefParser validator;
 
 		Query query;
@@ -251,7 +251,7 @@ namespace UnitTesting {
 		temp_token_chain.push_back({ QueryToken::COMMA, "" });
 		temp_token_chain.push_back({ QueryToken::WILDCARD, "" });
 
-		EXPECT_THROW(validator.parseParameterSuchThat(query, QueryToken::NEXT_T, temp_token_chain), SemanticErrorException);
+		EXPECT_THROW(validator.parseParameterSuchThat(query, QueryToken::NEXT_T, temp_token_chain), SyntacticErrorException);
 	}
 
 	TEST(NextTParserTest, semanticInvalidNextTVarWildTest) {
@@ -267,7 +267,7 @@ namespace UnitTesting {
 		temp_token_chain.push_back({ QueryToken::IDENTIFIER, "v" });
 		temp_token_chain.push_back({ QueryToken::COMMA, "" });
 		temp_token_chain.push_back({ QueryToken::WILDCARD, "" });
-
-		EXPECT_THROW(validator.parseParameterSuchThat(query, QueryToken::NEXT_T, temp_token_chain), SemanticErrorException);
+		validator.parseParameterSuchThat(query, QueryToken::NEXT_T, temp_token_chain);
+		EXPECT_TRUE(Utility::checkIsSemanticError(query));
 	}
 }

@@ -2,7 +2,6 @@
 
 void RelationPreprocessor::reset() {
 	is_fully_populated = false;
-	is_cache_initialized = false;
 	int size = calculated_matrix.size();
 	for (int i = 0; i < size; i++) {
 		calculated_dfs_forward[i] = false;
@@ -11,7 +10,7 @@ void RelationPreprocessor::reset() {
 			calculated_matrix[i][j] = false;
 		}
 	}
-	cache = RelationTable<StmtInfo, StmtInfo>();
+	cache = MonotypeRelationTable<StmtInfo>();
 }
 
 void RelationPreprocessor::setDFSForwardTrue(int index) {
@@ -32,22 +31,22 @@ bool RelationPreprocessor::isFullyPopulated() {
 	return is_fully_populated;
 }
 
-bool RelationPreprocessor::isCacheInitialized() {
-	return is_cache_initialized;
+const MonotypeRelationTable<StmtInfo>& RelationPreprocessor::getCache() {
+	return cache;
 }
 
-const RelationTable<StmtInfo, StmtInfo>& RelationPreprocessor::getCache() {
-	return cache;
+bool RelationPreprocessor::isCacheEmpty() {
+	return cache.isEmpty();
 }
 
 std::vector<std::vector<bool>> RelationPreprocessor::getCalculatedMatrix() {
 	return calculated_matrix;
 }
 
-std::vector<bool> RelationPreprocessor::getDFSForwardComputedList() {
-	return calculated_dfs_forward;
+bool RelationPreprocessor::isDFSForwardComputed(int index) {
+	return calculated_dfs_forward[index - 1];
 }
 
-std::vector<bool> RelationPreprocessor::getDFSBackwardComputedList() {
-	return calculated_dfs_backward;
+bool RelationPreprocessor::isDFSBackwardComputed(int index) {
+	return calculated_dfs_backward[index - 1];
 }

@@ -11,13 +11,31 @@ namespace UnitTesting {
 
 		virtual void SetUp() override {
 			PKB::getInstance().resetCache();
+			PKB::getInstance().addStmt(STMT_IF);
+			PKB::getInstance().addStmt(STMT_WHILE);
+			PKB::getInstance().addStmt(STMT_IF);
+			PKB::getInstance().addStmt(STMT_IF);
+			PKB::getInstance().addParent(1, 2);
+			PKB::getInstance().addParent(2, 3);
+			PKB::getInstance().generateParentT();
 		}
 
 		PKBAdapter pkb;
 		ParentTEvaluator evaluator;
+
+		StmtInfo p1{ 1, STMT_IF };
+		StmtInfo p2{ 2, STMT_WHILE };
+		StmtInfo p3{ 3, STMT_IF };
+		StmtInfo p4{ 4, STMT_IF };
+
+		Entity e1 = { STMT, "1" };
+		Entity e2 = { STMT, "2" };
+		Entity e3 = { STMT, "3" };
+		Entity e4 = { STMT, "4" };
 	};
 
 	TEST_F(ParentTEvaluatorTest, evaluateWildAndWild) {
+		PKB::getInstance().resetCache();
 		PKB::getInstance().addStmt(STMT_IF);
 		PKB::getInstance().addStmt(STMT_WHILE);
 		PKB::getInstance().addStmt(STMT_IF);
@@ -29,18 +47,6 @@ namespace UnitTesting {
 	}
 
 	TEST_F(ParentTEvaluatorTest, evaluateConstantAndConstant) {
-		Entity e1 = { STMT, "1" };
-		Entity e2 = { STMT, "2" };
-		Entity e3 = { STMT, "3" };
-		Entity e4 = { STMT, "4" };
-
-		PKB::getInstance().addStmt(STMT_IF);
-		PKB::getInstance().addStmt(STMT_WHILE);
-		PKB::getInstance().addStmt(STMT_IF);
-		PKB::getInstance().addStmt(STMT_IF);
-		PKB::getInstance().addParent(1, 2);
-		PKB::getInstance().addParent(2, 3);
-		PKB::getInstance().generateParentT();
 		EXPECT_TRUE(evaluator.evaluateConstantAndConstant(e1, e2));
 		EXPECT_TRUE(evaluator.evaluateConstantAndConstant(e1, e3));
 		EXPECT_TRUE(evaluator.evaluateConstantAndConstant(e2, e3));
@@ -60,17 +66,6 @@ namespace UnitTesting {
 	}
 
 	TEST_F(ParentTEvaluatorTest, evaluateConstantAndWild) {
-		Entity e1 = { STMT, "1" };
-		Entity e2 = { STMT, "2" };
-		Entity e3 = { STMT, "3" };
-		Entity e4 = { STMT, "4" };
-		PKB::getInstance().addStmt(STMT_IF);
-		PKB::getInstance().addStmt(STMT_WHILE);
-		PKB::getInstance().addStmt(STMT_IF);
-		PKB::getInstance().addStmt(STMT_IF);
-		PKB::getInstance().addParent(1, 2);
-		PKB::getInstance().addParent(2, 3);
-		PKB::getInstance().generateParentT();
 		EXPECT_TRUE(evaluator.evaluateConstantAndWild(e1));
 		EXPECT_TRUE(evaluator.evaluateConstantAndWild(e2));
 		EXPECT_FALSE(evaluator.evaluateConstantAndWild(e3));
@@ -78,17 +73,6 @@ namespace UnitTesting {
 	}
 
 	TEST_F(ParentTEvaluatorTest, evaluateWildAndConstant) {
-		Entity e1 = { STMT, "1" };
-		Entity e2 = { STMT, "2" };
-		Entity e3 = { STMT, "3" };
-		Entity e4 = { STMT, "4" };
-		PKB::getInstance().addStmt(STMT_IF);
-		PKB::getInstance().addStmt(STMT_WHILE);
-		PKB::getInstance().addStmt(STMT_IF);
-		PKB::getInstance().addStmt(STMT_IF);
-		PKB::getInstance().addParent(1, 2);
-		PKB::getInstance().addParent(2, 3);
-		PKB::getInstance().generateParentT();
 		EXPECT_FALSE(evaluator.evaluateWildAndConstant(e1));
 		EXPECT_TRUE(evaluator.evaluateWildAndConstant(e2));
 		EXPECT_TRUE(evaluator.evaluateWildAndConstant(e3));
@@ -96,19 +80,6 @@ namespace UnitTesting {
 	}
 
 	TEST_F(ParentTEvaluatorTest, evaluateSynonymAndSynonym) {
-		StmtInfo p1{ 1, STMT_IF };
-		StmtInfo p2{ 2, STMT_WHILE };
-		StmtInfo p3{ 3, STMT_IF };
-		StmtInfo p4{ 4, STMT_IF };
-
-		PKB::getInstance().addStmt(STMT_IF);
-		PKB::getInstance().addStmt(STMT_WHILE);
-		PKB::getInstance().addStmt(STMT_IF);
-		PKB::getInstance().addStmt(STMT_IF);
-		PKB::getInstance().addParent(1, 2);
-		PKB::getInstance().addParent(2, 3);
-		PKB::getInstance().generateParentT();
-
 		std::vector<std::pair<StmtInfo, StmtInfo>> v = pkb.getAllParentTRelation();
 
 		Entity left = { STMT, Synonym{"a"} };
@@ -153,18 +124,6 @@ namespace UnitTesting {
 	}
 
 	TEST_F(ParentTEvaluatorTest, evaluateWildAndSynonym) {
-		StmtInfo p1{ 1, STMT_IF };
-		StmtInfo p2{ 2, STMT_WHILE };
-		StmtInfo p3{ 3, STMT_IF };
-		StmtInfo p4{ 4, STMT_IF };
-
-		PKB::getInstance().addStmt(STMT_IF);
-		PKB::getInstance().addStmt(STMT_WHILE);
-		PKB::getInstance().addStmt(STMT_IF);
-		PKB::getInstance().addStmt(STMT_IF);
-		PKB::getInstance().addParent(1, 2);
-		PKB::getInstance().addParent(2, 3);
-		PKB::getInstance().generateParentT();
 
 		std::vector<StmtInfo> v = pkb.getChildT();
 		Entity header = { STMT, Synonym{"a"} };
@@ -197,18 +156,6 @@ namespace UnitTesting {
 	}
 
 	TEST_F(ParentTEvaluatorTest, evaluateSynonymAndWild) {
-		StmtInfo p1{ 1, STMT_IF };
-		StmtInfo p2{ 2, STMT_WHILE };
-		StmtInfo p3{ 3, STMT_IF };
-		StmtInfo p4{ 4, STMT_IF };
-
-		PKB::getInstance().addStmt(STMT_IF);
-		PKB::getInstance().addStmt(STMT_WHILE);
-		PKB::getInstance().addStmt(STMT_IF);
-		PKB::getInstance().addStmt(STMT_IF);
-		PKB::getInstance().addParent(1, 2);
-		PKB::getInstance().addParent(2, 3);
-		PKB::getInstance().generateParentT();
 
 		std::vector<StmtInfo> v = pkb.getParentT();
 		Entity header = { STMT, Synonym{"a"} };
@@ -241,18 +188,6 @@ namespace UnitTesting {
 	}
 
 	TEST_F(ParentTEvaluatorTest, evaluateConstantAndSynonym) {
-		StmtInfo p1{ 1, STMT_IF };
-		StmtInfo p2{ 2, STMT_WHILE };
-		StmtInfo p3{ 3, STMT_IF };
-		StmtInfo p4{ 4, STMT_IF };
-
-		PKB::getInstance().addStmt(STMT_IF);
-		PKB::getInstance().addStmt(STMT_WHILE);
-		PKB::getInstance().addStmt(STMT_IF);
-		PKB::getInstance().addStmt(STMT_IF);
-		PKB::getInstance().addParent(1, 2);
-		PKB::getInstance().addParent(2, 3);
-		PKB::getInstance().generateParentT();
 
 		std::vector<StmtInfo> v = { p2, p3 };
 		Entity header = { STMT, Synonym{"a"} };
@@ -308,18 +243,6 @@ namespace UnitTesting {
 	}
 
 	TEST_F(ParentTEvaluatorTest, evaluateSynonymAndConstant) {
-		StmtInfo p1{ 1, STMT_IF };
-		StmtInfo p2{ 2, STMT_WHILE };
-		StmtInfo p3{ 3, STMT_IF };
-		StmtInfo p4{ 4, STMT_IF };
-
-		PKB::getInstance().addStmt(STMT_IF);
-		PKB::getInstance().addStmt(STMT_WHILE);
-		PKB::getInstance().addStmt(STMT_IF);
-		PKB::getInstance().addStmt(STMT_IF);
-		PKB::getInstance().addParent(1, 2);
-		PKB::getInstance().addParent(2, 3);
-		PKB::getInstance().generateParentT();
 
 		std::vector<StmtInfo> v = { p1, p2 };
 		Entity header = { STMT, Synonym{"a"} };

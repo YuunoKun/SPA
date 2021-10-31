@@ -52,12 +52,15 @@ void QueryValidator::validateSelecting(QueryToken& token, QueryToken& prevTokenS
 		(token.type != QueryToken::QueryTokenType::DOT &&
 			token.type != QueryToken::QueryTokenType::SUCH_THAT &&
 			token.type != QueryToken::QueryTokenType::PATTERN &&
-			token.type != QueryToken::QueryTokenType::WITH)) {
-		throw SyntacticErrorException("After selection needs to have such that or pattern clause");
+			token.token_value != "with")) {
+		throw SyntacticErrorException("After selection needs to have such that or pattern clause or with");
 	}
 }
 
 void QueryValidator::validateQuery(Query& query, bool& endOfCurrentClauses) {
+	if (query.getIsSemanticError() != "") {
+		throw SemanticErrorException(query.getIsSemanticError(), query);
+	}
 	if (query.getEntities().size() == 0) {
 		throw SyntacticErrorException("No declaration has been made in your query");
 	}
@@ -69,6 +72,7 @@ void QueryValidator::validateQuery(Query& query, bool& endOfCurrentClauses) {
 	}
 
 	// Final check
+
 
 	for (std::pair<std::string, Entity> ent : query.getEntities()) {
 		if (ent.second.getType() != EntityType::STMT &&
@@ -87,11 +91,11 @@ void QueryValidator::validateQuery(Query& query, bool& endOfCurrentClauses) {
 	}
 }
 
-void QueryValidator::validatePatternType(Entity& patternTypeEntity) {
+void QueryValidator::validatePatternType(Entity& patternTypeEntity, Query& query) {
 	if (patternTypeEntity.getType() != EntityType::ASSIGN &&
 		patternTypeEntity.getType() != EntityType::WHILE &&
 		patternTypeEntity.getType() != EntityType::IF) {
-		throw SemanticErrorException("Pattern Type is invalid");
+		query.setIsSemanticError("Pattern Type is invalid");
 	}
 }
 
@@ -100,5 +104,41 @@ void QueryValidator::validateAnd(QueryToken& patternOrSuchThat) {
 		patternOrSuchThat.type != QueryToken::QueryTokenType::SUCH_THAT &&
 		patternOrSuchThat.type != QueryToken::QueryTokenType::WITH) {
 		throw SyntacticErrorException("The keyword 'and' should come after pattern/ relations have been initalized previously");
+	}
+}
+
+void QueryValidator::validateAttributeType(Query& query, QueryToken& prevToken, QueryToken& nextToken) {
+	std::unordered_map<std::string, Entity> queryEntities = query.getEntities();
+
+	bool isExist = false;
+	EntityType entType;
+	for (std::pair<std::string, Entity> element : queryEntities) {
+		if (element.first == prevToken.token_value) {
+			entType = element.second.getType();
+			isExist = true;
+		}
+	}
+
+	if (!isExist) {
+		query.setIsSemanticError("Selected Entity has not been declared");
+	}
+
+	if (nextToken.type == QueryToken::QueryTokenType::PROC_NAME &&
+		(entType != EntityType::PROCEDURE && entType != EntityType::CALL)) {
+		query.setIsSemanticError("Only procedure and call can have a procName attribute");
+	}
+	else if (nextToken.type == QueryToken::QueryTokenType::VAR_NAME &&
+		(entType != EntityType::VARIABLE && entType != EntityType::READ && entType != EntityType::PRINT)) {
+		query.setIsSemanticError("Only variable, read and print can have varName attribute");
+	}
+	else if (nextToken.type == QueryToken::QueryTokenType::VALUE &&
+		entType != EntityType::CONSTANT) {
+		query.setIsSemanticError("Only constant can have value attribute");
+	}
+	else if (nextToken.type == QueryToken::QueryTokenType::STMT_INDEX &&
+		(entType != EntityType::STMT && entType != EntityType::READ && entType != EntityType::PRINT &&
+			entType != EntityType::CALL && entType != EntityType::WHILE && entType != EntityType::IF &&
+			entType != EntityType::ASSIGN)) {
+		query.setIsSemanticError("Entity type for .stmt# attribute is not valid");
 	}
 }

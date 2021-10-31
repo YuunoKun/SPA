@@ -7,14 +7,42 @@ namespace UnitTesting {
 	class WithEvaluatorTest : public testing::Test {
 	protected:
 		WithEvaluatorTest() {
-		}
-
-		virtual void SetUp() override {
 			PKB::getInstance().resetCache();
+			PKB::getInstance().addStmt(STMT_WHILE);
+			PKB::getInstance().addStmt(STMT_WHILE);
+			PKB::getInstance().addStmt(STMT_IF);
+			PKB::getInstance().addStmt(STMT_IF);
+			PKB::getInstance().addStmt(STMT_PRINT);
+			PKB::getInstance().addStmt(STMT_PRINT);
+			PKB::getInstance().addStmt(STMT_READ);
+			PKB::getInstance().addStmt(STMT_READ);
+			PKB::getInstance().addStmt(STMT_CALL);
+			PKB::getInstance().addStmt(STMT_CALL);
+			PKB::getInstance().addVariable(s1);
+			PKB::getInstance().addVariable(s2);
+			PKB::getInstance().addProcedure(s1);
+			PKB::getInstance().addProcedure(s2);
+			PKB::getInstance().addUsesS(5, s1);
+			PKB::getInstance().addUsesS(6, s2);
+			PKB::getInstance().addModifiesS(7, s1);
+			PKB::getInstance().addModifiesS(8, s2);
+			PKB::getInstance().addCallsS(9, s1);
+			PKB::getInstance().addCallsS(10, s2);
+			PKB::getInstance().addConstant(1);
+			PKB::getInstance().addConstant(2);
 		}
 
 		PKBAdapter pkb;
 		WithEvaluator evaluator;
+
+		Entity e1 = { STMT, "1" };
+		Entity e2 = { STMT, "2" };
+		Entity e3 = { STMT, "3" };
+		Entity e4 = { STMT, "1" };
+
+		std::string s1 = "x";
+		std::string s2 = "y";
+		std::string s3 = "z";
 	};
 
 	TEST_F(WithEvaluatorTest, evaluateWildAndWild) {
@@ -22,11 +50,6 @@ namespace UnitTesting {
 	}
 
 	TEST_F(WithEvaluatorTest, evaluateConstantAndConstant) {
-		Entity e1 = { STMT, "1" };
-		Entity e2 = { STMT, "2" };
-		Entity e3 = { STMT, "3" };
-		Entity e4 = { STMT, "1" };
-
 		EXPECT_TRUE(evaluator.evaluateConstantAndConstant(e1, e1));
 		EXPECT_FALSE(evaluator.evaluateConstantAndConstant(e1, e2));
 		EXPECT_FALSE(evaluator.evaluateConstantAndConstant(e1, e3));
@@ -44,33 +67,6 @@ namespace UnitTesting {
 	}
 
 	TEST_F(WithEvaluatorTest, evaluateSynonymAndSynonym) {
-		std::string s1 = "x";
-		std::string s2 = "y";
-		std::string s3 = "z";
-
-		PKB::getInstance().addStmt(STMT_WHILE);
-		PKB::getInstance().addStmt(STMT_WHILE);
-		PKB::getInstance().addStmt(STMT_IF);
-		PKB::getInstance().addStmt(STMT_IF);
-		PKB::getInstance().addStmt(STMT_PRINT);
-		PKB::getInstance().addStmt(STMT_PRINT);
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_CALL);
-		PKB::getInstance().addStmt(STMT_CALL);
-		PKB::getInstance().addVariable(s1);
-		PKB::getInstance().addVariable(s2);
-		PKB::getInstance().addProcedure(s1);
-		PKB::getInstance().addProcedure(s2);
-		PKB::getInstance().addUsesS(5, s1);
-		PKB::getInstance().addUsesS(6, s2);
-		PKB::getInstance().addModifiesS(7, s1);
-		PKB::getInstance().addModifiesS(8, s2);
-		PKB::getInstance().addCallsS(9, s1);
-		PKB::getInstance().addCallsS(10, s2);
-		PKB::getInstance().addConstant(1);
-		PKB::getInstance().addConstant(2);
-
 		std::vector<std::string> v = { "1", "2"};
 		std::vector<Entity> headers = { { WHILE, Synonym{"a"} }, { WHILE, Synonym{"a"} } };
 		EXPECT_EQ(evaluator.evaluateSynonymAndSynonym(headers[0], headers[1]), ResultTable(headers[0], v));
@@ -110,33 +106,6 @@ namespace UnitTesting {
 	}
 
 	TEST_F(WithEvaluatorTest, evaluateSynonymAndConstant) {
-		std::string s1 = "x";
-		std::string s2 = "y";
-		std::string s3 = "z";
-
-		PKB::getInstance().addStmt(STMT_WHILE);
-		PKB::getInstance().addStmt(STMT_WHILE);
-		PKB::getInstance().addStmt(STMT_IF);
-		PKB::getInstance().addStmt(STMT_IF);
-		PKB::getInstance().addStmt(STMT_PRINT);
-		PKB::getInstance().addStmt(STMT_PRINT);
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_CALL);
-		PKB::getInstance().addStmt(STMT_CALL);
-		PKB::getInstance().addVariable(s1);
-		PKB::getInstance().addVariable(s2);
-		PKB::getInstance().addProcedure(s1);
-		PKB::getInstance().addProcedure(s2);
-		PKB::getInstance().addUsesS(5, s1);
-		PKB::getInstance().addUsesS(6, s2);
-		PKB::getInstance().addModifiesS(7, s1);
-		PKB::getInstance().addModifiesS(8, s2);
-		PKB::getInstance().addCallsS(9, s1);
-		PKB::getInstance().addCallsS(10, s2);
-		PKB::getInstance().addConstant(1);
-		PKB::getInstance().addConstant(2);
-
 		std::vector<std::string> v = { "1" };
 		Entity header = { STMT, Synonym{"a"} };
 		EXPECT_EQ(evaluator.evaluateConstantAndSynonym({ STMT, "1" }, header), ResultTable(header, v));

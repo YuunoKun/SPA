@@ -39,16 +39,33 @@
     <ClInclude Include="pch.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AffectsBipEvaluatorTest.cpp" />
+    <ClCompile Include="AffectsBipTEvaluatorTest.cpp" />
+    <ClCompile Include="AffectsEvaluatorTest.cpp" />
+    <ClCompile Include="AffectsTEvaluatorTest.cpp" />
+    <ClCompile Include="AffectsPreprocessorTest.cpp" />
+    <ClCompile Include="AffectsTPreprocessorTest.cpp" />
     <ClCompile Include="CallsEvaluatorTest.cpp" />
+    <ClCompile Include="CallsParserTest.cpp" />
     <ClCompile Include="CallsTEvaluatorTest.cpp" />
-    <ClCompile Include="CFGRelationsManagerTest.cpp" />
+    <ClCompile Include="CallsTParserTest.cpp" />
+    <ClCompile Include="CFGRelationManagerTest_Affects.cpp" />
+    <ClCompile Include="CFGRelationsManagerTest_AffectsT.cpp" />
+    <ClCompile Include="CFGRelationsManagerTest_NextT.cpp" />
     <ClCompile Include="ClauseTest.cpp" />
     <ClCompile Include="DesignExtractorTest.cpp" />
     <ClCompile Include="EntityTest.cpp" />
     <ClCompile Include="ExprNodeTest.cpp" />
     <ClCompile Include="ExprParserTest.cpp" />
+    <ClCompile Include="FollowsParserTest.cpp" />
+    <ClCompile Include="FollowsTParserTest.cpp" />
     <ClCompile Include="FSMTest.cpp" />
+    <ClCompile Include="MonotypeRelationTableTest.cpp" />
+    <ClCompile Include="NextBipEvaluatorTest.cpp" />
+    <ClCompile Include="NextBipTEvaluatorTest.cpp" />
     <ClCompile Include="NextEvaluatorTest.cpp" />
+    <ClCompile Include="ParentParserTest.cpp" />
+    <ClCompile Include="ParentTParserTest.cpp" />
     <ClCompile Include="NextTEvaluatorTest.cpp" />
     <ClCompile Include="NextTPreprocessorTest.cpp" />
     <ClCompile Include="ParserTest.cpp" />
@@ -57,6 +74,7 @@
     <ClCompile Include="PatternsEvaluatorTest.cpp" />
     <ClCompile Include="PatternWhileEvaluatorTest.cpp" />
     <ClCompile Include="PKBAdapterTest.cpp" />
+    <ClCompile Include="QueryEvaluatorCFGBipRelationTest.cpp" />
     <ClCompile Include="QueryEvaluatorCFGRelationTest.cpp" />
     <ClCompile Include="QueryEvaluatorMultiClausesTest.cpp" />
     <ClCompile Include="QueryEvaluatorPatternTest.cpp" />
@@ -79,6 +97,9 @@
     <ClCompile Include="NextTParserTest.cpp" />
     <ClCompile Include="AssignPatternParserTest.cpp" />
     <ClCompile Include="IfPatternParserTest.cpp" />
+    <ClCompile Include="ModifiesParserTest.cpp" />
+    <ClCompile Include="UsesParserTest.cpp" />
+    <ClCompile Include="WithParserTest.cpp" />
     <ClCompile Include="WhilePatternParserTest.cpp" />
     <ClCompile Include="QueryOptimizerTest.cpp" />
     <ClCompile Include="CFGNodeTest.cpp" />

@@ -60,7 +60,7 @@ namespace UnitTesting {
 
 		Entity expected_ent_wildcard = Entity(EntityType::WILD);
 
-		Pattern expected_pat = Pattern(expected_declared_assign, validator.setEntRef(query, left_expr_token_chain), validator.setExpr(right_expr_token_chain), false);
+		Pattern expected_pat = Pattern(expected_declared_assign, Utility::setEntRef(query, left_expr_token_chain, EntityType::VARIABLE), Utility::setExpr(right_expr_token_chain), false);
 
 		//Result
 		validator.parseParameterPattern(query, expected_declared_assign, temp_token_chain);
@@ -103,14 +103,13 @@ namespace UnitTesting {
 
 		Entity expected_ent_wildcard = Entity(EntityType::WILD);
 
-		Pattern expected_pat = Pattern(expected_declared_assign, validator.setEntRef(query, left_expr_token_chain), validator.setExpr(right_expr_token_chain), false);
+		Pattern expected_pat = Pattern(expected_declared_assign, Utility::setEntRef(query, left_expr_token_chain, EntityType::VARIABLE), Utility::setExpr(right_expr_token_chain), false);
 
 		//Result
 		validator.parseParameterPattern(query, expected_declared_assign, temp_token_chain);
 
 		EXPECT_TRUE(query.getClauses()[0].getPattern() == expected_pat);
 	}
-
 
 	TEST(AssignPatternParserTest, AssignIdentWildCardTest) {
 		QueryPatternRelRefParser validator;
@@ -142,7 +141,7 @@ namespace UnitTesting {
 
 		Entity expected_ent_wildcard = Entity(EntityType::WILD);
 
-		Pattern expected_pat = Pattern(expected_declared_assign, validator.setEntRef(query, left_expr_token_chain), validator.setExpr(right_expr_token_chain), true);
+		Pattern expected_pat = Pattern(expected_declared_assign, Utility::setEntRef(query, left_expr_token_chain, EntityType::VARIABLE), Utility::setExpr(right_expr_token_chain), true);
 
 		//Result
 		validator.parseParameterPattern(query, expected_declared_assign, temp_token_chain);
@@ -187,7 +186,7 @@ namespace UnitTesting {
 
 		Entity expected_ent_wildcard = Entity(EntityType::WILD);
 
-		Pattern expected_pat = Pattern(expected_declared_assign, validator.setEntRef(query, left_expr_token_chain), validator.setExpr(right_expr_token_chain), true);
+		Pattern expected_pat = Pattern(expected_declared_assign, Utility::setEntRef(query, left_expr_token_chain, EntityType::VARIABLE), Utility::setExpr(right_expr_token_chain), true);
 
 		//Result
 		validator.parseParameterPattern(query, expected_declared_assign, temp_token_chain);
@@ -236,7 +235,7 @@ namespace UnitTesting {
 
 		Entity expected_ent_wildcard = Entity(EntityType::WILD);
 
-		Pattern expected_pat = Pattern(expected_declared_assign, validator.setEntRef(query, left_expr_token_chain), validator.setExpr(right_expr_token_chain), true);
+		Pattern expected_pat = Pattern(expected_declared_assign, Utility::setEntRef(query, left_expr_token_chain, EntityType::VARIABLE), Utility::setExpr(right_expr_token_chain), true);
 
 		//Result
 		validator.parseParameterPattern(query, expected_declared_assign, temp_token_chain);
@@ -274,14 +273,14 @@ namespace UnitTesting {
 
 		//Entity expected_ent_wildcard = Entity(EntityType::WILD);
 
-		Pattern expected_pat = Pattern(expected_declared_assign, validator.setEntRef(query, left_expr_token_chain), validator.setExpr(right_expr_token_chain), true);
+		Pattern expected_pat = Pattern(expected_declared_assign, Utility::setEntRef(query, left_expr_token_chain, EntityType::VARIABLE), Utility::setExpr(right_expr_token_chain), true);
 
 		//Result
 		validator.parseParameterPattern(query, expected_declared_assign, temp_token_chain);
 
 		EXPECT_TRUE(query.getClauses()[0].getPattern() == expected_pat);
 	}
-	
+
 	TEST(AssignPatternParserTest, AssignSynIdentTest) {
 		QueryPatternRelRefParser validator;
 
@@ -320,14 +319,14 @@ namespace UnitTesting {
 
 		//Entity expected_ent_wildcard = Entity(EntityType::WILD);
 
-		Pattern expected_pat = Pattern(expected_declared_assign, validator.setEntRef(query, left_expr_token_chain), validator.setExpr(right_expr_token_chain), false);
+		Pattern expected_pat = Pattern(expected_declared_assign, Utility::setEntRef(query, left_expr_token_chain, EntityType::VARIABLE), Utility::setExpr(right_expr_token_chain), false);
 
 		//Result
 		validator.parseParameterPattern(query, expected_declared_assign, temp_token_chain);
 
 		EXPECT_TRUE(query.getClauses()[0].getPattern() == expected_pat);
 	}
-	
+
 	TEST(AssignPatternParserTest, AssignSynIdentWildCardTest) {
 		QueryPatternRelRefParser validator;
 
@@ -368,7 +367,7 @@ namespace UnitTesting {
 		Entity expected_2 = Entity(EntityType::VARIABLE, synonym2);
 		query.addEntity(expected_2);
 
-		Pattern expected_pat = Pattern(expected_declared_assign, validator.setEntRef(query, left_expr_token_chain), validator.setExpr(right_expr_token_chain), true);
+		Pattern expected_pat = Pattern(expected_declared_assign, Utility::setEntRef(query, left_expr_token_chain, EntityType::VARIABLE), Utility::setExpr(right_expr_token_chain), true);
 
 		//Result
 		validator.parseParameterPattern(query, expected_declared_assign, temp_token_chain);
@@ -401,7 +400,7 @@ namespace UnitTesting {
 
 		//Entity expected_ent_wildcard = Entity(EntityType::WILD);
 
-		Pattern expected_pat = Pattern(expected_declared_assign, validator.setEntRef(query, left_expr_token_chain), validator.setExpr(right_expr_token_chain), true);
+		Pattern expected_pat = Pattern(expected_declared_assign, Utility::setEntRef(query, left_expr_token_chain, EntityType::VARIABLE), Utility::setExpr(right_expr_token_chain), true);
 
 		//Result
 		validator.parseParameterPattern(query, expected_declared_assign, temp_token_chain);
@@ -442,7 +441,7 @@ namespace UnitTesting {
 
 		//Entity expected_ent_wildcard = Entity(EntityType::WILD);
 
-		Pattern expected_pat = Pattern(expected_declared_assign, validator.setEntRef(query, left_expr_token_chain), validator.setExpr(right_expr_token_chain), false);
+		Pattern expected_pat = Pattern(expected_declared_assign, Utility::setEntRef(query, left_expr_token_chain, EntityType::VARIABLE), Utility::setExpr(right_expr_token_chain), false);
 
 		//Result
 		validator.parseParameterPattern(query, expected_declared_assign, temp_token_chain);
@@ -485,7 +484,7 @@ namespace UnitTesting {
 		Entity expected_declared_assign = Entity(EntityType::ASSIGN, synonym);
 		query.addEntity(expected_declared_assign);
 
-		Pattern expected_pat = Pattern(expected_declared_assign, validator.setEntRef(query, left_expr_token_chain), validator.setExpr(right_expr_token_chain), true);
+		Pattern expected_pat = Pattern(expected_declared_assign, Utility::setEntRef(query, left_expr_token_chain, EntityType::VARIABLE), Utility::setExpr(right_expr_token_chain), true);
 
 		//Result
 		validator.parseParameterPattern(query, expected_declared_assign, temp_token_chain);
@@ -533,9 +532,54 @@ namespace UnitTesting {
 		synonym2.name = "procName";
 		Entity expected_2 = Entity(EntityType::PRINT, synonym2);
 		query.addEntity(expected_2);
-
-		EXPECT_THROW(validator.parseParameterPattern(query, expected_declared_assign, temp_token_chain), SemanticErrorException);
-
+		validator.parseParameterPattern(query, expected_declared_assign, temp_token_chain);
+		EXPECT_TRUE(Utility::checkIsSemanticError(query));
 	}
 
+
+	TEST(AssignPatternParserTest, syntacticInvalidExprTest) {
+		QueryPatternRelRefParser validator;
+
+		Query query;
+
+		std::vector<QueryToken> temp_token_chain;
+
+		temp_token_chain.push_back({ QueryToken::IDENTIFIER, "var" });
+		temp_token_chain.push_back({ QueryToken::COMMA, "" });
+		temp_token_chain.push_back({ QueryToken::WILDCARD, "" });
+		temp_token_chain.push_back({ QueryToken::QUOTATION_OPEN, "" });
+		temp_token_chain.push_back({ QueryToken::IDENTIFIER, "a" });
+		temp_token_chain.push_back({ QueryToken::QUOTATION_CLOSE, "" });
+		temp_token_chain.push_back({ QueryToken::QUOTATION_OPEN, "" });
+		temp_token_chain.push_back({ QueryToken::IDENTIFIER, "b" });
+		temp_token_chain.push_back({ QueryToken::QUOTATION_CLOSE, "" });
+		temp_token_chain.push_back({ QueryToken::WILDCARD, "" });
+
+		std::vector<QueryToken> left_expr_token_chain;
+		left_expr_token_chain.push_back({ QueryToken::IDENTIFIER, "var" });
+
+		std::vector<QueryToken> right_expr_token_chain;
+		temp_token_chain.push_back({ QueryToken::WILDCARD, "" });
+		temp_token_chain.push_back({ QueryToken::QUOTATION_OPEN, "" });
+		temp_token_chain.push_back({ QueryToken::IDENTIFIER, "a" });
+		temp_token_chain.push_back({ QueryToken::QUOTATION_CLOSE, "" });
+		temp_token_chain.push_back({ QueryToken::QUOTATION_OPEN, "" });
+		temp_token_chain.push_back({ QueryToken::IDENTIFIER, "b" });
+		temp_token_chain.push_back({ QueryToken::QUOTATION_CLOSE, "" });
+		temp_token_chain.push_back({ QueryToken::WILDCARD, "" });
+		//Synonym
+		//Expected
+		Synonym synonym;
+		synonym.name = "ass";
+		Entity expected_declared_assign = Entity(EntityType::ASSIGN, synonym);
+		query.addEntity(expected_declared_assign);
+
+		Synonym synonym2;
+		synonym2.name = "var";
+		Entity expected_2 = Entity(EntityType::VARIABLE, synonym2);
+		query.addEntity(expected_2);
+		
+		
+		EXPECT_THROW(validator.parseParameterPattern(query, expected_declared_assign, temp_token_chain), SyntacticErrorException);
+	}
 }

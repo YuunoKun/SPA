@@ -12,7 +12,7 @@ std::list<std::string> QuerySystem::processQuery(std::string input) {
 		Query query = preprocessor.parse(input);
 
 		if (!optimizer.checkAllConstantExist(query.getClauses())) {
-			returnEmptyResult(query.getSelected().front());
+			return returnEmptyResult(query.getSelected().front());
 		}
 
 		query.setClauses(optimizer.optimizeClausesOrder(query.getClauses()));
@@ -24,11 +24,17 @@ std::list<std::string> QuerySystem::processQuery(std::string input) {
 		preprocessor.resetQuery();
 		return {};
 	}
-	catch (SemanticErrorException&)
+	catch (SemanticErrorException& err)
 	{
-		// TODO: Return false here instead of empty query
 		preprocessor.resetQuery();
-		return {};
+
+		if (err.getQuery().getSelected().size() == 0) {
+			return {};
+		}
+		else {
+			return returnEmptyResult(err.getQuery().getSelected().front());
+		}
+
 	}
 	catch (std::exception& e)
 	{
@@ -37,7 +43,6 @@ std::list<std::string> QuerySystem::processQuery(std::string input) {
 		return {};
 	}
 }
-
 
 std::list<std::string> QuerySystem::returnEmptyResult(Entity& selected) {
 	if (selected.getType() == BOOLEAN) {

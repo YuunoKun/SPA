@@ -2,7 +2,6 @@
 #include "PKB.h"
 #include "Utility.h"
 #include "Common.h"
-#include "Stmt.h"
 #include "RelationTable.h"
 #include "RelationTable.cpp"
 
@@ -644,26 +643,6 @@ std::vector<StmtInfo> PKBAdapter::getNext(prog_line index) {
 	return a.getValues(s1);
 }
 
-bool PKBAdapter::isIfEmpty() {
-	auto a = PKB::getInstance().PKB::getIf();
-	return a.isEmpty();
-}
-
-bool PKBAdapter::isIfUses(stmt_index index, var_name var) {
-	auto a = PKB::getInstance().PKB::getIf();
-	return a.containsPair(index, var);
-}
-
-bool PKBAdapter::isIfUses(stmt_index index) {
-	auto a = PKB::getInstance().PKB::getIf();
-	return a.containsKey(index);
-}
-
-bool PKBAdapter::isIfUsed(var_name var) {
-	auto a = PKB::getInstance().PKB::getIf();
-	return a.containsValue(var);
-}
-
 std::vector<std::pair<stmt_index, var_name>> PKBAdapter::getAllIfUses() {
 	auto a = PKB::getInstance().PKB::getIf();
 	return a.getPairs();
@@ -674,39 +653,9 @@ std::vector<stmt_index> PKBAdapter::getIfUses() {
 	return a.getKeys();
 }
 
-std::vector<var_name> PKBAdapter::getIfUsed() {
-	auto a = PKB::getInstance().PKB::getIf();
-	return a.getValues();
-}
-
 std::vector<stmt_index> PKBAdapter::getIfUses(var_name var) {
 	auto a = PKB::getInstance().PKB::getIf();
 	return a.getKeys(var);
-}
-
-std::vector<var_name> PKBAdapter::getIfUsed(stmt_index index) {
-	auto a = PKB::getInstance().PKB::getIf();
-	return a.getValues(index);
-}
-
-bool PKBAdapter::isWhileEmpty() {
-	auto a = PKB::getInstance().PKB::getWhile();
-	return a.isEmpty();
-}
-
-bool PKBAdapter::isWhileUses(stmt_index index, var_name var) {
-	auto a = PKB::getInstance().PKB::getWhile();
-	return a.containsPair(index, var);
-}
-
-bool PKBAdapter::isWhileUses(stmt_index index) {
-	auto a = PKB::getInstance().PKB::getWhile();
-	return a.containsKey(index);
-}
-
-bool PKBAdapter::isWhileUsed(var_name var) {
-	auto a = PKB::getInstance().PKB::getWhile();
-	return a.containsValue(var);
 }
 
 std::vector<std::pair<stmt_index, var_name>> PKBAdapter::getAllWhileUses() {
@@ -719,19 +668,9 @@ std::vector<stmt_index> PKBAdapter::getWhileUses() {
 	return a.getKeys();
 }
 
-std::vector<var_name> PKBAdapter::getWhileUsed() {
-	auto a = PKB::getInstance().PKB::getWhile();
-	return a.getValues();
-}
-
 std::vector<stmt_index> PKBAdapter::getWhileUses(var_name var) {
 	auto a = PKB::getInstance().PKB::getWhile();
 	return a.getKeys(var);
-}
-
-std::vector<var_name> PKBAdapter::getWhileUsed(stmt_index index) {
-	auto a = PKB::getInstance().PKB::getWhile();
-	return a.getValues(index);
 }
 
 std::vector<std::pair<stmt_index, var_name>> PKBAdapter::getAllPrintVars() {

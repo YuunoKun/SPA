@@ -93,6 +93,9 @@ Query QueryPreprocessor::parse(std::string str) {
 			if (i < tokens.size() - 1) {
 				nextToken = tokens[i + 1];
 			}
+			else {
+				nextToken = QueryToken();
+			}
 			handleSelection(tokens[i]);
 		}
 	}
@@ -160,7 +163,9 @@ void QueryPreprocessor::handleSelection(QueryToken& token) {
 		else if (token.type == QueryToken::QueryTokenType::IDENTIFIER &&
 			token.token_value == "and") {
 			queryValidator.validateAnd(patternOrSuchThat);
-			if (patternOrSuchThat.type == QueryToken::QueryTokenType::PATTERN) {
+			if (patternOrSuchThat.type == QueryToken::QueryTokenType::PATTERN ||
+				patternOrSuchThat.type == QueryToken::QueryTokenType::SUCH_THAT ||
+				patternOrSuchThat.type == QueryToken::QueryTokenType::WITH) {
 				if (nextToken.token_value == "pattern") {
 					throw SyntacticErrorException("and pattern is a syntax error");
 				}
@@ -208,9 +213,6 @@ void QueryPreprocessor::handleSelection(QueryToken& token) {
 				token.type == QueryToken::QueryTokenType::SUCH_THAT)) {
 				isParameter = false;
 				endOfCurrentClauses = true;
-				// TODO: call jiyu's method
-				// validator.parseWith(query, parameterClause);
-				parameterClause.clear();
 			}
 		}
 		else {
@@ -221,14 +223,16 @@ void QueryPreprocessor::handleSelection(QueryToken& token) {
 }
 
 void QueryPreprocessor::handleIsSelecting(QueryToken& token) {
+	QueryValidator queryValidator = QueryValidator();
 	// Check next token, if its pattern or such that, go out from is_selecting
-	if (nextToken.type != QueryToken::QueryTokenType::WHITESPACE && (nextToken.token_value == "pattern" || nextToken.type == QueryToken::QueryTokenType::SUCH_THAT)) {
+	if (nextToken.type != QueryToken::QueryTokenType::WHITESPACE && (nextToken.token_value == "pattern" || nextToken.type == QueryToken::QueryTokenType::SUCH_THAT || nextToken.token_value == "with")) {
 		status = ParseStatus::NEUTRAL;
 	}
 
 	// if Select has attribute ie. Select p.procName
 	if (token.type == QueryToken::QueryTokenType::DOT &&
 		prevToken.type == QueryToken::QueryTokenType::IDENTIFIER) {
+		queryValidator.validateAttributeType(query, prevTokenSelect, nextToken);
 		isExpectingAttribute = true;
 	}
 	else if (isExpectingAttribute && prevTokenSelect.type == QueryToken::QueryTokenType::DOT) {
@@ -250,7 +254,10 @@ void QueryPreprocessor::handleIsSelecting(QueryToken& token) {
 }
 
 void QueryPreprocessor::handleSelectingMultipleClause(QueryToken& token) {
+	QueryValidator queryValidator = QueryValidator();
+
 	if (token.type == QueryToken::QueryTokenType::DOT) {
+		queryValidator.validateAttributeType(query, prevTokenSelect, nextToken);
 		isExpectingAttribute = true;
 	}
 	else if (isExpectingAttribute) {
@@ -279,12 +286,22 @@ void QueryPreprocessor::handleWithinParameter(QueryToken& token) {
 			token.token_value != "with" &&
 			token.token_value != "pattern" &&
 			token.type != QueryToken::QueryTokenType::SUCH_THAT))) {
+		QueryPatternRelRefParser validator;
 		parameterClause.push_back(token);
+
+		// add call jiyu method
+				// TODO: call jiyu's method
+		if (patternOrSuchThat.type == QueryToken::QueryTokenType::WITH && (this->nextToken.type == QueryToken::QueryTokenType::WHITESPACE || this->nextToken.token_value == "and")) {
+			validator.parseWith(query, parameterClause);
+			parameterClause.clear();
+			isParameter = false;
+			endOfCurrentClauses = true;
+		}
 	}
 	if (parenthesis_counter == 0 && token.type == QueryToken::QueryTokenType::PARENTHESIS_CLOSE) {
 		if (patternOrSuchThat.type == QueryToken::QueryTokenType::PATTERN) {
 			QueryValidator queryValidator = QueryValidator();
-			queryValidator.validatePatternType(patternTypeEntity);
+			queryValidator.validatePatternType(patternTypeEntity, query);
 			isParameter = false;
 			endOfCurrentClauses = true;
 			QueryPatternRelRefParser validator;
@@ -339,7 +356,7 @@ void QueryPreprocessor::setIdentifierToQueryTokenType(QueryToken& token) {
 		else if (token.token_value == "constant") {
 			declarationType = { QueryToken::QueryTokenType::CONSTANT, "constant" };
 		}
-		else if (token.token_value == "prog_line") {
+		else if (token.type == QueryToken::QueryTokenType::PROG_LINE) {
 			declarationType = { QueryToken::QueryTokenType::PROG_LINE, "prog_line" };
 		}
 		// Need to enforce that Select must only come after a terminator
@@ -360,7 +377,7 @@ void QueryPreprocessor::addEntityToQuery(QueryToken& token) {
 	Entity ent;
 	for (QueryToken each : this->output) {
 		if (token.token_value == each.token_value) {
-			throw SemanticErrorException("Name is already used!");
+			this->query.setIsSemanticError("Name is already used!");
 		}
 	}
 
@@ -385,34 +402,36 @@ void QueryPreprocessor::addPatternToQuery(QueryToken& token) {
 		}
 	}
 	if (!isValid) {
-		throw SemanticErrorException("Pattern type has not been declared");
+		this->query.setIsSemanticError("Pattern type has not been declared");
 	}
 }
 
 void QueryPreprocessor::addSelectedToQuery(QueryToken& token) {
 	Entity ent;
 	bool isValid = false;
-	if (token.token_value == "BOOLEAN" && this->query.getSelected().size() == 0) {
-		ent = { EntityType::BOOLEAN };
-		isValid = true;
-	}
-	else {
-		for (QueryToken each : this->output) {
-			if (token.token_value == each.token_value) {
-				selected.push_back({ each.type, token.token_value });
-				Synonym synonym;
-				synonym.name = token.token_value;
-				EntityType entityType = Utility::queryTokenTypeToEntityType(each.type);
-				ent = { entityType, synonym };
-				isValid = true;
-			}
+
+	for (QueryToken each : this->output) {
+		if (token.token_value == each.token_value) {
+			selected.push_back({ each.type, token.token_value });
+			Synonym synonym;
+			synonym.name = token.token_value;
+			EntityType entityType = Utility::queryTokenTypeToEntityType(each.type);
+			ent = { entityType, synonym };
+			isValid = true;
 		}
 	}
 
-	if (!isValid) {
-		throw SemanticErrorException("Select variable content has not been declared");
+	if (!isValid && token.token_value == "BOOLEAN" && this->query.getSelected().size() == 0) {
+		ent = { EntityType::BOOLEAN };
+		isValid = true;
 	}
-	this->query.addSelected(ent);
+
+	if (!isValid) {
+		this->query.setIsSemanticError("Select variable content has not been declared");
+	}
+	else {
+		this->query.addSelected(ent);
+	}
 }
 
 void QueryPreprocessor::setQueryParameter() {
