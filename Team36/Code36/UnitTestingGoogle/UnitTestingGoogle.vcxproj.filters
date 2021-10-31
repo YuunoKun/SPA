@@ -237,6 +237,9 @@
     <ClCompile Include="QueryEvaluatorCFGBipRelationTest.cpp">
       <Filter>PQL\QueryEvaluator</Filter>
     </ClCompile>
+    <ClCompile Include="AffectsBipPreprocessorTest.cpp">
+      <Filter>PKB\RelationPreprocessor</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />

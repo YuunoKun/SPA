@@ -11,6 +11,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\source\AffectsBipPreprocessor.cpp" />
+    <ClCompile Include="..\source\AffectsBipTPreprocessor.cpp" />
     <ClCompile Include="..\source\AffectsPreprocessor.cpp" />
     <ClCompile Include="..\source\AffectsTPreprocessor.cpp" />
     <ClCompile Include="..\source\DesignExtractor.cpp" />
@@ -18,6 +20,7 @@
     <ClCompile Include="..\source\ExprParser.cpp" />
     <ClCompile Include="..\source\FSM.cpp" />
     <ClCompile Include="..\source\IterativeDataflowSolver.cpp" />
+    <ClCompile Include="..\source\IterativeDataflowSolverBip.cpp" />
     <ClCompile Include="..\source\Parser.cpp" />
     <ClCompile Include="..\source\Procedure.cpp" />
     <ClCompile Include="..\source\RelationPreprocessor.cpp" />
@@ -92,6 +95,8 @@
     <ClCompile Include="..\source\NextTPreprocessor.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\source\AffectsBipPreprocessor.h" />
+    <ClInclude Include="..\source\AffectsBipTPreprocessor.h" />
     <ClInclude Include="..\source\AffectsTPreprocessor.h" />
     <ClInclude Include="..\source\DesignExtractor.h" />
     <ClInclude Include="..\source\ExprNode.h" />
@@ -100,6 +105,7 @@
     <ClInclude Include="..\source\FSM.h" />
     <ClInclude Include="..\source\AffectsPreprocessor.h" />
     <ClInclude Include="..\source\IterativeDataflowSolver.h" />
+    <ClInclude Include="..\source\IterativeDataflowSolverBip.h" />
     <ClInclude Include="..\source\MonotypeRelationTable.h" />
     <ClInclude Include="..\source\PKB.h" />
     <ClInclude Include="..\source\Parser.h" />

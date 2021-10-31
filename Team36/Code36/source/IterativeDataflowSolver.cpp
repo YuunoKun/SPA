@@ -273,7 +273,7 @@ void IterativeDataflowSolver::populateDataflowSets() {
 	is_dataflow_sets_populated = true;
 }
 
-void IterativeDataflowSolver::processInSet(stmt_index index) {
+void IterativeDataflowSolver::processInSet(int index) {
 	std::set<ModifiesTuple> new_in_list{};
 
 	for (stmt_index pred : pred_list[index]) {
@@ -285,7 +285,7 @@ void IterativeDataflowSolver::processInSet(stmt_index index) {
 	in_list[index] = new_in_list;
 }
 
-void IterativeDataflowSolver::processOutSet(stmt_index index) {
+void IterativeDataflowSolver::processOutSet(int index) {
 	std::set<ModifiesTuple> new_out_list{};
 
 	std::set_difference(in_list[index].begin(), in_list[index].end(),

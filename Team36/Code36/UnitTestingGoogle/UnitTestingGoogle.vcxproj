@@ -40,6 +40,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AffectsBipEvaluatorTest.cpp" />
+    <ClCompile Include="AffectsBipPreprocessorTest.cpp" />
     <ClCompile Include="AffectsBipTEvaluatorTest.cpp" />
     <ClCompile Include="AffectsEvaluatorTest.cpp" />
     <ClCompile Include="AffectsTEvaluatorTest.cpp" />

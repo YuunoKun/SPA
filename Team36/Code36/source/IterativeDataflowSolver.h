@@ -2,10 +2,11 @@
 #include <iostream>
 #include <set>
 
-#include "PKB.h"
 #include "Common.h"
 #include "RelationTable.h"
 #include "RelationTable.cpp"
+#include "MonotypeRelationTable.h"
+#include "MonotypeRelationTable.cpp"
 
 struct ModifiesTuple {
 	stmt_index stmt_index;
@@ -50,8 +51,8 @@ public:
 
 private:
 	void populateDataflowSets();
-	void processInSet(stmt_index index);
-	void processOutSet(stmt_index index);
+	void processInSet(int index);
+	void processOutSet(int index);
 	void resetOutList();
 	void resetInList();
 

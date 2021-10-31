@@ -333,6 +333,15 @@
     <ClCompile Include="..\source\AffectsTPreprocessor.cpp">
       <Filter>Source Files\PKB\RelationPreprocessor</Filter>
     </ClCompile>
+    <ClCompile Include="..\source\AffectsBipPreprocessor.cpp">
+      <Filter>Source Files\PKB\RelationPreprocessor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\AffectsBipTPreprocessor.cpp">
+      <Filter>Source Files\PKB\RelationPreprocessor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\IterativeDataflowSolverBip.cpp">
+      <Filter>Source Files\PKB\RelationPreprocessor</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\source\Parser.h">
@@ -621,6 +630,15 @@
       <Filter>Header Files\PKB\RelationTables</Filter>
     </ClInclude>
     <ClInclude Include="..\source\AffectsTPreprocessor.h">
+      <Filter>Header Files\PKB\RelationPreprocessor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\AffectsBipPreprocessor.h">
+      <Filter>Header Files\PKB\RelationPreprocessor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\AffectsBipTPreprocessor.h">
+      <Filter>Header Files\PKB\RelationPreprocessor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\IterativeDataflowSolverBip.h">
       <Filter>Header Files\PKB\RelationPreprocessor</Filter>
     </ClInclude>
   </ItemGroup>
