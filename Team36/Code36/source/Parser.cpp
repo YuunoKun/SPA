@@ -13,34 +13,13 @@ Parser::Parser(void) {
 }
 
 void Parser::load_file(std::string file) {
-	/*
-	FILE* input_file = fopen(file, "r");
-	try {
-		if (!input_file) {
-			std::runtime_error("Error : Failed to open file.");
-		}
-
-		fseek(input_file, 0, SEEK_END);
-		size_t file_size = ftell(input_file);
-		fseek(input_file, 0, SEEK_SET);
-		source_program = std::string(file_size, ' ');
-		fread(source_program.data(), 1, file_size, input_file);
-
-		fclose(input_file);
-	}
-	catch (...) {
-		std::runtime_error("Error : Unknown error loading file.");
-		source_program = "";
-		fclose(input_file);
-	}
-	*/
-
 	std::ifstream input_file;
 	input_file.open(file);
 	if (input_file.is_open()) {
 		std::string temp;
 		while (std::getline(input_file, temp)) {
 			source_program.append(temp);
+			source_program.push_back(' ');
 		}
 	}
 	else {
@@ -54,13 +33,6 @@ std::string Parser::getSourceProgram() {
 }
 
 void Parser::parse() {
-	// Actual parsing workflow
-
-	/*
-	TODO:
-	If source_program = "";
-	An error message should be pushed
-	*/
 	try {
 		tokenizer.parseIntoTokens(source_program.c_str());
 		FSM finite_state_machine(tokenizer);
