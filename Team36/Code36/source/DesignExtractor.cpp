@@ -399,7 +399,7 @@ void DesignExtractor::populateNext(PKB& pkb) {
 
 		for (CFG* cfg: cfgs) {
 			if (cfg->getHeadLabelledProgLine().label == 0) {
-				//pkb.addCFGBip(cfg);
+				pkb.addCFGBip(cfg);
 			}
 		}
 	}
@@ -407,7 +407,7 @@ void DesignExtractor::populateNext(PKB& pkb) {
 		std::cout << "CFGBip failed." << std::endl;
 	}
 
-	//pkb.addCFGsToDestroy(cfgs);
+	pkb.addCFGsToDestroy(cfgs);
 }
 
 void DesignExtractor::populateIfs(PKB& pkb) {

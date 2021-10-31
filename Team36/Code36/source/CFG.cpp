@@ -63,11 +63,14 @@ CFGNode* CFG::getTail() {
 
 LabelledProgLine CFG::getHeadLabelledProgLine() {
 	prog_line h = 0;
-
+	prog_line label = 0;
 	if (head->getProgramLines().size() > 0) {
 		h = head->getProgramLines().front();
 	}
-	return {h, 0};
+	if (head->getLabels().size() > 0) {
+		label = head->getLabels().front();
+	}
+	return {h, label};
 }
 
 bool CFG::isEmptyCFG() {
