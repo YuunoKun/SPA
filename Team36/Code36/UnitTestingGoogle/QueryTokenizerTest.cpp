@@ -12,30 +12,20 @@ namespace UnitTesting {
 		QueryTokenizerTest() {
 		}
 
-		// If the constructor and destructor are not enough for setting up
-		// and cleaning up each test, you can define the following methods:
-
 		virtual void SetUp() override {
-			// Code here will be called immediately after the constructor (right
-			// before each test).
 		}
 
 		void TearDown() override {
-			// Code here will be called immediately after each test (right
-			// before the destructor).
 		}
-
-		// Class members declared here can be used by all tests in the test suite
-		// for Foo.
 	};
 
 	// Test to see if overloaded constructors work
 	TEST(QueryTokenizer, ConstructorTest) {
-		
+		Query query;
 		//Result
 		QueryTokenizer query_tokenizer;
 		std::string input = "stmt S";
-		query_tokenizer.parse_into_query_tokens(input);
+		query_tokenizer.tokenize(query, input);
 		std::vector<QueryToken> output = query_tokenizer.get_query_token_chain();
 		
 
@@ -69,10 +59,12 @@ namespace UnitTesting {
 
 	// Test for newline
 	TEST(QueryTokenizer, NewlineTest) {
+		Query query;
+
 		//Result
 		QueryTokenizer query_tokenizer;
 		std::string input = "stmt s;\nSelect s";
-		query_tokenizer.parse_into_query_tokens(input);
+		query_tokenizer.tokenize(query, input);
 		std::vector<QueryToken> output = query_tokenizer.get_query_token_chain();
 
 		//Expected
@@ -92,11 +84,12 @@ namespace UnitTesting {
 
 	// Test for constants
 	TEST(QueryTokenizer, ConstantTest) {
+		Query query;
 
 		//Result
 		QueryTokenizer query_tokenizer;
 		std::string input = "9 stmt 8";
-		query_tokenizer.parse_into_query_tokens(input);
+		query_tokenizer.tokenize(query, input);
 		std::vector<QueryToken> output = query_tokenizer.get_query_token_chain();
 
 		//Expected
@@ -117,11 +110,12 @@ namespace UnitTesting {
 	
 	// Test for identifiers
 	TEST(QueryTokenizer, IdentifierTest) {
+		Query query;
 
 		//Result
 		QueryTokenizer query_tokenizer;
 		std::string input = "stmt S";
-		query_tokenizer.parse_into_query_tokens(input);
+		query_tokenizer.tokenize(query, input);
 		std::vector<QueryToken> output = query_tokenizer.get_query_token_chain();
 
 		//Expected
@@ -136,11 +130,12 @@ namespace UnitTesting {
 	}
 
 	TEST(QueryTokenizer, IdentifierTest2) {
+		Query query;
 
 		//Result
 		QueryTokenizer query_tokenizer;
 		std::string input = "stmt +S";
-		query_tokenizer.parse_into_query_tokens(input);
+		query_tokenizer.tokenize(query, input);
 		std::vector<QueryToken> output = query_tokenizer.get_query_token_chain();
 
 		//Expected
@@ -160,10 +155,11 @@ namespace UnitTesting {
 
 	//Test prog_line
 	TEST(QueryTokenizer, prog_lineTest) {
+		Query query;
 
 		//Result
 		QueryTokenizer query_tokenizer;
-		query_tokenizer.parse_into_query_tokens("stmt s; prog_line n; ");
+		query_tokenizer.tokenize(query, "stmt s; prog_line n; ");
 		std::vector<QueryToken> output = query_tokenizer.get_query_token_chain();
 
 		//Expected
@@ -184,11 +180,12 @@ namespace UnitTesting {
 
 	// Test for open and close parenthesis
 	TEST(QueryTokenizer, ParenthesisOpenCloseTest) {
+		Query query;
 
 		//Result
 		QueryTokenizer query_tokenizer;
 		std::string input = "(procName)";
-		query_tokenizer.parse_into_query_tokens(input);
+		query_tokenizer.tokenize(query, input);
 		std::vector<QueryToken> output = query_tokenizer.get_query_token_chain();
 
 		//Expected
@@ -207,10 +204,11 @@ namespace UnitTesting {
 
 	//Test for Tuple Open Close
 	TEST(QueryTokenizer, TupleOpenCloseTest) {
+		Query query;
 
 		//Result
 		QueryTokenizer query_tokenizer;
-		query_tokenizer.parse_into_query_tokens("<p.stmt#>");
+		query_tokenizer.tokenize(query, "<p.stmt#>");
 		std::vector<QueryToken> output = query_tokenizer.get_query_token_chain();
 
 		//Expected
@@ -229,11 +227,12 @@ namespace UnitTesting {
 
 	// Test for open and close quotation marks
 	TEST(QueryTokenizer, QuotationOpenCloseTest) {
-		
+		Query query;
+
 		//Result
 		QueryTokenizer query_tokenizer;
 		std::string input = "\"procName\"";
-		query_tokenizer.parse_into_query_tokens(input);
+		query_tokenizer.tokenize(query, input);
 		std::vector<QueryToken> output = query_tokenizer.get_query_token_chain();
 
 		//Expected
@@ -251,11 +250,12 @@ namespace UnitTesting {
 	}
 	// Test for terminator
 	TEST(QueryTokenizer, TerminatorTest) {
+		Query query;
 
 		//Result
 		QueryTokenizer query_tokenizer;
 		std::string input = "stmt s;";
-		query_tokenizer.parse_into_query_tokens(input);
+		query_tokenizer.tokenize(query, input);
 		std::vector<QueryToken> output = query_tokenizer.get_query_token_chain();
 
 		//Expected
@@ -275,11 +275,12 @@ namespace UnitTesting {
 
 	// Test for wildcard
 	TEST(QueryTokenizer, WildcardTest) {
+		Query query;
 
 		//Result
 		QueryTokenizer query_tokenizer;
 		std::string input = "Uses (s,_)";
-		query_tokenizer.parse_into_query_tokens(input);
+		query_tokenizer.tokenize(query, input);
 		std::vector<QueryToken> output = query_tokenizer.get_query_token_chain();
 
 		//Expected
@@ -290,11 +291,12 @@ namespace UnitTesting {
 
 	// Test for comma
 	TEST(QueryTokenizer, CommaTest) {
+		Query query;
 
 		//Result
 		QueryTokenizer query_tokenizer;
 		std::string input = "Uses (s,_)";
-		query_tokenizer.parse_into_query_tokens(input);
+		query_tokenizer.tokenize(query, input);
 		std::vector<QueryToken> output = query_tokenizer.get_query_token_chain();
 
 		//Expected
@@ -305,11 +307,12 @@ namespace UnitTesting {
 
 	// Test for SUCH_THAT
 	TEST(QueryTokenizer, SuchThatTest) {
+		Query query;
 
 		//Result
 		QueryTokenizer query_tokenizer;
 		std::string input = "such that ";
-		query_tokenizer.parse_into_query_tokens(input);
+		query_tokenizer.tokenize(query, input);
 		std::vector<QueryToken> output = query_tokenizer.get_query_token_chain();
 
 		//Expected
@@ -320,11 +323,12 @@ namespace UnitTesting {
 	}
 
 	TEST(QueryTokenizer, SuchThatTest2) {
+		Query query;
 
 		//Result
 		QueryTokenizer query_tokenizer;
 		std::string input = "Select s such that Follows";
-		query_tokenizer.parse_into_query_tokens(input);
+		query_tokenizer.tokenize(query, input);
 		std::vector<QueryToken> output = query_tokenizer.get_query_token_chain();
 
 		//Expected
@@ -334,11 +338,12 @@ namespace UnitTesting {
 	}
 
 	TEST(QueryTokenizer, SuchThatDoubleSpacingTest) {
+		Query query;
 
 		//Result
 		QueryTokenizer query_tokenizer;
 		std::string input = "Select s such  that Follows";
-		query_tokenizer.parse_into_query_tokens(input);
+		query_tokenizer.tokenize(query, input);
 		std::vector<QueryToken> output = query_tokenizer.get_query_token_chain();
 
 		//Expected
@@ -354,16 +359,17 @@ namespace UnitTesting {
 
 	// Test for PARENT_T
 	TEST(QueryTokenizer, ParentTTest) {
+		Query query;
 
 		//Result
 		QueryTokenizer query_tokenizer;
 		std::string input = "Parent*(s,_)";
-		query_tokenizer.parse_into_query_tokens(input);
+		query_tokenizer.tokenize(query, input);
 		std::vector<QueryToken> output = query_tokenizer.get_query_token_chain();
 
 		QueryTokenizer query_tokenizer2;
 		std::string input2 = " Parent* (s,_)";
-		query_tokenizer2.parse_into_query_tokens(input2);
+		query_tokenizer2.tokenize(query, input2);
 		std::vector<QueryToken> output2 = query_tokenizer.get_query_token_chain();
 
 		//Expected
@@ -386,16 +392,17 @@ namespace UnitTesting {
 
 	// Test for FOLLOW_T
 	TEST(QueryTokenizer, FollowsTTest) {
+		Query query;
 
 		//Result
 		QueryTokenizer query_tokenizer;
 		std::string input = "Follows*(s,_)";
-		query_tokenizer.parse_into_query_tokens(input);
+		query_tokenizer.tokenize(query, input);
 		std::vector<QueryToken> output = query_tokenizer.get_query_token_chain();
 
 		QueryTokenizer query_tokenizer2;
 		std::string input2 = " Follows* (s,_)";
-		query_tokenizer2.parse_into_query_tokens(input2);
+		query_tokenizer2.tokenize(query, input2);
 		std::vector<QueryToken> output2 = query_tokenizer.get_query_token_chain();
 
 		//Expected
@@ -417,11 +424,12 @@ namespace UnitTesting {
 	}
 
 	TEST(QueryTokenizer, MulAsteriskTest) {
+		Query query;
 
 		//Result
 		QueryTokenizer query_tokenizer;
 		std::string input = "Parent*(s, \"Parent*8\")";
-		query_tokenizer.parse_into_query_tokens(input);
+		query_tokenizer.tokenize(query, input);
 		std::vector<QueryToken> output = query_tokenizer.get_query_token_chain();
 
 		//Expected
@@ -445,17 +453,18 @@ namespace UnitTesting {
 
 	// Test for Arithmetic operators
 	TEST(QueryTokenizer, ArithmeticTest) {
+		Query query;
 
 		//Result
 		QueryTokenizer query_tokenizer;
 		std::string input = "Select a pattern a ( _ , _\"v + x - y * z / t\"_)";
-		query_tokenizer.parse_into_query_tokens(input);
+		query_tokenizer.tokenize(query, input);
 		std::vector<QueryToken> output = query_tokenizer.get_query_token_chain();
 
 
 		QueryTokenizer query_tokenizer2;
 		std::string input2 = " Select a pattern a ( _ , _\"v+x-y*z/t\"_)";
-		query_tokenizer2.parse_into_query_tokens(input2);
+		query_tokenizer2.tokenize(query, input2);
 		std::vector<QueryToken> output2 = query_tokenizer.get_query_token_chain();
 
 		//Expected
@@ -495,12 +504,13 @@ namespace UnitTesting {
 	
 	// Test for procName
 	TEST(QueryTokenizer, procNameTest) {
+		Query query;
 
 		//Result
 		QueryTokenizer query_tokenizer;
 		std::string input = "Select p such that Calls (p, q) with q.procName = \"Third\"";
 
-		query_tokenizer.parse_into_query_tokens(input);
+		query_tokenizer.tokenize(query, input);
 		std::vector<QueryToken> output = query_tokenizer.get_query_token_chain();
 
 		//Expected
@@ -530,12 +540,13 @@ namespace UnitTesting {
 	}
 
 	TEST(QueryTokenizer, multipleprocNameTest) {
+		Query query;
 
 		//Result
 		QueryTokenizer query_tokenizer;
 		std::string input = "Select p.procName such that Calls (p, q) with q.procName = \"Third\"";
 
-		query_tokenizer.parse_into_query_tokens(input);
+		query_tokenizer.tokenize(query, input);
 		std::vector<QueryToken> output = query_tokenizer.get_query_token_chain();
 
 		//Expected
@@ -568,12 +579,13 @@ namespace UnitTesting {
 
 	// test for varName
 	TEST(QueryTokenizer, varNameTest) {
+		Query query;
 
 		//Result
 		QueryTokenizer query_tokenizer;
 		std::string input = "Select p such that Calls (p, q) with q.varName = \"Third\"";
 
-		query_tokenizer.parse_into_query_tokens(input);
+		query_tokenizer.tokenize(query, input);
 		std::vector<QueryToken> output = query_tokenizer.get_query_token_chain();
 
 		//Expected
@@ -604,12 +616,13 @@ namespace UnitTesting {
 
 	// test for values
 	TEST(QueryTokenizer, valueTest) {
+		Query query;
 
 		//Result
 		QueryTokenizer query_tokenizer;
 		std::string input = "Select p such that Follows (p, q) with q.value = \"Third\"";
 
-		query_tokenizer.parse_into_query_tokens(input);
+		query_tokenizer.tokenize(query, input);
 		std::vector<QueryToken> output = query_tokenizer.get_query_token_chain();
 
 		//Expected
@@ -640,12 +653,13 @@ namespace UnitTesting {
 
 	// test for stmt#
 	TEST(QueryTokenizer, stmtIndexTest) {
+		Query query;
 
 		//Result
 		QueryTokenizer query_tokenizer;
 		std::string input = "Select p such that Follows (p, q) with q.stmt# = \"Third\"";
 
-		query_tokenizer.parse_into_query_tokens(input);
+		query_tokenizer.tokenize(query, input);
 		std::vector<QueryToken> output = query_tokenizer.get_query_token_chain();
 
 		//Expected
@@ -678,77 +692,115 @@ namespace UnitTesting {
 
 	// Test catch if parenthesis still open 
 	TEST(QueryTokenizer, InvalidParenthesisOpenTest) {
+		Query query;
 
 		QueryTokenizer query_tokenizer;
 		std::string input = "(procName";
 		
-		EXPECT_THROW(query_tokenizer.parse_into_query_tokens(input), SyntacticErrorException);
+		EXPECT_THROW(query_tokenizer.tokenize(query, input), SyntacticErrorException);
 	}
 
 	// Test catch if parenthesis no opening
 	TEST(QueryTokenizer, InvalidParenthesisCloseTest) {
+		Query query;
 
 		QueryTokenizer query_tokenizer;
 		std::string input = "procName)";
 
-		EXPECT_THROW(query_tokenizer.parse_into_query_tokens(input), SyntacticErrorException);
+		EXPECT_THROW(query_tokenizer.tokenize(query, input), SyntacticErrorException);
 
 	}
 
 	//Test for Tuple still Open
 	TEST(QueryTokenizer, InvalidTupleOpenTest) {
+		Query query;
 
 		//Result
 		QueryTokenizer query_tokenizer;
 		std::string input = "<p.stmt#";
 		
-		EXPECT_THROW(query_tokenizer.parse_into_query_tokens(input), SyntacticErrorException);
+		EXPECT_THROW(query_tokenizer.tokenize(query, input), SyntacticErrorException);
 
 	}
 
 	//Test for Tuple no Open
 	TEST(QueryTokenizer, InvalidTupleCloseTest) {
+		Query query;
 
 		//Result
 		QueryTokenizer query_tokenizer;
 		std::string input = "p.stmt#>";
 
-		EXPECT_THROW(query_tokenizer.parse_into_query_tokens(input), SyntacticErrorException);
+		EXPECT_THROW(query_tokenizer.tokenize(query, input), SyntacticErrorException);
 
 	}
 
 	// Test catch if quotation marks missing
 	TEST(QueryTokenizer, InvalidQuotationTest1) {
+		Query query;
 
 		QueryTokenizer query_tokenizer;
 		std::string input = "\"procName";
 		
-		EXPECT_THROW(query_tokenizer.parse_into_query_tokens(input), SyntacticErrorException);
+		EXPECT_THROW(query_tokenizer.tokenize(query, input), SyntacticErrorException);
 	}
 
 	// Test catch if quotation marks missing
 	TEST(QueryTokenizer, InvalidQuotationTest2) {
+		Query query;
 
 		QueryTokenizer query_tokenizer;
 		std::string input = "procName\"";
 		
-		EXPECT_THROW(query_tokenizer.parse_into_query_tokens(input), SyntacticErrorException);
+		EXPECT_THROW(query_tokenizer.tokenize(query, input), SyntacticErrorException);
 	}
 
 	TEST(QueryTokenizer, InvalidSingleQuotationTest) {
+		Query query;
 
 		QueryTokenizer query_tokenizer;
 		std::string input = "\'procName\'";
-		EXPECT_THROW(query_tokenizer.parse_into_query_tokens(input), SyntacticErrorException);
+		EXPECT_THROW(query_tokenizer.tokenize(query, input), SyntacticErrorException);
 
 	}
 
 	TEST(QueryTokenizer, InvalidIdentTest) {
+		Query query;
 
 		QueryTokenizer query_tokenizer;
 		std::string input = "1procName";
-		EXPECT_THROW(query_tokenizer.parse_into_query_tokens(input), SyntacticErrorException);
+		EXPECT_THROW(query_tokenizer.tokenize(query, input), SyntacticErrorException);
 
 	}
+	TEST(QueryTokenizer, InvalidSemanticLeadingZerosTest) {
+		Query query;
+
+		//Result
+		QueryTokenizer query_tokenizer;
+		std::string input = "Select p such that Follows (0, q)";
+
+		query_tokenizer.tokenize(query, input);
+		std::vector<QueryToken> output = query_tokenizer.get_query_token_chain();
+
+	
+		EXPECT_TRUE(Utility::checkIsSemanticError(query));
+
+	}
+
+	TEST(QueryTokenizer, InvalidSemanticLeadingZerosTest2) {
+		Query query;
+
+		//Result
+		QueryTokenizer query_tokenizer;
+		std::string input = "Select p such that Follows (09, q)";
+
+		query_tokenizer.tokenize(query, input);
+		std::vector<QueryToken> output = query_tokenizer.get_query_token_chain();
+
+
+		EXPECT_TRUE(Utility::checkIsSemanticError(query));
+
+	}
+
 
 }

@@ -2,46 +2,23 @@
 
 void ParentTParser::parse(Query& query, std::vector<QueryToken> token_chain) {
     // stmtRef , stmtRef
+    std::vector<std::vector<QueryToken>> separated_params = Utility::splitTokenChain(2, QueryToken::COMMA, token_chain);
 
-    std::vector<QueryToken> temp_token_chain_1;
-    std::vector<QueryToken> temp_token_chain_2;
-    int comma_count = 0;
-    size_t token_chain_size = token_chain.size();
-    for (size_t i = 0; i < token_chain_size; i++) {
-        if (token_chain[0].type == QueryToken::COMMA) {
-            token_chain.erase(token_chain.begin());
-            comma_count++;
-        }
-        else if (comma_count == 0) {
-            // 1st param
-            temp_token_chain_1.push_back(token_chain[0]);
-            token_chain.erase(token_chain.begin());
-        }
-        else if (comma_count == 1) {
-            // 2nd param
-            temp_token_chain_2.push_back(token_chain[0]);
-            token_chain.erase(token_chain.begin());
-        }
-        else {
-            throw SyntacticErrorException("Invalid parameters for Parent*");
-        }
-    }
-
-    if (temp_token_chain_1.size() != 1 || temp_token_chain_2.size() != 1) {
+    if (separated_params[0].size() != 1 || separated_params[1].size() != 1) {
         throw SyntacticErrorException("Invalid parameters for Parent*");
     }
 
-    if (!Utility::isStmtRef(query, temp_token_chain_1) || !Utility::isStmtRef(query, temp_token_chain_2)) {
+    if (!Utility::isStmtRef(query, separated_params[0]) || !Utility::isStmtRef(query, separated_params[1])) {
         query.setIsSemanticError("Invalid parameters for Parent*");
     }
 
-    QueryToken stmt = temp_token_chain_1[0];
+    QueryToken stmt = separated_params[0][0];
 
-    QueryToken stmt2 = temp_token_chain_2[0];
+    QueryToken stmt2 = separated_params[1][0];
 
     if (!Utility::checkIsSemanticError(query)) {
         query.addRelation(RelRef(RelType::PARENT_T,
-            Utility::setStmtRef(query, stmt),
-            Utility::setStmtRef(query, stmt2)));
+            Utility::setStmtRef(query, stmt, EntityType::STMT),
+            Utility::setStmtRef(query, stmt2, EntityType::STMT)));
     }
 }
