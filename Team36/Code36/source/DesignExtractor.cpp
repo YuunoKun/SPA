@@ -375,18 +375,39 @@ void DesignExtractor::populateCalls(PKB& pkb) {
 }
 
 void DesignExtractor::populateNext(PKB& pkb) {
+
+	std::vector<CFG*> cfgs;
 	for (Procedure* p : de_procedures) {
 		CFG* cfg = generateCFG(p->getChild());
 		std::vector<std::pair<prog_line, prog_line>> nexts = cfg->getNexts();
 		for (auto next_rel : nexts) {
 			pkb.addNext(next_rel.first, next_rel.second);
 		}
-		delete cfg;
-		
+		cfgs.push_back(cfg);
 	}
 
-	//void addCFGBip(CFG*); // CFGBip
-	//void addCFGsToDestroy(std::vector<CFG*>); // CFGs for all procedures
+
+	try {
+		for (proc_index p : call_sequence) {
+			for (stmt_index s: de_procedures[p - 1]->getChild()) {
+				Statement* stmt = de_statements[s - 1];
+				if (stmt->getType() == StmtType::STMT_CALL) {
+					cfgs[p - 1]->call(cfgs[proc_name_to_id[stmt->getCallee()] - 1], s);
+				}
+			}
+		}
+
+		for (CFG* cfg: cfgs) {
+			if (cfg->getHeadLabelledProgLine().label == 0) {
+				//pkb.addCFGBip(cfg);
+			}
+		}
+	}
+	catch (...) {
+		std::cout << "CFGBip failed." << std::endl;
+	}
+
+	//pkb.addCFGsToDestroy(cfgs);
 }
 
 void DesignExtractor::populateIfs(PKB& pkb) {
