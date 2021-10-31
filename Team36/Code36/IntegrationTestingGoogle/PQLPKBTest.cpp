@@ -252,17 +252,10 @@ namespace UnitTesting {
 
 		const std::list<std::string> EMPTY_RESULT = {};
 
-
-		// and cleaning up each test, you can define the following methods:
-
 		virtual void SetUp() override {
-
-
 		}
 
 		void TearDown() override {
-
-
 		}
 	};
 
