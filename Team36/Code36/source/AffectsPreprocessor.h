@@ -37,7 +37,6 @@ public:
 	AffectsPreprocessor() = default;
 private:
 	void updateCache(std::set<stmt_index>, std::vector<std::pair<StmtInfo, StmtInfo>>);
-	bool inSameProc(stmt_index index1, stmt_index index2);
 
 	const MonotypeRelationTable<StmtInfo>* next_table;
 	const RelationTable<StmtInfo, var_name>* useS_table;

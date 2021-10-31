@@ -75,8 +75,7 @@ bool AffectsPreprocessor::evaluateWildAndConstant(int index) {
 bool AffectsPreprocessor::evaluateConstantAndConstant(int index1, int index2) {
 	StmtInfo s1 = stmt_info_list[index1 - 1];
 	StmtInfo s2 = stmt_info_list[index2 - 1];
-	if (stmt_info_list[index1 - 1].stmt_type != STMT_ASSIGN || stmt_info_list[index2 - 1].stmt_type != STMT_ASSIGN ||
-		inSameProc(index1, index2) == false) {
+	if (stmt_info_list[index1 - 1].stmt_type != STMT_ASSIGN || stmt_info_list[index2 - 1].stmt_type != STMT_ASSIGN) {
 		calculated_matrix[index1 - 1][index2 - 1] = true;
 		return false;
 	}
@@ -160,11 +159,6 @@ void AffectsPreprocessor::updateCache(std::set<stmt_index> visited, std::vector<
 		setDFSForwardTrue(v);
 		setDFSBackwardTrue(v);
 	}
-}
-
-bool AffectsPreprocessor::inSameProc(stmt_index index1, stmt_index index2) {
-	std::vector<proc_name> v = procS_table->getKeys(index1);
-	return procS_table->containsPair(v[0], index2);
 }
 
 void AffectsPreprocessor::reset() {

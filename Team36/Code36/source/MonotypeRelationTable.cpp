@@ -1,3 +1,5 @@
+#pragma once
+
 #include "RelationTable.cpp"
 #include "MonotypeRelationTable.h"
 

@@ -79,8 +79,10 @@ struct LabelledProgLine {
 		return program_line == labelled_progline.program_line && label == labelled_progline.label;
 	}
 
-	bool operator < (const LabelledProgLine& st) const {
-		return (program_line < st.program_line);
+	bool operator < (const LabelledProgLine& labelled_progline) const {
+		return ((program_line < labelled_progline.program_line) || 
+			(program_line == labelled_progline.program_line &&
+			label < labelled_progline.label));
 	}
 };
 

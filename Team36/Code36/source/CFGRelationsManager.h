@@ -8,6 +8,8 @@
 #include "NextTPreprocessor.h"
 #include "AffectsPreprocessor.h"
 #include "AffectsTPreprocessor.h"
+#include "AffectsBipPreprocessor.h"
+#include "AffectsBipTPreprocessor.h"
 
 class CFGRelationsManager {
 public:
@@ -88,6 +90,8 @@ public:
 	NextTPreprocessor getNextTProcessor();
 	AffectsPreprocessor getAffectsProcessor();
 	AffectsTPreprocessor getAffectsTProcessor();
+	AffectsBipPreprocessor getAffectsBipProcessor();
+	AffectsBipTPreprocessor getAffectsBipTProcessor();
 
 private:
 	NextTPreprocessor next_t_processor = NextTPreprocessor(PKB::getInstance().getNext(), PKB::getInstance().getStmts());
@@ -96,4 +100,22 @@ private:
 		PKB::getInstance().getProcContains(), PKB::getInstance().getStmts());
 	AffectsTPreprocessor affectsT_processor = AffectsTPreprocessor(
 		affects_processor.getCache(), PKB::getInstance().getStmts());
+	// Todo for Kelvin: Update next_table and first_proglines after CFGBip methods are available
+	AffectsBipPreprocessor affects_bip_processor = AffectsBipPreprocessor(
+		MonotypeRelationTable<LabelledProgLine>{}, PKB::getInstance().getUsesS(), PKB::getInstance().getModifiesS(),
+		PKB::getInstance().getProcContains(), getFirstProgs(), PKB::getInstance().getStmts());
+	AffectsBipTPreprocessor affects_bipT_processor = AffectsBipTPreprocessor(
+		affects_bip_processor.getCache(), affects_bip_processor.getLabelledProgLineCache(), PKB::getInstance().getStmts());
+
+	std::vector<LabelledProgLine> getFirstProgs();
+	bool inSameProc(stmt_index index1, stmt_index index2);
 };
+
+inline std::vector<LabelledProgLine> CFGRelationsManager::getFirstProgs() {
+	auto keys = PKB::getInstance().getProcContains().getKeys();
+	std::vector<LabelledProgLine> res;
+	for (auto& key : keys) {
+		res.push_back({ PKB::getInstance().getProcContains().getValues(key)[0], 0 });
+	}
+	return res;
+}
