@@ -481,7 +481,7 @@ bool Utility::isStmtRef(Query& query, std::vector<QueryToken> token_chain) {
 	QueryToken token = token_chain[0];
 
 	if (token.type == QueryToken::CONSTANT) {
-		return true;
+		return token.token_value != "0";
 	}
 
 	if (token.type == QueryToken::WILDCARD) {
@@ -526,7 +526,7 @@ bool Utility::isStmtRef(Query& query, std::vector<QueryToken> token_chain, Entit
 	QueryToken token = token_chain[0];
 
 	if (token.type == QueryToken::CONSTANT) {
-		return true;
+		return token.token_value != "0";
 	}
 
 	if (token.type == QueryToken::WILDCARD) {
