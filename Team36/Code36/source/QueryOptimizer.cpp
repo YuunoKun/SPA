@@ -2,6 +2,20 @@
 #include "Entity.h"
 #include "Utility.h"
 
+
+
+std::vector<Clause> QueryOptimizer::optimizeClausesOrder(std::vector<Clause>& clauses) {
+	if (optimize_clause_by_common_synonym) {
+		clauses = optimizeClausesOrderByCommonSynonym(clauses);
+	}
+	
+	if (optimize_clause_by_relation_type) {
+		clauses = optimizeClausesOrderByRelationType(clauses);
+	}
+	return clauses;
+}
+
+
 //Re-order the clauses in the following order
 //1. clauses with no synonym
 //2. clauses with one synonym
@@ -45,7 +59,7 @@ std::list<Clause> QueryOptimizer::optimizeTwoSynonymClausesOrder(std::list<Claus
 //Re-order the clauses in the following order according to their computational intencity in increasing other.
 //1. other clauses
 //2. next clauses
-//3. affect synonym
+//3. affect clauses
 std::vector<Clause> QueryOptimizer::optimizeClausesOrderByRelationType(std::vector<Clause>& clauses) {
 	std::list<Clause> others_clauses, next_t_cfg_search_clauses, affects_clauses;
 	for (Clause c : clauses) {
@@ -76,16 +90,14 @@ std::vector<Clause> QueryOptimizer::optimizeClausesOrderByRelationType(std::vect
 }
 
 
-
-
 //Re-order the clauses in the following order
 //1. first two common synonym next clauses (to cache the result)
-//2. Next_T clauses that require graph search and terminate whenever single result found
+//2. Next_T clauses that require graph search and terminate whenever a single result found
 //3. Next_T clauses that require graph search and terminate when all relevant result is found
 //2. remaining two synonym clauses
 std::list<Clause> QueryOptimizer::optimizeNextClausesOrder(std::list<Clause>& next_t_clauses) {
 	std::list<Clause> compute_next_graph, no_synonym_clauses, 
-		one_synonym_clauses, two_synonym_list_clauses_compute;
+		one_synonym_clauses, two_synonym_clauses_after_pre_compute;
 
 	for (Clause c : next_t_clauses) {
 		ClauseType type = c.getType();
@@ -97,14 +109,14 @@ std::list<Clause> QueryOptimizer::optimizeNextClausesOrder(std::list<Clause>& ne
 				compute_next_graph.emplace_back(c);
 			}
 			else {
-				two_synonym_list_clauses_compute.emplace_back(c);
+				two_synonym_clauses_after_pre_compute.emplace_back(c);
 			}
 
 		}
 		else if (isConstantAndConstant(left_entity, right_entity)) {
 			no_synonym_clauses.emplace_back(c);
 		}
-		else if (type == ClauseType::RELATION && isSynonymAndWild(left_entity, right_entity)) {
+		else if (isSynonymAndConstant(left_entity, right_entity)) {
 			one_synonym_clauses.emplace_back(c);
 		}
 		else {
@@ -117,7 +129,7 @@ std::list<Clause> QueryOptimizer::optimizeNextClausesOrder(std::list<Clause>& ne
 	reordered_clauses.insert(reordered_clauses.end(), compute_next_graph.begin(), compute_next_graph.end());
 	reordered_clauses.insert(reordered_clauses.end(), no_synonym_clauses.begin(), no_synonym_clauses.end());
 	reordered_clauses.insert(reordered_clauses.end(), one_synonym_clauses.begin(), one_synonym_clauses.end());
-	reordered_clauses.insert(reordered_clauses.end(), two_synonym_list_clauses_compute.begin(), two_synonym_list_clauses_compute.end());
+	reordered_clauses.insert(reordered_clauses.end(), two_synonym_clauses_after_pre_compute.begin(), two_synonym_clauses_after_pre_compute.end());
 	return reordered_clauses;
 }
 
@@ -125,13 +137,13 @@ std::list<Clause> QueryOptimizer::optimizeNextClausesOrder(std::list<Clause>& ne
 //Re-order the clauses in the following order
 //1. first two common synonym affect* or affect clauses (to cache the result)
 //2. Affects/Affect_T clauses that require graph search and terminate whenever single result found
-//4. Affects clauses that require graph search and terminate when all relevant result is found or with specfic target e.g (Affect(1,30))
+//4. Affects clauses that require graph search and terminate when all relevant result is found or with specfic target e.g (Affect*(1,30))
 //5. Remaining two synonym affects clauses
-//7. Affects_T clauses that require graph search and terminate when all relevant result is found or with specfic target e.g (Affect(1,30))
+//7. Affects_T clauses that require graph search and terminate when all relevant result is found or with specfic target e.g (Affect*(1,30))
 //8. Remaining two synonym affects_T clauses
 std::list<Clause> QueryOptimizer::optimizeAffectClausesOrder(std::list<Clause>& affect_clauses) {
 
-	std::list<Clause> compute_affect_graph, constant_and_wild_clauses,
+	std::list<Clause> compute_affect_graph, no_synonym_clauses,
 		affect_one_synonym_clauses, affect_two_synonym_clauses,
 		affect_t_one_synonym_clauses, affect_t_two_synonym_clauses;
 
@@ -165,7 +177,7 @@ std::list<Clause> QueryOptimizer::optimizeAffectClausesOrder(std::list<Clause>& 
 			}
 		}
 		else if (isNoSynonym(left_entity, right_entity)) {
-			constant_and_wild_clauses.emplace_back(c);
+			no_synonym_clauses.emplace_back(c);
 		}
 		else {
 			throw std::domain_error("optimizeAffectClausesOrder() :: Some affects clauses has not been handle!");
@@ -173,15 +185,13 @@ std::list<Clause> QueryOptimizer::optimizeAffectClausesOrder(std::list<Clause>& 
 
 	}
 
-	std::list<Clause> compute_affect_graph, constant_and_wild_clauses,
-		affect_one_synonym_clauses, affect_two_synonym_clauses,
-		affect_t_one_synonym_clauses, affect_t_two_synonym_clauses;
-
 	std::list<Clause> reordered_clauses;
-	reordered_clauses.insert(reordered_clauses.end(), compute_affect_graph.begin(), constant_and_wild_clauses.end());
-	reordered_clauses.insert(reordered_clauses.end(), constant_and_wild_clauses.begin(), constant_and_wild_clauses.end());
+	reordered_clauses.insert(reordered_clauses.end(), compute_affect_graph.begin(), compute_affect_graph.end());
+	reordered_clauses.insert(reordered_clauses.end(), no_synonym_clauses.begin(), no_synonym_clauses.end());
 	reordered_clauses.insert(reordered_clauses.end(), affect_one_synonym_clauses.begin(), affect_one_synonym_clauses.end());
-	reordered_clauses.insert(reordered_clauses.end(), two_synonym_list_clauses_compute.begin(), two_synonym_list_clauses_compute.end());
+	reordered_clauses.insert(reordered_clauses.end(), affect_two_synonym_clauses.begin(), affect_two_synonym_clauses.end());
+	reordered_clauses.insert(reordered_clauses.end(), affect_t_one_synonym_clauses.begin(), affect_t_one_synonym_clauses.end());
+	reordered_clauses.insert(reordered_clauses.end(), affect_t_two_synonym_clauses.begin(), affect_t_two_synonym_clauses.end());
 	return reordered_clauses;
 }
 
@@ -256,7 +266,7 @@ bool QueryOptimizer::isConstantAndConstant(Entity& e1, Entity& e2) {
 		(!e2.isSynonym() && e2.getType() != EntityType::WILD);
 }
 
-bool QueryOptimizer::isSynonymAndWild(Entity& e1, Entity& e2) {
+bool QueryOptimizer::isSynonymAndConstant(Entity& e1, Entity& e2) {
 	return ((e1.isSynonym() && (!e2.isSynonym() && e2.getType() != EntityType::WILD)) ||
 		(e2.isSynonym() && (!e1.isSynonym() && e1.getType() != EntityType::WILD)));
 }
@@ -270,7 +280,7 @@ bool QueryOptimizer::isOneSynonym(Entity& e1, Entity& e2) {
 }
 
 bool QueryOptimizer::isNextTWithCFGSearch(Entity& e1, Entity& e2) {
-	return isSynonymAndSynonym(e1, e2) || isSynonymAndWild(e1, e2) || isConstantAndConstant(e1, e2);
+	return isSynonymAndSynonym(e1, e2) || isSynonymAndConstant(e1, e2) || isConstantAndConstant(e1, e2);
 }
 
 Entity QueryOptimizer::getLeftEntity(Clause& c) {
