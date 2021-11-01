@@ -327,7 +327,6 @@ bool Utility::isSecondaryAttribute(Entity e) {
 		(e.getType() == EntityType::PRINT && e.getAttribute() == AttrRef::VAR_NAME);
 }
 
-
 EntityType Utility::queryTokenTypeToEntityType(QueryToken::QueryTokenType& query_token_type) {
 	if (query_token_type == QueryToken::QueryTokenType::STMT) {
 		return EntityType::STMT;
@@ -419,6 +418,54 @@ std::string Utility::queryTokenTypeToExprString(std::vector<QueryToken> token_ch
 
 }
 
+void Utility::isSyntacticValidpattern(std::vector<QueryToken>token_chain) {
+	std::vector<std::vector<QueryToken>> separated_params;
+	for (int i = 0; i < 3; i++) {
+		separated_params.push_back(std::vector<QueryToken>{});
+	}
+
+	int delimiter_count = 0;
+	size_t token_chain_size = token_chain.size();
+
+	for (size_t i = 0; i < token_chain_size; i++) {
+		if (token_chain[0].type == QueryToken::COMMA) {
+			token_chain.erase(token_chain.begin());
+			delimiter_count++;
+		}
+		else if (delimiter_count >= 0 && delimiter_count < 3) {
+			// 1st param
+			separated_params[delimiter_count].push_back(token_chain[0]);
+			token_chain.erase(token_chain.begin());
+		}
+		else {
+			throw SyntacticErrorException("Invalid parameters");
+		}
+	}
+
+	if (delimiter_count == 1) {
+		// ent ref 1st,
+		//is expr or WC
+		if (!Utility::isSyntacticValidEntRef(separated_params[0]) ||
+			!(Utility::isWildCard(separated_params[1]) || Utility::isExpr(separated_params[1]))) {
+			throw SyntacticErrorException("Invalid parameters");
+		}
+
+	}
+	else if (delimiter_count == 2) {
+		// cehck for entref 1st, last 2 WC
+		if (!Utility::isSyntacticValidEntRef(separated_params[0]) ||
+			!Utility::isWildCard(separated_params[1]) || 
+			!Utility::isWildCard(separated_params[2])) {
+			throw SyntacticErrorException("Invalid parameters");
+		}
+
+	}
+	else {
+		throw SyntacticErrorException("Invalid parameters");
+	}
+
+}
+
 bool Utility::isStmtRef(Query& query, std::vector<QueryToken> token_chain) {
 
 	// no args found, throw syntax errors
@@ -502,8 +549,68 @@ bool Utility::isStmtRef(Query& query, std::vector<QueryToken> token_chain, Entit
 	throw SyntacticErrorException("Invalid stmtRef arguments");
 }
 
+bool Utility::isSyntacticValidEntRef(std::vector<QueryToken> token_chain) {
+	if (token_chain.size() == 0) {
+		return false;
+	}
+	else if (token_chain.size() == 1 && 
+		(token_chain[0].type == QueryToken::WILDCARD || token_chain[0].type == QueryToken::IDENTIFIER)) {
+		return true;
+	}
+	else if (token_chain.size() == 3 && 
+		token_chain[0].type == QueryToken::QUOTATION_OPEN &&
+		token_chain[1].type == QueryToken::IDENTIFIER &&
+		token_chain[2].type == QueryToken::QUOTATION_CLOSE) {
+		return true;
+	}
+	else {
+		return false;
+	}
+}
 
-bool Utility::isEntRef(Query& query, std::vector<QueryToken> token_chain) {
+bool Utility::isSemanticValidEntRef(Query& query, std::vector<QueryToken> token_chain, EntityType entity_type) {
+	// entRef : synonym | ‘_’ | ‘"’ IDENT ‘"’
+
+	if (token_chain.size() == 1) {
+		QueryToken token = token_chain[0];
+
+		if (token.type == QueryToken::WILDCARD) {
+			return true;
+		}
+		else if (token.type == QueryToken::IDENTIFIER) {
+			// check synonym if is EntRef
+			std::unordered_map<std::string, Entity> ent_chain = query.getEntities();
+
+			if (ent_chain.find(token.token_value) != ent_chain.end()) {
+				return ent_chain.at(token.token_value).getType() == entity_type;
+			}
+			else {
+				// Undeclared Syn, Cannot find Entity in Query
+				return false;
+			}
+		}
+		else {
+			return false;
+		}
+
+	}
+	else if (token_chain.size() == 3) {
+		//checking for " IDENT " 
+		if (token_chain[0].type == QueryToken::QUOTATION_OPEN &&
+			token_chain[1].type == QueryToken::IDENTIFIER &&
+			token_chain[2].type == QueryToken::QUOTATION_CLOSE) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+	else {
+		return false;
+	}
+}
+
+bool Utility::isEntRef(Query& query, std::vector<QueryToken> token_chain, EntityType entity_type) {
 	// entRef : synonym | ‘_’ | ‘"’ IDENT ‘"’
 
 	if (token_chain.size() == 0) {
@@ -520,8 +627,7 @@ bool Utility::isEntRef(Query& query, std::vector<QueryToken> token_chain) {
 			std::unordered_map<std::string, Entity> ent_chain = query.getEntities();
 
 			if (ent_chain.find(token.token_value) != ent_chain.end()) {
-				return ent_chain.at(token.token_value).getType() == EntityType::VARIABLE ||
-					ent_chain.at(token.token_value).getType() == EntityType::PROCEDURE;
+				return ent_chain.at(token.token_value).getType() == entity_type;
 			}
 			else {
 				// Undeclared Syn, Cannot find Entity in Query
@@ -713,32 +819,16 @@ bool Utility::isExpr(std::vector<QueryToken> token_chain) {
 	}
 }
 
-bool Utility::isCorrectSynEntRef(Query& query, std::vector<QueryToken> token_chain,
-	EntityType expected_ent_type) {
-
-	std::unordered_map<std::string, Entity> ent_chain = query.getEntities();
-
-	if (token_chain.size() == 1 && token_chain[0].type == QueryToken::IDENTIFIER) {
-
-		QueryToken token = token_chain[0];
-		if (ent_chain.find(token.token_value) != ent_chain.end()) {
-			return ent_chain.at(token.token_value).getType() == expected_ent_type;
-		}
-
-	}
-	else {
-		return true;
-	}
-}
-
 bool Utility::isWildCard(std::vector<QueryToken> token_chain) {
-	if (token_chain.size() == 0) {
-		throw SyntacticErrorException("Invalid arguments, wildcards only");
-	}
-	else if (token_chain.size() > 1) {
-		throw SyntacticErrorException("Invalid arguments, wildcards only");
-	}
-	else if (token_chain[0].type == QueryToken::WILDCARD) {
+	//if (token_chain.size() == 0) {
+	//	throw SyntacticErrorException("Invalid arguments, wildcards only");
+	//}
+	//else if (token_chain.size() > 1) {
+	//	throw SyntacticErrorException("Invalid arguments, wildcards only");
+	//}
+	//else 
+	if (token_chain.size() == 1 && 
+		token_chain[0].type == QueryToken::WILDCARD) {
 		return true;
 	}
 	else {
@@ -978,6 +1068,7 @@ std::vector<std::vector<QueryToken>> Utility::splitTokenChain(int max_params, Qu
 	for (int i = 0; i < max_params; i++) {
 		separated_params.push_back(std::vector<QueryToken>{});
 	}
+
 	int delimiter_count = 0;
 	size_t token_chain_size = token_chain.size();
 	for (size_t i = 0; i < token_chain_size; i++) {

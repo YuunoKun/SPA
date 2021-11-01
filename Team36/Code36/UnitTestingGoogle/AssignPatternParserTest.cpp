@@ -526,6 +526,30 @@ namespace UnitTesting {
 		EXPECT_TRUE(Utility::checkIsSemanticError(query));
 	}
 
+	TEST(AssignPatternParserTest, semanticInvalidAssignExtraParams) {
+		QueryPatternRelRefParser validator;
+
+		Query query;
+
+		std::vector<QueryToken> temp_token_chain;
+
+		temp_token_chain.push_back({ QueryToken::WILDCARD, "" });
+		temp_token_chain.push_back({ QueryToken::COMMA, "" });
+		temp_token_chain.push_back({ QueryToken::WILDCARD, "" });
+		temp_token_chain.push_back({ QueryToken::COMMA, "" });
+		temp_token_chain.push_back({ QueryToken::WILDCARD, "" });
+
+		//Synonym
+		//Expected
+		Synonym synonym;
+		synonym.name = "a";
+		Entity expected_declared_assign = Entity(EntityType::ASSIGN, synonym);
+		query.addEntity(expected_declared_assign);
+
+		validator.parseParameterPattern(query, expected_declared_assign, temp_token_chain);
+		EXPECT_TRUE(Utility::checkIsSemanticError(query));
+	}
+
 
 	TEST(AssignPatternParserTest, syntacticInvalidExprTest) {
 		QueryPatternRelRefParser validator;
@@ -570,6 +594,30 @@ namespace UnitTesting {
 		query.addEntity(expected_2);
 		
 		
+		EXPECT_THROW(validator.parseParameterPattern(query, expected_declared_assign, temp_token_chain), SyntacticErrorException);
+	}
+	TEST(AssignPatternParserTest, syntacticInvalidExtraParams) {
+		QueryPatternRelRefParser validator;
+
+		Query query;
+
+		std::vector<QueryToken> temp_token_chain;
+
+		temp_token_chain.push_back({ QueryToken::WILDCARD, "" });
+		temp_token_chain.push_back({ QueryToken::COMMA, "" });
+		temp_token_chain.push_back({ QueryToken::WILDCARD, "" });
+		temp_token_chain.push_back({ QueryToken::COMMA, "" });
+		temp_token_chain.push_back({ QueryToken::WILDCARD, "" });
+		temp_token_chain.push_back({ QueryToken::COMMA, "" });
+		temp_token_chain.push_back({ QueryToken::WILDCARD, "" });
+
+		//Synonym
+		//Expected
+		Synonym synonym;
+		synonym.name = "ass";
+		Entity expected_declared_assign = Entity(EntityType::ASSIGN, synonym);
+		query.addEntity(expected_declared_assign);
+
 		EXPECT_THROW(validator.parseParameterPattern(query, expected_declared_assign, temp_token_chain), SyntacticErrorException);
 	}
 }

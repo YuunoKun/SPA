@@ -787,6 +787,4 @@ namespace UnitTesting {
 		EXPECT_TRUE(Utility::checkIsSemanticError(query));
 
 	}
-
-
 }
