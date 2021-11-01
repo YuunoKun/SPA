@@ -33,6 +33,8 @@ Debug\AutoTester.exe ..\Tests36\iter3_tuple_source.txt ..\Tests36\iter3_tuple_qu
 Debug\AutoTester.exe ..\Tests36\iter3_with_source.txt ..\Tests36\iter3_with_queries.txt .\Tests\out-29-iter3_with_queries.xml
 Debug\AutoTester.exe ..\Tests36\iter3_Affects_source.txt ..\Tests36\iter3_Affects_queries.txt .\Tests\out-30-iter3_Affects_queries.xml
 Debug\AutoTester.exe ..\Tests36\iter3_AffectsT_source.txt ..\Tests36\iter3_AffectsT_queries.txt .\Tests\out-31-iter3_AffectsT_queries.xml
+Debug\AutoTester.exe ..\Tests36\iter3_nextbip_source.txt ..\Tests36\iter3_nextbip_queries.txt .\Tests\out-32-iter3_nextbip_queries.xml
+Debug\AutoTester.exe ..\Tests36\iter3_nextbipT_source.txt ..\Tests36\iter3_nextbipT_queries.txt .\Tests\out-33-iter3_nextbipT_queries.xml
 Debug\AutoTester.exe ..\Tests36\container_constants_source.txt ..\Tests36\container_constants_queries.txt .\Tests\out-container_constants.xml
 Debug\AutoTester.exe ..\Tests36\multi_clauses_source.txt ..\Tests36\multi_clauses_queries.txt .\Tests\out-multi-clauses.xml
 Debug\AutoTester.exe ..\Tests36\valid_query_source.txt ..\Tests36\valid_query_queries.txt .\Tests\out-valid-query.xml
