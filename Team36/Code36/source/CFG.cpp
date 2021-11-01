@@ -261,7 +261,12 @@ std::vector<std::pair<prog_line, prog_line>> CFG::getNextBip() {
 
 		node->setVisited();
 
-		if (node->IsCall()) {
+		std::vector<prog_line> lines = node->getProgramLines();
+		for (size_t i = 0; i < lines.size() - 1; i++) {
+			result.insert({ lines[i], lines[i + 1] });
+		}
+
+		if (node->isCall()) {
 			auto reset = [](CFGNode* node) {
 				if (node->getVisited()) {
 					node->setVisited();
@@ -286,27 +291,27 @@ std::vector<std::pair<prog_line, prog_line>> CFG::getNextBip() {
 				action(node->getNextBranch(), action, call_stack);
 			}
 
-			prog_line from;
-			CFGNode* to = node->getNextMain();
-			do {
+			prog_line from = call_stack.top();
+			call_stack.pop();
+			CFGNode* to = node->getNextMain()->getNextReturn()[from];
+			if (!to) {
+				throw std::runtime_error("Error traversing CFG for NextBip. Invalid call return.");
+			}
+			while (to->getTermination() && to->isReturn()) {
 				from = call_stack.top();
 				call_stack.pop();
 				to = to->getNextReturn()[from];
 				if (!to) {
 					throw std::runtime_error("Error traversing CFG for NextBip. Invalid call return.");
 				}
-			} while (to->getTermination() && to->IsReturn());
+			}
+			
 			result.insert({ node->getProgramLines().back(), to->getProgramLines().front() });
 
 			if (node->getNextMain()->getPrevMain() == node) {
 				action(to, action, call_stack);
 			}
 			return;
-		}
-
-		std::vector<prog_line> lines = node->getProgramLines();
-		for (size_t i = 0; i < lines.size() - 1; i++) {
-			result.insert({ lines[i], lines[i + 1] });
 		}
 
 		if (node->getNextBranch()) {
@@ -344,8 +349,12 @@ std::vector<std::pair<LabelledProgLine, LabelledProgLine>> CFG::getNextBipWithLa
 
 		node->setVisited();
 
+		std::vector<prog_line> lines = node->getProgramLines();
+		for (size_t i = 0; i < lines.size() - 1; i++) {
+			result.insert({ {lines[i], call_stack.top()}, {lines[i + 1], call_stack.top()} });
+		}
 
-		if (node->IsCall()) {
+		if (node->isCall()) {
 			auto reset = [](CFGNode* node) {
 				if (node->getVisited()) {
 					node->setVisited();
@@ -369,28 +378,27 @@ std::vector<std::pair<LabelledProgLine, LabelledProgLine>> CFG::getNextBipWithLa
 				result.insert({ {node->getProgramLines().back(), call_stack.top()}, {node->getNextBranch()->getProgramLines().front(), call_stack.top()} });
 				action(node->getNextBranch(), action, call_stack);
 			}
-			prog_line label = call_stack.top();
-			prog_line from;
-			CFGNode* to = node->getNextMain();
-			do {
+			prog_line from = call_stack.top();
+			prog_line label = from;
+			call_stack.pop();
+			CFGNode* to = node->getNextMain()->getNextReturn()[from];
+			if (!to) {
+				throw std::runtime_error("Error traversing CFG for NextBip. Invalid call return.");
+			}
+			while (to->getTermination() && to->isReturn()) {
 				from = call_stack.top();
 				call_stack.pop();
 				to = to->getNextReturn()[from];
 				if (!to) {
 					throw std::runtime_error("Error traversing CFG for NextBip. Invalid call return.");
 				}
-			} while (to->getTermination() && to->IsReturn());
+			}
 			result.insert({ {node->getProgramLines().back(), label}, {to->getProgramLines().front(), call_stack.top()} });
 
 			if (node->getNextMain()->getPrevMain() == node) {
 				action(to, action, call_stack);
 			}
 			return;
-		}
-
-		std::vector<prog_line> lines = node->getProgramLines();
-		for (size_t i = 0; i < lines.size() - 1; i++) {
-			result.insert({ {lines[i], call_stack.top()}, {lines[i + 1], call_stack.top()} });
 		}
 
 		if (node->getNextBranch()) {

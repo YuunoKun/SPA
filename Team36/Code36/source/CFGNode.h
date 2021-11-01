@@ -40,8 +40,8 @@ public:
 	bool getVisited();
 	bool getTermination();
 	bool getInvalid();
-	bool IsCall();
-	bool IsReturn();
+	bool isCall();
+	bool isReturn();
 
 	template <class T, class U>
 	void traverse(bool(*action)(CFGNode*, T, U), T, U);

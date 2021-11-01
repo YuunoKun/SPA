@@ -679,9 +679,9 @@ namespace UnitTesting {
 		CFGNode* cfg1_node5 = cfg1_node4->getNextMain();
 		ASSERT_NE(cfg1_node5, nullptr);
 
-		ASSERT_TRUE(cfg1_node1->IsCall());
-		ASSERT_TRUE(cfg1_node2->IsCall());
-		ASSERT_TRUE(cfg1_node3->IsCall());
+		ASSERT_TRUE(cfg1_node1->isCall());
+		ASSERT_TRUE(cfg1_node2->isCall());
+		ASSERT_TRUE(cfg1_node3->isCall());
 
 		std::vector<prog_line> cfg1_labels_n4 = cfg1_node4->getLabels();
 		std::vector<prog_line> cfg1_labels_n4_expected = { 1, 2, 3 };
@@ -692,7 +692,7 @@ namespace UnitTesting {
 		ASSERT_EQ(cfg1_labels_n5.size(), cfg1_labels_n5_expected.size());
 		ASSERT_TRUE(equal(cfg1_labels_n5.begin(), cfg1_labels_n5.end(), cfg1_labels_n5_expected.begin(), cfg1_labels_n5_expected.end()));
 
-		ASSERT_TRUE(cfg1_node5->getNextMain()->IsReturn());
+		ASSERT_TRUE(cfg1_node5->getNextMain()->isReturn());
 		ASSERT_TRUE(cfg1_node5->getNextMain()->getTermination());
 
 		std::unordered_map<prog_line, CFGNode*> map = cfg1_node5->getNextMain()->getNextReturn();
@@ -728,9 +728,9 @@ namespace UnitTesting {
 		first->call(cfg1, 19);
 		first->call(cfg1_calls, 15);
 
-		ASSERT_TRUE(first_node1->IsCall());
-		ASSERT_TRUE(first_node3->IsCall());
-		ASSERT_TRUE(first_node5->IsCall());
+		ASSERT_TRUE(first_node1->isCall());
+		ASSERT_TRUE(first_node3->isCall());
+		ASSERT_TRUE(first_node5->isCall());
 
 		std::vector<prog_line> expected_labels = { 11, 19 };
 		std::vector<prog_line> expected_labels_call = { 1, 2, 3, 15 };
