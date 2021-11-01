@@ -55,6 +55,7 @@
     <ClCompile Include="CallsTEvaluatorTest.cpp" />
     <ClCompile Include="CallsTParserTest.cpp" />
     <ClCompile Include="CFGRelationManagerTest_Affects.cpp" />
+    <ClCompile Include="CFGRelationManagerTest_AffectsBip.cpp" />
     <ClCompile Include="CFGRelationsManagerTest_AffectsT.cpp" />
     <ClCompile Include="CFGRelationsManagerTest_NextT.cpp" />
     <ClCompile Include="ClauseTest.cpp" />

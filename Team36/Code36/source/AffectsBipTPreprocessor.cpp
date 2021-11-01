@@ -71,4 +71,7 @@ AffectsBipTPreprocessor::AffectsBipTPreprocessor(const MonotypeRelationTable<Stm
 	labelled_affects_bip_table(&labelled_table) {
 	stmt_info_list = v;
 	int size = stmt_info_list.size();
+	calculated_matrix.resize(size, std::vector<bool>(size, false));
+	calculated_dfs_forward.resize(size, false);
+	calculated_dfs_backward.resize(size, false);
 }

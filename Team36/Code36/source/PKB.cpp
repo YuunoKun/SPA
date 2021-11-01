@@ -290,7 +290,7 @@ void PKB::resetCache() {
 	print_table.clear();
 	expr_table.clear();
 	procS_table.clear();
-	for (auto& cfg : cfgs_to_destroy) {
+	for (CFG* cfg : cfgs_to_destroy) {
 		delete cfg;
 	}
 	cfgs_to_destroy = {};

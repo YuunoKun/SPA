@@ -1,27 +1,61 @@
 #include "CFGRelationsManager.h"
 
 CFGRelationsManager::CFGRelationsManager() {
-	next_t_processor = NextTPreprocessor(PKB::getInstance().getNext(), PKB::getInstance().getStmts());
+	next_t_processor = NextTPreprocessor(PKB::getInstance().getNext(),
+		PKB::getInstance().getStmts());
 	affects_processor = AffectsPreprocessor(
-		PKB::getInstance().getNext(), PKB::getInstance().getUsesS(), PKB::getInstance().getModifiesS(),
-		PKB::getInstance().getProcContains(), PKB::getInstance().getStmts());
+		PKB::getInstance().getNext(),
+		PKB::getInstance().getUsesS(),
+		PKB::getInstance().getModifiesS(),
+		PKB::getInstance().getProcContains(),
+		PKB::getInstance().getStmts());
+	affects_bip_processor = AffectsBipPreprocessor(
+		getLabelledNextTable(),
+		PKB::getInstance().getUsesS(),
+		PKB::getInstance().getModifiesS(),
+		PKB::getInstance().getProcContains(),
+		getFirstProgs(),
+		PKB::getInstance().getStmts());
 	affectsT_processor = AffectsTPreprocessor(
-		affects_processor.getCache(), PKB::getInstance().getStmts());
+		affects_processor.getCache(),
+		PKB::getInstance().getStmts());
+	affects_bipT_processor = AffectsBipTPreprocessor(
+		affects_bip_processor.getCache(),
+		affects_bip_processor.getLabelledProgLineCache(),
+		PKB::getInstance().getStmts());
 }
 
 void CFGRelationsManager::update() {
-	next_t_processor = NextTPreprocessor(PKB::getInstance().getNext(), PKB::getInstance().getStmts());
+	next_t_processor = NextTPreprocessor(PKB::getInstance().getNext(),
+		PKB::getInstance().getStmts());
 	affects_processor = AffectsPreprocessor(
-		PKB::getInstance().getNext(), PKB::getInstance().getUsesS(), PKB::getInstance().getModifiesS(),
-		PKB::getInstance().getProcContains(), PKB::getInstance().getStmts());
+		PKB::getInstance().getNext(),
+		PKB::getInstance().getUsesS(),
+		PKB::getInstance().getModifiesS(),
+		PKB::getInstance().getProcContains(),
+		PKB::getInstance().getStmts());
+	affects_bip_processor = AffectsBipPreprocessor(
+		getLabelledNextTable(),
+		PKB::getInstance().getUsesS(),
+		PKB::getInstance().getModifiesS(),
+		PKB::getInstance().getProcContains(),
+		getFirstProgs(),
+		PKB::getInstance().getStmts());
 	affectsT_processor = AffectsTPreprocessor(
-		affects_processor.getCache(), PKB::getInstance().getStmts());
+		affects_processor.getCache(),
+		PKB::getInstance().getStmts());
+	affects_bipT_processor = AffectsBipTPreprocessor(
+		affects_bip_processor.getCache(),
+		affects_bip_processor.getLabelledProgLineCache(),
+		PKB::getInstance().getStmts());
 }
 
 void CFGRelationsManager::reset() {
 	next_t_processor.reset();
 	affects_processor.reset();
 	affectsT_processor.reset();
+	affects_bip_processor.reset();
+	affects_bipT_processor.reset();
 }
 
 bool CFGRelationsManager::isNextTEmpty() {
@@ -305,7 +339,7 @@ std::vector<StmtInfo> CFGRelationsManager::getAffectedBip(stmt_index index) {
 	if (stmts[index - 1].stmt_type != STMT_ASSIGN) {
 		return std::vector<StmtInfo>{};
 	}
-	return affects_bip_processor.evaluateSynonymAndConstant(index);
+	return affects_bip_processor.evaluateConstantAndSynonym(index);
 }
 
 std::vector<StmtInfo> CFGRelationsManager::getAffectingBip(stmt_index index) {
@@ -313,7 +347,7 @@ std::vector<StmtInfo> CFGRelationsManager::getAffectingBip(stmt_index index) {
 	if (stmts[index - 1].stmt_type != STMT_ASSIGN) {
 		return std::vector<StmtInfo>{};
 	}
-	return affects_bip_processor.evaluateConstantAndSynonym(index);
+	return affects_bip_processor.evaluateSynonymAndConstant(index);
 }
 
 bool CFGRelationsManager::isAffectsBipTEmpty() {
@@ -393,4 +427,23 @@ AffectsBipPreprocessor CFGRelationsManager::getAffectsBipProcessor() {
 
 AffectsBipTPreprocessor CFGRelationsManager::getAffectsBipTProcessor() {
 	return affects_bipT_processor;
+}
+
+std::vector<LabelledProgLine> CFGRelationsManager::getFirstProgs() {
+	std::vector<LabelledProgLine> res;
+	auto cfgs = PKB::getInstance().getCFGBips();
+	for (CFG* cfg : cfgs) {
+		res.push_back(cfg->getHeadLabelledProgLine());
+	}
+	return res;
+}
+
+const MonotypeRelationTable<LabelledProgLine>& CFGRelationsManager::getLabelledNextTable() {
+	auto cfgs = PKB::getInstance().getCFGBips();
+	for (CFG* cfg : cfgs) {
+		for (auto pair : cfg->getNextBipWithLabel()) {
+			labelled_next_table.insert(pair.first, pair.second);
+		}
+	}
+	return labelled_next_table;
 }

@@ -94,5 +94,9 @@ AffectsBipPreprocessor::AffectsBipPreprocessor(
 	useS_table(&useS_table),
 	procS_table(&procS_table) {
 	stmt_info_list = v;
+	int size = stmt_info_list.size();
+	calculated_matrix.resize(size, std::vector<bool>(size, false));
+	calculated_dfs_forward.resize(size, false);
+	calculated_dfs_backward.resize(size, false);
 	solver = IterativeDataflowSolverBip(next_table, useS_table, modifiesS_table, stmt_info_list, first_stmts);
 }

@@ -248,6 +248,9 @@
     <ClCompile Include="AffectsBipTPreprocessorTest.cpp">
       <Filter>PKB\RelationPreprocessor</Filter>
     </ClCompile>
+    <ClCompile Include="CFGRelationManagerTest_AffectsBip.cpp">
+      <Filter>PKB</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
