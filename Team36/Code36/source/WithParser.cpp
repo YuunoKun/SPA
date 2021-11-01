@@ -1,46 +1,25 @@
 #include "WithParser.h"
 
 void WithParser::parse(Query& query, std::vector<QueryToken> token_chain) {
-    std::vector<QueryToken> temp_token_chain_1;
-    std::vector<QueryToken> temp_token_chain_2;
     EntityType ident_type = EntityType::NONE_ENTITY;
     AttrRef attr_name = AttrRef::NONE;
     std::unordered_map<std::string, Entity> ent_chain = query.getEntities();
-    int comma_count = 0;
-    size_t token_chain_size = token_chain.size();
-    for (size_t i = 0; i < token_chain_size; i++) {
-        if (token_chain[0].type == QueryToken::EQUAL) {
-            token_chain.erase(token_chain.begin());
-            comma_count++;
-        }
-        else if (comma_count == 0) {
-            // 1st param
-            temp_token_chain_1.push_back(token_chain[0]);
-            token_chain.erase(token_chain.begin());
-        }
-        else if (comma_count == 1) {
-            // 2nd param
-            temp_token_chain_2.push_back(token_chain[0]);
-            token_chain.erase(token_chain.begin());
-        }
-        else {
-            throw SyntacticErrorException("Invalid parameters for With");
-        }
-    }
 
-     if (!Utility::isRef(query, temp_token_chain_1) || !Utility::isRef(query, temp_token_chain_2)) {
+    std::vector<std::vector<QueryToken>> separated_params = Utility::splitTokenChain(2, QueryToken::EQUAL, token_chain);
+
+     if (!Utility::isRef(query, separated_params[0]) || !Utility::isRef(query, separated_params[1])) {
         query.setIsSemanticError("Invalid parameters for With");
     }
 
 
-    if (!isSameRefType(query, temp_token_chain_1, temp_token_chain_2)) {
+    if (!isSameRefType(query, separated_params[0], separated_params[1])) {
         query.setIsSemanticError("Invalid parameters for With");
     }
 
     if (!Utility::checkIsSemanticError(query)) {
 
-        EntityType ent_type_1 = getEntityType(query, temp_token_chain_1);
-        EntityType ent_type_2 = getEntityType(query, temp_token_chain_2);
+        EntityType ent_type_1 = getEntityType(query, separated_params[0]);
+        EntityType ent_type_2 = getEntityType(query, separated_params[1]);
 
         if (ent_type_1 == EntityType::NONE_ENTITY &&
             ent_type_2 == EntityType::NONE_ENTITY) {
@@ -53,8 +32,8 @@ void WithParser::parse(Query& query, std::vector<QueryToken> token_chain) {
             ident_type = ent_type_1;
         }
 
-        AttrRef attr_name_1 = getAttrName(query, temp_token_chain_1);
-        AttrRef attr_name_2 = getAttrName(query, temp_token_chain_2);
+        AttrRef attr_name_1 = getAttrName(query, separated_params[0]);
+        AttrRef attr_name_2 = getAttrName(query, separated_params[1]);
 
         if (attr_name_1 == AttrRef::NONE &&
             attr_name_2 == AttrRef::NONE) {
@@ -68,8 +47,8 @@ void WithParser::parse(Query& query, std::vector<QueryToken> token_chain) {
         }
 
         query.addRelation(RelRef(RelType::WITH,
-            Utility::setRef(query, temp_token_chain_1, ident_type, attr_name),
-            Utility::setRef(query, temp_token_chain_2, ident_type, attr_name)));
+            Utility::setRef(query, separated_params[0], ident_type, attr_name),
+            Utility::setRef(query, separated_params[1], ident_type, attr_name)));
     }
 }
 

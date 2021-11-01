@@ -34,7 +34,6 @@ std::list<std::string> QuerySystem::processQuery(std::string input) {
 		else {
 			return returnEmptyResult(err.getQuery().getSelected().front());
 		}
-
 	}
 	catch (std::exception& e)
 	{

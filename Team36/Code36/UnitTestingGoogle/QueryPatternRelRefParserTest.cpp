@@ -10,21 +10,11 @@ namespace UnitTesting {
 		QueryPatternRelRefParserTest() {
 		}
 
-		// If the constructor and destructor are not enough for setting up
-		// and cleaning up each test, you can define the following methods:
-
 		virtual void SetUp() override {
-			// Code here will be called immediately after the constructor (right
-			// before each test).
 		}
 
 		void TearDown() override {
-			// Code here will be called immediately after each test (right
-			// before the destructor).
 		}
-
-		// Class members declared here can be used by all tests in the test suite
-		// for Foo.
 	};
 
 	// Test setStmtRef
@@ -41,7 +31,7 @@ namespace UnitTesting {
 		//Synonym
 		//Result
 		QueryToken stmt_s_token = QueryToken(QueryToken::IDENTIFIER, "s");
-		Entity ent_stmt = Utility::setStmtRef(query, stmt_s_token);
+		Entity ent_stmt = Utility::setStmtRef(query, stmt_s_token, EntityType::STMT);
 
 		EXPECT_TRUE(ent_stmt == declared_stmt);
 
@@ -50,7 +40,7 @@ namespace UnitTesting {
 		//WILDCARD
 		//Result
 		QueryToken wildcard_token = QueryToken(QueryToken::WILDCARD, "_");
-		Entity ent_wildacrd = Utility::setStmtRef(query, wildcard_token);
+		Entity ent_wildacrd = Utility::setStmtRef(query, wildcard_token, EntityType::STMT);
 
 		//Expected
 		Entity expected_ent_wildcard = Entity(EntityType::WILD);
@@ -62,10 +52,10 @@ namespace UnitTesting {
 		//CONSTANT
 		//Result
 		QueryToken constant_token = QueryToken(QueryToken::CONSTANT, "9");
-		Entity ent_constant = Utility::setStmtRef(query, constant_token);
+		Entity ent_constant = Utility::setStmtRef(query, constant_token, EntityType::STMT);
 
 		////Expected
-		Entity expected_ent_constant = Entity(EntityType::CONSTANT, "9");
+		Entity expected_ent_constant = Entity(EntityType::STMT, "9");
 
 		EXPECT_TRUE(ent_constant == expected_ent_constant);
 	}
