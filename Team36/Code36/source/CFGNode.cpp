@@ -129,11 +129,11 @@ bool CFGNode::getInvalid() {
 	return invalid;
 }
 
-bool CFGNode::IsCall() {
+bool CFGNode::isCall() {
 	return is_call;
 }
 
-bool CFGNode::IsReturn() {
+bool CFGNode::isReturn() {
 	return is_return;
 }
 

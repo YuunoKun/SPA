@@ -266,7 +266,7 @@ std::vector<std::pair<prog_line, prog_line>> CFG::getNextBip() {
 			result.insert({ lines[i], lines[i + 1] });
 		}
 
-		if (node->IsCall()) {
+		if (node->isCall()) {
 			auto reset = [](CFGNode* node) {
 				if (node->getVisited()) {
 					node->setVisited();
@@ -297,7 +297,7 @@ std::vector<std::pair<prog_line, prog_line>> CFG::getNextBip() {
 			if (!to) {
 				throw std::runtime_error("Error traversing CFG for NextBip. Invalid call return.");
 			}
-			while (to->getTermination() && to->IsReturn()) {
+			while (to->getTermination() && to->isReturn()) {
 				from = call_stack.top();
 				call_stack.pop();
 				to = to->getNextReturn()[from];
@@ -354,7 +354,7 @@ std::vector<std::pair<LabelledProgLine, LabelledProgLine>> CFG::getNextBipWithLa
 			result.insert({ {lines[i], call_stack.top()}, {lines[i + 1], call_stack.top()} });
 		}
 
-		if (node->IsCall()) {
+		if (node->isCall()) {
 			auto reset = [](CFGNode* node) {
 				if (node->getVisited()) {
 					node->setVisited();
@@ -385,7 +385,7 @@ std::vector<std::pair<LabelledProgLine, LabelledProgLine>> CFG::getNextBipWithLa
 			if (!to) {
 				throw std::runtime_error("Error traversing CFG for NextBip. Invalid call return.");
 			}
-			while (to->getTermination() && to->IsReturn()) {
+			while (to->getTermination() && to->isReturn()) {
 				from = call_stack.top();
 				call_stack.pop();
 				to = to->getNextReturn()[from];
