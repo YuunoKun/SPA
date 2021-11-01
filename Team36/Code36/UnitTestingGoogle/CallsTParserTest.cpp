@@ -10,21 +10,12 @@ namespace UnitTesting {
 		CallsTParserTest() {
 		}
 
-		// If the constructor and destructor are not enough for setting up
-		// and cleaning up each test, you can define the following methods:
-
 		virtual void SetUp() override {
-			// Code here will be called immediately after the constructor (right
-			// before each test).
 		}
 
 		void TearDown() override {
-			// Code here will be called immediately after each test (right
-			// before the destructor).
 		}
-
-		// Class members declared here can be used by all tests in the test suite
-		// for Foo.
+		
 	};
 
 	TEST(CallsTParserTest, CallsTSynWildTest) {

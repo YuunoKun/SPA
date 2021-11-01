@@ -46,8 +46,12 @@ public:
 		FOLLOWS_T,
 		NEXT,
 		NEXT_T,
+		NEXT_BIP,
+		NEXT_BIP_T,
 		AFFECTS,
 		AFFECTS_T,
+		AFFECTS_BIP,
+		AFFECTS_BIP_T,
 
 		//Pattern
 		ASSIGN,

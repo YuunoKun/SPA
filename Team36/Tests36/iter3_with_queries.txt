@@ -1,0 +1,420 @@
+1 - Compare integer
+assign a;
+Select a with 1 = 1
+2, 3, 10, 15, 17, 22, 26, 34, 35, 39, 41, 48
+5000
+2 - Compare ident
+assign a;
+Select a with "a" = "a"
+2, 3, 10, 15, 17, 22, 26, 34, 35, 39, 41, 48
+5000
+3 - Compare attrRef
+assign a;
+Select a with a.stmt# = a.stmt#
+2, 3, 10, 15, 17, 22, 26, 34, 35, 39, 41, 48
+5000
+4 - Compare synonym, not prog_line so invalid
+assign a;
+Select a with a = 2
+none
+5000
+5 - Compare synonym, prog_line
+prog_line n;
+Select n with n = 2
+2
+5000
+6 - LHS procName, procedure
+procedure p;
+Select p with p.procName = "myFirst"
+myFirst
+5000
+7 - RHS procName, procedure
+procedure p;
+Select p with "myFirst" = p.procName
+myFirst
+5000
+8 - LHS procName, call
+call c;
+Select c with c.procName = "mySecond"
+7, 47
+5000
+9 - RHS procName, call
+call c;
+Select c with "mySecond" = c.procName
+7, 47
+5000
+10 - LHS varName, variable
+variable v;
+Select v with v.varName = "a"
+a
+5000
+11 - RHS varName, variable
+variable v;
+Select v with "a" = v.varName
+a
+5000
+12 - LHS varName, read
+read r;
+Select r with r.varName = "d"
+4
+5000
+13 - RHS varName, read
+read r;
+Select r with "d" = r.varName
+4
+5000
+14 - LHS varName, print
+print pn;
+Select pn with pn.varName = "d"
+27, 46
+5000
+15 - RHS varName, print
+print pn;
+Select pn with "d" = pn.varName
+27, 46
+5000
+16 - LHS value, constant
+constant c;
+Select c with c.value = 4
+4
+5000
+17 - RHS value, constant
+constant c;
+Select c with 4 = c.value
+4
+5000
+18 - LHS stmt#, stmt
+stmt s;
+Select s with s.stmt# = 5
+5
+5000
+19 - RHS stmt#, stmt
+stmt s;
+Select s with 5 = stmt#
+5
+5000
+20 - LHS stmt#, read
+read r;
+Select r with r.stmt# = 8
+none
+5000
+21 - RHS stmt#, read
+read r;
+Select r with 8 = r.stmt#
+none
+5000
+22 - LHS stmt#, print
+print pn;
+Select pn with pn.stmt# = 9
+9
+5000
+23 - RHS stmt#, print
+print pn;
+Select pn with 9 = pn.stmt#
+9
+5000
+24 - LHS stmt#, call
+call c;
+Select c with c.stmt# = 7
+7
+5000
+25 - RHS stmt#, call
+call c;
+Select c with 7 = c.stmt#
+7
+5000
+26 - LHS stmt#, while
+while w;
+Select w with w.stmt# = 6
+6
+5000
+27 - RHS stmt#, while
+while w;
+Select w with 6 = w.stmt#
+6
+5000
+28 - LHS stmt#, if
+if ifs;
+Select ifs with ifs.stmt# = 8
+6
+5000
+29 - RHS stmt#, if
+if ifs;
+Select ifs with 8 = ifs.stmt#8
+6
+5000
+30 - LHS stmt#, assign
+assign a;
+Select a with a.stmt# = 10
+10
+5000
+31 - RHS stmt#, assign
+assign a;
+Select a with 10 = a.stmt#
+10
+5000
+32 - compare different types
+assign a; read r;
+Select a with a.stmt# = r.varName
+none
+5000
+33 -  LHS procedure procName, RHS call procName
+procedure p; call c;
+Select p with p.procName = c.procName
+mySecond, myThird, myFourth
+5000
+34 - LHS procedure procName, RHS variable varName
+procedure p; variable v;
+Select p with p.procName = v.varName
+myFirst, mySecond
+5000
+35 - LHS procedure procName, RHS read varName
+procedure p; read r;
+Select p with p.procName = r.varName
+myThird, myFourth
+5000
+36 - LHS procedure procName, RHS print varName
+procedure p; print pn;
+Select p with p.procName = pn.varName
+myFourth
+5000
+37 - LHS call procName, RHS variable varName
+call c; variable v;
+Select c with c.procName = v.varName
+7, 47
+5000
+38 - LHS call procName, RHS read varName
+call c; read r;
+Select c with c.procName = r.varName
+13, 32
+5000
+39 - LHS call procName, RHS print varName
+call c; print pn;
+Select c with c.procName = pn.varName
+32
+5000
+40 - LHS variable varName, RHS read varName
+variable v; read r;
+Select v with v.varName = r.varName
+a, d, e, f, g, h, i, j, k
+5000
+41 - LHS variable varName, RHS print varName
+variable v; print pn;
+Select v with v.varName = pn.varName
+a, b, c, h, d, j, k
+5000
+42 - LHS read varName, RHS print varName
+read r; print pn;
+Select r with r.varName = pn.varName
+1, 4, 21, 25, 28, 50
+5000
+43 - LHS print varName, RHS print varName
+read r; print pn;
+Select pn with r.varName = pn.varName
+5, 9, 24, 27, 29, 36, 37, 40, 46
+5000
+44 - LHS const value, RHS stmt stmt#
+constant c; stmt s;
+Select c with c.value = s.stmt#
+3, 4, 10, 7, 1, 9, 6
+5000
+45 - LHS const value, RHS read stmt#
+constant c; read r;
+Select c with c.value = r.stmt#
+4, 1
+5000
+46 - LHS const value, RHS print stmt#
+constant c; print pn;
+Select c with c.value = pn.stmt#
+9
+5000
+47 - LHS const value, RHS call stmt#
+constant c; call c1;
+Select c with c.value = c1.stmt#
+7
+5000
+48 - LHS const value, RHS while stmt#
+constant c; while w;
+Select c with c.value = w.stmt#
+6
+5000
+49 - LHS const value, RHS if stmt#
+constant c; if ifs;
+Select c with c.value = ifs.stmt#
+none
+5000
+50 - LHS const value, RHS assign stmt#
+constant c; assign a;
+Select c with c.value = a.stmt#
+3, 10
+5000
+51 - LHS stmt stmt#, RHS read stmt#
+stmt s; read r;
+Select s with s.stmt# = r.stmt#
+1, 4, 11, 14, 16, 21, 25, 28, 33, 49, 50
+5000
+52 - LHS stmt stmt#, RHS print stmt#
+stmt s; print pn;
+Select s with s.stmt# = pn.stmt#
+5, 9, 18, 24, 27, 29, 36, 37, 40, 44, 46, 51
+5000
+53 - LHS stmt stmt#, RHS call stmt#
+stmt s; call c;
+Select s with s.stmt# = c.stmt#
+7, 13, 32, 47
+5000
+54 - LHS stmt stmt#, RHS while stmt#
+stmt s; while w;
+Select s with s.stmt# = w.stmt#
+6, 12, 30, 31, 38, 43, 45
+5000
+55 - LHS stmt stmt#, RHS if stmt#
+stmt s; if ifs;
+Select s with s.stmt# = ifs.stmt#
+8, 19, 20, 23, 42
+5000
+56 - LHS stmt stmt#, RHS assign stmt#
+stmt s; assign a;
+Select s with s.stmt# = a.stmt#
+2, 3, 10, 15, 17, 22, 26, 34, 35, 39, 41, 48
+5000
+57 - LHS read stmt#, RHS print stmt#
+read r; print pn;
+Select r with r.stmt# = pn.stmt#
+none
+5000
+58 - LHS read stmt#, RHS call stmt#
+read r; call c;
+Select r with r.stmt# = c.stmt#
+none
+5000
+59 - LHS read stmt#, RHS while stmt#
+read r; while w;
+Select r with r.stmt# = w.stmt#
+none
+5000
+60 - LHS read stmt#, RHS if stmt#
+read r; if ifs;
+Select r with r.stmt# = ifs.stmt#
+none
+5000
+61 - LHS read stmt#, RHS assign stmt#
+read r; assign a;
+Select r with r.stmt# = a.stmt#
+none
+5000
+62 - LHS print stmt#, RHS call stmt#
+print pn; call c;
+Select pn with pn.stmt# = c.stmt#
+none
+5000
+63 - LHS print stmt#, RHS while stmt#
+print pn; while w;
+Select pn with pn.stmt# = w.stmt#
+none
+5000
+64 - LHS print stmt#, RHS if stmt#
+print pn; if ifs;
+Select pn with pn.stmt# = ifs.stmt#
+none
+5000
+65 - LHS print stmt#, RHS assign stmt#
+print pn; assign a;
+Select pn with pn.stmt# = a.stmt#
+none
+5000
+66 - LHS call stmt#, RHS while stmt#
+call c; while w;
+Select c with c.stmt# = w.stmt#
+none
+5000
+67 - LHS call stmt#, RHS if stmt#
+call c; if ifs;
+Select c with c.stmt# = ifs.stmt#
+none
+5000
+68 - LHS call stmt#, RHS assign stmt#
+call c; assign a;
+Select c with c.stmt# = a.stmt#
+none
+5000
+69 - LHS while stmt#, RHS if stmt#
+while w; if ifs;
+Select w with w.stmt# = ifs.stmt#
+none
+5000
+70 - LHS while stmt#, RHS assign stmt#
+while w; assign a;
+Select w with w.stmt# = a.stmt#
+none
+5000
+71 - LHS if stmt#, RHS assign stmt#
+if ifs; assign a;
+Select ifs with ifs.stmt# = a.stmt#
+none
+5000
+72 - LHS prog_line, RHS const value
+prog_line n; constant c;
+Select n with n = c.value
+3, 4, 10, 7, 1, 9, 6
+5000
+73 - LHS prog_line, RHS stmt stmt#
+prog_line n; stmt s;
+Select n with n = s.stmt#
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51
+5000
+74 - LHS prog_line, RHS read stmt#
+prog_line n; read r;
+Select n with n = r.stmt#
+1, 4, 11, 14, 16, 21, 25, 28, 33, 49, 50
+5000
+75 - LHS prog_line, RHS print stmt#
+prog_line n; print pn;
+Select n with n = pn.stmt#
+5, 9, 18, 24, 27, 29, 36, 37, 40, 44, 46, 51
+5000
+76 - LHS prog_line, RHS call stmt#
+prog_line n; call c;
+Select n with n = c.stmt#
+7, 13, 32, 47
+5000
+77 - LHS prog_line, RHS while stmt#
+prog_line n; while w;
+Select n with n = w.stmt#
+6, 12, 30, 31, 38, 43, 45
+5000
+78 - LHS prog_line, RHS if stmt#
+prog_line n; if ifs;
+Select n with n = ifs.stmt#
+8, 19, 20, 23, 42
+5000
+79 - LHS prog_line, RHS assign stmt#
+prog_line n; assign a;
+Select n with n = a.stmt#
+2, 3, 10, 15, 17, 22, 26, 34, 35, 39, 41, 48
+5000
+80 - invalid n.varName
+prog_line n;
+Select n with n.varName = "a"
+none
+5000
+81 - invalid n.stmt#
+prog_line n;
+Select n with n.stmt# = 6
+none
+5000
+82 - invalid call.varName
+call c;
+Select c with c.varName = "myFourth"
+none
+5000
+83 - invalid procedure varName
+procedure p;
+Select p with p.varName = "myFirst"
+none
+5000
+84 - use with as a entity
+stmt with;
+Select with with with.stmt# = 5
+5
+5000

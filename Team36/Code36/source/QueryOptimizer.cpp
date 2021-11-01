@@ -209,7 +209,7 @@ bool QueryOptimizer::checkAllConstantExist(std::vector<Clause>& clauses) {
 }
 
 bool QueryOptimizer::checkConstantExist(Entity& e) {
-	if (e.isSynonym() || e.getType() == EntityType::WILD) {
+	if (e.isSynonym() || e.getType() == EntityType::WILD || e.getType() == EntityType::BOOLEAN) {
 		return true;
 	}
 	if (Utility::isSecondaryAttribute(e)) {
