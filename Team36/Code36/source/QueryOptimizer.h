@@ -15,8 +15,8 @@ public:
 private:
 	bool optimize_clause_by_common_synonym = true;
 	bool optimize_clause_by_relation_type = true;
-	bool affect_threshold_optimization = false;
-	int affect_threshold_count = 0;
+	bool affect_threshold_optimization = true;
+	int affect_threshold_count = 10;
 
 	std::list<Clause> optmizeClausesWithAffectThreshold(std::list<Clause>&);
 	std::list<Clause> sortClausesOrderByCommonSynonym(std::list<Clause>&);

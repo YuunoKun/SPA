@@ -4,7 +4,101 @@
 #include <PKB.h>
 
 namespace UnitTesting {
-	TEST(QueryOptimizer, optimizeClausesOrder) {
+
+
+	TEST(QueryOptimizer, sortTwoSynonymClausesOrderByCommonSynonym) {
+		QueryOptimizer optimizer;
+		RelRef rel_ref_no_synonym(FOLLOWS, { STMT, "1" }, { STMT, "2" });
+		RelRef rel_ref_one_synonym(FOLLOWS, { STMT, Synonym("a") }, { STMT, "2" });
+		RelRef rel_ref_two_synonym_no_common1(FOLLOWS, { STMT, Synonym("z1") }, { STMT, Synonym("x1") });
+		RelRef rel_ref_two_synonym_no_common2(FOLLOWS, { STMT, Synonym("z2") }, { STMT, Synonym("x2") });
+		RelRef rel_ref_two_synonym_no_common3(FOLLOWS, { STMT, Synonym("z3") }, { STMT, Synonym("x3") });
+		RelRef rel_ref_two_synonym_both_same1(FOLLOWS, { STMT, Synonym("v1") }, { STMT, Synonym("v1") });
+		RelRef rel_ref_two_synonym_both_same2_1(FOLLOWS, { STMT, Synonym("v2") }, { STMT, Synonym("v2") });
+		RelRef rel_ref_two_synonym_both_same2_2(FOLLOWS, { STMT, Synonym("v2") }, { STMT, Synonym("v2") });
+		RelRef rel_ref_two_synonym_both_same2_3(FOLLOWS, { STMT, Synonym("v2") }, { STMT, Synonym("v2") });
+		RelRef rel_ref_two_synonym_two_common1_1(FOLLOWS, { STMT, Synonym("c1") }, { STMT, Synonym("c2") });
+		RelRef rel_ref_two_synonym_two_common1_2(FOLLOWS, { STMT, Synonym("c1") }, { STMT, Synonym("c2") });
+		RelRef rel_ref_two_synonym_two_common2_1(FOLLOWS, { STMT, Synonym("c3") }, { STMT, Synonym("c4") });
+		RelRef rel_ref_two_synonym_two_common2_2(FOLLOWS, { STMT, Synonym("c4") }, { STMT, Synonym("c3") });
+		RelRef rel_ref_two_synonym_two_common2_3(FOLLOWS, { STMT, Synonym("c3") }, { STMT, Synonym("c4") });
+
+		RelRef rel_ref_two_synonym_one_common1_1(FOLLOWS, { STMT, Synonym("v1") }, { STMT, Synonym("v2") });
+		RelRef rel_ref_two_synonym_one_common1_2(FOLLOWS, { STMT, Synonym("v2") }, { STMT, Synonym("v3") });
+
+		RelRef rel_ref_two_synonym_one_common2_1(FOLLOWS, { STMT, Synonym("e1") }, { STMT, Synonym("e2") });
+		RelRef rel_ref_two_synonym_one_common2_2(FOLLOWS, { STMT, Synonym("e1") }, { STMT, Synonym("e2") });
+		RelRef rel_ref_two_synonym_one_common2_3(FOLLOWS, { STMT, Synonym("e2") }, { STMT, Synonym("e3") });
+
+		RelRef rel_ref_two_synonym_one_common3_1(FOLLOWS, { STMT, Synonym("f1") }, { STMT, Synonym("f2") });
+		RelRef rel_ref_two_synonym_one_common3_2(FOLLOWS, { STMT, Synonym("f1") }, { STMT, Synonym("f2") });
+		RelRef rel_ref_two_synonym_one_common3_3(FOLLOWS, { STMT, Synonym("f2") }, { STMT, Synonym("f3") });
+		RelRef rel_ref_two_synonym_one_common3_4(FOLLOWS, { STMT, Synonym("f3") }, { STMT, Synonym("f2") });
+		RelRef rel_ref_two_synonym_one_common3_5(FOLLOWS, { STMT, Synonym("f4") }, { STMT, Synonym("f2") });
+		RelRef rel_ref_two_synonym_one_common3_6(FOLLOWS, { STMT, Synonym("f4") }, { STMT, Synonym("f5") });
+
+		std::vector<Clause> unordered_clauses, ordered_clauses;
+
+		unordered_clauses.push_back({ rel_ref_two_synonym_one_common1_1 });
+		unordered_clauses.push_back({ rel_ref_two_synonym_no_common1 });
+		unordered_clauses.push_back({ rel_ref_two_synonym_one_common1_2 });
+		unordered_clauses.push_back({ rel_ref_two_synonym_one_common2_1 });
+		unordered_clauses.push_back({ rel_ref_two_synonym_one_common2_2 });
+		unordered_clauses.push_back({ rel_ref_two_synonym_both_same1 });
+		unordered_clauses.push_back({ rel_ref_two_synonym_one_common2_3 });
+		unordered_clauses.push_back({ rel_ref_one_synonym });
+		unordered_clauses.push_back({ rel_ref_two_synonym_one_common3_1 });
+		unordered_clauses.push_back({ rel_ref_two_synonym_no_common2 });
+		unordered_clauses.push_back({ rel_ref_two_synonym_one_common3_2 });
+		unordered_clauses.push_back({ rel_ref_two_synonym_both_same2_1 });
+		unordered_clauses.push_back({ rel_ref_two_synonym_two_common1_1 });
+		unordered_clauses.push_back({ rel_ref_two_synonym_one_common3_3 });
+		unordered_clauses.push_back({ rel_ref_two_synonym_no_common3 });
+		unordered_clauses.push_back({ rel_ref_two_synonym_two_common1_2 });
+		unordered_clauses.push_back({ rel_ref_two_synonym_one_common3_4 });
+		unordered_clauses.push_back({ rel_ref_two_synonym_both_same2_2 });
+		unordered_clauses.push_back({ rel_ref_two_synonym_two_common2_1 });
+		unordered_clauses.push_back({ rel_ref_two_synonym_one_common3_5 });
+		unordered_clauses.push_back({ rel_ref_two_synonym_two_common2_2 });
+		unordered_clauses.push_back({ rel_ref_no_synonym });
+		unordered_clauses.push_back({ rel_ref_two_synonym_one_common3_6 });
+		unordered_clauses.push_back({ rel_ref_two_synonym_both_same2_3 });
+		unordered_clauses.push_back({ rel_ref_two_synonym_two_common2_3 });
+
+
+
+		ordered_clauses.push_back({ rel_ref_no_synonym });
+		ordered_clauses.push_back({ rel_ref_one_synonym });
+		ordered_clauses.push_back({ rel_ref_two_synonym_no_common1 });
+		ordered_clauses.push_back({ rel_ref_two_synonym_both_same1 });
+		ordered_clauses.push_back({ rel_ref_two_synonym_no_common2 });
+		ordered_clauses.push_back({ rel_ref_two_synonym_both_same2_1 });
+		ordered_clauses.push_back({ rel_ref_two_synonym_no_common3 });
+		ordered_clauses.push_back({ rel_ref_two_synonym_both_same2_2 });
+		ordered_clauses.push_back({ rel_ref_two_synonym_both_same2_3 });
+
+		ordered_clauses.push_back({ rel_ref_two_synonym_two_common1_1 });
+		ordered_clauses.push_back({ rel_ref_two_synonym_two_common1_2 });
+		ordered_clauses.push_back({ rel_ref_two_synonym_two_common2_1 });
+		ordered_clauses.push_back({ rel_ref_two_synonym_two_common2_2 });
+		ordered_clauses.push_back({ rel_ref_two_synonym_two_common2_3 });
+
+		ordered_clauses.push_back({ rel_ref_two_synonym_one_common1_1 });
+		ordered_clauses.push_back({ rel_ref_two_synonym_one_common1_2 });
+		ordered_clauses.push_back({ rel_ref_two_synonym_one_common2_1 });
+		ordered_clauses.push_back({ rel_ref_two_synonym_one_common2_2 });
+		ordered_clauses.push_back({ rel_ref_two_synonym_one_common2_3 });
+
+		ordered_clauses.push_back({ rel_ref_two_synonym_one_common3_1 });
+		ordered_clauses.push_back({ rel_ref_two_synonym_one_common3_2 });
+		ordered_clauses.push_back({ rel_ref_two_synonym_one_common3_3 });
+		ordered_clauses.push_back({ rel_ref_two_synonym_one_common3_4 });
+		ordered_clauses.push_back({ rel_ref_two_synonym_one_common3_5 });
+		ordered_clauses.push_back({ rel_ref_two_synonym_one_common3_6 });
+		EXPECT_EQ(optimizer.optimizeClausesOrder(unordered_clauses), ordered_clauses);
+	}
+
+	TEST(QueryOptimizer, sortClausesByNumOfSynonym) {
 		QueryOptimizer optimizer;
 		RelRef rel_ref_no_synonym(FOLLOWS, { STMT, "1" }, { STMT, "2" });
 		RelRef rel_ref_one_synonym(PARENT, { STMT, Synonym("a") }, { STMT, "2" });
@@ -52,7 +146,8 @@ namespace UnitTesting {
 		EXPECT_EQ(optimizer.optimizeClausesOrder(unordered_clauses), ordered_clauses);
 	}
 
-	TEST(QueryOptimizer, optimizeNextClausesOrder) {
+
+	TEST(QueryOptimizer, sortNextTClausesOrder) {
 		QueryOptimizer optimizer(false, true);
 		RelRef no_synonym(NEXT_T, { STMT, "1" }, { WILD });
 		RelRef one_synonym(NEXT_T, { STMT, Synonym("a") }, { WILD });
@@ -82,7 +177,7 @@ namespace UnitTesting {
 		EXPECT_EQ(optimizer.optimizeClausesOrder(unordered_clauses), ordered_clauses);
 	}
 
-	TEST(QueryOptimizer, optimizeAffectClausesOrder_affect_t_only) {
+	TEST(QueryOptimizer, sortAffectsClausesOrder_affect_t_only) {
 		QueryOptimizer optimizer(false, true);
 		RelRef no_synonym1(AFFECT_T, { STMT, "1" }, { WILD });
 		RelRef no_synonym2(AFFECT_T, { WILD }, { STMT, "1" });
@@ -121,7 +216,7 @@ namespace UnitTesting {
 		EXPECT_EQ(optimizer.optimizeClausesOrder(unordered_clauses), ordered_clauses);
 	}
 
-	TEST(QueryOptimizer, optimizeAffectClausesOrder_affect_only) {
+	TEST(QueryOptimizer, sortAffectsClausesOrder_affect_only) {
 
 		QueryOptimizer optimizer(false, true);
 		RelRef no_synonym1(AFFECT, { WILD }, { WILD });
@@ -161,7 +256,7 @@ namespace UnitTesting {
 		EXPECT_EQ(optimizer.optimizeClausesOrder(unordered_clauses), ordered_clauses);
 	}
 
-	TEST(QueryOptimizer, optimizeAffectClausesOrder) {
+	TEST(QueryOptimizer, sortAffectsClausesOrder) {
 		QueryOptimizer optimizer;
 		RelRef affect_no_synonym1(AFFECT, { WILD }, { WILD });
 		RelRef affect_no_synonym2(AFFECT, { STMT, "1" }, { WILD });

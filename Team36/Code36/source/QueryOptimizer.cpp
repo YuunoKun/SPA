@@ -102,7 +102,7 @@ std::list<Clause> QueryOptimizer::sortClausesOrderByCommonSynonym(std::list<Clau
 		}
 	}
 
-	two_synonym_list = sortTwoSynonymClausesOrder(two_synonym_list);
+	two_synonym_list = sortTwoSynonymClausesOrderByCommonSynonym(two_synonym_list);
 
 	std::list<Clause> reordered_clauses;
 	reordered_clauses.insert(reordered_clauses.end(), others_synonym_list.begin(), others_synonym_list.end());
@@ -113,9 +113,66 @@ std::list<Clause> QueryOptimizer::sortClausesOrderByCommonSynonym(std::list<Clau
 
 //Re-order the clauses in the following order to delay joining of table 
 //1. clauses with no common synonym
-//2. clauses with two common synonym
+//2. clauses with two common synonym only
 //3. clauses with one common synonym
-std::list<Clause> QueryOptimizer::optimizeTwoSynonymClausesOrder(std::list<Clause>& two_synonym_clauses) {
+std::list<Clause> QueryOptimizer::sortTwoSynonymClausesOrderByCommonSynonym(std::list<Clause>& two_synonym_clauses) {
+	std::unordered_map<std::string, int> synonym_count;
+	std::vector<std::vector<std::string>> synonym_names;
+	for (Clause c : two_synonym_clauses) {
+		Entity left_entity = getLeftEntity(c);
+		Entity right_entity = getRightEntity(c);
+		if (left_entity.getSynonym() == right_entity.getSynonym()) {
+			//Skip as this is the same as having only 1 column, with the need to fliter/combine e.g Affect(n,n)
+			continue;
+		}
+		std::vector<std::string> synonym_name = { left_entity.getSynonym(), right_entity.getSynonym() };
+		sort(synonym_name.begin(), synonym_name.end());
+		synonym_name.push_back(synonym_name[0] + " " + synonym_name[1]);
+		for (std::string name : synonym_name) {
+
+			std::unordered_map<std::string, int>::iterator it = synonym_count.find(name);
+			if (it != synonym_count.end()) {
+				it->second++;
+			}else {
+				synonym_count.insert(std::make_pair(name, 1));
+			}
+		}
+
+		synonym_names.push_back(synonym_name);
+	}
+
+	std::list<Clause> no_common_synonym_clauses, two_common_synonym_clauses, one_common_synonym_clauses;
+
+	int count = 0;
+
+	for (Clause c : two_synonym_clauses) {
+		Entity left_entity = getLeftEntity(c);
+		Entity right_entity = getRightEntity(c);
+		if (left_entity.getSynonym() == right_entity.getSynonym()) {
+			no_common_synonym_clauses.emplace_back(c);
+			continue;
+		}
+
+		int left_synonym_count = synonym_count.find(synonym_names[count][0])->second;
+		int right_synonym_count = synonym_count.find(synonym_names[count][1])->second;
+		int combine_synonym_count = synonym_count.find(synonym_names[count][2])->second;
+		if (left_synonym_count == 1 && right_synonym_count == 1 && combine_synonym_count == 1) {
+			no_common_synonym_clauses.emplace_back(c);
+		}
+		else if (left_synonym_count == right_synonym_count && combine_synonym_count == right_synonym_count) {
+			two_common_synonym_clauses.emplace_back(c);
+		}else {
+			one_common_synonym_clauses.emplace_back(c);
+		}
+		count++;
+	}
+
+	std::list<Clause> reordered_clauses;
+	reordered_clauses.insert(reordered_clauses.end(), no_common_synonym_clauses.begin(), no_common_synonym_clauses.end());
+	reordered_clauses.insert(reordered_clauses.end(), two_common_synonym_clauses.begin(), two_common_synonym_clauses.end());
+	reordered_clauses.insert(reordered_clauses.end(), one_common_synonym_clauses.begin(), one_common_synonym_clauses.end());
+	return reordered_clauses;
+
 	return two_synonym_clauses;
 }
 
