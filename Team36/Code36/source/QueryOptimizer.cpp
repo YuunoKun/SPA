@@ -198,7 +198,6 @@ std::list<Clause> QueryOptimizer::sortClausesByComputationalType(std::list<Claus
 		}
 		else {
 			others_clauses.emplace_back(c);
-			cout << "here";
 		}
 	}
 	next_t_cfg_search_clauses = sortNextTClauses(next_t_cfg_search_clauses);
