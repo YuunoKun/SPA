@@ -77,8 +77,8 @@ QueryPreprocessor::QueryPreprocessor() {
 Query QueryPreprocessor::parse(std::string str) {
 	QueryTokenizer query_tokenizer;
 	QueryValidator queryValidator = QueryValidator();
-
-	query_tokenizer.parse_into_query_tokens(str);
+	//Query query
+	query_tokenizer.tokenize(this->query, str);
 
 	std::vector<QueryToken> tokens = query_tokenizer.get_query_token_chain();
 
@@ -163,9 +163,7 @@ void QueryPreprocessor::handleSelection(QueryToken& token) {
 		else if (token.type == QueryToken::QueryTokenType::IDENTIFIER &&
 			token.token_value == "and") {
 			queryValidator.validateAnd(patternOrSuchThat);
-			if (patternOrSuchThat.type == QueryToken::QueryTokenType::PATTERN ||
-				patternOrSuchThat.type == QueryToken::QueryTokenType::SUCH_THAT ||
-				patternOrSuchThat.type == QueryToken::QueryTokenType::WITH) {
+			if (patternOrSuchThat.type == QueryToken::QueryTokenType::PATTERN) {
 				if (nextToken.token_value == "pattern") {
 					throw SyntacticErrorException("and pattern is a syntax error");
 				}
@@ -289,8 +287,6 @@ void QueryPreprocessor::handleWithinParameter(QueryToken& token) {
 		QueryPatternRelRefParser validator;
 		parameterClause.push_back(token);
 
-		// add call jiyu method
-				// TODO: call jiyu's method
 		if (patternOrSuchThat.type == QueryToken::QueryTokenType::WITH && (this->nextToken.type == QueryToken::QueryTokenType::WHITESPACE || this->nextToken.token_value == "and")) {
 			validator.parseWith(query, parameterClause);
 			parameterClause.clear();
@@ -472,6 +468,18 @@ void QueryPreprocessor::setQueryParameter() {
 	}
 	else if (prevTokenSelect.token_value == "" && prevTokenSelect.type == QueryToken::QueryTokenType::AFFECTS_T) {
 		queryParameter = { QueryToken::QueryTokenType::AFFECTS_T, "" };
+	}
+	else if (prevTokenSelect.token_value == "AffectsBip" && prevTokenSelect.type == QueryToken::QueryTokenType::IDENTIFIER) {
+		queryParameter = { QueryToken::QueryTokenType::AFFECTS_BIP, "AffectsBip" };
+	}
+	else if (prevTokenSelect.token_value == "" && prevTokenSelect.type == QueryToken::QueryTokenType::AFFECTS_BIP_T) {
+		queryParameter = { QueryToken::QueryTokenType::AFFECTS_BIP_T, "" };
+	}
+	else if (prevTokenSelect.token_value == "NextBip" && prevTokenSelect.type == QueryToken::QueryTokenType::IDENTIFIER) {
+		queryParameter = { QueryToken::QueryTokenType::NEXT_BIP, "NextBip" };
+	}
+	else if (prevTokenSelect.token_value == "" && prevTokenSelect.type == QueryToken::QueryTokenType::NEXT_BIP_T) {
+		queryParameter = { QueryToken::QueryTokenType::NEXT_BIP_T, "" };
 	}
 }
 

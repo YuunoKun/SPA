@@ -1,0 +1,73 @@
+procedure myFirst {
+    read a;
+    b = a * 3;
+    c = a * b + 4;
+    read d;
+    print a;
+    while (a != 0) {
+        call mySecond;
+        if (d < c) then {
+            print b;
+            d = a + b * c + c - d * a;
+            read e;
+            while (a > c) {
+                call myThird;
+                read f;
+                c = a + e * 5 + f /10;
+            }
+        } else {
+            read g;
+            b = 7 * e + g;
+            print c;
+        }
+    }
+
+}
+procedure mySecond {
+    if(a == 1) then {
+        if (b != c) then {
+            read h;
+            h = h + c - 9;
+            if (h > 0) then {
+                print h;
+            } else {
+                read i;
+            }
+            i = a + i / c;
+        } else {
+            print d;
+        }
+    } else {
+        read j;
+        print j;
+    }
+}
+procedure myThird {
+    while (b <= 0) {
+        while ((c * b) > 6) {
+            call myFourth;
+            read k;
+            k = a + b + c + d;
+            a = a + b - 8;
+            print a;
+            print b;
+            while (k > (7 + d)) {
+                k = k - 1;
+                print k;
+            }
+        }
+    }
+}
+procedure myFourth {
+    d = 3 - a;
+    if (d < 0) then {
+        while (a > (c / b)) {
+            print b;
+        }
+    } else {
+        while (b != c) {
+            print d;
+        }
+    }
+    call mySecond;
+}
