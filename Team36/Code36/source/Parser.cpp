@@ -3,8 +3,6 @@
 #include <stdexcept>
 #include <fstream>
 #include "Parser.h"
-#include "FSM.h"
-#include "DesignExtractor.h"
 
 using namespace SourceProcessor;
 

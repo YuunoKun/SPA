@@ -3,7 +3,6 @@
 #include <iostream>
 #include <vector>
 #include <list>
-#include <functional>
 #include <unordered_map>
 #include "Common.h"
 
@@ -44,13 +43,12 @@ public:
 	bool IsCall();
 	bool IsReturn();
 
+	template <class T, class U>
+	void traverse(bool(*action)(CFGNode*, T, U), T, U);
+
 	void traverse(bool(*action)(CFGNode*));
 	void traverse(bool(*action)(CFGNode*, std::vector<std::pair<prog_line, prog_line>>&),
 		std::vector<std::pair<prog_line, prog_line>>&);
-	template<class T, class U>
-	void traverse(bool(*action)(CFGNode*, T, U), T, U);
-
-
 
 private:
 	std::vector<prog_line> program_lines;
@@ -65,4 +63,17 @@ private:
 	CFGNode* next_call{nullptr};
 	std::unordered_map<prog_line, CFGNode*> next_return;
 	std::list<CFGNode*> prev;
+};
+
+
+template <class T, class U>
+void CFGNode::traverse(bool(*action)(CFGNode*, T, U), T t, U u) {
+	if (action(this, t, u)) {
+		if (next_main) {
+			next_main->traverse<T, U>(action, t, u);
+		}
+		if (next_branch) {
+			next_branch->traverse<T, U>(action, t, u);
+		}
+	}
 };

@@ -5,7 +5,7 @@
 #include "PKB.h"
 #include "RelationTable.h"
 #include "RelationTable.cpp"
-#include <ExprParser.h>
+#include "ExprParser.h"
 
 namespace IntegrationTesting {
 	class ParserPKBTest : public testing::Test {

@@ -1,8 +1,7 @@
 #pragma once
 
-#include <functional>
-#include "CFGNode.h"
 #include "Common.h"
+#include "CFGNode.h"
 
 class CFG {
 public:

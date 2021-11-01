@@ -4,11 +4,11 @@
 #include <stack>
 #include <unordered_set>
 #include <unordered_map>
+#include "CFG.h"
 #include "Extractor.h"
 #include "Procedure.h"
 #include "Statement.h"
 #include "ExprParser.h"
-#include "CFG.h"
 
 namespace SourceProcessor {
 	class DesignExtractor : public Extractor {

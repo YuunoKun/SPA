@@ -1,6 +1,7 @@
 #include <algorithm>
 #include "CFGNode.h"
 
+
 CFGNode::CFGNode() {
 	visited = false;
 	termination = false;
@@ -155,18 +156,6 @@ void CFGNode::traverse(bool(*action)(CFGNode*, std::vector<std::pair<prog_line, 
 		}
 		if (next_branch) {
 			next_branch->traverse(action, v);
-		}
-	}
-}
-
-template<class T, class U>
-void CFGNode::traverse(bool(*action)(CFGNode*, T, U), T t, U u) {
-	if (action(this, t, u)) {
-		if (next_main) {
-			next_main->traverse<T, U>(action, t, u);
-		}
-		if (next_branch) {
-			next_branch->traverse<T, U>(action, t, u);
 		}
 	}
 }
