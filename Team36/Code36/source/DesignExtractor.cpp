@@ -375,14 +375,39 @@ void DesignExtractor::populateCalls(PKB& pkb) {
 }
 
 void DesignExtractor::populateNext(PKB& pkb) {
+
+	std::vector<CFG*> cfgs;
 	for (Procedure* p : de_procedures) {
 		CFG* cfg = generateCFG(p->getChild());
 		std::vector<std::pair<prog_line, prog_line>> nexts = cfg->getNexts();
 		for (auto next_rel : nexts) {
 			pkb.addNext(next_rel.first, next_rel.second);
 		}
-		delete cfg;
+		cfgs.push_back(cfg);
 	}
+
+
+	try {
+		for (proc_index p : call_sequence) {
+			for (stmt_index s: de_procedures[p - 1]->getChild()) {
+				Statement* stmt = de_statements[s - 1];
+				if (stmt->getType() == StmtType::STMT_CALL) {
+					cfgs[p - 1]->call(cfgs[proc_name_to_id[stmt->getCallee()] - 1], s);
+				}
+			}
+		}
+
+		for (CFG* cfg: cfgs) {
+			if (cfg->getHeadLabelledProgLine().label == 0) {
+				pkb.addCFGBip(cfg);
+			}
+		}
+	}
+	catch (...) {
+		std::cout << "CFGBip failed." << std::endl;
+	}
+
+	pkb.addCFGsToDestroy(cfgs);
 }
 
 void DesignExtractor::populateIfs(PKB& pkb) {
@@ -446,7 +471,7 @@ CFG* DesignExtractor::generateCFG(std::vector<stmt_index> indexes) {
 				}
 
 				if (split.size() != 2) {
-					throw runtime_error("CFG build failure. If statement not 2 splits.");
+					throw std::runtime_error("CFG build failure. If statement not 2 splits.");
 				}
 
 				stmt_index then_start = curr + 1;
@@ -475,7 +500,7 @@ CFG* DesignExtractor::generateCFG(std::vector<stmt_index> indexes) {
 				delete cfg_while;
 			}
 			else {
-				throw runtime_error("CFG build failure. Gap involved non-container statement.");
+				throw std::runtime_error("CFG build failure. Gap involved non-container statement.");
 			}
 		}
 		else {

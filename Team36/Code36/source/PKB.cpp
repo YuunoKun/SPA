@@ -293,6 +293,7 @@ void PKB::resetCache() {
 	for (auto& cfg : cfgs_to_destroy) {
 		delete cfg;
 	}
+	cfgs_to_destroy = {};
 	cfg_bips = {};
 }
 
