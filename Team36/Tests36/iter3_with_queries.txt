@@ -90,7 +90,7 @@ Select s with s.stmt# = 5
 5000
 19 - RHS stmt#, stmt
 stmt s;
-Select s with 5 = stmt#
+Select s with 5 = s.stmt#
 5
 5000
 20 - LHS stmt#, read
@@ -136,12 +136,12 @@ Select w with 6 = w.stmt#
 28 - LHS stmt#, if
 if ifs;
 Select ifs with ifs.stmt# = 8
-6
+8
 5000
 29 - RHS stmt#, if
 if ifs;
-Select ifs with 8 = ifs.stmt#8
-6
+Select ifs with 8 = ifs.stmt#
+8
 5000
 30 - LHS stmt#, assign
 assign a;
@@ -166,7 +166,7 @@ mySecond, myThird, myFourth
 34 - LHS procedure procName, RHS variable varName
 procedure p; variable v;
 Select p with p.procName = v.varName
-myFirst, mySecond
+myFirst, mySecond, myThird, myFourth
 5000
 35 - LHS procedure procName, RHS read varName
 procedure p; read r;
@@ -181,7 +181,7 @@ myFourth
 37 - LHS call procName, RHS variable varName
 call c; variable v;
 Select c with c.procName = v.varName
-7, 47
+7, 47, 13, 32
 5000
 38 - LHS call procName, RHS read varName
 call c; read r;
@@ -196,27 +196,27 @@ Select c with c.procName = pn.varName
 40 - LHS variable varName, RHS read varName
 variable v; read r;
 Select v with v.varName = r.varName
-a, d, e, f, g, h, i, j, k
+a, d, e, f, g, h, i, j, k, myFourth, myThird
 5000
 41 - LHS variable varName, RHS print varName
 variable v; print pn;
 Select v with v.varName = pn.varName
-a, b, c, h, d, j, k
+a, b, c, h, d, j, k, myFourth
 5000
 42 - LHS read varName, RHS print varName
 read r; print pn;
 Select r with r.varName = pn.varName
-1, 4, 21, 25, 28, 50
+1, 4, 21, 28, 33, 50
 5000
 43 - LHS print varName, RHS print varName
 read r; print pn;
 Select pn with r.varName = pn.varName
-5, 9, 24, 27, 29, 36, 37, 40, 46
+5, 24, 27, 29, 36, 40, 46, 51
 5000
 44 - LHS const value, RHS stmt stmt#
 constant c; stmt s;
 Select c with c.value = s.stmt#
-3, 4, 10, 7, 1, 9, 6
+3, 4, 5, 8, 10, 7, 1, 9, 6
 5000
 45 - LHS const value, RHS read stmt#
 constant c; read r;
@@ -226,7 +226,7 @@ Select c with c.value = r.stmt#
 46 - LHS const value, RHS print stmt#
 constant c; print pn;
 Select c with c.value = pn.stmt#
-9
+5, 9
 5000
 47 - LHS const value, RHS call stmt#
 constant c; call c1;
@@ -241,7 +241,7 @@ Select c with c.value = w.stmt#
 49 - LHS const value, RHS if stmt#
 constant c; if ifs;
 Select c with c.value = ifs.stmt#
-none
+8
 5000
 50 - LHS const value, RHS assign stmt#
 constant c; assign a;
@@ -356,7 +356,7 @@ none
 72 - LHS prog_line, RHS const value
 prog_line n; constant c;
 Select n with n = c.value
-3, 4, 10, 7, 1, 9, 6
+3, 4, 10, 7, 1, 9, 6, 5, 8
 5000
 73 - LHS prog_line, RHS stmt stmt#
 prog_line n; stmt s;
@@ -417,4 +417,9 @@ none
 stmt with;
 Select with with with.stmt# = 5
 5
+5000
+85 - stmt# = n
+assign a; prog_line n;
+Select n with a.stmt# = n
+2, 3, 10, 15, 17, 22, 26, 34, 35, 39, 41, 48
 5000

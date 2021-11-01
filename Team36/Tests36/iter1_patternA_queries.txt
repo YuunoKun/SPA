@@ -63,3 +63,8 @@ assign a; variable v;
 Select v pattern a(v, "x")
 none
 5000
+14 - select tuple
+assign a; variable v;
+Select <a, v> pattern a(v, _)
+1 x, 2 y, 8 y, 12 var1, 14 var1, 15 x, 18 y, 19 y
+5000
