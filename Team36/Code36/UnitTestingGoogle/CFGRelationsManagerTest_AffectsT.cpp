@@ -178,7 +178,6 @@ namespace UnitTesting {
 		for (auto& pair : false_list) {
 			EXPECT_FALSE(manager.isAffectsT(pair.first.stmt_index, pair.second.stmt_index)) << "Expected false but fail at " <<
 				pair.first.stmt_index << " and" << pair.second.stmt_index;
-			EXPECT_EQ(manager.getAffectsTProcessor().getCalculatedMatrix()[pair.first.stmt_index - 1][pair.second.stmt_index - 1], 1);
 			EXPECT_FALSE(manager.isAffectsT(pair.first.stmt_index, pair.second.stmt_index)) << "Expected false but fail at " <<
 				pair.first.stmt_index << " and" << pair.second.stmt_index;
 		}
