@@ -6,7 +6,7 @@
 namespace UnitTesting {
 
 
-	TEST(QueryOptimizer, sortTwoSynonymClausesOrderByCommonSynonym) {
+	TEST(QueryOptimizer, sortTwoSynonymClausesByCommonSynonym) {
 		QueryOptimizer optimizer;
 		RelRef rel_ref_no_synonym(FOLLOWS, { STMT, "1" }, { STMT, "2" });
 		RelRef rel_ref_one_synonym(FOLLOWS, { STMT, Synonym("a") }, { STMT, "2" });
@@ -147,7 +147,7 @@ namespace UnitTesting {
 	}
 
 
-	TEST(QueryOptimizer, sortNextTClausesOrder) {
+	TEST(QueryOptimizer, sortNextTClauses) {
 		QueryOptimizer optimizer(false, true);
 		RelRef no_synonym(NEXT_T, { STMT, "1" }, { WILD });
 		RelRef one_synonym(NEXT_T, { STMT, Synonym("a") }, { WILD });
@@ -177,7 +177,7 @@ namespace UnitTesting {
 		EXPECT_EQ(optimizer.optimizeClausesOrder(unordered_clauses), ordered_clauses);
 	}
 
-	TEST(QueryOptimizer, sortAffectsClausesOrder_affect_t_only) {
+	TEST(QueryOptimizer, sortAffectsClauses_affect_t_only) {
 		QueryOptimizer optimizer(false, true);
 		RelRef no_synonym1(AFFECT_T, { STMT, "1" }, { WILD });
 		RelRef no_synonym2(AFFECT_T, { WILD }, { STMT, "1" });
@@ -216,7 +216,7 @@ namespace UnitTesting {
 		EXPECT_EQ(optimizer.optimizeClausesOrder(unordered_clauses), ordered_clauses);
 	}
 
-	TEST(QueryOptimizer, sortAffectsClausesOrder_affect_only) {
+	TEST(QueryOptimizer, sortAffectsClauses_affect_only) {
 
 		QueryOptimizer optimizer(false, true);
 		RelRef no_synonym1(AFFECT, { WILD }, { WILD });
@@ -256,7 +256,7 @@ namespace UnitTesting {
 		EXPECT_EQ(optimizer.optimizeClausesOrder(unordered_clauses), ordered_clauses);
 	}
 
-	TEST(QueryOptimizer, sortAffectsClausesOrder) {
+	TEST(QueryOptimizer, sortAffectsClauses) {
 		QueryOptimizer optimizer;
 		RelRef affect_no_synonym1(AFFECT, { WILD }, { WILD });
 		RelRef affect_no_synonym2(AFFECT, { STMT, "1" }, { WILD });
@@ -333,7 +333,7 @@ namespace UnitTesting {
 	}
 
 
-	TEST(QueryOptimizer, sortClausesOrderByRelationType) {
+	TEST(QueryOptimizer, sortClausesByComputationalType) {
 		QueryOptimizer optimizer(false, true);
 
 		RelRef rel_ref_no_synonym(FOLLOWS, { STMT, "1" }, { STMT, "2" });

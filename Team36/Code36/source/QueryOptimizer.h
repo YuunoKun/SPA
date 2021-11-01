@@ -19,23 +19,22 @@ private:
 	int affect_threshold_count = 10;
 
 	std::list<Clause> optmizeClausesWithAffectThreshold(std::list<Clause>&);
-	std::list<Clause> sortClausesOrderByCommonSynonym(std::list<Clause>&);
-	std::list<Clause> sortTwoSynonymClausesOrder(std::list<Clause>&);
+	std::list<Clause> sortClausesByCommonSynonym(std::list<Clause>&);
+	std::list<Clause> sortTwoSynonymClausesByCommonSynonym(std::list<Clause>&);
 
-	std::list<Clause> sortClausesOrderByRelationType(std::list<Clause>&);
-	std::list<Clause> sortNextTClausesOrder(std::list<Clause>&);
-	std::list<Clause> sortAffectsClausesOrder(std::list<Clause>&);
+	std::list<Clause> sortClausesByComputationalType(std::list<Clause>&);
+	std::list<Clause> sortNextTClauses(std::list<Clause>&);
+	std::list<Clause> sortAffectsClauses(std::list<Clause>&);
 	std::list<Clause> sortClausesByNumOfSynonym(std::list<Clause>&);
 
 	bool isSynonymAndSynonym(Entity&, Entity&);
 	bool isConstantAndConstant(Entity&, Entity&);
 	bool isSynonymAndConstant(Entity&, Entity&);
 
-
 	bool isNoSynonym(Entity&, Entity&);
 	bool isOneSynonym(Entity&, Entity&);
 
-	bool isCFGSearchWithNonTCache(Entity&, Entity&);
+	bool isDFSWhenNonTTableNotCached(Entity&, Entity&);
 
 	bool checkConstantExist(Entity&);
 	bool checkSecondaryAttributeConstantExist(Entity&);

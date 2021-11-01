@@ -28,11 +28,11 @@ std::vector<Clause> QueryOptimizer::optimizeClausesOrder(std::vector<Clause>& cl
 		clauses_list = optmizeClausesWithAffectThreshold(clauses_list);
 	}
 	if (optimize_clause_by_common_synonym) {
-		clauses_list = sortClausesOrderByCommonSynonym(clauses_list);
+		clauses_list = sortClausesByCommonSynonym(clauses_list);
 	}
 	
 	if (optimize_clause_by_relation_type) {
-		clauses_list = sortClausesOrderByRelationType(clauses_list);
+		clauses_list = sortClausesByComputationalType(clauses_list);
 	}
 	std::vector<Clause> clauses_result(clauses_list.begin(), clauses_list.end());
 	return clauses_result;
@@ -68,7 +68,7 @@ std::list<Clause> QueryOptimizer::optmizeClausesWithAffectThreshold(std::list<Cl
 		else if (isSynonymAndSynonym(left_entity, right_entity) && relationType == RelType::AFFECT) {
 			have_affect_table_cache_clauses = true;
 		}
-		else if (relationType == RelType::AFFECT_T && isCFGSearchWithNonTCache(left_entity, right_entity)) {
+		else if (relationType == RelType::AFFECT_T && isDFSWhenNonTTableNotCached(left_entity, right_entity)) {
 			have_affect_table_cache_clauses = true;
 			affect_t_clauses_count++;
 		}
@@ -88,7 +88,7 @@ std::list<Clause> QueryOptimizer::optmizeClausesWithAffectThreshold(std::list<Cl
 //Re-order the clauses in the following order
 //1. clauses with one or less synonym
 //2. clauses with two synonym - sorted by common synonym
-std::list<Clause> QueryOptimizer::sortClausesOrderByCommonSynonym(std::list<Clause>& clauses) {
+std::list<Clause> QueryOptimizer::sortClausesByCommonSynonym(std::list<Clause>& clauses) {
 	std::list<Clause> others_synonym_list, two_synonym_list;
 	for (Clause c : clauses) {
 		Entity left_entity = getLeftEntity(c);
@@ -102,7 +102,7 @@ std::list<Clause> QueryOptimizer::sortClausesOrderByCommonSynonym(std::list<Clau
 		}
 	}
 
-	two_synonym_list = sortTwoSynonymClausesOrderByCommonSynonym(two_synonym_list);
+	two_synonym_list = sortTwoSynonymClausesByCommonSynonym(two_synonym_list);
 
 	std::list<Clause> reordered_clauses;
 	reordered_clauses.insert(reordered_clauses.end(), others_synonym_list.begin(), others_synonym_list.end());
@@ -115,7 +115,7 @@ std::list<Clause> QueryOptimizer::sortClausesOrderByCommonSynonym(std::list<Clau
 //1. clauses with no common synonym
 //2. clauses with two common synonym only
 //3. clauses with one common synonym
-std::list<Clause> QueryOptimizer::sortTwoSynonymClausesOrderByCommonSynonym(std::list<Clause>& two_synonym_clauses) {
+std::list<Clause> QueryOptimizer::sortTwoSynonymClausesByCommonSynonym(std::list<Clause>& two_synonym_clauses) {
 	std::unordered_map<std::string, int> synonym_count;
 	std::vector<std::vector<std::string>> synonym_names;
 	for (Clause c : two_synonym_clauses) {
@@ -181,7 +181,7 @@ std::list<Clause> QueryOptimizer::sortTwoSynonymClausesOrderByCommonSynonym(std:
 //1. Other clauses
 //2. Next_T clauses that require CFG search
 //3. Affect clauses
-std::list<Clause> QueryOptimizer::sortClausesOrderByRelationType(std::list<Clause>& clauses) {
+std::list<Clause> QueryOptimizer::sortClausesByComputationalType(std::list<Clause>& clauses) {
 	std::list<Clause> others_clauses, next_t_cfg_search_clauses, affects_clauses;
 	for (Clause c : clauses) {
 		ClauseType type = c.getType();
@@ -190,7 +190,7 @@ std::list<Clause> QueryOptimizer::sortClausesOrderByRelationType(std::list<Claus
 		Entity right_entity = getRightEntity(c);
 
 		if (type == ClauseType::RELATION && relationType == RelType::NEXT_T
-			&& isCFGSearchWithNonTCache(left_entity, right_entity)) {
+			&& isDFSWhenNonTTableNotCached(left_entity, right_entity)) {
 			next_t_cfg_search_clauses.emplace_back(c);
 		}
 		else if (type == ClauseType::RELATION && (relationType == RelType::AFFECT || relationType == RelType::AFFECT_T)) {
@@ -201,8 +201,8 @@ std::list<Clause> QueryOptimizer::sortClausesOrderByRelationType(std::list<Claus
 			cout << "here";
 		}
 	}
-	next_t_cfg_search_clauses = sortNextTClausesOrder(next_t_cfg_search_clauses);
-	affects_clauses = sortAffectsClausesOrder(affects_clauses);
+	next_t_cfg_search_clauses = sortNextTClauses(next_t_cfg_search_clauses);
+	affects_clauses = sortAffectsClauses(affects_clauses);
 
 	std::list<Clause> reordered_clauses;
 	reordered_clauses.insert(reordered_clauses.end(), others_clauses.begin(), others_clauses.end());
@@ -215,7 +215,7 @@ std::list<Clause> QueryOptimizer::sortClausesOrderByRelationType(std::list<Claus
 //Re-order the next_t clauses in the following order
 //1. First two common synonym next clauses (to cache the result)
 //2. Others clauses
-std::list<Clause> QueryOptimizer::sortNextTClausesOrder(std::list<Clause>& next_t_clauses) {
+std::list<Clause> QueryOptimizer::sortNextTClauses(std::list<Clause>& next_t_clauses) {
 	std::list<Clause> compute_next_graph, other_clauses;
 
 	for (Clause c : next_t_clauses) {
@@ -240,7 +240,7 @@ std::list<Clause> QueryOptimizer::sortNextTClausesOrder(std::list<Clause>& next_
 //1. first two common synonym affect* or affect clauses (to cache the result)
 //2. Affects/Affect_T clauses that require graph search with next table
 //3. Affects_T clauses that require graph search on pre-compute affect table
-std::list<Clause> QueryOptimizer::sortAffectsClausesOrder(std::list<Clause>& affect_clauses) {
+std::list<Clause> QueryOptimizer::sortAffectsClauses(std::list<Clause>& affect_clauses) {
 
 	std::list<Clause> compute_affect_graph, affect_cfg_search_clauses, affect_t_cfg_search_clauses;
 
@@ -265,7 +265,7 @@ std::list<Clause> QueryOptimizer::sortAffectsClausesOrder(std::list<Clause>& aff
 				affect_cfg_search_clauses.emplace_back(c);
 			}
 
-		}else if (relationType == RelType::AFFECT_T && isCFGSearchWithNonTCache(left_entity, right_entity)) {
+		}else if (relationType == RelType::AFFECT_T && isDFSWhenNonTTableNotCached(left_entity, right_entity)) {
 			affect_t_cfg_search_clauses.emplace_back(c);
 		}
 		else{
@@ -406,7 +406,9 @@ bool QueryOptimizer::isOneSynonym(Entity& e1, Entity& e2) {
 	return (!e1.isSynonym() && e2.isSynonym()) || (!e2.isSynonym() && e1.isSynonym());
 }
 
-bool QueryOptimizer::isCFGSearchWithNonTCache(Entity& e1, Entity& e2) {
+//The synonym combination require to perform DFS search on Non-T table when not cached
+// e.g Next_T perform DFS on Next Table or Affect_T perform DFS on Affect table
+bool QueryOptimizer::isDFSWhenNonTTableNotCached(Entity& e1, Entity& e2) {
 	return isSynonymAndSynonym(e1, e2) || isSynonymAndConstant(e1, e2) || isConstantAndConstant(e1, e2);
 }
 
