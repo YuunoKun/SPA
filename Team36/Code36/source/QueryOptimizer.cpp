@@ -4,15 +4,35 @@
 
 
 
+QueryOptimizer::QueryOptimizer() {
+}
+
+QueryOptimizer::QueryOptimizer(bool optimize_clause_by_common_synonym, bool optimize_clause_by_relation_type) {
+	this->optimize_clause_by_common_synonym = optimize_clause_by_common_synonym;
+	this->optimize_clause_by_relation_type = optimize_clause_by_relation_type;
+}
+
+QueryOptimizer::QueryOptimizer(bool optimize_clause_by_common_synonym, bool optimize_clause_by_relation_type, bool affect_threshold_optimization, int affect_threshold_count) {
+	this->optimize_clause_by_common_synonym = optimize_clause_by_common_synonym;
+	this->optimize_clause_by_relation_type = optimize_clause_by_relation_type;
+	this->affect_threshold_optimization = affect_threshold_optimization;
+	this->affect_threshold_count = affect_threshold_count;
+}
+
 std::vector<Clause> QueryOptimizer::optimizeClausesOrder(std::vector<Clause>& clauses) {
+	std::list<Clause> clauses_list(clauses.begin(), clauses.end());
+	if (optimize_clause_by_common_synonym || optimize_clause_by_relation_type) {
+		clauses_list = optimizeClausesByNumOfSynonym(clauses_list);
+	}
 	if (optimize_clause_by_common_synonym) {
-		clauses = optimizeClausesOrderByCommonSynonym(clauses);
+		clauses_list = optimizeClausesOrderByCommonSynonym(clauses_list);
 	}
 	
 	if (optimize_clause_by_relation_type) {
-		clauses = optimizeClausesOrderByRelationType(clauses);
+		clauses_list = optimizeClausesOrderByRelationType(clauses_list);
 	}
-	return clauses;
+	std::vector<Clause> clauses_result(clauses_list.begin(), clauses_list.end());
+	return clauses_result;
 }
 
 
@@ -20,28 +40,24 @@ std::vector<Clause> QueryOptimizer::optimizeClausesOrder(std::vector<Clause>& cl
 //1. clauses with no synonym
 //2. clauses with one synonym
 //3. clauses with two synonym
-std::vector<Clause> QueryOptimizer::optimizeClausesOrderByCommonSynonym(std::vector<Clause>& clauses) {
-	std::list<Clause> no_synonym_list, one_synonym_list, two_synonym_list;
+std::list<Clause> QueryOptimizer::optimizeClausesOrderByCommonSynonym(std::list<Clause>& clauses) {
+	std::list<Clause> others_synonym_list, two_synonym_list;
 	for (Clause c : clauses) {
-		ClauseType type = c.getType();
 		Entity left_entity = getLeftEntity(c);
 		Entity right_entity = getRightEntity(c);
 
-		if (left_entity.isSynonym() && right_entity.isSynonym()) {
+		if (isSynonymAndSynonym(left_entity, right_entity)) {
 			two_synonym_list.emplace_back(c);
 		}
-		else if (left_entity.isSynonym() || right_entity.isSynonym()) {
-			one_synonym_list.emplace_back(c);
-		}
 		else {
-			no_synonym_list.emplace_back(c);
+			others_synonym_list.emplace_back(c);
 		}
 	}
 
 	two_synonym_list = optimizeTwoSynonymClausesOrder(two_synonym_list);
-	std::vector<Clause> reordered_clauses;
-	reordered_clauses.insert(reordered_clauses.end(), no_synonym_list.begin(), no_synonym_list.end());
-	reordered_clauses.insert(reordered_clauses.end(), one_synonym_list.begin(), one_synonym_list.end());
+
+	std::list<Clause> reordered_clauses;
+	reordered_clauses.insert(reordered_clauses.end(), others_synonym_list.begin(), others_synonym_list.end());
 	reordered_clauses.insert(reordered_clauses.end(), two_synonym_list.begin(), two_synonym_list.end());
 	return reordered_clauses;
 }
@@ -56,33 +72,34 @@ std::list<Clause> QueryOptimizer::optimizeTwoSynonymClausesOrder(std::list<Claus
 }
 
 
-//Re-order the clauses in the following order according to their computational intencity in increasing other.
-//1. other clauses
-//2. next clauses
-//3. affect clauses
-std::vector<Clause> QueryOptimizer::optimizeClausesOrderByRelationType(std::vector<Clause>& clauses) {
+//Re-order the clauses in the following order according to their computational intensity in increasing other.
+//1. Other clauses
+//2. Next_T clauses that require CFG search
+//3. Affect clauses
+std::list<Clause> QueryOptimizer::optimizeClausesOrderByRelationType(std::list<Clause>& clauses) {
 	std::list<Clause> others_clauses, next_t_cfg_search_clauses, affects_clauses;
 	for (Clause c : clauses) {
 		ClauseType type = c.getType();
+		RelType relationType = c.getRelation().getType();
 		Entity left_entity = getLeftEntity(c);
 		Entity right_entity = getRightEntity(c);
 
-		if (type == ClauseType::RELATION && c.getRelation().getType() == NEXT_T
-			&& isNextTWithCFGSearch(left_entity, right_entity)) {
+		if (type == ClauseType::RELATION && relationType == RelType::NEXT_T
+			&& isCFGSearchWithNonTCache(left_entity, right_entity)) {
 			next_t_cfg_search_clauses.emplace_back(c);
 		}
-		else if (type == ClauseType::RELATION &&
-			(c.getRelation().getType() == AFFECT || c.getRelation().getType() == AFFECT_T)) {
+		else if (type == ClauseType::RELATION && (relationType == RelType::AFFECT || relationType == RelType::AFFECT_T)) {
 			affects_clauses.emplace_back(c);
 		}
 		else {
 			others_clauses.emplace_back(c);
+			cout << "here";
 		}
 	}
-	next_t_cfg_search_clauses = optimizeNextClausesOrder(next_t_cfg_search_clauses);
-	affects_clauses = optimizeAffectClausesOrder(affects_clauses);
+	next_t_cfg_search_clauses = optimizeNextTClausesOrder(next_t_cfg_search_clauses);
+	affects_clauses = optimizeAffectsClausesOrder(affects_clauses);
 
-	std::vector<Clause> reordered_clauses;
+	std::list<Clause> reordered_clauses;
 	reordered_clauses.insert(reordered_clauses.end(), others_clauses.begin(), others_clauses.end());
 	reordered_clauses.insert(reordered_clauses.end(), next_t_cfg_search_clauses.begin(), next_t_cfg_search_clauses.end());
 	reordered_clauses.insert(reordered_clauses.end(), affects_clauses.begin(), affects_clauses.end());
@@ -90,65 +107,40 @@ std::vector<Clause> QueryOptimizer::optimizeClausesOrderByRelationType(std::vect
 }
 
 
-//Re-order the clauses in the following order
-//1. first two common synonym next clauses (to cache the result)
-//2. Next_T clauses that require graph search and terminate whenever a single result found
-//3. Next_T clauses that require graph search and terminate when all relevant result is found
-//2. remaining two synonym clauses
-std::list<Clause> QueryOptimizer::optimizeNextClausesOrder(std::list<Clause>& next_t_clauses) {
-	std::list<Clause> compute_next_graph, no_synonym_clauses, 
-		one_synonym_clauses, two_synonym_clauses_after_pre_compute;
+//Re-order the next_t clauses in the following order
+//1. First two common synonym next clauses (to cache the result)
+//2. Others clauses
+std::list<Clause> QueryOptimizer::optimizeNextTClausesOrder(std::list<Clause>& next_t_clauses) {
+	std::list<Clause> compute_next_graph, other_clauses;
 
 	for (Clause c : next_t_clauses) {
-		ClauseType type = c.getType();
 		Entity left_entity = getLeftEntity(c);
 		Entity right_entity = getRightEntity(c);
 
-		if (isSynonymAndSynonym(left_entity, right_entity)) {
-			if (compute_next_graph.empty()) {
-				compute_next_graph.emplace_back(c);
-			}
-			else {
-				two_synonym_clauses_after_pre_compute.emplace_back(c);
-			}
-
-		}
-		else if (isConstantAndConstant(left_entity, right_entity)) {
-			no_synonym_clauses.emplace_back(c);
-		}
-		else if (isSynonymAndConstant(left_entity, right_entity)) {
-			one_synonym_clauses.emplace_back(c);
+		if (isSynonymAndSynonym(left_entity, right_entity) && compute_next_graph.empty()) {
+			compute_next_graph.emplace_back(c);
 		}
 		else {
-			throw std::domain_error("optimizeNextClausesOrder() :: Some next clauses has not been handle!");
+			other_clauses.emplace_back(c);
 		}
-
 	}
-
 	std::list<Clause> reordered_clauses;
 	reordered_clauses.insert(reordered_clauses.end(), compute_next_graph.begin(), compute_next_graph.end());
-	reordered_clauses.insert(reordered_clauses.end(), no_synonym_clauses.begin(), no_synonym_clauses.end());
-	reordered_clauses.insert(reordered_clauses.end(), one_synonym_clauses.begin(), one_synonym_clauses.end());
-	reordered_clauses.insert(reordered_clauses.end(), two_synonym_clauses_after_pre_compute.begin(), two_synonym_clauses_after_pre_compute.end());
+	reordered_clauses.insert(reordered_clauses.end(), other_clauses.begin(), other_clauses.end());
 	return reordered_clauses;
 }
 
 
-//Re-order the clauses in the following order
+//Re-order the afffects clauses in the following order
 //1. first two common synonym affect* or affect clauses (to cache the result)
-//2. Affects/Affect_T clauses that require graph search and terminate whenever single result found
-//4. Affects clauses that require graph search and terminate when all relevant result is found or with specfic target e.g (Affect*(1,30))
-//5. Remaining two synonym affects clauses
-//7. Affects_T clauses that require graph search and terminate when all relevant result is found or with specfic target e.g (Affect*(1,30))
-//8. Remaining two synonym affects_T clauses
-std::list<Clause> QueryOptimizer::optimizeAffectClausesOrder(std::list<Clause>& affect_clauses) {
+//2. Affects/Affect_T clauses that require graph search with next table
+//3. Affects_T clauses that require graph search on pre-compute affect table
+std::list<Clause> QueryOptimizer::optimizeAffectsClausesOrder(std::list<Clause>& affect_clauses) {
 
-	std::list<Clause> compute_affect_graph, no_synonym_clauses,
-		affect_one_synonym_clauses, affect_two_synonym_clauses,
-		affect_t_one_synonym_clauses, affect_t_two_synonym_clauses;
+	std::list<Clause> compute_affect_graph, affect_cfg_search_clauses, affect_t_cfg_search_clauses;
 
 	for (Clause c : affect_clauses) {
-		ClauseType type = c.getType();
+		RelType relationType = c.getRelation().getType();
 		Entity left_entity = getLeftEntity(c);
 		Entity right_entity = getRightEntity(c);
 
@@ -156,42 +148,66 @@ std::list<Clause> QueryOptimizer::optimizeAffectClausesOrder(std::list<Clause>& 
 			if (compute_affect_graph.empty()) {
 				compute_affect_graph.emplace_back(c);
 			}
-			else if(compute_affect_graph.front().getType() == RelType::AFFECT && c.getRelation().getType() == RelType::AFFECT_T){
+			else if(compute_affect_graph.front().getRelation().getType() == RelType::AFFECT && relationType == RelType::AFFECT_T){
 				compute_affect_graph.emplace_back(c);
-				affect_two_synonym_clauses.emplace_back(compute_affect_graph.front());
+				affect_cfg_search_clauses.emplace_back(compute_affect_graph.front());
 				compute_affect_graph.pop_front();
 			}
-			else if (c.getRelation().getType() == RelType::AFFECT_T) {
-				affect_t_two_synonym_clauses.emplace_back(c);
+			else if (relationType == RelType::AFFECT_T) {
+				affect_t_cfg_search_clauses.emplace_back(c);
 			}
 			else {
-				affect_two_synonym_clauses.emplace_back(c);
+				affect_cfg_search_clauses.emplace_back(c);
 			}
 
-		}else if (isConstantAndConstant(left_entity, right_entity) || isOneSynonym(left_entity, right_entity)) {
-			if (c.getRelation().getType() == RelType::AFFECT_T) {
-				affect_one_synonym_clauses.emplace_back(c);
-			}
-			else {
-				affect_t_one_synonym_clauses.emplace_back(c);
-			}
+		}else if (relationType == RelType::AFFECT_T && isCFGSearchWithNonTCache(left_entity, right_entity)) {
+			affect_t_cfg_search_clauses.emplace_back(c);
+		}
+		else{
+			affect_cfg_search_clauses.emplace_back(c);
+		}
+	}
+
+	std::list<Clause> reordered_clauses;
+	reordered_clauses.insert(reordered_clauses.end(), compute_affect_graph.begin(), compute_affect_graph.end());
+	reordered_clauses.insert(reordered_clauses.end(), affect_cfg_search_clauses.begin(), affect_cfg_search_clauses.end());
+	reordered_clauses.insert(reordered_clauses.end(), affect_t_cfg_search_clauses.begin(), affect_t_cfg_search_clauses.end());
+	return reordered_clauses;
+}
+
+
+//Re-order the affects t clauses in the following order
+//2. Affect_T clauses that require graph search and terminate whenever a single result found
+//3. Affect_T clauses that require graph search and terminate when all relevant result is found
+//2. Two synonym clauses
+std::list<Clause> QueryOptimizer::optimizeClausesByNumOfSynonym(std::list<Clause>& clauses) {
+	std::list<Clause> no_synonym_clauses,
+		one_synonym_clauses, two_synonym_clauses;
+
+	for (Clause c : clauses) {
+		ClauseType type = c.getType();
+		Entity left_entity = getLeftEntity(c);
+		Entity right_entity = getRightEntity(c);
+
+		if (isSynonymAndSynonym(left_entity, right_entity)) {
+			two_synonym_clauses.emplace_back(c);
 		}
 		else if (isNoSynonym(left_entity, right_entity)) {
 			no_synonym_clauses.emplace_back(c);
 		}
+		else if (isOneSynonym(left_entity, right_entity)) {
+			one_synonym_clauses.emplace_back(c);
+		}
 		else {
-			throw std::domain_error("optimizeAffectClausesOrder() :: Some affects clauses has not been handle!");
+			throw std::domain_error("optimizeAffectsTClausesOrder() :: Some next clauses has not been handle!");
 		}
 
 	}
 
 	std::list<Clause> reordered_clauses;
-	reordered_clauses.insert(reordered_clauses.end(), compute_affect_graph.begin(), compute_affect_graph.end());
 	reordered_clauses.insert(reordered_clauses.end(), no_synonym_clauses.begin(), no_synonym_clauses.end());
-	reordered_clauses.insert(reordered_clauses.end(), affect_one_synonym_clauses.begin(), affect_one_synonym_clauses.end());
-	reordered_clauses.insert(reordered_clauses.end(), affect_two_synonym_clauses.begin(), affect_two_synonym_clauses.end());
-	reordered_clauses.insert(reordered_clauses.end(), affect_t_one_synonym_clauses.begin(), affect_t_one_synonym_clauses.end());
-	reordered_clauses.insert(reordered_clauses.end(), affect_t_two_synonym_clauses.begin(), affect_t_two_synonym_clauses.end());
+	reordered_clauses.insert(reordered_clauses.end(), one_synonym_clauses.begin(), one_synonym_clauses.end());
+	reordered_clauses.insert(reordered_clauses.end(), two_synonym_clauses.begin(), two_synonym_clauses.end());
 	return reordered_clauses;
 }
 
@@ -279,7 +295,7 @@ bool QueryOptimizer::isOneSynonym(Entity& e1, Entity& e2) {
 	return (!e1.isSynonym() && e2.isSynonym()) || (!e2.isSynonym() && e1.isSynonym());
 }
 
-bool QueryOptimizer::isNextTWithCFGSearch(Entity& e1, Entity& e2) {
+bool QueryOptimizer::isCFGSearchWithNonTCache(Entity& e1, Entity& e2) {
 	return isSynonymAndSynonym(e1, e2) || isSynonymAndConstant(e1, e2) || isConstantAndConstant(e1, e2);
 }
 
