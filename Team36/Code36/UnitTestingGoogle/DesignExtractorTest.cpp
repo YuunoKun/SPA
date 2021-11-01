@@ -970,6 +970,47 @@ namespace UnitTesting {
 		for (const auto& next : expected_nexts) {
 			ASSERT_TRUE(table_nexts.containsPair(next.first, next.second));
 		}
+
+		//NextBip
+		auto cfgbips = pkb->getCFGBips();
+		ASSERT_EQ(cfgbips.size(), 1);
+		
+		std::vector<std::pair<prog_line, prog_line>> nextbip_actual = cfgbips[0]->getNextBip();
+		std::vector<std::pair<prog_line, prog_line>> nextbip_expected =
+		{
+			{1, 2}, {2, 3}, {3, 4}, {4, 5},
+			{5, 6}, {6, 7}, {7, 14}, {14, 8},
+			{5, 9}, {9, 10}, {10, 11}, {11, 10}, {10, 12},
+			{12, 13}, {8, 13}
+		};
+		sort(nextbip_actual.begin(), nextbip_actual.end());
+		sort(nextbip_expected.begin(), nextbip_expected.end());
+		ASSERT_EQ(nextbip_actual, nextbip_expected);
+
+		//NextBipWithLabels
+		std::vector<std::pair<LabelledProgLine, LabelledProgLine>> nextbip_labelled_actual = cfgbips[0]->getNextBipWithLabel();
+		std::vector<std::pair<LabelledProgLine, LabelledProgLine>> nextbip_labelled_expected =
+		{
+			{{1, 0},{2, 0}},
+			{{2, 0},{3, 0}},
+			{{3, 0},{4, 0}},
+			{{4, 0},{5, 0}},
+			{{5, 0},{6, 0}},
+			{{6, 0},{7, 0}},
+			{{7, 0},{14, 7}},
+			{{14, 7},{8, 0}},
+			{{5, 0},{9, 0}},
+			{{9, 0},{10, 0}},
+			{{10, 0},{11, 0}},
+			{{11, 0},{10, 0}},
+			{{10, 0},{12, 0}},
+			{{12, 0},{13, 0}},
+			{{8, 0},{13, 0}}
+		};
+		sort(nextbip_actual.begin(), nextbip_actual.end());
+		sort(nextbip_expected.begin(), nextbip_expected.end());
+		ASSERT_EQ(nextbip_actual, nextbip_expected);
+
 		delete extractor;
 	}
 

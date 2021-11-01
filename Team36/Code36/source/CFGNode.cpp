@@ -1,10 +1,13 @@
 #include <algorithm>
 #include "CFGNode.h"
 
+
 CFGNode::CFGNode() {
 	visited = false;
 	termination = false;
 	invalid = false;
+	is_call = false;
+	is_return = false;
 }
 
 CFGNode::~CFGNode() {
@@ -12,7 +15,7 @@ CFGNode::~CFGNode() {
 	delete next_branch;
 }
 
-void CFGNode::setProgramLines(vector<prog_line> lines) {
+void CFGNode::setProgramLines(std::vector<prog_line> lines) {
 	program_lines = lines;
 }
 
@@ -22,6 +25,10 @@ void CFGNode::setNextMain(CFGNode* next_m) {
 
 void CFGNode::setNextBranch(CFGNode* next_m) {
 	next_branch = next_m;
+}
+
+void CFGNode::setNextCall(CFGNode* node) {
+	next_call = node;
 }
 
 void CFGNode::setPrevMain(CFGNode* prev_m) {
@@ -38,11 +45,7 @@ void CFGNode::setPrevBranch(CFGNode* prev_b) {
 }
 
 void CFGNode::setVisited() {
-	if (visited == false) {
-		visited = true;
-	}else {
-		visited = false;
-	}
+	visited = !visited;
 }
 
 void CFGNode::setTermination() {
@@ -56,14 +59,38 @@ void CFGNode::setInvalid() {
 	next_branch = nullptr;
 }
 
+void CFGNode::setIsCall() {
+	is_call = true;
+}
+
+void CFGNode::setIsReturn() {
+	is_return = true;
+}
+
 void CFGNode::insertLine(prog_line programLine) {
 	if (std::find(program_lines.begin(), program_lines.end(), programLine) == program_lines.end()) {
 		program_lines.push_back(programLine);
 	}
 }
 
-vector<prog_line> CFGNode::getProgramLines() {
+void CFGNode::addLabel(prog_line new_label) {
+	labels.push_back(new_label);
+}
+
+void CFGNode::addNextReturn(prog_line from, CFGNode* to) {
+	next_return.insert({from, to});
+}
+
+std::vector<prog_line> CFGNode::getProgramLines() {
 	return program_lines;
+}
+
+std::vector<prog_line> CFGNode::getLabels() {
+	return labels;
+}
+
+std::unordered_map<prog_line, CFGNode*> CFGNode::getNextReturn() {
+	return next_return;
 }
 
 CFGNode* CFGNode::getNextMain() {
@@ -74,6 +101,10 @@ CFGNode* CFGNode::getNextBranch() {
 	return next_branch;
 }
 
+CFGNode* CFGNode::getNextCall() {
+	return next_call;
+}
+
 CFGNode* CFGNode::getPrevMain() {
 	return prev.front();
 }
@@ -82,7 +113,7 @@ CFGNode* CFGNode::getPrevBranch() {
 	return prev.back();
 }
 
-list<CFGNode*> CFGNode::getPrev() {
+std::list<CFGNode*>& CFGNode::getPrev() {
 	return prev;
 }
 
@@ -96,4 +127,35 @@ bool CFGNode::getTermination() {
 
 bool CFGNode::getInvalid() {
 	return invalid;
+}
+
+bool CFGNode::IsCall() {
+	return is_call;
+}
+
+bool CFGNode::IsReturn() {
+	return is_return;
+}
+
+void CFGNode::traverse(bool(*action)(CFGNode*)) {
+	if (action(this)) {
+		if (next_main) {
+			next_main->traverse(action);
+		}
+		if (next_branch) {
+			next_branch->traverse(action);
+		}
+	}
+}
+
+void CFGNode::traverse(bool(*action)(CFGNode*, std::vector<std::pair<prog_line, prog_line>>&),
+	std::vector<std::pair<prog_line, prog_line>>& v) {
+	if (action(this, v)) {
+		if (next_main) {
+			next_main->traverse(action, v);
+		}
+		if (next_branch) {
+			next_branch->traverse(action, v);
+		}
+	}
 }
