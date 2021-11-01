@@ -22,25 +22,73 @@ QueryOptimizer::QueryOptimizer(bool optimize_clause_by_common_synonym, bool opti
 std::vector<Clause> QueryOptimizer::optimizeClausesOrder(std::vector<Clause>& clauses) {
 	std::list<Clause> clauses_list(clauses.begin(), clauses.end());
 	if (optimize_clause_by_common_synonym || optimize_clause_by_relation_type) {
-		clauses_list = optimizeClausesByNumOfSynonym(clauses_list);
+		clauses_list = sortClausesByNumOfSynonym(clauses_list);
+	}
+	if (affect_threshold_optimization) {
+		clauses_list = optmizeClausesWithAffectThreshold(clauses_list);
 	}
 	if (optimize_clause_by_common_synonym) {
-		clauses_list = optimizeClausesOrderByCommonSynonym(clauses_list);
+		clauses_list = sortClausesOrderByCommonSynonym(clauses_list);
 	}
 	
 	if (optimize_clause_by_relation_type) {
-		clauses_list = optimizeClausesOrderByRelationType(clauses_list);
+		clauses_list = sortClausesOrderByRelationType(clauses_list);
 	}
 	std::vector<Clause> clauses_result(clauses_list.begin(), clauses_list.end());
 	return clauses_result;
 }
 
 
+//If the number of affects and affects_t reaches a certain threshold and there is no two synonym clauses
+//Add a dummy two synonym clauses to pre-compute and cache the result
+std::list<Clause> QueryOptimizer::optmizeClausesWithAffectThreshold(std::list<Clause>& clauses) {
+
+	bool have_affect_table_cache_clauses = false;
+	int affect_clauses_count = 0;
+	int affect_t_clauses_count = 0;
+	std::list<Clause> compute_affect_graph, affect_cfg_search_clauses, affect_t_cfg_search_clauses;
+
+	for (Clause c : clauses) {
+		if (c.getType() == ClauseType::PATTERN) {
+			continue;
+		}
+
+		RelType relationType = c.getRelation().getType();
+		if (relationType != RelType::AFFECT && relationType != RelType::AFFECT_T) {
+			continue;
+		}
+
+		Entity left_entity = getLeftEntity(c);
+		Entity right_entity = getRightEntity(c);
+
+		if (isSynonymAndSynonym(left_entity, right_entity) && relationType == RelType::AFFECT_T) {
+			//Affect* table will be re-compute, no optimization needed
+			return clauses;
+		}
+		else if (isSynonymAndSynonym(left_entity, right_entity) && relationType == RelType::AFFECT) {
+			have_affect_table_cache_clauses = true;
+		}
+		else if (relationType == RelType::AFFECT_T && isCFGSearchWithNonTCache(left_entity, right_entity)) {
+			have_affect_table_cache_clauses = true;
+			affect_t_clauses_count++;
+		}
+		else {
+			affect_clauses_count++;
+		}
+	}
+	if (affect_t_clauses_count > affect_threshold_count) {
+		clauses.push_back({ {AFFECT_T, {ASSIGN, Synonym()}, {ASSIGN, Synonym() } } });
+	}
+	else if (!have_affect_table_cache_clauses && affect_clauses_count > affect_threshold_count) {
+		clauses.push_back({ {AFFECT, {ASSIGN, Synonym()}, {ASSIGN, Synonym() } } });
+	}
+	return clauses;
+}
+
 //Re-order the clauses in the following order
-//1. clauses with no synonym
-//2. clauses with one synonym
-//3. clauses with two synonym
-std::list<Clause> QueryOptimizer::optimizeClausesOrderByCommonSynonym(std::list<Clause>& clauses) {
+//1. clauses with one or less synonym
+//2. clauses with two synonym - sorted by common synonym
+std::list<Clause> QueryOptimizer::sortClausesOrderByCommonSynonym(std::list<Clause>& clauses) {
 	std::list<Clause> others_synonym_list, two_synonym_list;
 	for (Clause c : clauses) {
 		Entity left_entity = getLeftEntity(c);
@@ -54,7 +102,7 @@ std::list<Clause> QueryOptimizer::optimizeClausesOrderByCommonSynonym(std::list<
 		}
 	}
 
-	two_synonym_list = optimizeTwoSynonymClausesOrder(two_synonym_list);
+	two_synonym_list = sortTwoSynonymClausesOrder(two_synonym_list);
 
 	std::list<Clause> reordered_clauses;
 	reordered_clauses.insert(reordered_clauses.end(), others_synonym_list.begin(), others_synonym_list.end());
@@ -76,7 +124,7 @@ std::list<Clause> QueryOptimizer::optimizeTwoSynonymClausesOrder(std::list<Claus
 //1. Other clauses
 //2. Next_T clauses that require CFG search
 //3. Affect clauses
-std::list<Clause> QueryOptimizer::optimizeClausesOrderByRelationType(std::list<Clause>& clauses) {
+std::list<Clause> QueryOptimizer::sortClausesOrderByRelationType(std::list<Clause>& clauses) {
 	std::list<Clause> others_clauses, next_t_cfg_search_clauses, affects_clauses;
 	for (Clause c : clauses) {
 		ClauseType type = c.getType();
@@ -96,8 +144,8 @@ std::list<Clause> QueryOptimizer::optimizeClausesOrderByRelationType(std::list<C
 			cout << "here";
 		}
 	}
-	next_t_cfg_search_clauses = optimizeNextTClausesOrder(next_t_cfg_search_clauses);
-	affects_clauses = optimizeAffectsClausesOrder(affects_clauses);
+	next_t_cfg_search_clauses = sortNextTClausesOrder(next_t_cfg_search_clauses);
+	affects_clauses = sortAffectsClausesOrder(affects_clauses);
 
 	std::list<Clause> reordered_clauses;
 	reordered_clauses.insert(reordered_clauses.end(), others_clauses.begin(), others_clauses.end());
@@ -110,7 +158,7 @@ std::list<Clause> QueryOptimizer::optimizeClausesOrderByRelationType(std::list<C
 //Re-order the next_t clauses in the following order
 //1. First two common synonym next clauses (to cache the result)
 //2. Others clauses
-std::list<Clause> QueryOptimizer::optimizeNextTClausesOrder(std::list<Clause>& next_t_clauses) {
+std::list<Clause> QueryOptimizer::sortNextTClausesOrder(std::list<Clause>& next_t_clauses) {
 	std::list<Clause> compute_next_graph, other_clauses;
 
 	for (Clause c : next_t_clauses) {
@@ -135,7 +183,7 @@ std::list<Clause> QueryOptimizer::optimizeNextTClausesOrder(std::list<Clause>& n
 //1. first two common synonym affect* or affect clauses (to cache the result)
 //2. Affects/Affect_T clauses that require graph search with next table
 //3. Affects_T clauses that require graph search on pre-compute affect table
-std::list<Clause> QueryOptimizer::optimizeAffectsClausesOrder(std::list<Clause>& affect_clauses) {
+std::list<Clause> QueryOptimizer::sortAffectsClausesOrder(std::list<Clause>& affect_clauses) {
 
 	std::list<Clause> compute_affect_graph, affect_cfg_search_clauses, affect_t_cfg_search_clauses;
 
@@ -168,6 +216,13 @@ std::list<Clause> QueryOptimizer::optimizeAffectsClausesOrder(std::list<Clause>&
 		}
 	}
 
+	//If there need to pre-compute affect table for some affect* clauses, compute the affect* clauses first to cache the result
+	if (compute_affect_graph.size() == 0 && affect_t_cfg_search_clauses.size() > 0) {
+		compute_affect_graph.push_back(affect_t_cfg_search_clauses.front());
+		affect_t_cfg_search_clauses.pop_front();
+	}
+
+
 	std::list<Clause> reordered_clauses;
 	reordered_clauses.insert(reordered_clauses.end(), compute_affect_graph.begin(), compute_affect_graph.end());
 	reordered_clauses.insert(reordered_clauses.end(), affect_cfg_search_clauses.begin(), affect_cfg_search_clauses.end());
@@ -180,12 +235,11 @@ std::list<Clause> QueryOptimizer::optimizeAffectsClausesOrder(std::list<Clause>&
 //2. Affect_T clauses that require graph search and terminate whenever a single result found
 //3. Affect_T clauses that require graph search and terminate when all relevant result is found
 //2. Two synonym clauses
-std::list<Clause> QueryOptimizer::optimizeClausesByNumOfSynonym(std::list<Clause>& clauses) {
+std::list<Clause> QueryOptimizer::sortClausesByNumOfSynonym(std::list<Clause>& clauses) {
 	std::list<Clause> no_synonym_clauses,
 		one_synonym_clauses, two_synonym_clauses;
 
 	for (Clause c : clauses) {
-		ClauseType type = c.getType();
 		Entity left_entity = getLeftEntity(c);
 		Entity right_entity = getRightEntity(c);
 

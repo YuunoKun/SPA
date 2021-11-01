@@ -238,7 +238,7 @@ namespace UnitTesting {
 	}
 
 
-	TEST(QueryOptimizer, optimizeClausesOrderByRelationType) {
+	TEST(QueryOptimizer, sortClausesOrderByRelationType) {
 		QueryOptimizer optimizer(false, true);
 
 		RelRef rel_ref_no_synonym(FOLLOWS, { STMT, "1" }, { STMT, "2" });
@@ -353,6 +353,130 @@ namespace UnitTesting {
 		ordered_clauses.push_back({ affect_t_two_synonym_after_compute });
 		EXPECT_EQ(optimizer.optimizeClausesOrder(unordered_clauses), ordered_clauses);
 	}
+
+
+
+	TEST(QueryOptimizer, optmizeClausesWithAffectThreshold) {
+		QueryOptimizer optimizer(false, false, true, 3);
+
+		RelRef affect_one_synonym1(AFFECT, { STMT, Synonym("a") }, { WILD });
+		RelRef affect_one_synonym2(AFFECT, { WILD }, { STMT, Synonym("a") });
+		RelRef affect_one_synonym3(AFFECT, { STMT, Synonym("a") }, { STMT, "2" });
+		RelRef affect_two_synonym(AFFECT, { STMT, Synonym("a") }, { STMT, Synonym("b") });
+		RelRef affect_two_synonym_dummy(AFFECT, { ASSIGN, Synonym() }, { ASSIGN, Synonym() });
+
+		RelRef affect_t_no_synonym1(AFFECT_T, { STMT, "1" }, { WILD });
+		RelRef affect_t_no_synonym_graph_search_before_precompute(AFFECT_T, { STMT, "1" }, { STMT, "2" });
+		RelRef affect_t_one_synonym_graph_search_before_precompute1(AFFECT_T, { STMT, Synonym("a") }, { STMT, "2" });
+		RelRef affect_t_one_synonym_graph_search_before_precompute2(AFFECT_T, { STMT, "2" }, { STMT, Synonym("a") });
+		RelRef affect_t_two_synonym(AFFECT_T, { STMT, Synonym("a") }, { STMT, Synonym("b") });
+		RelRef affect_t_two_synonym_dummy(AFFECT_T, { ASSIGN, Synonym() }, { ASSIGN, Synonym() });
+
+
+		std::vector<Clause> unordered_clauses, ordered_clauses;
+
+		unordered_clauses.push_back({ affect_one_synonym1 });
+		unordered_clauses.push_back({ affect_one_synonym2 });
+		unordered_clauses.push_back({ affect_one_synonym3 });
+
+		ordered_clauses.push_back({ affect_one_synonym1 });
+		ordered_clauses.push_back({ affect_one_synonym2 });
+		ordered_clauses.push_back({ affect_one_synonym3 });
+
+		EXPECT_EQ(optimizer.optimizeClausesOrder(unordered_clauses), ordered_clauses);
+
+		unordered_clauses.clear();
+		ordered_clauses.clear();
+		unordered_clauses.push_back({ affect_one_synonym1 });
+		unordered_clauses.push_back({ affect_one_synonym2 });
+		unordered_clauses.push_back({ affect_one_synonym3 });
+		unordered_clauses.push_back({ affect_t_no_synonym1 });
+		unordered_clauses.push_back({ affect_two_synonym });
+
+		ordered_clauses.push_back({ affect_one_synonym1 });
+		ordered_clauses.push_back({ affect_one_synonym2 });
+		ordered_clauses.push_back({ affect_one_synonym3 });
+		ordered_clauses.push_back({ affect_t_no_synonym1 });
+		ordered_clauses.push_back({ affect_two_synonym });
+
+		EXPECT_EQ(optimizer.optimizeClausesOrder(unordered_clauses), ordered_clauses);
+
+		unordered_clauses.clear();
+		ordered_clauses.clear();
+		unordered_clauses.push_back({ affect_one_synonym1 });
+		unordered_clauses.push_back({ affect_one_synonym2 });
+		unordered_clauses.push_back({ affect_one_synonym3 });
+		unordered_clauses.push_back({ affect_t_no_synonym1 });
+
+		ordered_clauses.push_back({ affect_one_synonym1 });
+		ordered_clauses.push_back({ affect_one_synonym2 });
+		ordered_clauses.push_back({ affect_one_synonym3 });
+		ordered_clauses.push_back({ affect_t_no_synonym1 });
+		ordered_clauses.push_back({ affect_two_synonym_dummy });
+
+		EXPECT_EQ(optimizer.optimizeClausesOrder(unordered_clauses), ordered_clauses);
+
+		unordered_clauses.clear();
+		ordered_clauses.clear();
+		unordered_clauses.push_back({ affect_one_synonym1 });
+		unordered_clauses.push_back({ affect_one_synonym2 });
+		unordered_clauses.push_back({ affect_one_synonym3 });
+		unordered_clauses.push_back({ affect_t_no_synonym_graph_search_before_precompute });
+
+		ordered_clauses.push_back({ affect_one_synonym1 });
+		ordered_clauses.push_back({ affect_one_synonym2 });
+		ordered_clauses.push_back({ affect_one_synonym3 });
+		ordered_clauses.push_back({ affect_t_no_synonym_graph_search_before_precompute });
+
+		EXPECT_EQ(optimizer.optimizeClausesOrder(unordered_clauses), ordered_clauses);
+
+
+		unordered_clauses.clear();
+		ordered_clauses.clear();
+		unordered_clauses.push_back({ affect_one_synonym1 });
+		unordered_clauses.push_back({ affect_one_synonym2 });
+		unordered_clauses.push_back({ affect_one_synonym3 });
+		unordered_clauses.push_back({ affect_t_no_synonym_graph_search_before_precompute });
+		unordered_clauses.push_back({ affect_t_one_synonym_graph_search_before_precompute1 });
+		unordered_clauses.push_back({ affect_t_one_synonym_graph_search_before_precompute2 });
+		unordered_clauses.push_back({ affect_t_no_synonym_graph_search_before_precompute });
+
+		ordered_clauses.push_back({ affect_one_synonym1 });
+		ordered_clauses.push_back({ affect_one_synonym2 });
+		ordered_clauses.push_back({ affect_one_synonym3 });
+		ordered_clauses.push_back({ affect_t_no_synonym_graph_search_before_precompute });
+		ordered_clauses.push_back({ affect_t_one_synonym_graph_search_before_precompute1 });
+		ordered_clauses.push_back({ affect_t_one_synonym_graph_search_before_precompute2 });
+		ordered_clauses.push_back({ affect_t_no_synonym_graph_search_before_precompute });
+		ordered_clauses.push_back({ affect_t_two_synonym_dummy });
+
+		EXPECT_EQ(optimizer.optimizeClausesOrder(unordered_clauses), ordered_clauses);
+
+		unordered_clauses.clear();
+		ordered_clauses.clear();
+		unordered_clauses.push_back({ affect_one_synonym1 });
+		unordered_clauses.push_back({ affect_one_synonym2 });
+		unordered_clauses.push_back({ affect_one_synonym3 });
+		unordered_clauses.push_back({ affect_t_no_synonym_graph_search_before_precompute });
+		unordered_clauses.push_back({ affect_t_one_synonym_graph_search_before_precompute1 });
+		unordered_clauses.push_back({ affect_t_one_synonym_graph_search_before_precompute2 });
+		unordered_clauses.push_back({ affect_t_no_synonym_graph_search_before_precompute });
+		unordered_clauses.push_back({ affect_t_two_synonym });
+
+		ordered_clauses.push_back({ affect_one_synonym1 });
+		ordered_clauses.push_back({ affect_one_synonym2 });
+		ordered_clauses.push_back({ affect_one_synonym3 });
+		ordered_clauses.push_back({ affect_t_no_synonym_graph_search_before_precompute });
+		ordered_clauses.push_back({ affect_t_one_synonym_graph_search_before_precompute1 });
+		ordered_clauses.push_back({ affect_t_one_synonym_graph_search_before_precompute2 });
+		ordered_clauses.push_back({ affect_t_no_synonym_graph_search_before_precompute });
+		ordered_clauses.push_back({ affect_t_two_synonym });
+
+		EXPECT_EQ(optimizer.optimizeClausesOrder(unordered_clauses), ordered_clauses);
+
+	}
+
+
 	TEST(QueryOptimizer, checkConstantExist) {
 		PKB::getInstance().resetCache();
 		QueryOptimizer optimizer;

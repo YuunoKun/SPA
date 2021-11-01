@@ -18,13 +18,14 @@ private:
 	bool affect_threshold_optimization = false;
 	int affect_threshold_count = 0;
 
-	std::list<Clause> optimizeClausesOrderByCommonSynonym(std::list<Clause>&);
-	std::list<Clause> optimizeTwoSynonymClausesOrder(std::list<Clause>&);
+	std::list<Clause> optmizeClausesWithAffectThreshold(std::list<Clause>&);
+	std::list<Clause> sortClausesOrderByCommonSynonym(std::list<Clause>&);
+	std::list<Clause> sortTwoSynonymClausesOrder(std::list<Clause>&);
 
-	std::list<Clause> optimizeClausesOrderByRelationType(std::list<Clause>&);
-	std::list<Clause> optimizeNextTClausesOrder(std::list<Clause>&);
-	std::list<Clause> optimizeAffectsClausesOrder(std::list<Clause>&);
-	std::list<Clause> optimizeClausesByNumOfSynonym(std::list<Clause>&);
+	std::list<Clause> sortClausesOrderByRelationType(std::list<Clause>&);
+	std::list<Clause> sortNextTClausesOrder(std::list<Clause>&);
+	std::list<Clause> sortAffectsClausesOrder(std::list<Clause>&);
+	std::list<Clause> sortClausesByNumOfSynonym(std::list<Clause>&);
 
 	bool isSynonymAndSynonym(Entity&, Entity&);
 	bool isConstantAndConstant(Entity&, Entity&);
