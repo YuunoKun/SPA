@@ -2136,7 +2136,7 @@ FALSE
 162 - Semantically invalid pattern
 stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
 Select BOOLEAN pattern ifs(_, _)
-none
+FALSE
 5000
 66 - Semantically invalid Uses (stmtRef is out of range) 
 variable v; 
