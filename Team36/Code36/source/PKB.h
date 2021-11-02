@@ -12,6 +12,7 @@
 #include "KnowledgeBase.h"
 #include "RelationTable.h"
 #include "MonotypeRelationTable.h"
+#include "RelationTableUtility.h"
 
 class PKB : public KnowledgeBase {
 public:
@@ -77,11 +78,11 @@ public:
 	void resetEntities() override;
 
 private:
-	std::vector<proc_name> proc_table;
-	std::vector<var_name> var_table;
-	std::vector<StmtInfo> stmt_table;
-	std::unordered_set<constant> const_table;
-	std::unordered_map<stmt_index, expr> expr_table;
+	std::vector<proc_name> proc_table{};
+	std::vector<var_name> var_table{};
+	std::vector<StmtInfo> stmt_table{};
+	std::unordered_set<constant> const_table{};
+	std::unordered_map<stmt_index, expr> expr_table{};
 	RelationTable<stmt_index, var_name> assignment_table;
 	MonotypeRelationTable<StmtInfo> follows_table;
 	MonotypeRelationTable<StmtInfo> parent_table;

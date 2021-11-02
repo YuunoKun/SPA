@@ -1,5 +1,5 @@
 #include "NextTPreprocessor.h"
-#include "MonotypeRelationTable.cpp"
+#include "RelationTableUtility.cpp"
 
 bool NextTPreprocessor::evaluateWildAndWild() {
 	return !next_table->isEmpty();
@@ -23,7 +23,7 @@ bool NextTPreprocessor::evaluateConstantAndConstant(int index1, int index2) {
 		return cache.containsPair(s1, s2);
 	}
 	else {
-		auto dfs = cache.forwardDFS(s1);
+		auto dfs = RelationTableUtility<StmtInfo>::forwardDFS(cache, s1);
 		calculated_matrix[index1 - 1][index1 - 1] = true;
 		for (StmtInfo indirect_value : dfs) {
 			cache.insert(s1, indirect_value);
@@ -56,7 +56,7 @@ std::vector<StmtInfo> NextTPreprocessor::evaluateConstantAndSynonym(int index) {
 		return cache.getValues(s1);
 	}
 	else {
-		std::vector<StmtInfo> res = cache.forwardDFS(s1);
+		std::vector<StmtInfo> res = RelationTableUtility<StmtInfo>::forwardDFS(cache, s1);
 		for (auto& s2 : res) {
 			cache.insert(s1, s2);
 		}
@@ -72,7 +72,7 @@ std::vector<StmtInfo> NextTPreprocessor::evaluateSynonymAndConstant(int index) {
 		return cache.getKeys(s1);
 	}
 	else {
-		std::vector<StmtInfo> res = cache.backwardDFS(s1);
+		std::vector<StmtInfo> res = RelationTableUtility<StmtInfo>::backwardDFS(cache, s1);
 		for (auto& s2 : res) {
 			cache.insert(s2, s1);
 		}
@@ -83,13 +83,13 @@ std::vector<StmtInfo> NextTPreprocessor::evaluateSynonymAndConstant(int index) {
 
 void NextTPreprocessor::checkCache() {
 	if (isCacheEmpty()) {
-		cache = next_table->copy();
+		cache = RelationTableUtility<StmtInfo>::copy(*next_table);
 	}
 }
 
 void NextTPreprocessor::fullyPopulate() {
 	if (!is_fully_populated) {
-		cache = next_table->findTransitiveClosure();
+		cache = RelationTableUtility<StmtInfo>::findTransitiveClosure(*next_table);
 		is_fully_populated = true;
 	}
 }

@@ -2,10 +2,11 @@
 #include <iostream>
 #include <set>
 
-#include "PKB.h"
 #include "Common.h"
 #include "RelationTable.h"
 #include "RelationTable.cpp"
+#include "MonotypeRelationTable.h"
+#include "MonotypeRelationTable.cpp"
 
 struct ModifiesTuple {
 	stmt_index stmt_index;
@@ -24,7 +25,6 @@ namespace std {
 	template <>
 	struct hash<ModifiesTuple> {
 		size_t operator()(const ModifiesTuple& k) const {
-			// Compute individual hash values for two data members and combine them using XOR and bit shifting
 			return ((hash<int>()(k.stmt_index) ^ (hash<std::string>()(k.var_name) << 1)) >> 1);
 		}
 	};
@@ -50,12 +50,21 @@ public:
 
 private:
 	void populateDataflowSets();
-	void processInSet(stmt_index index);
-	void processOutSet(stmt_index index);
+	void processInSet(int index);
+	void processOutSet(int index);
 	void resetOutList();
 	void resetInList();
+	void resetKillList();
+	void resetGenList();
+	void resetPredList();
+	void resetSuccList();
 
 	std::vector<std::pair<StmtInfo, StmtInfo>> findResults(std::set<stmt_index>);
+	bool checkIfTupleAffects(ModifiesTuple, stmt_index);
+	bool checkIfAffecting(stmt_index index, stmt_index affecting_stmt);
+	bool checkIfAffected(stmt_index);
+	void addSuccessorsToWorklist(stmt_index, std::queue<stmt_index>&);
+	StmtInfo getStmt(stmt_index);
 
 	bool is_dataflow_sets_populated = false;
 
