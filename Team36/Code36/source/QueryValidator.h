@@ -21,4 +21,6 @@ public:
 	void validateAnd(QueryToken&);
 
 	void validateAttributeType(Query&, QueryToken&, QueryToken&);
+
+	void isExpectingIdentifier(QueryToken&);
 };

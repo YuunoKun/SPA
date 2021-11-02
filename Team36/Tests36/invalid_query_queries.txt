@@ -1493,6 +1493,16 @@ assign a; variable v;
 Select BOOLEAN pattern a(v, _ _)
 none
 5000
+50 - Semantically invalid pattern
+stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN pattern *(_, _)
+none
+5000
+56 - Semantically invalid pattern
+stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
+Select BOOLEAN pattern _(_, _)
+none
+5000
 176 - Syntactically invalid relations (double param)
 stmts s1, s2, s3;
 Select BOOLEAN Follows(s1 s2, s3)
@@ -2063,11 +2073,6 @@ stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; pro
 Select BOOLEAN pattern p(_, _)
 FALSE
 5000
-50 - Semantically invalid pattern
-stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select BOOLEAN pattern *(_, _)
-FALSE
-5000
 52 - Semantically invalid pattern
 stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
 Select BOOLEAN pattern v(_, _)
@@ -2086,11 +2091,6 @@ FALSE
 55 - Semantically invalid pattern
 stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
 Select BOOLEAN pattern c(_, _)
-FALSE
-5000
-56 - Semantically invalid pattern
-stmt s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
-Select BOOLEAN pattern _(_, _)
 FALSE
 5000
 57 - Semantically invalid pattern

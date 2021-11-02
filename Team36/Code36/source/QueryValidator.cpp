@@ -142,3 +142,9 @@ void QueryValidator::validateAttributeType(Query& query, QueryToken& prevToken, 
 		query.setIsSemanticError("Entity type for .stmt# attribute is not valid");
 	}
 }
+
+void QueryValidator::isExpectingIdentifier(QueryToken& nextToken) {
+	if (nextToken.type != QueryToken::QueryTokenType::IDENTIFIER) {
+		throw SyntacticErrorException("Expected identifier but receives a different token type");
+	}
+}

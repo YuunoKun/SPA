@@ -193,10 +193,7 @@ void QueryPreprocessor::handleSelection(QueryToken& token) {
 			}
 		}
 		else if (patternOrSuchThat.type == QueryToken::QueryTokenType::PATTERN) {
-			if (
-				((prevTokenSelect.token_value == "pattern" && token.type == QueryToken::QueryTokenType::IDENTIFIER) || prevTokenSelect.token_value == "and")
-				&&
-				isExpectingPatternType) {
+			if ((prevTokenSelect.token_value == "pattern" || prevTokenSelect.token_value == "and") && isExpectingPatternType) {
 				QueryPreprocessor::addPatternToQuery(token);
 				isExpectingPatternType = false;
 			}
@@ -387,6 +384,8 @@ void QueryPreprocessor::addEntityToQuery(QueryToken& token) {
 }
 
 void QueryPreprocessor::addPatternToQuery(QueryToken& token) {
+	QueryValidator queryValidator;
+	queryValidator.isExpectingIdentifier(token);
 	bool isValid = false;
 	for (QueryToken each : output) {
 		if (token.token_value == each.token_value) {
