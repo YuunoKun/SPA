@@ -972,7 +972,7 @@ namespace UnitTesting {
 		EXPECT_EQ(out, to);
 	}
 
-	TEST(Utility, removeEntities) {
+	TEST(Utility, getEntitiesExclude) {
 		Entity e1 = { STMT,Synonym{"e1"} };
 		Entity e2 = { STMT,Synonym{"e2"} };
 		Entity e3 = { STMT,Synonym{"e3"} };
@@ -982,27 +982,27 @@ namespace UnitTesting {
 		std::vector<Entity> a = { e1, e2, e3, e4, e5 };
 		std::vector<Entity> b = { e1 };
 		std::vector<Entity> to = { e2, e3, e4, e5 };
-		EXPECT_EQ(Utility::removeEntities(a, b), to);
+		EXPECT_EQ(Utility::getEntitiesExclude(a, b), to);
 
 		b = { e2, e4 };
 		to = { e1, e3, e5 };
-		EXPECT_EQ(Utility::removeEntities(a, b), to);
+		EXPECT_EQ(Utility::getEntitiesExclude(a, b), to);
 
 		b = { e1, e3, e5 };
 		to = { e2, e4 };
-		EXPECT_EQ(Utility::removeEntities(a, b), to);
+		EXPECT_EQ(Utility::getEntitiesExclude(a, b), to);
 
 		b = { e1, e3, e4, e5 };
 		to = { e2 };
-		EXPECT_EQ(Utility::removeEntities(a, b), to);
+		EXPECT_EQ(Utility::getEntitiesExclude(a, b), to);
 
 		b = { e1, e2, e3, e4, e5 };
 		to = { };
-		EXPECT_EQ(Utility::removeEntities(a, b), to);
+		EXPECT_EQ(Utility::getEntitiesExclude(a, b), to);
 	}
 
 
-	TEST(Utility, removeDuplicateEntities) {
+	TEST(Utility, getEntitiesWithoutDuplicate) {
 		Entity e1 = { STMT,Synonym{"e1"} };
 		Entity e2 = { STMT,Synonym{"e2"} };
 		Entity e3 = { STMT,Synonym{"e3"} };
@@ -1011,7 +1011,7 @@ namespace UnitTesting {
 
 		std::vector<Entity> a = { e1, e2, e1, e3, e2, e3, e4, e5, e1, e2, e3, e4, e5 };
 		std::vector<Entity> b = { e1, e2, e3, e4, e5 };
-		EXPECT_EQ(Utility::removeDuplicateEntities(a), b);
+		EXPECT_EQ(Utility::getEntitiesWithoutDuplicate(a), b);
 	}
 
 	TEST(Utility, isSecondaryAttribute) {

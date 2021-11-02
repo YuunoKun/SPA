@@ -54,8 +54,8 @@ public:
 	static void joinTable(std::list<std::vector<std::string>>&, 
 		std::list<std::vector<std::string>>&, std::list<std::vector<std::string>>&);
 
-	static std::vector<Entity> removeEntities(std::vector<Entity>&, std::vector<Entity>&);
-	static std::vector<Entity> removeDuplicateEntities(std::vector<Entity>&);
+	static std::vector<Entity> getEntitiesExclude(std::vector<Entity>&, std::vector<Entity>&);
+	static std::vector<Entity> getEntitiesWithoutDuplicate(std::vector<Entity>&);
 
 	static std::list<std::vector<std::string>> getColumnsNoDuplicate(std::list<std::vector<std::string>>&, std::vector<int>&);
 

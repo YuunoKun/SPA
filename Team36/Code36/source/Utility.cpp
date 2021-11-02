@@ -294,7 +294,7 @@ void Utility::joinRow(std::vector<std::string>& main, std::vector<std::string>& 
 }
 
 
-std::vector<Entity> Utility::removeEntities(std::vector<Entity>& main, std::vector<Entity>& to_remove) {
+std::vector<Entity> Utility::getEntitiesExclude(std::vector<Entity>& main, std::vector<Entity>& to_remove) {
 
 	std::unordered_set<std::string> to_remove_set;
 	for (auto& e : to_remove) {
@@ -305,20 +305,20 @@ std::vector<Entity> Utility::removeEntities(std::vector<Entity>& main, std::vect
 	
 	for (auto& e : main) {
 		if (to_remove_set.count(e.getSynonym()) == 0) {
-			result.push_back(e);
+			result.emplace_back(e);
 		}
 	}
 
 	return result;
 }
 
-std::vector<Entity> Utility::removeDuplicateEntities(std::vector<Entity>& main) {
+std::vector<Entity> Utility::getEntitiesWithoutDuplicate(std::vector<Entity>& main) {
 	std::unordered_set<std::string> unique;
 	std::vector<Entity> result;
 
 	for (auto& e : main) {
 		if (unique.count(e.getSynonym()) == 0) {
-			result.push_back(e);
+			result.emplace_back(e);
 			unique.insert(e.getSynonym());
 		}
 	}

@@ -74,7 +74,7 @@ ResultTable QueryResult::getResults(std::vector<Entity> selected) {
 		if (common.empty()) {
 			continue;
 		}
-		selected = Utility::removeEntities(selected, common);
+		selected = Utility::getEntitiesExclude(selected, common);
 		tables.emplace_back(result.getResultTable(common));
 	}
 	if (tables.size() == 1) {

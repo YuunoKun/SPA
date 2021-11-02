@@ -137,11 +137,11 @@ void QueryEvaluator::mergeResultTables(std::list<std::list<std::string>>& table,
 
 
 void QueryEvaluator::getTupleResult(Query& query, QueryResult& query_result, std::list<std::string>& out) {
-	std::vector<Entity> selected_entities = Utility::removeDuplicateEntities(query.getSelected());
+	std::vector<Entity> selected_entities = Utility::getEntitiesWithoutDuplicate(query.getSelected());
 	std::list<ResultTable> results;
 	if (query_result.isInTables(selected_entities)) {
 		results.emplace_back(query_result.getResults(selected_entities));
-		selected_entities = Utility::removeEntities(selected_entities, results.front().getHeaders());
+		selected_entities = Utility::getEntitiesExclude(selected_entities, results.front().getHeaders());
 	}
 
 	for (auto& selected : selected_entities) {
