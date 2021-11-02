@@ -73,25 +73,39 @@ namespace UnitTesting {
 
 		headers = { { WHILE, Synonym{ "a" } }, { IF, Synonym{"b"} } };
 		std::list<std::string> r = {  };
-		EXPECT_EQ(evaluator.evaluateSynonymAndSynonym(headers[0], headers[1]).getEntityResult(headers[0]), r);
+		std::list<std::string> out; 
+		evaluator.evaluateSynonymAndSynonym(headers[0], headers[1]).getEntityResult(headers[0], out);
+		EXPECT_EQ(out, r);
 
 		headers = { { PRINT, Synonym{ "a" }, VAR_NAME }, { READ, Synonym{"b"} , VAR_NAME } };
 		r = { "5", "6" };
-		EXPECT_EQ(evaluator.evaluateSynonymAndSynonym(headers[0], headers[1]).getEntityResult(headers[0]), r);
+		out.clear();
+		evaluator.evaluateSynonymAndSynonym(headers[0], headers[1]).getEntityResult(headers[0], out);
+		EXPECT_EQ(out, r);
 		r = { "7", "8" };
-		EXPECT_EQ(evaluator.evaluateSynonymAndSynonym(headers[0], headers[1]).getEntityResult(headers[1]), r);
+		out.clear();
+		evaluator.evaluateSynonymAndSynonym(headers[0], headers[1]).getEntityResult(headers[1], out);
+		EXPECT_EQ(out, r);
 
 		headers = { { PROCEDURE, Synonym{ "a" }, PROC_NAME }, { CALL, Synonym{"b"} , PROC_NAME } };
 		r = { s1, s2 };
-		EXPECT_EQ(evaluator.evaluateSynonymAndSynonym(headers[0], headers[1]).getEntityResult(headers[0]), r);
+		out.clear();
+		evaluator.evaluateSynonymAndSynonym(headers[0], headers[1]).getEntityResult(headers[0], out);
+		EXPECT_EQ(out, r);
 		r = { "10", "9" };
-		EXPECT_EQ(evaluator.evaluateSynonymAndSynonym(headers[0], headers[1]).getEntityResult(headers[1]), r);
+		out.clear();
+		evaluator.evaluateSynonymAndSynonym(headers[0], headers[1]).getEntityResult(headers[1], out);
+		EXPECT_EQ(out, r);
 
 		headers = { { WHILE, Synonym{ "a" } }, { CONSTANT, Synonym{"b"} } };
 		r = { "1", "2"};
-		EXPECT_EQ(evaluator.evaluateSynonymAndSynonym(headers[0], headers[1]).getEntityResult(headers[0]), r);
+		out.clear();
+		evaluator.evaluateSynonymAndSynonym(headers[0], headers[1]).getEntityResult(headers[0], out);
+		EXPECT_EQ(out, r);
 		r = { "1", "2" };
-		EXPECT_EQ(evaluator.evaluateSynonymAndSynonym(headers[0], headers[1]).getEntityResult(headers[1]), r);
+		out.clear();
+		evaluator.evaluateSynonymAndSynonym(headers[0], headers[1]).getEntityResult(headers[1], out);
+		EXPECT_EQ(out, r);
 
 	}
 

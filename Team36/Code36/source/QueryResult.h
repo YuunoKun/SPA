@@ -12,8 +12,8 @@ public:
 	bool isInTables(std::vector<Entity>);
 	bool isInTables(Entity);
 	void addResult(ResultTable);
-	ResultTable getResults(std::vector<Entity>);
-	std::list<std::string> getResult(Entity);
+	void getResults(std::vector<Entity>&, ResultTable&);
+	void getResult(Entity, std::list<std::string>&);
 
 private:
 	std::vector<ResultTable> results;

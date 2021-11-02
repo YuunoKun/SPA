@@ -78,43 +78,53 @@ namespace UnitTesting {
 		query_result.addResult(result_table3);
 
 		std::list<std::string> result{ "1", "5", "9", "13", "17", "3", "7", "11", "15", "19" };
-		std::list<std::string> table_result = query_result.getResult(query_table_header1.first);
+		std::list<std::string> table_result;
+		query_result.getResult(query_table_header1.first, table_result);
 		result.sort();
 		table_result.sort();
 		EXPECT_EQ(table_result, result);
 
 		result = { "2", "6", "10", "14", "18", "4", "8", "12", "16", "20" };
-		table_result = query_result.getResult(query_table_header1.second);
+		table_result.clear();
+		query_result.getResult(query_table_header1.second, table_result);
 		result.sort();
 		table_result.sort();
 		EXPECT_EQ(table_result, result);
 
 		result = { "1", "2", "3", "4", "5" };
-		table_result = query_result.getResult(query_table_header2.first);
+
+		table_result.clear();
+		query_result.getResult(query_table_header2.first, table_result);
 		result.sort();
 		table_result.sort();
 		EXPECT_EQ(table_result, result);
 
 		result = { "11", "12", "13", "14", "15" };
-		table_result = query_result.getResult(query_table_header2.second);
+
+		table_result.clear();
+		query_result.getResult(query_table_header2.second, table_result);
 		result.sort();
 		table_result.sort();
 		EXPECT_EQ(table_result, result);
 
 		result = { "6", "7", "8", "9", "10" };
-		table_result = query_result.getResult(query_table_header3.first);
+
+		table_result.clear();
+		query_result.getResult(query_table_header3.first, table_result);
 		result.sort();
 		table_result.sort();
 		EXPECT_EQ(table_result, result);
 
 		result = { "16", "17", "18", "19", "20" };
-		table_result = query_result.getResult(query_table_header3.second);
+
+		table_result.clear();
+		query_result.getResult(query_table_header3.second, table_result);
 		result.sort();
 		table_result.sort();
 		EXPECT_EQ(table_result, result);
 
 		try {
-			table_result = query_result.getResult({ STMT, Synonym{"DoesNotExist"} });
+			query_result.getResult({ STMT, Synonym{"DoesNotExist"} }, table_result);
 			FAIL();
 		}
 		catch (std::domain_error const& ex) {
@@ -137,8 +147,12 @@ namespace UnitTesting {
 		std::list<std::string> b1 = { "1", "2", "3", "4", "5", "6", "7" };
 		std::list<std::string> b2 = { "1", "3", "5", "7" };
 
-		EXPECT_EQ(q.getResult(e1), b1);
-		EXPECT_EQ(q.getResult(e2), b2);
+		std::list<std::string> out;
+		q.getResult(e1, out);
+		EXPECT_EQ(out, b1);
+		out.clear();
+		q.getResult(e2, out);
+		EXPECT_EQ(out, b2);
 	}
 	TEST(QueryResult, addResultMergeFilterSingleColumnSingleTable) {
 		Entity e(STMT, Synonym{ "x" });
@@ -151,9 +165,15 @@ namespace UnitTesting {
 		q.addResult(t1);
 		q.addResult(t2);
 		std::list<std::string> b = { "1", "3", "5", "7" };
-		EXPECT_EQ(q.getResult(e), b);
+
+		std::list<std::string> out;
+		q.getResult(e, out);
+		EXPECT_EQ(out, b);
 		q.addResult(t2);
-		EXPECT_EQ(q.getResult(e), b);
+
+		out.clear();
+		q.getResult(e, out);
+		EXPECT_EQ(out, b);
 
 		a1 = { { 1, STMT_WHILE } , { 3, STMT_READ }, { 5, STMT_CALL }, { 7, STMT_ASSIGN} };
 		a2 = { { 1, STMT_WHILE }, { 2, STMT_IF} , { 3, STMT_READ },
@@ -163,9 +183,16 @@ namespace UnitTesting {
 		q = QueryResult();
 		q.addResult(t1);
 		q.addResult(t2);
-		EXPECT_EQ(q.getResult(e), b);
+
+		out.clear();
+		q.getResult(e, out);
+		EXPECT_EQ(out, b);
+
 		q.addResult(t2);
-		EXPECT_EQ(q.getResult(e), b);
+
+		out.clear();
+		q.getResult(e, out);
+		EXPECT_EQ(out, b);
 
 		a1 = { { 1, STMT_WHILE }, { 2, STMT_IF} , { 3, STMT_READ },
 			{ 4, STMT_PRINT}, { 5, STMT_CALL }, { 6, STMT_ASSIGN}, { 7, STMT_ASSIGN} };
@@ -212,16 +239,30 @@ namespace UnitTesting {
 		q.addResult(t2);
 		std::list<std::string> b1 = { "9", "1", "5" };
 		std::list<std::string> b2 = { "2", "6", "10" };
-		EXPECT_EQ(q.getResult(e1.first), b1);
-		EXPECT_EQ(q.getResult(e1.second), b2);
+
+
+		std::list<std::string> out;
+		q.getResult(e1.first, out);
+		EXPECT_EQ(out, b1);
+
+		out.clear();
+		q.getResult(e1.second, out);
+		EXPECT_EQ(out, b2);
 
 		t1 = ResultTable(e2, a2);
 		t2 = ResultTable(e1, a1);
 		q = QueryResult();
 		q.addResult(t1);
 		q.addResult(t2);
-		EXPECT_EQ(q.getResult(e1.first), b1);
-		EXPECT_EQ(q.getResult(e1.second), b2);
+
+		out.clear();
+		q.getResult(e1.first, out);
+		EXPECT_EQ(out, b1);
+
+		out.clear();
+		q.getResult(e1.second, out);
+		EXPECT_EQ(out, b2);
+
 
 		e2 = { STMT, Synonym{ "y" } };
 		a2 = { { 4, STMT_WHILE }, { 8, STMT_CALL } };
@@ -234,8 +275,14 @@ namespace UnitTesting {
 		q.addResult(t2);
 		b1 = { "3", "7" };
 		b2 = { "4", "8" };
-		EXPECT_EQ(q.getResult(e1.first), b1);
-		EXPECT_EQ(q.getResult(e1.second), b2);
+
+		out.clear();
+		q.getResult(e1.first, out);
+		EXPECT_EQ(out, b1);
+
+		out.clear();
+		q.getResult(e1.second, out);
+		EXPECT_EQ(out, b2);
 
 		a2 = { { 4, STMT_WHILE }, { 8, STMT_CALL } };
 
@@ -245,8 +292,14 @@ namespace UnitTesting {
 		q = QueryResult();
 		q.addResult(t1);
 		q.addResult(t2);
-		EXPECT_EQ(q.getResult(e1.first), b1);
-		EXPECT_EQ(q.getResult(e1.second), b2);
+
+		out.clear();
+		q.getResult(e1.first, out);
+		EXPECT_EQ(out, b1);
+
+		out.clear();
+		q.getResult(e1.second, out);
+		EXPECT_EQ(out, b2);
 
 		e1 = { {STMT, Synonym{"x"} } , { STMT,Synonym{"y"} } };
 		e2 = { STMT, Synonym{ "x" } };
@@ -317,8 +370,14 @@ namespace UnitTesting {
 		q.addResult(t2);
 		std::list<std::string> b1 = { "9", "1", "5" };
 		std::list<std::string> b2 = { "2", "6", "10" };
-		EXPECT_EQ(q.getResult(e1.first), b1);
-		EXPECT_EQ(q.getResult(e1.second), b2);
+
+		std::list<std::string> out;
+		q.getResult(e1.first, out);
+		EXPECT_EQ(out, b1);
+
+		out.clear();
+		q.getResult(e1.second, out);
+		EXPECT_EQ(out, b2);
 
 		e2 = { {STMT, Synonym{"y"} } , { STMT,Synonym{"x"} } };
 		a2 = {
@@ -332,8 +391,15 @@ namespace UnitTesting {
 		q.addResult(t2);
 		b1 = { "9", "1", "5" };
 		b2 = { "2", "6", "10" };
-		EXPECT_EQ(q.getResult(e1.first), b1);
-		EXPECT_EQ(q.getResult(e1.second), b2);
+
+		out.clear();
+		q.getResult(e1.first, out);
+		EXPECT_EQ(out, b1);
+
+		out.clear();
+		q.getResult(e1.second, out);
+		EXPECT_EQ(out, b2);
+
 
 		e2 = { {STMT, Synonym{"y"} } , { STMT,Synonym{"x"} } };
 		a2 = {
@@ -384,9 +450,18 @@ namespace UnitTesting {
 		std::list<std::string> b1 = { "1", "2" };
 		std::list<std::string> b2 = { "4", "5" };
 		std::list<std::string> b3 = { "7", "8" };
-		EXPECT_EQ(q.getResult(e1), b1);
-		EXPECT_EQ(q.getResult(e2), b2);
-		EXPECT_EQ(q.getResult(e3), b3);
+
+		std::list<std::string> out;
+		q.getResult(e1, out);
+		EXPECT_EQ(out, b1);
+
+		out.clear();
+		q.getResult(e2, out);
+		EXPECT_EQ(out, b2);
+
+		out.clear();
+		q.getResult(e3, out);
+		EXPECT_EQ(out, b3);
 		
 		t1 = ResultTable(h1, a1);
 		t2 = ResultTable(h2, a2);
@@ -396,9 +471,18 @@ namespace UnitTesting {
 		q.addResult(t1);
 		q.addResult(t2);
 		q.addResult(t3);
-		EXPECT_EQ(q.getResult(e1), b1);
-		EXPECT_EQ(q.getResult(e2), b2);
-		EXPECT_EQ(q.getResult(e3), b3);
+
+		out.clear();
+		q.getResult(e1, out);
+		EXPECT_EQ(out, b1);
+
+		out.clear();
+		q.getResult(e2, out);
+		EXPECT_EQ(out, b2);
+
+		out.clear();
+		q.getResult(e3, out);
+		EXPECT_EQ(out, b3);
 
 		h1 = { e1, e2 };
 		h2 = { e3, e2 };
@@ -453,9 +537,18 @@ namespace UnitTesting {
 		std::list<std::string> b1 = { "1", "2", "3" };
 		std::list<std::string> b2 = { "4", "5", "6" };
 		std::list<std::string> b3 = { "7", "8", "9" };
-		EXPECT_EQ(q.getResult(e1), b1);
-		EXPECT_EQ(q.getResult(e2), b2);
-		EXPECT_EQ(q.getResult(e3), b3);
+
+		std::list<std::string> out;
+		q.getResult(e1, out);
+		EXPECT_EQ(out, b1);
+
+		out.clear();
+		q.getResult(e2, out);
+		EXPECT_EQ(out, b2);
+
+		out.clear();
+		q.getResult(e3, out);
+		EXPECT_EQ(out, b3);
 
 		h1 = { e1, e2 };
 		h2 = { e3, e2 };
@@ -475,16 +568,34 @@ namespace UnitTesting {
 		q = QueryResult();
 		q.addResult(t1);
 		q.addResult(t2);
-		EXPECT_EQ(q.getResult(e1), b1);
-		EXPECT_EQ(q.getResult(e2), b2);
-		EXPECT_EQ(q.getResult(e3), b3);
+
+		out.clear();
+		q.getResult(e1, out);
+		EXPECT_EQ(out, b1);
+
+		out.clear();
+		q.getResult(e2, out);
+		EXPECT_EQ(out, b2);
+
+		out.clear();
+		q.getResult(e3, out);
+		EXPECT_EQ(out, b3);
 
 		q = QueryResult();
 		q.addResult(t2);
 		q.addResult(t1);
-		EXPECT_EQ(q.getResult(e1), b1);
-		EXPECT_EQ(q.getResult(e2), b2);
-		EXPECT_EQ(q.getResult(e3), b3);
+
+		out.clear();
+		q.getResult(e1, out);
+		EXPECT_EQ(out, b1);
+
+		out.clear();
+		q.getResult(e2, out);
+		EXPECT_EQ(out, b2);
+
+		out.clear();
+		q.getResult(e3, out);
+		EXPECT_EQ(out, b3);
 
 		h1 = { e1, e2 };
 		h2 = { e1, e3 };
@@ -504,15 +615,34 @@ namespace UnitTesting {
 		q = QueryResult();
 		q.addResult(t1);
 		q.addResult(t2);
-		EXPECT_EQ(q.getResult(e1), b1);
-		EXPECT_EQ(q.getResult(e2), b2);
-		EXPECT_EQ(q.getResult(e3), b3);
+
+		out.clear();
+		q.getResult(e1, out);
+		EXPECT_EQ(out, b1);
+
+		out.clear();
+		q.getResult(e2, out);
+		EXPECT_EQ(out, b2);
+
+		out.clear();
+		q.getResult(e3, out);
+		EXPECT_EQ(out, b3);
+
 		q = QueryResult();
 		q.addResult(t2);
 		q.addResult(t1);
-		EXPECT_EQ(q.getResult(e1), b1);
-		EXPECT_EQ(q.getResult(e2), b2);
-		EXPECT_EQ(q.getResult(e3), b3);
+
+		out.clear();
+		q.getResult(e1, out);
+		EXPECT_EQ(out, b1);
+
+		out.clear();
+		q.getResult(e2, out);
+		EXPECT_EQ(out, b2);
+
+		out.clear();
+		q.getResult(e3, out);
+		EXPECT_EQ(out, b3);
 	}
 
 	TEST(QueryResult, addResultMergeJoinDoubleColumnTripleTable) {
@@ -568,10 +698,22 @@ namespace UnitTesting {
 		q.addResult(t2);
 		q.addResult(t4);
 		q.addResult(t3);
-		EXPECT_EQ(q.getResult(e1), b1);
-		EXPECT_EQ(q.getResult(e2), b2);
-		EXPECT_EQ(q.getResult(e3), b3);
-		EXPECT_EQ(q.getResult(e4), b4);
+
+		std::list<std::string> out;
+		q.getResult(e1, out);
+		EXPECT_EQ(out, b1);
+
+		out.clear();
+		q.getResult(e2, out);
+		EXPECT_EQ(out, b2);
+
+		out.clear();
+		q.getResult(e3, out);
+		EXPECT_EQ(out, b3);
+
+		out.clear();
+		q.getResult(e4, out);
+		EXPECT_EQ(out, b4);
 
 		t1 = ResultTable(h1, a1);
 		t2 = ResultTable(h2, a2);
@@ -582,10 +724,22 @@ namespace UnitTesting {
 		q.addResult(t4);
 		q.addResult(t2);
 		q.addResult(t3);
-		EXPECT_EQ(q.getResult(e1), b1);
-		EXPECT_EQ(q.getResult(e2), b2);
-		EXPECT_EQ(q.getResult(e3), b3);
-		EXPECT_EQ(q.getResult(e4), b4);
+
+		out.clear();
+		q.getResult(e1, out);
+		EXPECT_EQ(out, b1);
+
+		out.clear();
+		q.getResult(e2, out);
+		EXPECT_EQ(out, b2);
+
+		out.clear();
+		q.getResult(e3, out);
+		EXPECT_EQ(out, b3);
+
+		out.clear();
+		q.getResult(e4, out);
+		EXPECT_EQ(out, b4);
 
 		t1 = ResultTable(h1, a1);
 		t2 = ResultTable(h2, a2);
@@ -596,10 +750,22 @@ namespace UnitTesting {
 		q.addResult(t4);
 		q.addResult(t3);
 		q.addResult(t2);
-		EXPECT_EQ(q.getResult(e1), b1);
-		EXPECT_EQ(q.getResult(e2), b2);
-		EXPECT_EQ(q.getResult(e3), b3);
-		EXPECT_EQ(q.getResult(e4), b4);
+
+		out.clear();
+		q.getResult(e1, out);
+		EXPECT_EQ(out, b1);
+
+		out.clear();
+		q.getResult(e2, out);
+		EXPECT_EQ(out, b2);
+
+		out.clear();
+		q.getResult(e3, out);
+		EXPECT_EQ(out, b3);
+
+		out.clear();
+		q.getResult(e4, out);
+		EXPECT_EQ(out, b4);
 
 		t1 = ResultTable(h1, a1);
 		t2 = ResultTable(h2, a2);
@@ -610,10 +776,22 @@ namespace UnitTesting {
 		q.addResult(t4);
 		q.addResult(t2);
 		q.addResult(t3);
-		EXPECT_EQ(q.getResult(e1), b1);
-		EXPECT_EQ(q.getResult(e2), b2);
-		EXPECT_EQ(q.getResult(e3), b3);
-		EXPECT_EQ(q.getResult(e4), b4);
+
+		out.clear();
+		q.getResult(e1, out);
+		EXPECT_EQ(out, b1);
+
+		out.clear();
+		q.getResult(e2, out);
+		EXPECT_EQ(out, b2);
+
+		out.clear();
+		q.getResult(e3, out);
+		EXPECT_EQ(out, b3);
+
+		out.clear();
+		q.getResult(e4, out);
+		EXPECT_EQ(out, b4);
 
 		t1 = ResultTable(h1, a1);
 		t2 = ResultTable(h2, a2);
@@ -624,10 +802,22 @@ namespace UnitTesting {
 		q.addResult(t1);
 		q.addResult(t2);
 		q.addResult(t3);
-		EXPECT_EQ(q.getResult(e1), b1);
-		EXPECT_EQ(q.getResult(e2), b2);
-		EXPECT_EQ(q.getResult(e3), b3);
-		EXPECT_EQ(q.getResult(e4), b4);
+
+		out.clear();
+		q.getResult(e1, out);
+		EXPECT_EQ(out, b1);
+
+		out.clear();
+		q.getResult(e2, out);
+		EXPECT_EQ(out, b2);
+
+		out.clear();
+		q.getResult(e3, out);
+		EXPECT_EQ(out, b3);
+
+		out.clear();
+		q.getResult(e4, out);
+		EXPECT_EQ(out, b4);
 
 		h1 = { e1, e2 };
 		h2 = { e3, e2 };
@@ -665,10 +855,22 @@ namespace UnitTesting {
 		b2 = { "4" };
 		b3 = { "7" };
 		b4 = { "10" };
-		EXPECT_EQ(q.getResult(e1), b1);
-		EXPECT_EQ(q.getResult(e2), b2);
-		EXPECT_EQ(q.getResult(e3), b3);
-		EXPECT_EQ(q.getResult(e4), b4);
+
+		out.clear();
+		q.getResult(e1, out);
+		EXPECT_EQ(out, b1);
+
+		out.clear();
+		q.getResult(e2, out);
+		EXPECT_EQ(out, b2);
+
+		out.clear();
+		q.getResult(e3, out);
+		EXPECT_EQ(out, b3);
+
+		out.clear();
+		q.getResult(e4, out);
+		EXPECT_EQ(out, b4);
 
 		h1 = { e1, e2 };
 		h2 = { e2, e3 };
@@ -707,10 +909,22 @@ namespace UnitTesting {
 		b2 = { "1" };
 		b3 = { "1" };
 		b4 = { "4", "5", "6" };
-		EXPECT_EQ(q.getResult(e1), b1);
-		EXPECT_EQ(q.getResult(e2), b2);
-		EXPECT_EQ(q.getResult(e3), b3);
-		EXPECT_EQ(q.getResult(e4), b4);
+
+		out.clear();
+		q.getResult(e1, out);
+		EXPECT_EQ(out, b1);
+
+		out.clear();
+		q.getResult(e2, out);
+		EXPECT_EQ(out, b2);
+
+		out.clear();
+		q.getResult(e3, out);
+		EXPECT_EQ(out, b3);
+
+		out.clear();
+		q.getResult(e4, out);
+		EXPECT_EQ(out, b4);
 
 		h1 = { e1, e2 };
 		h2 = { e2, e3 };
@@ -784,11 +998,17 @@ namespace UnitTesting {
 		q.addResult(t3);
 
 		std::vector<Entity> selected { e1, e5 };
-		ResultTable result = q.getResults(selected);
+		ResultTable result;
+		q.getResults(selected, result);
 		std::list<std::string> b1 = { "1", "2", "3" };
 
-		EXPECT_EQ(result.getEntityResult(e1), b1);
-		EXPECT_EQ(result.getEntityResult(e5), b1);
+
+		std::list<std::string> out;
+		result.getEntityResult(e1, out);
+		EXPECT_EQ(out, b1);
+		out.clear();
+		result.getEntityResult(e5, out);
+		EXPECT_EQ(out, b1);
 
 	}
 }

@@ -55,7 +55,7 @@ namespace UnitTesting {
 
 		std::chrono::steady_clock::time_point startTime, endTime;
 
-		bool print_result = true;
+		bool disable_stress_test = true;
 		// table size = x ^ 2
 		vector<int> source_code_size = { 10, 20, 30, 40, 50, 100 , 250 };//, 250 };
 		vector<std::list<vector<std::string>>> tables;
@@ -65,6 +65,9 @@ namespace UnitTesting {
 
 	// Join Table merge column algorithm Speed Test
 	TEST_F(QueryEvaluatorStressTest, join_table_common_column) {
+		if (disable_stress_test) {
+			return;
+		}
 		for (int i = 0; i < source_code_size.size(); i++) {
 			std::list<std::vector<std::string>> out;
 			startTimer();
@@ -72,13 +75,14 @@ namespace UnitTesting {
 			endTimer();
 			printTime("Codes of size " + to_string(source_code_size[i]) + " takes : ");
 		}
-
-		std::cout << " end" << endl;
-		EXPECT_TRUE(!print_result);
+		EXPECT_TRUE(disable_stress_test);
 	}
 
 	// Join Table algorithm Speed Test 
 	TEST_F(QueryEvaluatorStressTest, join_table) {
+		if (disable_stress_test) {
+			return;
+		}
 		std::cout << "list max size: " << tables.max_size() << endl;
 		std::cout << "vector max size: " << source_code_size.max_size() << endl;
 		for (int i = 0; i < source_code_size.size(); i++) {
@@ -88,18 +92,7 @@ namespace UnitTesting {
 			endTimer();
 			printTime("Codes of size " + to_string(source_code_size[i]) + " takes : ");
 		}
-		std::cout << " end" << endl;
-		EXPECT_TRUE(!print_result);
+		EXPECT_TRUE(disable_stress_test);
 	}
 
-	TEST_F(QueryEvaluatorStressTest, filter_table) {
-		for (int i = 0; i < source_code_size.size(); i++) {
-			startTimer();
-			//Utility::filterResults(tables[i],0, 1, tables2[i],0,1);
-			endTimer();
-			printTime("Codes of size " + to_string(source_code_size[i]) + " takes : ");
-		}
-		std::cout << " end" << endl;
-		EXPECT_TRUE(!print_result);
-	}
 }

@@ -1,6 +1,9 @@
 #include "ResultTable.h"
 #include "Utility.h"
 
+ResultTable::ResultTable() {
+}
+
 ResultTable::ResultTable(Entity& header, std::vector<StmtInfo>& table) {
 	Utility::filterResults(header.getType(), table, this->table);
 	addHeader(header);
@@ -88,32 +91,28 @@ bool ResultTable::isEmpty() {
 	return table.empty();
 }
 
-std::list<std::string> ResultTable::getEntityResult(Entity e) {
+void ResultTable::getEntityResult(Entity& e, std::list<std::string>& out) {
 	int columnIndex = Utility::getIndex(header, e);
 	std::unordered_set<std::string> result_set;
 	for (auto row : table) {
 		result_set.insert(row[columnIndex]);
 	}
-	std::list<std::string> result;
-	Utility::unorderedSetToStringList(result_set, result);
-	return result;
+	Utility::unorderedSetToStringList(result_set, out);
 }
 
-std::list<std::list<std::string>> ResultTable::getEntityResults(std::vector<Entity> entities) {
+void ResultTable::getEntityResults(std::vector<Entity> entities, std::list<std::list<std::string>>& out) {
 	std::vector<int> indexes;
 	for (auto& e : entities) {
 		indexes.push_back(getHeaderIndex(e));
 	}
-	std::list<std::list<std::string>> results;
+
 	for (auto row : table) {
 		std::list<std::string> row_result;
 		for (int i = 0; i < indexes.size(); i++) {
 			row_result.emplace_back(row[indexes[i]]);
 		}
-		results.emplace_back(row_result);
+		out.emplace_back(row_result);
 	}
-
-	return results;
 }
 
 std::vector<Entity> ResultTable::getCommonHeaders(std::vector<Entity>& v) {
@@ -121,7 +120,7 @@ std::vector<Entity> ResultTable::getCommonHeaders(std::vector<Entity>& v) {
 
 	for (unsigned int i = 0; i < v.size(); i++) {
 		if (header_set.find(v[i].getSynonym()) != header_set.end()) {
-			common_headers.push_back(v[i]);
+			common_headers.emplace_back(v[i]);
 		}
 	}
 
@@ -133,7 +132,9 @@ ResultTable ResultTable::getResultTable(std::vector<Entity>& entities) {
 	for (auto& e : entities) {
 		indexes.push_back(getHeaderIndex(e));
 	}
-	return ResultTable(entities, Utility::getColumnsNoDuplicate(table, indexes));
+	std::list<std::vector<std::string>> result;
+	Utility::getColumnsWithoutDuplicate(table, indexes, result);
+	return ResultTable(entities, result);
 }
 
 std::vector<Entity> ResultTable::getHeaders() {
@@ -269,7 +270,13 @@ void ResultTable::joinTable(ResultTable& t, Entity common_header) {
 
 
 void ResultTable::joinTable(ResultTable& t) {
-	std::list<std::vector<std::string>> main = table;
+	if (this->header.empty()) {
+		this->table = t.table;
+		addHeader(t.header);
+		return;
+	}
+
+	std::list<std::vector<std::string>> main = this->table;
 	table = std::list<std::vector<std::string>>();
 	Utility::joinTable(main, t.table, table);
 	addHeader(t.header);

@@ -67,33 +67,23 @@ void QueryResult::addHeader(std::vector<Entity> v) {
 	}
 }
 
-ResultTable QueryResult::getResults(std::vector<Entity> selected) {
-	std::list<ResultTable> tables;
+void QueryResult::getResults(std::vector<Entity>& selected, ResultTable& out) {
 	for (auto& result : results) {
 		std::vector<Entity> common = result.getCommonHeaders(selected);
 		if (common.empty()) {
 			continue;
 		}
 		selected = Utility::getEntitiesExclude(selected, common);
-		tables.emplace_back(result.getResultTable(common));
-	}
-	if (tables.size() == 1) {
-		return tables.front();
-	}
-	ResultTable resultTable = tables.front();
-	tables.pop_front();
-	while (!tables.empty()) {
-		resultTable.joinTable(tables.front());
-		tables.pop_front();
+		out.joinTable(result.getResultTable(common));
 	}
 
-	return resultTable;
 }
 
-std::list<std::string> QueryResult::getResult(Entity e) {
+void QueryResult::getResult(Entity e, std::list<std::string>& out) {
 	for (auto& table : results) {
 		if (table.isInTable(e)) {
-			return table.getEntityResult(e);
+			table.getEntityResult(e, out);
+			return;
 		}
 	}
 	throw std::domain_error("Invalid Entity, Source: QueryResult.getResult");

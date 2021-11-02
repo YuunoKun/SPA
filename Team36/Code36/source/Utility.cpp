@@ -325,9 +325,8 @@ std::vector<Entity> Utility::getEntitiesWithoutDuplicate(std::vector<Entity>& ma
 	return result;
 }
 
-std::list<std::vector<std::string>> Utility::getColumnsNoDuplicate(std::list<std::vector<std::string>>& main, std::vector<int>& indexes) {
+void Utility::getColumnsWithoutDuplicate(std::list<std::vector<std::string>>& main, std::vector<int>& indexes, std::list<std::vector<std::string>>& out) {
 	std::unordered_set<std::string> unique;
-	std::list<std::vector<std::string>> result;
 	for (auto& row : main) {
 		std::vector<std::string> newRow;
 		std::string rowString;
@@ -336,11 +335,10 @@ std::list<std::vector<std::string>> Utility::getColumnsNoDuplicate(std::list<std
 			rowString += row[indexes[i]] + " ";
 		}
 		if (unique.count(rowString) == 0) {
-			result.emplace_back(newRow);
+			out.emplace_back(newRow);
 			unique.insert(rowString);
 		}
 	}
-	return result;
 }
 
 bool Utility::isSecondaryAttribute(Entity e) {

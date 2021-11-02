@@ -1043,7 +1043,7 @@ namespace UnitTesting {
 
 	}
 
-	TEST(Utility, getColumnsNoDuplicate) {
+	TEST(Utility, getColumnsWithoutDuplicate) {
 		std::list<std::vector<std::string>> a = { 
 			{"1","1","1"}, 
 			{"1","2","1"}, 
@@ -1051,27 +1051,40 @@ namespace UnitTesting {
 
 		std::vector<int> b = { 1, 2 };
 		std::list<std::vector<std::string>> to = { {"1","1"}, {"2","1"}, {"3","1"} };
-		EXPECT_EQ(Utility::getColumnsNoDuplicate(a, b), to);
+
+		std::list<std::vector<std::string>> out;
+		Utility::getColumnsWithoutDuplicate(a, b, out);
+		EXPECT_EQ(out, to);
 
 		b = { 0, 2 };
 		to = { {"1","1"} };
-		EXPECT_EQ(Utility::getColumnsNoDuplicate(a, b), to);
+		out.clear();
+		Utility::getColumnsWithoutDuplicate(a, b, out);
+		EXPECT_EQ(out, to);
 
 		b = { 0, 1 };
 		to = { {"1","1"}, {"1","2"}, {"1","3"} };
-		EXPECT_EQ(Utility::getColumnsNoDuplicate(a, b), to);
+		out.clear();
+		Utility::getColumnsWithoutDuplicate(a, b, out);
+		EXPECT_EQ(out, to);
 
 		b = { 0 };
 		to = { {"1"} };
-		EXPECT_EQ(Utility::getColumnsNoDuplicate(a, b), to);
+		out.clear();
+		Utility::getColumnsWithoutDuplicate(a, b, out);
+		EXPECT_EQ(out, to);
 
 		b = { 1 };
 		to = { {"1"}, {"2"}, {"3"} };
-		EXPECT_EQ(Utility::getColumnsNoDuplicate(a, b), to);
+		out.clear();
+		Utility::getColumnsWithoutDuplicate(a, b, out);
+		EXPECT_EQ(out, to);
 
 		b = { 2 };
 		to = { {"1"} };
-		EXPECT_EQ(Utility::getColumnsNoDuplicate(a, b), to);
+		out.clear();
+		Utility::getColumnsWithoutDuplicate(a, b, out);
+		EXPECT_EQ(out, to);
 
 	}
 	TEST(Utility, queryTokenTypeToEntityType) {

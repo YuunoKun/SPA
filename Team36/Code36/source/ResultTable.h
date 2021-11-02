@@ -4,6 +4,7 @@
 
 class ResultTable {
 public:
+	ResultTable();
 	ResultTable(Entity&, std::vector<StmtInfo>&);
 	ResultTable(Entity&, std::vector<stmt_index>&);
 	ResultTable(Entity&, std::vector<std::string>&);
@@ -19,8 +20,8 @@ public:
 	bool merge(ResultTable&);
 	bool isInTable(Entity);
 	bool isEmpty();
-	std::list<std::string> getEntityResult(Entity);
-	std::list<std::list<std::string>> getEntityResults(std::vector<Entity>);
+	void getEntityResult(Entity&, std::list<std::string>&);
+	void getEntityResults(std::vector<Entity>, std::list<std::list<std::string>>&);
 	std::vector<Entity> getCommonHeaders(std::vector<Entity>&);
 	ResultTable getResultTable(std::vector<Entity>&);
 	std::vector<Entity> getHeaders();

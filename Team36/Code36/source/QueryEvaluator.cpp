@@ -85,7 +85,7 @@ void QueryEvaluator::getRawResultWithSecondaryAttribute(Entity selected, std::li
 	throw std::domain_error("Selected Entity type does not have Secondary Attribute!");
 }
 
-std::string QueryEvaluator::getEntitySecondaryAttribute(std::string primary, Entity type) {
+std::string QueryEvaluator::getEntitySecondaryAttribute(std::string primary, Entity& type) {
 	switch (type.getType()) {
 	case EntityType::READ:
 		if (type.getAttribute() == AttrRef::VAR_NAME) {
@@ -107,13 +107,18 @@ std::string QueryEvaluator::getEntitySecondaryAttribute(std::string primary, Ent
 	throw std::domain_error("Selected Entity type does not have Secondary Attribute!");
 }
 
-void QueryEvaluator::convertToSecondaryAttribute(std::list<std::string>& table, Entity type, std::list<std::string>& out) {
-	for (auto row : table) {
-		out.emplace_back(getEntitySecondaryAttribute(row, type));
+void QueryEvaluator::convertToSecondaryAttribute(std::list<std::string>& table, Entity& type) {
+	auto& it = table.begin();
+	while (it != table.end()) {
+		*it = getEntitySecondaryAttribute(*it, type);
+		it++;
 	}
+
 }
 
-void QueryEvaluator::mergeResultTables(std::list<std::list<std::string>>& table, std::vector<Entity> selected, std::list<std::string>& out) {
+void QueryEvaluator::mergeTable(ResultTable& result_table, std::vector<Entity>& selected, std::list<std::string>& out) {
+	std::list<std::list<std::string>> table;
+	result_table.getEntityResults(selected, table);
 	for (auto row : table) {
 		int index = 0;
 		std::string row_result = row.front();
@@ -138,26 +143,19 @@ void QueryEvaluator::mergeResultTables(std::list<std::list<std::string>>& table,
 
 void QueryEvaluator::getTupleResult(Query& query, QueryResult& query_result, std::list<std::string>& out) {
 	std::vector<Entity> selected_entities = Utility::getEntitiesWithoutDuplicate(query.getSelected());
-	std::list<ResultTable> results;
+	ResultTable result;
 	if (query_result.isInTables(selected_entities)) {
-		results.emplace_back(query_result.getResults(selected_entities));
-		selected_entities = Utility::getEntitiesExclude(selected_entities, results.front().getHeaders());
+		query_result.getResults(selected_entities, result);
+		selected_entities = Utility::getEntitiesExclude(selected_entities, result.getHeaders());
 	}
 
 	for (auto& selected : selected_entities) {
 		std::list<std::string> raw_result;
 		getRawResult(selected, raw_result);
-		results.push_back(ResultTable(selected, raw_result));
-	}
-
-	ResultTable result = results.front();
-	results.pop_front();
-	while (!results.empty()) {
-		result.joinTable(results.front());
-		results.pop_front();
+		result.joinTable(ResultTable(selected, raw_result));
 	}
 	
-	mergeResultTables(result.getEntityResults(query.getSelected()), query.getSelected(), out);
+	mergeTable(result, query.getSelected(), out);
 }
 
 
@@ -183,14 +181,17 @@ void QueryEvaluator::getResult(Query& query, QueryResult& result, std::list<std:
 
 	if (!result.isInTables(query.getSelected()[0])) {
 		getRawResult(query.getSelected()[0], out);
+
+		if (Utility::isSecondaryAttribute(query.getSelected()[0])) {
+			}
 		return;
 	}
+
+	result.getResult(query.getSelected()[0], out);
 
 	if (Utility::isSecondaryAttribute(query.getSelected()[0])) {
-		convertToSecondaryAttribute(result.getResult(query.getSelected()[0]), query.getSelected()[0], out);
+		convertToSecondaryAttribute(out, query.getSelected()[0]);
 		return;
 	}
 
-	std::list<std::string> result_list = result.getResult(query.getSelected()[0]);
-	out.insert(out.end(), result_list.begin(), result_list.end());
 }

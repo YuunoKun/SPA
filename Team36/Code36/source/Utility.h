@@ -57,7 +57,7 @@ public:
 	static std::vector<Entity> getEntitiesExclude(std::vector<Entity>&, std::vector<Entity>&);
 	static std::vector<Entity> getEntitiesWithoutDuplicate(std::vector<Entity>&);
 
-	static std::list<std::vector<std::string>> getColumnsNoDuplicate(std::list<std::vector<std::string>>&, std::vector<int>&);
+	static void getColumnsWithoutDuplicate(std::list<std::vector<std::string>>&, std::vector<int>&, std::list<std::vector<std::string>>&);
 
 	static bool isSecondaryAttribute(Entity);
 

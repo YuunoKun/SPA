@@ -18,12 +18,12 @@ private:
 	void getRawResultWithSecondaryAttribute(Entity, std::list<std::string>&);
 	void getTupleResult(Query&, QueryResult&, std::list<std::string>&);
 
-	std::string getEntitySecondaryAttribute(std::string, Entity);
+	std::string getEntitySecondaryAttribute(std::string, Entity&);
 
-	void convertToSecondaryAttribute(std::list<std::string>&, Entity, std::list<std::string>&);
+	void convertToSecondaryAttribute(std::list<std::string>&, Entity&);
 
 
-	void mergeResultTables(std::list<std::list<std::string>>&, std::vector<Entity>, std::list<std::string>&);
+	void mergeTable(ResultTable&, std::vector<Entity>&, std::list<std::string>&);
 
 	PKBAdapter pkb;
 };
