@@ -115,7 +115,7 @@ void Tokenizer::parseIntoTokens(const char* input) {
 			case SYMBOL_PLUS_SIGN:
 				addToken(current_token);
 				current_token.setTokenType(TokenType::PLUS);
-				current_token.appendTokenValue(SYMBOL_EQUAL_SIGN);
+				current_token.appendTokenValue(SYMBOL_PLUS_SIGN);
 				addToken(current_token);
 				break;
 			case SYMBOL_MINUS_SIGN:
