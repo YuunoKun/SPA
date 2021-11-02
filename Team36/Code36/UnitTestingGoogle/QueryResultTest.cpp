@@ -57,13 +57,14 @@ namespace UnitTesting {
 		QueryResult result1;
 		Entity e({ WHILE, Synonym{"test"} });
 		std::vector<std::string> v;
-		result1.addResult({ e, v });
+		
+		result1.addResult(ResultTable( e, v ));
 		EXPECT_FALSE(result1.haveResult());
 
 		QueryResult result2;
 		Entity e1({ WHILE, Synonym{"test" } });
 		std::vector<std::string> v1({ "String" });
-		result2.addResult({ e1, v1 });
+		result2.addResult(ResultTable( e1, v1 ));
 		EXPECT_TRUE(result2.haveResult());
 	}
 

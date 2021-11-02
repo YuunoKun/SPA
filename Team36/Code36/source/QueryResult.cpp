@@ -6,6 +6,14 @@ QueryResult::QueryResult() {
 	have_result = true;
 }
 
+QueryResult::~QueryResult() {
+	while (!results.empty()) {
+		delete results.front(),
+		results.pop_front();
+	}
+
+}
+
 bool QueryResult::haveResult() {
 	return have_result;
 }
@@ -30,35 +38,38 @@ bool QueryResult::isInTables(Entity e) {
 	return false;
 }
 
-void QueryResult::addResult(ResultTable t) {
+void QueryResult::addResult(ResultTable& t) {
 	if (t.isEmpty()) {
 		have_result = false;
 		return;
 	}
+	ResultTable* new_result = new ResultTable();
+	new_result->joinTable(t);
 	//If new result table cannot be merge
 	if (!isInTables(t.getHeaders())) {
-		results.push_back(t);
+		results.push_back(new_result);
 		addHeader(t.getHeaders());
 		return;
 	}
 	addHeader(t.getHeaders());
 
 	//Common header found, began merge
-	std::vector<ResultTable> new_results;
-	while (!results.empty()) {
-		ResultTable r = results.back();
-		results.pop_back();
-		bool merged = t.merge(r);
-		if (merged && t.isEmpty()) {
+	auto& it = results.begin();
+	while(it != results.end()) {
+		bool merged = new_result->merge(**it);
+		if (merged && new_result->isEmpty()) {
 			have_result = false;
 			return;
-		}else if(!merged) {
-			new_results.emplace_back(r);
+		}else if(merged) {
+			ResultTable* to_delete = *it;
+			it = results.erase(it);
+			delete to_delete;
+		} else {
+			it++;
 		}
 	}
 
-	new_results.emplace_back(t);
-	results = new_results;
+	results.push_back(new_result);
 }
 
 void QueryResult::addHeader(std::vector<Entity> v) {
@@ -69,20 +80,20 @@ void QueryResult::addHeader(std::vector<Entity> v) {
 
 void QueryResult::getResults(std::vector<Entity>& selected, ResultTable& out) {
 	for (auto& result : results) {
-		std::vector<Entity> common = result.getCommonHeaders(selected);
+		std::vector<Entity> common = result->getCommonHeaders(selected);
 		if (common.empty()) {
 			continue;
 		}
 		selected = Utility::getEntitiesExclude(selected, common);
-		out.joinTable(result.getResultTable(common));
+		out.joinTable(result->getResultTable(common));
 	}
 
 }
 
 void QueryResult::getResult(Entity e, std::list<std::string>& out) {
 	for (auto& table : results) {
-		if (table.isInTable(e)) {
-			table.getEntityResult(e, out);
+		if (table->isInTable(e)) {
+			table->getEntityResult(e, out);
 			return;
 		}
 	}
