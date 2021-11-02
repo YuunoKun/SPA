@@ -52,7 +52,7 @@ namespace IntegrationTesting {
 
 	TEST_F(ParserPKBTest, Sample3TokenizerTest) {
 		SourceProcessor::Parser parser;
-		parser.load_file("../UnitTestingGoogle/SPTest/TestSource/Sample3.txt");
+		parser.loadSourceFile("../UnitTestingGoogle/SPTest/TestSource/Sample3.txt");
 		parser.parse();
 		EXPECT_EQ(PKB::getInstance().getProcedures().size(), 1);
 		EXPECT_EQ(PKB::getInstance().getConstants().size(), 1);
@@ -60,7 +60,7 @@ namespace IntegrationTesting {
 
 	TEST_F(ParserPKBTest, Sample4TokenizerTest) {
 		SourceProcessor::Parser parser;
-		parser.load_file("../UnitTestingGoogle/SPTest/TestSource/Sample4.txt");
+		parser.loadSourceFile("../UnitTestingGoogle/SPTest/TestSource/Sample4.txt");
 		parser.parse();
 		EXPECT_EQ(PKB::getInstance().getProcedures().size(), 2);
 		EXPECT_EQ(PKB::getInstance().getConstants().size(), 4);
@@ -68,31 +68,31 @@ namespace IntegrationTesting {
 
 	TEST_F(ParserPKBTest, DuplicateProcedureNames) {
 		SourceProcessor::Parser parser;
-		parser.load_file("../IntegrationTestingGoogle/Tests/duplicate_procedure_name_source.txt");
+		parser.loadSourceFile("../IntegrationTestingGoogle/Tests/duplicate_procedure_name_source.txt");
 		ASSERT_THROW(parser.parse(), std::runtime_error);
 	}
 
 	TEST_F(ParserPKBTest, CallUndefinedProcedureName) {
 		SourceProcessor::Parser parser;
-		parser.load_file("../IntegrationTestingGoogle/Tests/call_undefined_procedure_source.txt");
+		parser.loadSourceFile("../IntegrationTestingGoogle/Tests/call_undefined_procedure_source.txt");
 		ASSERT_THROW(parser.parse(), std::runtime_error);
 	}
 
 	TEST_F(ParserPKBTest, RecursiveCallSource) {
 		SourceProcessor::Parser parser;
-		parser.load_file("../IntegrationTestingGoogle/Tests/recursive_calls_source.txt");
+		parser.loadSourceFile("../IntegrationTestingGoogle/Tests/recursive_calls_source.txt");
 		ASSERT_THROW(parser.parse(), std::runtime_error);
 	}
 
 	TEST_F(ParserPKBTest, CyclicCallSource) {
 		SourceProcessor::Parser parser;
-		parser.load_file("../IntegrationTestingGoogle/Tests/cyclic_calls_source.txt");
+		parser.loadSourceFile("../IntegrationTestingGoogle/Tests/cyclic_calls_source.txt");
 		ASSERT_THROW(parser.parse(), std::runtime_error);
 	}
 
 	TEST_F(ParserPKBTest, Sample5Test_Entities) {
 		SourceProcessor::Parser parser;
-		parser.load_file("../UnitTestingGoogle/SPTest/TestSource/Sample5.txt");
+		parser.loadSourceFile("../UnitTestingGoogle/SPTest/TestSource/Sample5.txt");
 		parser.parse();
 
 		std::vector<proc_name> proc_v = { "main", "readPoint", "printResults", "computeCentroid" };
@@ -109,7 +109,7 @@ namespace IntegrationTesting {
 
 	TEST_F(ParserPKBTest, Sample5Test_Assign) {
 		SourceProcessor::Parser parser;
-		parser.load_file("../UnitTestingGoogle/SPTest/TestSource/Sample5.txt");
+		parser.loadSourceFile("../UnitTestingGoogle/SPTest/TestSource/Sample5.txt");
 		parser.parse();
 
 		std::vector<std::pair<stmt_index, var_name>> expected_assign = { {1, "flag"}, {7, "count"},
@@ -124,7 +124,7 @@ namespace IntegrationTesting {
 	TEST_F(ParserPKBTest, Sample5Test_Expr) {
 		SourceProcessor::Parser parser;
 		ExprParser expr_parser;
-		parser.load_file("../UnitTestingGoogle/SPTest/TestSource/Sample5.txt");
+		parser.loadSourceFile("../UnitTestingGoogle/SPTest/TestSource/Sample5.txt");
 		parser.parse();
 
 		std::vector<std::pair<stmt_index, expr>> expected_expr = { {1, expr_parser.parse("0")},
@@ -144,7 +144,7 @@ namespace IntegrationTesting {
 
 	TEST_F(ParserPKBTest, Sample5Test_Follows) {
 		SourceProcessor::Parser parser;
-		parser.load_file("../UnitTestingGoogle/SPTest/TestSource/Sample5.txt");
+		parser.loadSourceFile("../UnitTestingGoogle/SPTest/TestSource/Sample5.txt");
 		parser.parse();
 
 		std::vector<std::pair<stmt_index, stmt_index>> expected_follows = {
@@ -165,7 +165,7 @@ namespace IntegrationTesting {
 
 	TEST_F(ParserPKBTest, Sample5Test_FollowsT) {
 		SourceProcessor::Parser parser;
-		parser.load_file("../UnitTestingGoogle/SPTest/TestSource/Sample5.txt");
+		parser.loadSourceFile("../UnitTestingGoogle/SPTest/TestSource/Sample5.txt");
 		parser.parse();
 
 		std::vector<std::pair<stmt_index, stmt_index>> expected_followsT = {
@@ -186,7 +186,7 @@ namespace IntegrationTesting {
 
 	TEST_F(ParserPKBTest, Sample5Test_Parent) {
 		SourceProcessor::Parser parser;
-		parser.load_file("../UnitTestingGoogle/SPTest/TestSource/Sample5.txt");
+		parser.loadSourceFile("../UnitTestingGoogle/SPTest/TestSource/Sample5.txt");
 		parser.parse();
 
 		std::vector<std::pair<stmt_index, stmt_index>> expected_parent = {
@@ -207,7 +207,7 @@ namespace IntegrationTesting {
 
 	TEST_F(ParserPKBTest, Sample5Test_ParentT) {
 		SourceProcessor::Parser parser;
-		parser.load_file("../UnitTestingGoogle/SPTest/TestSource/Sample5.txt");
+		parser.loadSourceFile("../UnitTestingGoogle/SPTest/TestSource/Sample5.txt");
 		parser.parse();
 
 		std::vector<std::pair<stmt_index, stmt_index>> expected_parentT = {
@@ -228,7 +228,7 @@ namespace IntegrationTesting {
 
 	TEST_F(ParserPKBTest, Sample5Test_UsesS) {
 		SourceProcessor::Parser parser;
-		parser.load_file("../UnitTestingGoogle/SPTest/TestSource/Sample5.txt");
+		parser.loadSourceFile("../UnitTestingGoogle/SPTest/TestSource/Sample5.txt");
 		parser.parse();
 
 		std::vector<std::pair<stmt_index, var_name>> expected_usesS = {
@@ -251,7 +251,7 @@ namespace IntegrationTesting {
 
 	TEST_F(ParserPKBTest, Sample5Test_ModifiesS) {
 		SourceProcessor::Parser parser;
-		parser.load_file("../UnitTestingGoogle/SPTest/TestSource/Sample5.txt");
+		parser.loadSourceFile("../UnitTestingGoogle/SPTest/TestSource/Sample5.txt");
 		parser.parse();
 
 		std::vector<std::pair<stmt_index, var_name>> expected_modifiesS = {
@@ -274,7 +274,7 @@ namespace IntegrationTesting {
 
 	TEST_F(ParserPKBTest, Sample5Test_CallsP) {
 		SourceProcessor::Parser parser;
-		parser.load_file("../UnitTestingGoogle/SPTest/TestSource/Sample5.txt");
+		parser.loadSourceFile("../UnitTestingGoogle/SPTest/TestSource/Sample5.txt");
 		parser.parse();
 
 		std::vector<std::pair<proc_name, proc_name>> expected_callsP = {
@@ -290,7 +290,7 @@ namespace IntegrationTesting {
 
 	TEST_F(ParserPKBTest, Sample5Test_CallsPT) {
 		SourceProcessor::Parser parser;
-		parser.load_file("../UnitTestingGoogle/SPTest/TestSource/Sample5.txt");
+		parser.loadSourceFile("../UnitTestingGoogle/SPTest/TestSource/Sample5.txt");
 		parser.parse();
 
 		std::vector<std::pair<proc_name, proc_name>> expected_callsPT = {
@@ -306,7 +306,7 @@ namespace IntegrationTesting {
 
 	TEST_F(ParserPKBTest, NoProcedureCallsTest_UsesP) {
 		SourceProcessor::Parser parser;
-		parser.load_file("../IntegrationTestingGoogle/Tests/no_procedure_call_source.txt");
+		parser.loadSourceFile("../IntegrationTestingGoogle/Tests/no_procedure_call_source.txt");
 		parser.parse();
 
 		std::vector<std::pair<proc_name, var_name>> expected_usesP = {
@@ -322,7 +322,7 @@ namespace IntegrationTesting {
 
 	TEST_F(ParserPKBTest, NoProcedureCallsTest_ModifiesP) {
 		SourceProcessor::Parser parser;
-		parser.load_file("../IntegrationTestingGoogle/Tests/no_procedure_call_source.txt");
+		parser.loadSourceFile("../IntegrationTestingGoogle/Tests/no_procedure_call_source.txt");
 		parser.parse();
 
 		std::vector<std::pair<proc_name, var_name>> expected_modifiesP = {
@@ -339,7 +339,7 @@ namespace IntegrationTesting {
 
 	TEST_F(ParserPKBTest, ProcedureCallsTest_UsesP) {
 		SourceProcessor::Parser parser;
-		parser.load_file("../IntegrationTestingGoogle/Tests/procedure_call_source.txt");
+		parser.loadSourceFile("../IntegrationTestingGoogle/Tests/procedure_call_source.txt");
 		parser.parse();
 
 		std::vector<std::pair<proc_name, var_name>> expected_usesP = {
@@ -358,7 +358,7 @@ namespace IntegrationTesting {
 
 	TEST_F(ParserPKBTest, ProcedureCallsTest_ModifiesP) {
 		SourceProcessor::Parser parser;
-		parser.load_file("../IntegrationTestingGoogle/Tests/procedure_call_source.txt");
+		parser.loadSourceFile("../IntegrationTestingGoogle/Tests/procedure_call_source.txt");
 		parser.parse();
 
 		std::vector<std::pair<proc_name, var_name>> expected_modifiesP = {
@@ -377,7 +377,7 @@ namespace IntegrationTesting {
 
 	TEST_F(ParserPKBTest, Sample5Test_Next) {
 		SourceProcessor::Parser parser;
-		parser.load_file("../UnitTestingGoogle/SPTest/TestSource/Sample5.txt");
+		parser.loadSourceFile("../UnitTestingGoogle/SPTest/TestSource/Sample5.txt");
 		parser.parse();
 
 		std::vector<std::pair<stmt_index, stmt_index>> expected_next = {
@@ -398,7 +398,7 @@ namespace IntegrationTesting {
 
 	TEST_F(ParserPKBTest, Sample6Test_Next) {
 		SourceProcessor::Parser parser;
-		parser.load_file("../UnitTestingGoogle/SPTest/TestSource/Sample6.txt");
+		parser.loadSourceFile("../UnitTestingGoogle/SPTest/TestSource/Sample6.txt");
 		parser.parse();
 
 		std::vector<std::pair<stmt_index, stmt_index>> expected_next = {
@@ -420,7 +420,7 @@ namespace IntegrationTesting {
 
 	TEST_F(ParserPKBTest, Sample7Test_Next) {
 		SourceProcessor::Parser parser;
-		parser.load_file("../UnitTestingGoogle/SPTest/TestSource/Sample7.txt");
+		parser.loadSourceFile("../UnitTestingGoogle/SPTest/TestSource/Sample7.txt");
 		parser.parse();
 
 		std::vector<std::pair<stmt_index, stmt_index>> expected_next = {
@@ -442,7 +442,7 @@ namespace IntegrationTesting {
 
 	TEST_F(ParserPKBTest, Sample8Test_Next) {
 		SourceProcessor::Parser parser;
-		parser.load_file("../UnitTestingGoogle/SPTest/TestSource/Sample8.txt");
+		parser.loadSourceFile("../UnitTestingGoogle/SPTest/TestSource/Sample8.txt");
 		parser.parse();
 
 		std::vector<std::pair<stmt_index, stmt_index>> expected_next = {
@@ -463,7 +463,7 @@ namespace IntegrationTesting {
 
 	TEST_F(ParserPKBTest, Sample5Test_Whiles) {
 		SourceProcessor::Parser parser;
-		parser.load_file("../UnitTestingGoogle/SPTest/TestSource/Sample5.txt");
+		parser.loadSourceFile("../UnitTestingGoogle/SPTest/TestSource/Sample5.txt");
 		parser.parse();
 
 		std::vector<std::pair<stmt_index, var_name>> expected_whiles = {
@@ -479,7 +479,7 @@ namespace IntegrationTesting {
 
 	TEST_F(ParserPKBTest, Sample6Test_While_Nested) {
 		SourceProcessor::Parser parser;
-		parser.load_file("../UnitTestingGoogle/SPTest/TestSource/Sample6.txt");
+		parser.loadSourceFile("../UnitTestingGoogle/SPTest/TestSource/Sample6.txt");
 		parser.parse();
 
 		std::vector<std::pair<stmt_index, var_name>> expected_whiles = {
@@ -496,7 +496,7 @@ namespace IntegrationTesting {
 
 	TEST_F(ParserPKBTest, Sample5Test_Ifs) {
 		SourceProcessor::Parser parser;
-		parser.load_file("../UnitTestingGoogle/SPTest/TestSource/Sample5.txt");
+		parser.loadSourceFile("../UnitTestingGoogle/SPTest/TestSource/Sample5.txt");
 		parser.parse();
 
 		std::vector<std::pair<stmt_index, var_name>> expected_ifs = {
@@ -512,7 +512,7 @@ namespace IntegrationTesting {
 
 	TEST_F(ParserPKBTest, Sample7Test_Ifs_Nested) {
 		SourceProcessor::Parser parser;
-		parser.load_file("../UnitTestingGoogle/SPTest/TestSource/Sample7.txt");
+		parser.loadSourceFile("../UnitTestingGoogle/SPTest/TestSource/Sample7.txt");
 		parser.parse();
 
 		std::vector<std::pair<stmt_index, var_name>> expected_ifs = {

@@ -2,26 +2,21 @@
 
 #include <stdexcept>
 #include <string>
+#include "SPCommon.h"
 #include "PKB.h"
 #include "Tokenizer.h"
-#include "Common.h"
 #include "DesignExtractor.h"
-
 
 namespace SourceProcessor {
 
 	class FSM {
 	public:
 		FSM(Tokenizer&);
-
 		FSM(Tokenizer&, Extractor*);
 
 		~FSM();
 
 		Tokenizer& getTokenizer();
-
-		// Build data structure with the given tokenizer
-		// TODO: Dependency injection of KnowledgeBase, done on parser side
 		void build();
 
 		// Expects a procedure.
@@ -95,22 +90,11 @@ namespace SourceProcessor {
 		// Expects an identifier.
 		Token expectIdentifier();
 
-		// Optional relational expression.
 		bool optionalRelationalExpression();
-
-		// Optional replational factor.
 		bool optionalRelationalFactor();
-
-		// Optional expression.
 		bool optionalExpression();
-
-		// Optional term.
 		bool optionalTerm();
-
-		// Optional factor.
 		bool optionalFactor();
-
-		// Optional identifier.
 		bool optionalIdentifier();
 
 	private:
@@ -122,11 +106,7 @@ namespace SourceProcessor {
 
 		// This token can be optional, will return a boolean value indicating if that token exists
 		bool peekToken(TokenType);
-
-		// Expects an optional token with given token type.
 		bool probeAndPop(TokenType);
-
-		// Expects an optional token with given token type.
 		bool probeAndPeek(TokenType);
 
 		// Throws exception

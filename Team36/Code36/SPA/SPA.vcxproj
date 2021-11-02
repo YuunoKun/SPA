@@ -118,6 +118,7 @@
     <ClInclude Include="..\source\KnowledgeBase.h" />
     <ClInclude Include="..\source\RelationTableUtility.h" />
     <ClInclude Include="..\source\RelationTable.h" />
+    <ClInclude Include="..\source\SPCommon.h" />
     <ClInclude Include="..\source\Statement.h" />
     <ClInclude Include="..\source\Common.h" />
     <ClInclude Include="..\source\QueryResult.h" />
