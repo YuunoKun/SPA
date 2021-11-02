@@ -61,6 +61,25 @@ struct Synonym {
 	}
 };
 
+struct LabelledProgLine {
+	prog_line program_line;
+	prog_line label;
+
+	bool operator==(const LabelledProgLine& other) const {
+		return program_line == other.program_line && label == other.label;
+	}
+
+	bool operator<(const LabelledProgLine& other) const {
+		if (program_line == other.program_line) {
+			return label < other.label;
+		}
+		else {
+			return program_line < other.program_line;
+		}
+	}
+};
+
+
 namespace std {
 	template <>
 	struct hash<StmtInfo> {
@@ -69,27 +88,11 @@ namespace std {
 			return ((hash<int>()(k.stmt_index) ^ (hash<int>()(k.stmt_type) << 1)) >> 1);
 		}
 	};
-}
 
-struct LabelledProgLine {
-	prog_line program_line;
-	prog_line label;
-
-	bool operator==(const LabelledProgLine& labelled_progline) const {
-		return program_line == labelled_progline.program_line && label == labelled_progline.label;
-	}
-
-	bool operator < (const LabelledProgLine& st) const {
-		return (program_line < st.program_line);
-	}
-};
-
-namespace std {
 	template <>
 	struct hash<LabelledProgLine> {
-		size_t operator()(const LabelledProgLine& k) const {
-			// Compute individual hash values for two data members and combine them using XOR and bit shifting
-			return ((hash<int>()(k.program_line) ^ (hash<int>()(k.label) << 1)) >> 1);
+		size_t operator()(const LabelledProgLine& l) const {
+			return ((hash<int>()(l.program_line) ^ (hash<int>()(l.label) << 1)) >> 1);
 		}
 	};
 }
