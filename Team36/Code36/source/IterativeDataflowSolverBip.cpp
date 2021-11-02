@@ -174,8 +174,10 @@ void IterativeDataflowSolverBip::resetInList() {
 void IterativeDataflowSolverBip::reset() {
 	resetOutList();
 	resetInList();
+	auto size = kill_list.size();
+	kill_list.resize(0);
+	kill_list.resize(size, {});
 	gen_list.clear();
-	kill_list.clear();
 	pred_list.clear();
 	succ_list.clear();
 	is_dataflow_sets_populated = false;
