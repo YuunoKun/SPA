@@ -13,18 +13,17 @@ public:
 private:
 	void evaluateClauses(Query&, QueryResult&);
 
-	std::list<std::string> getResult(Query&, QueryResult&);
-	std::list<std::string> getRawResult(Entity);
-	std::list<std::string> getRawResultWithSecondaryAttribute(Entity);
-	std::list<std::string> getTupleResult(Query&, QueryResult&);
+	void getResult(Query&, QueryResult&, std::list<std::string>&);
+	void getRawResult(Entity, std::list<std::string>&);
+	void getRawResultWithSecondaryAttribute(Entity, std::list<std::string>&);
+	void getTupleResult(Query&, QueryResult&, std::list<std::string>&);
 
 	std::string getEntitySecondaryAttribute(std::string, Entity);
 
-	std::list<std::string> convertToSecondaryAttribute(std::list<std::string>, Entity);
+	void convertToSecondaryAttribute(std::list<std::string>&, Entity, std::list<std::string>&);
 
 
-
-	std::list<std::string> mergeResultTables(std::list<std::list<std::string>>, std::vector<Entity>);
+	void mergeResultTables(std::list<std::list<std::string>>&, std::vector<Entity>, std::list<std::string>&);
 
 	PKBAdapter pkb;
 };

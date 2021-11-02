@@ -31,8 +31,11 @@ ResultTable WithEvaluator::evaluateSynonymAndSynonym(Entity left, Entity right) 
 	Entity dummy = { STMT, Synonym() };
 	std::vector<Entity> header1 = { left, dummy };
 	std::vector<Entity> header2 = { right, dummy };
-	ResultTable rt1(header1, getEntity(left));
-	ResultTable rt2(header2, getEntity(right));
+	std::list<std::vector<std::string>> result1, result2;
+	getEntity(left, result1);
+	getEntity(right, result2);
+	ResultTable rt1(header1, result1);
+	ResultTable rt2(header2, result2);
 
 	rt1.merge(rt2);
 	std::vector<Entity> header = { left, right };
@@ -51,54 +54,58 @@ ResultTable WithEvaluator::evaluateSynonymAndWild(Entity header) {
 }
 
 ResultTable WithEvaluator::evaluateConstantAndSynonym(Entity constant, Entity header) {
-	return ResultTable(header, getEntityWithAttribute(header, constant));
+	return evaluateSynonymAndConstant(header, constant);
 }
 
 ResultTable WithEvaluator::evaluateSynonymAndConstant(Entity header, Entity constant) {
-	return ResultTable(header, getEntityWithAttribute(header, constant));
+	std::list<std::vector<std::string>> result;
+	getEntityWithAttribute(header, constant, result);
+	return ResultTable(header, result);
 }
 
-std::list<std::vector<std::string>> WithEvaluator::getEntity(Entity e) {
-
+void WithEvaluator::getEntity(Entity& e, std::list<std::vector<std::string>>& out) {
 	if (Utility::isSecondaryAttribute(e)) {
-		return getEntityAndSecondaryAttribute(e);
+		getEntityAndSecondaryAttribute(e, out);
+		return;
 	}
 	std::list<std::string> result;
 	switch (e.getType()) {
 	case EntityType::PROG_LINE:
-	case EntityType::STMT: result = Utility::stmtInfoToStringList(pkb.getStmts()); break;
-	case EntityType::READ: result = Utility::stmtInfoToStringList(pkb.getReads());  break;
-	case EntityType::PRINT: result = Utility::stmtInfoToStringList(pkb.getPrints()); break;
-	case EntityType::CALL: result = Utility::stmtInfoToStringList(pkb.getCalls()); break;
-	case EntityType::WHILE: result = Utility::stmtInfoToStringList(pkb.getWhiles()); break;
-	case EntityType::IF: result = Utility::stmtInfoToStringList(pkb.getIfs()); break;
-	case EntityType::ASSIGN: result = Utility::stmtInfoToStringList(pkb.getAssigns()); break;
-	case EntityType::VARIABLE: result = Utility::variablesToStringList(pkb.getVariables());  break;
-	case EntityType::CONSTANT: result = Utility::constantsToStringList(pkb.getConstants());  break;
-	case EntityType::PROCEDURE: result = Utility::proceduresToStringList(pkb.getProcedures());  break;
+	case EntityType::STMT: Utility::stmtInfoToStringList(pkb.getStmts(), result); break;
+	case EntityType::READ: Utility::stmtInfoToStringList(pkb.getReads(), result);  break;
+	case EntityType::PRINT: Utility::stmtInfoToStringList(pkb.getPrints(), result); break;
+	case EntityType::CALL: Utility::stmtInfoToStringList(pkb.getCalls(), result); break;
+	case EntityType::WHILE: Utility::stmtInfoToStringList(pkb.getWhiles(), result); break;
+	case EntityType::IF: Utility::stmtInfoToStringList(pkb.getIfs(), result); break;
+	case EntityType::ASSIGN: Utility::stmtInfoToStringList(pkb.getAssigns(), result); break;
+	case EntityType::VARIABLE: Utility::variableToStringList(pkb.getVariables(), result);  break;
+	case EntityType::CONSTANT: Utility::constantToStringList(pkb.getConstants(), result);  break;
+	case EntityType::PROCEDURE: Utility::procedureToStringList(pkb.getProcedures(), result);  break;
 	default: throw std::domain_error("getEntityWithAttribute(Entity, Entity): Entity type does not have Attribute!");
 		break;
 	}
-	return Utility::pairToStringTable(Utility::stringListToStringPair(result));
+	Utility::stringListToStringTablePair(result, out);
 }
 
 
-
-std::list<std::vector<std::string>> WithEvaluator::getEntityAndSecondaryAttribute(Entity synonym) {
+void WithEvaluator::getEntityAndSecondaryAttribute(Entity& synonym, std::list<std::vector<std::string>>& out) {
 	switch (synonym.getType()) {
 	case EntityType::READ:
 		if (synonym.getAttribute() == AttrRef::VAR_NAME) {
-			return Utility::pairToStringTable(pkb.getAllReadVars());
+			Utility::pairToStringTable(pkb.getAllReadVars(), out);
+			return;
 		}
 		break;
 	case EntityType::PRINT:
 		if (synonym.getAttribute() == AttrRef::VAR_NAME) {
-			return Utility::pairToStringTable(pkb.getAllPrintVars());
+			Utility::pairToStringTable(pkb.getAllPrintVars(), out);
+			return;
 		}
 		break;
 	case EntityType::CALL:
 		if (synonym.getAttribute() == AttrRef::PROC_NAME) {
-			return Utility::pairToStringTable(pkb.getAllCallS());
+			Utility::pairToStringTable(pkb.getAllCallS(), out);
+			return;
 		}
 		break;
 	}
@@ -106,9 +113,10 @@ std::list<std::vector<std::string>> WithEvaluator::getEntityAndSecondaryAttribut
 	throw std::domain_error("getEntityAndSecondaryAttribute(Entity): Entity type does not have Secondary Attribute!");
 }
 
-std::list<std::string> WithEvaluator::getEntityWithAttribute(Entity e, Entity constant) {
+void WithEvaluator::getEntityWithAttribute(Entity& e, Entity& constant, std::list<std::vector<std::string>>& out) {
 	if (Utility::isSecondaryAttribute(e)) {
-		return getEntityWithSecondaryAttribute(constant);
+		getEntityWithSecondaryAttribute(constant, out);
+		return;
 	}
 	bool is_true = false;
 	switch (e.getType()) {
@@ -127,28 +135,28 @@ std::list<std::string> WithEvaluator::getEntityWithAttribute(Entity e, Entity co
 		break;
 	}
 	if (is_true) {
-		return { constant.getValue() };
-	}
-	else {
-		return { };
+		out.push_back({ constant.getValue() });
 	}
 }
 
-std::list<std::string> WithEvaluator::getEntityWithSecondaryAttribute(Entity constant) {
+void WithEvaluator::getEntityWithSecondaryAttribute(Entity& constant, std::list<std::vector<std::string>>& out) {
 	switch (constant.getType()) {
 	case EntityType::READ:
 		if (constant.getAttribute() == AttrRef::VAR_NAME) {
-		return Utility::stmtIndexToStringList(pkb.getRead(constant.getValue()));
+			Utility::stmtIndexToStringTable(pkb.getRead(constant.getValue()), out);
+			return;
 		}
 		break;
 	case EntityType::PRINT:
 		if (constant.getAttribute() == AttrRef::VAR_NAME) {
-			return Utility::stmtIndexToStringList(pkb.getPrint(constant.getValue()));
+			Utility::stmtIndexToStringTable(pkb.getPrint(constant.getValue()), out);
+			return;
 		}
 		break;
 	case EntityType::CALL: 
 		if (constant.getAttribute() == AttrRef::PROC_NAME) {
-			return Utility::stmtIndexToStringList(pkb.getCalleeS(constant.getValue()));
+			Utility::stmtIndexToStringTable(pkb.getCalleeS(constant.getValue()), out);
+			return;
 		}
 		break;
 	}

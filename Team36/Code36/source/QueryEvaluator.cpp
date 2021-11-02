@@ -16,7 +16,10 @@ std::list<std::string> QueryEvaluator::evaluateQuery(Query& query) {
 	evaluateClauses(query, result);
 
 	PKBAdapter::getRelationManager().reset();
-	return getResult(query, result);
+
+	std::list<std::string> out;
+	getResult(query, result, out);
+	return out;
 }
 
 void QueryEvaluator::evaluateClauses(Query& query, QueryResult& query_result) {
@@ -35,43 +38,46 @@ void QueryEvaluator::evaluateClauses(Query& query, QueryResult& query_result) {
 }
 
 
-std::list<std::string> QueryEvaluator::getRawResult(Entity selected) {
+void QueryEvaluator::getRawResult(Entity selected, std::list<std::string>& out) {
 	if (Utility::isSecondaryAttribute(selected)) {
-		return getRawResultWithSecondaryAttribute(selected);
+		getRawResultWithSecondaryAttribute(selected, out);
+		return;
 	}
-	std::list<std::string> result;
+
 	switch (selected.getType()) {
 	case EntityType::PROG_LINE :
-	case EntityType::STMT: result = Utility::stmtInfoToStringList(pkb.getStmts()); break;
-	case EntityType::READ: result = Utility::stmtInfoToStringList(pkb.getReads());  break;
-	case EntityType::PRINT: result = Utility::stmtInfoToStringList(pkb.getPrints()); break;
-	case EntityType::CALL: result = Utility::stmtInfoToStringList(pkb.getCalls()); break;
-	case EntityType::WHILE: result = Utility::stmtInfoToStringList(pkb.getWhiles()); break;
-	case EntityType::IF: result = Utility::stmtInfoToStringList(pkb.getIfs()); break;
-	case EntityType::ASSIGN: result = Utility::stmtInfoToStringList(pkb.getAssigns()); break;
-	case EntityType::VARIABLE: result = Utility::variablesToStringList(pkb.getVariables());  break;
-	case EntityType::CONSTANT: result = Utility::constantsToStringList(pkb.getConstants());  break;
-	case EntityType::PROCEDURE: result = Utility::proceduresToStringList(pkb.getProcedures());  break;
+	case EntityType::STMT: Utility::stmtInfoToStringList(pkb.getStmts(), out); break;
+	case EntityType::READ: Utility::stmtInfoToStringList(pkb.getReads(), out);  break;
+	case EntityType::PRINT: Utility::stmtInfoToStringList(pkb.getPrints(), out); break;
+	case EntityType::CALL: Utility::stmtInfoToStringList(pkb.getCalls(), out); break;
+	case EntityType::WHILE: Utility::stmtInfoToStringList(pkb.getWhiles(), out); break;
+	case EntityType::IF: Utility::stmtInfoToStringList(pkb.getIfs(), out); break;
+	case EntityType::ASSIGN: Utility::stmtInfoToStringList(pkb.getAssigns(), out); break;
+	case EntityType::VARIABLE: Utility::variableToStringList(pkb.getVariables(), out);  break;
+	case EntityType::CONSTANT: Utility::constantToStringList(pkb.getConstants(), out);  break;
+	case EntityType::PROCEDURE: Utility::procedureToStringList(pkb.getProcedures(), out);  break;
 	}
 
-	return result;
 }
 
-std::list<std::string> QueryEvaluator::getRawResultWithSecondaryAttribute(Entity selected) {
+void QueryEvaluator::getRawResultWithSecondaryAttribute(Entity selected, std::list<std::string>& out) {
 	switch (selected.getType()) {
 	case EntityType::READ:
 		if (selected.getAttribute() == AttrRef::VAR_NAME) {
-			return Utility::variablesToStringList(pkb.getPrintVar());
+			Utility::variableToStringList(pkb.getPrintVar(), out);
+			return;
 		}
 		break;
 	case EntityType::PRINT:
 		if (selected.getAttribute() == AttrRef::VAR_NAME) {
-			return Utility::variablesToStringList(pkb.getReadVar());
+			Utility::variableToStringList(pkb.getReadVar(), out);
+			return;
 		}
 		break;
 	case EntityType::CALL:
 		if (selected.getAttribute() == AttrRef::PROC_NAME) {
-			return Utility::proceduresToStringList(pkb.getCalledS());
+			Utility::procedureToStringList(pkb.getCalledS(), out);
+			return;
 		}
 		break;
 	}
@@ -101,17 +107,13 @@ std::string QueryEvaluator::getEntitySecondaryAttribute(std::string primary, Ent
 	throw std::domain_error("Selected Entity type does not have Secondary Attribute!");
 }
 
-std::list<std::string> QueryEvaluator::convertToSecondaryAttribute(std::list<std::string> table, Entity type) {
-	std::list<std::string> results;
+void QueryEvaluator::convertToSecondaryAttribute(std::list<std::string>& table, Entity type, std::list<std::string>& out) {
 	for (auto row : table) {
-		results.emplace_back(getEntitySecondaryAttribute(row, type));
+		out.emplace_back(getEntitySecondaryAttribute(row, type));
 	}
-	return results;
 }
 
-std::list<std::string> QueryEvaluator::mergeResultTables(std::list<std::list<std::string>> table, std::vector<Entity> selected) {
-
-	std::list<std::string> results;
+void QueryEvaluator::mergeResultTables(std::list<std::list<std::string>>& table, std::vector<Entity> selected, std::list<std::string>& out) {
 	for (auto row : table) {
 		int index = 0;
 		std::string row_result = row.front();
@@ -129,13 +131,12 @@ std::list<std::string> QueryEvaluator::mergeResultTables(std::list<std::list<std
 			}
 			row.pop_front();
 		}
-		results.emplace_back(row_result);
+		out.emplace_back(row_result);
 	}
-	return results;
 }
 
 
-std::list<std::string> QueryEvaluator::getTupleResult(Query& query, QueryResult& query_result) {
+void QueryEvaluator::getTupleResult(Query& query, QueryResult& query_result, std::list<std::string>& out) {
 	std::vector<Entity> selected_entities = Utility::removeDuplicateEntities(query.getSelected());
 	std::list<ResultTable> results;
 	if (query_result.isInTables(selected_entities)) {
@@ -144,7 +145,9 @@ std::list<std::string> QueryEvaluator::getTupleResult(Query& query, QueryResult&
 	}
 
 	for (auto& selected : selected_entities) {
-		results.push_back(ResultTable(selected, getRawResult(selected)));
+		std::list<std::string> raw_result;
+		getRawResult(selected, raw_result);
+		results.push_back(ResultTable(selected, raw_result));
 	}
 
 	ResultTable result = results.front();
@@ -153,34 +156,41 @@ std::list<std::string> QueryEvaluator::getTupleResult(Query& query, QueryResult&
 		result.joinTable(results.front());
 		results.pop_front();
 	}
-	return mergeResultTables(result.getEntityResults(query.getSelected()), query.getSelected());
+	
+	mergeResultTables(result.getEntityResults(query.getSelected()), query.getSelected(), out);
 }
 
 
-std::list<std::string> QueryEvaluator::getResult(Query& query, QueryResult& result) {
+void QueryEvaluator::getResult(Query& query, QueryResult& result, std::list<std::string>& out) {
 	if (query.getSelected()[0].getType() == EntityType::BOOLEAN) {
 		if (result.haveResult()) {
-			return { BOOLEAN_TRUE };
+			out.push_back(BOOLEAN_TRUE);
 		}
 		else {
-			return { BOOLEAN_FALSE };
+			out.push_back(BOOLEAN_FALSE);
 		}
-	}
+		return;
+	} 
 
 	if (!result.haveResult()) {
-		return {};
+		return;
 	}
 
 	if (query.getSelected().size() > 1) {
-		return getTupleResult(query, result);
+		getTupleResult(query, result, out);
+		return;
 	}
 
 	if (!result.isInTables(query.getSelected()[0])) {
-		return getRawResult(query.getSelected()[0]);
+		getRawResult(query.getSelected()[0], out);
+		return;
 	}
 
 	if (Utility::isSecondaryAttribute(query.getSelected()[0])) {
-		return convertToSecondaryAttribute(result.getResult(query.getSelected()[0]), query.getSelected()[0]);
+		convertToSecondaryAttribute(result.getResult(query.getSelected()[0]), query.getSelected()[0], out);
+		return;
 	}
-	return result.getResult(query.getSelected()[0]);
+
+	std::list<std::string> result_list = result.getResult(query.getSelected()[0]);
+	out.insert(out.end(), result_list.begin(), result_list.end());
 }

@@ -2,41 +2,54 @@
 #include "Utility.h"
 
 ResultTable::ResultTable(Entity& header, std::vector<StmtInfo>& table) {
-	table = Utility::filterResult(header.getType(), table);
-	init(header, Utility::stmtInfoToStringList(table));
+	Utility::filterResults(header.getType(), table, this->table);
+	addHeader(header);
 }
 
 ResultTable::ResultTable(Entity& header, std::vector<stmt_index>& table) {
-	init(header, Utility::stmtIndexToStringList(table));
+	Utility::stmtIndexToStringTable(table, this->table);
+	addHeader(header);
 }
 
 ResultTable::ResultTable(Entity& header, std::vector<std::string>& table) {
-	init(header, std::list<std::string>(table.begin(), table.end()));
+	Utility::stringToStringTable(table, this->table);
+	addHeader(header);
 }
 
 ResultTable::ResultTable(Entity& header, std::list<std::string>& table) {
-	init(header, table);
+	Utility::stringToStringTable(table, this->table);
+	addHeader(header);
 }
 
-ResultTable::ResultTable(std::pair<Entity, Entity> header, std::vector<std::pair<std::string, std::string>>& table) {
-	init(header, Utility::pairToStringTable(table));
-}
-
-ResultTable::ResultTable(std::pair<Entity, Entity> header, std::vector<std::pair<stmt_index, std::string>>& table) {
-	init(header, Utility::pairToStringTable(table));
-}
-
-ResultTable::ResultTable(std::pair<Entity, Entity>  header, std::vector<std::pair<StmtInfo, std::string>>& table) {
-	init(header, Utility::filterResults(header.first.getType(), table));
-}
-
-ResultTable::ResultTable(std::pair<Entity, Entity>  header, std::vector<std::pair<StmtInfo, StmtInfo>>& table) {
-	init(header, Utility::filterResults(std::make_pair(header.first.getType(), header.second.getType()), table));
+ResultTable::ResultTable(Entity& header, std::list<std::vector<std::string>>& table) {
+	this->table = table;
+	addHeader(header);
 }
 
 ResultTable::ResultTable(std::vector<Entity>& e, std::list<std::vector<std::string>>& table) {
 	this->table = table;
 	addHeader(e);
+}
+
+
+ResultTable::ResultTable(std::pair<Entity, Entity> header, std::vector<std::pair<std::string, std::string>>& table) {
+	Utility::pairToStringTable(table, this->table);
+	addHeader(header);
+}
+
+ResultTable::ResultTable(std::pair<Entity, Entity> header, std::vector<std::pair<stmt_index, std::string>>& table) {
+	Utility::pairToStringTable(table, this->table);
+	addHeader(header);
+}
+
+ResultTable::ResultTable(std::pair<Entity, Entity>  header, std::vector<std::pair<StmtInfo, std::string>>& table) {
+	Utility::filterResults(header.first.getType(), table, this->table);
+	addHeader(header);
+}
+
+ResultTable::ResultTable(std::pair<Entity, Entity>  header, std::vector<std::pair<StmtInfo, StmtInfo>>& table) {
+	Utility::filterResults(std::make_pair(header.first.getType(), header.second.getType()), table, this->table);
+	addHeader(header);
 }
 
 
@@ -71,18 +84,19 @@ bool ResultTable::isInTable(Entity e) {
 	return header_set.find(e.getSynonym()) != header_set.end();
 }
 
-//if table contain no value
 bool ResultTable::isEmpty() {
 	return table.empty();
 }
 
 std::list<std::string> ResultTable::getEntityResult(Entity e) {
 	int columnIndex = Utility::getIndex(header, e);
-	std::unordered_set<std::string> result;
+	std::unordered_set<std::string> result_set;
 	for (auto row : table) {
-		result.insert(row[columnIndex]);
+		result_set.insert(row[columnIndex]);
 	}
-	return Utility::unorderedSetToStringList(result);
+	std::list<std::string> result;
+	Utility::unorderedSetToStringList(result_set, result);
+	return result;
 }
 
 std::list<std::list<std::string>> ResultTable::getEntityResults(std::vector<Entity> entities) {
@@ -130,22 +144,15 @@ bool ResultTable::operator==(const ResultTable& other) const {
 	return header == other.header && table == other.table;
 }
 
-void ResultTable::init(Entity header, std::list<std::string>& table) {
-	addHeader(header);
-	for (auto& it : table) {
-		this->table.push_back({ it });
-	}
-}
 
-void ResultTable::init(std::pair<Entity, Entity> header, std::list<std::vector<std::string>>& table) {
+void ResultTable::addHeader(std::pair<Entity, Entity> header) {
 	if (header.first == header.second) {
-		//If the header is the same, merge column if equal.
-		init(header.first, Utility::mergeColumnEqual(table));
+		Utility::mergeColumnEqual(table);
+		addHeader(header.first);
 	}
 	else {
 		addHeader(header.first);
 		addHeader(header.second);
-		this->table = table;
 	}
 }
 
@@ -196,8 +203,8 @@ void ResultTable::filter_table(ResultTable& t, Entity common_header) {
 	for (auto& it : filter_table) {
 		filter.insert(it[0]);
 	}
-
-	table = Utility::filterResults(main_table, filter, header_index);
+	table = std::list<std::vector<std::string>>();
+	Utility::filterResults(main_table, filter, header_index, table);
 }
 
 void ResultTable::filter_table(ResultTable& t, Entity common_header1, Entity common_header2) {
@@ -239,7 +246,8 @@ void ResultTable::filter_table(ResultTable& t, Entity common_header1, Entity com
 		container->second.insert(it[filter_index2]);
 	}
 
-	table = Utility::filterResults(main_table, filters, header_index1, header_index2);
+	table = std::list<std::vector<std::string>>();
+	Utility::filterResults(main_table, filters, header_index1, header_index2, table);
 }
 
 void ResultTable::joinTable(ResultTable& t, Entity common_header) {

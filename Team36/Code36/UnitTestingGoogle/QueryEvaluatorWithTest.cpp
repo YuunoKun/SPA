@@ -58,7 +58,7 @@ namespace UnitTesting {
 	};
 
 
-	TEST_F(QueryEvaluatorWithTest, evaluateQueryWithClausesSynonymAndConstant) {
+	TEST_F(QueryEvaluatorWithTest, evaluateQueryWithClausesConstantAndConstant) {
 		Entity c1 = { STMT, "1" };
 		Entity c2 = { STMT, "2" };
 		Entity c3 = { STMT, "3" };
@@ -81,7 +81,7 @@ namespace UnitTesting {
 		EXPECT_EQ(evaluator.evaluateQuery(q), result);
 	}
 
-	TEST_F(QueryEvaluatorWithTest, evaluateQueryWithClausesConstantAndConstant) {
+	TEST_F(QueryEvaluatorWithTest, evaluateQueryWithClausesSynonymAndConstant) {
 		Entity s = { STMT, Synonym{"a"} };
 		Query q = initQuery({ WITH, s , { STMT, "1" } }, { s });
 		std::list<std::string> result = { "1" };

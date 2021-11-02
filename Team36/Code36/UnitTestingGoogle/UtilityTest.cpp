@@ -8,30 +8,38 @@ namespace UnitTesting {
 		std::vector<constant> a{ 1, 2, 3, 4, 5 };
 		std::list<std::string> b{ "1", "2", "3", "4", "5" };
 
-		EXPECT_EQ(Utility::constantsToStringList(a), b);
+		std::list<std::string> out;
+		Utility::constantToStringList(a, out);
+		EXPECT_EQ(out, b);
 
 		std::list<std::string> c{ "1", "2", "3", "4" };
-		EXPECT_NE(Utility::constantsToStringList(a), c);
+		EXPECT_NE(out, c);
 
 		std::vector<constant> d{ 1, 2 };
 		std::list<std::string> e{ "1", "2" };
 
-		EXPECT_EQ(Utility::constantsToStringList(d), e);
+		out.clear();
+		Utility::constantToStringList(d, out);
+		EXPECT_EQ(out, e);
 	}
 
 	TEST(Utility, proceduresToStringList) {
 		std::vector<proc_name> a{ "a", "b", "c", "d", "e" };
 		std::list<std::string> b{ "a", "b", "c", "d", "e" };
 
-		EXPECT_EQ(Utility::proceduresToStringList(a), b);
+		std::list<std::string> out;
+		Utility::procedureToStringList(a, out);
+		EXPECT_EQ(out, b);
 
 		std::list<std::string> c{ "a", "b", "c", "d" };
-		EXPECT_NE(Utility::proceduresToStringList(a), c);
+		EXPECT_NE(out, c);
 
 		std::vector<proc_name> d{ "a", "b" };
 		std::list<std::string> e{ "a", "b" };
 
-		EXPECT_EQ(Utility::proceduresToStringList(d), e);
+		out.clear();
+		Utility::procedureToStringList(d, out);
+		EXPECT_EQ(out, e);
 	}
 
 	TEST(Utility, stmtInfoToStringList) {
@@ -39,77 +47,105 @@ namespace UnitTesting {
 			{3, STMT_IF} ,{4, STMT_WHILE} ,{5, STMT_PRINT} };
 		std::list<std::string> b{ "1", "2", "3", "4", "5" };
 
-		EXPECT_EQ(Utility::stmtInfoToStringList(a), b);
+		std::list<std::string> out;
+		Utility::stmtInfoToStringList(a, out);
+		EXPECT_EQ(out, b);
 
 		std::list<std::string> c{ "1", "2", "3", "4" };
-		EXPECT_NE(Utility::stmtInfoToStringList(a), c);
+		EXPECT_NE(out, c);
 
 		std::vector<StmtInfo> d{ {1, STMT_ASSIGN}, {2, STMT_CALL} };
 		std::list<std::string> e{ "1", "2" };
 
-		EXPECT_EQ(Utility::stmtInfoToStringList(d), e);
+		out.clear();
+		Utility::stmtInfoToStringList(d, out);
+		EXPECT_EQ(out, e);
 	}
 
 	TEST(Utility, variablesToStringList) {
 		std::vector<var_name> a{ "a", "b", "c", "d", "e" };
 		std::list<std::string> b{ "a", "b", "c", "d", "e" };
 
-		EXPECT_EQ(Utility::variablesToStringList(a), b);
+		std::list<std::string> out;
+		Utility::variableToStringList(a, out);
+		EXPECT_EQ(out, b);
 
 		std::list<std::string> c{ "a", "b", "c", "d" };
-		EXPECT_NE(Utility::variablesToStringList(a), c);
+		EXPECT_NE(out, c);
 
 		std::vector<var_name> d{ "a", "b" };
 		std::list<std::string> e{ "a", "b" };
 
-		EXPECT_EQ(Utility::variablesToStringList(d), e);
+		out.clear();
+		Utility::variableToStringList(d, out);
+		EXPECT_EQ(out, e);
 	}
 
 	TEST(Utility, unorderedSetToStringList) {
 		std::unordered_set<std::string> a{ "a", "b", "c", "d", "e" };
 		std::list<std::string> b{ "a", "b", "c", "d", "e" };
 
-		EXPECT_EQ(Utility::unorderedSetToStringList(a), b);
+		std::list<std::string> out;
+		Utility::unorderedSetToStringList(a, out);
+		EXPECT_EQ(out, b);
 
 		std::list<std::string> c{ "a", "b", "c", "d" };
-		EXPECT_NE(Utility::unorderedSetToStringList(a), c);
+		EXPECT_NE(out, c);
 
 		std::unordered_set<std::string> d{ "a", "b" };
 		std::list<std::string> e{ "a", "b" };
 
-		EXPECT_EQ(Utility::unorderedSetToStringList(d), e);
+		out.clear();
+		Utility::unorderedSetToStringList(d, out);
+		EXPECT_EQ(out, e);
 	}
 
 	TEST(Utility, stmtIndexToStringList) {
 		std::vector<stmt_index> a = { 1, 2, 3, 4 };
 		std::list<std::string> b{ "1", "2", "3", "4" };
-		EXPECT_EQ(Utility::stmtIndexToStringList(a), b);
+		std::list<std::string> out;
+		Utility::stmtIndexToStringList(a, out);
+		EXPECT_EQ(out, b);
 	}
 
 	TEST(Utility, stringListToStringPair) {
 		std::list<std::string> a{ "1", "2", "3", "4" };
-		std::vector<std::pair<std::string, std::string>> b = { {"1", "1"},{"2", "2"},{"3", "3"},{"4", "4"} };
-		EXPECT_EQ(Utility::stringListToStringPair(a), b);
+		std::list<std::vector<std::string>> b = { {"1", "1"},{"2", "2"},{"3", "3"},{"4", "4"} };
+
+		std::list<std::vector<std::string>> out;
+		Utility::stringListToStringTablePair(a, out);
+		EXPECT_EQ(out, b);
 	}
 
 
 	TEST(Utility, pairToStringTable) {
 		std::vector<std::pair<std::string, std::string>> p1 = { {"a", "b"},{"c", "d"} };
 		std::list<std::vector<std::string>> t1 = { {"a", "b"},{"c", "d"} };
-		EXPECT_EQ(Utility::pairToStringTable(p1), t1);
+
+		std::list<std::vector<std::string>> out; 
+		Utility::pairToStringTable(p1, out);
+		EXPECT_EQ(out, t1);
 
 		std::vector<std::pair<stmt_index, std::string>> p2 = { { 1 , "b"}, { 2 , "d"} };
 		std::list<std::vector<std::string>> t2 = { {"1", "b"},{"2", "d"} };
-		EXPECT_EQ(Utility::pairToStringTable(p2), t2);
+		out.clear();
+		Utility::pairToStringTable(p2, out);
+		EXPECT_EQ(out, t2);
 
 		std::vector<std::pair<StmtInfo, std::string>> p3 = { {{ 1, STMT_ASSIGN }, "b"},{{ 2, STMT_ASSIGN }, "d"} };
 		std::list<std::vector<std::string>> t3 = { {"1", "b"},{"2", "d"} };
-		EXPECT_EQ(Utility::pairToStringTable(p3), t3);
+
+		out.clear();
+		Utility::pairToStringTable(p3, out);
+		EXPECT_EQ(out, t3);
 
 		std::vector<std::pair<StmtInfo, StmtInfo>> p4 = { {{ 1, STMT_ASSIGN }, { 3, STMT_WHILE }},
 			{{ 2, STMT_ASSIGN }, { 4, STMT_WHILE }} };
 		std::list<std::vector<std::string>> t4 = { {"1", "3"},{"2", "4"} };
-		EXPECT_EQ(Utility::pairToStringTable(p4), t4);
+
+		out.clear();
+		Utility::pairToStringTable(p4, out);
+		EXPECT_EQ(out, t4);
 	}
 	TEST(Utility, getIndexString) {
 		std::vector<std::string> c{ "a", "b", "c", "d", "e" };
@@ -171,6 +207,41 @@ namespace UnitTesting {
 		EXPECT_EQ(Utility::filterResult(CALL, a), b);
 	}
 
+
+	TEST(Utility, filterResultsToTable) {
+		std::vector<StmtInfo> a = { { 1, STMT_WHILE }, { 2, STMT_IF} , { 3, STMT_READ },
+			{ 4, STMT_PRINT}, { 5, STMT_CALL }, { 6, STMT_ASSIGN}, { 7, STMT_ASSIGN} };
+		std::list<std::vector<std::string>> b = { { "6" } , { "7" } };
+
+		std::list<std::vector<std::string>> out;
+		Utility::filterResults(ASSIGN, a, out);
+		EXPECT_EQ(out, b);
+
+		b = { { "1" } };
+		out.clear();
+		Utility::filterResults(WHILE, a, out);
+		EXPECT_EQ(out, b);
+
+		b = { { "2" } };
+		out.clear();
+		Utility::filterResults(IF, a, out);
+		EXPECT_EQ(out, b);
+
+		b = { { "3" } };
+		out.clear();
+		Utility::filterResults(READ, a, out);
+		EXPECT_EQ(out, b);
+
+		b = { { "4" } };
+		out.clear();
+		Utility::filterResults(PRINT, a, out);
+		EXPECT_EQ(out, b);
+
+		b = { { "5" } };
+		out.clear();
+		Utility::filterResults(CALL, a, out);
+		EXPECT_EQ(out, b);
+	}
 	TEST(Utility, filterResultsPairStmtInfoAndString) {
 		std::vector<std::pair<StmtInfo, std::string>> a = {
 			{{ 1, STMT_WHILE }, "a"},{{ 2, STMT_IF }, "b"} ,
@@ -179,22 +250,42 @@ namespace UnitTesting {
 			{{ 7, STMT_ASSIGN }, "g"},{{ 8, STMT_ASSIGN }, "h"} };
 
 		std::list<std::vector<std::string>> b = { {"6", "f"}, {"7", "g"}, { "8", "h"} };
-		EXPECT_EQ(Utility::filterResults(ASSIGN, a), b);
+
+		std::list<std::vector<std::string>> out;
+		Utility::filterResults(ASSIGN, a, out);
+		EXPECT_EQ(out, b);
+		EXPECT_EQ(out, b);
 
 		b = { {"1", "a"} };
-		EXPECT_EQ(Utility::filterResults(WHILE, a), b);
+
+		out.clear();
+		Utility::filterResults(WHILE, a, out);
+		EXPECT_EQ(out, b);
 
 		b = { {"2", "b"} };
-		EXPECT_EQ(Utility::filterResults(IF, a), b);
+
+		out.clear();
+		Utility::filterResults(IF, a, out);
+		EXPECT_EQ(out, b);
 
 		b = { {"3", "c"} };
-		EXPECT_EQ(Utility::filterResults(READ, a), b);
+
+		out.clear();
+		Utility::filterResults(READ, a, out);
+		EXPECT_EQ(out, b);
 
 		b = { {"4", "d"} };
-		EXPECT_EQ(Utility::filterResults(PRINT, a), b);
+
+		out.clear();
+		Utility::filterResults(PRINT, a, out);
+		EXPECT_EQ(out, b);
 
 		b = { {"5", "e"} };
-		EXPECT_EQ(Utility::filterResults(CALL, a), b);
+
+
+		out.clear();
+		Utility::filterResults(CALL, a, out);
+		EXPECT_EQ(out, b);
 	}
 
 	TEST(Utility, filterResultsPairStmtInfoAndStmtInfo) {
@@ -205,60 +296,87 @@ namespace UnitTesting {
 			{{ 7, STMT_ASSIGN }, { 17, STMT_IF }},{{ 8, STMT_ASSIGN }, { 18, STMT_IF }} };
 
 		std::list<std::vector<std::string>> b = { {"6", "16"}, {"7", "17"}, { "8", "18"} };
-		EXPECT_EQ(Utility::filterResults({ ASSIGN, IF }, a), b);
+
+		std::list<std::vector<std::string>> out;
+		Utility::filterResults({ ASSIGN, IF }, a, out);
+		EXPECT_EQ(out, b);
+
 
 		b = { {"1", "11"} };
-		EXPECT_EQ(Utility::filterResults({ WHILE, READ }, a), b);
+
+		out.clear();
+		Utility::filterResults({ WHILE, READ }, a, out);
+		EXPECT_EQ(out, b);
+
 
 		b = { {"2", "12"} };
-		EXPECT_EQ(Utility::filterResults({ IF, IF }, a), b);
+
+		out.clear();
+		Utility::filterResults({ IF, IF }, a, out);
+		EXPECT_EQ(out, b);
 
 		b = { {"3", "13"} };
-		EXPECT_EQ(Utility::filterResults({ READ, CALL }, a), b);
+
+		out.clear();
+		Utility::filterResults({ READ, CALL }, a, out);
+		EXPECT_EQ(out, b);
 
 		b = { {"4", "14"} };
-		EXPECT_EQ(Utility::filterResults({ PRINT, IF }, a), b);
+
+		out.clear();
+		Utility::filterResults({ PRINT, IF }, a, out);
+		EXPECT_EQ(out, b);
 
 		b = { {"5", "15"} };
-		EXPECT_EQ(Utility::filterResults({ CALL, ASSIGN }, a), b);
+
+		out.clear();
+		Utility::filterResults({ CALL, ASSIGN }, a, out);
+		EXPECT_EQ(out, b);
 
 		b = { };
 
-		EXPECT_EQ(Utility::filterResults({ WHILE, WHILE }, a), b);
-		EXPECT_EQ(Utility::filterResults({ WHILE, CALL }, a), b);
-		EXPECT_EQ(Utility::filterResults({ WHILE, IF }, a), b);
-		EXPECT_EQ(Utility::filterResults({ WHILE, PRINT }, a), b);
-		EXPECT_EQ(Utility::filterResults({ WHILE, ASSIGN }, a), b);
+		std::vector<std::pair<EntityType, EntityType>> filter;
+		filter.push_back({ WHILE, WHILE });
+		filter.push_back({ WHILE, CALL });
+		filter.push_back({ WHILE, IF });
+		filter.push_back({ WHILE, PRINT });
+		filter.push_back({ WHILE, ASSIGN });
 
-		EXPECT_EQ(Utility::filterResults({ READ, WHILE }, a), b);
-		EXPECT_EQ(Utility::filterResults({ READ, READ }, a), b);
-		EXPECT_EQ(Utility::filterResults({ READ, IF }, a), b);
-		EXPECT_EQ(Utility::filterResults({ READ, PRINT }, a), b);
-		EXPECT_EQ(Utility::filterResults({ READ, ASSIGN }, a), b);
+		filter.push_back({ READ, WHILE });
+		filter.push_back({ READ, READ });
+		filter.push_back({ READ, IF });
+		filter.push_back({ READ, PRINT });
+		filter.push_back({ READ, ASSIGN });
 
-		EXPECT_EQ(Utility::filterResults({ CALL, WHILE }, a), b);
-		EXPECT_EQ(Utility::filterResults({ CALL, READ }, a), b);
-		EXPECT_EQ(Utility::filterResults({ CALL, CALL }, a), b);
-		EXPECT_EQ(Utility::filterResults({ CALL, IF }, a), b);
-		EXPECT_EQ(Utility::filterResults({ CALL, PRINT }, a), b);
+		filter.push_back({ CALL, WHILE });
+		filter.push_back({ CALL, READ });
+		filter.push_back({ CALL, CALL });
+		filter.push_back({ CALL, IF });
+		filter.push_back({ CALL, PRINT });
 
-		EXPECT_EQ(Utility::filterResults({ IF, WHILE }, a), b);
-		EXPECT_EQ(Utility::filterResults({ IF, READ }, a), b);
-		EXPECT_EQ(Utility::filterResults({ IF, CALL }, a), b);
-		EXPECT_EQ(Utility::filterResults({ IF, PRINT }, a), b);
-		EXPECT_EQ(Utility::filterResults({ IF, ASSIGN }, a), b);
+		filter.push_back({ IF, WHILE });
+		filter.push_back({ IF, READ });
+		filter.push_back({ IF, CALL });
+		filter.push_back({ IF, PRINT });
+		filter.push_back({ IF, ASSIGN });
 
-		EXPECT_EQ(Utility::filterResults({ PRINT, WHILE }, a), b);
-		EXPECT_EQ(Utility::filterResults({ PRINT, READ }, a), b);
-		EXPECT_EQ(Utility::filterResults({ PRINT, CALL }, a), b);
-		EXPECT_EQ(Utility::filterResults({ PRINT, PRINT }, a), b);
-		EXPECT_EQ(Utility::filterResults({ PRINT, ASSIGN }, a), b);
+		filter.push_back({ PRINT, WHILE });
+		filter.push_back({ PRINT, READ });
+		filter.push_back({ PRINT, CALL });
+		filter.push_back({ PRINT, PRINT });
+		filter.push_back({ PRINT, ASSIGN });
 
-		EXPECT_EQ(Utility::filterResults({ ASSIGN, WHILE }, a), b);
-		EXPECT_EQ(Utility::filterResults({ ASSIGN, READ }, a), b);
-		EXPECT_EQ(Utility::filterResults({ ASSIGN, CALL }, a), b);
-		EXPECT_EQ(Utility::filterResults({ ASSIGN, PRINT }, a), b);
-		EXPECT_EQ(Utility::filterResults({ ASSIGN, ASSIGN }, a), b);
+		filter.push_back({ ASSIGN, WHILE });
+		filter.push_back({ ASSIGN, READ });
+		filter.push_back({ ASSIGN, CALL });
+		filter.push_back({ ASSIGN, PRINT });
+		filter.push_back({ ASSIGN, ASSIGN });
+
+		for (auto f : filter) {
+			out.clear();
+			Utility::filterResults(f, a, out);
+			EXPECT_EQ(out, b);
+		}
 	}
 
 	TEST(Utility, filterResultsSingleColumn) {
@@ -282,7 +400,11 @@ namespace UnitTesting {
 			{"5", "5", "3", "4", "5"}
 		};
 
-		EXPECT_EQ(Utility::filterResults(from, filters, index), to);
+
+		std::list<std::vector<std::string>> out; 
+		Utility::filterResults(from, filters, index, out);
+		EXPECT_EQ(out, to);
+
 
 		filters = { "2", "4" };;
 		to = {
@@ -292,7 +414,9 @@ namespace UnitTesting {
 			{"4", "5", "3", "4", "5"}
 		};
 
-		EXPECT_EQ(Utility::filterResults(from, filters, index), to);
+		out.clear();
+		Utility::filterResults(from, filters, index, out);
+		EXPECT_EQ(out, to);
 
 		index = 2;
 		filters = { "1", "3", "5" };;
@@ -307,7 +431,9 @@ namespace UnitTesting {
 			{"5", "5", "3", "4", "5"}
 		};
 
-		EXPECT_EQ(Utility::filterResults(from, filters, index), to);
+		out.clear();
+		Utility::filterResults(from, filters, index, out);
+		EXPECT_EQ(out, to);
 
 		filters = { "3" };;
 		to = {
@@ -320,7 +446,9 @@ namespace UnitTesting {
 			{"5", "5", "3", "4", "5"}
 		};
 
-		EXPECT_EQ(Utility::filterResults(from, filters, index), to);
+		out.clear();
+		Utility::filterResults(from, filters, index, out);
+		EXPECT_EQ(out, to);
 
 		index = 4;
 		filters = { "1", "5" };;
@@ -335,12 +463,16 @@ namespace UnitTesting {
 			{"5", "5", "3", "4", "5"}
 		};
 
-		EXPECT_EQ(Utility::filterResults(from, filters, index), to);
+		out.clear();
+		Utility::filterResults(from, filters, index, out);
+		EXPECT_EQ(out, to);
 
 		filters = { "2", "4" };;
 		to = { };
 
-		EXPECT_EQ(Utility::filterResults(from, filters, index), to);
+		out.clear();
+		Utility::filterResults(from, filters, index, out);
+		EXPECT_EQ(out, to);
 	}
 
 	TEST(Utility, filterResultsDoubleColumn) {
@@ -376,7 +508,10 @@ namespace UnitTesting {
 			{"5", "5", "3", "4", "5"}
 		};
 
-		EXPECT_EQ(Utility::filterResults(to, filters, index1, index2), to);
+		std::list<std::vector<std::string>> out;
+		Utility::filterResults(from, filters, index1, index2, out);
+		EXPECT_EQ(out, to);
+
 
 		filters = {
 			{"1", {"1", "2" } },
@@ -391,7 +526,9 @@ namespace UnitTesting {
 			{"5", "5", "3", "4", "5"}
 		};
 
-		EXPECT_EQ(Utility::filterResults(to, filters, index1, index2), to);
+		out.clear();
+		Utility::filterResults(from, filters, index1, index2, out);
+		EXPECT_EQ(out, to);
 
 		filters = {
 			{"3", {"3" } },
@@ -405,7 +542,9 @@ namespace UnitTesting {
 			{"5", "5", "3", "4", "5"}
 		};
 
-		EXPECT_EQ(Utility::filterResults(to, filters, index1, index2), to);
+		out.clear();
+		Utility::filterResults(from, filters, index1, index2, out);
+		EXPECT_EQ(out, to);
 
 		index1 = 1;
 		index2 = 2;
@@ -426,7 +565,9 @@ namespace UnitTesting {
 			{"3", "3", "3", "4", "5"},
 		};
 
-		EXPECT_EQ(Utility::filterResults(to, filters, index1, index2), to);
+		out.clear();
+		Utility::filterResults(from, filters, index1, index2, out);
+		EXPECT_EQ(out, to);
 
 		index1 = 1;
 		index2 = 3;
@@ -445,7 +586,9 @@ namespace UnitTesting {
 			{"4", "4", "3", "4", "5"},
 		};
 
-		EXPECT_EQ(Utility::filterResults(to, filters, index1, index2), to);
+		out.clear();
+		Utility::filterResults(from, filters, index1, index2, out);
+		EXPECT_EQ(out, to);
 
 		index1 = 1;
 		index2 = 4;
@@ -465,7 +608,9 @@ namespace UnitTesting {
 			{"5", "5", "3", "4", "5"}
 		};
 
-		EXPECT_EQ(Utility::filterResults(to, filters, index1, index2), to);
+		out.clear();
+		Utility::filterResults(from, filters, index1, index2, out);
+		EXPECT_EQ(out, to);
 
 		index1 = 0;
 		index2 = 3;
@@ -480,11 +625,16 @@ namespace UnitTesting {
 		to = {
 			{"1", "1", "1", "1", "1"},
 			{"1", "2", "3", "4", "5"},
+			{"3", "3", "3", "4", "5"},
 			{"4", "4", "3", "4", "5"},
-			{"4", "5", "3", "4", "5"}
+			{"4", "5", "3", "4", "5"},
+			{"5", "5", "3", "4", "5"}
 		};
 
-		EXPECT_EQ(Utility::filterResults(to, filters, index1, index2), to);
+
+		out.clear();
+		Utility::filterResults(from, filters, index1, index2, out);
+		EXPECT_EQ(out, to);
 
 		index1 = 0;
 		index2 = 4;
@@ -498,10 +648,13 @@ namespace UnitTesting {
 
 		to = {
 			{"1", "1", "1", "1", "1"},
-			{"4", "5", "3", "4", "5"},
+			{"4", "4", "3", "4", "5"},
+			{"4", "5", "3", "4", "5"}
 		};
 
-		EXPECT_EQ(Utility::filterResults(to, filters, index1, index2), to);
+		out.clear();
+		Utility::filterResults(from, filters, index1, index2, out);
+		EXPECT_EQ(out, to);
 
 		index1 = 3;
 		index2 = 4;
@@ -513,21 +666,27 @@ namespace UnitTesting {
 			{"5", {"5" } }
 		};
 
-		to = { };
+		to = { {"1", "1", "1", "1", "1"} };
 
-		EXPECT_EQ(Utility::filterResults(to, filters, index1, index2), to);
+		out.clear();
+		Utility::filterResults(from, filters, index1, index2, out);
+		EXPECT_EQ(out, to);
 
 		index1 = 1;
 		index2 = 4;
 		filters = {
-			{"1", {"4", "5" } },
-			{"2", {"3", "5" } },
+			{"1", {"3", "4" } },
+			{"2", {"3", "4" } },
 			{"3", {"3" } },
-			{"4", {"5", "4" } },
-			{"5", {"5" } }
+			{"4", {"3", "4" } },
+			{"5", {"2" } }
 		};
 
-		EXPECT_EQ(Utility::filterResults(to, filters, index1, index2), to);
+		to = { };
+
+		out.clear();
+		Utility::filterResults(from, filters, index1, index2, out);
+		EXPECT_EQ(out, to);
 	}
 	
 	TEST(Utility, mergeColumnEqual) {
@@ -542,7 +701,7 @@ namespace UnitTesting {
 		std::list<std::string> r1 = { "1", "2", "3", "5" };
 
 		std::list<std::vector<std::string>> t2, t3;
-		std::list<std::string> r2, r3;
+		std::list<std::vector<std::string>> r2, r3;
 
 		for (int i1 = 0; i1 < 10; i1++) {
 			for (int i2 = 0; i2 < 10; i2++) {
@@ -550,10 +709,11 @@ namespace UnitTesting {
 					t2.push_back({ std::to_string(i1), std::to_string(i2), std::to_string(i3) });
 				}
 			}
-			r2.push_back(std::to_string(i1));
+			r2.push_back({ std::to_string(i1) });
 		}
 
-		EXPECT_EQ(Utility::mergeColumnEqual(t2), r2);
+		Utility::mergeColumnEqual(t2);
+		EXPECT_EQ(t2, r2);
 
 		for (int i1 = 0; i1 < 20; i1++) {
 			for (int i2 = 0; i2 < 20; i2++) {
@@ -564,10 +724,11 @@ namespace UnitTesting {
 					}
 				}
 			}
-			r3.push_back(std::to_string(i1));
+			r3.push_back({ std::to_string(i1) });
 		}
 
-		EXPECT_EQ(Utility::mergeColumnEqual(t3), r3);
+		Utility::mergeColumnEqual(t3);
+		EXPECT_EQ(t3, r3);
 	}
 
 	TEST(Utility, joinTableSingleColumn) {
