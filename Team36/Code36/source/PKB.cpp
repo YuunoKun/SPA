@@ -6,9 +6,8 @@
 #include "PKB.h"
 #include "Common.h"
 #include "RelationTable.h"
-// need to include this .cpp for template classes
 #include "RelationTable.cpp"
-#include "MonotypeRelationTable.cpp"
+#include "RelationsUtility.cpp"
 
 PKB& PKB::getInstance() {
 	static PKB pkb;
@@ -255,15 +254,15 @@ void PKB::addCFGBip(CFG* new_cfg) {
 }
 
 void PKB::generateParentT() {
-	parentT_table = parent_table.findTransitiveClosure();
+	parentT_table = RelationsUtility<StmtInfo>::findTransitiveClosure(parent_table);
 }
 
 void PKB::generateFollowsT() {
-	followsT_table = follows_table.findTransitiveClosure();
+	followsT_table = RelationsUtility<StmtInfo>::findTransitiveClosure(follows_table);
 }
 
 void PKB::generateCallsPT() {
-	callsPT_table = callsP_table.findTransitiveClosure();
+	callsPT_table = RelationsUtility<proc_name>::findTransitiveClosure(callsP_table);
 }
 
 void PKB::resetCache() {

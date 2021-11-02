@@ -69,7 +69,6 @@
     <ClCompile Include="FSMTest.cpp" />
     <ClCompile Include="NextBipParserTest.cpp" />
     <ClCompile Include="NextBipTParserTest.cpp" />
-    <ClCompile Include="MonotypeRelationTableTest.cpp" />
     <ClCompile Include="NextBipEvaluatorTest.cpp" />
     <ClCompile Include="NextBipTEvaluatorTest.cpp" />
     <ClCompile Include="NextEvaluatorTest.cpp" />
@@ -108,6 +107,7 @@
     <ClCompile Include="IfPatternParserTest.cpp" />
     <ClCompile Include="ModifiesParserTest.cpp" />
     <ClCompile Include="AffectsParserTest.cpp" />
+    <ClCompile Include="RelationsUtilityTest.cpp" />
     <ClCompile Include="UsesParserTest.cpp" />
     <ClCompile Include="WithParserTest.cpp" />
     <ClCompile Include="WhilePatternParserTest.cpp" />

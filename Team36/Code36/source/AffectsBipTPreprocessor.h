@@ -3,7 +3,6 @@
 
 #include "PKB.h"
 #include "Common.h"
-#include "MonotypeRelationTable.cpp"
 #include "RelationPreprocessor.h"
 
 class AffectsBipTPreprocessor : public RelationPreprocessor

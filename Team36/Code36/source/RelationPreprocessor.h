@@ -1,6 +1,7 @@
 #pragma once
 
 #include "PKB.h"
+#include "RelationsUtility.h"
 
 enum BooleanStatus {
 	STATUS_UNKNOWN = 2,

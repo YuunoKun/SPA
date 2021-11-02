@@ -1,5 +1,5 @@
 #include "AffectsBipTPreprocessor.h"
-#include "MonotypeRelationTable.cpp"
+#include "RelationsUtility.cpp"
 
 bool AffectsBipTPreprocessor::evaluateWildAndWild() {
 	return !affects_bip_table->isEmpty();
@@ -51,7 +51,7 @@ std::vector<StmtInfo> AffectsBipTPreprocessor::evaluateSynonymAndConstant(int in
 
 void AffectsBipTPreprocessor::fullyPopulate() {
 	if (!is_fully_populated) {
-		labelled_cache = labelled_affects_bip_table->findTransitiveClosure();
+		labelled_cache = RelationsUtility<LabelledProgLine>::findTransitiveClosure(*labelled_affects_bip_table);
 		is_fully_populated = true;
 
 		for (auto& affects_pair : labelled_cache.getPairs()) {
