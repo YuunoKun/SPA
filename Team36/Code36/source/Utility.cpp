@@ -481,7 +481,10 @@ bool Utility::isStmtRef(Query& query, std::vector<QueryToken> token_chain) {
 	QueryToken token = token_chain[0];
 
 	if (token.type == QueryToken::CONSTANT) {
-		return token.token_value != "0";
+		if (token.token_value == "0") {
+			query.setIsSemanticError("0 is not a valid stmtRef");
+		}
+		return true;
 	}
 
 	if (token.type == QueryToken::WILDCARD) {
