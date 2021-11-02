@@ -296,11 +296,7 @@ void QueryPreprocessor::handleAddParameterTokensAndParseWith(QueryToken& token) 
 	if ((((patternOrSuchThat.type == QueryToken::QueryTokenType::PATTERN ||
 		patternOrSuchThat.type == QueryToken::QueryTokenType::SUCH_THAT) &&
 		(token.type != QueryToken::QueryTokenType::PARENTHESIS_CLOSE || parenthesis_counter > 0)) ||
-		(patternOrSuchThat.type == QueryToken::QueryTokenType::WITH &&
-			token.token_value != "and" &&
-			token.token_value != "with" &&
-			token.token_value != "pattern" &&
-			token.type != QueryToken::QueryTokenType::SUCH_THAT))) {
+		patternOrSuchThat.type == QueryToken::QueryTokenType::WITH)) {
 		parameterClause.push_back(token);
 		QueryPreprocessor::checkParseWith();
 	}

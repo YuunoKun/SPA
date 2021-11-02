@@ -1348,6 +1348,33 @@ namespace UnitTesting {
 		q2.addRelation(RelRef(RelType::WITH, Entity(EntityType::PROCEDURE, Synonym{ "p" }), Entity(EntityType::VARIABLE, Synonym{ "v" })));
 
 		EXPECT_EQ(test2, q2);
+
+		Query test3 = qp.parse("stmt with; Select with with with.stmt# = 5");
+
+		Query q3;
+		q3.addEntity(Entity(EntityType::STMT, Synonym{ "with" }));
+		q3.addSelected(Entity(EntityType::STMT, Synonym{ "with" }));
+		q3.addRelation(RelRef(RelType::WITH, Entity(EntityType::STMT, Synonym{ "with" }), Entity(EntityType::STMT, "5")));
+
+		EXPECT_EQ(test3, q3);
+
+		Query test4 = qp.parse("stmt and; Select and with and.stmt# = 5");
+
+		Query q4;
+		q4.addEntity(Entity(EntityType::STMT, Synonym{ "and" }));
+		q4.addSelected(Entity(EntityType::STMT, Synonym{ "and" }));
+		q4.addRelation(RelRef(RelType::WITH, Entity(EntityType::STMT, Synonym{ "and" }), Entity(EntityType::STMT, "5")));
+
+		EXPECT_EQ(test4, q4);
+
+		Query test5 = qp.parse("stmt pattern; Select pattern with pattern.stmt# = 5");
+
+		Query q5;
+		q5.addEntity(Entity(EntityType::STMT, Synonym{ "pattern" }));
+		q5.addSelected(Entity(EntityType::STMT, Synonym{ "pattern" }));
+		q5.addRelation(RelRef(RelType::WITH, Entity(EntityType::STMT, Synonym{ "pattern" }), Entity(EntityType::STMT, "5")));
+
+		EXPECT_EQ(test5, q5);
 	}
 
 	TEST(QueryPreprocessor, multipleWithClauses) {
