@@ -386,25 +386,19 @@ void DesignExtractor::populateNext(PKB& pkb) {
 		cfgs.push_back(cfg);
 	}
 
-
-	try {
-		for (proc_index p : call_sequence) {
-			for (stmt_index s: de_procedures[p - 1]->getChild()) {
-				Statement* stmt = de_statements[s - 1];
-				if (stmt->getType() == StmtType::STMT_CALL) {
-					cfgs[p - 1]->call(cfgs[proc_name_to_id[stmt->getCallee()] - 1], s);
-				}
-			}
-		}
-
-		for (CFG* cfg: cfgs) {
-			if (cfg->getHeadLabelledProgLine().label == 0) {
-				pkb.addCFGBip(cfg);
+	for (proc_index p : call_sequence) {
+		for (stmt_index s: de_procedures[p - 1]->getChild()) {
+			Statement* stmt = de_statements[s - 1];
+			if (stmt->getType() == StmtType::STMT_CALL) {
+				cfgs[p - 1]->call(cfgs[proc_name_to_id[stmt->getCallee()] - 1], s);
 			}
 		}
 	}
-	catch (...) {
-		std::cout << "CFGBip failed." << std::endl;
+
+	for (CFG* cfg: cfgs) {
+		if (cfg->getHeadLabelledProgLine().label == 0) {
+			pkb.addCFGBip(cfg);
+		}
 	}
 
 	pkb.addCFGsToDestroy(cfgs);

@@ -14,40 +14,13 @@ CFG::CFG() {
 }
 
 CFG::~CFG() {
-	if (isInvalidCFG() == false) {
-		std::list<CFGNode*> s;
-		CFGNode* node;
-		s.push_back(head);
-		head->setVisited();
-		while (!s.empty()) {
-			node = s.front();
-			if (node->getNextMain() != nullptr) {
-				if (node->getNextMain()->getVisited() == false) {
-					node->getNextMain()->setVisited();
-					s.push_back(node->getNextMain());
-				}
-				else {
-					node->setNextMain(nullptr);
-				}
-			}
-			if (node->getNextBranch() != nullptr) {
-				if (node->getNextBranch()->getVisited() == false) {
-					node->getNextBranch()->setVisited();
-					s.push_back(node->getNextBranch());
-				}
-				else {
-					node->setNextBranch(nullptr);
-				}
-			}
-			s.pop_front();
-		}
-		delete head;
-	}
-	else {
+	if (isInvalidCFG()) {
 		delete tail;
 	}
+	else {
+		delete head;
+	}
 }
-
 
 CFGNode* CFG::getHead() {
 	return head;
@@ -74,11 +47,11 @@ LabelledProgLine CFG::getHeadLabelledProgLine() {
 }
 
 bool CFG::isEmptyCFG() {
-	return head->getProgramLines().size() == 0;
+	return head->isTermination();
 }
 
 bool CFG::isInvalidCFG() {
-	return getTail()->getInvalid();
+	return getTail()->isInvalid();
 }
 
 void CFG::add(prog_line new_line) {
@@ -100,90 +73,85 @@ void CFG::add(prog_line new_line) {
 		new_node->insertLine(new_line);
 		tail->getPrevMain()->setNextMain(new_node);
 		new_node->setPrevMain(tail->getPrevMain());
-
 		new_node->setNextMain(tail);
 		tail->setPrevMain(new_node);
 	}
 }
 
-CFGNode* CFG::contains(CFGNode* curr, prog_line line) {
-	CFGNode* result = nullptr;
+CFGNode* CFG::findNode(CFGNode* curr, prog_line line) {
 	checkValidity();
-	if (curr != nullptr) {
-		std::vector<prog_line> curr_lines = curr->getProgramLines();
-		for (auto const& l : curr_lines) {
-			if (l == line) {
-				result = curr;
-				break;
+
+	auto action = [](CFGNode* node, prog_line to_find, CFGNode** ref) {
+		if (node->isVisited() || *ref) {
+			return false;
+		}
+		node->toggleVisited();
+
+		if (node->getProgramLines().size() > 0) {
+			std::vector<prog_line> lines = node->getProgramLines();
+			if (std::find(lines.begin(), lines.end(), to_find) != lines.end()) {
+				*ref = node;
+				return false;
 			}
 		}
-		if (result != nullptr) {
-			return result;
-		}
-		else {
-			result = contains(curr->getNextMain(), line);
-			if (result == nullptr) {
-				result = contains(curr->getNextBranch(), line);
-			}
-			return result;
-		}
-	} else {
-		return result;
-	}
+		return true;
+	};
+	CFGNode* result = nullptr;
+	CFGNode** ref = &result;
+	head->traverse<prog_line, CFGNode**>(action, line, ref);
+	resetAllVisited();
+	return result;
 }
 
 void CFG::loop(CFG* cfg, prog_line line_attached) {
 	checkValidity();
 
 	CFGNode* target = makeStandalone(line_attached);
-	if (target != nullptr) {
-		target->setNextBranch(cfg->getHead());
-		cfg->getHead()->setPrevBranch(target);
+	target->setNextBranch(cfg->getHead());
+	cfg->getHead()->setPrevBranch(target);
 
-		for (auto const& previous : cfg->getTail()->getPrev()) {
-			previous->setNextMain(target);
-			target->setPrevBranch(previous);
-		}
-
-		cfg->getTail()->setInvalid();
-		cfg->setHead(nullptr);
+	for (auto const& previous : cfg->getTail()->getPrev()) {
+		previous->setNextMain(target);
+		target->setPrevBranch(previous);
 	}
+
+	cfg->getTail()->setInvalid();
+	cfg->setHead(nullptr);
 }
 
 void CFG::fork(CFG* cfg_if, CFG* cfg_else, prog_line line_attached) {
 	checkValidity();
 
-	CFGNode* target1 = makeStandalone(line_attached);
-	CFGNode* target2 = target1->getNextMain();
-	if (target1 != nullptr) {
-		if (target1->getNextBranch() == nullptr && target1->getNextMain()) {
-			target1->setNextMain(cfg_if->getHead());
-			cfg_if->getHead()->setPrevMain(target1);
+	CFGNode* fork_start = makeStandalone(line_attached);
+	CFGNode* fork_end = fork_start->getNextMain();
 
-			target1->setNextBranch(cfg_else->getHead());
-			cfg_else->getHead()->setPrevBranch(target1);
+	if (fork_start->getNextMain() && !fork_start->getNextBranch()) {
+		fork_start->setNextMain(cfg_if->getHead());
+		cfg_if->getHead()->setPrevMain(fork_start);
 
-			target2->setPrevMain(cfg_if->getTail()->getPrevMain());
-			cfg_if->getTail()->getPrevMain()->setNextMain(target2);
-			cfg_if->getTail()->getPrev().pop_front();
+		fork_start->setNextBranch(cfg_else->getHead());
+		cfg_else->getHead()->setPrevBranch(fork_start);
 
-			for (auto const& previous : cfg_if->getTail()->getPrev()) {
-				previous->setNextMain(target2);
-				target2->setPrevBranch(previous);
-			}
-			cfg_if->getTail()->setInvalid();
-			cfg_if->setHead(nullptr);
+		fork_end->setPrevMain(cfg_if->getTail()->getPrevMain());
+		cfg_if->getTail()->getPrevMain()->setNextMain(fork_end);
+		cfg_if->getTail()->getPrev().pop_front();
 
-			for (auto const& previous : cfg_else->getTail()->getPrev()) {
-				previous->setNextMain(target2);
-				target2->setPrevBranch(previous);
-			}
-			cfg_else->getTail()->setInvalid();
-			cfg_else->setHead(nullptr);
+		for (auto const& previous : cfg_if->getTail()->getPrev()) {
+			previous->setNextMain(fork_end);
+			fork_end->setPrevBranch(previous);
 		}
-		else {
-			throw std::runtime_error("Unable to fork CFG");
+		cfg_if->getTail()->setInvalid();
+		cfg_if->setHead(nullptr);
+
+		for (auto const& previous : cfg_else->getTail()->getPrev()) {
+			previous->setNextMain(fork_end);
+			fork_end->setPrevBranch(previous);
 		}
+		cfg_else->getTail()->setInvalid();
+		cfg_else->setHead(nullptr);
+	}
+	else {
+		throw std::runtime_error("Unable to fork CFG. Target fork start already has a branch.");
 	}
 }
 
@@ -199,15 +167,15 @@ void CFG::call(CFG* cfg_call, prog_line call_node) {
 	target->setNextCall(cfg_call->getHead());
 
 	auto label_nodes = [](CFGNode* self, prog_line from, CFGNode* to) {
-		if (self->getVisited()) {
+		if (self->isVisited()) {
 			return false;
 		}
 		else {
 			self->addLabel(from);
-			self->setVisited();
+			self->toggleVisited();
 		}
 
-		if (self->getTermination()) {
+		if (self->isTermination()) {
 			self->setIsReturn();
 			self->addNextReturn(from, to);
 			return false;
@@ -224,7 +192,7 @@ std::vector<std::pair<prog_line, prog_line>> CFG::getNexts() {
 
 	std::vector<std::pair<prog_line, prog_line>> result;
 	auto action = [](CFGNode* node, std::vector<std::pair<prog_line, prog_line>>& res) {
-		if (node->getTermination() || node->getVisited()) {
+		if (node->isTermination() || node->isVisited()) {
 			return false;
 		}
 
@@ -233,13 +201,13 @@ std::vector<std::pair<prog_line, prog_line>> CFG::getNexts() {
 			res.push_back({lines[i], lines[i+1]});
 		}
 
-		if (node->getNextMain() && !node->getNextMain()->getTermination()) {
+		if (node->getNextMain() && !node->getNextMain()->isTermination()) {
 			res.push_back({ lines.back(), node->getNextMain()->getProgramLines().front() });
 		}
-		if (node->getNextBranch() && !node->getNextBranch()->getTermination()) {
+		if (node->getNextBranch() && !node->getNextBranch()->isTermination()) {
 			res.push_back({ lines.back(), node->getNextBranch()->getProgramLines().front() });
 		}		
-		node->setVisited();
+		node->toggleVisited();
 		return true;
 	};
 	head->traverse(action, result);
@@ -255,11 +223,11 @@ std::vector<std::pair<prog_line, prog_line>> CFG::getNextBip() {
 	std::unordered_multimap<prog_line, prog_line> result;
 	auto action = [&result](CFGNode* node, auto action, std::stack<prog_line> call_stack) {
 
-		if (node->getVisited()) {
+		if (node->isVisited()) {
 			return;
 		}
 
-		node->setVisited();
+		node->toggleVisited();
 
 		std::vector<prog_line> lines = node->getProgramLines();
 		for (size_t i = 0; i < lines.size() - 1; i++) {
@@ -268,8 +236,8 @@ std::vector<std::pair<prog_line, prog_line>> CFG::getNextBip() {
 
 		if (node->isCall()) {
 			auto reset = [](CFGNode* node) {
-				if (node->getVisited()) {
-					node->setVisited();
+				if (node->isVisited()) {
+					node->toggleVisited();
 					return true;
 				}
 				return false;
@@ -281,7 +249,7 @@ std::vector<std::pair<prog_line, prog_line>> CFG::getNextBip() {
 			return;
 		}
 
-		if (node->getNextMain() && node->getNextMain()->getTermination()) {
+		if (node->getNextMain() && node->getNextMain()->isTermination()) {
 			if (call_stack.empty()) {
 				return;
 			}
@@ -297,7 +265,7 @@ std::vector<std::pair<prog_line, prog_line>> CFG::getNextBip() {
 			if (!to) {
 				throw std::runtime_error("Error traversing CFG for NextBip. Invalid call return.");
 			}
-			while (to->getTermination() && to->isReturn()) {
+			while (to->isTermination() && to->isReturn()) {
 				from = call_stack.top();
 				call_stack.pop();
 				to = to->getNextReturn()[from];
@@ -343,11 +311,11 @@ std::vector<std::pair<LabelledProgLine, LabelledProgLine>> CFG::getNextBipWithLa
 	std::unordered_multimap<LabelledProgLine, LabelledProgLine> result;
 	auto action = [&result](CFGNode* node, auto action, std::stack<prog_line> call_stack) {
 
-		if (node->getVisited()) {
+		if (node->isVisited()) {
 			return;
 		}
 
-		node->setVisited();
+		node->toggleVisited();
 
 		std::vector<prog_line> lines = node->getProgramLines();
 		for (size_t i = 0; i < lines.size() - 1; i++) {
@@ -356,8 +324,8 @@ std::vector<std::pair<LabelledProgLine, LabelledProgLine>> CFG::getNextBipWithLa
 
 		if (node->isCall()) {
 			auto reset = [](CFGNode* node) {
-				if (node->getVisited()) {
-					node->setVisited();
+				if (node->isVisited()) {
+					node->toggleVisited();
 					return true;
 				}
 				return false;
@@ -369,7 +337,7 @@ std::vector<std::pair<LabelledProgLine, LabelledProgLine>> CFG::getNextBipWithLa
 			return;
 		}
 
-		if (node->getNextMain() && node->getNextMain()->getTermination()) {
+		if (node->getNextMain() && node->getNextMain()->isTermination()) {
 			if (call_stack.size() == 1) {
 				return;
 			}
@@ -385,7 +353,7 @@ std::vector<std::pair<LabelledProgLine, LabelledProgLine>> CFG::getNextBipWithLa
 			if (!to) {
 				throw std::runtime_error("Error traversing CFG for NextBip. Invalid call return.");
 			}
-			while (to->getTermination() && to->isReturn()) {
+			while (to->isTermination() && to->isReturn()) {
 				from = call_stack.top();
 				call_stack.pop();
 				to = to->getNextReturn()[from];
@@ -421,8 +389,8 @@ std::vector<std::pair<LabelledProgLine, LabelledProgLine>> CFG::getNextBipWithLa
 void CFG::resetAllVisited() {
 	if (head) {
 		auto action = [](CFGNode* node) {
-			if (node->getVisited()) {
-				node->setVisited();
+			if (node->isVisited()) {
+				node->toggleVisited();
 				return true;
 			}
 			else {
@@ -435,8 +403,7 @@ void CFG::resetAllVisited() {
 }
 
 CFGNode* CFG::makeStandalone(prog_line target_line) {
-
-	CFGNode* target_node = contains(head, target_line);
+	CFGNode* target_node = findNode(head, target_line);
 	if (!target_node) {
 		throw std::runtime_error("Unable to perform action on CFG. Target node not found.");
 	}

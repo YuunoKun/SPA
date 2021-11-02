@@ -76,12 +76,12 @@ namespace UnitTesting {
 		node2->setNextMain(node3);
 
 		auto action = [](CFGNode* node) {
-			if (node->getVisited()) {
+			if (node->isVisited()) {
 				return false;
 			}
 			else {
 				node->addLabel(node->getProgramLines()[0]);
-				node->setVisited();
+				node->toggleVisited();
 				return true;
 			}
 		};
@@ -115,12 +115,12 @@ namespace UnitTesting {
 
 
 		auto action = [](CFGNode* node, prog_line line, prog_line nil) {
-			if (node->getVisited()) {
+			if (node->isVisited()) {
 				return false;
 			}
 			else {
 				node->setProgramLines({line});
-				node->setVisited();
+				node->toggleVisited();
 				return true;
 			}
 		};
