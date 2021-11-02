@@ -25,4 +25,6 @@ public:
 	void isExpectingIdentifier(QueryToken&);
 
 	void validateNotAndPattern(QueryToken&);
+
+	void validateNotSuchThat(QueryToken&);
 };

@@ -153,3 +153,9 @@ void QueryValidator::validateNotAndPattern(QueryToken& nextToken) {
 		throw SyntacticErrorException("Expecting pattern identifier token");
 	}
 }
+
+void QueryValidator::validateNotSuchThat(QueryToken& token) {
+	if (token.type == QueryToken::QueryTokenType::SUCH_THAT) {
+		throw SyntacticErrorException("Invalid query, token cannot be such that");
+	}
+}

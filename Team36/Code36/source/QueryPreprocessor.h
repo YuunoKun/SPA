@@ -56,6 +56,18 @@ private:
 
 	void handleSelectingMultipleClause(QueryToken&);
 
+	void handleSuchThatClause();
+
+	void handlePatternClause();
+
+	void handleWithClause();
+
+	void handleAnd();
+
+	void setSuchThatParameter(QueryToken&);
+
+	void setPatternParameter(QueryToken&);
+
 	void handleWithinParameter(QueryToken&);
 
 	void handleParenthesisOpen(QueryToken&);
