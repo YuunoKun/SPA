@@ -14,14 +14,10 @@ typedef enum EXPR_SYMBOL {
 
 class ExprNode {
 public:
-
-	ExprNode(ExprSymbol);
-
-	ExprNode(std::string);
-
-	ExprNode(const ExprNode&);
-
 	ExprNode();
+	ExprNode(ExprSymbol);
+	ExprNode(std::string);
+	ExprNode(const ExprNode&);
 
 	~ExprNode();
 
@@ -38,14 +34,12 @@ public:
 	bool contains(ExprNode*);
 	bool equals(ExprNode*);
 
-
 	bool operator==(const ExprNode&) const;
 	ExprNode& operator=(const ExprNode&);
 
 private:
-
 	ExprSymbol symbol;
-	std::string value{ "" };
+	std::string value;
 	ExprNode* lhs{ nullptr };
 	ExprNode* rhs{ nullptr };
 };

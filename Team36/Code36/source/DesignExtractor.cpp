@@ -9,9 +9,9 @@
 using namespace SourceProcessor;
 
 DesignExtractor::DesignExtractor() {
-	curr_proc_id = 0;
-	curr_stmt_id = 0;
-	curr_stmt_list_id = 1;
+	curr_proc_id = INIT_PROCEDURE_NO;
+	curr_stmt_id = INIT_STATEMENT_NO;
+	curr_stmt_list_id = INIT_STMT_LIST_NO;
 	is_cond_expr = false;
 }
 
@@ -39,7 +39,7 @@ void DesignExtractor::endNesting() {
 		throw std::runtime_error("Failed to end nesting. Current stmt : " + curr_stmt_id);
 	}
 
-	curr_stmt_list_id = de_statements[curr_nesting_stk.top() - 1]->getStmtList();
+	curr_stmt_list_id = de_statements[curr_nesting_stk.top() - OFFSET]->getStmtList();
 	curr_nesting_stk.pop();
 }
 
@@ -87,11 +87,11 @@ void DesignExtractor::addStatement(TokenType token_type) {
 
 	if (!curr_nesting_stk.empty() && curr_nesting_stk.top() != curr_stmt_id) {
 		stmt->setDirectParent(curr_nesting_stk.top());
-		de_statements[curr_nesting_stk.top() - 1]->addDirectChild(stmt->getIndex());
+		de_statements[curr_nesting_stk.top() - OFFSET]->addDirectChild(stmt->getIndex());
 	}
 
 	de_statements.push_back(stmt);
-	de_procedures[curr_proc_id - 1]->addChild(curr_stmt_id);
+	de_procedures[curr_proc_id - OFFSET]->addChild(curr_stmt_id);
 }
 
 void DesignExtractor::addVariable(var_name name) {
@@ -119,54 +119,54 @@ const std::unordered_set<constant>& DesignExtractor::getConstants() {
 }
 
 void DesignExtractor::addStatementUses(var_name name) {
-	de_statements[curr_stmt_id - 1]->addUsesVariable(name);
+	de_statements[curr_stmt_id - OFFSET]->addUsesVariable(name);
 
 	if (is_cond_expr) {
-		de_statements[curr_stmt_id - 1]->addUsesCondVariable(name);
+		de_statements[curr_stmt_id - OFFSET]->addUsesCondVariable(name);
 	}
 
 	stmt_index curr = curr_stmt_id;
-	stmt_index parent = de_statements[curr - 1]->getDirectParent();
+	stmt_index parent = de_statements[curr - OFFSET]->getDirectParent();
 	while (parent) {
-		de_statements[parent - 1]->addUsesVariable(name);
+		de_statements[parent - OFFSET]->addUsesVariable(name);
 		curr = parent;
-		parent = de_statements[curr - 1]->getDirectParent();
+		parent = de_statements[curr - OFFSET]->getDirectParent();
 	}
 
-	de_procedures[curr_proc_id - 1]->addUsesVariable(name);
+	de_procedures[curr_proc_id - OFFSET]->addUsesVariable(name);
 }
 
 void DesignExtractor::addStatementModifies(var_name name) {
-	de_statements[curr_stmt_id - 1]->addModifiesVariable(name);
+	de_statements[curr_stmt_id - OFFSET]->addModifiesVariable(name);
 
 	stmt_index curr = curr_stmt_id;
-	stmt_index parent = de_statements[curr - 1]->getDirectParent();
+	stmt_index parent = de_statements[curr - OFFSET]->getDirectParent();
 	while (parent) {
-		de_statements[parent - 1]->addModifiesVariable(name);
+		de_statements[parent - OFFSET]->addModifiesVariable(name);
 		curr = parent;
-		parent = de_statements[curr - 1]->getDirectParent();
+		parent = de_statements[curr - OFFSET]->getDirectParent();
 	}
 
-	de_procedures[curr_proc_id - 1]->addModifiesVariable(name);
+	de_procedures[curr_proc_id - OFFSET]->addModifiesVariable(name);
 }
 
 void DesignExtractor::startExpr() {
-	expr_builder = "";
+	expr_builder = std::string();
 }
 
 void DesignExtractor::addExprSegment(std::string segment) {
-	if (de_statements[curr_stmt_id - 1]->getType() == StmtType::STMT_ASSIGN) {
+	if (de_statements[curr_stmt_id - OFFSET]->getType() == StmtType::STMT_ASSIGN) {
 		expr_builder.append(segment);
 	}
 }
 
 void DesignExtractor::endExpr() {
-	de_statements[curr_stmt_id - 1]->setExprStr(expr_builder);
+	de_statements[curr_stmt_id - OFFSET]->setExprStr(expr_builder);
 	expr_builder.erase();
 }
 
 void DesignExtractor::addCallee(proc_name name) {
-	de_statements[curr_stmt_id - 1]->setCallee(name);
+	de_statements[curr_stmt_id - OFFSET]->setCallee(name);
 }
 
 void DesignExtractor::validate() {
@@ -196,11 +196,11 @@ void DesignExtractor::validate() {
 	std::vector<proc_index> all_procedures(de_procedures.size(), 0);
 
 	for (auto call : call_cache) {
-		all_procedures[call.first - 1]++;
+		all_procedures[call.first - OFFSET]++;
 	}
 
 	while (call_sequence.size() != all_procedures.size()) {
-		proc_index filtered_id = 0;
+		proc_index filtered_id = NON_EXISTING_PROCEDURE;
 
 		for (size_t i = 0; i < all_procedures.size(); i++) {
 			if (all_procedures[i] == 0) {
@@ -209,7 +209,7 @@ void DesignExtractor::validate() {
 				call_cache.erase(std::remove_if(call_cache.begin(), call_cache.end(),
 					[filtered_id, &all_procedures](std::pair<proc_index, proc_index> call) {
 						if (call.second == filtered_id) {
-							all_procedures[call.first - 1]--;
+							all_procedures[call.first - OFFSET]--;
 						}
 						return call.second == filtered_id;
 					}), call_cache.end());
@@ -218,7 +218,7 @@ void DesignExtractor::validate() {
 			}
 		}
 
-		if (filtered_id == 0) {
+		if (filtered_id == NON_EXISTING_PROCEDURE) {
 			throw std::runtime_error("Cyclic procedure calls detected.");
 		}
 	}
@@ -227,14 +227,14 @@ void DesignExtractor::validate() {
 void DesignExtractor::populatePostValidation() {
 	// Procedure uses and modifies, populate call statements too
 	for (proc_index proc : call_sequence) {
-		Procedure* p = de_procedures[proc - 1];
+		Procedure* p = de_procedures[proc - OFFSET];
 
-		auto child_stmt = de_procedures[proc - 1]->getChild();
+		auto child_stmt = de_procedures[proc - OFFSET]->getChild();
 		for (int i = child_stmt.size() - 1; i >= 0; i--) {
-			Statement* s = de_statements[child_stmt[i] - 1];
+			Statement* s = de_statements[child_stmt[i] - OFFSET];
 
 			if (s->getType() == StmtType::STMT_CALL) {
-				Procedure* callee = de_procedures[proc_name_to_id[s->getCallee()] - 1];
+				Procedure* callee = de_procedures[proc_name_to_id[s->getCallee()] - OFFSET];
 				for (auto used_var : callee->getUsedVariable()) {
 					s->addUsesVariable(used_var);
 				}
@@ -244,7 +244,7 @@ void DesignExtractor::populatePostValidation() {
 			}
 
 			if (s->getDirectParent() != 0) {
-				Statement* parent = de_statements[s->getDirectParent() - 1];
+				Statement* parent = de_statements[s->getDirectParent() - OFFSET];
 				for (auto used_var : s->getUsedVariable()) {
 					parent->addUsesVariable(used_var);
 				}
@@ -387,8 +387,8 @@ void DesignExtractor::populateNext(PKB& pkb) {
 	}
 
 	for (proc_index p : call_sequence) {
-		for (stmt_index s: de_procedures[p - 1]->getChild()) {
-			Statement* stmt = de_statements[s - 1];
+		for (stmt_index s: de_procedures[p - OFFSET]->getChild()) {
+			Statement* stmt = de_statements[s - OFFSET];
 			if (stmt->getType() == StmtType::STMT_CALL) {
 				cfgs[p - 1]->call(cfgs[proc_name_to_id[stmt->getCallee()] - 1], s);
 			}
@@ -431,10 +431,11 @@ CFG* DesignExtractor::generateCFG(std::vector<stmt_index> indexes) {
 
 	CFG* cfg = new CFG();
 
-	stmt_index parent = de_statements[indexes[0] - 1]->getDirectParent();
+	stmt_index parent = de_statements[indexes.front() - OFFSET]->getDirectParent();
 	std::vector<stmt_index> main;
 	for (stmt_index id: indexes) {
-		if (de_statements[id - 1]->getDirectParent() == parent && de_statements[id - 1]->getStmtList() == indexes[0]) {
+		if (de_statements[id - OFFSET]->getDirectParent() == parent 
+			&& de_statements[id - OFFSET]->getStmtList() == indexes.front()) {
 			main.push_back(id);
 		}
 	}
@@ -448,57 +449,55 @@ CFG* DesignExtractor::generateCFG(std::vector<stmt_index> indexes) {
 
 		curr = main[i];
 		if (i == main.size() - 1) {
-			next = *indexes.rbegin() + 1;
+			next = indexes.back() + 1;
 		}
 		else {
 			next = main[i + 1];
 		}
 
-		if (next - curr > 1) { // gap
-			Statement* container = de_statements[curr - 1];
+		if (next - curr <= 1) {
+			continue;
+		}
 
-			if (container->getType() == StmtType::STMT_IF) {
-				std::vector<stmt_index> children(container->getDirectChild());
-				std::set<stmt_index> split;
-				for (stmt_index child_id : children) {
-					split.insert(de_statements[child_id - 1]->getStmtList());
-				}
-
-				if (split.size() != 2) {
-					throw std::runtime_error("CFG build failure. If statement not 2 splits.");
-				}
-
-				stmt_index then_start = curr + 1;
-				split.erase(then_start);
-				stmt_index else_start = *split.begin();
-				
-				std::vector<stmt_index> then_scope(else_start - then_start);
-				std::iota(then_scope.begin(), then_scope.end(), then_start);
-				CFG* cfg_then = generateCFG(then_scope);
-
-				std::vector<stmt_index> else_scope(next - else_start);
-				std::iota(else_scope.begin(), else_scope.end(), else_start);
-				CFG* cfg_else = generateCFG(else_scope);
-
-				cfg->fork(cfg_then, cfg_else, curr);
-
-				delete cfg_then, cfg_else;
+		Statement* container = de_statements[curr - OFFSET];
+		if (container->getType() == StmtType::STMT_IF) {
+			std::vector<stmt_index> children(container->getDirectChild());
+			std::set<stmt_index> split;
+			for (stmt_index child_id : children) {
+				split.insert(de_statements[child_id - OFFSET]->getStmtList());
 			}
-			else if (container->getType() == StmtType::STMT_WHILE) {
-				std::vector<stmt_index> scope(next - curr - 1);
-				std::iota(scope.begin(), scope.end(), curr + 1);
-				CFG* cfg_while = generateCFG(scope);
 
-				cfg->loop(cfg_while, curr);
+			if (split.size() != 2) {
+				throw std::runtime_error("CFG build failure. If statement not 2 splits.");
+			}
 
-				delete cfg_while;
-			}
-			else {
-				throw std::runtime_error("CFG build failure. Gap involved non-container statement.");
-			}
+			stmt_index then_start = curr + 1;
+			split.erase(then_start);
+			stmt_index else_start = *split.begin();
+
+			std::vector<stmt_index> then_scope(else_start - then_start);
+			std::iota(then_scope.begin(), then_scope.end(), then_start);
+			CFG* cfg_then = generateCFG(then_scope);
+
+			std::vector<stmt_index> else_scope(next - else_start);
+			std::iota(else_scope.begin(), else_scope.end(), else_start);
+			CFG* cfg_else = generateCFG(else_scope);
+
+			cfg->fork(cfg_then, cfg_else, curr);
+
+			delete cfg_then, cfg_else;
+		}
+		else if (container->getType() == StmtType::STMT_WHILE) {
+			std::vector<stmt_index> scope(next - curr - 1);
+			std::iota(scope.begin(), scope.end(), curr + 1);
+			CFG* cfg_while = generateCFG(scope);
+
+			cfg->loop(cfg_while, curr);
+
+			delete cfg_while;
 		}
 		else {
-			continue;
+			throw std::runtime_error("CFG build failure. Gap involved non-container statement.");
 		}
 	}
 

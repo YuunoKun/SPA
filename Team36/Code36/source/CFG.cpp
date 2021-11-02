@@ -331,7 +331,8 @@ std::vector<std::pair<LabelledProgLine, LabelledProgLine>> CFG::getNextBipWithLa
 				return false;
 			};
 			node->getNextCall()->traverse(reset);
-			result.insert({ {node->getProgramLines().back(), call_stack.top()}, {node->getNextCall()->getProgramLines().front(), node->getProgramLines().back()} });
+			result.insert({ {node->getProgramLines().back(), call_stack.top()}, 
+				{node->getNextCall()->getProgramLines().front(), node->getProgramLines().back()} });
 			call_stack.push(node->getProgramLines().back());
 			action(node->getNextCall(), action, call_stack);
 			return;
@@ -343,7 +344,8 @@ std::vector<std::pair<LabelledProgLine, LabelledProgLine>> CFG::getNextBipWithLa
 			}
 
 			if (node->getNextBranch()) {
-				result.insert({ {node->getProgramLines().back(), call_stack.top()}, {node->getNextBranch()->getProgramLines().front(), call_stack.top()} });
+				result.insert({ {node->getProgramLines().back(), call_stack.top()}, 
+					{node->getNextBranch()->getProgramLines().front(), call_stack.top()} });
 				action(node->getNextBranch(), action, call_stack);
 			}
 			prog_line from = call_stack.top();
@@ -370,11 +372,13 @@ std::vector<std::pair<LabelledProgLine, LabelledProgLine>> CFG::getNextBipWithLa
 		}
 
 		if (node->getNextBranch()) {
-			result.insert({ {node->getProgramLines().back(), call_stack.top()}, {node->getNextBranch()->getProgramLines().front(), call_stack.top()} });
+			result.insert({ {node->getProgramLines().back(), call_stack.top()}, 
+				{node->getNextBranch()->getProgramLines().front(), call_stack.top()} });
 			action(node->getNextBranch(), action, call_stack);
 		}
 		if (node->getNextMain()) {
-			result.insert({ {node->getProgramLines().back(), call_stack.top()}, {node->getNextMain()->getProgramLines().front(), call_stack.top()} });
+			result.insert({ {node->getProgramLines().back(), call_stack.top()}, 
+				{node->getNextMain()->getProgramLines().front(), call_stack.top()} });
 			action(node->getNextMain(), action, call_stack);
 		}
 	};

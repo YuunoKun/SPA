@@ -3,60 +3,41 @@
 #include <string>
 #include <vector>
 #include <unordered_set>
-#include "Common.h"
-
+#include "SPCommon.h"
 
 namespace SourceProcessor {
 
 	class Statement {
 	public:
-
 		Statement(stmt_index, StmtType, proc_name, int);
 
 		StmtType getType();
-
 		stmt_index getIndex();
-
 		proc_name getProcName();
-
-		void setDirectParent(stmt_index);
-
 		stmt_index getDirectParent();
-
-		void addDirectChild(stmt_index);
-
 		std::vector<stmt_index>& getDirectChild();
-
 		int getStmtList();
-
-		void addUsesVariable(var_name);
-
 		std::vector<var_name> getUsedVariable();
-
-		void addModifiesVariable(var_name);
-
 		std::vector<var_name> getModifiedVariable();
-
-		void addUsesCondVariable(var_name);
-
 		std::vector<var_name> getUsedCondVariable();
-
-		void setExprStr(std::string);
-
 		std::string getExprStr();
-
-		void setCallee(proc_name);
-
 		proc_name getCallee();
 
+		void setDirectParent(stmt_index);
+		void addDirectChild(stmt_index);
+		void addUsesVariable(var_name);
+		void addModifiesVariable(var_name);
+		void addUsesCondVariable(var_name);
+		void setExprStr(std::string);
+		void setCallee(proc_name);
 
 	private:
-		stmt_index statement_index;
 		StmtType statement_type;
+		stmt_index statement_index;
 		proc_name under_procedure;
-		stmt_index statement_direct_parent{ 0 };
+		stmt_index statement_direct_parent{ INIT_DIRECT_PARENT };
 		std::vector<stmt_index> statement_direct_child;
-		int statement_list_no{ 0 };
+		int statement_list_no{ INIT_STMT_LIST_NO };
 		std::unordered_set<var_name> statement_uses;
 		std::unordered_set<var_name> statement_modifies;
 		std::unordered_set<var_name> statement_uses_cond;
