@@ -606,7 +606,9 @@ namespace UnitTesting {
 			{"3", "3", "3"},
 		};
 
-		EXPECT_EQ(Utility::joinTable(from, fromIndex, to_join, to_join_index), to);
+		std::list<std::vector<std::string>> out;
+		Utility::joinTable(from, fromIndex, to_join, to_join_index, out);
+		EXPECT_EQ(out, to);
 
 		fromIndex = 1;
 		to_join_index = 0;
@@ -623,7 +625,10 @@ namespace UnitTesting {
 			{"3", "3", "3"},
 		};
 
-		EXPECT_EQ(Utility::joinTable(from, fromIndex, to_join, to_join_index), to);
+
+		out.clear();
+		Utility::joinTable(from, fromIndex, to_join, to_join_index, out);
+		EXPECT_EQ(out, to);
 
 		from = {
 			{"1"},
@@ -650,7 +655,9 @@ namespace UnitTesting {
 			{"2", "3"}
 		};
 
-		EXPECT_EQ(Utility::joinTable(from, fromIndex, to_join, to_join_index), to);
+		out.clear();
+		Utility::joinTable(from, fromIndex, to_join, to_join_index, out);
+		EXPECT_EQ(out, to);
 
 		from = {
 			{"1"},
@@ -677,7 +684,9 @@ namespace UnitTesting {
 			{"2", "3", "3" }
 		};
 
-		EXPECT_EQ(Utility::joinTable(from, fromIndex, to_join, to_join_index), to);
+		out.clear();
+		Utility::joinTable(from, fromIndex, to_join, to_join_index, out);
+		EXPECT_EQ(out, to);
 
 		from = {
 			{"1", "1"},
@@ -720,7 +729,9 @@ namespace UnitTesting {
 			{"2", "3", "3", "3" }
 		};
 
-		EXPECT_EQ(Utility::joinTable(from, fromIndex, to_join, to_join_index), to);
+		out.clear();
+		Utility::joinTable(from, fromIndex, to_join, to_join_index, out);
+		EXPECT_EQ(out, to);
 
 		from = {
 			{"1"},
@@ -751,7 +762,9 @@ namespace UnitTesting {
 			{"1", "5", "1" }
 		};
 
-		EXPECT_EQ(Utility::joinTable(from, fromIndex, to_join, to_join_index), to);
+		out.clear();
+		Utility::joinTable(from, fromIndex, to_join, to_join_index, out);
+		EXPECT_EQ(out, to);
 
 		fromIndex = 0;
 		to_join_index = 1;
@@ -763,7 +776,9 @@ namespace UnitTesting {
 			{"1", "1", "1" }
 		};
 
-		EXPECT_EQ(Utility::joinTable(from, fromIndex, to_join, to_join_index), to);
+		out.clear();
+		Utility::joinTable(from, fromIndex, to_join, to_join_index, out);
+		EXPECT_EQ(out, to);
 	}
 
 	TEST(Utility, joinTable) {
@@ -771,13 +786,18 @@ namespace UnitTesting {
 		std::list<std::vector<std::string>> b = { {"1"} };
 		std::list<std::vector<std::string>> to = { {"1","1"}, {"2","1"}, {"3","1"} };
 
-		EXPECT_EQ(Utility::joinTable(a, b), to);
+		std::list<std::vector<std::string>> out;
+		Utility::joinTable(a, b, out);
+		EXPECT_EQ(out, to);
+
 
 		a = { {"1"} };
 		b = { {"1"}, {"2"}, {"3"} };
 		to = { {"1","1"}, {"1","2"}, {"1","3"} };
 
-		EXPECT_EQ(Utility::joinTable(a, b), to);
+		out.clear();
+		Utility::joinTable(a, b, out);
+		EXPECT_EQ(out, to);
 
 
 		a = { {"1"}, {"2"}, {"3"} };
@@ -786,7 +806,9 @@ namespace UnitTesting {
 				{"2","1"}, {"2","2"}, {"2","3"},
 				{"3","1"}, {"3","2"}, {"3","3"} };
 
-		EXPECT_EQ(Utility::joinTable(a, b), to);
+		out.clear();
+		Utility::joinTable(a, b, out);
+		EXPECT_EQ(out, to);
 	}
 
 	TEST(Utility, removeEntities) {

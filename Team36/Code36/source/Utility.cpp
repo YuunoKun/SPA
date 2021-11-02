@@ -222,55 +222,53 @@ std::list<std::string> Utility::mergeColumnEqual(std::list<std::vector<std::stri
 	return to;
 }
 
-std::list<std::vector<std::string>> Utility::joinTable(std::list<std::vector<std::string>>& main, int main_header_index,
-	std::unordered_multimap<std::string, std::vector<std::string>>& to_join, int to_join_header_index) {
-	std::list<std::vector<std::string>> results;
+void  Utility::joinTable(std::list<std::vector<std::string>>& main, int main_header_index,
+	std::unordered_multimap<std::string, std::vector<std::string>>& to_join, int to_join_header_index, 
+	std::list<std::vector<std::string>>& out) {
 
 	for (auto& it : main) {
 		if (to_join.count(it[main_header_index]) == 0) {
 			continue;
 		}
-		std::pair<std::unordered_multimap<std::string, std::vector<std::string>>::iterator, 
-			std::unordered_multimap<std::string, std::vector<std::string>>::iterator> ret;
+		auto& ret = to_join.equal_range(it[main_header_index]);
 
-		ret = to_join.equal_range(it[main_header_index]);
-
-		for (std::unordered_multimap<std::string, std::vector<std::string>>::iterator itr1 = ret.first; itr1 != ret.second; ++itr1) {
-			results.emplace_back(joinRow(it, itr1->second, to_join_header_index));
+		for (auto& itr1 = ret.first; itr1 != ret.second; ++itr1) {
+			std::vector<std::string> joined_row;
+			joinRow(it, itr1->second, to_join_header_index, joined_row);
+			out.emplace_back(joined_row);
 		}
 	}
-	return results;
 }
 
-std::vector<std::string> Utility::joinRow(std::vector<std::string>& main, std::vector<std::string>& to_join) {
-	std::vector<std::string> result(main);
-	for (unsigned int i = 0; i < to_join.size(); i++) {
-		result.push_back(to_join[i]);
+void Utility::joinTable(std::list<std::vector<std::string>>& main,
+	std::list<std::vector<std::string>>& to_join, std::list<std::vector<std::string>>& out) {
+	for (auto& main_row : main) {
+		for (auto& to_join_row : to_join) {
+			std::vector<std::string> joined_row;
+			joinRow(main_row, to_join_row, joined_row);
+			out.emplace_back(joined_row);
+		}
 	}
-	return result;
 }
 
-std::vector<std::string> Utility::joinRow(std::vector<std::string>& main, std::vector<std::string>& to_join, int common_index) {
-	std::vector<std::string> result(main);
+void Utility::joinRow(std::vector<std::string>& main, std::vector<std::string>& to_join, std::vector<std::string>& out) {
+
+	out.insert(out.end(), main.begin(), main.end());
+	for (unsigned int i = 0; i < to_join.size(); i++) {
+		out.push_back(to_join[i]);
+	}
+}
+
+void Utility::joinRow(std::vector<std::string>& main, std::vector<std::string>& to_join, int common_index, std::vector<std::string>& out) {
+	out.insert(out.end(), main.begin(), main.end());
 	for (unsigned int i = 0; i < to_join.size(); i++) {
 		if (i == common_index) {
 			continue;
 		}
-		result.push_back(to_join[i]);
+		out.push_back(to_join[i]);
 	}
-	return result;
 }
 
-
-std::list<std::vector<std::string>> Utility::joinTable(std::list<std::vector<std::string>>& main, std::list<std::vector<std::string>>& to_join) {
-	std::list<std::vector<std::string>> result;
-	for (auto& main_row : main) {
-		for (auto& to_join_row : to_join) {
-			result.push_back(joinRow(main_row, to_join_row));
-		}
-	}
-	return result;
-}
 
 std::vector<Entity> Utility::removeEntities(std::vector<Entity>& main, std::vector<Entity>& to_remove) {
 

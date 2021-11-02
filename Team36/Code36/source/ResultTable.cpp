@@ -246,19 +246,23 @@ void ResultTable::joinTable(ResultTable& t, Entity common_header) {
 	int header_index = getHeaderIndex(common_header);
 	int to_join_index = t.getHeaderIndex(common_header);
 
+	std::list<std::vector<std::string>> main = table;
+	table = std::list<std::vector<std::string>>();
 	std::unordered_multimap<std::string, std::vector<std::string>> to_join;
 
 	for (auto& it : t.table) {
 		to_join.insert({ it[to_join_index], it });
 	}
 
-	table = Utility::joinTable(table, header_index, to_join, to_join_index);
+	Utility::joinTable(main, header_index, to_join, to_join_index, table);
 	addHeader(t.header);
 }
 
 
 
 void ResultTable::joinTable(ResultTable& t) {
-	table = Utility::joinTable(table, t.table);
+	std::list<std::vector<std::string>> main = table;
+	table = std::list<std::vector<std::string>>();
+	Utility::joinTable(main, t.table, table);
 	addHeader(t.header);
 }

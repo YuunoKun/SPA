@@ -57,7 +57,7 @@ namespace UnitTesting {
 
 		bool print_result = true;
 		// table size = x ^ 2
-		vector<int> source_code_size = { 10, 20, 30, 40, 50, 100 };//, 250 };
+		vector<int> source_code_size = { 10, 20, 30, 40, 50, 100 , 250 };//, 250 };
 		vector<std::list<vector<std::string>>> tables;
 		vector<std::list<vector<std::string>>> tables2;
 		vector<std::unordered_multimap<std::string, std::vector<std::string>>> join_tables;
@@ -66,8 +66,9 @@ namespace UnitTesting {
 	// Join Table merge column algorithm Speed Test
 	TEST_F(QueryEvaluatorStressTest, join_table_common_column) {
 		for (int i = 0; i < source_code_size.size(); i++) {
+			std::list<std::vector<std::string>> out;
 			startTimer();
-			Utility::joinTable(tables[i], 0, join_tables[i], 0);
+			Utility::joinTable(tables[i], 0, join_tables[i], 0, out);
 			endTimer();
 			printTime("Codes of size " + to_string(source_code_size[i]) + " takes : ");
 		}
@@ -81,8 +82,9 @@ namespace UnitTesting {
 		std::cout << "list max size: " << tables.max_size() << endl;
 		std::cout << "vector max size: " << source_code_size.max_size() << endl;
 		for (int i = 0; i < source_code_size.size(); i++) {
+			std::list<std::vector<std::string>> out;
 			startTimer();
-			Utility::joinTable(tables[i], tables2[i]);
+			Utility::joinTable(tables[i], tables2[i], out);
 			endTimer();
 			printTime("Codes of size " + to_string(source_code_size[i]) + " takes : ");
 		}
@@ -93,7 +95,7 @@ namespace UnitTesting {
 	TEST_F(QueryEvaluatorStressTest, filter_table) {
 		for (int i = 0; i < source_code_size.size(); i++) {
 			startTimer();
-			Utility::filterResults(tables[i],0, 1, tables2[i],0,1);
+			//Utility::filterResults(tables[i],0, 1, tables2[i],0,1);
 			endTimer();
 			printTime("Codes of size " + to_string(source_code_size[i]) + " takes : ");
 		}

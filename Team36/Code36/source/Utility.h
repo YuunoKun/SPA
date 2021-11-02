@@ -41,8 +41,11 @@ public:
 
 	static std::list<std::string> mergeColumnEqual(std::list<std::vector<std::string>>&);
 
-	static std::list<std::vector<std::string>> joinTable(std::list<std::vector<std::string>>&, int, std::unordered_multimap<std::string, std::vector<std::string>>&, int);
-	static std::list<std::vector<std::string>> joinTable(std::list<std::vector<std::string>>&, std::list<std::vector<std::string>>&);
+	static void joinTable(std::list<std::vector<std::string>>&, int,
+		std::unordered_multimap<std::string, std::vector<std::string>>&, int,
+		std::list<std::vector<std::string>>&);
+	static void joinTable(std::list<std::vector<std::string>>&, 
+		std::list<std::vector<std::string>>&, std::list<std::vector<std::string>>&);
 
 	static std::vector<Entity> removeEntities(std::vector<Entity>&, std::vector<Entity>&);
 	static std::vector<Entity> removeDuplicateEntities(std::vector<Entity>&);
@@ -75,6 +78,6 @@ public:
 private:
 	static bool isStmt(EntityType);
 
-	static std::vector<std::string> joinRow(std::vector<std::string>&, std::vector<std::string>&);
-	static std::vector<std::string> joinRow(std::vector<std::string>&, std::vector<std::string>&, int);
+	static void joinRow(std::vector<std::string>&, std::vector<std::string>&, std::vector<std::string>&);
+	static void joinRow(std::vector<std::string>&, std::vector<std::string>&, int, std::vector<std::string>&);
 };
