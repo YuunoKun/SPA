@@ -298,12 +298,19 @@ void QueryPreprocessor::handleAddParameterTokensAndParseWith(QueryToken& token) 
 		(token.type != QueryToken::QueryTokenType::PARENTHESIS_CLOSE || parenthesis_counter > 0)) ||
 		patternOrSuchThat.type == QueryToken::QueryTokenType::WITH)) {
 		parameterClause.push_back(token);
-		QueryPreprocessor::checkParseWith();
+		QueryPreprocessor::checkParseWith(token);
 	}
 }
 
-void QueryPreprocessor::checkParseWith() {
+void QueryPreprocessor::checkParseWith(QueryToken& token) {
 	if (patternOrSuchThat.type == QueryToken::QueryTokenType::WITH &&
+		(token.type == QueryToken::QueryTokenType::QUOTATION_CLOSE ||
+			token.type == QueryToken::QueryTokenType::CONSTANT ||
+			token.type == QueryToken::QueryTokenType::IDENTIFIER ||
+			token.type == QueryToken::QueryTokenType::PROC_NAME ||
+			token.type == QueryToken::QueryTokenType::VAR_NAME ||
+			token.type == QueryToken::QueryTokenType::VALUE ||
+			token.type == QueryToken::QueryTokenType::STMT_INDEX) &&
 		(this->nextToken.type == QueryToken::QueryTokenType::WHITESPACE ||
 			this->nextToken.token_value == "and" ||
 			this->nextToken.token_value == "pattern" ||

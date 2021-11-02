@@ -74,7 +74,7 @@ private:
 
 	void handleAddParameterTokensAndParseWith(QueryToken&);
 
-	void checkParseWith();
+	void checkParseWith(QueryToken&);
 
 	void handleValidatePatternAndSuchThat(QueryToken&);
 
