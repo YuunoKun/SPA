@@ -181,17 +181,13 @@ void QueryEvaluator::getResult(Query& query, QueryResult& result, std::list<std:
 
 	if (!result.isInTables(query.getSelected()[0])) {
 		getRawResult(query.getSelected()[0], out);
-
-		if (Utility::isSecondaryAttribute(query.getSelected()[0])) {
-			}
-		return;
+	} else {
+		result.getResult(query.getSelected()[0], out);
 	}
 
-	result.getResult(query.getSelected()[0], out);
 
 	if (Utility::isSecondaryAttribute(query.getSelected()[0])) {
 		convertToSecondaryAttribute(out, query.getSelected()[0]);
-		return;
 	}
 
 }
