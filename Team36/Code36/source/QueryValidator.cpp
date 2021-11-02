@@ -73,7 +73,6 @@ void QueryValidator::validateQuery(Query& query, bool& endOfCurrentClauses) {
 
 	// Final check
 
-
 	for (std::pair<std::string, Entity> ent : query.getEntities()) {
 		if (ent.second.getType() != EntityType::STMT &&
 			ent.second.getType() != EntityType::PROCEDURE &&
@@ -146,5 +145,11 @@ void QueryValidator::validateAttributeType(Query& query, QueryToken& prevToken, 
 void QueryValidator::isExpectingIdentifier(QueryToken& nextToken) {
 	if (nextToken.type != QueryToken::QueryTokenType::IDENTIFIER) {
 		throw SyntacticErrorException("Expected identifier but receives a different token type");
+	}
+}
+
+void QueryValidator::validateNotAndPattern(QueryToken& nextToken) {
+	if (nextToken.token_value == "pattern") {
+		throw SyntacticErrorException("Expecting pattern identifier token");
 	}
 }

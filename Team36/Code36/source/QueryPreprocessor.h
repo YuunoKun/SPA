@@ -59,6 +59,16 @@ private:
 
 	void handleWithinParameter(QueryToken&);
 
+	void handleParenthesisOpen(QueryToken&);
+
+	void handleAddParameterTokensAndParseWith(QueryToken&);
+
+	void checkParseWith();
+
+	void handleValidatePatternAndSuchThat(QueryToken&);
+
+	void handleParenthesisClose(QueryToken&);
+
 	void setIdentifierToQueryTokenType(QueryToken&);
 
 	void addEntityToQuery(QueryToken&);
