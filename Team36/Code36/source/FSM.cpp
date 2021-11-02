@@ -299,7 +299,11 @@ void FSM::expectFactor() {
 	switch (tokenizer.peekToken().getTokenType()) {
 	case TokenType::CONSTANT:
 		design_extractor->addExprSegment(tokenizer.peekToken().getTokenValue());
-		design_extractor->addConstant(std::stoul(expectTokenAndPop(TokenType::CONSTANT).getTokenValue(), nullptr, 0));
+		if (tokenizer.peekToken().getTokenValue().size() > 1 && tokenizer.peekToken().getTokenValue().front() == '0') {
+			throw std::runtime_error("Semantic violation. Constant with leading zero detected.");
+		}
+		design_extractor->addConstant(std::stoul(tokenizer.peekToken().getTokenValue(), nullptr, 0));
+		expectTokenAndPop(TokenType::CONSTANT);
 		break;
 	case TokenType::PARENTHESIS_OPEN:
 		design_extractor->addExprSegment(tokenizer.peekToken().getTokenValue());
