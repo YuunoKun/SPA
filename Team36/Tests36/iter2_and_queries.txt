@@ -910,7 +910,7 @@ none
 5000
 183 - with a.stmt# = n and n = 10
 assign a; prog_line n;
-Select a with a.stmt# = n and n = 10;
+Select a with a.stmt# = n and n = 10
 10
 5000
 184 - with a.stmt# = s.stmt# and pn.varName = r.varName
