@@ -2,8 +2,8 @@
 #include <iostream>
 #include <stdexcept>
 #include <vector>
-#include "../../source/FSM.h"
 #include "../../source/Extractor.h"
+#include "../../source/FSM.h"
 #include "../../source/Tokenizer.h"
 
 namespace UnitTesting {

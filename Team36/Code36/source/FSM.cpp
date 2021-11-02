@@ -13,7 +13,7 @@ FSM::FSM(Tokenizer& t, Extractor *extractor) {
 }
 
 FSM::~FSM() {
-	delete design_extractor;
+	if(design_extractor) design_extractor->~Extractor();
 }
 
 Tokenizer& FSM::getTokenizer() {
@@ -359,7 +359,6 @@ bool FSM::optionalRelationalFactor() {
 	return optionalExpression();
 }
 
-
 bool FSM::optionalExpression() {
 	if (!optionalTerm()) {
 		return false;
@@ -396,7 +395,7 @@ bool FSM::optionalFactor() {
 	}
 }
 
-bool FSM::optionalIdentifier() noexcept {
+bool FSM::optionalIdentifier() {
 	switch (tokenizer.peekProbe().getTokenType()) {
 	case TokenType::PROCEDURE:
 	case TokenType::READ:

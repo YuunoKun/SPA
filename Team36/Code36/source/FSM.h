@@ -12,7 +12,6 @@ namespace SourceProcessor {
 	class FSM {
 	public:
 		FSM(Tokenizer&);
-
 		FSM(Tokenizer&, Extractor*);
 
 		~FSM();
@@ -96,7 +95,7 @@ namespace SourceProcessor {
 		bool optionalExpression();
 		bool optionalTerm();
 		bool optionalFactor();
-		bool optionalIdentifier() noexcept;
+		bool optionalIdentifier();
 
 	private:
 		Tokenizer tokenizer;
