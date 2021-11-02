@@ -10,7 +10,7 @@ Parser::Parser(void) {
 	tokenizer = Tokenizer();
 }
 
-void Parser::load_file(std::string file) {
+void Parser::loadSourceFile(std::string file) {
 	std::ifstream input_file;
 	input_file.open(file);
 	if (input_file.is_open()) {

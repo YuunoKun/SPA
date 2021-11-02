@@ -4,6 +4,7 @@
 #include <stack>
 #include <unordered_set>
 #include <unordered_map>
+#include "SPCommon.h"
 #include "CFG.h"
 #include "Extractor.h"
 #include "Procedure.h"
@@ -13,53 +14,33 @@
 namespace SourceProcessor {
 	class DesignExtractor : public Extractor {
 	public:
-
 		DesignExtractor();
 
 		~DesignExtractor();
 
 		void startNesting() override;
-
 		void chopNesting() override;
-
 		void endNesting() override;
-
 		void setCondExpr(bool) override;
-
 		void addProcedure(proc_name) override;
-
-		const std::vector<Procedure*>& getProcedures();
-
 		void addStatement(TokenType) override;
-
-		const std::vector<Statement*>& getStatements();
-
 		void addVariable(var_name) override;
-
-		const std::unordered_set<var_name>& getVariables();
-
 		void addConstant(constant) override;
-
+		const std::vector<Procedure*>& getProcedures();
+		const std::vector<Statement*>& getStatements();
+		const std::unordered_set<var_name>& getVariables();
 		const std::unordered_set<constant>& getConstants();
-
 		void addStatementUses(var_name) override;
-
 		void addStatementModifies(var_name) override;
-
 		void startExpr() override;
-
 		void addExprSegment(std::string) override;
-
 		void endExpr() override;
-
 		void addCallee(proc_name) override;
 
 		void validate() override;
 
 		void populatePostValidation() override;
-
 		void populateEntities(PKB&) override;
-
 		void populateRelations(PKB&) override;
 
 	private:
@@ -93,4 +74,5 @@ namespace SourceProcessor {
 
 		CFG* generateCFG(std::vector<stmt_index>);
 	};
+
 } // namespace SourceProcessor
