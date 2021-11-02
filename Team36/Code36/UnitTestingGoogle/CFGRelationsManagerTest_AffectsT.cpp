@@ -67,8 +67,18 @@ namespace UnitTesting {
 			s10, s11, s12, s13, s14, s15, s16, s17, s18, s19
 		};
 
-		std::vector<proc_name> proc_list = { "First", "Second" };
-		std::vector<var_name> var_list = { "x", "i", "a", "y", "z", "v" };
+		proc_name p1 = "p1";
+		proc_name p2 = "p2";
+
+		var_name a = "a";
+		var_name i = "i";
+		var_name v = "v";
+		var_name x = "x";
+		var_name y = "y";
+		var_name z = "z";
+
+		std::vector<proc_name> proc_list = { p1, p2 };
+		std::vector<var_name> var_list = { a, i, v, x, y, z };
 
 		std::vector<std::pair<StmtInfo, StmtInfo>> expected_pairs = {
 			{s1, s8}, {s1, s12}, {s1, s14}, {s1, s15}, {s1, s16}, {s2, s10}, {s4, s4 },
@@ -84,23 +94,28 @@ namespace UnitTesting {
 		};
 
 		std::vector<std::pair<StmtInfo, var_name>> test_usesS_list = {
-			{s3, "i"}, {s4, "a"}, {s5, "x"}, {s5, "a"}, {s7, "a"}, {s8, "x"}, {s8, "y"}, {s9, "v"},
-			{s10, "i"}, {s11, "x"}, {s12, "x"}, {s14, "z"}, {s14, "x"}, {s15, "z"}, {s16, "x"}, {s16, "y"},
-			{s16, "z"}, {s19, "v"},
+			{s3, i}, {s4, a}, {s5, x}, {s5, a}, {s7, a}, {s8, x}, {s8, y}, {s9, v},
+			{s10, i}, {s11, x}, {s12, x}, {s14, z}, {s14, x}, {s15, z}, {s16, x}, {s16, y},
+			{s16, z}, {s19, v},
 		};
 
 		std::vector<std::pair<StmtInfo, var_name>> test_modifiesS_list = {
-			{s1, "x"}, {s2, "i"}, {s3, "x"}, {s3, "a"}, {s3, "v"}, {s4, "a"}, {s5, "a"}, {s6, "a"}, {s8, "x"},
-			{s9, "x"}, {s9, "v"}, {s10, "i"}, {s11, "x"}, {s12, "x"}, {s13, "z"}, {s14, "z"}, {s15, "y"},
-			{s16, "x"}, {s17, "x"}, {s18, "v"}
+			{s1, x}, {s2, i}, {s3, x}, {s3, a}, {s3, v}, {s4, a}, {s5, a}, {s6, a}, {s8, x},
+			{s9, x}, {s9, v}, {s10, i}, {s11, x}, {s12, x}, {s13, z}, {s14, z}, {s15, y},
+			{s16, x}, {s17, x}, {s18, v}
 		};
 
 		std::vector<std::pair<proc_name, stmt_index>> test_procS_list = {
-			{"First", 1}, {"First", 2},{"First", 3},{"First", 4},{"First", 5},
-			{"First", 6}, {"First", 7},{"First", 8},{"First", 9},{"First", 10},
-			{"First", 11}, {"First", 12},{"First", 13},{"First", 14},{"First", 15},
-			{"First", 16}, {"Second", 17}, {"Second", 18}, {"Second", 19}
+			{p1, 1}, {p1, 2}, {p1, 3}, {p1, 4}, {p1, 5},
+			{p1, 6}, {p1, 7}, {p1, 8}, {p1, 9}, {p1, 10},
+			{p1, 11}, {p1, 12}, {p1, 13}, {p1, 14}, {p1, 15},
+			{p1, 16}, {p2, 17}, {p2, 18}, {p2, 19}
 		};
+
+		void TearDown() override {
+			manager.reset();
+			PKB::getInstance().resetCache();
+		}
 	};
 
 	TEST_F(CFGRelationsManagerTest_AffectsT, isAffectsTEmpty) {
@@ -122,12 +137,12 @@ namespace UnitTesting {
 		std::set_difference(stmt_list.begin(), stmt_list.end(), true_list.begin(), true_list.end(), std::inserter(false_list, false_list.begin()));
 
 		for (auto& stmt : true_list) {
-			EXPECT_TRUE(manager.isAffectingT(stmt.stmt_index)) << "Expected true but fail at " << stmt.stmt_index;
-			EXPECT_TRUE(manager.isAffectingT(stmt.stmt_index)) << "Expected true but fail at " << stmt.stmt_index;
+			EXPECT_TRUE(manager.isAffectingT(stmt.stmt_index));
+			EXPECT_TRUE(manager.isAffectingT(stmt.stmt_index));
 		}
 		for (auto& stmt : false_list) {
-			EXPECT_FALSE(manager.isAffectingT(stmt.stmt_index)) << "Expected false but fail at " << stmt.stmt_index;
-			EXPECT_FALSE(manager.isAffectingT(stmt.stmt_index)) << "Expected false but fail at " << stmt.stmt_index;
+			EXPECT_FALSE(manager.isAffectingT(stmt.stmt_index));
+			EXPECT_FALSE(manager.isAffectingT(stmt.stmt_index));
 		}
 	}
 
@@ -145,12 +160,12 @@ namespace UnitTesting {
 		std::set_difference(stmt_list.begin(), stmt_list.end(), true_list.begin(), true_list.end(), std::inserter(false_list, false_list.begin()));
 
 		for (auto& stmt : true_list) {
-			EXPECT_TRUE(manager.isAffectedT(stmt.stmt_index)) << "Expected true but fail at " << stmt.stmt_index;
-			EXPECT_TRUE(manager.isAffectedT(stmt.stmt_index)) << "Expected true but fail at " << stmt.stmt_index;
+			EXPECT_TRUE(manager.isAffectedT(stmt.stmt_index));
+			EXPECT_TRUE(manager.isAffectedT(stmt.stmt_index));
 		}
 		for (auto& stmt : false_list) {
-			EXPECT_FALSE(manager.isAffectedT(stmt.stmt_index)) << "Expected false but fail at " << stmt.stmt_index;
-			EXPECT_FALSE(manager.isAffectedT(stmt.stmt_index)) << "Expected false but fail at " << stmt.stmt_index;
+			EXPECT_FALSE(manager.isAffectedT(stmt.stmt_index));
+			EXPECT_FALSE(manager.isAffectedT(stmt.stmt_index));
 		}
 	}
 
@@ -272,12 +287,12 @@ namespace UnitTesting {
 		std::set_difference(stmt_list.begin(), stmt_list.end(), true_list_c_wild.begin(), true_list_c_wild.end(), std::inserter(false_list_c_wild, false_list_c_wild.begin()));
 
 		for (auto& stmt : true_list_c_wild) {
-			EXPECT_TRUE(manager.isAffectingT(stmt.stmt_index)) << "Expected true but fail at " << stmt.stmt_index;
-			EXPECT_TRUE(manager.isAffectingT(stmt.stmt_index)) << "Expected true but fail at " << stmt.stmt_index;
+			EXPECT_TRUE(manager.isAffectingT(stmt.stmt_index));
+			EXPECT_TRUE(manager.isAffectingT(stmt.stmt_index));
 		}
 		for (auto& stmt : false_list_c_wild) {
-			EXPECT_FALSE(manager.isAffectingT(stmt.stmt_index)) << "Expected false but fail at " << stmt.stmt_index;
-			EXPECT_FALSE(manager.isAffectingT(stmt.stmt_index)) << "Expected false but fail at " << stmt.stmt_index;
+			EXPECT_FALSE(manager.isAffectingT(stmt.stmt_index));
+			EXPECT_FALSE(manager.isAffectingT(stmt.stmt_index));
 		}
 
 		// _, c
@@ -295,12 +310,12 @@ namespace UnitTesting {
 			true_list_wild_c.end(), std::inserter(false_list_wild_c, false_list_wild_c.begin()));
 
 		for (auto& stmt : true_list_wild_c) {
-			EXPECT_TRUE(manager.isAffectedT(stmt.stmt_index)) << "Expected true but fail at " << stmt.stmt_index;
-			EXPECT_TRUE(manager.isAffectedT(stmt.stmt_index)) << "Expected true but fail at " << stmt.stmt_index;
+			EXPECT_TRUE(manager.isAffectedT(stmt.stmt_index));
+			EXPECT_TRUE(manager.isAffectedT(stmt.stmt_index));
 		}
 		for (auto& stmt : false_list_wild_c) {
-			EXPECT_FALSE(manager.isAffectedT(stmt.stmt_index)) << "Expected false but fail at " << stmt.stmt_index;
-			EXPECT_FALSE(manager.isAffectedT(stmt.stmt_index)) << "Expected false but fail at " << stmt.stmt_index;
+			EXPECT_FALSE(manager.isAffectedT(stmt.stmt_index));
+			EXPECT_FALSE(manager.isAffectedT(stmt.stmt_index));
 		}
 
 		// c, c

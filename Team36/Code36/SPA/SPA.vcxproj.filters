@@ -354,7 +354,7 @@
     <ClCompile Include="..\source\IterativeDataflowSolverBip.cpp">
       <Filter>Source Files\PKB\RelationPreprocessor</Filter>
     </ClCompile>
-    <ClCompile Include="..\source\RelationsUtility.cpp">
+    <ClCompile Include="..\source\RelationTableUtility.cpp">
       <Filter>Source Files\PKB\RelationTables</Filter>
     </ClCompile>
   </ItemGroup>
@@ -668,7 +668,7 @@
     <ClInclude Include="..\source\IterativeDataflowSolverBip.h">
       <Filter>Header Files\PKB\RelationPreprocessor</Filter>
     </ClInclude>
-    <ClInclude Include="..\source\RelationsUtility.h">
+    <ClInclude Include="..\source\RelationTableUtility.h">
       <Filter>Header Files\PKB\RelationTables</Filter>
     </ClInclude>
   </ItemGroup>

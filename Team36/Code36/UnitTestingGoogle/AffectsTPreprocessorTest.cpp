@@ -49,14 +49,7 @@ namespace UnitTesting {
 		};
 
 		virtual void SetUp() override {
-			// Code here will be called immediately after the constructor (right
-			// before each test).
 			processor.reset();
-		}
-
-		void TearDown() override {
-			// Code here will be called immediately after each test (right
-			// before the destructor).
 		}
 	};
 
@@ -78,12 +71,12 @@ namespace UnitTesting {
 		std::set_difference(stmt_list.begin(), stmt_list.end(), true_list.begin(), true_list.end(), std::inserter(false_list, false_list.begin()));
 
 		for (auto& stmt : true_list) {
-			EXPECT_TRUE(processor.evaluateConstantAndWild(stmt.stmt_index)) << "Expected true but fail at " << stmt.stmt_index;
-			EXPECT_TRUE(processor.evaluateConstantAndWild(stmt.stmt_index)) << "Expected true but fail at " << stmt.stmt_index;
+			EXPECT_TRUE(processor.evaluateConstantAndWild(stmt.stmt_index));
+			EXPECT_TRUE(processor.evaluateConstantAndWild(stmt.stmt_index));
 		}
 		for (auto& stmt : false_list) {
-			EXPECT_FALSE(processor.evaluateConstantAndWild(stmt.stmt_index)) << "Expected false but fail at " << stmt.stmt_index;
-			EXPECT_FALSE(processor.evaluateConstantAndWild(stmt.stmt_index)) << "Expected false but fail at " << stmt.stmt_index;
+			EXPECT_FALSE(processor.evaluateConstantAndWild(stmt.stmt_index));
+			EXPECT_FALSE(processor.evaluateConstantAndWild(stmt.stmt_index));
 		}
 	}
 
@@ -101,12 +94,12 @@ namespace UnitTesting {
 		std::set_difference(stmt_list.begin(), stmt_list.end(), true_list.begin(), true_list.end(), std::inserter(false_list, false_list.begin()));
 
 		for (auto& stmt : true_list) {
-			EXPECT_TRUE(processor.evaluateWildAndConstant(stmt.stmt_index)) << "Expected true but fail at " << stmt.stmt_index;
-			EXPECT_TRUE(processor.evaluateWildAndConstant(stmt.stmt_index)) << "Expected true but fail at " << stmt.stmt_index;
+			EXPECT_TRUE(processor.evaluateWildAndConstant(stmt.stmt_index));
+			EXPECT_TRUE(processor.evaluateWildAndConstant(stmt.stmt_index));
 		}
 		for (auto& stmt : false_list) {
-			EXPECT_FALSE(processor.evaluateWildAndConstant(stmt.stmt_index)) << "Expected false but fail at " << stmt.stmt_index;
-			EXPECT_FALSE(processor.evaluateWildAndConstant(stmt.stmt_index)) << "Expected false but fail at " << stmt.stmt_index;
+			EXPECT_FALSE(processor.evaluateWildAndConstant(stmt.stmt_index));
+			EXPECT_FALSE(processor.evaluateWildAndConstant(stmt.stmt_index));
 		}
 	}
 
@@ -276,10 +269,10 @@ namespace UnitTesting {
 		std::set_difference(stmt_list.begin(), stmt_list.end(), true_list.begin(), true_list.end(), std::inserter(false_list, false_list.begin()));
 
 		for (auto& stmt : true_list) {
-			EXPECT_TRUE(processor.evaluateConstantAndWild(stmt.stmt_index)) << "Expected true but fail at " << stmt.stmt_index;
+			EXPECT_TRUE(processor.evaluateConstantAndWild(stmt.stmt_index));
 		}
 		for (auto& stmt : false_list) {
-			EXPECT_FALSE(processor.evaluateConstantAndWild(stmt.stmt_index)) << "Expected false but fail at " << stmt.stmt_index;
+			EXPECT_FALSE(processor.evaluateConstantAndWild(stmt.stmt_index));
 		}
 
 		// (s1, _)

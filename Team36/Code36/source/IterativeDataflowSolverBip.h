@@ -26,7 +26,6 @@ namespace std {
 	template <>
 	struct hash<LabelledModifiesTuple> {
 		size_t operator()(const LabelledModifiesTuple& k) const {
-			// Compute individual hash values for two data members and combine them using XOR and bit shifting
 			return ((hash<LabelledProgLine>()(k.labelled_prog_line) ^ (hash<std::string>()(k.var_name) << 1)) >> 1);
 		}
 	};

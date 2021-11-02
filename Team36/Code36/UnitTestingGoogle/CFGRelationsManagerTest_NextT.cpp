@@ -59,11 +59,9 @@ namespace UnitTesting {
 			{s5, s2}, {s5, s3}, {s5, s4}, {s5, s5}, {s5, s6},
 		};
 
-		virtual void SetUp() override {
-		}
-
 		void TearDown() override {
 			manager.reset();
+			PKB::getInstance().resetCache();
 		}
 	};
 

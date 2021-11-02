@@ -38,11 +38,10 @@ namespace UnitTesting {
 				PKB::getInstance().addProcContains(pair.first, pair.second);
 			}
 
-			manager = new CFGRelationsManager();
-			manager->update();
+			manager.update();
 		}
 
-		CFGRelationsManager* manager;
+		CFGRelationsManager manager;
 
 		StmtInfo s1{ 1, STMT_ASSIGN };
 		StmtInfo s2{ 2, STMT_ASSIGN };
@@ -68,8 +67,18 @@ namespace UnitTesting {
 			s10, s11, s12, s13, s14, s15, s16, s17, s18, s19
 		};
 
-		std::vector<proc_name> proc_list = { "First", "Second" };
-		std::vector<var_name> var_list = { "x", "i", "a", "y", "z", "v" };
+		proc_name p1 = "p1";
+		proc_name p2 = "p2";
+
+		var_name a = "a";
+		var_name i = "i";
+		var_name v = "v";
+		var_name x = "x";
+		var_name y = "y";
+		var_name z = "z";
+
+		std::vector<proc_name> proc_list = { p1, p2 };
+		std::vector<var_name> var_list = { a, i, v, x, y, z };
 
 		std::vector<std::pair<StmtInfo, StmtInfo>> expected_pairs = {
 			{s1, s8}, {s1, s12}, {s1, s14}, {s1, s16}, {s2, s10}, {s4, s4 },
@@ -85,68 +94,33 @@ namespace UnitTesting {
 		};
 
 		std::vector<std::pair<StmtInfo, var_name>> test_usesS_list = {
-			{s3, "i"}, {s4, "a"}, {s5, "x"}, {s5, "a"}, {s7, "a"}, {s8, "x"}, {s8, "y"}, {s9, "v"},
-			{s10, "i"}, {s11, "x"}, {s12, "x"}, {s14, "z"}, {s14, "x"}, {s15, "z"}, {s16, "x"}, {s16, "y"},
-			{s16, "z"}, {s19, "v"},
+			{s3, i}, {s4, a}, {s5, x}, {s5, a}, {s7, a}, {s8, x}, {s8, y}, {s9, v},
+			{s10, i}, {s11, x}, {s12, x}, {s14, z}, {s14, x}, {s15, z}, {s16, x}, {s16, y},
+			{s16, z}, {s19, v},
 		};
 
 		std::vector<std::pair<StmtInfo, var_name>> test_modifiesS_list = {
-			{s1, "x"}, {s2, "i"}, {s3, "x"}, {s3, "a"}, {s3, "v"}, {s4, "a"}, {s5, "a"}, {s6, "a"}, {s8, "x"},
-			{s9, "x"}, {s9, "v"}, {s10, "i"}, {s11, "x"}, {s12, "x"}, {s13, "z"}, {s14, "z"}, {s15, "y"},
-			{s16, "x"}, {s17, "x"}, {s18, "v"}
+			{s1, x}, {s2, i}, {s3, x}, {s3, a}, {s3, v}, {s4, a}, {s5, a}, {s6, a}, {s8, x},
+			{s9, x}, {s9, v}, {s10, i}, {s11, x}, {s12, x}, {s13, z}, {s14, z}, {s15, y},
+			{s16, x}, {s17, x}, {s18, v}
 		};
 
 		std::vector<std::pair<proc_name, stmt_index>> test_procS_list = {
-			{"First", 1}, {"First", 2},{"First", 3},{"First", 4},{"First", 5},
-			{"First", 6}, {"First", 7},{"First", 8},{"First", 9},{"First", 10},
-			{"First", 11}, {"First", 12},{"First", 13},{"First", 14},{"First", 15},
-			{"First", 16}, {"Second", 17}, {"Second", 18}, {"Second", 19}
+			{p1, 1}, {p1, 2}, {p1, 3}, {p1, 4}, {p1, 5},
+			{p1, 6}, {p1, 7}, {p1, 8}, {p1, 9}, {p1, 10},
+			{p1, 11}, {p1, 12}, {p1, 13}, {p1, 14}, {p1, 15},
+			{p1, 16}, {p2, 17}, {p2, 18}, {p2, 19}
 		};
 
-		// Sample program:
-		//procedure First{
-		//01        x = 0;
-		//02        i = 5;
-		//03        while (i != 0) {
-		//04            a = a + 1;
-		//05            if (x < 3) then {
-		//06                read a;
-		//              } else {
-		//07                print a;
-		//              }
-		//08            x = x + 2 * y;
-		//09            call Second;
-		//10            i = i - 1;
-		//          }
-		//11        if (x == 1) then {
-		//12            x = x + 1; }
-		//	  	    else {
-		//13            z = 1;
-		//          }
-		//14        z = z + x + i;
-		//15        y = z + 2;
-		//16        x = x * y + z;
-		//}
-		//procedure Second{
-		//17	x = 5;
-		//18	v = z;
-		//19	print v;
-		//}
-		virtual void SetUp() override {
-			// Code here will be called immediately after the constructor (right
-			// before each test).
-		}
-
 		void TearDown() override {
-			// Code here will be called immediately after each test (right
-			// before the destructor).
-			manager->reset();
+			manager.reset();
+			PKB::getInstance().resetCache();
 		}
 	};
 
 	TEST_F(CFGRelationsManagerTest_Affects, isAffectsEmpty) {
-		EXPECT_FALSE(manager->isAffectsEmpty());
-		EXPECT_TRUE(manager->getAffectsPreprocessor().isNonEmpty());
+		EXPECT_FALSE(manager.isAffectsEmpty());
+		EXPECT_TRUE(manager.getAffectsPreprocessor().isNonEmpty());
 	}
 
 	TEST_F(CFGRelationsManagerTest_Affects, isAffecting_identifier) {
@@ -163,12 +137,12 @@ namespace UnitTesting {
 		std::set_difference(stmt_list.begin(), stmt_list.end(), true_list.begin(), true_list.end(), std::inserter(false_list, false_list.begin()));
 
 		for (auto& stmt : true_list) {
-			EXPECT_TRUE(manager->isAffecting(stmt.stmt_index)) << "Expected true but fail at " << stmt.stmt_index;
-			EXPECT_TRUE(manager->getAffectsPreprocessor().getAffecting()[stmt.stmt_index - 1]);
+			EXPECT_TRUE(manager.isAffecting(stmt.stmt_index));
+			EXPECT_TRUE(manager.getAffectsPreprocessor().getAffecting()[stmt.stmt_index - 1]);
 		}
 		for (auto& stmt : false_list) {
-			EXPECT_FALSE(manager->isAffecting(stmt.stmt_index)) << "Expected false but fail at " << stmt.stmt_index;
-			EXPECT_FALSE(manager->getAffectsPreprocessor().getAffecting()[stmt.stmt_index - 1]);
+			EXPECT_FALSE(manager.isAffecting(stmt.stmt_index));
+			EXPECT_FALSE(manager.getAffectsPreprocessor().getAffecting()[stmt.stmt_index - 1]);
 		}
 	}
 
@@ -186,12 +160,11 @@ namespace UnitTesting {
 		std::set_difference(stmt_list.begin(), stmt_list.end(), true_list.begin(), true_list.end(), std::inserter(false_list, false_list.begin()));
 
 		for (auto& stmt : true_list) {
-			EXPECT_TRUE(manager->isAffected(stmt.stmt_index)) << "Expected true but fail at " << stmt.stmt_index;
-			EXPECT_TRUE(manager->getAffectsPreprocessor().getAffected()[stmt.stmt_index - 1]);
+			EXPECT_TRUE(manager.isAffected(stmt.stmt_index));
 		}
 		for (auto& stmt : false_list) {
-			EXPECT_FALSE(manager->isAffected(stmt.stmt_index)) << "Expected false but fail at " << stmt.stmt_index;
-			EXPECT_FALSE(manager->getAffectsPreprocessor().getAffected()[stmt.stmt_index - 1]) << "Expected false but fail at " << stmt.stmt_index;;
+			EXPECT_FALSE(manager.isAffected(stmt.stmt_index));
+			EXPECT_FALSE(manager.getAffectsPreprocessor().getAffected()[stmt.stmt_index - 1]);
 		}
 	}
 
@@ -210,30 +183,28 @@ namespace UnitTesting {
 		std::set_difference(all_list.begin(), all_list.end(), true_list.begin(), true_list.end(), std::inserter(false_list, false_list.begin()));
 
 		for (auto& pair : true_list) {
-			stmt_index first_stmt_index = pair.first.stmt_index;
-			stmt_index second_stmt_index = pair.second.stmt_index;
+			stmt_index p1_stmt_index = pair.first.stmt_index;
+			stmt_index p2_stmt_index = pair.second.stmt_index;
 
-			EXPECT_TRUE(manager->isAffects(first_stmt_index, second_stmt_index)) << "Expected true but fail at " <<
-				first_stmt_index << " and" << second_stmt_index;
+			EXPECT_TRUE(manager.isAffects(p1_stmt_index, p2_stmt_index));
 		}
 		for (auto& pair : false_list) {
-			stmt_index first_stmt_index = pair.first.stmt_index;
-			stmt_index second_stmt_index = pair.second.stmt_index;
+			stmt_index p1_stmt_index = pair.first.stmt_index;
+			stmt_index p2_stmt_index = pair.second.stmt_index;
 
-			EXPECT_FALSE(manager->isAffects(first_stmt_index, second_stmt_index)) << "Expected false but fail at " <<
-				first_stmt_index << " and" << second_stmt_index;
+			EXPECT_FALSE(manager.isAffects(p1_stmt_index, p2_stmt_index));
 		}
 	}
 
 	TEST_F(CFGRelationsManagerTest_Affects, getAllAffectsRelation) {
-		auto v1 = manager->getAllAffectsRelation();
+		auto v1 = manager.getAllAffectsRelation();
 		std::sort(v1.begin(), v1.end());
 		EXPECT_EQ(v1, expected_pairs);
-		EXPECT_TRUE(manager->getAffectsPreprocessor().isFullyPopulated());
+		EXPECT_TRUE(manager.getAffectsPreprocessor().isFullyPopulated());
 	}
 
 	TEST_F(CFGRelationsManagerTest_Affects, getAffecting_all) {
-		auto v1 = manager->getAffecting();
+		auto v1 = manager.getAffecting();
 		std::sort(v1.begin(), v1.end());
 
 		std::unordered_set<StmtInfo> set;
@@ -244,11 +215,11 @@ namespace UnitTesting {
 		std::copy(set.begin(), set.end(), v2.begin());
 		std::sort(v2.begin(), v2.end());
 		EXPECT_EQ(v1, v2);
-		EXPECT_TRUE(manager->getAffectsPreprocessor().isFullyPopulated());
+		EXPECT_TRUE(manager.getAffectsPreprocessor().isFullyPopulated());
 	}
 
 	TEST_F(CFGRelationsManagerTest_Affects, getAffected_all) {
-		auto v1 = manager->getAffected();
+		auto v1 = manager.getAffected();
 		std::sort(v1.begin(), v1.end());
 
 		std::unordered_set<StmtInfo> set;
@@ -259,12 +230,12 @@ namespace UnitTesting {
 		std::copy(set.begin(), set.end(), v2.begin());
 		std::sort(v2.begin(), v2.end());
 		EXPECT_EQ(v1, v2);
-		EXPECT_TRUE(manager->getAffectsPreprocessor().isFullyPopulated());
+		EXPECT_TRUE(manager.getAffectsPreprocessor().isFullyPopulated());
 	}
 
 	TEST_F(CFGRelationsManagerTest_Affects, getAffected_identifier) {
 		for (auto& stmt : stmt_list) {
-			auto v1 = manager->getAffected(stmt.stmt_index);
+			auto v1 = manager.getAffected(stmt.stmt_index);
 			std::sort(v1.begin(), v1.end());
 
 			std::vector<StmtInfo> v2;
@@ -274,13 +245,13 @@ namespace UnitTesting {
 				}
 			}
 			EXPECT_EQ(v1, v2);
-			EXPECT_TRUE(manager->getAffectsPreprocessor().isDFSForwardComputed(stmt.stmt_index));
+			EXPECT_TRUE(manager.getAffectsPreprocessor().isDFSForwardComputed(stmt.stmt_index));
 		}
 	}
 
 	TEST_F(CFGRelationsManagerTest_Affects, getAffecting_identifier) {
 		for (auto& stmt : stmt_list) {
-			auto v1 = manager->getAffecting(stmt.stmt_index);
+			auto v1 = manager.getAffecting(stmt.stmt_index);
 			std::sort(v1.begin(), v1.end());
 
 			std::vector<StmtInfo> v2;
@@ -290,16 +261,16 @@ namespace UnitTesting {
 				}
 			}
 			EXPECT_EQ(v1, v2);
-			EXPECT_TRUE(manager->getAffectsPreprocessor().isDFSBackwardComputed(stmt.stmt_index));
+			EXPECT_TRUE(manager.getAffectsPreprocessor().isDFSBackwardComputed(stmt.stmt_index));
 		}
 	}
 
 	TEST_F(CFGRelationsManagerTest_Affects, reset) {
-		manager->getAllAffectsRelation();
-		EXPECT_TRUE(manager->getAffectsPreprocessor().isFullyPopulated());
-		EXPECT_FALSE(manager->getAffectsPreprocessor().isCacheEmpty());
-		manager->reset();
-		EXPECT_FALSE(manager->getAffectsPreprocessor().isFullyPopulated());
-		EXPECT_TRUE(manager->getAffectsPreprocessor().isCacheEmpty());
+		manager.getAllAffectsRelation();
+		EXPECT_TRUE(manager.getAffectsPreprocessor().isFullyPopulated());
+		EXPECT_FALSE(manager.getAffectsPreprocessor().isCacheEmpty());
+		manager.reset();
+		EXPECT_FALSE(manager.getAffectsPreprocessor().isFullyPopulated());
+		EXPECT_TRUE(manager.getAffectsPreprocessor().isCacheEmpty());
 	}
 }

@@ -1,5 +1,5 @@
 #include "AffectsTPreprocessor.h"
-#include "RelationsUtility.cpp"
+#include "RelationTableUtility.cpp"
 
 bool AffectsTPreprocessor::evaluateWildAndWild() {
 	return !affects_table->isEmpty();
@@ -23,7 +23,7 @@ bool AffectsTPreprocessor::evaluateConstantAndConstant(int index1, int index2) {
 		return cache.containsPair(s1, s2);
 	}
 	else {
-		auto dfs = RelationsUtility<StmtInfo>::forwardDFS(cache, s1);
+		auto dfs = RelationTableUtility<StmtInfo>::forwardDFS(cache, s1);
 		calculated_matrix[index1 - 1][index2 - 1] = true;
 		for (StmtInfo indirect_value : dfs) {
 			cache.insert(s1, indirect_value);
@@ -56,7 +56,7 @@ std::vector<StmtInfo> AffectsTPreprocessor::evaluateConstantAndSynonym(int index
 		return cache.getValues(s1);
 	}
 	else {
-		std::vector<StmtInfo> res = RelationsUtility<StmtInfo>::forwardDFS(cache, s1);
+		std::vector<StmtInfo> res = RelationTableUtility<StmtInfo>::forwardDFS(cache, s1);
 		for (auto& s2 : res) {
 			cache.insert(s1, s2);
 		}
@@ -72,7 +72,7 @@ std::vector<StmtInfo> AffectsTPreprocessor::evaluateSynonymAndConstant(int index
 		return cache.getKeys(s1);
 	}
 	else {
-		std::vector<StmtInfo> res = RelationsUtility<StmtInfo>::backwardDFS(cache, s1);
+		std::vector<StmtInfo> res = RelationTableUtility<StmtInfo>::backwardDFS(cache, s1);
 		for (auto& s2 : res) {
 			cache.insert(s2, s1);
 		}
@@ -83,13 +83,13 @@ std::vector<StmtInfo> AffectsTPreprocessor::evaluateSynonymAndConstant(int index
 
 void AffectsTPreprocessor::checkCache() {
 	if (isCacheEmpty()) {
-		cache = RelationsUtility<StmtInfo>::copy(*affects_table);
+		cache = RelationTableUtility<StmtInfo>::copy(*affects_table);
 	}
 }
 
 void AffectsTPreprocessor::fullyPopulate() {
 	if (!is_fully_populated) {
-		cache = RelationsUtility<StmtInfo>::findTransitiveClosure(*affects_table);
+		cache = RelationTableUtility<StmtInfo>::findTransitiveClosure(*affects_table);
 		is_fully_populated = true;
 	}
 }

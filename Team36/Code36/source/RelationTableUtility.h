@@ -11,7 +11,7 @@
 #include "MonotypeRelationTable.h"
 
 template <class T>
-class RelationsUtility {
+class RelationTableUtility {
 public:
 	static std::vector<T> forwardDFS(const MonotypeRelationTable<T>& table, T start);
 	static std::vector<T> backwardDFS(const MonotypeRelationTable<T>& table, T start);

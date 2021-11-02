@@ -3,10 +3,10 @@
 #include<stdio.h>
 
 #include <iostream>
-#include "RelationsUtility.h"
+#include "RelationTableUtility.h"
 
 template<class T>
-std::vector<T> RelationsUtility<T>::forwardDFS(const MonotypeRelationTable<T>& table, T start) {
+std::vector<T> RelationTableUtility<T>::forwardDFS(const MonotypeRelationTable<T>& table, T start) {
 	std::vector<T> res;
 
 	std::unordered_set<T> visited;
@@ -36,7 +36,7 @@ std::vector<T> RelationsUtility<T>::forwardDFS(const MonotypeRelationTable<T>& t
 }
 
 template<class T>
-std::vector<T> RelationsUtility<T>::backwardDFS(const MonotypeRelationTable<T>& table, T start) {
+std::vector<T> RelationTableUtility<T>::backwardDFS(const MonotypeRelationTable<T>& table, T start) {
 	std::vector<T> res;
 
 	std::unordered_set<T> visited;
@@ -65,7 +65,7 @@ std::vector<T> RelationsUtility<T>::backwardDFS(const MonotypeRelationTable<T>& 
 }
 
 template<class T>
-std::vector<T> RelationsUtility<T>::transitiveClosureDFS(MonotypeRelationTable<T>& table, T start, std::unordered_set<T>& calculated_list) {
+std::vector<T> RelationTableUtility<T>::transitiveClosureDFS(MonotypeRelationTable<T>& table, T start, std::unordered_set<T>& calculated_list) {
 	std::vector<T> res;
 
 	std::unordered_set<T> visited;
@@ -101,7 +101,7 @@ std::vector<T> RelationsUtility<T>::transitiveClosureDFS(MonotypeRelationTable<T
 }
 
 template<class T>
-MonotypeRelationTable<T> RelationsUtility<T>::findTransitiveClosure(const MonotypeRelationTable<T>& table) {
+MonotypeRelationTable<T> RelationTableUtility<T>::findTransitiveClosure(const MonotypeRelationTable<T>& table) {
 	std::unordered_set<T> calculated_dfs_forward;
 	MonotypeRelationTable<T> res = copy(table);
 	std::vector<T> keys = res.getKeys();
@@ -122,7 +122,7 @@ MonotypeRelationTable<T> RelationsUtility<T>::findTransitiveClosure(const Monoty
 }
 
 template<class T>
-MonotypeRelationTable<T> RelationsUtility<T>::copy(const MonotypeRelationTable<T>& table) {
+MonotypeRelationTable<T> RelationTableUtility<T>::copy(const MonotypeRelationTable<T>& table) {
 	MonotypeRelationTable<T> res;
 	for (auto const& pair : table.getPairs()) {
 		T key = pair.first;

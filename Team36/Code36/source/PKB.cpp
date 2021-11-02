@@ -7,7 +7,7 @@
 #include "Common.h"
 #include "RelationTable.h"
 #include "RelationTable.cpp"
-#include "RelationsUtility.cpp"
+#include "RelationTableUtility.cpp"
 
 PKB& PKB::getInstance() {
 	static PKB pkb;
@@ -254,15 +254,15 @@ void PKB::addCFGBip(CFG* new_cfg) {
 }
 
 void PKB::generateParentT() {
-	parentT_table = RelationsUtility<StmtInfo>::findTransitiveClosure(parent_table);
+	parentT_table = RelationTableUtility<StmtInfo>::findTransitiveClosure(parent_table);
 }
 
 void PKB::generateFollowsT() {
-	followsT_table = RelationsUtility<StmtInfo>::findTransitiveClosure(follows_table);
+	followsT_table = RelationTableUtility<StmtInfo>::findTransitiveClosure(follows_table);
 }
 
 void PKB::generateCallsPT() {
-	callsPT_table = RelationsUtility<proc_name>::findTransitiveClosure(callsP_table);
+	callsPT_table = RelationTableUtility<proc_name>::findTransitiveClosure(callsP_table);
 }
 
 void PKB::resetCache() {

@@ -99,15 +99,15 @@ namespace UnitTesting {
 		};
 		RelationTable<StmtInfo, var_name> test_modifiesS_table = RelationTable<StmtInfo, var_name>(test_modifiesS_list);
 
-		proc_name sally = "Sally";
-		proc_name bill = "Bill";
-		proc_name mary = "Mary";
-		proc_name john = "John";
+		proc_name proc_sally = "Sally";
+		proc_name proc_bill = "Bill";
+		proc_name proc_mary = "Mary";
+		proc_name proc_john = "John";
 
 		std::vector<std::pair<proc_name, stmt_index>> test_procS_list = {
-			{sally, 1}, {sally, 2}, {sally, 3}, {bill, 4}, {bill, 5},
-			{bill, 6}, {bill, 7}, {bill, 8}, {mary, 9}, {mary, 10},
-			{mary, 11}, {john, 12}, {john, 13}, {john, 14}, {john, 15}
+			{proc_sally, 1}, {proc_sally, 2}, {proc_sally, 3}, {proc_bill, 4}, {proc_bill, 5},
+			{proc_bill, 6}, {proc_bill, 7}, {proc_bill, 8}, {proc_mary, 9}, {proc_mary, 10},
+			{proc_mary, 11}, {proc_john, 12}, {proc_john, 13}, {proc_john, 14}, {proc_john, 15}
 		};
 
 		RelationTable<proc_name, stmt_index> test_procS_table = RelationTable<proc_name, stmt_index>(test_procS_list);
@@ -117,14 +117,7 @@ namespace UnitTesting {
 		AffectsBipPreprocessor processor = AffectsBipPreprocessor(test_next_table,
 			test_usesS_table, test_modifiesS_table, test_procS_table, first_proglines, stmt_list);
 
-		virtual void SetUp() override {
-			// Code here will be called immediately after the constructor (right
-			// before each test).
-		}
-
 		void TearDown() override {
-			// Code here will be called immediately after each test (right
-			// before the destructor).
 			processor.reset();
 		}
 	};
@@ -147,10 +140,10 @@ namespace UnitTesting {
 		std::set_difference(stmt_list.begin(), stmt_list.end(), true_list.begin(), true_list.end(), std::inserter(false_list, false_list.begin()));
 
 		for (auto& stmt : true_list) {
-			EXPECT_TRUE(processor.evaluateConstantAndWild(stmt.stmt_index)) << "Expected true but fail at " << stmt.stmt_index;
+			EXPECT_TRUE(processor.evaluateConstantAndWild(stmt.stmt_index));
 		}
 		for (auto& stmt : false_list) {
-			EXPECT_FALSE(processor.evaluateConstantAndWild(stmt.stmt_index)) << "Expected false but fail at " << stmt.stmt_index;
+			EXPECT_FALSE(processor.evaluateConstantAndWild(stmt.stmt_index));
 		}
 	}
 
@@ -168,10 +161,10 @@ namespace UnitTesting {
 		std::set_difference(stmt_list.begin(), stmt_list.end(), true_list.begin(), true_list.end(), std::inserter(false_list, false_list.begin()));
 
 		for (auto& stmt : true_list) {
-			EXPECT_TRUE(processor.evaluateWildAndConstant(stmt.stmt_index)) << "Expected true but fail at " << stmt.stmt_index;
+			EXPECT_TRUE(processor.evaluateWildAndConstant(stmt.stmt_index));
 		}
 		for (auto& stmt : false_list) {
-			EXPECT_FALSE(processor.evaluateWildAndConstant(stmt.stmt_index)) << "Expected false but fail at " << stmt.stmt_index;
+			EXPECT_FALSE(processor.evaluateWildAndConstant(stmt.stmt_index));
 		}
 	}
 
@@ -327,10 +320,10 @@ namespace UnitTesting {
 		std::set_difference(stmt_list.begin(), stmt_list.end(), true_list.begin(), true_list.end(), std::inserter(false_list, false_list.begin()));
 
 		for (auto& stmt : true_list) {
-			EXPECT_TRUE(processor.evaluateConstantAndWild(stmt.stmt_index)) << "Expected true but fail at " << stmt.stmt_index;
+			EXPECT_TRUE(processor.evaluateConstantAndWild(stmt.stmt_index));
 		}
 		for (auto& stmt : false_list) {
-			EXPECT_FALSE(processor.evaluateConstantAndWild(stmt.stmt_index)) << "Expected false but fail at " << stmt.stmt_index;
+			EXPECT_FALSE(processor.evaluateConstantAndWild(stmt.stmt_index));
 		}
 
 		// (s1, _)
