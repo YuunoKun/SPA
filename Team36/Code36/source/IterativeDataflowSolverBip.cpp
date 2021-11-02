@@ -53,23 +53,30 @@ std::vector<std::pair<LabelledProgLine, LabelledProgLine>> IterativeDataflowSolv
 std::vector<std::pair<LabelledProgLine, LabelledProgLine>> IterativeDataflowSolverBip::findResults() {
 	std::vector<std::pair<LabelledProgLine, LabelledProgLine>> res;
 	for (auto& progline : labelled_progline_list) {
-		StmtInfo statement_affected = stmt_info_list[progline.program_line - 1];
+		StmtInfo statement_affected = getStmt(progline.program_line);
 		if (statement_affected.stmt_type != STMT_ASSIGN) {
 			continue;
 		}
 		for (auto& tuple : in_list[progline]) {
-			LabelledProgLine affecting_progline = tuple.labelled_prog_line;
-			StmtInfo statement_affecting = stmt_info_list[affecting_progline.program_line - 1];
-			for (auto& var_used : useS_table->getValues(statement_affected)) {
-				bool var_matched = tuple.var_name == var_used;
-				if (var_matched) {
-					res.push_back({ affecting_progline, progline });
-					break;
-				}
+			if (checkIfTupleAffects(tuple, progline)) {
+				res.push_back({ tuple.labelled_prog_line, progline });
 			}
 		}
 	}
 	return res;
+}
+
+bool IterativeDataflowSolverBip::checkIfTupleAffects(LabelledModifiesTuple tuple, LabelledProgLine affected) {
+	LabelledProgLine affecting_progline = tuple.labelled_prog_line;
+	StmtInfo statement_affecting = getStmt(affecting_progline.program_line);
+	StmtInfo statement_affected = getStmt(affected.program_line);
+	for (auto& var_used : useS_table->getValues(statement_affected)) {
+		bool var_matched = tuple.var_name == var_used;
+		if (var_matched) {
+			return true;
+		}
+	}
+	return false;
 }
 
 std::vector<LabelledProgLine> IterativeDataflowSolverBip::getProgLines(stmt_index index) {
@@ -82,14 +89,19 @@ std::vector<LabelledProgLine> IterativeDataflowSolverBip::getProgLines(stmt_inde
 	return res;
 }
 
+StmtInfo IterativeDataflowSolverBip::getStmt(stmt_index index) {
+	return stmt_info_list[index - 1];
+}
+
 void IterativeDataflowSolverBip::updateKillGenList(stmt_index index, var_name var, bool is_assign) {
 	std::vector<StmtInfo> other_stmts_modify_var = modifiesS_table->getKeys(var);
 	std::vector<LabelledProgLine> curr_prog_lines = getProgLines(index);
 	for (auto& other_stmt : other_stmts_modify_var) {
 		std::vector<LabelledProgLine> other_prog_lines = getProgLines(other_stmt.stmt_index);
 		for (auto& other_prog_line : other_prog_lines) {
-			if (stmt_info_list[other_prog_line.program_line - 1].stmt_type == STMT_ASSIGN)
+			if (stmt_info_list[other_prog_line.program_line - 1].stmt_type == STMT_ASSIGN) {
 				kill_list[index - 1].emplace(LabelledModifiesTuple{ other_prog_line, var });
+			}
 		}
 	}
 	if (is_assign) {
@@ -105,12 +117,13 @@ void IterativeDataflowSolverBip::populateDataflowSets() {
 	}
 
 	for (auto& s : stmt_info_list) {
-		if (s.stmt_type == STMT_ASSIGN || s.stmt_type == STMT_READ) {
-			std::vector<var_name> var_modified_by_s = modifiesS_table->getValues(s);
-			for (auto& var : var_modified_by_s) {
-				bool is_assign = s.stmt_type == STMT_ASSIGN;
-				updateKillGenList(s.stmt_index, var, is_assign);
-			}
+		if (s.stmt_type != STMT_ASSIGN && s.stmt_type != STMT_READ) {
+			continue;
+		}
+		std::vector<var_name> var_modified_by_s = modifiesS_table->getValues(s);
+		for (auto& var : var_modified_by_s) {
+			bool is_assign = s.stmt_type == STMT_ASSIGN;
+			updateKillGenList(s.stmt_index, var, is_assign);
 		}
 	}
 	for (auto& progline : labelled_progline_list) {
@@ -145,12 +158,6 @@ void IterativeDataflowSolverBip::processOutSet(LabelledProgLine index) {
 		kill_list[index.program_line - 1].begin(), kill_list[index.program_line - 1].end(),
 		std::inserter(out_list[index], out_list[index].begin()));
 
-	//StmtInfo s = stmt_info_list[index.program_line];
-	//if (s.stmt_type == STMT_ASSIGN) {
-	//	LabelledModifiesTuple tuple = { index, modifiesS_table->getValues(s)[0] };
-	//	out_list[index].insert(tuple);
-	//}
-
 	std::set_union(new_out_list.begin(), new_out_list.end(),
 		gen_list[index].begin(), gen_list[index].end(),
 		std::inserter(out_list[index], out_list[index].begin()));
@@ -167,4 +174,9 @@ void IterativeDataflowSolverBip::resetInList() {
 void IterativeDataflowSolverBip::reset() {
 	resetOutList();
 	resetInList();
+	gen_list.clear();
+	kill_list.clear();
+	pred_list.clear();
+	succ_list.clear();
+	is_dataflow_sets_populated = false;
 }

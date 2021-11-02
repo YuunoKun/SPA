@@ -54,8 +54,17 @@ private:
 	void processOutSet(int index);
 	void resetOutList();
 	void resetInList();
+	void resetKillList();
+	void resetGenList();
+	void resetPredList();
+	void resetSuccList();
 
 	std::vector<std::pair<StmtInfo, StmtInfo>> findResults(std::set<stmt_index>);
+	bool checkIfTupleAffects(ModifiesTuple, stmt_index);
+	bool checkIfAffecting(stmt_index index, stmt_index affecting_stmt);
+	bool checkIfAffected(stmt_index);
+	void addSuccessorsToWorklist(stmt_index, std::queue<stmt_index>&);
+	StmtInfo getStmt(stmt_index);
 
 	bool is_dataflow_sets_populated = false;
 

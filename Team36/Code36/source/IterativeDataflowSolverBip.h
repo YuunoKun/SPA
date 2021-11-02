@@ -54,7 +54,9 @@ private:
 	void updateKillGenList(stmt_index index, var_name var, bool is_assign);
 
 	std::vector<LabelledProgLine> getProgLines(stmt_index index);
+	StmtInfo getStmt(stmt_index index);
 	std::vector<std::pair<LabelledProgLine, LabelledProgLine>> findResults();
+	bool checkIfTupleAffects(LabelledModifiesTuple, LabelledProgLine);
 
 	std::vector<std::set<LabelledModifiesTuple>> kill_list;
 	std::unordered_map<LabelledProgLine, std::set<LabelledModifiesTuple>> gen_list;
