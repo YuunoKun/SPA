@@ -102,7 +102,7 @@ namespace SourceProcessor {
 
 	constexpr char* TOKENVALUE_PLACEHOLDER = "";
 
-	// Valid keywords
+	// Valid keywords for tokenizer
 	constexpr char* KEYWORD_PROCEDURE = "procedure";
 	constexpr char* KEYWORD_READ = "read";
 	constexpr char* KEYWORD_PRINT = "print";
@@ -113,7 +113,7 @@ namespace SourceProcessor {
 	constexpr char* KEYWORD_ELSE = "else";
 
 
-	// Valid symbols
+	// Valid symbols for tokenizer
 	constexpr char SYMBOL_SPACE = ' ';
 	constexpr char SYMBOL_TAB = '	';
 	constexpr char SYMBOL_PLUS_SIGN = '+';
@@ -135,18 +135,18 @@ namespace SourceProcessor {
 	constexpr char SYMBOL_SEMICOLON = ';';
 
 
-	const stmt_index INIT_DIRECT_PARENT = 0;
-	const stmt_index INIT_STMT_LIST_NO = 0;
 
-
-	const stmt_index INIT_STATEMENT_NO = 0;
-	const proc_index INIT_PROCEDURE_NO = 0;
-	const stmt_index INIT_STMT_LIST_NO = 1;
-
-	const stmt_index NON_EXISTING_STATEMENT = 0;
-	const stmt_index NON_EXISTING_PROCEDURE = 0;
+	const stmt_index STMT_DEFAULT_DIRECT_PARENT = 0;
+	const stmt_index STMT_DEFAULT_STMT_LIST_NO = 0;
+	const stmt_index DE_INIT_STMT_NO = 0;
+	const proc_index DE_INIT_PROC_NO = 0;
+	const stmt_index DE_INIT_STMT_LIST_NO = 1;
+	const stmt_index NON_EXISTING_STMT_NO = 0;
+	const stmt_index NON_EXISTING_PROC_NO = 0;
 
 	// Array index start from 0, but stmt and proc start from OFFSET
 	const size_t OFFSET = 1;
+
+	const size_t IF_STMT_BRANCH_NO = 2;
 
 }// namespace SourceProcessor

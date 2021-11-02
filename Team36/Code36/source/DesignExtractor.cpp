@@ -9,9 +9,9 @@
 using namespace SourceProcessor;
 
 DesignExtractor::DesignExtractor() {
-	curr_proc_id = INIT_PROCEDURE_NO;
-	curr_stmt_id = INIT_STATEMENT_NO;
-	curr_stmt_list_id = INIT_STMT_LIST_NO;
+	curr_proc_id = DE_INIT_PROC_NO;
+	curr_stmt_id = DE_INIT_STMT_NO;
+	curr_stmt_list_id = DE_INIT_STMT_LIST_NO;
 	is_cond_expr = false;
 }
 
@@ -83,7 +83,7 @@ void DesignExtractor::addStatement(TokenType token_type) {
 	}
 
 	curr_stmt_id++;
-	Statement* stmt = new Statement(curr_stmt_id, stmt_type, de_procedures[curr_proc_id - 1]->getName(), curr_stmt_list_id);
+	Statement* stmt = new Statement(curr_stmt_id, stmt_type, de_procedures[curr_proc_id - OFFSET]->getName(), curr_stmt_list_id);
 
 	if (!curr_nesting_stk.empty() && curr_nesting_stk.top() != curr_stmt_id) {
 		stmt->setDirectParent(curr_nesting_stk.top());
@@ -193,18 +193,20 @@ void DesignExtractor::validate() {
 	}
 
 	// Validate cyclic calls
-	std::vector<proc_index> all_procedures(de_procedures.size(), 0);
+	const int INIT = 0;
+	const int DISQUALIFIED = -1;
+	std::vector<int> all_procedures(de_procedures.size(), INIT);
 
 	for (auto call : call_cache) {
 		all_procedures[call.first - OFFSET]++;
 	}
 
 	while (call_sequence.size() != all_procedures.size()) {
-		proc_index filtered_id = NON_EXISTING_PROCEDURE;
+		proc_index filtered_id = NON_EXISTING_PROC_NO;
 
 		for (size_t i = 0; i < all_procedures.size(); i++) {
-			if (all_procedures[i] == 0) {
-				filtered_id = i + 1;
+			if (all_procedures[i] == INIT) {
+				filtered_id = i + OFFSET;
 				call_sequence.push_back(filtered_id);
 				call_cache.erase(std::remove_if(call_cache.begin(), call_cache.end(),
 					[filtered_id, &all_procedures](std::pair<proc_index, proc_index> call) {
@@ -213,12 +215,12 @@ void DesignExtractor::validate() {
 						}
 						return call.second == filtered_id;
 					}), call_cache.end());
-				all_procedures[i] = -1;
+				all_procedures[i] = DISQUALIFIED;
 				break;
 			}
 		}
 
-		if (filtered_id == NON_EXISTING_PROCEDURE) {
+		if (filtered_id == NON_EXISTING_PROC_NO) {
 			throw std::runtime_error("Cyclic procedure calls detected.");
 		}
 	}
@@ -243,7 +245,7 @@ void DesignExtractor::populatePostValidation() {
 				}
 			}
 
-			if (s->getDirectParent() != 0) {
+			if (s->getDirectParent() != STMT_DEFAULT_DIRECT_PARENT) {
 				Statement* parent = de_statements[s->getDirectParent() - OFFSET];
 				for (auto used_var : s->getUsedVariable()) {
 					parent->addUsesVariable(used_var);
@@ -390,13 +392,13 @@ void DesignExtractor::populateNext(PKB& pkb) {
 		for (stmt_index s: de_procedures[p - OFFSET]->getChild()) {
 			Statement* stmt = de_statements[s - OFFSET];
 			if (stmt->getType() == StmtType::STMT_CALL) {
-				cfgs[p - 1]->call(cfgs[proc_name_to_id[stmt->getCallee()] - 1], s);
+				cfgs[p - OFFSET]->call(cfgs[proc_name_to_id[stmt->getCallee()] - OFFSET], s);
 			}
 		}
 	}
 
 	for (CFG* cfg: cfgs) {
-		if (cfg->getHeadLabelledProgLine().label == 0) {
+		if (cfg->getHeadLabelledProgLine().label == NON_EXISTING_STMT_NO) {
 			pkb.addCFGBip(cfg);
 		}
 	}
@@ -445,9 +447,7 @@ CFG* DesignExtractor::generateCFG(std::vector<stmt_index> indexes) {
 	}
 
 	for (size_t i = 0; i < main.size(); i++) {
-		prog_line curr, next;
-
-		curr = main[i];
+		prog_line curr = main[i], next;
 		if (i == main.size() - 1) {
 			next = indexes.back() + 1;
 		}
@@ -467,8 +467,8 @@ CFG* DesignExtractor::generateCFG(std::vector<stmt_index> indexes) {
 				split.insert(de_statements[child_id - OFFSET]->getStmtList());
 			}
 
-			if (split.size() != 2) {
-				throw std::runtime_error("CFG build failure. If statement not 2 splits.");
+			if (split.size() != IF_STMT_BRANCH_NO) {
+				throw std::runtime_error("CFG build failure. If statement has incorrect number of branches.");
 			}
 
 			stmt_index then_start = curr + 1;

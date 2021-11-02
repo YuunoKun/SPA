@@ -35,9 +35,9 @@ namespace SourceProcessor {
 		StmtType statement_type;
 		stmt_index statement_index;
 		proc_name under_procedure;
-		stmt_index statement_direct_parent{ INIT_DIRECT_PARENT };
+		stmt_index statement_direct_parent{ STMT_DEFAULT_DIRECT_PARENT };
 		std::vector<stmt_index> statement_direct_child;
-		int statement_list_no{ INIT_STMT_LIST_NO };
+		int statement_list_no{ STMT_DEFAULT_STMT_LIST_NO };
 		std::unordered_set<var_name> statement_uses;
 		std::unordered_set<var_name> statement_modifies;
 		std::unordered_set<var_name> statement_uses_cond;
