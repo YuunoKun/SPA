@@ -34,9 +34,6 @@ QueryPreprocessor::QueryPreprocessor() {
 	// Collection of declared query tokens
 	this->output.clear();
 
-	// Collection of selected query tokens
-	this->selected.clear();
-
 	// To keep track of parameter content in such that and pattern clauses
 	this->parameterClause.clear();
 
@@ -403,15 +400,9 @@ void QueryPreprocessor::addPatternToQuery(QueryToken& token) {
 	QueryValidator queryValidator;
 	queryValidator.isExpectingIdentifier(token);
 	bool isValid = false;
-	for (QueryToken each : output) {
-		if (token.token_value == each.token_value) {
-			Synonym synonym;
-			synonym.name = token.token_value;
-			EntityType entityType = Utility::queryTokenTypeToEntityType(each.type);
-			patternTypeEntity = { entityType, synonym };
-			isValid = true;
-		}
-	}
+
+	QueryPreprocessor::updateEntityType(token, patternTypeEntity, isValid);
+
 	if (!isValid) {
 		this->query.setIsSemanticError("Pattern type has not been declared");
 	}
@@ -421,16 +412,7 @@ void QueryPreprocessor::addSelectedToQuery(QueryToken& token) {
 	Entity ent;
 	bool isValid = false;
 
-	for (QueryToken each : this->output) {
-		if (token.token_value == each.token_value) {
-			selected.push_back({ each.type, token.token_value });
-			Synonym synonym;
-			synonym.name = token.token_value;
-			EntityType entityType = Utility::queryTokenTypeToEntityType(each.type);
-			ent = { entityType, synonym };
-			isValid = true;
-		}
-	}
+	QueryPreprocessor::updateEntityType(token, ent, isValid);
 
 	if (!isValid && token.token_value == "BOOLEAN" && this->query.getSelected().size() == 0) {
 		ent = { EntityType::BOOLEAN };
@@ -442,6 +424,18 @@ void QueryPreprocessor::addSelectedToQuery(QueryToken& token) {
 	}
 	else {
 		this->query.addSelected(ent);
+	}
+}
+
+void QueryPreprocessor::updateEntityType(QueryToken& token, Entity& ent, bool& isValid) {
+	for (QueryToken declaredToken : this->output) {
+		if (token.token_value == declaredToken.token_value) {
+			Synonym synonym;
+			synonym.name = token.token_value;
+			EntityType entityType = Utility::queryTokenTypeToEntityType(declaredToken.type);
+			ent = { entityType, synonym };
+			isValid = true;
+		}
 	}
 }
 
@@ -516,7 +510,6 @@ void QueryPreprocessor::resetQuery() {
 	this->isExpectingAttribute = false;
 	this->endOfCurrentClauses = true;
 	output.clear();
-	selected.clear();
 	parameterClause.clear();
 	this->prevToken = QueryToken();
 	this->declarationType = QueryToken();

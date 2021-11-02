@@ -33,7 +33,6 @@ private:
 	bool isExpectingAttribute;
 	bool endOfCurrentClauses;
 	std::vector<QueryToken> output;
-	std::vector<QueryToken> selected;
 	std::vector<QueryToken> parameterClause;
 	QueryToken prevToken;
 	QueryToken declarationType;
@@ -76,6 +75,8 @@ private:
 	void addSelectedToQuery(QueryToken&);
 
 	void addPatternToQuery(QueryToken&);
+
+	void updateEntityType(QueryToken&, Entity& ent, bool&);
 
 	void setQueryParameter();
 
