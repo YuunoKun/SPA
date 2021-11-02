@@ -148,9 +148,15 @@ void QueryValidator::isExpectingIdentifier(QueryToken& nextToken) {
 	}
 }
 
-void QueryValidator::validateNotAndPattern(QueryToken& nextToken) {
-	if (nextToken.token_value == "pattern") {
-		throw SyntacticErrorException("Expecting pattern identifier token");
+void QueryValidator::validateNotAndPattern(QueryToken& nextToken, std::vector<QueryToken>& output) {
+	bool patternDeclared = false;
+	for (QueryToken declaredToken : output) {
+		if (declaredToken.token_value == "pattern") {
+			patternDeclared = true;
+		}
+	}
+	if (nextToken.token_value == "pattern" && !patternDeclared) {
+		throw SyntacticErrorException("and pattern is syntactically valid unless pattern is a declared synonym");
 	}
 }
 

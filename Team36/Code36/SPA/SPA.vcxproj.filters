@@ -126,9 +126,6 @@
     <ClCompile Include="..\source\QueryToken.cpp">
       <Filter>Source Files\PQL\QueryPreprocessor</Filter>
     </ClCompile>
-    <ClCompile Include="..\source\QueryPreprocessor.cpp">
-      <Filter>Source Files\PQL\QueryPreprocessor</Filter>
-    </ClCompile>
     <ClCompile Include="..\source\Pattern.cpp">
       <Filter>Source Files\PQL\QueryObject</Filter>
     </ClCompile>
@@ -318,18 +315,18 @@
     <ClCompile Include="..\source\RelationPreprocessor.cpp">
       <Filter>Source Files\PKB\RelationPreprocessor</Filter>
     </ClCompile>
-	<ClCompile Include="..\source\AffectsBipParser.cpp">
-		<Filter>Source Files\PQL\QueryPreprocessor\QueryPatternRelRefParser</Filter>
-	</ClCompile>
-	<ClCompile Include="..\source\AffectsBipTParser.cpp">
-		<Filter>Source Files\PQL\QueryPreprocessor\QueryPatternRelRefParser</Filter>
-	</ClCompile>
-	<ClCompile Include="..\source\NextBipParser.cpp">
-		<Filter>Source Files\PQL\QueryPreprocessor\QueryPatternRelRefParser</Filter>
-	</ClCompile>
-	<ClCompile Include="..\source\NextBipTParser.cpp">
-		<Filter>Source Files\PQL\QueryPreprocessor\QueryPatternRelRefParser</Filter>
-	</ClCompile>
+    <ClCompile Include="..\source\AffectsBipParser.cpp">
+      <Filter>Source Files\PQL\QueryPreprocessor\QueryPatternRelRefParser</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\AffectsBipTParser.cpp">
+      <Filter>Source Files\PQL\QueryPreprocessor\QueryPatternRelRefParser</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\NextBipParser.cpp">
+      <Filter>Source Files\PQL\QueryPreprocessor\QueryPatternRelRefParser</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\NextBipTParser.cpp">
+      <Filter>Source Files\PQL\QueryPreprocessor\QueryPatternRelRefParser</Filter>
+    </ClCompile>
     <ClCompile Include="..\source\AffectsPreprocessor.cpp">
       <Filter>Source Files\PKB\RelationPreprocessor</Filter>
     </ClCompile>
@@ -344,6 +341,9 @@
     </ClCompile>
     <ClCompile Include="..\source\AffectsTPreprocessor.cpp">
       <Filter>Source Files\PKB\RelationPreprocessor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\QueryPreprocessor.cpp">
+      <Filter>Source Files\PQL\QueryPreprocessor</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -620,18 +620,18 @@
     <ClInclude Include="..\source\RelationPreprocessor.h">
       <Filter>Header Files\PKB\RelationPreprocessor</Filter>
     </ClInclude>
-	<ClInclude Include="..\source\AffectsBipParser.h">
-		<Filter>Header Files\PQL\QueryPreprocessor\QueryPatternRelRefParser</Filter>
-	</ClInclude>
-	<ClInclude Include="..\source\AffectsBipTParser.h">
-		<Filter>Header Files\PQL\QueryPreprocessor\QueryPatternRelRefParser</Filter>
-	</ClInclude>
-	<ClInclude Include="..\source\NextBipParser.h">
-		<Filter>Header Files\PQL\QueryPreprocessor\QueryPatternRelRefParser</Filter>
-	</ClInclude>
-	<ClInclude Include="..\source\NextBipTParser.h">
-		<Filter>Header Files\PQL\QueryPreprocessor\QueryPatternRelRefParser</Filter>
-	</ClInclude>
+    <ClInclude Include="..\source\AffectsBipParser.h">
+      <Filter>Header Files\PQL\QueryPreprocessor\QueryPatternRelRefParser</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\AffectsBipTParser.h">
+      <Filter>Header Files\PQL\QueryPreprocessor\QueryPatternRelRefParser</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\NextBipParser.h">
+      <Filter>Header Files\PQL\QueryPreprocessor\QueryPatternRelRefParser</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\NextBipTParser.h">
+      <Filter>Header Files\PQL\QueryPreprocessor\QueryPatternRelRefParser</Filter>
+    </ClInclude>
     <ClInclude Include="..\source\AffectsPreprocessor.h">
       <Filter>Header Files\PKB\RelationPreprocessor</Filter>
     </ClInclude>

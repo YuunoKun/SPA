@@ -24,7 +24,7 @@ public:
 
 	void isExpectingIdentifier(QueryToken&);
 
-	void validateNotAndPattern(QueryToken&);
+	void validateNotAndPattern(QueryToken&, std::vector<QueryToken>&);
 
 	void validateNotSuchThat(QueryToken&);
 };

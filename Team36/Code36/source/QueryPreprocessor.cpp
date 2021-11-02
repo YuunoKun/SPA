@@ -195,7 +195,7 @@ void QueryPreprocessor::handleAnd() {
 	QueryValidator queryValidator = QueryValidator();
 	queryValidator.validateAnd(patternOrSuchThat);
 	if (patternOrSuchThat.type == QueryToken::QueryTokenType::PATTERN) {
-		queryValidator.validateNotAndPattern(nextToken);
+		queryValidator.validateNotAndPattern(nextToken, output);
 		isExpectingPatternType = true;
 	}
 	else if (patternOrSuchThat.type == QueryToken::QueryTokenType::WITH) {
@@ -303,7 +303,11 @@ void QueryPreprocessor::handleAddParameterTokensAndParseWith(QueryToken& token) 
 }
 
 void QueryPreprocessor::checkParseWith() {
-	if (patternOrSuchThat.type == QueryToken::QueryTokenType::WITH && (this->nextToken.type == QueryToken::QueryTokenType::WHITESPACE || this->nextToken.token_value == "and")) {
+	if (patternOrSuchThat.type == QueryToken::QueryTokenType::WITH &&
+		(this->nextToken.type == QueryToken::QueryTokenType::WHITESPACE ||
+			this->nextToken.token_value == "and" ||
+			this->nextToken.token_value == "pattern" ||
+			this->nextToken.type == QueryToken::QueryTokenType::SUCH_THAT)) {
 		QueryPatternRelRefParser validator;
 		validator.parseWith(query, parameterClause);
 		parameterClause.clear();
