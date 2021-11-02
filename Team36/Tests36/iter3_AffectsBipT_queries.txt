@@ -1,0 +1,150 @@
+1 - LHS integer, RHS integer
+assign a;
+Select a such that AffectsBip*(1, 13)
+1, 2, 3, 5, 6, 8, 12, 13, 16, 20, 26
+5000
+2 - LHS integer, RHS integer
+assign a;
+Select a such that AffectsBip*(6, 16)
+none
+5000
+3 - LHS integer, RHS synonym
+assign a;
+Select a such that AffectsBip*(3, a)
+6, 8, 12, 13, 20, 26
+5000
+4 - LHS synonym, RHS integer
+assign a;
+Select a such that AffectsBip*(a, 26)
+1, 3, 5, 20
+5000
+5 - LHS synonym, RHS synonym
+assign a1, a2;
+Select a1 such that AffectsBip*(a1, a2)
+1, 2, 3, 6, 8, 20
+5000
+6 - LHS synonym, RHS synonym
+assign a1, a2;
+Select a2 such that AffectsBip*(a1, a2)
+6, 13, 16, 26, 5, 8, 20, 12
+5000
+7 - LHS synonym, RHS synonym tuple
+assign a1, a2;
+Select <a1, a2> such that AffectsBip*(a1, a2)
+1 6, 1 13, 1 16, 1 26, 2 5, 2 6, 3 6, 3 8, 3 12, 3 13, 3 20, 3 26, 5 6, 5 13, 5 16, 5 26, 6 13, 8 12, 20 26
+5000
+8 - LHS wildcard, RHS wildcard
+assign a;
+Select a such that AffectsBip*(_, _)
+1, 2, 3, 5, 6, 8, 12, 13, 16, 20, 26
+5000
+9 - LHS integer, RHS wildcard
+assign a;
+Select a such that AffectsBip*(1, _)
+1, 2, 3, 5, 6, 8, 12, 13, 16, 20, 26
+5000
+10 - LHS wildcard, RHS integer
+assign a;
+Select a such that AffectsBip*(_, 3)
+none
+5000
+11 - LHS synonym, RHS wildcard
+assign a;
+Select a such that AffectsBip*(a, _)
+1, 2, 3, 6, 8, 20
+5000
+12 - LHS wildcard, RHS synonym
+assign a;
+Select a such that AffectsBip*(_, a)
+6, 13, 16, 26, 5, 8, 20, 12
+5000
+13 - LHS assign, RHS stmt
+assign a; stmt s;
+Select a such that AffectsBip*(a, s)
+1, 2, 3, 6, 8, 20
+5000
+14 - LHS assign, RHS prog_line
+assign a; prog_line n;
+Select a such that AffectsBip*(a, n)
+1, 2, 3, 6, 8, 20
+5000
+15 - LHS assign, RHS read, wrong param type
+assign a; read r;
+Select a such that AffectsBip*(a, r)
+none
+5000
+16 - LHS assign, RHS print, wrong param type
+assign a; print pn;
+Select a such that AffectsBip*(a, pn)
+none
+5000
+17 - LHS assign, RHS while, wrong param type
+assign a; while w;
+Select a such that AffectsBip*(a, w)
+none
+5000
+18 - LHS assign, RHS if, wrong param type
+assign a; if ifs;
+Select a such that AffectsBip*(a, ifs)
+none
+5000
+19 - LHS assign, RHS call, wrong param type
+assign a; call c;
+Select a such that AffectsBip*(a, c)
+none
+5000
+20 - LHS stmt, RHS assign
+assign a; stmt s;
+Select a such that AffectsBip*(s, a)
+6, 13, 16, 26, 5, 8, 20, 12
+5000
+21 - LHS prog_line, RHS assign
+assign a; prog_line n;
+Select a such that AffectsBip*(n, a)
+6, 13, 16, 26, 5, 8, 20, 12
+5000
+22 - LHS read, RHS assign, wrong param type
+assign a; read r;
+Select a such that AffectsBip*(r, a)
+none
+5000
+23 - LHS print, RHS assign, wrong param type
+assign a; print pn;
+Select a such that AffectsBip*(pn, a)
+none
+5000
+24 - LHS while, RHS assign, wrong param type
+assign a; while w;
+Select a such that AffectsBip*(w, a)
+none
+5000
+25 - LHS if, RHS assign, wrong param type
+assign a; if ifs;
+Select a such that AffectsBip*(ifs, a)
+none
+5000
+26 - LHS call, RHS assign, wrong param type
+assign a; call c;
+Select a such that AffectsBip*(c, a)
+none
+5000
+27 - wrong param type, procedure
+procedure p; assign a;
+Select a such that AffectsBip*(p, a)
+none
+5000
+28 - wrong param type, constant
+constant c; assign a;
+Select a such that AffectsBip*(c, a)
+none
+5000
+29 - LHS stmt, RHS stmt
+stmt s1, s2;
+Select s1 such that AffectsBip*(s1, s2)
+1, 2, 3, 6, 8, 20
+5000
+30 - LHS prog_line, RHS prog_line
+prog_line n1, n2;
+Select n1 such that AffectsBip*(n1, n2)
+1, 2, 3, 6, 8, 20
+5000

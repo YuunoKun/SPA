@@ -423,3 +423,178 @@ assign a; prog_line n;
 Select n with a.stmt# = n
 2, 3, 10, 15, 17, 22, 26, 34, 35, 39, 41, 48
 5000
+86 - select p.procName
+procedure p;
+Select p.procName with p.procName = "myFirst"
+myFirst
+5000
+87 - select c.procName
+call c;
+Select c.procName with c.procName = "mySecond"
+7, 47
+5000
+88 - select v.varName
+variable v;
+Select v.varName with v.varName = "a"
+a
+5000
+89 - select r.varName
+read r;
+Select r.varName with r.varName = "a"
+1
+5000
+90 - select pn.varName
+print pn;
+Select pn.varName with pn.varName = "k"
+40
+5000
+91 - select c1.value
+constant c1;
+Select c1.value with c1.value = 0
+0
+5000
+92 - select s.stmt#
+stmt s;
+Select s.stmt# with s.stmt# = 5
+5
+5000
+93 - select r.stmt#
+read r;
+Select r.stmt# with r.stmt# = 33
+33
+5000
+94 - select pn.stmt#
+print pn;
+Select pn.stmt# with pn.stmt# = 36
+36
+5000
+95 - select c.stmt#
+call c;
+Select c.stmt# with c.stmt# = 32
+32
+5000
+96 - select w.stmt#
+while w;
+Select w.stmt# with w.stmt# = 30
+30
+5000
+97 - select ifs.stmt#
+if ifs;
+Select ifs.stmt# with ifs.stmt# = 42
+42
+5000
+98 - select a.stmt#
+assign a;
+Select a.stmt# with a.stmt# = 3
+3
+5000
+99 - invalid p.stmt#
+procedure p;
+Select p.stmt# with p.stmt# = 5
+none
+5000
+100 - invalid c1.stmt#
+constant c1;
+Select c1.stmt# with c1.stmt# = 5
+none
+5000
+101 - invalid c1.varName
+constant c1;
+Select c1.varName with c1.varName = "a"
+none
+5000
+102 - invalid p.value
+procedure p;
+Select p.value with p.value = 6
+none
+5000
+103 - invalid c.value
+call c;
+Select c.value with c.value = 8
+none
+5000
+104 - invalid v.value
+variable v;
+Select v.value with v.value = 0
+none
+5000
+105 - invalud r.value
+read r;
+Select r.value with r.value = 9
+none
+5000
+106 - invalid pn.value
+print pn;
+Select pn.value with pn.value = 5
+none
+5000
+107 - invalid w.value
+while w;
+Select w.value with w.value = 1
+none
+5000
+108 - invalid ifs.value
+if ifs;
+Select ifs.value with ifs.value = 5
+none
+5000
+109 - invalid a.value
+assign a;
+Select a.value with a.value = 0
+none
+5000
+110 - invalid s.procName
+stmt s;
+Select s.procName with s.procName = "myFirst"
+none
+5000
+111 - invalid s.varName
+stmt s;
+Select s.varName with s.varName = "a"
+none
+5000
+112 - invalid r.procName
+read r;
+Select r.procName with r.procName = "myFirst"
+none
+5000
+113 - invalid pn.procName
+print pn;
+Select pn.procName with pn.procName = "myFirst"
+none
+5000
+114 - invalid c.varName
+call c;
+Select c.varName with c.varName = "a"
+none
+5000
+115 - invalid w.varName
+while w;
+Select w.varName with w.varName = "a"
+none
+5000
+116 - invalid w.procName
+while w;
+Select w.procName with w.procName = "myFirst"
+none
+5000
+117 - invalid ifs.varName
+if ifs;
+Select ifs.varName with ifs.varName = "a"
+none
+5000
+118 - invalid ifs.procname
+if ifs;
+Select ifs.procName with ifs.procName = "myFirst"
+none
+5000
+119 - invalid a.procName
+assign a;
+Select a.procName with a.procName  = "myFirst"
+none
+5000
+120 - invalid a.varName
+assign a;
+Select a.varName with a.varName = "a"
+none
+5000
