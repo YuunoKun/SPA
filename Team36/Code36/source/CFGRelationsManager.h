@@ -8,6 +8,8 @@
 #include "NextTPreprocessor.h"
 #include "AffectsPreprocessor.h"
 #include "AffectsTPreprocessor.h"
+#include "AffectsBipPreprocessor.h"
+#include "AffectsBipTPreprocessor.h"
 
 class CFGRelationsManager {
 public:
@@ -85,15 +87,21 @@ public:
 	std::vector<StmtInfo> getAffectedBipT(stmt_index index);
 	std::vector<StmtInfo> getAffectingBipT(stmt_index index);
 
-	NextTPreprocessor getNextTProcessor();
-	AffectsPreprocessor getAffectsProcessor();
-	AffectsTPreprocessor getAffectsTProcessor();
+	NextTPreprocessor getNextTPreprocessor();
+	AffectsPreprocessor getAffectsPreprocessor();
+	AffectsTPreprocessor getAffectsTPreprocessor();
+	AffectsBipPreprocessor getAffectsBipPreprocessor();
+	AffectsBipTPreprocessor getAffectsBipTPreprocessor();
+	MonotypeRelationTable<LabelledProgLine> labelled_next_table;
 
 private:
-	NextTPreprocessor next_t_processor = NextTPreprocessor(PKB::getInstance().getNext(), PKB::getInstance().getStmts());
-	AffectsPreprocessor affects_processor = AffectsPreprocessor(
-		PKB::getInstance().getNext(), PKB::getInstance().getUsesS(), PKB::getInstance().getModifiesS(),
-		PKB::getInstance().getProcContains(), PKB::getInstance().getStmts());
-	AffectsTPreprocessor affectsT_processor = AffectsTPreprocessor(
-		affects_processor.getCache(), PKB::getInstance().getStmts());
+	NextTPreprocessor next_t_preprocessor;
+	AffectsPreprocessor affects_preprocessor;
+	AffectsTPreprocessor affectsT_preprocessor;
+	AffectsBipPreprocessor affects_bip_preprocessor;
+	AffectsBipTPreprocessor affects_bipT_preprocessor;
+
+	std::vector<LabelledProgLine> getFirstProgs();
+	const MonotypeRelationTable<LabelledProgLine>& getLabelledNextTable();
+	bool inSameProc(stmt_index index1, stmt_index index2);
 };

@@ -6,9 +6,8 @@
 #include "PKB.h"
 #include "Common.h"
 #include "RelationTable.h"
-// need to include this .cpp for template classes
 #include "RelationTable.cpp"
-#include "MonotypeRelationTable.cpp"
+#include "RelationTableUtility.cpp"
 
 PKB& PKB::getInstance() {
 	static PKB pkb;
@@ -247,7 +246,7 @@ void PKB::addProcContains(proc_name proc, stmt_index index) {
 }
 
 void PKB::addCFGsToDestroy(std::vector<CFG*> cfgs) {
-	cfgs_to_destroy = cfgs;
+	cfgs_to_destroy.insert(cfgs_to_destroy.end(), cfgs.begin(), cfgs.end());
 }
 
 void PKB::addCFGBip(CFG* new_cfg) {
@@ -255,15 +254,15 @@ void PKB::addCFGBip(CFG* new_cfg) {
 }
 
 void PKB::generateParentT() {
-	parentT_table = parent_table.findTransitiveClosure();
+	parentT_table = RelationTableUtility<StmtInfo>::findTransitiveClosure(parent_table);
 }
 
 void PKB::generateFollowsT() {
-	followsT_table = follows_table.findTransitiveClosure();
+	followsT_table = RelationTableUtility<StmtInfo>::findTransitiveClosure(follows_table);
 }
 
 void PKB::generateCallsPT() {
-	callsPT_table = callsP_table.findTransitiveClosure();
+	callsPT_table = RelationTableUtility<proc_name>::findTransitiveClosure(callsP_table);
 }
 
 void PKB::resetCache() {
@@ -290,10 +289,6 @@ void PKB::resetCache() {
 	print_table.clear();
 	expr_table.clear();
 	procS_table.clear();
-	for (auto& cfg : cfgs_to_destroy) {
-		delete cfg;
-	}
-	cfgs_to_destroy = {};
 	cfg_bips = {};
 }
 

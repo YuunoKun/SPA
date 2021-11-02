@@ -7,9 +7,9 @@
 #include "RelationTable.h"
 #include "RelationTable.cpp"
 #include "RelationPreprocessor.h"
-#include "IterativeDataflowSolver.h"
+#include "IterativeDataflowSolverBip.h"
 
-class AffectsPreprocessor : public RelationPreprocessor
+class AffectsBipPreprocessor : public RelationPreprocessor
 {
 public:
 	bool evaluateWildAndWild() override;
@@ -21,30 +21,27 @@ public:
 	std::vector<StmtInfo> evaluateSynonymAndWild() override;
 	std::vector<StmtInfo> evaluateConstantAndSynonym(int) override;
 	std::vector<StmtInfo> evaluateSynonymAndConstant(int) override;
-	std::vector<BooleanStatus> getAffecting();
-	std::vector<BooleanStatus> getAffected();
-	BooleanStatus isNonEmpty();
+	const MonotypeRelationTable<LabelledProgLine>& getLabelledProgLineCache();
 
 	void reset();
 	void fullyPopulate();
 
-	AffectsPreprocessor(
-		const MonotypeRelationTable<StmtInfo>& next_table,
+	AffectsBipPreprocessor(
+		const MonotypeRelationTable<LabelledProgLine>& next_table,
 		const RelationTable<StmtInfo, var_name>& useS_table,
 		const RelationTable<StmtInfo, var_name>& modifiesS_table,
 		const RelationTable<proc_name, stmt_index>& procS_table,
+		std::vector<LabelledProgLine>& first_proglines,
 		const std::vector<StmtInfo> v);
-	AffectsPreprocessor() = default;
+	AffectsBipPreprocessor() = default;
 private:
-	void updateCache(std::set<stmt_index>, std::vector<std::pair<StmtInfo, StmtInfo>>);
+	void updateCache(std::vector<std::pair<LabelledProgLine, LabelledProgLine>> results);
 
-	const MonotypeRelationTable<StmtInfo>* next_table;
+	const MonotypeRelationTable<LabelledProgLine>* next_table;
 	const RelationTable<StmtInfo, var_name>* useS_table;
 	const RelationTable<StmtInfo, var_name>* modifiesS_table;
 	const RelationTable<proc_name, stmt_index>* procS_table;
-	IterativeDataflowSolver solver;
+	IterativeDataflowSolverBip solver;
 
-	BooleanStatus is_non_empty = STATUS_UNKNOWN;
-	std::vector<BooleanStatus> is_affecting{};
-	std::vector<BooleanStatus> is_affected{};
+	MonotypeRelationTable<LabelledProgLine> labelled_progline_cache;
 };
