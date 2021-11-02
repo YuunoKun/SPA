@@ -161,7 +161,7 @@ std::list<Clause> QueryOptimizer::sortTwoSynonymClausesByCommonSynonym(std::list
 		}
 		else if (left_synonym_count == right_synonym_count && combine_synonym_count == right_synonym_count) {
 			two_common_synonym_clauses.emplace_back(c);
-		}else {
+		} else {
 			one_common_synonym_clauses.emplace_back(c);
 		}
 		count++;
