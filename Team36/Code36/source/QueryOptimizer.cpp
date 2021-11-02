@@ -133,7 +133,7 @@ std::list<Clause> QueryOptimizer::sortTwoSynonymClausesByCommonSynonym(std::list
 			std::unordered_map<std::string, int>::iterator it = synonym_count.find(name);
 			if (it != synonym_count.end()) {
 				it->second++;
-			}else {
+			} else {
 				synonym_count.insert(std::make_pair(name, 1));
 			}
 		}
