@@ -31,7 +31,7 @@ namespace UnitTesting {
 		delete cfg;
 	}
 
-	TEST(CFG, contains) {
+	TEST(CFG, findNode) {
 		CFG* cfg = new CFG();
 		std::vector<prog_line> v1 = { 1, 2, 3 };
 		std::vector<prog_line> v2 = { 5, 6 };
@@ -49,19 +49,12 @@ namespace UnitTesting {
 		cfg->add(v3[1]);
 
 		cfg->add(v4[0]);
-		
-		CFGNode* target1 = new CFGNode();
-		target1->setProgramLines(v1);
-		CFGNode* target2 = new CFGNode();
-		target2->setProgramLines(v3);
-		CFGNode* target3 = new CFGNode();
-		target3->setProgramLines(v4);
-		ASSERT_EQ(cfg->contains(cfg->getHead(), 3)->getProgramLines(), target1->getProgramLines());
-		ASSERT_EQ(cfg->contains(cfg->getHead(), 9)->getProgramLines(), target2->getProgramLines());
-		ASSERT_EQ(cfg->contains(cfg->getHead(), 12)->getProgramLines(), target3->getProgramLines());
+
+		ASSERT_EQ(cfg->findNode(cfg->getHead(), 3)->getProgramLines(), v1);
+		ASSERT_EQ(cfg->findNode(cfg->getHead(), 9)->getProgramLines(), v3);
+		ASSERT_EQ(cfg->findNode(cfg->getHead(), 12)->getProgramLines(), v4);
 
 		delete cfg;
-		delete target1, target2, target3;
 	}
 
 	TEST(CFG, loop) {
@@ -102,7 +95,7 @@ namespace UnitTesting {
 		ASSERT_EQ(cfg1->getHead()->getNextMain()->getNextMain()->getProgramLines(), target_node4->getProgramLines());
 		ASSERT_EQ(cfg1->getHead()->getNextMain()->getNextBranch()->getProgramLines(), target_node3->getProgramLines());
 		ASSERT_EQ(cfg1->getHead()->getNextMain()->getNextBranch()->getNextMain()->getProgramLines(), target_node2->getProgramLines());
-		ASSERT_EQ(cfg2->getTail()->getInvalid(), true);
+		ASSERT_EQ(cfg2->getTail()->isInvalid(), true);
 
 		delete target_node1, target_node2, target_node3, target_node4;
 		delete cfg1, cfg2;
@@ -155,8 +148,8 @@ namespace UnitTesting {
 		ASSERT_EQ(cfg1->getHead()->getNextMain()->getNextMain()->getNextMain()->getProgramLines(), target_node5->getProgramLines());
 		ASSERT_EQ(cfg1->getHead()->getNextMain()->getNextBranch()->getProgramLines(), target_node4->getProgramLines());
 		ASSERT_EQ(cfg1->getHead()->getNextMain()->getNextBranch()->getNextMain()->getProgramLines(), target_node5->getProgramLines());
-		ASSERT_EQ(cfg2->getTail()->getInvalid(), true);
-		ASSERT_EQ(cfg3->getTail()->getInvalid(), true);
+		ASSERT_EQ(cfg2->getTail()->isInvalid(), true);
+		ASSERT_EQ(cfg3->getTail()->isInvalid(), true);
 		ASSERT_EQ(cfg2->getHead(), nullptr);
 		ASSERT_EQ(cfg3->getHead(), nullptr);
 
@@ -394,7 +387,7 @@ namespace UnitTesting {
 
 		ASSERT_EQ(cfg_null->getHead()->getProgramLines().size(), 1);
 		ASSERT_EQ(cfg_null->getHead()->getProgramLines()[0], 1);
-		ASSERT_TRUE(cfg_null->getHead()->getNextMain()->getTermination());
+		ASSERT_TRUE(cfg_null->getHead()->getNextMain()->isTermination());
 		ASSERT_EQ(cfg_null->getHead()->getNextMain()->getPrev().front(), cfg_null->getHead());
 		delete cfg_null;
 
@@ -405,7 +398,7 @@ namespace UnitTesting {
 
 		ASSERT_EQ(cfg_def->getHead()->getProgramLines().size(), 1);
 		ASSERT_EQ(cfg_def->getHead()->getProgramLines()[0], 1);
-		ASSERT_TRUE(cfg_def->getHead()->getNextMain()->getTermination());
+		ASSERT_TRUE(cfg_def->getHead()->getNextMain()->isTermination());
 		ASSERT_EQ(ptr_def, cfg_def->getHead());
 		ASSERT_EQ(ptr_def->getNextMain()->getPrev().front(), ptr_def);
 		delete cfg_def;
@@ -420,7 +413,7 @@ namespace UnitTesting {
 		ASSERT_EQ(cfg1->getHead()->getNextMain()->getProgramLines().size(), 1);
 		ASSERT_EQ(cfg1->getHead()->getProgramLines()[0], 1);
 		ASSERT_EQ(cfg1->getHead()->getNextMain()->getProgramLines()[0], 2);
-		ASSERT_TRUE(cfg1->getHead()->getNextMain()->getNextMain()->getTermination());
+		ASSERT_TRUE(cfg1->getHead()->getNextMain()->getNextMain()->isTermination());
 		ASSERT_EQ(ptr1, cfg1->getHead());
 		ASSERT_EQ(ptr1->getNextMain()->getPrev().front(), ptr1);
 		delete cfg1;
@@ -435,7 +428,7 @@ namespace UnitTesting {
 		ASSERT_EQ(cfg2->getHead()->getNextMain()->getProgramLines().size(), 1);
 		ASSERT_EQ(cfg2->getHead()->getProgramLines()[0], 1);
 		ASSERT_EQ(cfg2->getHead()->getNextMain()->getProgramLines()[0], 2);
-		ASSERT_TRUE(cfg2->getHead()->getNextMain()->getNextMain()->getTermination());
+		ASSERT_TRUE(cfg2->getHead()->getNextMain()->getNextMain()->isTermination());
 		ASSERT_EQ(ptr2, cfg2->getHead()->getNextMain());
 		ASSERT_EQ(ptr2->getPrev().front(), cfg2->getHead());
 		ASSERT_EQ(ptr2->getNextMain()->getPrev().front(), ptr2);
@@ -453,7 +446,7 @@ namespace UnitTesting {
 		ASSERT_EQ(cfg3->getHead()->getProgramLines()[0], 1);
 		ASSERT_EQ(cfg3->getHead()->getNextMain()->getProgramLines()[0], 2);
 		ASSERT_EQ(cfg3->getHead()->getNextMain()->getProgramLines()[1], 3);
-		ASSERT_TRUE(cfg3->getHead()->getNextMain()->getNextMain()->getTermination());
+		ASSERT_TRUE(cfg3->getHead()->getNextMain()->getNextMain()->isTermination());
 		ASSERT_EQ(ptr3, cfg3->getHead());
 		ASSERT_EQ(ptr3->getNextMain()->getPrev().front(), ptr3);
 		ASSERT_EQ(ptr3->getNextMain()->getNextMain()->getPrev().front(), ptr3->getNextMain());
@@ -471,7 +464,7 @@ namespace UnitTesting {
 		ASSERT_EQ(cfg4->getHead()->getProgramLines()[0], 1);
 		ASSERT_EQ(cfg4->getHead()->getProgramLines()[1], 2);
 		ASSERT_EQ(cfg4->getHead()->getNextMain()->getProgramLines()[0], 3);
-		ASSERT_TRUE(cfg4->getHead()->getNextMain()->getNextMain()->getTermination());
+		ASSERT_TRUE(cfg4->getHead()->getNextMain()->getNextMain()->isTermination());
 		ASSERT_EQ(ptr4, cfg4->getHead()->getNextMain());
 		ASSERT_EQ(ptr4->getPrev().front(), cfg4->getHead());
 		ASSERT_EQ(ptr4->getNextMain()->getPrev().front(), ptr4);
@@ -490,7 +483,7 @@ namespace UnitTesting {
 		ASSERT_EQ(cfg5->getHead()->getProgramLines()[0], 1);
 		ASSERT_EQ(cfg5->getHead()->getNextMain()->getProgramLines()[0], 2);
 		ASSERT_EQ(cfg5->getHead()->getNextMain()->getNextMain()->getProgramLines()[0], 3);
-		ASSERT_TRUE(cfg5->getHead()->getNextMain()->getNextMain()->getNextMain()->getTermination());
+		ASSERT_TRUE(cfg5->getHead()->getNextMain()->getNextMain()->getNextMain()->isTermination());
 		ASSERT_EQ(ptr5, cfg5->getHead()->getNextMain());
 		ASSERT_EQ(ptr5->getPrev().front(), cfg5->getHead());
 		ASSERT_EQ(ptr5->getNextMain()->getPrev().front(), ptr5);
@@ -527,7 +520,7 @@ namespace UnitTesting {
 		ASSERT_EQ(cfg6->getHead()->getNextMain()->getNextMain()->getProgramLines()[1], 5);
 		ASSERT_EQ(cfg6_node6->getProgramLines()[0], 6);
 		ASSERT_EQ(cfg6->getHead()->getNextMain()->getNextMain()->getNextMain()->getProgramLines()[0], 7);
-		ASSERT_TRUE(cfg6->getHead()->getNextMain()->getNextMain()->getNextMain()->getNextMain()->getTermination());
+		ASSERT_TRUE(cfg6->getHead()->getNextMain()->getNextMain()->getNextMain()->getNextMain()->isTermination());
 		ASSERT_EQ(ptr6, cfg6->getHead()->getNextMain());
 
 		ASSERT_EQ(cfg6_node2->getNextMain(), cfg6->getHead()->getNextMain());
@@ -577,7 +570,7 @@ namespace UnitTesting {
 		ASSERT_EQ(cfg7->getHead()->getNextMain()->getNextMain()->getNextMain()->getProgramLines()[0], 5);
 		ASSERT_EQ(cfg7_node6->getProgramLines()[0], 6);
 		ASSERT_EQ(cfg7->getHead()->getNextMain()->getNextMain()->getNextMain()->getNextMain()->getProgramLines()[0], 7);
-		ASSERT_TRUE(cfg7->getHead()->getNextMain()->getNextMain()->getNextMain()->getNextMain()->getNextMain()->getTermination());
+		ASSERT_TRUE(cfg7->getHead()->getNextMain()->getNextMain()->getNextMain()->getNextMain()->getNextMain()->isTermination());
 		ASSERT_EQ(ptr7, cfg7->getHead()->getNextMain()->getNextMain());
 
 		ASSERT_EQ(cfg7_node2->getNextMain(), cfg7->getHead()->getNextMain()); // 2 -> 3
@@ -630,7 +623,7 @@ namespace UnitTesting {
 		ASSERT_EQ(cfg8->getHead()->getNextMain()->getNextMain()->getProgramLines()[0], 5);
 		ASSERT_EQ(cfg8_node6->getProgramLines()[0], 6);
 		ASSERT_EQ(cfg8->getHead()->getNextMain()->getNextMain()->getNextMain()->getProgramLines()[0], 7);
-		ASSERT_TRUE(cfg8->getHead()->getNextMain()->getNextMain()->getNextMain()->getNextMain()->getTermination());
+		ASSERT_TRUE(cfg8->getHead()->getNextMain()->getNextMain()->getNextMain()->getNextMain()->isTermination());
 		ASSERT_EQ(ptr8, cfg8->getHead()->getNextMain()->getNextMain());
 
 		CFGNode* cfg8_node34 = cfg8->getHead()->getNextMain();
@@ -693,7 +686,7 @@ namespace UnitTesting {
 		ASSERT_TRUE(equal(cfg1_labels_n5.begin(), cfg1_labels_n5.end(), cfg1_labels_n5_expected.begin(), cfg1_labels_n5_expected.end()));
 
 		ASSERT_TRUE(cfg1_node5->getNextMain()->isReturn());
-		ASSERT_TRUE(cfg1_node5->getNextMain()->getTermination());
+		ASSERT_TRUE(cfg1_node5->getNextMain()->isTermination());
 
 		std::unordered_map<prog_line, CFGNode*> map = cfg1_node5->getNextMain()->getNextReturn();
 		ASSERT_EQ(map.size(), 3);
@@ -753,10 +746,10 @@ namespace UnitTesting {
 		
 		ASSERT_EQ(map_cfg1.find(11)->second, first_node2);
 		ASSERT_EQ(map_cfg1.find(19)->second, first_node5->getNextMain());
-		ASSERT_TRUE(first_node5->getNextMain()->getTermination());
+		ASSERT_TRUE(first_node5->getNextMain()->isTermination());
 		ASSERT_EQ(map_cfg1_call.find(1)->second, cfg1_node2);
 		ASSERT_EQ(map_cfg1_call.find(2)->second, cfg1_node3);
-		ASSERT_TRUE(cfg1_node3->getNextMain()->getTermination());
+		ASSERT_TRUE(cfg1_node3->getNextMain()->isTermination());
 		ASSERT_EQ(map_cfg1_call.find(15)->second, first_node4);
 	}
 	
