@@ -2,7 +2,7 @@
 
 #include "pch.h"
 #include "PKB.h"
-#include <CFGRelationsManager.h>
+#include "CFGRelationsManager.h"
 
 namespace UnitTesting {
 	class CFGRelationsManagerTest_AffectsT : public testing::Test {
@@ -105,7 +105,7 @@ namespace UnitTesting {
 
 	TEST_F(CFGRelationsManagerTest_AffectsT, isAffectsTEmpty) {
 		EXPECT_FALSE(manager.isAffectsTEmpty());
-		EXPECT_TRUE(manager.getAffectsProcessor().isNonEmpty());
+		EXPECT_TRUE(manager.getAffectsPreprocessor().isNonEmpty());
 	}
 
 	TEST_F(CFGRelationsManagerTest_AffectsT, isAffectingT_identifier) {
@@ -171,7 +171,7 @@ namespace UnitTesting {
 		for (auto& pair : true_list) {
 			EXPECT_TRUE(manager.isAffectsT(pair.first.stmt_index, pair.second.stmt_index)) << "Expected true but fail at " <<
 				pair.first.stmt_index << " and" << pair.second.stmt_index;
-			EXPECT_EQ(manager.getAffectsTProcessor().getCalculatedMatrix()[pair.first.stmt_index - 1][pair.second.stmt_index - 1], 1);
+			EXPECT_EQ(manager.getAffectsTPreprocessor().getCalculatedMatrix()[pair.first.stmt_index - 1][pair.second.stmt_index - 1], 1);
 			EXPECT_TRUE(manager.isAffectsT(pair.first.stmt_index, pair.second.stmt_index)) << "Expected true but fail at " <<
 				pair.first.stmt_index << " and" << pair.second.stmt_index;
 		}
@@ -187,7 +187,7 @@ namespace UnitTesting {
 		auto v1 = manager.getAllAffectsTRelation();
 		std::sort(v1.begin(), v1.end());
 		EXPECT_EQ(v1, expected_pairs);
-		EXPECT_TRUE(manager.getAffectsProcessor().isFullyPopulated());
+		EXPECT_TRUE(manager.getAffectsPreprocessor().isFullyPopulated());
 		EXPECT_EQ(v1, expected_pairs);
 	}
 
@@ -203,8 +203,8 @@ namespace UnitTesting {
 		std::copy(set.begin(), set.end(), v2.begin());
 		std::sort(v2.begin(), v2.end());
 		EXPECT_EQ(v1, v2);
-		EXPECT_FALSE(manager.getAffectsTProcessor().isFullyPopulated());
-		EXPECT_TRUE(manager.getAffectsProcessor().isFullyPopulated());
+		EXPECT_FALSE(manager.getAffectsTPreprocessor().isFullyPopulated());
+		EXPECT_TRUE(manager.getAffectsPreprocessor().isFullyPopulated());
 	}
 
 	TEST_F(CFGRelationsManagerTest_AffectsT, getAffectedT_all) {
@@ -219,8 +219,8 @@ namespace UnitTesting {
 		std::copy(set.begin(), set.end(), v2.begin());
 		std::sort(v2.begin(), v2.end());
 		EXPECT_EQ(v1, v2);
-		EXPECT_FALSE(manager.getAffectsTProcessor().isFullyPopulated());
-		EXPECT_TRUE(manager.getAffectsProcessor().isFullyPopulated());
+		EXPECT_FALSE(manager.getAffectsTPreprocessor().isFullyPopulated());
+		EXPECT_TRUE(manager.getAffectsPreprocessor().isFullyPopulated());
 	}
 
 	TEST_F(CFGRelationsManagerTest_AffectsT, getAffectingT_identifier) {
@@ -253,121 +253,156 @@ namespace UnitTesting {
 		}
 	}
 
-	//TEST_F(CFGRelationsManagerTest_AffectsT, combinations) {
-	//	// (s1, s2)
+	TEST_F(CFGRelationsManagerTest_AffectsT, combinations) {
+		// _, _
+		EXPECT_FALSE(manager.isAffectsTEmpty());
+		EXPECT_TRUE(manager.getAffectsPreprocessor().isNonEmpty());
 
-	//	auto v1 = manager.getAllAffectsTRelation();
-	//	std::sort(v1.begin(), v1.end());
-	//	EXPECT_EQ(v1, expected_pairs);
-	//	EXPECT_TRUE(manager.getAffectsProcessor().isFullyPopulated());
-	//	EXPECT_TRUE(manager.getAffectsTProcessor().isFullyPopulated());
+		// c, _
+		std::vector<StmtInfo> true_list_c_wild, false_list_c_wild;
+		std::set<StmtInfo> set_c_wild;
+		for (auto& pair : expected_pairs) {
+			set_c_wild.emplace(pair.first);
+		}
+		true_list_c_wild.assign(set_c_wild.begin(), set_c_wild.end());
 
-	//	// (s1, c)
+		std::sort(true_list_c_wild.begin(), true_list_c_wild.end());
+		std::sort(stmt_list.begin(), stmt_list.end());
 
-	//	for (auto& stmt : stmt_list) {
-	//		auto v1 = manager.getAffecting(stmt.stmt_index);
-	//		std::sort(v1.begin(), v1.end());
+		std::set_difference(stmt_list.begin(), stmt_list.end(), true_list_c_wild.begin(), true_list_c_wild.end(), std::inserter(false_list_c_wild, false_list_c_wild.begin()));
 
-	//		std::vector<StmtInfo> v2;
-	//		for (auto& pair : expected_pairs) {
-	//			if (pair.second == stmt) {
-	//				v2.push_back(pair.first);
-	//			}
-	//		}
-	//		EXPECT_EQ(v1, v2);
-	//		for (int i = 0; i < PKB::getInstance().getStmts().size(); i++) {
-	//			EXPECT_TRUE(processor.getCalculatedMatrix()[i][stmt.stmt_index - 1]);
-	//			EXPECT_TRUE(processor.isDFSBackwardComputed(stmt.stmt_index));
-	//		}
-	//	}
+		for (auto& stmt : true_list_c_wild) {
+			EXPECT_TRUE(manager.isAffectingT(stmt.stmt_index)) << "Expected true but fail at " << stmt.stmt_index;
+			EXPECT_TRUE(manager.isAffectingT(stmt.stmt_index)) << "Expected true but fail at " << stmt.stmt_index;
+		}
+		for (auto& stmt : false_list_c_wild) {
+			EXPECT_FALSE(manager.isAffectingT(stmt.stmt_index)) << "Expected false but fail at " << stmt.stmt_index;
+			EXPECT_FALSE(manager.isAffectingT(stmt.stmt_index)) << "Expected false but fail at " << stmt.stmt_index;
+		}
 
-	//	// (c1, c2)
-	//	std::vector < std::pair<StmtInfo, StmtInfo>> true_list2 = expected_pairs, false_list2, all_list2;
-	//	for (auto& s1 : stmt_list) {
-	//		for (auto& s2 : stmt_list) {
-	//			all_list2.push_back({ s1, s2 });
-	//		}
-	//	}
+		// _, c
+		std::vector<StmtInfo> true_list_wild_c, false_list_wild_c;
+		std::set<StmtInfo> set_wild_c;
+		for (auto& pair : expected_pairs) {
+			set_wild_c.emplace(pair.second);
+		}
+		true_list_wild_c.assign(set_wild_c.begin(), set_wild_c.end());
 
-	//	std::sort(true_list2.begin(), true_list2.end());
-	//	std::sort(all_list2.begin(), all_list2.end());
+		std::sort(true_list_wild_c.begin(), true_list_wild_c.end());
+		std::sort(stmt_list.begin(), stmt_list.end());
 
-	//	std::set_difference(all_list2.begin(), all_list2.end(), true_list2.begin(), true_list2.end(), std::inserter(false_list2, false_list2.begin()));
+		std::set_difference(stmt_list.begin(), stmt_list.end(), true_list_wild_c.begin(),
+			true_list_wild_c.end(), std::inserter(false_list_wild_c, false_list_wild_c.begin()));
 
-	//	for (auto& pair : true_list2) {
-	//		EXPECT_TRUE(processor.evaluateConstantAndConstant(pair.first.stmt_index, pair.second.stmt_index)) << "Expected true but fail at " <<
-	//			pair.first.stmt_index << " and" << pair.second.stmt_index;
-	//	}
-	//	for (auto& pair : false_list2) {
-	//		EXPECT_FALSE(processor.evaluateConstantAndConstant(pair.first.stmt_index, pair.second.stmt_index)) << "Expected false but fail at " <<
-	//			pair.first.stmt_index << " and" << pair.second.stmt_index;
-	//	}
+		for (auto& stmt : true_list_wild_c) {
+			EXPECT_TRUE(manager.isAffectedT(stmt.stmt_index)) << "Expected true but fail at " << stmt.stmt_index;
+			EXPECT_TRUE(manager.isAffectedT(stmt.stmt_index)) << "Expected true but fail at " << stmt.stmt_index;
+		}
+		for (auto& stmt : false_list_wild_c) {
+			EXPECT_FALSE(manager.isAffectedT(stmt.stmt_index)) << "Expected false but fail at " << stmt.stmt_index;
+			EXPECT_FALSE(manager.isAffectedT(stmt.stmt_index)) << "Expected false but fail at " << stmt.stmt_index;
+		}
 
-	//	// (c, _)
+		// c, c
+		std::vector < std::pair<StmtInfo, StmtInfo>> true_list_c_c = expected_pairs, false_list_c_c, all_list_c_c;
+		std::set<StmtInfo> set_c_c;
+		for (auto& s1 : stmt_list) {
+			for (auto& s2 : stmt_list) {
+				all_list_c_c.push_back({ s1, s2 });
+			}
+		}
 
-	//	std::vector<StmtInfo> true_list, false_list;
-	//	std::set<StmtInfo> set;
-	//	for (auto& pair : expected_pairs) {
-	//		set.emplace(pair.first);
-	//	}
-	//	true_list.assign(set.begin(), set.end());
+		std::sort(true_list_c_c.begin(), true_list_c_c.end());
+		std::sort(all_list_c_c.begin(), all_list_c_c.end());
 
-	//	std::sort(true_list.begin(), true_list.end());
-	//	std::sort(stmt_list.begin(), stmt_list.end());
+		std::set_difference(all_list_c_c.begin(), all_list_c_c.end(), true_list_c_c.begin(), true_list_c_c.end(), std::inserter(false_list_c_c, false_list_c_c.begin()));
 
-	//	std::set_difference(stmt_list.begin(), stmt_list.end(), true_list.begin(), true_list.end(), std::inserter(false_list, false_list.begin()));
+		for (auto& pair : true_list_c_c) {
+			EXPECT_TRUE(manager.isAffectsT(pair.first.stmt_index, pair.second.stmt_index)) << "Expected true but fail at " <<
+				pair.first.stmt_index << " and" << pair.second.stmt_index;
+			EXPECT_EQ(manager.getAffectsTPreprocessor().getCalculatedMatrix()[pair.first.stmt_index - 1][pair.second.stmt_index - 1], 1);
+			EXPECT_TRUE(manager.isAffectsT(pair.first.stmt_index, pair.second.stmt_index)) << "Expected true but fail at " <<
+				pair.first.stmt_index << " and" << pair.second.stmt_index;
+		}
+		for (auto& pair : false_list_c_c) {
+			EXPECT_FALSE(manager.isAffectsT(pair.first.stmt_index, pair.second.stmt_index)) << "Expected false but fail at " <<
+				pair.first.stmt_index << " and" << pair.second.stmt_index;
+			EXPECT_FALSE(manager.isAffectsT(pair.first.stmt_index, pair.second.stmt_index)) << "Expected false but fail at " <<
+				pair.first.stmt_index << " and" << pair.second.stmt_index;
+		}
 
-	//	for (auto& stmt : true_list) {
-	//		EXPECT_TRUE(processor.evaluateConstantAndWild(stmt.stmt_index)) << "Expected true but fail at " << stmt.stmt_index;
-	//	}
-	//	for (auto& stmt : false_list) {
-	//		EXPECT_FALSE(processor.evaluateConstantAndWild(stmt.stmt_index)) << "Expected false but fail at " << stmt.stmt_index;
-	//	}
+		// s, _
+		auto v1_s_wild = manager.getAffectingT();
+		std::sort(v1_s_wild.begin(), v1_s_wild.end());
 
-	//	// (s1, _)
-	//	auto v3 = processor.evaluateSynonymAndWild();
-	//	std::sort(v3.begin(), v3.end());
+		std::unordered_set<StmtInfo> set_s_wild;
+		for (auto& pair : expected_pairs) {
+			set_s_wild.emplace(pair.first);
+		}
+		std::vector<StmtInfo> v2_s_wild(set_s_wild.size());
+		std::copy(set_s_wild.begin(), set_s_wild.end(), v2_s_wild.begin());
+		std::sort(v2_s_wild.begin(), v2_s_wild.end());
+		EXPECT_EQ(v1_s_wild, v2_s_wild);
+		EXPECT_FALSE(manager.getAffectsTPreprocessor().isFullyPopulated());
+		EXPECT_TRUE(manager.getAffectsPreprocessor().isFullyPopulated());
 
-	//	std::unordered_set<StmtInfo> set2;
-	//	for (auto& pair : expected_pairs) {
-	//		set2.emplace(pair.first);
-	//	}
-	//	std::vector<StmtInfo> v4(set.size());
-	//	std::copy(set2.begin(), set2.end(), v4.begin());
-	//	std::sort(v4.begin(), v4.end());
-	//	EXPECT_EQ(v3, v4);
-	//	EXPECT_TRUE(processor.isFullyPopulated());
-	//}
+		// _, s
+		auto v1_wild_s = manager.getAffectedT();
+		std::sort(v1_wild_s.begin(), v1_wild_s.end());
 
-	//TEST_F(CFGRelationsManagerTest_AffectsT, reset) {
-	//	for (auto& stmt : stmt_list) {
-	//		processor.evaluateSynonymAndConstant(stmt.stmt_index);
-	//		for (int i = 0; i < PKB::getInstance().getStmts().size(); i++) {
-	//			EXPECT_TRUE(processor.getCalculatedMatrix()[i][stmt.stmt_index - 1]);
-	//			EXPECT_TRUE(processor.isDFSBackwardComputed(stmt.stmt_index));
-	//		}
-	//	}
-	//	for (auto& stmt : stmt_list) {
-	//		processor.evaluateConstantAndSynonym(stmt.stmt_index);
-	//		for (int i = 0; i < PKB::getInstance().getStmts().size(); i++) {
-	//			EXPECT_TRUE(processor.getCalculatedMatrix()[stmt.stmt_index - 1][i]);
-	//			EXPECT_TRUE(processor.isDFSForwardComputed(stmt.stmt_index));
-	//		}
-	//	}
-	//	processor.reset();
-	//	for (auto& stmt : stmt_list) {
-	//		for (int i = 0; i < PKB::getInstance().getStmts().size(); i++) {
-	//			EXPECT_FALSE(processor.getCalculatedMatrix()[i][stmt.stmt_index - 1]);
-	//			EXPECT_FALSE(processor.isDFSBackwardComputed(stmt.stmt_index));
-	//			EXPECT_FALSE(processor.getCalculatedMatrix()[stmt.stmt_index - 1][i]);
-	//			EXPECT_FALSE(processor.isDFSForwardComputed(stmt.stmt_index));
-	//		}
-	//	}
-	//	processor.evaluateSynonymAndSynonym();
-	//	EXPECT_TRUE(processor.isFullyPopulated());
-	//	EXPECT_FALSE(processor.isCacheEmpty());
-	//	processor.reset();
-	//	EXPECT_FALSE(processor.isFullyPopulated());
-	//	EXPECT_TRUE(processor.isCacheEmpty());
-	//}
+		std::unordered_set<StmtInfo> set_wild_s;
+		for (auto& pair : expected_pairs) {
+			set_wild_s.emplace(pair.second);
+		}
+		std::vector<StmtInfo> v2_wild_s(set_wild_s.size());
+		std::copy(set_wild_s.begin(), set_wild_s.end(), v2_wild_s.begin());
+		std::sort(v2_wild_s.begin(), v2_wild_s.end());
+		EXPECT_EQ(v1_wild_s, v2_wild_s);
+		EXPECT_FALSE(manager.getAffectsTPreprocessor().isFullyPopulated());
+		EXPECT_TRUE(manager.getAffectsPreprocessor().isFullyPopulated());
+
+		// s, c
+		for (auto& stmt : stmt_list) {
+			auto v1 = manager.getAffectingT(stmt.stmt_index);
+			std::sort(v1.begin(), v1.end());
+
+			std::vector<StmtInfo> v2;
+			for (auto& pair : expected_pairs) {
+				if (pair.second == stmt) {
+					v2.push_back(pair.first);
+				}
+			}
+			EXPECT_EQ(v1, v2);
+		}
+
+		// c, s
+		for (auto& stmt : stmt_list) {
+			auto v1 = manager.getAffectedT(stmt.stmt_index);
+			std::sort(v1.begin(), v1.end());
+
+			std::vector<StmtInfo> v2;
+			for (auto& pair : expected_pairs) {
+				if (pair.first == stmt) {
+					v2.push_back(pair.second);
+				}
+			}
+			EXPECT_EQ(v1, v2);
+		}
+
+		// s1, s2
+		auto v1_s_s = manager.getAllAffectsTRelation();
+		std::sort(v1_s_s.begin(), v1_s_s.end());
+		EXPECT_EQ(v1_s_s, expected_pairs);
+		EXPECT_TRUE(manager.getAffectsPreprocessor().isFullyPopulated());
+		EXPECT_EQ(v1_s_s, expected_pairs);
+	}
+
+	TEST_F(CFGRelationsManagerTest_AffectsT, reset) {
+		manager.getAllAffectsTRelation();
+		EXPECT_TRUE(manager.getAffectsTPreprocessor().isFullyPopulated());
+		EXPECT_FALSE(manager.getAffectsTPreprocessor().isCacheEmpty());
+		manager.reset();
+		EXPECT_FALSE(manager.getAffectsTPreprocessor().isFullyPopulated());
+		EXPECT_TRUE(manager.getAffectsTPreprocessor().isCacheEmpty());
+	}
 }

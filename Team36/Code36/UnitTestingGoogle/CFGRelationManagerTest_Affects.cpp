@@ -146,7 +146,7 @@ namespace UnitTesting {
 
 	TEST_F(CFGRelationsManagerTest_Affects, isAffectsEmpty) {
 		EXPECT_FALSE(manager->isAffectsEmpty());
-		EXPECT_TRUE(manager->getAffectsProcessor().isNonEmpty());
+		EXPECT_TRUE(manager->getAffectsPreprocessor().isNonEmpty());
 	}
 
 	TEST_F(CFGRelationsManagerTest_Affects, isAffecting_identifier) {
@@ -164,11 +164,11 @@ namespace UnitTesting {
 
 		for (auto& stmt : true_list) {
 			EXPECT_TRUE(manager->isAffecting(stmt.stmt_index)) << "Expected true but fail at " << stmt.stmt_index;
-			EXPECT_TRUE(manager->getAffectsProcessor().getAffecting()[stmt.stmt_index - 1]);
+			EXPECT_TRUE(manager->getAffectsPreprocessor().getAffecting()[stmt.stmt_index - 1]);
 		}
 		for (auto& stmt : false_list) {
 			EXPECT_FALSE(manager->isAffecting(stmt.stmt_index)) << "Expected false but fail at " << stmt.stmt_index;
-			EXPECT_FALSE(manager->getAffectsProcessor().getAffecting()[stmt.stmt_index - 1]);
+			EXPECT_FALSE(manager->getAffectsPreprocessor().getAffecting()[stmt.stmt_index - 1]);
 		}
 	}
 
@@ -187,11 +187,11 @@ namespace UnitTesting {
 
 		for (auto& stmt : true_list) {
 			EXPECT_TRUE(manager->isAffected(stmt.stmt_index)) << "Expected true but fail at " << stmt.stmt_index;
-			EXPECT_TRUE(manager->getAffectsProcessor().getAffected()[stmt.stmt_index - 1]);
+			EXPECT_TRUE(manager->getAffectsPreprocessor().getAffected()[stmt.stmt_index - 1]);
 		}
 		for (auto& stmt : false_list) {
 			EXPECT_FALSE(manager->isAffected(stmt.stmt_index)) << "Expected false but fail at " << stmt.stmt_index;
-			EXPECT_FALSE(manager->getAffectsProcessor().getAffected()[stmt.stmt_index - 1]) << "Expected false but fail at " << stmt.stmt_index;;
+			EXPECT_FALSE(manager->getAffectsPreprocessor().getAffected()[stmt.stmt_index - 1]) << "Expected false but fail at " << stmt.stmt_index;;
 		}
 	}
 
@@ -229,7 +229,7 @@ namespace UnitTesting {
 		auto v1 = manager->getAllAffectsRelation();
 		std::sort(v1.begin(), v1.end());
 		EXPECT_EQ(v1, expected_pairs);
-		EXPECT_TRUE(manager->getAffectsProcessor().isFullyPopulated());
+		EXPECT_TRUE(manager->getAffectsPreprocessor().isFullyPopulated());
 	}
 
 	TEST_F(CFGRelationsManagerTest_Affects, getAffecting_all) {
@@ -244,7 +244,7 @@ namespace UnitTesting {
 		std::copy(set.begin(), set.end(), v2.begin());
 		std::sort(v2.begin(), v2.end());
 		EXPECT_EQ(v1, v2);
-		EXPECT_TRUE(manager->getAffectsProcessor().isFullyPopulated());
+		EXPECT_TRUE(manager->getAffectsPreprocessor().isFullyPopulated());
 	}
 
 	TEST_F(CFGRelationsManagerTest_Affects, getAffected_all) {
@@ -259,7 +259,7 @@ namespace UnitTesting {
 		std::copy(set.begin(), set.end(), v2.begin());
 		std::sort(v2.begin(), v2.end());
 		EXPECT_EQ(v1, v2);
-		EXPECT_TRUE(manager->getAffectsProcessor().isFullyPopulated());
+		EXPECT_TRUE(manager->getAffectsPreprocessor().isFullyPopulated());
 	}
 
 	TEST_F(CFGRelationsManagerTest_Affects, getAffected_identifier) {
@@ -274,7 +274,7 @@ namespace UnitTesting {
 				}
 			}
 			EXPECT_EQ(v1, v2);
-			EXPECT_TRUE(manager->getAffectsProcessor().isDFSForwardComputed(stmt.stmt_index));
+			EXPECT_TRUE(manager->getAffectsPreprocessor().isDFSForwardComputed(stmt.stmt_index));
 		}
 	}
 
@@ -290,16 +290,16 @@ namespace UnitTesting {
 				}
 			}
 			EXPECT_EQ(v1, v2);
-			EXPECT_TRUE(manager->getAffectsProcessor().isDFSBackwardComputed(stmt.stmt_index));
+			EXPECT_TRUE(manager->getAffectsPreprocessor().isDFSBackwardComputed(stmt.stmt_index));
 		}
 	}
 
 	TEST_F(CFGRelationsManagerTest_Affects, reset) {
 		manager->getAllAffectsRelation();
-		EXPECT_TRUE(manager->getAffectsProcessor().isFullyPopulated());
-		EXPECT_FALSE(manager->getAffectsProcessor().isCacheEmpty());
+		EXPECT_TRUE(manager->getAffectsPreprocessor().isFullyPopulated());
+		EXPECT_FALSE(manager->getAffectsPreprocessor().isCacheEmpty());
 		manager->reset();
-		EXPECT_FALSE(manager->getAffectsProcessor().isFullyPopulated());
-		EXPECT_TRUE(manager->getAffectsProcessor().isCacheEmpty());
+		EXPECT_FALSE(manager->getAffectsPreprocessor().isFullyPopulated());
+		EXPECT_TRUE(manager->getAffectsPreprocessor().isCacheEmpty());
 	}
 }

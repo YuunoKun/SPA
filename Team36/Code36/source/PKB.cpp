@@ -247,7 +247,7 @@ void PKB::addProcContains(proc_name proc, stmt_index index) {
 }
 
 void PKB::addCFGsToDestroy(std::vector<CFG*> cfgs) {
-	cfgs_to_destroy = cfgs;
+	cfgs_to_destroy.insert(cfgs_to_destroy.end(), cfgs.begin(), cfgs.end());
 }
 
 void PKB::addCFGBip(CFG* new_cfg) {
@@ -290,10 +290,6 @@ void PKB::resetCache() {
 	print_table.clear();
 	expr_table.clear();
 	procS_table.clear();
-	for (CFG* cfg : cfgs_to_destroy) {
-		delete cfg;
-	}
-	cfgs_to_destroy = {};
 	cfg_bips = {};
 }
 

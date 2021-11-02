@@ -6,9 +6,9 @@
 #include "CFGRelationsManager.h"
 
 namespace UnitTesting {
-	class CFGRelationsManagerTest_AffectsBip : public testing::Test {
+	class CFGRelationsManagerTest_AffectsBipT : public testing::Test {
 	protected:
-		CFGRelationsManagerTest_AffectsBip() {
+		CFGRelationsManagerTest_AffectsBipT() {
 			PKB::getInstance().resetCache();
 
 			cfg1->add(1);
@@ -76,6 +76,8 @@ namespace UnitTesting {
 
 		CFGRelationsManager* manager;
 
+		//std::vector<std::pair<LabelledProgLine, LabelledProgLine>> nextbip_actual = cfg1->getNextBipWithLabel();
+
 		CFG* cfg1 = new CFG();
 		CFG* cfg2 = new CFG();
 		CFG* cfg3 = new CFG();
@@ -106,12 +108,13 @@ namespace UnitTesting {
 		StmtInfo s16{ 16, STMT_ASSIGN };
 
 		std::vector<std::pair<StmtInfo, StmtInfo>> expected_pairs = {
-			{s4, s6}, {s4, s8}, {s4, s9}, {s4, s11}, {s4, s13}, {s4, s16},
+			{s4, s6}, {s4, s8}, {s4, s9}, {s4, s11}, {s4, s13}, {s4, s14}, {s4, s16},
 			{s6, s8}, {s6, s16},
-			{s9, s11}, {s9, s16}, {s11, s13},
+			{s9, s8}, {s9, s11}, {s9, s13}, {s9, s14}, {s9, s16},
+			{s11, s8}, {s11, s13}, {s11, s14},
 			{s13, s6}, {s13, s8}, {s13, s11}, {s13, s13}, {s13, s14}, {s13, s16},
-			{s14, s8}, {s14, s11},
-			{s16, s8}, {s16, s11}, {s16, s16}
+			{s14, s8}, {s14, s11}, {s14, s13}, {s14, s14},
+			{s16, s8}, {s16, s11}, {s16, s13}, {s16, s14}, {s16, s16}
 		};
 
 		std::vector<StmtInfo> stmt_list = { s1, s2, s3, s4, s5, s6, s7, s8, s9,
@@ -175,25 +178,11 @@ namespace UnitTesting {
 				delete cfg;
 			}
 			manager->reset();
+			PKB::getInstance().resetCache();
 		}
 	};
 
-	TEST_F(CFGRelationsManagerTest_AffectsBip, getLabelledNextTable) {
-		MonotypeRelationTable<LabelledProgLine> labelled_next_table;
-		auto cfgs = PKB::getInstance().getCFGBips();
-		for (CFG* cfg : cfgs) {
-			for (auto pair : cfg->getNextBipWithLabel()) {
-				labelled_next_table.insert(pair.first, pair.second);
-			}
-		}
-		auto v1 = labelled_next_table.getPairs();
-		auto v2 = test_next_table.getPairs();
-		std::sort(v1.begin(), v1.end());
-		std::sort(v2.begin(), v2.end());
-		EXPECT_EQ(v1, v2);
-	}
-
-	TEST_F(CFGRelationsManagerTest_AffectsBip, isAffectingBip_identifier) {
+	TEST_F(CFGRelationsManagerTest_AffectsBipT, isAffectingBipT_identifier) {
 		std::vector<StmtInfo> true_list, false_list;
 		std::set<StmtInfo> set;
 		for (auto& pair : expected_pairs) {
@@ -207,15 +196,14 @@ namespace UnitTesting {
 		std::set_difference(stmt_list.begin(), stmt_list.end(), true_list.begin(), true_list.end(), std::inserter(false_list, false_list.begin()));
 
 		for (auto& stmt : true_list) {
-			EXPECT_TRUE(manager->isAffectingBip(stmt.stmt_index)) << "Expected true but fail at " << stmt.stmt_index;
+			EXPECT_TRUE(manager->isAffectingBipT(stmt.stmt_index)) << "Expected true but fail at " << stmt.stmt_index;
 		}
 		for (auto& stmt : false_list) {
-			EXPECT_FALSE(manager->isAffectingBip(stmt.stmt_index)) << "Expected false but fail at " << stmt.stmt_index;
+			EXPECT_FALSE(manager->isAffectingBipT(stmt.stmt_index)) << "Expected false but fail at " << stmt.stmt_index;
 		}
-		EXPECT_TRUE(manager->getAffectsBipPreprocessor().isFullyPopulated());
 	}
 
-	TEST_F(CFGRelationsManagerTest_AffectsBip, isAffectedBip_identifier) {
+	TEST_F(CFGRelationsManagerTest_AffectsBipT, isAffectedBipT_identifier) {
 		std::vector<StmtInfo> true_list, false_list;
 		std::set<StmtInfo> set;
 		for (auto& pair : expected_pairs) {
@@ -229,15 +217,14 @@ namespace UnitTesting {
 		std::set_difference(stmt_list.begin(), stmt_list.end(), true_list.begin(), true_list.end(), std::inserter(false_list, false_list.begin()));
 
 		for (auto& stmt : true_list) {
-			EXPECT_TRUE(manager->isAffectedBip(stmt.stmt_index)) << "Expected true but fail at " << stmt.stmt_index;
+			EXPECT_TRUE(manager->isAffectedBipT(stmt.stmt_index)) << "Expected true but fail at " << stmt.stmt_index;
 		}
 		for (auto& stmt : false_list) {
-			EXPECT_FALSE(manager->isAffectedBip(stmt.stmt_index)) << "Expected false but fail at " << stmt.stmt_index;
+			EXPECT_FALSE(manager->isAffectedBipT(stmt.stmt_index)) << "Expected false but fail at " << stmt.stmt_index;
 		}
-		EXPECT_TRUE(manager->getAffectsBipPreprocessor().isFullyPopulated());
 	}
 
-	TEST_F(CFGRelationsManagerTest_AffectsBip, isAffectsBip_double_identifier) {
+	TEST_F(CFGRelationsManagerTest_AffectsBipT, isAffectsBipT_double_identifier) {
 		std::vector < std::pair<StmtInfo, StmtInfo>> true_list = expected_pairs, false_list, all_list;
 		std::set<StmtInfo> set;
 		for (auto& s1 : stmt_list) {
@@ -255,28 +242,28 @@ namespace UnitTesting {
 			stmt_index first_stmt_index = pair.first.stmt_index;
 			stmt_index second_stmt_index = pair.second.stmt_index;
 
-			EXPECT_TRUE(manager->isAffectsBip(first_stmt_index, second_stmt_index)) << "Expected true but fail at " <<
+			EXPECT_TRUE(manager->isAffectsBipT(first_stmt_index, second_stmt_index)) << "Expected true but fail at " <<
 				first_stmt_index << " and" << second_stmt_index;
 		}
 		for (auto& pair : false_list) {
 			stmt_index first_stmt_index = pair.first.stmt_index;
 			stmt_index second_stmt_index = pair.second.stmt_index;
 
-			EXPECT_FALSE(manager->isAffectsBip(first_stmt_index, second_stmt_index)) << "Expected false but fail at " <<
+			EXPECT_FALSE(manager->isAffectsBipT(first_stmt_index, second_stmt_index)) << "Expected false but fail at " <<
 				first_stmt_index << " and" << second_stmt_index;
 		}
-		EXPECT_TRUE(manager->getAffectsBipPreprocessor().isFullyPopulated());
+		EXPECT_TRUE(manager->getAffectsBipTPreprocessor().isFullyPopulated());
 	}
 
-	TEST_F(CFGRelationsManagerTest_AffectsBip, getAllAffectsBipRelation) {
-		auto v1 = manager->getAllAffectsBipRelation();
+	TEST_F(CFGRelationsManagerTest_AffectsBipT, getAllAffectsBipTRelation) {
+		auto v1 = manager->getAllAffectsBipTRelation();
 		std::sort(v1.begin(), v1.end());
 		EXPECT_EQ(v1, expected_pairs);
-		EXPECT_TRUE(manager->getAffectsBipPreprocessor().isFullyPopulated());
+		EXPECT_TRUE(manager->getAffectsBipTPreprocessor().isFullyPopulated());
 	}
 
-	TEST_F(CFGRelationsManagerTest_AffectsBip, getAffectingBip_all) {
-		auto v1 = manager->getAffectingBip();
+	TEST_F(CFGRelationsManagerTest_AffectsBipT, getAffectingBipT_all) {
+		auto v1 = manager->getAffectingBipT();
 		std::sort(v1.begin(), v1.end());
 
 		std::unordered_set<StmtInfo> set;
@@ -287,11 +274,11 @@ namespace UnitTesting {
 		std::copy(set.begin(), set.end(), v2.begin());
 		std::sort(v2.begin(), v2.end());
 		EXPECT_EQ(v1, v2);
-		EXPECT_TRUE(manager->getAffectsBipPreprocessor().isFullyPopulated());
+		EXPECT_TRUE(manager->getAffectsBipTPreprocessor().isFullyPopulated());
 	}
 
-	TEST_F(CFGRelationsManagerTest_AffectsBip, getAffectedBip_all) {
-		auto v1 = manager->getAffectedBip();
+	TEST_F(CFGRelationsManagerTest_AffectsBipT, getAffectedBipT_all) {
+		auto v1 = manager->getAffectedBipT();
 		std::sort(v1.begin(), v1.end());
 
 		std::unordered_set<StmtInfo> set;
@@ -302,12 +289,12 @@ namespace UnitTesting {
 		std::copy(set.begin(), set.end(), v2.begin());
 		std::sort(v2.begin(), v2.end());
 		EXPECT_EQ(v1, v2);
-		EXPECT_TRUE(manager->getAffectsBipPreprocessor().isFullyPopulated());
+		EXPECT_TRUE(manager->getAffectsBipTPreprocessor().isFullyPopulated());
 	}
 
-	TEST_F(CFGRelationsManagerTest_AffectsBip, getAffectedBip_identifier) {
+	TEST_F(CFGRelationsManagerTest_AffectsBipT, getAffectedBipT_identifier) {
 		for (auto& stmt : stmt_list) {
-			auto v1 = manager->getAffectedBip(stmt.stmt_index);
+			auto v1 = manager->getAffectedBipT(stmt.stmt_index);
 			std::sort(v1.begin(), v1.end());
 
 			std::vector<StmtInfo> v2;
@@ -320,9 +307,9 @@ namespace UnitTesting {
 		}
 	}
 
-	TEST_F(CFGRelationsManagerTest_AffectsBip, getAffectingBip_identifier) {
+	TEST_F(CFGRelationsManagerTest_AffectsBipT, getAffectingBipT_identifier) {
 		for (auto& stmt : stmt_list) {
-			auto v1 = manager->getAffectingBip(stmt.stmt_index);
+			auto v1 = manager->getAffectingBipT(stmt.stmt_index);
 			std::sort(v1.begin(), v1.end());
 
 			std::vector<StmtInfo> v2;
@@ -335,12 +322,12 @@ namespace UnitTesting {
 		}
 	}
 
-	TEST_F(CFGRelationsManagerTest_AffectsBip, reset) {
-		manager->getAllAffectsBipRelation();
-		EXPECT_TRUE(manager->getAffectsBipPreprocessor().isFullyPopulated());
-		EXPECT_FALSE(manager->getAffectsBipPreprocessor().isCacheEmpty());
+	TEST_F(CFGRelationsManagerTest_AffectsBipT, reset) {
+		manager->getAllAffectsBipTRelation();
+		EXPECT_TRUE(manager->getAffectsBipTPreprocessor().isFullyPopulated());
+		EXPECT_FALSE(manager->getAffectsBipTPreprocessor().isCacheEmpty());
 		manager->reset();
-		EXPECT_FALSE(manager->getAffectsBipPreprocessor().isFullyPopulated());
-		EXPECT_TRUE(manager->getAffectsBipPreprocessor().isCacheEmpty());
+		EXPECT_FALSE(manager->getAffectsBipTPreprocessor().isFullyPopulated());
+		EXPECT_TRUE(manager->getAffectsBipTPreprocessor().isCacheEmpty());
 	}
 }

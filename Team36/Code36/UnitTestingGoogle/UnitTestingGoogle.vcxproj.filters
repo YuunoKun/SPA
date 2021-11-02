@@ -251,6 +251,9 @@
     <ClCompile Include="CFGRelationManagerTest_AffectsBip.cpp">
       <Filter>PKB</Filter>
     </ClCompile>
+    <ClCompile Include="CFGRelationsManagerTest_AffectsBipT.cpp">
+      <Filter>PKB</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
