@@ -1218,6 +1218,71 @@ namespace UnitTesting {
 		q6.addRelation(RelRef(RelType::USES_S, Entity(EntityType::ASSIGN, Synonym{ "a" }), Entity(EntityType::VARIABLE, Synonym{ "v" })));
 
 		EXPECT_EQ(test6, q6);
+
+		Query test7 = qp.parse("procedure p; assign a; Select BOOLEAN with p.procName = \"pattern\" pattern a(_, _)");
+
+		Query q7;
+		q6.addEntity(Entity(EntityType::PROG_LINE, Synonym{ "n" }));
+		q6.addEntity(Entity(EntityType::STMT, Synonym{ "s" }));
+		q6.addEntity(Entity(EntityType::ASSIGN, Synonym{ "a" }));
+		q6.addEntity(Entity(EntityType::ASSIGN, Synonym{ "a1" }));
+		q6.addEntity(Entity(EntityType::VARIABLE, Synonym{ "v" }));
+		q6.addSelected(Entity(EntityType::ASSIGN, Synonym{ "a" }));
+		q6.addRelation(RelRef(RelType::WITH, Entity(EntityType::STMT, Synonym{ "s" }), Entity(EntityType::PROG_LINE, Synonym{ "n" })));
+		q6.addRelation(RelRef(RelType::WITH, Entity(EntityType::PROG_LINE, Synonym{ "n" }), Entity(EntityType::PROG_LINE, "10")));
+		q6.addPattern(Pattern(Entity(EntityType::ASSIGN, Synonym{ "a" }), Entity(EntityType::VARIABLE, "q"), "p", true));
+		q6.addPattern(Pattern(Entity(EntityType::ASSIGN, Synonym{ "a1" }), Entity(EntityType::VARIABLE, Synonym{ "v" }), "", true));
+		q6.addRelation(RelRef(RelType::PARENT, Entity(EntityType::STMT, Synonym{ "s" }), Entity(EntityType::ASSIGN, Synonym{ "a" })));
+		q6.addRelation(RelRef(RelType::USES_S, Entity(EntityType::ASSIGN, Synonym{ "a" }), Entity(EntityType::VARIABLE, Synonym{ "v" })));
+	}
+
+	TEST(QueryPreprocessor, specialKeyWordInWithClause) {
+		QueryPreprocessor qp;
+
+		Query test1 = qp.parse("procedure p; assign a; Select p with p.procName = \"pattern\" pattern a(\"q\", _\"p\"_)");
+
+		Query q1;
+		q1.addEntity(Entity(EntityType::PROCEDURE, Synonym{ "p" }));
+		q1.addEntity(Entity(EntityType::ASSIGN, Synonym{ "a" }));
+		q1.addSelected(Entity(EntityType::PROCEDURE, Synonym{ "p" }));
+		q1.addRelation(RelRef(RelType::WITH, Entity(EntityType::PROCEDURE, Synonym{ "p" }), Entity(EntityType::PROCEDURE, "pattern")));
+		q1.addPattern(Pattern(Entity(EntityType::ASSIGN, Synonym{ "a" }), Entity(EntityType::VARIABLE, "q"), "p", true));
+
+		EXPECT_EQ(test1, q1);
+
+		Query test2 = qp.parse("procedure p; assign a; Select p with p.procName = \"and\" pattern a(\"q\", _\"p\"_)");
+
+		Query q2;
+		q2.addEntity(Entity(EntityType::PROCEDURE, Synonym{ "p" }));
+		q2.addEntity(Entity(EntityType::ASSIGN, Synonym{ "a" }));
+		q2.addSelected(Entity(EntityType::PROCEDURE, Synonym{ "p" }));
+		q2.addRelation(RelRef(RelType::WITH, Entity(EntityType::PROCEDURE, Synonym{ "p" }), Entity(EntityType::PROCEDURE, "and")));
+		q2.addPattern(Pattern(Entity(EntityType::ASSIGN, Synonym{ "a" }), Entity(EntityType::VARIABLE, "q"), "p", true));
+
+		EXPECT_EQ(test2, q2);
+
+		Query test3 = qp.parse("procedure p; assign a; Select p with p.procName = \"and\" and a.stmt# = 5");
+
+		Query q3;
+		q3.addEntity(Entity(EntityType::PROCEDURE, Synonym{ "p" }));
+		q3.addEntity(Entity(EntityType::ASSIGN, Synonym{ "a" }));
+		q3.addSelected(Entity(EntityType::PROCEDURE, Synonym{ "p" }));
+		q3.addRelation(RelRef(RelType::WITH, Entity(EntityType::PROCEDURE, Synonym{ "p" }), Entity(EntityType::PROCEDURE, "and")));
+		q3.addRelation(RelRef(RelType::WITH, Entity(EntityType::ASSIGN, Synonym{ "a" }, AttrRef{ STMT_INDEX }), Entity(EntityType::ASSIGN, "5")));
+
+		EXPECT_EQ(test3, q3);
+
+		Query test4 = qp.parse("procedure p; assign a; Select p with p.procName = \"and\" and a.stmt# = 5 pattern a(\"q\", _\"p\"_)");
+
+		Query q4;
+		q4.addEntity(Entity(EntityType::PROCEDURE, Synonym{ "p" }));
+		q4.addEntity(Entity(EntityType::ASSIGN, Synonym{ "a" }));
+		q4.addSelected(Entity(EntityType::PROCEDURE, Synonym{ "p" }));
+		q4.addRelation(RelRef(RelType::WITH, Entity(EntityType::PROCEDURE, Synonym{ "p" }), Entity(EntityType::PROCEDURE, "and")));
+		q4.addRelation(RelRef(RelType::WITH, Entity(EntityType::ASSIGN, Synonym{ "a" }, AttrRef{ STMT_INDEX }), Entity(EntityType::ASSIGN, "5")));
+		q4.addPattern(Pattern(Entity(EntityType::ASSIGN, Synonym{ "a" }), Entity(EntityType::VARIABLE, "q"), "p", true));
+
+		EXPECT_EQ(test4, q4);
 	}
 
 	TEST(QueryPreprocessor, tupleSelect) {
