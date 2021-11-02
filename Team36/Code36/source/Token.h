@@ -1,8 +1,3 @@
-/*
-Defining SIMPLE tokens for parsing.
-
-*/
-
 #pragma once
 
 #include <string>

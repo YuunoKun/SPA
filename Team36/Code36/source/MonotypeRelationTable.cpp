@@ -19,15 +19,16 @@ std::vector<T> MonotypeRelationTable<T>::forwardDFS(T key) {
 	while (!stack.empty()) {
 		T s = stack.top();
 		stack.pop();
-		if (calculated_dfs_forward.count(s)) {
-			visited.emplace(s);
-			for (auto it : getValues(s)) {
-				insert(key, it);
-			}
-		}
+
 		if (!visited.count(s)) {
 			visited.emplace(s);
 			insert(key, s);
+		}
+		if (calculated_dfs_forward.count(s)) {
+			for (auto it : getValues(s)) {
+				insert(key, it);
+			}
+			continue;
 		}
 
 		for (auto it : getValues(s)) {

@@ -2,6 +2,7 @@
 
 #include <string>
 #include "Tokenizer.h"
+#include "FSM.h"
 
 namespace SourceProcessor {
 
