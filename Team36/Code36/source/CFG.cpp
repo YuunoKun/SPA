@@ -110,7 +110,7 @@ void CFG::loop(CFG* cfg, prog_line line_attached) {
 	target->setNextBranch(cfg->getHead());
 	cfg->getHead()->setPrevBranch(target);
 
-	for (auto const& previous : cfg->getTail()->getPrev()) {
+	for (auto previous : cfg->getTail()->getPrev()) {
 		previous->setNextMain(target);
 		target->setPrevBranch(previous);
 	}
@@ -136,14 +136,14 @@ void CFG::fork(CFG* cfg_if, CFG* cfg_else, prog_line line_attached) {
 		cfg_if->getTail()->getPrevMain()->setNextMain(fork_end);
 		cfg_if->getTail()->getPrev().pop_front();
 
-		for (auto const& previous : cfg_if->getTail()->getPrev()) {
+		for (auto previous : cfg_if->getTail()->getPrev()) {
 			previous->setNextMain(fork_end);
 			fork_end->setPrevBranch(previous);
 		}
 		cfg_if->getTail()->setInvalid();
 		cfg_if->setHead(nullptr);
 
-		for (auto const& previous : cfg_else->getTail()->getPrev()) {
+		for (auto previous : cfg_else->getTail()->getPrev()) {
 			previous->setNextMain(fork_end);
 			fork_end->setPrevBranch(previous);
 		}
@@ -197,7 +197,7 @@ std::vector<std::pair<prog_line, prog_line>> CFG::getNexts() {
 		}
 
 		std::vector<prog_line> lines = node->getProgramLines();
-		for (size_t i = 0; i < lines.size() - 1; i++) {
+		for (size_t i = 0; i + 1 < lines.size(); i++) {
 			res.push_back({lines[i], lines[i+1]});
 		}
 
@@ -230,7 +230,7 @@ std::vector<std::pair<prog_line, prog_line>> CFG::getNextBip() {
 		node->toggleVisited();
 
 		std::vector<prog_line> lines = node->getProgramLines();
-		for (size_t i = 0; i < lines.size() - 1; i++) {
+		for (size_t i = 0; i + 1 < lines.size(); i++) {
 			result.insert({ lines[i], lines[i + 1] });
 		}
 
@@ -274,7 +274,9 @@ std::vector<std::pair<prog_line, prog_line>> CFG::getNextBip() {
 				}
 			}
 			
-			result.insert({ node->getProgramLines().back(), to->getProgramLines().front() });
+			if (!to->isTermination()) {
+				result.insert({ node->getProgramLines().back(), to->getProgramLines().front() });
+			}
 
 			if (node->getNextMain()->getPrevMain() == node) {
 				action(to, action, call_stack);
@@ -318,7 +320,7 @@ std::vector<std::pair<LabelledProgLine, LabelledProgLine>> CFG::getNextBipWithLa
 		node->toggleVisited();
 
 		std::vector<prog_line> lines = node->getProgramLines();
-		for (size_t i = 0; i < lines.size() - 1; i++) {
+		for (size_t i = 0; i + 1< lines.size(); i++) {
 			result.insert({ {lines[i], call_stack.top()}, {lines[i + 1], call_stack.top()} });
 		}
 
@@ -363,7 +365,11 @@ std::vector<std::pair<LabelledProgLine, LabelledProgLine>> CFG::getNextBipWithLa
 					throw std::runtime_error("Error traversing CFG for NextBip. Invalid call return.");
 				}
 			}
-			result.insert({ {node->getProgramLines().back(), label}, {to->getProgramLines().front(), call_stack.top()} });
+
+			if (!to->isTermination()) {
+				result.insert({ {node->getProgramLines().back(), label}, 
+					{to->getProgramLines().front(), call_stack.top()} });
+			}
 
 			if (node->getNextMain()->getPrevMain() == node) {
 				action(to, action, call_stack);
@@ -445,7 +451,6 @@ CFGNode* CFG::makeStandalone(prog_line target_line) {
 			curr->setProgramLines(std::vector<prog_line>(target_it + 1, to_split.end()));
 		}
 		
-		// connect bottom
 		if (next_main) {
 			curr->setNextMain(next_main);
 			*find(next_main->getPrev().begin(), next_main->getPrev().end(), start) = curr;
