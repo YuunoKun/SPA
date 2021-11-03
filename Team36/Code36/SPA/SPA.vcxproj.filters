@@ -670,6 +670,7 @@
     </ClInclude>
     <ClInclude Include="..\source\RelationTableUtility.h">
       <Filter>Header Files\PKB\RelationTables</Filter>
+	</ClInclude>
     <ClInclude Include="..\source\SPCommon.h">
       <Filter>Header Files\SP</Filter>
     </ClInclude>
