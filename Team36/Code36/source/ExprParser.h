@@ -2,6 +2,7 @@
 
 #include <vector>
 #include <deque>
+#include "Common.h"
 #include "ExprNode.h"
 
 class ExprParser {

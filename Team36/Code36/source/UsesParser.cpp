@@ -18,27 +18,17 @@ void UsesParser::parse(Query& query, std::vector<QueryToken> token_chain) {
     }
     else {
         // Not stmtRef
-        if (Utility::isEntRef(query, separated_params[0])) {
+        if (Utility::isEntRef(query, separated_params[0], EntityType::PROCEDURE)) {
             is_USES_S = false;
         }
         else {
             query.setIsSemanticError("Invalid parameters for Uses");
         }
-
-        //check if is PROCEDURE only
-        if (!Utility::isCorrectSynEntRef(query, separated_params[0], EntityType::PROCEDURE)) {
-            query.setIsSemanticError("Invalid parameters for Modifies");
-        }
-
     }
 
     //Validate second param
-    if (!Utility::isEntRef(query, separated_params[1])) {
+    if (!Utility::isEntRef(query, separated_params[1], EntityType::VARIABLE)) {
         query.setIsSemanticError("Invalid parameters for Uses");
-    }
-    // check if VARIABLE only
-    if (!Utility::isCorrectSynEntRef(query, separated_params[1], EntityType::VARIABLE)) {
-        query.setIsSemanticError("Invalid parameters for Modifies");
     }
 
     if (is_USES_S) {

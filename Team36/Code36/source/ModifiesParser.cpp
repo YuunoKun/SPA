@@ -15,26 +15,17 @@ void ModifiesParser::parse(Query& query, std::vector<QueryToken> token_chain) {
     }
     else {
         // Not stmtRef
-        if (Utility::isEntRef(query, separated_params[0])) {
+        if (Utility::isEntRef(query, separated_params[0], EntityType::PROCEDURE)) {
             is_MODIFIES_S = false;
         }
         else {
             //Not stmtRef or entRef
             query.setIsSemanticError("Invalid parameters for Modifies");
         }
-
-        //check if is PROCEDURE only
-        if (!Utility::isCorrectSynEntRef(query, separated_params[0], EntityType::PROCEDURE)) {
-            query.setIsSemanticError("Invalid parameters for Modifies");
-        }
     }
 
     //Validate second param
-    if (!Utility::isEntRef(query, separated_params[1])) {
-        query.setIsSemanticError("Invalid parameters for Modifies");
-    }
-    // check if VARIABLE only
-    if (!Utility::isCorrectSynEntRef(query, separated_params[1], EntityType::VARIABLE)) {
+    if (!Utility::isEntRef(query, separated_params[1], EntityType::VARIABLE)) {
         query.setIsSemanticError("Invalid parameters for Modifies");
     }
 

@@ -772,22 +772,8 @@ namespace UnitTesting {
 		EXPECT_THROW(query_tokenizer.tokenize(query, input), SyntacticErrorException);
 
 	}
+
 	TEST(QueryTokenizer, InvalidSemanticLeadingZerosTest) {
-		Query query;
-
-		//Result
-		QueryTokenizer query_tokenizer;
-		std::string input = "Select p such that Follows (0, q)";
-
-		query_tokenizer.tokenize(query, input);
-		std::vector<QueryToken> output = query_tokenizer.get_query_token_chain();
-
-	
-		EXPECT_TRUE(Utility::checkIsSemanticError(query));
-
-	}
-
-	TEST(QueryTokenizer, InvalidSemanticLeadingZerosTest2) {
 		Query query;
 
 		//Result
@@ -801,6 +787,4 @@ namespace UnitTesting {
 		EXPECT_TRUE(Utility::checkIsSemanticError(query));
 
 	}
-
-
 }

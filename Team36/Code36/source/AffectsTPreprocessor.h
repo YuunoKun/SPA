@@ -25,8 +25,7 @@ public:
 	AffectsTPreprocessor() = default;
 
 private:
-	const MonotypeRelationTable<StmtInfo>* affects_table;
-	std::vector<StmtInfo> stmt_info_list;
-
 	void checkCache();
+
+	const MonotypeRelationTable<StmtInfo>* affects_table;
 };
