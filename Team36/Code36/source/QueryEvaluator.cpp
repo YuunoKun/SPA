@@ -45,7 +45,7 @@ void QueryEvaluator::getRawResult(Entity selected, std::list<std::string>& out) 
 	}
 
 	switch (selected.getType()) {
-	case EntityType::PROG_LINE :
+	case EntityType::PROG_LINE:
 	case EntityType::STMT: Utility::stmtInfoToStringList(pkb.getStmts(), out); break;
 	case EntityType::READ: Utility::stmtInfoToStringList(pkb.getReads(), out);  break;
 	case EntityType::PRINT: Utility::stmtInfoToStringList(pkb.getPrints(), out); break;
@@ -129,9 +129,8 @@ void QueryEvaluator::mergeTable(ResultTable& result_table, std::vector<Entity>& 
 		while (!row.empty()) {
 			index++;
 			if (Utility::isSecondaryAttribute(selected[index])) {
-				row_result += " " +getEntitySecondaryAttribute(row.front(), selected[index]);
-			}
-			else {
+				row_result += " " + getEntitySecondaryAttribute(row.front(), selected[index]);
+			} else {
 				row_result += " " + row.front();
 			}
 			row.pop_front();
@@ -154,7 +153,7 @@ void QueryEvaluator::getTupleResult(Query& query, QueryResult& query_result, std
 		getRawResult(selected, raw_result);
 		result.joinTable(ResultTable(selected, raw_result));
 	}
-	
+
 	mergeTable(result, query.getSelected(), out);
 }
 
@@ -163,12 +162,11 @@ void QueryEvaluator::getResult(Query& query, QueryResult& result, std::list<std:
 	if (query.getSelected()[0].getType() == EntityType::BOOLEAN) {
 		if (result.haveResult()) {
 			out.push_back(BOOLEAN_TRUE);
-		}
-		else {
+		} else {
 			out.push_back(BOOLEAN_FALSE);
 		}
 		return;
-	} 
+	}
 
 	if (!result.haveResult()) {
 		return;

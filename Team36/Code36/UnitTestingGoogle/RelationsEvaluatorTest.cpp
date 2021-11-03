@@ -183,7 +183,7 @@ namespace UnitTesting {
 			RelRef relation2(type, { PROCEDURE, main1 }, { WILD });
 			RelRef relation3(type, { PROCEDURE, Synonym{"a"} }, { VARIABLE, Synonym{"a"} });
 			RelRef relation4(type, { PROCEDURE, Synonym{"a"} }, { WILD });
-			RelRef relation5(type, { PROCEDURE, main1  }, { VARIABLE, Synonym{"a"} });
+			RelRef relation5(type, { PROCEDURE, main1 }, { VARIABLE, Synonym{"a"} });
 			RelRef relation6(type, { PROCEDURE, Synonym{"a"} }, { VARIABLE, "x" });
 
 			std::vector<RelRef> relations{ relation1, relation2, relation3, relation4,

@@ -29,7 +29,7 @@ namespace UnitTesting {
 			}
 			return table;
 		}
-		
+
 		std::unordered_multimap<std::string, std::vector<std::string>> generateJoinTable(int size) {
 			std::unordered_multimap<std::string, std::vector<std::string>> table;
 

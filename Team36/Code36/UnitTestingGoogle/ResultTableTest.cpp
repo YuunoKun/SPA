@@ -370,11 +370,11 @@ namespace UnitTesting {
 			{ 4, STMT_PRINT}, { 5, STMT_CALL }, { 6, STMT_ASSIGN}, { 7, STMT_ASSIGN} };
 		t1 = ResultTable(e, a1);
 		t2 = ResultTable(e, a2);
-		t1.merge(t2);		
+		t1.merge(t2);
 		out.clear();
 		t1.getEntityResult(e, out);
 		EXPECT_EQ(out, b);
-		EXPECT_TRUE(t1.merge(t2));		
+		EXPECT_TRUE(t1.merge(t2));
 		out.clear();
 		t1.getEntityResult(e, out);
 		EXPECT_EQ(out, b);
@@ -831,7 +831,7 @@ namespace UnitTesting {
 		EXPECT_TRUE(t1.merge(t2));
 		std::list<std::string> b1 = { "1", "2", "3" };
 		std::list<std::string> b2 = { "4", "5", "6" };
-		std::list<std::string> b3 = { "7", "8", "9" }; 
+		std::list<std::string> b3 = { "7", "8", "9" };
 		std::list<std::string> out;
 		t1.getEntityResult(e1, out);
 		EXPECT_EQ(out, b1);

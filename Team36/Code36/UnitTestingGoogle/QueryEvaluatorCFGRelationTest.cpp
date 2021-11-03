@@ -519,7 +519,7 @@ namespace UnitTesting {
 		//Test case for Select selected such that NextT("1", selected)
 		relation = RelRef(type, { STMT, left1 }, selected_entity);
 		EXPECT_EQ(evaluator.evaluateQuery(initQuery(relation, selected_entity)), result);
-		
+
 		//Test case for Select selected such that NextT("2", selected)
 		result = { right2 };
 		relation = RelRef(type, { STMT, left2 }, selected_entity);

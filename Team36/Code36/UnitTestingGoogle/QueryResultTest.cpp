@@ -57,14 +57,14 @@ namespace UnitTesting {
 		QueryResult result1;
 		Entity e({ WHILE, Synonym{"test"} });
 		std::vector<std::string> v;
-		
-		result1.addResult(ResultTable( e, v ));
+
+		result1.addResult(ResultTable(e, v));
 		EXPECT_FALSE(result1.haveResult());
 
 		QueryResult result2;
 		Entity e1({ WHILE, Synonym{"test" } });
 		std::vector<std::string> v1({ "String" });
-		result2.addResult(ResultTable( e1, v1 ));
+		result2.addResult(ResultTable(e1, v1));
 		EXPECT_TRUE(result2.haveResult());
 	}
 
@@ -127,8 +127,7 @@ namespace UnitTesting {
 		try {
 			query_result.getResult({ STMT, Synonym{"DoesNotExist"} }, table_result);
 			FAIL();
-		}
-		catch (std::domain_error const& ex) {
+		} catch (std::domain_error const& ex) {
 			EXPECT_EQ(ex.what(), std::string("Invalid Entity, Source: QueryResult.getResult"));
 		}
 	}
@@ -463,7 +462,7 @@ namespace UnitTesting {
 		out.clear();
 		q.getResult(e3, out);
 		EXPECT_EQ(out, b3);
-		
+
 		t1 = ResultTable(h1, a1);
 		t2 = ResultTable(h2, a2);
 		t2 = ResultTable(h3, a3);
@@ -998,7 +997,7 @@ namespace UnitTesting {
 		q.addResult(t2);
 		q.addResult(t3);
 
-		std::vector<Entity> selected { e1, e5 };
+		std::vector<Entity> selected{ e1, e5 };
 		ResultTable result;
 		q.getResults(selected, result);
 		std::list<std::string> b1 = { "1", "2", "3" };

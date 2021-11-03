@@ -8,7 +8,7 @@ QueryResult::QueryResult() {
 
 QueryResult::~QueryResult() {
 	while (!results.empty()) {
-		delete results.front(),
+		delete results.front();
 		results.pop_front();
 	}
 
@@ -55,12 +55,12 @@ void QueryResult::addResult(ResultTable& t) {
 
 	//Common header found, began merge
 	auto& it = results.begin();
-	while(it != results.end()) {
+	while (it != results.end()) {
 		bool merged = new_result->merge(**it);
 		if (merged && new_result->isEmpty()) {
 			have_result = false;
 			return;
-		}else if(merged) {
+		} else if (merged) {
 			ResultTable* to_delete = *it;
 			it = results.erase(it);
 			delete to_delete;

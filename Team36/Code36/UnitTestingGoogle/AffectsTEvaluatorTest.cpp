@@ -205,7 +205,7 @@ namespace UnitTesting {
 
 		std::vector<StmtInfo> v = { p2, p3 };
 		Entity header = { STMT, Synonym{"a"} };
-		Entity match = {ASSIGN, "1" };
+		Entity match = { ASSIGN, "1" };
 		ResultTable t(header, v);
 		EXPECT_EQ(evaluator.evaluateConstantAndSynonym(match, header), t);
 		header = { ASSIGN, Synonym{"a"} };
@@ -214,7 +214,7 @@ namespace UnitTesting {
 
 		v = { p3 };
 		header = { STMT, Synonym{"a"} };
-		match = {ASSIGN, "2" };
+		match = { ASSIGN, "2" };
 		t = ResultTable(header, v);
 		EXPECT_EQ(evaluator.evaluateConstantAndSynonym(match, header), t);
 		match = { ASSIGN, "2" };
@@ -223,17 +223,17 @@ namespace UnitTesting {
 
 		v = { };
 		header = { PRINT, Synonym{"a"} };
-		match = {ASSIGN, "1" };
+		match = { ASSIGN, "1" };
 		t = ResultTable(header, v);
 		EXPECT_EQ(evaluator.evaluateConstantAndSynonym(match, header), t);
 
 		header = { READ, Synonym{"a"} };
-		match = {ASSIGN, "1" };
+		match = { ASSIGN, "1" };
 		t = ResultTable(header, v);
 		EXPECT_EQ(evaluator.evaluateConstantAndSynonym(match, header), t);
 
 		header = { READ, Synonym{"a"} };
-		match = {ASSIGN, "2" };
+		match = { ASSIGN, "2" };
 		t = ResultTable(header, v);
 		EXPECT_EQ(evaluator.evaluateConstantAndSynonym(match, header), t);
 
@@ -264,7 +264,7 @@ namespace UnitTesting {
 
 		std::vector<StmtInfo> v = { p2, p1 };
 		Entity header = { STMT, Synonym{"a"} };
-		Entity match = {ASSIGN, "3" };
+		Entity match = { ASSIGN, "3" };
 		ResultTable t(header, v);
 		EXPECT_EQ(evaluator.evaluateSynonymAndConstant(header, match), t);
 		header = { ASSIGN, Synonym{"a"} };
@@ -273,7 +273,7 @@ namespace UnitTesting {
 
 		v = { p1 };
 		header = { STMT, Synonym{"a"} };
-		match = {ASSIGN, "2" };
+		match = { ASSIGN, "2" };
 		t = ResultTable(header, v);
 		EXPECT_EQ(evaluator.evaluateSynonymAndConstant(header, match), t);
 

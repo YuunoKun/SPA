@@ -153,7 +153,7 @@ void WithEvaluator::getEntityWithSecondaryAttribute(Entity& constant, std::list<
 			return;
 		}
 		break;
-	case EntityType::CALL: 
+	case EntityType::CALL:
 		if (constant.getAttribute() == AttrRef::PROC_NAME) {
 			Utility::stmtIndexToStringTable(pkb.getCalleeS(constant.getValue()), out);
 			return;

@@ -93,7 +93,7 @@ namespace UnitTesting {
 		void validate(std::vector<RelRef> relations, std::vector<Pattern> patterns, int i, int j) {
 
 			validate(initQuery(relations, patterns, ALL_SELECT[i % ALL_SELECT.size()]), ALL_RESULT[i % ALL_SELECT.size()], i, j);
-			validate(initQuery(relations, patterns, SELECT_BOOLEAN), BOOLEAN_TRUE_RESULT, i, j); 
+			validate(initQuery(relations, patterns, SELECT_BOOLEAN), BOOLEAN_TRUE_RESULT, i, j);
 		}
 
 		void validateEmpty(std::vector<RelRef> relations, std::vector<Pattern> patterns, int i, int j) {
@@ -112,7 +112,7 @@ namespace UnitTesting {
 		void validate(std::vector<Pattern>& patterns1, std::vector<Pattern>& patterns2) {
 			for (unsigned int i = 0; i < patterns1.size(); i++) {
 				for (unsigned int j = 0; j < patterns2.size(); j++) {
-					validate({ },  { patterns1[i], patterns2[j] }, i, j);
+					validate({ }, { patterns1[i], patterns2[j] }, i, j);
 				}
 			}
 		}
@@ -141,7 +141,7 @@ namespace UnitTesting {
 			}
 		}
 
-		void validateEmpty(std::vector<RelRef>& relations1, std::vector<RelRef>& relations2)  {
+		void validateEmpty(std::vector<RelRef>& relations1, std::vector<RelRef>& relations2) {
 			for (unsigned int i = 0; i < relations1.size(); i++) {
 				for (unsigned int j = 0; j < relations2.size(); j++) {
 					validateEmpty({ relations1[i], relations2[j] }, { }, i, j);
@@ -265,7 +265,7 @@ namespace UnitTesting {
 
 			relations.push_back(RelRef(type, { STMT, "2" }, { STMT, "2" }));
 			relations.push_back(RelRef(type, { STMT, "3" }, { STMT, "3" }));
-			
+
 			type = MODIFIES_S;
 			left1 = MODIFIES_LEFT1;
 			left2 = MODIFIES_LEFT2;
@@ -281,7 +281,7 @@ namespace UnitTesting {
 					relations.push_back(RelRef(type, synonyms[k], ALL_VARIABLES[j]));
 				}
 			}
-			
+
 			type = USES_S;
 			left1 = USES_LEFT1;
 			left2 = USES_LEFT2;
@@ -295,9 +295,9 @@ namespace UnitTesting {
 					relations.push_back(RelRef(type, VALID_CONSTANT_STMT_ENTITY[i], invalid_rights[k]));
 				}
 			}
-			
+
 			return relations;
-			
+
 		}
 
 		std::vector<Pattern> getAllValidPattern(Synonym s1, Synonym s2) {

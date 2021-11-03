@@ -67,13 +67,13 @@ namespace UnitTesting {
 	}
 
 	TEST_F(WithEvaluatorTest, evaluateSynonymAndSynonym) {
-		std::vector<std::string> v = { "1", "2"};
+		std::vector<std::string> v = { "1", "2" };
 		std::vector<Entity> headers = { { WHILE, Synonym{"a"} }, { WHILE, Synonym{"a"} } };
 		EXPECT_EQ(evaluator.evaluateSynonymAndSynonym(headers[0], headers[1]), ResultTable(headers[0], v));
 
 		headers = { { WHILE, Synonym{ "a" } }, { IF, Synonym{"b"} } };
 		std::list<std::string> r = {  };
-		std::list<std::string> out; 
+		std::list<std::string> out;
 		evaluator.evaluateSynonymAndSynonym(headers[0], headers[1]).getEntityResult(headers[0], out);
 		EXPECT_EQ(out, r);
 
@@ -98,7 +98,7 @@ namespace UnitTesting {
 		EXPECT_EQ(out, r);
 
 		headers = { { WHILE, Synonym{ "a" } }, { CONSTANT, Synonym{"b"} } };
-		r = { "1", "2"};
+		r = { "1", "2" };
 		out.clear();
 		evaluator.evaluateSynonymAndSynonym(headers[0], headers[1]).getEntityResult(headers[0], out);
 		EXPECT_EQ(out, r);
