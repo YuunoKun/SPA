@@ -195,24 +195,23 @@ namespace UnitTesting {
 	TEST_F(NextTPreprocessorTest, reset) {
 		for (auto& stmt : s) {
 			processor.evaluateSynonymAndConstant(stmt.stmt_index);
-			for (int i = 0; i < PKB::getInstance().getStmts().size(); i++) {
+			for (int i = 0; i < s.size(); i++) {
 				EXPECT_TRUE(processor.isCalculated(i, stmt.stmt_index - 1));
 				EXPECT_TRUE(processor.isDFSBackwardComputed(stmt.stmt_index));
 			}
 		}
 		for (auto& stmt : s) {
 			processor.evaluateConstantAndSynonym(stmt.stmt_index);
-			for (int i = 0; i < PKB::getInstance().getStmts().size(); i++) {
+			for (int i = 0; i < s.size(); i++) {
 				EXPECT_TRUE(processor.isCalculated(stmt.stmt_index - 1, i));
 				EXPECT_TRUE(processor.isDFSForwardComputed(stmt.stmt_index));
 			}
 		}
 		processor.reset();
-		int size = PKB::getInstance().getStmts().size();
-		for (int i = 0; i < size; i++) {
-			EXPECT_FALSE(processor.isDFSBackwardComputed(i));
-			EXPECT_FALSE(processor.isDFSForwardComputed(i));
-			for (int j = 0; j < size; j++) {
+		for (int i = 0; i < s.size(); i++) {
+			EXPECT_FALSE(processor.isDFSBackwardComputed(i + 1));
+			EXPECT_FALSE(processor.isDFSForwardComputed(i + 1));
+			for (int j = 0; j < s.size(); j++) {
 				EXPECT_FALSE(processor.isCalculated(i, j));
 			}
 		}
