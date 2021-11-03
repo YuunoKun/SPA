@@ -43,7 +43,7 @@ LabelledProgLine CFG::getHeadLabelledProgLine() {
 	if (head->getLabels().size() > 0) {
 		label = head->getLabels().front();
 	}
-	return { h, label };
+	return { h, {label} };
 }
 
 bool CFG::isEmptyCFG() {
@@ -312,7 +312,7 @@ std::vector<std::pair<LabelledProgLine, LabelledProgLine>> CFG::getNextBipWithLa
 	checkValidity();
 
 	std::unordered_multimap<LabelledProgLine, LabelledProgLine> result;
-	auto action = [&result](CFGNode* node, auto action, std::stack<prog_line> call_stack) {
+	auto action = [&result](CFGNode* node, auto action, std::vector<prog_line> call_stack) {
 		if (node->isVisited()) {
 			return;
 		}
@@ -320,8 +320,8 @@ std::vector<std::pair<LabelledProgLine, LabelledProgLine>> CFG::getNextBipWithLa
 		node->toggleVisited();
 
 		std::vector<prog_line> lines = node->getProgramLines();
-		for (size_t i = 0; i + 1< lines.size(); i++) {
-			result.insert({ {lines[i], call_stack.top()}, {lines[i + 1], call_stack.top()} });
+		for (size_t i = 0; i + 1 < lines.size(); i++) {
+			result.insert({ {lines[i], call_stack}, {lines[i + 1], call_stack} });
 		}
 
 		if (node->isCall()) {
@@ -333,9 +333,10 @@ std::vector<std::pair<LabelledProgLine, LabelledProgLine>> CFG::getNextBipWithLa
 				return false;
 			};
 			node->getNextCall()->traverse(reset);
-			result.insert({ {node->getProgramLines().back(), call_stack.top()},
-				{node->getNextCall()->getProgramLines().front(), node->getProgramLines().back()} });
-			call_stack.push(node->getProgramLines().back());
+			LabelledProgLine from = { node->getProgramLines().back(), call_stack };
+			call_stack.push_back(node->getProgramLines().back());
+			LabelledProgLine to = { node->getNextCall()->getProgramLines().front(), call_stack };
+			result.insert({ from, to });
 			action(node->getNextCall(), action, call_stack);
 			return;
 		}
@@ -346,20 +347,20 @@ std::vector<std::pair<LabelledProgLine, LabelledProgLine>> CFG::getNextBipWithLa
 			}
 
 			if (node->getNextBranch()) {
-				result.insert({ {node->getProgramLines().back(), call_stack.top()},
-					{node->getNextBranch()->getProgramLines().front(), call_stack.top()} });
+				result.insert({ {node->getProgramLines().back(), call_stack},
+					{node->getNextBranch()->getProgramLines().front(), call_stack} });
 				action(node->getNextBranch(), action, call_stack);
 			}
-			prog_line from = call_stack.top();
-			prog_line label = from;
-			call_stack.pop();
+			prog_line from = call_stack.back();
+			std::vector<prog_line> label = call_stack;
+			call_stack.pop_back();
 			CFGNode* to = node->getNextMain()->getNextReturn()[from];
 			if (!to) {
 				throw std::runtime_error("Error traversing CFG for NextBip. Invalid call return.");
 			}
 			while (to->isTermination() && to->isReturn()) {
-				from = call_stack.top();
-				call_stack.pop();
+				from = call_stack.back();
+				call_stack.pop_back();
 				to = to->getNextReturn()[from];
 				if (!to) {
 					throw std::runtime_error("Error traversing CFG for NextBip. Invalid call return.");
@@ -367,8 +368,7 @@ std::vector<std::pair<LabelledProgLine, LabelledProgLine>> CFG::getNextBipWithLa
 			}
 
 			if (!to->isTermination()) {
-				result.insert({ {node->getProgramLines().back(), label}, 
-					{to->getProgramLines().front(), call_stack.top()} });
+				result.insert({ {node->getProgramLines().back(), label}, {to->getProgramLines().front(), call_stack} });
 			}
 
 			if (node->getNextMain()->getPrevMain() == node) {
@@ -378,19 +378,18 @@ std::vector<std::pair<LabelledProgLine, LabelledProgLine>> CFG::getNextBipWithLa
 		}
 
 		if (node->getNextBranch()) {
-			result.insert({ {node->getProgramLines().back(), call_stack.top()},
-				{node->getNextBranch()->getProgramLines().front(), call_stack.top()} });
+			result.insert({ {node->getProgramLines().back(), call_stack},
+				{node->getNextBranch()->getProgramLines().front(), call_stack} });
 			action(node->getNextBranch(), action, call_stack);
 		}
 		if (node->getNextMain()) {
-			result.insert({ {node->getProgramLines().back(), call_stack.top()},
-				{node->getNextMain()->getProgramLines().front(), call_stack.top()} });
+			result.insert({ {node->getProgramLines().back(), call_stack},
+				{node->getNextMain()->getProgramLines().front(), call_stack} });
 			action(node->getNextMain(), action, call_stack);
 		}
 	};
 
-	std::stack<prog_line> init_stk;
-	init_stk.push(0);
+	std::vector<prog_line> init_stk = { 0 };
 	action(head, action, init_stk);
 	resetAllVisited();
 	return std::vector<std::pair<LabelledProgLine, LabelledProgLine>>(result.begin(), result.end());
