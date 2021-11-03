@@ -96,10 +96,30 @@ Select n such that Uses(n,_)
 20 - Uses, prog_line RHS, ident LHS
 prog_line n;
 Select n such that Uses(n, "x")
-4, 8, 9, 13, 14, 15, 16, 17, 18
+4, 5, 6, 7, 8, 9, 13, 14, 15, 17, 18
 5000
 21 - Uses, prog_line RHS, variable LHS
 prog_line n; variable v;
 Select n such that Uses(n,v)
 4, 5, 6, 7, 8, 9, 10, 11, 13, 14, 15, 16, 17, 18, 19
+5000
+22 - select tuple, assign
+assign a; variable v;
+Select <a, v> such that Uses(a, v)
+8 y, 8 x, 14 y, 14 x, 14 z, 15 x, 18 x, 18 y, 18 z, 19 y, 19 z
+5000
+23 - select tuple, print
+print pn; variable v;
+Select <pn, v> such that Uses(pn, v)
+9 x, 10 y, 11 z, 16 var1
+5000
+24 - select tuple, if
+if ifs; variable v;
+Select <ifs, v> such that Uses(ifs, v)
+6 y, 6 z, 6 x, 17 y, 17 x, 17 z
+5000
+25 - select tuple, while
+while w; variable v;
+Select <w, v> such that Uses(w, v)
+4 y, 4 var1, 4 x, 4 z, 13 x, 13 y, 13 z
 5000
