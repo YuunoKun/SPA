@@ -168,3 +168,13 @@ procedure p;
 Select p such that Uses(p, "w")
 Gandulf, Frodo, Aragon, Sam
 5000
+35 - select tuple, procedure
+procedure p; variable v;
+Select <p, v> such that Uses(p, v)
+Gandulf shine, Gandulf ring, Gandulf f, Gandulf lost, Gandulf a, Gandulf w, Gandulf d, Gandulf g, Frodo a, Frodo f, Frodo w, Frodo lost, Frodo shine, Frodo ring, Aragon w, Aragon a, Aragon lost, Aragon shine, Aragon f, Aragon ring, Sam a, Sam f, Sam lost, Sam shine, Sam w, Sam ring
+5000
+36 - select tuple, call
+call c; variable v;
+Select <c, v> such that Uses(c, v)
+5 a, 5 f, 5 w, 5 lost, 5 shine, 5 ring, 7 f, 7 w, 7 a, 7 lost, 7 shine, 7 ring, 12 a, 12 f, 12 w, 12 lost, 12 shine, 12 ring, 17 w, 17 a, 17 lost, 17 shine, 17 f, 17 ring, 31 a, 31 f, 31 w, 31 lost, 31 shine, 31 ring
+5000

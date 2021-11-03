@@ -113,3 +113,8 @@ if ifs;
 Select ifs pattern ifs("1", _, _)
 none
 5000
+24 - select tuple
+if ifs; variable v;
+Select <ifs, v> pattern ifs(v, _, _)
+8 d, 8 c, 20 b, 20 c, 23 h, 42 d
+5000

@@ -113,3 +113,8 @@ while w;
 Select w pattern w("0", _)
 none
 5000
+24 - select tuple
+while w; variable v;
+Select <w, v> pattern w(v, _)
+6 a, 12 a, 12 c, 31 c, 31 b, 38 k, 38 d, 43 a, 43 c, 43 b, 45 b, 45 c
+5000
