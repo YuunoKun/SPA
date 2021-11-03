@@ -96,8 +96,6 @@ public:
 	NextBipTPreprocessor getNextBipTPreprocessor();
 	AffectsBipPreprocessor getAffectsBipPreprocessor();
 	AffectsBipTPreprocessor getAffectsBipTPreprocessor();
-	MonotypeRelationTable<StmtInfo> next_bip_table;
-	MonotypeRelationTable<LabelledProgLine> labelled_next_table;
 
 private:
 	NextTPreprocessor next_t_preprocessor;
@@ -107,6 +105,9 @@ private:
 	NextBipTPreprocessor next_bipT_preprocessor;
 	AffectsBipPreprocessor affects_bip_preprocessor;
 	AffectsBipTPreprocessor affects_bipT_preprocessor;
+
+	MonotypeRelationTable<StmtInfo> next_bip_table;
+	MonotypeRelationTable<LabelledProgLine> labelled_next_table;
 
 	std::vector<LabelledProgLine> getFirstProgs();
 	const MonotypeRelationTable<StmtInfo>& getNextBipTable();

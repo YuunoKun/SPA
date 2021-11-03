@@ -58,8 +58,4 @@ void NextBipTPreprocessor::fullyPopulate() {
 NextBipTPreprocessor::NextBipTPreprocessor(const MonotypeRelationTable<StmtInfo>& table, const std::vector<StmtInfo> v) :
 	next_bip_table(&table) {
 	stmt_info_list = v;
-	int size = stmt_info_list.size();
-	calculated_matrix.resize(size, std::vector<bool>(size, false));
-	calculated_dfs_forward.resize(size, false);
-	calculated_dfs_backward.resize(size, false);
 }

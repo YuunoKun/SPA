@@ -6,9 +6,9 @@
 #include "CFGRelationsManager.h"
 
 namespace UnitTesting {
-	class CFGRelationsManagerTest_AffectsBip : public testing::Test {
+	class CFGRelationsManagerTest_NextBip : public testing::Test {
 	protected:
-		CFGRelationsManagerTest_AffectsBip() {
+		CFGRelationsManagerTest_NextBip() {
 			PKB::getInstance().resetCache();
 
 			cfg1->add(1);
@@ -41,26 +41,6 @@ namespace UnitTesting {
 
 			for (auto& stmt : stmt_list) {
 				PKB::getInstance().addStmt(stmt.stmt_type);
-			}
-
-			for (auto& proc : proc_list) {
-				PKB::getInstance().addProcedure(proc);
-			}
-
-			for (auto& var : var_list) {
-				PKB::getInstance().addVariable(var);
-			}
-
-			for (auto& pair : test_usesS_list) {
-				PKB::getInstance().addUsesS(pair.first.stmt_index, pair.second);
-			}
-
-			for (auto& pair : test_modifiesS_list) {
-				PKB::getInstance().addModifiesS(pair.first.stmt_index, pair.second);
-			}
-
-			for (auto& pair : test_procS_list) {
-				PKB::getInstance().addProcContains(pair.first, pair.second);
 			}
 
 			PKB::getInstance().addCFGsToDestroy(test_cfg_bips);
@@ -104,65 +84,19 @@ namespace UnitTesting {
 		StmtInfo s15{ 15, STMT_WHILE };
 		StmtInfo s16{ 16, STMT_ASSIGN };
 
-		std::vector<std::pair<StmtInfo, StmtInfo>> expected_pairs = {
-			{s4, s6}, {s4, s8}, {s4, s9}, {s4, s11}, {s4, s13}, {s4, s16},
-			{s6, s8}, {s6, s16},
-			{s9, s11}, {s9, s16}, {s11, s13},
-			{s13, s6}, {s13, s8}, {s13, s11}, {s13, s13}, {s13, s14},
-			{s13, s16}, {s14, s8}, {s14, s11},
-			{s16, s8}, {s16, s11}, {s16, s16}
+		std::vector<std::pair<StmtInfo, StmtInfo>> test_next_list = {
+			{s1, s2}, {s2, s3}, {s4, s5}, {s5, s9}, {s6, s7}, {s7, s12}, {s9, s10}, {s10, s12},
+			{s11, s6}, {s12, s13}, {s12, s15}, {s13, s14}, {s14, s8},
+			{s14, s11}, {s15, s8}, {s15, s11}, {s15, s16}, {s16, s15}
 		};
+		std::vector<std::pair<StmtInfo, StmtInfo>> expected_pairs = test_next_list;
 
 		std::vector<StmtInfo> stmt_list = { s1, s2, s3, s4, s5, s6, s7, s8, s9,
 			s10, s11, s12, s13, s14, s15, s16
 		};
 
-		std::vector<std::pair<LabelledProgLine, LabelledProgLine>> test_next_list = {
-			{{1,0}, {2,0}}, {{2,0}, {3,0}}, {{4,0}, {5,0}}, {{5,0}, {9,5}},
-			{{9,5}, {10,5}}, {{10,5}, {12,10}}, {{12,10},{13,10}},
-			{{13, 10}, {14, 10}}, {{12,10},{15,10}}, {{15,10},{16,10}},
-			{{16,10},{15,10}}, {{14, 10}, {11, 5}}, {{15, 10}, {11, 5}},
-			{{11,5}, {6,0}}, {{6,0}, {7,0}}, {{7,0}, {12,7}}, {{12,7},{13,7}},
-			{{13,7}, {14,7}}, {{12,7},{15,7}}, {{15,7},{16,7}},
-			{{16,7},{15,7}}, {{14, 7}, {8,0}}, {{15, 7}, {8,0}}
-		};
-
-		MonotypeRelationTable<LabelledProgLine> test_next_table =
-			MonotypeRelationTable<LabelledProgLine>(test_next_list);
-
-		var_name x = "x";
-		var_name y = "y";
-		var_name z = "z";
-		var_name v = "v";
-		std::vector<var_name> var_list = { x, y, z, v };
-
-		std::vector<std::pair<StmtInfo, var_name>> test_usesS_list = {
-			{s3, v}, {s5, v}, {s5, x}, {s5, y}, {s5, z}, {s6, x}, {s7, v},
-			{s7, x}, {s7, y}, {s7, z}, {s8, x}, {s8, y}, {s9,x},  {s10, v},
-			{s10, x}, {s10, y}, {s10, z}, {s11, x}, {s11,y}, {s12, v}, {s12, x},
-			{s12, y}, {s12, z}, {s13, x}, {s13, z}, {s14, x}, {s15, v}, {s15, x},
-			{s15, y}, {s16, x}, {s16, y}
-		};
-
-		std::vector<std::pair<StmtInfo, var_name>> test_modifiesS_list = {
-			{s1, x}, {s2, v}, {s4, x}, {s5, y}, {s5, z}, {s5, x}, {s6, y},
-			{s7, x}, {s7, y}, {s8, z}, {s9, y}, {s10, x}, {s10, y}, {s11, z},
-			{s12, x}, {s12, y}, {s13, x}, {s14, y}, {s15, y}, {s16, y}
-		};
-
-		proc_name proc_sally = "Sally";
-		proc_name proc_bill = "Bill";
-		proc_name proc_mary = "Mary";
-		proc_name proc_john = "John";
-		std::vector<proc_name> proc_list = { proc_sally, proc_bill, proc_mary, proc_john };
-
-		std::vector<std::pair<proc_name, stmt_index>> test_procS_list = {
-			{proc_sally, 1}, {proc_sally, 2}, {proc_sally, 3}, {proc_bill, 4}, {proc_bill, 5},
-			{proc_bill, 6}, {proc_bill, 7}, {proc_bill, 8}, {proc_mary, 9}, {proc_mary, 10},
-			{proc_mary, 11}, {proc_john, 12}, {proc_john, 13}, {proc_john, 14}, {proc_john, 15}
-		};
-
-		std::vector<LabelledProgLine> first_proglines = { {1, 0}, { 4, 0 } };
+		MonotypeRelationTable<StmtInfo> test_next_table =
+			MonotypeRelationTable<StmtInfo>(test_next_list);
 
 		void TearDown() override {
 			for (auto& cfg : test_cfg_bips) {
@@ -173,7 +107,7 @@ namespace UnitTesting {
 		}
 	};
 
-	TEST_F(CFGRelationsManagerTest_AffectsBip, isAffectingBip_identifier) {
+	TEST_F(CFGRelationsManagerTest_NextBip, isPreviousBip_identifier) {
 		std::vector<StmtInfo> true_list, false_list;
 		std::set<StmtInfo> set;
 		for (auto& pair : expected_pairs) {
@@ -188,15 +122,15 @@ namespace UnitTesting {
 			true_list.end(), std::inserter(false_list, false_list.begin()));
 
 		for (auto& stmt : true_list) {
-			EXPECT_TRUE(manager.isAffectingBip(stmt.stmt_index));
+			EXPECT_TRUE(manager.isPreviousBip(stmt.stmt_index));
 		}
 		for (auto& stmt : false_list) {
-			EXPECT_FALSE(manager.isAffectingBip(stmt.stmt_index));
+			EXPECT_FALSE(manager.isPreviousBip(stmt.stmt_index));
 		}
-		EXPECT_TRUE(manager.getAffectsBipPreprocessor().isFullyPopulated());
+		EXPECT_TRUE(manager.getNextBipPreprocessor().isFullyPopulated());
 	}
 
-	TEST_F(CFGRelationsManagerTest_AffectsBip, isAffectedBip_identifier) {
+	TEST_F(CFGRelationsManagerTest_NextBip, isNextBip_identifier) {
 		std::vector<StmtInfo> true_list, false_list;
 		std::set<StmtInfo> set;
 		for (auto& pair : expected_pairs) {
@@ -211,15 +145,15 @@ namespace UnitTesting {
 			true_list.end(), std::inserter(false_list, false_list.begin()));
 
 		for (auto& stmt : true_list) {
-			EXPECT_TRUE(manager.isAffectedBip(stmt.stmt_index));
+			EXPECT_TRUE(manager.isNextBip(stmt.stmt_index));
 		}
 		for (auto& stmt : false_list) {
-			EXPECT_FALSE(manager.isAffectedBip(stmt.stmt_index));
+			EXPECT_FALSE(manager.isNextBip(stmt.stmt_index));
 		}
-		EXPECT_TRUE(manager.getAffectsBipPreprocessor().isFullyPopulated());
+		EXPECT_TRUE(manager.getNextBipPreprocessor().isFullyPopulated());
 	}
 
-	TEST_F(CFGRelationsManagerTest_AffectsBip, isAffectsBip_double_identifier) {
+	TEST_F(CFGRelationsManagerTest_NextBip, isNextBip_double_identifier) {
 		std::vector<std::pair<StmtInfo, StmtInfo>> true_list = expected_pairs,
 			false_list, all_list;
 		std::set<StmtInfo> set;
@@ -239,26 +173,26 @@ namespace UnitTesting {
 			stmt_index first_stmt_index = pair.first.stmt_index;
 			stmt_index second_stmt_index = pair.second.stmt_index;
 
-			EXPECT_TRUE(manager.isAffectsBip(first_stmt_index, second_stmt_index));
+			EXPECT_TRUE(manager.isNextBip(first_stmt_index, second_stmt_index));
 		}
 		for (auto& pair : false_list) {
 			stmt_index first_stmt_index = pair.first.stmt_index;
 			stmt_index second_stmt_index = pair.second.stmt_index;
 
-			EXPECT_FALSE(manager.isAffectsBip(first_stmt_index, second_stmt_index));
+			EXPECT_FALSE(manager.isNextBip(first_stmt_index, second_stmt_index));
 		}
-		EXPECT_TRUE(manager.getAffectsBipPreprocessor().isFullyPopulated());
+		EXPECT_TRUE(manager.getNextBipPreprocessor().isFullyPopulated());
 	}
 
-	TEST_F(CFGRelationsManagerTest_AffectsBip, getAllAffectsBipRelation) {
-		auto v1 = manager.getAllAffectsBipRelation();
+	TEST_F(CFGRelationsManagerTest_NextBip, getAllNextBipRelation) {
+		auto v1 = manager.getAllNextBipRelation();
 		std::sort(v1.begin(), v1.end());
 		EXPECT_EQ(v1, expected_pairs);
-		EXPECT_TRUE(manager.getAffectsBipPreprocessor().isFullyPopulated());
+		EXPECT_TRUE(manager.getNextBipPreprocessor().isFullyPopulated());
 	}
 
-	TEST_F(CFGRelationsManagerTest_AffectsBip, getAffectingBip_all) {
-		auto v1 = manager.getAffectingBip();
+	TEST_F(CFGRelationsManagerTest_NextBip, getPreviousBip_all) {
+		auto v1 = manager.getPreviousBip();
 		std::sort(v1.begin(), v1.end());
 
 		std::unordered_set<StmtInfo> set;
@@ -269,11 +203,11 @@ namespace UnitTesting {
 		std::copy(set.begin(), set.end(), v2.begin());
 		std::sort(v2.begin(), v2.end());
 		EXPECT_EQ(v1, v2);
-		EXPECT_TRUE(manager.getAffectsBipPreprocessor().isFullyPopulated());
+		EXPECT_TRUE(manager.getNextBipPreprocessor().isFullyPopulated());
 	}
 
-	TEST_F(CFGRelationsManagerTest_AffectsBip, getAffectedBip_all) {
-		auto v1 = manager.getAffectedBip();
+	TEST_F(CFGRelationsManagerTest_NextBip, getNextBip_all) {
+		auto v1 = manager.getNextBip();
 		std::sort(v1.begin(), v1.end());
 
 		std::unordered_set<StmtInfo> set;
@@ -284,12 +218,12 @@ namespace UnitTesting {
 		std::copy(set.begin(), set.end(), v2.begin());
 		std::sort(v2.begin(), v2.end());
 		EXPECT_EQ(v1, v2);
-		EXPECT_TRUE(manager.getAffectsBipPreprocessor().isFullyPopulated());
+		EXPECT_TRUE(manager.getNextBipPreprocessor().isFullyPopulated());
 	}
 
-	TEST_F(CFGRelationsManagerTest_AffectsBip, getAffectedBip_identifier) {
+	TEST_F(CFGRelationsManagerTest_NextBip, getNextBip_identifier) {
 		for (auto& stmt : stmt_list) {
-			auto v1 = manager.getAffectedBip(stmt.stmt_index);
+			auto v1 = manager.getNextBip(stmt.stmt_index);
 			std::sort(v1.begin(), v1.end());
 
 			std::vector<StmtInfo> v2;
@@ -302,9 +236,9 @@ namespace UnitTesting {
 		}
 	}
 
-	TEST_F(CFGRelationsManagerTest_AffectsBip, getAffectingBip_identifier) {
+	TEST_F(CFGRelationsManagerTest_NextBip, getPreviousBip_identifier) {
 		for (auto& stmt : stmt_list) {
-			auto v1 = manager.getAffectingBip(stmt.stmt_index);
+			auto v1 = manager.getPreviousBip(stmt.stmt_index);
 			std::sort(v1.begin(), v1.end());
 
 			std::vector<StmtInfo> v2;
@@ -317,12 +251,12 @@ namespace UnitTesting {
 		}
 	}
 
-	TEST_F(CFGRelationsManagerTest_AffectsBip, reset) {
-		manager.getAllAffectsBipRelation();
-		EXPECT_TRUE(manager.getAffectsBipPreprocessor().isFullyPopulated());
-		EXPECT_FALSE(manager.getAffectsBipPreprocessor().isCacheEmpty());
+	TEST_F(CFGRelationsManagerTest_NextBip, reset) {
+		manager.getAllNextBipRelation();
+		EXPECT_TRUE(manager.getNextBipPreprocessor().isFullyPopulated());
+		EXPECT_FALSE(manager.getNextBipPreprocessor().isCacheEmpty());
 		manager.reset();
-		EXPECT_FALSE(manager.getAffectsBipPreprocessor().isFullyPopulated());
-		EXPECT_TRUE(manager.getAffectsBipPreprocessor().isCacheEmpty());
+		EXPECT_FALSE(manager.getNextBipPreprocessor().isFullyPopulated());
+		EXPECT_TRUE(manager.getNextBipPreprocessor().isCacheEmpty());
 	}
 }

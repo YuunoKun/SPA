@@ -56,6 +56,7 @@
     <ClCompile Include="CallsTParserTest.cpp" />
     <ClCompile Include="CFGRelationManagerTest_Affects.cpp" />
     <ClCompile Include="CFGRelationManagerTest_AffectsBip.cpp" />
+    <ClCompile Include="CFGRelationManagerTest_NextBip.cpp" />
     <ClCompile Include="CFGRelationsManagerTest_AffectsBipT.cpp" />
     <ClCompile Include="CFGRelationsManagerTest_AffectsT.cpp" />
     <ClCompile Include="CFGRelationsManagerTest_NextT.cpp" />
@@ -68,9 +69,11 @@
     <ClCompile Include="FollowsTParserTest.cpp" />
     <ClCompile Include="FSMTest.cpp" />
     <ClCompile Include="NextBipParserTest.cpp" />
+    <ClCompile Include="NextBipPreprocessorTest.cpp" />
     <ClCompile Include="NextBipTParserTest.cpp" />
     <ClCompile Include="NextBipEvaluatorTest.cpp" />
     <ClCompile Include="NextBipTEvaluatorTest.cpp" />
+    <ClCompile Include="NextBipTPreprocessorTest.cpp" />
     <ClCompile Include="NextEvaluatorTest.cpp" />
     <ClCompile Include="ParentParserTest.cpp" />
     <ClCompile Include="ParentTParserTest.cpp" />
