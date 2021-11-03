@@ -140,9 +140,6 @@
     <ClCompile Include="CallsTEvaluatorTest.cpp">
       <Filter>PQL\QueryEvaluator\RelationEvaluator</Filter>
     </ClCompile>
-    <ClCompile Include="CFGNodeTest.cpp">
-      <Filter>PKB</Filter>
-    </ClCompile>
     <ClCompile Include="CFGRelationManagerTest_Affects.cpp">
       <Filter>PKB</Filter>
     </ClCompile>
@@ -187,7 +184,6 @@
     </ClCompile>
     <ClCompile Include="CFGTest.cpp">
       <Filter>PKB</Filter>
-    </ClCompile>
     <ClCompile Include="MonotypeRelationTableTest.cpp">
       <Filter>PKB\RelationTables</Filter>
     </ClCompile>
@@ -253,6 +249,25 @@
     </ClCompile>
     <ClCompile Include="AffectsBipParserTest.cpp">
       <Filter>PQL\QueryPreprocessor\QueryPatternRelRefParser</Filter>
+    <ClCompile Include="AffectsBipPreprocessorTest.cpp">
+      <Filter>PKB\RelationPreprocessor</Filter>
+    </ClCompile>
+    <ClCompile Include="AffectsBipTPreprocessorTest.cpp">
+      <Filter>PKB\RelationPreprocessor</Filter>
+    </ClCompile>
+    <ClCompile Include="CFGRelationManagerTest_AffectsBip.cpp">
+      <Filter>PKB</Filter>
+    </ClCompile>
+    <ClCompile Include="CFGRelationsManagerTest_AffectsBipT.cpp">
+      <Filter>PKB</Filter>
+    </ClCompile>
+    <ClCompile Include="RelationsUtilityTest.cpp">
+      <Filter>PKB\RelationTables</Filter>
+    <ClCompile Include="CFGNodeTest.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="CFGTest.cpp">
+      <Filter>Common</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

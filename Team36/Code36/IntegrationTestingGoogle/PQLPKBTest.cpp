@@ -57,7 +57,6 @@ namespace UnitTesting {
 			PKB::getInstance().addWhile(std::stoi(WHILE_LEFT1), WHILE_RIGHT1);
 			PKB::getInstance().addWhile(std::stoi(WHILE_LEFT2), WHILE_RIGHT2);
 			PKB::getInstance().addCallsP(p1, p2);
-			//PKB::getInstance().addNext(p1, p2);
 		}
 
 		QuerySystem qs;

@@ -665,7 +665,7 @@ namespace UnitTesting {
 
 
 		Synonym synonym2;
-		synonym2.name = "ass";
+		synonym2.name = "assign1";
 		Entity expected_2 = Entity(EntityType::ASSIGN, synonym2);
 		expected_2.setAttribute(AttrRef::STMT_INDEX);
 		query.addEntity(expected_2);
@@ -679,7 +679,7 @@ namespace UnitTesting {
 		temp_token_chain.push_back({ QueryToken::DOT, "" });
 		temp_token_chain.push_back({ QueryToken::STMT_INDEX, "" });
 		temp_token_chain.push_back({ QueryToken::EQUAL, "" });
-		temp_token_chain.push_back({ QueryToken::IDENTIFIER, "ass" });
+		temp_token_chain.push_back({ QueryToken::IDENTIFIER, "assign1" });
 		temp_token_chain.push_back({ QueryToken::DOT, "" });
 		temp_token_chain.push_back({ QueryToken::STMT_INDEX, "" });
 		validator.parseWith(query, temp_token_chain);
