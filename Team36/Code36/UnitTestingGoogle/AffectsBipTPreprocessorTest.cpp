@@ -2,62 +2,139 @@
 
 #include "pch.h"
 #include "PKB.h"
-#include <AffectsTPreprocessor.h>
+#include <AffectsBipPreprocessor.h>
+#include <AffectsBipTPreprocessor.h>
 
 namespace UnitTesting {
-	class AffectsTPreprocessorTest : public testing::Test {
+	class AffectsBipTPreprocessorTest : public testing::Test {
 	protected:
+		AffectsBipTPreprocessorTest() {
+			processor_base.fullyPopulate();
+		}
 
 		StmtInfo s1{ 1, STMT_ASSIGN };
 		StmtInfo s2{ 2, STMT_ASSIGN };
-		StmtInfo s3{ 3, STMT_WHILE };
+		StmtInfo s3{ 3, STMT_PRINT };
 		StmtInfo s4{ 4, STMT_ASSIGN };
-		StmtInfo s5{ 5, STMT_IF };
-		StmtInfo s6{ 6, STMT_READ };
-		StmtInfo s7{ 7, STMT_PRINT };
+		StmtInfo s5{ 5, STMT_CALL };
+		StmtInfo s6{ 6, STMT_ASSIGN };
+		StmtInfo s7{ 7, STMT_CALL };
 		StmtInfo s8{ 8, STMT_ASSIGN };
-		StmtInfo s9{ 9, STMT_CALL };
-		StmtInfo s10{ 10, STMT_ASSIGN };
-		StmtInfo s11{ 11, STMT_IF };
-		StmtInfo s12{ 12, STMT_ASSIGN };
+		StmtInfo s9{ 9, STMT_ASSIGN };
+		StmtInfo s10{ 10, STMT_CALL };
+		StmtInfo s11{ 11, STMT_ASSIGN };
+		StmtInfo s12{ 12, STMT_IF };
 		StmtInfo s13{ 13, STMT_ASSIGN };
 		StmtInfo s14{ 14, STMT_ASSIGN };
-		StmtInfo s15{ 15, STMT_ASSIGN };
+		StmtInfo s15{ 15, STMT_WHILE };
 		StmtInfo s16{ 16, STMT_ASSIGN };
-		StmtInfo s17{ 17, STMT_ASSIGN };
-		StmtInfo s18{ 18, STMT_ASSIGN };
-		StmtInfo s19{ 19, STMT_PRINT };
 
 		std::vector<StmtInfo> stmt_list = { s1, s2, s3, s4, s5, s6, s7, s8, s9,
-			s10, s11, s12, s13, s14, s15, s16, s17, s18, s19
+			s10, s11, s12, s13, s14, s15, s16
 		};
 
-		std::vector<StmtInfo> empty_result = {};
-		std::vector<std::pair<StmtInfo, StmtInfo>> test_input = {
-			{s1, s8}, {s1, s12}, {s1, s14}, {s1, s16}, {s2, s10}, {s4, s4 },
-			{s10, s10}, {s12, s14}, {s12, s16}, {s13, s14}, {s14, s15},
-			{s14, s16}, {s15, s16}
-		};
-		MonotypeRelationTable<StmtInfo> test = MonotypeRelationTable<StmtInfo>(test_input);
+		//procedure Sally{
+		//01	x = 5;
+		//02	v = z;
+		//03	print v;
+		//}
+		//	procedure Bill{
+		//04      x = 5;
+		//05      call Mary;
+		//06      y = x + 6;
+		//07      call John;
+		//08      z = x * y + 2; }
 
-		AffectsTPreprocessor processor = AffectsTPreprocessor(test, stmt_list);
+		//procedure Mary{
+		//09      y = x * 3;
+		//10      call John;
+		//11      z = x + y; }
+
+		//procedure John{
+		//12      if (i > 0) then {
+		//13              x = x + z;
+		//14              y = x;
+		// } }
+		//		  else {
+		//15          while (v > 5) {
+		//16               y = x * y;
+		//			  }
+		//         }
+		//	}
 
 		std::vector<std::pair<StmtInfo, StmtInfo>> expected_pairs = {
-			{s1, s8}, {s1, s12}, {s1, s14}, {s1, s15}, {s1, s16}, {s2, s10}, {s4, s4 },
-			{s10, s10}, {s12, s14}, {s12, s15}, {s12, s16}, {s13, s14}, {s13, s15},
-			{s13, s16}, {s14, s15}, {s14, s16}, {s15, s16}
+			{s4, s6}, {s4, s8}, {s4, s9}, {s4, s11}, {s4, s13}, {s4, s14}, {s4, s16},
+			{s6, s8}, {s6, s16},
+			{s9, s8}, {s9, s11}, {s9, s13}, {s9, s14}, {s9, s16},
+			{s11, s8}, {s11, s13}, {s11, s14},
+			{s13, s6}, {s13, s8}, {s13, s11}, {s13, s13}, {s13, s14}, {s13, s16},
+			{s14, s8}, {s14, s11}, {s14, s13}, {s14, s14},
+			{s16, s8}, {s16, s11}, {s16, s13}, {s16, s14}, {s16, s16}
 		};
 
-		virtual void SetUp() override {
+		std::vector<std::pair<LabelledProgLine, LabelledProgLine>> test_next_list = {
+			{{1,0}, {2,0}}, {{2,0}, {3,0}}, {{4,0}, {5,0}}, {{5,0}, {9,5}},
+			{{9,5}, {10,5}}, {{10,5}, {12,10}}, {{12,10},{13,10}}, {{13, 10}, {14, 10}},
+			{{12,10},{15,10}},
+			{{15,10},{16,10}}, {{16,10},{15,10}}, {{14, 10}, {11, 5}}, {{15, 10}, {11, 5}}, {{11,5}, {6,0}},
+			{{6,0}, {7,0}}, {{7,0}, {12,7}}, {{12,7},{13,7}}, {{13,7}, {14,7}}, {{12,7},{15,7}},
+			{{15,7},{16,7}}, {{16,7},{15,7}}, {{14, 7}, {8,0}}, {{15, 7}, {8,0}},
+			{{9,0}, {10, 0}}, {{14, 10}, {11, 0}}, {{15, 10}, {11, 0}},
+			{{12,0},{13,0}}, {{13,0},{14,0}}, {{12,0},{15,0}}, {{15,0},{16,0}}, {{16,0},{15,0}}
+		};
+
+		MonotypeRelationTable<LabelledProgLine> test_next_table = MonotypeRelationTable<LabelledProgLine>(test_next_list);
+
+		var_name x = "x";
+		var_name y = "y";
+		var_name z = "z";
+		var_name v = "v";
+
+		std::vector<std::pair<StmtInfo, var_name>> test_usesS_list = {
+			{s3, v}, {s5, v}, {s5, x}, {s5, y}, {s5, z}, {s6, x}, {s7, v},
+			{s7, x}, {s7, y}, {s7, z}, {s8, x}, {s8, y}, {s9,x},  {s10, v},
+			{s10, x}, {s10, y}, {s10, z}, {s11, x}, {s11,y}, {s12, v}, {s12, x},
+			{s12, y}, {s12, z}, {s13, x}, {s13, z}, {s14, x}, {s15, v}, {s15, x},
+			{s15, y}, {s16, x}, {s16, y}
+		};
+		RelationTable<StmtInfo, var_name> test_usesS_table = RelationTable<StmtInfo, var_name>(test_usesS_list);
+
+		std::vector<std::pair<StmtInfo, var_name>> test_modifiesS_list = {
+			{s1, x}, {s2, v}, {s4, x}, {s5, y}, {s5, z}, {s5, x}, {s6, y},
+			{s7, x}, {s7, y}, {s8, z}, {s9, y}, {s10, x}, {s10, y}, {s11, z},
+			{s12, x}, {s12, y}, {s13, x}, {s14, y}, {s15, y}, {s16, y}
+		};
+		RelationTable<StmtInfo, var_name> test_modifiesS_table = RelationTable<StmtInfo, var_name>(test_modifiesS_list);
+
+		proc_name proc_sally = "Sally";
+		proc_name proc_bill = "Bill";
+		proc_name proc_mary = "Mary";
+		proc_name proc_john = "John";
+
+		std::vector<std::pair<proc_name, stmt_index>> test_procS_list = {
+			{proc_sally, 1}, {proc_sally, 2}, {proc_sally, 3}, {proc_bill, 4}, {proc_bill, 5},
+			{proc_bill, 6}, {proc_bill, 7}, {proc_bill, 8}, {proc_mary, 9}, {proc_mary, 10},
+			{proc_mary, 11}, {proc_john, 12}, {proc_john, 13}, {proc_john, 14}, {proc_john, 15}
+		};
+
+		RelationTable<proc_name, stmt_index> test_procS_table = RelationTable<proc_name, stmt_index>(test_procS_list);
+
+		std::vector<LabelledProgLine> first_proglines = { {1, 0}, { 4, 0 } };
+
+		AffectsBipPreprocessor processor_base = AffectsBipPreprocessor(test_next_table,
+			test_usesS_table, test_modifiesS_table, test_procS_table, first_proglines, stmt_list);
+		AffectsBipTPreprocessor processor = AffectsBipTPreprocessor(processor_base.getCache(), processor_base.getLabelledProgLineCache(), stmt_list);
+
+		void TearDown() override {
 			processor.reset();
 		}
 	};
 
-	TEST_F(AffectsTPreprocessorTest, evaluateWildAndWild) {
-		EXPECT_TRUE(processor.evaluateWildAndWild());
+	TEST_F(AffectsBipTPreprocessorTest, evaluateWildAndWild) {
+		EXPECT_EQ(processor.evaluateWildAndWild(), !expected_pairs.empty());
 	}
 
-	TEST_F(AffectsTPreprocessorTest, evaluateConstantAndWild) {
+	TEST_F(AffectsBipTPreprocessorTest, evaluateConstantAndWild) {
 		std::vector<StmtInfo> true_list, false_list;
 		std::set<StmtInfo> set;
 		for (auto& pair : expected_pairs) {
@@ -72,15 +149,13 @@ namespace UnitTesting {
 
 		for (auto& stmt : true_list) {
 			EXPECT_TRUE(processor.evaluateConstantAndWild(stmt.stmt_index));
-			EXPECT_TRUE(processor.evaluateConstantAndWild(stmt.stmt_index));
 		}
 		for (auto& stmt : false_list) {
-			EXPECT_FALSE(processor.evaluateConstantAndWild(stmt.stmt_index));
 			EXPECT_FALSE(processor.evaluateConstantAndWild(stmt.stmt_index));
 		}
 	}
 
-	TEST_F(AffectsTPreprocessorTest, evaluateWildAndConstant) {
+	TEST_F(AffectsBipTPreprocessorTest, evaluateWildAndConstant) {
 		std::vector<StmtInfo> true_list, false_list;
 		std::set<StmtInfo> set;
 		for (auto& pair : expected_pairs) {
@@ -95,15 +170,13 @@ namespace UnitTesting {
 
 		for (auto& stmt : true_list) {
 			EXPECT_TRUE(processor.evaluateWildAndConstant(stmt.stmt_index));
-			EXPECT_TRUE(processor.evaluateWildAndConstant(stmt.stmt_index));
 		}
 		for (auto& stmt : false_list) {
-			EXPECT_FALSE(processor.evaluateWildAndConstant(stmt.stmt_index));
 			EXPECT_FALSE(processor.evaluateWildAndConstant(stmt.stmt_index));
 		}
 	}
 
-	TEST_F(AffectsTPreprocessorTest, evaluateConstantAndConstant) {
+	TEST_F(AffectsBipTPreprocessorTest, evaluateConstantAndConstant) {
 		std::vector < std::pair<StmtInfo, StmtInfo>> true_list = expected_pairs, false_list, all_list;
 		std::set<StmtInfo> set;
 		for (auto& s1 : stmt_list) {
@@ -118,22 +191,14 @@ namespace UnitTesting {
 		std::set_difference(all_list.begin(), all_list.end(), true_list.begin(), true_list.end(), std::inserter(false_list, false_list.begin()));
 
 		for (auto& pair : true_list) {
-			EXPECT_TRUE(processor.evaluateConstantAndConstant(pair.first.stmt_index, pair.second.stmt_index)) << "Expected true but fail at " <<
-				pair.first.stmt_index << " and" << pair.second.stmt_index;
-			EXPECT_EQ(processor.getCalculatedMatrix()[pair.first.stmt_index - 1][pair.second.stmt_index - 1], 1);
-			EXPECT_TRUE(processor.evaluateConstantAndConstant(pair.first.stmt_index, pair.second.stmt_index)) << "Expected true but fail at " <<
-				pair.first.stmt_index << " and" << pair.second.stmt_index;
+			EXPECT_TRUE(processor.evaluateConstantAndConstant(pair.first.stmt_index, pair.second.stmt_index));
 		}
 		for (auto& pair : false_list) {
-			EXPECT_FALSE(processor.evaluateConstantAndConstant(pair.first.stmt_index, pair.second.stmt_index)) << "Expected false but fail at " <<
-				pair.first.stmt_index << " and" << pair.second.stmt_index;
-			EXPECT_EQ(processor.getCalculatedMatrix()[pair.first.stmt_index - 1][pair.second.stmt_index - 1], 1);
-			EXPECT_FALSE(processor.evaluateConstantAndConstant(pair.first.stmt_index, pair.second.stmt_index)) << "Expected false but fail at " <<
-				pair.first.stmt_index << " and" << pair.second.stmt_index;
+			EXPECT_FALSE(processor.evaluateConstantAndConstant(pair.first.stmt_index, pair.second.stmt_index));
 		}
 	}
 
-	TEST_F(AffectsTPreprocessorTest, evaluateSynonymAndSynonym) {
+	TEST_F(AffectsBipTPreprocessorTest, evaluateSynonymAndSynonym) {
 		auto v1 = processor.evaluateSynonymAndSynonym();
 		std::sort(v1.begin(), v1.end());
 		EXPECT_EQ(v1, expected_pairs);
@@ -141,7 +206,7 @@ namespace UnitTesting {
 		EXPECT_EQ(v1, expected_pairs);
 	}
 
-	TEST_F(AffectsTPreprocessorTest, evaluateWildAndSynonym) {
+	TEST_F(AffectsBipTPreprocessorTest, evaluateWildAndSynonym) {
 		auto v1 = processor.evaluateWildAndSynonym();
 		std::sort(v1.begin(), v1.end());
 
@@ -153,10 +218,10 @@ namespace UnitTesting {
 		std::copy(set.begin(), set.end(), v2.begin());
 		std::sort(v2.begin(), v2.end());
 		EXPECT_EQ(v1, v2);
-		EXPECT_FALSE(processor.isFullyPopulated());
+		EXPECT_TRUE(processor.isFullyPopulated());
 	}
 
-	TEST_F(AffectsTPreprocessorTest, evaluateSynonymAndWild) {
+	TEST_F(AffectsBipTPreprocessorTest, evaluateSynonymAndWild) {
 		auto v1 = processor.evaluateSynonymAndWild();
 		std::sort(v1.begin(), v1.end());
 
@@ -168,10 +233,10 @@ namespace UnitTesting {
 		std::copy(set.begin(), set.end(), v2.begin());
 		std::sort(v2.begin(), v2.end());
 		EXPECT_EQ(v1, v2);
-		EXPECT_FALSE(processor.isFullyPopulated());
+		EXPECT_TRUE(processor.isFullyPopulated());
 	}
 
-	TEST_F(AffectsTPreprocessorTest, evaluateConstantAndSynonym) {
+	TEST_F(AffectsBipTPreprocessorTest, evaluateConstantAndSynonym) {
 		for (auto& stmt : stmt_list) {
 			auto v1 = processor.evaluateConstantAndSynonym(stmt.stmt_index);
 			std::sort(v1.begin(), v1.end());
@@ -183,14 +248,10 @@ namespace UnitTesting {
 				}
 			}
 			EXPECT_EQ(v1, v2);
-			for (int i = 0; i < stmt_list.size(); i++) {
-				EXPECT_TRUE(processor.getCalculatedMatrix()[stmt.stmt_index - 1][i]);
-				EXPECT_TRUE(processor.isDFSForwardComputed(stmt.stmt_index));
-			}
 		}
 	}
 
-	TEST_F(AffectsTPreprocessorTest, evaluateSynonymAndConstant) {
+	TEST_F(AffectsBipTPreprocessorTest, evaluateSynonymAndConstant) {
 		for (auto& stmt : stmt_list) {
 			auto v1 = processor.evaluateSynonymAndConstant(stmt.stmt_index);
 			std::sort(v1.begin(), v1.end());
@@ -202,14 +263,10 @@ namespace UnitTesting {
 				}
 			}
 			EXPECT_EQ(v1, v2);
-			for (int i = 0; i < stmt_list.size(); i++) {
-				EXPECT_TRUE(processor.getCalculatedMatrix()[i][stmt.stmt_index - 1]);
-				EXPECT_TRUE(processor.isDFSBackwardComputed(stmt.stmt_index));
-			}
 		}
 	}
 
-	TEST_F(AffectsTPreprocessorTest, combinations) {
+	TEST_F(AffectsBipTPreprocessorTest, combinations) {
 		// (s1, s2)
 
 		auto v1 = processor.evaluateSynonymAndSynonym();
@@ -246,12 +303,10 @@ namespace UnitTesting {
 		std::set_difference(all_list2.begin(), all_list2.end(), true_list2.begin(), true_list2.end(), std::inserter(false_list2, false_list2.begin()));
 
 		for (auto& pair : true_list2) {
-			EXPECT_TRUE(processor.evaluateConstantAndConstant(pair.first.stmt_index, pair.second.stmt_index)) << "Expected true but fail at " <<
-				pair.first.stmt_index << " and" << pair.second.stmt_index;
+			EXPECT_TRUE(processor.evaluateConstantAndConstant(pair.first.stmt_index, pair.second.stmt_index));
 		}
 		for (auto& pair : false_list2) {
-			EXPECT_FALSE(processor.evaluateConstantAndConstant(pair.first.stmt_index, pair.second.stmt_index)) << "Expected false but fail at " <<
-				pair.first.stmt_index << " and" << pair.second.stmt_index;
+			EXPECT_FALSE(processor.evaluateConstantAndConstant(pair.first.stmt_index, pair.second.stmt_index));
 		}
 
 		// (c, _)
@@ -290,30 +345,7 @@ namespace UnitTesting {
 		EXPECT_TRUE(processor.isFullyPopulated());
 	}
 
-	TEST_F(AffectsTPreprocessorTest, reset) {
-		for (auto& stmt : stmt_list) {
-			processor.evaluateSynonymAndConstant(stmt.stmt_index);
-			for (int i = 0; i < stmt_list.size(); i++) {
-				EXPECT_TRUE(processor.getCalculatedMatrix()[i][stmt.stmt_index - 1]);
-				EXPECT_TRUE(processor.isDFSBackwardComputed(stmt.stmt_index));
-			}
-		}
-		for (auto& stmt : stmt_list) {
-			processor.evaluateConstantAndSynonym(stmt.stmt_index);
-			for (int i = 0; i < stmt_list.size(); i++) {
-				EXPECT_TRUE(processor.getCalculatedMatrix()[stmt.stmt_index - 1][i]);
-				EXPECT_TRUE(processor.isDFSForwardComputed(stmt.stmt_index));
-			}
-		}
-		processor.reset();
-		for (auto& stmt : stmt_list) {
-			for (int i = 0; i < stmt_list.size(); i++) {
-				EXPECT_FALSE(processor.getCalculatedMatrix()[i][stmt.stmt_index - 1]);
-				EXPECT_FALSE(processor.isDFSBackwardComputed(stmt.stmt_index));
-				EXPECT_FALSE(processor.getCalculatedMatrix()[stmt.stmt_index - 1][i]);
-				EXPECT_FALSE(processor.isDFSForwardComputed(stmt.stmt_index));
-			}
-		}
+	TEST_F(AffectsBipTPreprocessorTest, reset) {
 		processor.evaluateSynonymAndSynonym();
 		EXPECT_TRUE(processor.isFullyPopulated());
 		EXPECT_FALSE(processor.isCacheEmpty());

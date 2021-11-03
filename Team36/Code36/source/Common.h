@@ -79,12 +79,10 @@ struct LabelledProgLine {
 	}
 };
 
-
 namespace std {
 	template <>
 	struct hash<StmtInfo> {
 		size_t operator()(const StmtInfo& k) const {
-			// Compute individual hash values for two data members and combine them using XOR and bit shifting
 			return ((hash<int>()(k.stmt_index) ^ (hash<int>()(k.stmt_type) << 1)) >> 1);
 		}
 	};
@@ -96,3 +94,28 @@ namespace std {
 		}
 	};
 }
+
+
+// Valid expression symbols
+constexpr char EXPR_SYMBOL_SPACE_C = ' ';
+constexpr char* EXPR_SYMBOL_SPACE_S = "	";
+constexpr char EXPR_SYMBOL_TAB_C = '	';
+constexpr char* EXPR_SYMBOL_TAB_S = "	";
+constexpr char EXPR_SYMBOL_PLUS_SIGN_C = '+';
+constexpr char* EXPR_SYMBOL_PLUS_SIGN_S = "+";
+constexpr char EXPR_SYMBOL_MINUS_SIGN_C = '-';
+constexpr char* EXPR_SYMBOL_MINUS_SIGN_S = "-";
+constexpr char EXPR_SYMBOL_ASTERISK_C = '*';
+constexpr char* EXPR_SYMBOL_ASTERISK_S = "*";
+constexpr char EXPR_SYMBOL_SLASH_C = '/';
+constexpr char* EXPR_SYMBOL_SLASH_S = "/";
+constexpr char EXPR_SYMBOL_PERCENT_SIGN_C = '%';
+constexpr char* EXPR_SYMBOL_PERCENT_SIGN_S = "%";
+constexpr char EXPR_SYMBOL_EQUAL_SIGN_C = '=';
+constexpr char* EXPR_SYMBOL_EQUAL_SIGN_S = "=";
+constexpr char EXPR_SYMBOL_LEFT_PARENTHESIS_C = '(';
+constexpr char* EXPR_SYMBOL_LEFT_PARENTHESIS_S = "(";
+constexpr char EXPR_SYMBOL_RIGHT_PARENTHESIS_C = ')';
+constexpr char* EXPR_SYMBOL_RIGHT_PARENTHESIS_S = ")";
+constexpr char EXPR_SYMBOL_SEMICOLON_C = ';'; 
+constexpr char* EXPR_SYMBOL_SEMICOLON_S = ";";

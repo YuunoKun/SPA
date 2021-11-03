@@ -1,7 +1,6 @@
 #include <algorithm>
 #include "CFGNode.h"
 
-
 CFGNode::CFGNode() {
 	is_visited = false;
 	is_termination = false;
@@ -12,7 +11,7 @@ CFGNode::CFGNode() {
 
 CFGNode::~CFGNode() {
 	delete next_branch;
-	if (getNextMain() && getNextMain()->getPrevMain() != this) {
+	if (getNextMain() && getNextMain()->getPrevMain() == this) {
 		delete next_main;
 	}
 }
@@ -78,7 +77,7 @@ void CFGNode::addLabel(prog_line new_label) {
 }
 
 void CFGNode::addNextReturn(prog_line from, CFGNode* to) {
-	next_return.insert({from, to});
+	next_return.insert({ from, to });
 }
 
 std::vector<prog_line> CFGNode::getProgramLines() {

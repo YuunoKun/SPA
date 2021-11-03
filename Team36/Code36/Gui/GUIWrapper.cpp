@@ -15,7 +15,7 @@ GUIWrapper::GUIWrapper() {
 void GUIWrapper::parse(std::string filename) {
 	// call your parser to do the parsing
 	SourceProcessor::Parser parser;
-	parser.load_file(filename);
+	parser.loadSourceFile(filename);
 	parser.parse();
 	std::cout << "parsed " << filename << std::endl;
 	// ...rest of your code...
