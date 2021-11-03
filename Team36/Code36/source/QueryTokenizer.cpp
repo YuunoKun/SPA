@@ -116,13 +116,13 @@ void QueryTokenizer::tokenize(Query& query, std::string input) {
 				&& curr_query_token.token_value == SUCH_SPACE_THAT_STR) {
 				// check for "such that" in such that
 				curr_query_token.type = QueryToken::SUCH_THAT;
-				curr_query_token.token_value = EMPTY_STR;
+				curr_query_token.token_value = EMPTY_S;
 				add_query_token(query, curr_query_token);
 				break;
 			} else if (curr_query_token.type == QueryToken::IDENTIFIER
 				&& curr_query_token.token_value == PROG_UNDERSCORE_LINE_STR) {
 				curr_query_token.type = QueryToken::PROG_LINE;
-				curr_query_token.token_value = EMPTY_STR;
+				curr_query_token.token_value = EMPTY_S;
 				add_query_token(query, curr_query_token);
 				is_prog_line = false;
 			}
@@ -142,31 +142,31 @@ void QueryTokenizer::tokenize(Query& query, std::string input) {
 			if (!quotation_validation && curr_query_token.type == QueryToken::IDENTIFIER) {
 				if (curr_query_token.token_value == FOLLOWS_STR) {
 					curr_query_token.type = QueryToken::FOLLOWS_T;
-					curr_query_token.token_value = EMPTY_STR;
+					curr_query_token.token_value = EMPTY_S;
 					add_query_token(query, curr_query_token);
 				} else if (curr_query_token.token_value == PARENT_STR) {
 					curr_query_token.type = QueryToken::PARENT_T;
-					curr_query_token.token_value = EMPTY_STR;
+					curr_query_token.token_value = EMPTY_S;
 					add_query_token(query, curr_query_token);
 				} else if (curr_query_token.token_value == CALLS_STR) {
 					curr_query_token.type = QueryToken::CALLS_T;
-					curr_query_token.token_value = EMPTY_STR;
+					curr_query_token.token_value = EMPTY_S;
 					add_query_token(query, curr_query_token);
 				} else if (curr_query_token.token_value == NEXT_STR) {
 					curr_query_token.type = QueryToken::NEXT_T;
-					curr_query_token.token_value = EMPTY_STR;
+					curr_query_token.token_value = EMPTY_S;
 					add_query_token(query, curr_query_token);
 				} else if (curr_query_token.token_value == NEXT_BIP_STR) {
 					curr_query_token.type = QueryToken::NEXT_BIP_T;
-					curr_query_token.token_value = EMPTY_STR;
+					curr_query_token.token_value = EMPTY_S;
 					add_query_token(query, curr_query_token);
 				} else if (curr_query_token.token_value == AFFECTS_STR) {
 					curr_query_token.type = QueryToken::AFFECTS_T;
-					curr_query_token.token_value = EMPTY_STR;
+					curr_query_token.token_value = EMPTY_S;
 					add_query_token(query, curr_query_token);
 				} else if (curr_query_token.token_value == AFFECTS_BIP_STR) {
 					curr_query_token.type = QueryToken::AFFECTS_BIP_T;
-					curr_query_token.token_value = EMPTY_STR;
+					curr_query_token.token_value = EMPTY_S;
 					add_query_token(query, curr_query_token);
 				}
 
@@ -272,31 +272,31 @@ void QueryTokenizer::add_query_token(Query& query, QueryToken& query_token) {
 
 		if (query_token.token_value == DOT_PROCNAME_STR) {
 			query_token.type = QueryToken::DOT;
-			query_token.token_value = EMPTY_STR;
+			query_token.token_value = EMPTY_S;
 			query_token_cache.push_back(query_token);
 			query_token.type = QueryToken::PROC_NAME;
-			query_token.token_value = EMPTY_STR;
+			query_token.token_value = EMPTY_S;
 		}
 		else if (query_token.token_value == DOT_VARNAME_STR) {
 			query_token.type = QueryToken::DOT;
-			query_token.token_value = EMPTY_STR;
+			query_token.token_value = EMPTY_S;
 			query_token_cache.push_back(query_token);
 			query_token.type = QueryToken::VAR_NAME;
-			query_token.token_value = EMPTY_STR;
+			query_token.token_value = EMPTY_S;
 		}
 		else if (query_token.token_value == DOT_VALIUE_STR) {
 			query_token.type = QueryToken::DOT;
-			query_token.token_value = EMPTY_STR;
+			query_token.token_value = EMPTY_S;
 			query_token_cache.push_back(query_token);
 			query_token.type = QueryToken::VALUE;
-			query_token.token_value = EMPTY_STR;
+			query_token.token_value = EMPTY_S;
 		}
 		else if (query_token.token_value == DOT_STMT_HASH_STR) {
 			query_token.type = QueryToken::DOT;
-			query_token.token_value = EMPTY_STR;
+			query_token.token_value = EMPTY_S;
 			query_token_cache.push_back(query_token);
 			query_token.type = QueryToken::STMT_INDEX;
-			query_token.token_value = EMPTY_STR;
+			query_token.token_value = EMPTY_S;
 		}
 	}
 	else if (query_token.type == QueryToken::CONSTANT) {
@@ -308,5 +308,5 @@ void QueryTokenizer::add_query_token(Query& query, QueryToken& query_token) {
 
 	query_token_cache.push_back(query_token);
 	query_token.type = QueryToken::QueryTokenType::WHITESPACE;
-	query_token.token_value = EMPTY_STR;
+	query_token.token_value = EMPTY_S;
 }

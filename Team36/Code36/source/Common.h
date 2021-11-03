@@ -96,7 +96,6 @@ namespace std {
 }
 
 
-// Valid expression symbols
 constexpr char SPACE_C = ' ';
 constexpr char* SPACE_S = "	";
 constexpr char TAB_C = '	';
@@ -134,25 +133,25 @@ constexpr char HASH_C = '#';
 constexpr char ZERO_C = '0';
 constexpr char* ZERO_S = "0";
 
-static std::string const EMPTY_STR = "";
+constexpr char* EMPTY_S = "";
 
-static std::string const SUCH_STR = "such";
-static std::string const SUCH_SPACE_STR = "such ";
-static std::string const SUCH_SPACE_THAT_STR = "such that";
-static std::string const PROG_STR = "prog";
-static std::string const PROG_UNDERSCORE_STR = "prog_";
-static std::string const PROG_UNDERSCORE_LINE_STR = "prog_line";
+constexpr char* SUCH_STR = "such";
+constexpr char* SUCH_SPACE_STR = "such ";
+constexpr char* SUCH_SPACE_THAT_STR = "such that";
+constexpr char* PROG_STR = "prog";
+constexpr char* PROG_UNDERSCORE_STR = "prog_";
+constexpr char* PROG_UNDERSCORE_LINE_STR = "prog_line";
 
-static std::string const FOLLOWS_STR = "Follows";
-static std::string const PARENT_STR = "Parent";
-static std::string const CALLS_STR = "Calls";
-static std::string const NEXT_STR = "Next";
-static std::string const NEXT_BIP_STR = "NextBip";
-static std::string const AFFECTS_STR = "Affects";
-static std::string const AFFECTS_BIP_STR = "AffectsBip";
+constexpr char* FOLLOWS_STR = "Follows";
+constexpr char* PARENT_STR = "Parent";
+constexpr char* CALLS_STR = "Calls";
+constexpr char* NEXT_STR = "Next";
+constexpr char* NEXT_BIP_STR = "NextBip";
+constexpr char* AFFECTS_STR = "Affects";
+constexpr char* AFFECTS_BIP_STR = "AffectsBip";
 
-static std::string const DOT_PROCNAME_STR = ".procName";
-static std::string const DOT_VARNAME_STR = ".varName";
-static std::string const DOT_VALIUE_STR = ".value";
-static std::string const DOT_STMT_STR = ".stmt";
-static std::string const DOT_STMT_HASH_STR = ".stmt#";
+constexpr char* DOT_PROCNAME_STR = ".procName";
+constexpr char* DOT_VARNAME_STR = ".varName";
+constexpr char* DOT_VALIUE_STR = ".value";
+constexpr char* DOT_STMT_STR = ".stmt";
+constexpr char* DOT_STMT_HASH_STR = ".stmt#";
