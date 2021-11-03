@@ -116,16 +116,16 @@ namespace UnitTesting {
 		};
 
 		std::vector<std::pair<LabelledProgLine, LabelledProgLine>> test_next_list = {
-			{{1,{0}},{2,{0}}}, {{2,{0}},{3,{0}}}, 
+			{{1,{0}},{2,{0}}}, {{2,{0}},{3,{0}}},
 
 			{{4,{0}},{5,{0}}}, {{5,{0}},{9,{0,5}}}, {{9,{0,5}},{10,{0,5}}},
 			{{10,{0,5}},{12,{0,5,10}}}, {{12,{0,5,10}},{13,{0,5,10}}}, {{13,{0,5,10}},{14,{0,5,10}}},
 			{{12,{0,5,10}},{15,{0,5,10}}}, {{15,{0,5,10}},{16,{0,5,10}}}, {{16,{0,5,10}},{15,{0,5,10}}},
 			{{14,{0,5,10}},{11,{0,5}}}, {{15,{0,5,10}},{11,{0,5}}}, {{11,{0,5}},{6,{0}}}, {{6,{0}},{7,{0}}},
-			{{7,{0}},{12,{0,7}}}, {{12,{0,7}},{13,{0,7}}}, {{13,{0,7}},{14,{0,7}}}, {{12,{0,7}},{15,{0,7}}}, 
-			{{15,{0,7}},{16,{0,7}}}, {{16,{0,7}},{15,{0,7}}}, {{14,{0,7}},{8,{0}}}, {{15,{0,7}},{8,{0}}}, 
+			{{7,{0}},{12,{0,7}}}, {{12,{0,7}},{13,{0,7}}}, {{13,{0,7}},{14,{0,7}}}, {{12,{0,7}},{15,{0,7}}},
+			{{15,{0,7}},{16,{0,7}}}, {{16,{0,7}},{15,{0,7}}}, {{14,{0,7}},{8,{0}}}, {{15,{0,7}},{8,{0}}},
 
-			{{9,{0}},{10,{0}}}, {{10,{0}},{12,{0,10}}}, {{12,{0,10}},{13,{0,10}}}, 
+			{{9,{0}},{10,{0}}}, {{10,{0}},{12,{0,10}}}, {{12,{0,10}},{13,{0,10}}},
 			{{13,{0,10}},{14,{0,10}}}, {{12,{0,10}},{15,{0,10}}}, {{15,{0,10}},{16,{0,10}}}, {{16,{0,10}},{15,{0,10}}},
 			{{14,{0,10}},{11,{0}}}, {{15,{0,10}},{11,{0}}},
 
@@ -177,21 +177,6 @@ namespace UnitTesting {
 			PKB::getInstance().resetCache();
 		}
 	};
-
-	TEST_F(CFGRelationsManagerTest_AffectsBip, getLabelledNextTable) {
-		MonotypeRelationTable<LabelledProgLine> labelled_next_table;
-		auto cfgs = PKB::getInstance().getCFGBips();
-		for (CFG* cfg : cfgs) {
-			for (auto& pair : cfg->getNextBipWithLabel()) {
-				labelled_next_table.insert(pair.first, pair.second);
-			}
-		}
-		auto v1 = labelled_next_table.getPairs();
-		auto v2 = test_next_table.getPairs();
-		std::sort(v1.begin(), v1.end());
-		std::sort(v2.begin(), v2.end());
-		EXPECT_EQ(v1, v2);
-	}
 
 	TEST_F(CFGRelationsManagerTest_AffectsBip, isAffectingBip_identifier) {
 		std::vector<StmtInfo> true_list, false_list;
