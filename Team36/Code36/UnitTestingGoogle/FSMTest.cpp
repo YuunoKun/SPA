@@ -2,8 +2,8 @@
 #include <iostream>
 #include <stdexcept>
 #include <vector>
-#include "../../source/FSM.h"
 #include "../../source/Extractor.h"
+#include "../../source/FSM.h"
 #include "../../source/Tokenizer.h"
 
 namespace UnitTesting {
@@ -79,7 +79,7 @@ namespace UnitTesting {
 		Tokenizer tokenizer;
 		DummyDesignExtractor dde;
 
-		tokenizer.parseIntoTokens("arandomvariable 0983425");
+		tokenizer.parseIntoTokens("arandomvariable 983425");
 		tokenizer.initTokenStack();
 		FSM fsm_1(tokenizer, &dde);
 		ASSERT_NO_THROW(fsm_1.expectFactor());
@@ -104,6 +104,11 @@ namespace UnitTesting {
 		tokenizer.parseIntoTokens("{");
 		tokenizer.initTokenStack();
 		FSM fsm(tokenizer, &dde);
+		ASSERT_THROW(fsm.expectFactor(), std::runtime_error);
+
+		tokenizer.parseIntoTokens("01234");
+		tokenizer.initTokenStack();
+		FSM fsm2(tokenizer, &dde);
 		ASSERT_THROW(fsm.expectFactor(), std::runtime_error);
 	}
 
