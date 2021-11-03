@@ -21,8 +21,4 @@ public:
 			insert(pair.first, pair.second);
 		}
 	};
-
-protected:
-	std::unordered_set<T> calculated_dfs_forward;
-	std::unordered_set<T> calculated_dfs_backward;
 };
