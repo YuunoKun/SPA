@@ -1,50 +1,51 @@
 #include "NextBipTPreprocessor.h"
 
 bool NextBipTPreprocessor::evaluateWildAndWild() {
-	return !cache.isEmpty();
+	return !next_bip_table->isEmpty();
 }
 
 bool NextBipTPreprocessor::evaluateConstantAndWild(int index) {
 	StmtInfo s1 = stmt_info_list[index - 1];
-	return cache.containsKey(s1);
+	return next_bip_table->containsKey(s1);
 }
 
 bool NextBipTPreprocessor::evaluateWildAndConstant(int index) {
 	StmtInfo s1 = stmt_info_list[index - 1];
-	return cache.containsValue(s1);
+	return next_bip_table->containsValue(s1);
 }
 
 bool NextBipTPreprocessor::evaluateConstantAndConstant(int index1, int index2) {
 	StmtInfo s1 = stmt_info_list[index1 - 1];
 	StmtInfo s2 = stmt_info_list[index2 - 1];
+	fullyPopulate();
 	return cache.containsPair(s1, s2);
 }
 
 std::vector<std::pair<StmtInfo, StmtInfo>> NextBipTPreprocessor::evaluateSynonymAndSynonym() {
 	fullyPopulate();
-	return next_bip_table->getPairs();
+	return cache.getPairs();
 }
 
 std::vector<StmtInfo> NextBipTPreprocessor::evaluateWildAndSynonym() {
 	fullyPopulate();
-	return next_bip_table->getValues();
+	return cache.getValues();
 }
 
 std::vector<StmtInfo> NextBipTPreprocessor::evaluateSynonymAndWild() {
 	fullyPopulate();
-	return next_bip_table->getKeys();
+	return cache.getKeys();
 }
 
 std::vector<StmtInfo> NextBipTPreprocessor::evaluateConstantAndSynonym(int index) {
 	StmtInfo s1 = stmt_info_list[index - 1];
 	fullyPopulate();
-	return next_bip_table->getValues(s1);
+	return cache.getValues(s1);
 }
 
 std::vector<StmtInfo> NextBipTPreprocessor::evaluateSynonymAndConstant(int index) {
 	StmtInfo s1 = stmt_info_list[index - 1];
 	fullyPopulate();
-	return next_bip_table->getKeys(s1);
+	return cache.getKeys(s1);
 }
 
 void NextBipTPreprocessor::fullyPopulate() {
