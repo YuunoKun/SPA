@@ -67,6 +67,26 @@ void AffectsBipPreprocessor::updateCache(std::vector<std::pair<LabelledProgLine,
 	}
 }
 
+std::vector<stmt_index> AffectsBipPreprocessor::getFirstAssignStmtPerComponent() {
+	std::vector<stmt_index> res;
+	std::vector<proc_name> root_procedures_in_call_graph{};
+	for (auto& labelled_progline : first_labelled_proglines) {
+		stmt_index program_line = labelled_progline.program_line;
+		proc_name procedure_containing_progline = procS_table->getKeys(program_line)[0];
+		root_procedures_in_call_graph.push_back(procedure_containing_progline);
+	}
+
+	for (auto& proc : root_procedures_in_call_graph) {
+		for (stmt_index stmt : procS_table->getValues(proc)) {
+			if (stmt_info_list[stmt - 1].stmt_type == STMT_ASSIGN) {
+				res.push_back(stmt);
+				break;
+			}
+		}
+	}
+	return res;
+}
+
 void AffectsBipPreprocessor::reset() {
 	is_fully_populated = false;
 	solver.reset();
@@ -75,7 +95,7 @@ void AffectsBipPreprocessor::reset() {
 
 void AffectsBipPreprocessor::fullyPopulate() {
 	if (!is_fully_populated) {
-		std::vector<std::pair<LabelledProgLine, LabelledProgLine>> res = solver.solve();
+		std::vector<std::pair<LabelledProgLine, LabelledProgLine>> res = solver.solve(getFirstAssignStmtPerComponent());
 		updateCache(res);
 		// add to secondary cache
 		is_fully_populated = true;
@@ -94,6 +114,7 @@ AffectsBipPreprocessor::AffectsBipPreprocessor(
 	useS_table(&useS_table),
 	procS_table(&procS_table) {
 	stmt_info_list = v;
+	first_labelled_proglines = first_stmts;
 	int size = stmt_info_list.size();
 	calculated_matrix.resize(size, std::vector<bool>(size, false));
 	calculated_dfs_forward.resize(size, false);

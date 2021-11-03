@@ -36,7 +36,7 @@ public:
 	std::pair<std::set<stmt_index>, std::vector<std::pair<StmtInfo, StmtInfo>>> solve(std::vector<stmt_index> starting_statements);
 	bool solveIfAffectingAndAffected(stmt_index affecting, stmt_index affected);
 	bool solveIfAffecting(stmt_index affecting);
-	bool solveIfAffected(stmt_index affected);
+	bool solveIfAffected(stmt_index affected, stmt_index starting_index);
 	bool solveIfNonEmpty(std::vector<stmt_index> first_statements);
 	void reset();
 

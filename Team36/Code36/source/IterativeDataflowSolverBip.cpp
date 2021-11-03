@@ -22,13 +22,13 @@ IterativeDataflowSolverBip::IterativeDataflowSolverBip(
 	kill_list.resize(size, {});
 }
 
-std::vector<std::pair<LabelledProgLine, LabelledProgLine>> IterativeDataflowSolverBip::solve() {
+std::vector<std::pair<LabelledProgLine, LabelledProgLine>> IterativeDataflowSolverBip::solve(std::vector<stmt_index> starting_worklist) {
 	populateDataflowSets();
 	std::queue<LabelledProgLine> worklist;
 	std::set<LabelledProgLine> visited{};
 
-	for (auto& LabelledProgLine : first_proglines) {
-		worklist.push(LabelledProgLine);
+	for (auto& progline : starting_worklist) {
+		worklist.push({ progline, 0 });
 	}
 
 	while (!worklist.empty()) {

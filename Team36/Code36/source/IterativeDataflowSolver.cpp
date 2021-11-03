@@ -119,15 +119,12 @@ bool IterativeDataflowSolver::solveIfAffecting(stmt_index affecting_stmt) {
 	return false;
 }
 
-bool IterativeDataflowSolver::solveIfAffected(stmt_index affected_stmt) {
+bool IterativeDataflowSolver::solveIfAffected(stmt_index affected_stmt, stmt_index starting_index) {
 	populateDataflowSets();
 	std::queue<stmt_index> worklist;
 	std::set<stmt_index> visited{};
 
-	proc_name proc = procS_table->getKeys(affected_stmt)[0];
-	stmt_index first_statement = procS_table->getValues(proc)[0];
-
-	worklist.push(first_statement);
+	worklist.push(starting_index);
 
 	while (!worklist.empty()) {
 		stmt_index curr = worklist.front();
@@ -159,7 +156,6 @@ bool IterativeDataflowSolver::solveIfNonEmpty(std::vector<stmt_index> first_stat
 	std::queue<stmt_index> worklist;
 	std::set<stmt_index> visited{};
 
-	proc_name proc = procS_table->getKeys()[0];
 	for (auto& stmt_index : first_statements) {
 		worklist.push(stmt_index);
 	}

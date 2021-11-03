@@ -34,7 +34,7 @@ namespace std {
 class IterativeDataflowSolverBip
 {
 public:
-	std::vector<std::pair<LabelledProgLine, LabelledProgLine>> solve();
+	std::vector<std::pair<LabelledProgLine, LabelledProgLine>> solve(std::vector<stmt_index> starting_worklist);
 	void reset();
 
 	IterativeDataflowSolverBip(

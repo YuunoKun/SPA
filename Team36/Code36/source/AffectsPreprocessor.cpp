@@ -61,7 +61,8 @@ bool AffectsPreprocessor::evaluateWildAndConstant(int index) {
 		return false;
 	}
 	else {
-		bool is_index_affected = solver.solveIfAffected(index);
+		proc_name proc = procS_table->getKeys(index)[0];
+		bool is_index_affected = solver.solveIfAffected(index, getFirstAssignStmt(proc));
 		if (is_index_affected) {
 			is_affected[index - 1] = STATUS_TRUE;
 		}
@@ -112,9 +113,8 @@ std::vector<StmtInfo> AffectsPreprocessor::evaluateConstantAndSynonym(int index)
 	StmtInfo s1 = stmt_info_list[index - 1];
 	if (!is_fully_populated && !calculated_dfs_forward[index - 1]) {
 		proc_name proc = procS_table->getKeys(index)[0];
-		std::vector<stmt_index> first_stmt_of_curr_proc{};
-		first_stmt_of_curr_proc.push_back(procS_table->getValues(proc)[0]);
-		auto [visited, res] = solver.solve(first_stmt_of_curr_proc);
+		std::vector<stmt_index> first_assign_stmt_of_curr_proc{ getFirstAssignStmt(proc) };
+		auto [visited, res] = solver.solve(first_assign_stmt_of_curr_proc);
 		updateCache(visited, res);
 	}
 	return cache.getValues(s1);
@@ -128,9 +128,8 @@ std::vector<StmtInfo> AffectsPreprocessor::evaluateSynonymAndConstant(int index)
 	StmtInfo s1 = stmt_info_list[index - 1];
 	if (!is_fully_populated && !calculated_dfs_backward[index - 1]) {
 		proc_name proc = procS_table->getKeys(index)[0];
-		std::vector<stmt_index> first_stmt_of_curr_proc{};
-		first_stmt_of_curr_proc.push_back(procS_table->getValues(proc)[0]);
-		auto [visited, res] = solver.solve(first_stmt_of_curr_proc);
+		std::vector<stmt_index> first_assign_stmt_of_curr_proc{ getFirstAssignStmt(proc) };
+		auto [visited, res] = solver.solve(first_assign_stmt_of_curr_proc);
 		updateCache(visited, res);
 	}
 	return cache.getKeys(s1);
@@ -180,14 +179,22 @@ void AffectsPreprocessor::reset() {
 
 void AffectsPreprocessor::fullyPopulate() {
 	if (!is_fully_populated) {
-		std::vector<stmt_index> list_of_first_statements{};
-		for (proc_name proc : procS_table->getKeys()) {
-			list_of_first_statements.push_back(procS_table->getValues(proc)[0]);
+		std::vector<stmt_index> all_first_assign_stmts{};
+		for (auto& p : procS_table->getKeys()) {
+			all_first_assign_stmts.push_back(getFirstAssignStmt(p));
 		}
-
-		auto [visited, res] = solver.solve(list_of_first_statements);
+		auto [visited, res] = solver.solve(all_first_assign_stmts);
 		updateCache(visited, res);
 		is_fully_populated = true;
+	}
+}
+
+stmt_index AffectsPreprocessor::getFirstAssignStmt(proc_name proc) {
+	for (stmt_index stmt : procS_table->getValues(proc)) {
+		if (stmt_info_list[stmt - 1].stmt_type == STMT_ASSIGN) {
+			return stmt;
+			break;
+		}
 	}
 }
 
