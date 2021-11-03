@@ -13,46 +13,51 @@ IterativeDataflowSolverBip::IterativeDataflowSolverBip(
 	useS_table(&useS_table),
 	stmt_info_list(v),
 	first_proglines(first_proglines) {
-	std::vector<LabelledProgLine> keys = next_table.getKeys();
-	std::vector<LabelledProgLine> values = next_table.getValues();
-	std::sort(keys.begin(), keys.end());
-	std::sort(values.begin(), values.end());
-	std::set_union(keys.begin(), keys.end(),
-		values.begin(), values.end(),
-		std::inserter(labelled_progline_list, labelled_progline_list.begin()));
+	labelled_progline_list = getAllProgLines();
 	int size = stmt_info_list.size();
 	kill_list.resize(size, {});
 }
 
-std::vector<std::pair<LabelledProgLine, LabelledProgLine>> IterativeDataflowSolverBip::solve() {
+std::vector<std::pair<LabelledProgLine, LabelledProgLine>> IterativeDataflowSolverBip::solve(std::vector<stmt_index> starting_worklist) {
 	populateDataflowSets();
 	std::deque<LabelledProgLine> worklist;
 	std::set<LabelledProgLine> visited{};
+	std::unordered_set<LabelledProgLine> worklist_set{};
 
-	for (auto& progline : labelled_progline_list) {
-		worklist.push_back(progline);
+	for (auto& stmt_index : starting_worklist) {
+		for (auto& labelled_progline : getProgLines(stmt_index)) {
+			worklist.push_back(labelled_progline);
+			worklist_set.emplace(labelled_progline);
+		}
 	}
 
 	while (!worklist.empty()) {
 		LabelledProgLine curr = worklist.front();
 		visited.emplace(curr);
 		worklist.pop_front();
+		worklist_set.erase(curr);
 		int old_out_size = out_list[curr].size();
 
 		processInSet(curr);
 		processOutSet(curr);
 
 		if (out_list[curr].size() != old_out_size) {
-			addSuccessorsToWorklist(curr, worklist);
+			addSuccessorsToWorklist(curr, worklist, worklist_set);
 		}
 	}
 	resetOutList();
 	return findResults();
 }
 
-void IterativeDataflowSolverBip::addSuccessorsToWorklist(LabelledProgLine index, std::deque<LabelledProgLine>& worklist) {
-	for (auto& succ : succ_list[index]) {
-		worklist.push_front(succ);
+void IterativeDataflowSolverBip::addSuccessorsToWorklist(LabelledProgLine index, std::deque<LabelledProgLine>& worklist, std::unordered_set<LabelledProgLine>& worklist_set) {
+	auto v = succ_list[index];
+	std::set<LabelledProgLine>::reverse_iterator rev_it;
+	// Add the successors of index if they are not in the worklist currently, in reverse order
+	for (rev_it = v.rbegin(); rev_it != v.rend(); rev_it++) {
+		if (worklist_set.count(*rev_it) == 0) {
+			worklist.push_front(*rev_it);
+			worklist_set.emplace(*rev_it);
+		}
 	}
 }
 
@@ -92,6 +97,18 @@ std::vector<LabelledProgLine> IterativeDataflowSolverBip::getProgLines(stmt_inde
 			res.push_back(labelled_progline);
 		}
 	}
+	return res;
+}
+
+std::vector<LabelledProgLine> IterativeDataflowSolverBip::getAllProgLines() {
+	std::vector<LabelledProgLine> res;
+	std::vector<LabelledProgLine> keys = next_table->getKeys();
+	std::vector<LabelledProgLine> values = next_table->getValues();
+	std::sort(keys.begin(), keys.end());
+	std::sort(values.begin(), values.end());
+	std::set_union(keys.begin(), keys.end(),
+		values.begin(), values.end(),
+		std::inserter(res, res.begin()));
 	return res;
 }
 

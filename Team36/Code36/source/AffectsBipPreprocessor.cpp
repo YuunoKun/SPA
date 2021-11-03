@@ -75,11 +75,19 @@ void AffectsBipPreprocessor::reset() {
 
 void AffectsBipPreprocessor::fullyPopulate() {
 	if (!is_fully_populated) {
-		std::vector<std::pair<LabelledProgLine, LabelledProgLine>> res = solver.solve();
+		std::vector<std::pair<LabelledProgLine, LabelledProgLine>> res = solver.solve(getAssignments());
 		updateCache(res);
 		// add to secondary cache
 		is_fully_populated = true;
 	}
+}
+
+std::vector<stmt_index> AffectsBipPreprocessor::getAssignments() {
+	std::vector<stmt_index> assignment_stmts;
+	for (StmtInfo s : stmt_info_list) {
+		if (s.stmt_type == STMT_ASSIGN) assignment_stmts.push_back(s.stmt_index);
+	}
+	return assignment_stmts;
 }
 
 AffectsBipPreprocessor::AffectsBipPreprocessor(

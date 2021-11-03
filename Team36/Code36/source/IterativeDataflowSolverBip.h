@@ -33,7 +33,7 @@ namespace std {
 class IterativeDataflowSolverBip
 {
 public:
-	std::vector<std::pair<LabelledProgLine, LabelledProgLine>> solve();
+	std::vector<std::pair<LabelledProgLine, LabelledProgLine>> solve(std::vector<stmt_index> starting_worklist);
 	void reset();
 
 	IterativeDataflowSolverBip(
@@ -53,9 +53,10 @@ private:
 	void updateKillList(stmt_index index, var_name var);
 	void updateGenList(stmt_index index, var_name var);
 
+	std::vector<LabelledProgLine> getAllProgLines();
 	std::vector<LabelledProgLine> getProgLines(stmt_index index);
 	StmtInfo getStmt(stmt_index index);
-	void addSuccessorsToWorklist(LabelledProgLine index, std::deque<LabelledProgLine>& worklist);
+	void addSuccessorsToWorklist(LabelledProgLine index, std::deque<LabelledProgLine>& worklist, std::unordered_set<LabelledProgLine>& worklist_set);
 	std::vector<std::pair<LabelledProgLine, LabelledProgLine>> findResults();
 	bool checkIfTupleAffects(LabelledModifiesTuple, LabelledProgLine);
 
