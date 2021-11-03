@@ -55,13 +55,15 @@ public:
 	static AttrRef queryTokenTypeToAttrRef(QueryToken::QueryTokenType&);
 	static std::string Utility::queryTokenTypeToExprString(std::vector<QueryToken>);
 	
+	static void isSyntacticValidpattern(std::vector<QueryToken>);
 	static bool isStmtRef(Query&, std::vector<QueryToken>);
 	static bool isStmtRef(Query&, std::vector<QueryToken>, EntityType);
-	static bool isEntRef(Query&, std::vector<QueryToken>);
+	static bool isEntRef(Query&, std::vector<QueryToken>, EntityType);
+	static bool isSyntacticValidEntRef(std::vector<QueryToken>);
+	static bool isSemanticValidEntRef(Query&, std::vector<QueryToken>, EntityType);
 	static bool isLineRef(Query&, std::vector<QueryToken>);
 	static bool isRef(Query&, std::vector<QueryToken>);
 	static bool isExpr(std::vector<QueryToken>);
-	static bool isCorrectSynEntRef(Query&, std::vector<QueryToken>, EntityType);
 	static bool isWildCard(std::vector<QueryToken>);
 	static bool isStringRefType(Query&, std::vector<QueryToken>);
 	static bool isIntRefType(Query&, std::vector<QueryToken>);

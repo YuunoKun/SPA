@@ -11,6 +11,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\source\AffectsBipPreprocessor.cpp" />
+    <ClCompile Include="..\source\AffectsBipTPreprocessor.cpp" />
     <ClCompile Include="..\source\AffectsPreprocessor.cpp" />
     <ClCompile Include="..\source\AffectsTPreprocessor.cpp" />
     <ClCompile Include="..\source\DesignExtractor.cpp" />
@@ -18,9 +20,11 @@
     <ClCompile Include="..\source\ExprParser.cpp" />
     <ClCompile Include="..\source\FSM.cpp" />
     <ClCompile Include="..\source\IterativeDataflowSolver.cpp" />
+    <ClCompile Include="..\source\IterativeDataflowSolverBip.cpp" />
     <ClCompile Include="..\source\Parser.cpp" />
     <ClCompile Include="..\source\Procedure.cpp" />
     <ClCompile Include="..\source\RelationPreprocessor.cpp" />
+    <ClCompile Include="..\source\RelationTableUtility.cpp" />
     <ClCompile Include="..\source\RelationTable.cpp" />
     <ClCompile Include="..\source\PKB.cpp" />
     <ClCompile Include="..\source\MonotypeRelationTable.cpp" />
@@ -96,6 +100,8 @@
     <ClCompile Include="..\source\NextBipTParser.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\source\AffectsBipPreprocessor.h" />
+    <ClInclude Include="..\source\AffectsBipTPreprocessor.h" />
     <ClInclude Include="..\source\AffectsTPreprocessor.h" />
     <ClInclude Include="..\source\DesignExtractor.h" />
     <ClInclude Include="..\source\ExprNode.h" />
@@ -104,11 +110,13 @@
     <ClInclude Include="..\source\FSM.h" />
     <ClInclude Include="..\source\AffectsPreprocessor.h" />
     <ClInclude Include="..\source\IterativeDataflowSolver.h" />
+    <ClInclude Include="..\source\IterativeDataflowSolverBip.h" />
     <ClInclude Include="..\source\MonotypeRelationTable.h" />
     <ClInclude Include="..\source\PKB.h" />
     <ClInclude Include="..\source\Parser.h" />
     <ClInclude Include="..\source\Procedure.h" />
     <ClInclude Include="..\source\KnowledgeBase.h" />
+    <ClInclude Include="..\source\RelationTableUtility.h" />
     <ClInclude Include="..\source\RelationTable.h" />
     <ClInclude Include="..\source\SPCommon.h" />
     <ClInclude Include="..\source\Statement.h" />
