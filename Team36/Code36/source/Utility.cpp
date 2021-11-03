@@ -443,8 +443,8 @@ void Utility::isSyntacticValidpattern(std::vector<QueryToken>token_chain) {
 	}
 
 	if (delimiter_count == 1) {
-		// ent ref 1st,
-		//is expr or WC
+		//1st param: entRef
+		//2nd param: wildcard | expr
 		if (!Utility::isSyntacticValidEntRef(separated_params[0]) ||
 			!(Utility::isWildCard(separated_params[1]) || Utility::isExpr(separated_params[1]))) {
 			throw SyntacticErrorException("Invalid parameters");
@@ -452,7 +452,8 @@ void Utility::isSyntacticValidpattern(std::vector<QueryToken>token_chain) {
 
 	}
 	else if (delimiter_count == 2) {
-		// cehck for entref 1st, last 2 WC
+		//1st param: entRef
+		//2nd & 3rd param: wildcard 
 		if (!Utility::isSyntacticValidEntRef(separated_params[0]) ||
 			!Utility::isWildCard(separated_params[1]) || 
 			!Utility::isWildCard(separated_params[2])) {
@@ -572,7 +573,7 @@ bool Utility::isSyntacticValidEntRef(std::vector<QueryToken> token_chain) {
 }
 
 bool Utility::isSemanticValidEntRef(Query& query, std::vector<QueryToken> token_chain, EntityType entity_type) {
-	// entRef : synonym | ‘_’ | ‘"’ IDENT ‘"’
+	// entRef : synonym | _ | " IDENT "
 
 	if (token_chain.size() == 1) {
 		QueryToken token = token_chain[0];
@@ -614,7 +615,7 @@ bool Utility::isSemanticValidEntRef(Query& query, std::vector<QueryToken> token_
 }
 
 bool Utility::isEntRef(Query& query, std::vector<QueryToken> token_chain, EntityType entity_type) {
-	// entRef : synonym | ‘_’ | ‘"’ IDENT ‘"’
+	// entRef : synonym | _ | " IDENT "
 
 	if (token_chain.size() == 0) {
 		throw SyntacticErrorException("Invalid entRef arguments");
@@ -660,7 +661,6 @@ bool Utility::isEntRef(Query& query, std::vector<QueryToken> token_chain, Entity
 }
 
 bool Utility::isLineRef(Query& query, std::vector<QueryToken> token_chain) {
-
 	// no args found, throw syntax errors
 	if (token_chain.size() != 1) {
 		throw SyntacticErrorException("Invalid lineRef arguments");
@@ -668,7 +668,6 @@ bool Utility::isLineRef(Query& query, std::vector<QueryToken> token_chain) {
 
 	QueryToken token = token_chain[0];
 
-	//if integer, return true
 	if (token.type == QueryToken::CONSTANT) {
 		return true;
 	}
@@ -700,7 +699,7 @@ bool Utility::isLineRef(Query& query, std::vector<QueryToken> token_chain) {
 }
 
 bool Utility::isRef(Query& query, std::vector<QueryToken> token_chain) {
-	// entRef : synonym | ‘_’ | ‘"’ IDENT ‘"’ | synonym"."attrName
+	// entRef : synonym | _ | " IDENT " | synonym.attrName
 	
 	std::unordered_map<std::string, Entity> ent_chain = query.getEntities();
 
@@ -823,13 +822,6 @@ bool Utility::isExpr(std::vector<QueryToken> token_chain) {
 }
 
 bool Utility::isWildCard(std::vector<QueryToken> token_chain) {
-	//if (token_chain.size() == 0) {
-	//	throw SyntacticErrorException("Invalid arguments, wildcards only");
-	//}
-	//else if (token_chain.size() > 1) {
-	//	throw SyntacticErrorException("Invalid arguments, wildcards only");
-	//}
-	//else 
 	if (token_chain.size() == 1 && 
 		token_chain[0].type == QueryToken::WILDCARD) {
 		return true;
@@ -923,7 +915,7 @@ bool Utility::isIntRefType(Query& query, std::vector<QueryToken> token_chain) {
 }
 
 Entity Utility::setStmtRef(Query& query, QueryToken token, EntityType ident_type) {
-	// synonym | ‘_’ | INTEGER
+	// synonym | _ | INTEGER
 
 	// wild card check
 	if (token.type == QueryToken::WILDCARD) {
@@ -946,7 +938,7 @@ Entity Utility::setStmtRef(Query& query, QueryToken token, EntityType ident_type
 
 Entity Utility::setEntRef(Query& query,
 	std::vector<QueryToken> token_chain, EntityType ident_type) {
-	// entRef : synonym | ‘_’ | ‘"’ IDENT ‘"’
+	// entRef : synonym | _ | "IDENT"
 
 	if (token_chain.size() == 1) {
 		// wild card check
@@ -972,7 +964,7 @@ Entity Utility::setEntRef(Query& query,
 }
 
 Entity Utility::setLineRef(Query& query, QueryToken token) {
-	// synonym | ‘_’ | INTEGER
+	// synonym | "_" | INTEGER
 
 	// wild card check
 	if (token.type == QueryToken::WILDCARD) {
@@ -1039,13 +1031,11 @@ Entity Utility::setRef(Query& query,
 			return ent;
 		}
 	}
-
-
 	query.setIsSemanticError("Unknown Ref");
 }
 
 std::string Utility::setExpr(std::vector<QueryToken> token_chain) {
-	// expression-spec : ‘"‘ expr’"’ | ‘_’ ‘"’ expr ‘"’ ‘_’ | ‘_’
+	// expression-spec : "expr" | _"expr"_ | _
 	int wildcard_count = 0;
 	bool is_quotation_open = false;
 	bool is_quotation_close = false;
@@ -1090,7 +1080,6 @@ std::vector<std::vector<QueryToken>> Utility::splitTokenChain(int max_params, Qu
 	}
 	return separated_params;
 }
-
 
 bool Utility::checkIsSemanticError(Query& query) {
 	return query.getIsSemanticError() != "";

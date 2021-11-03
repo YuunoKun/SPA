@@ -147,7 +147,7 @@ namespace UnitTesting {
 		//Synonym
 		//Expected
 		Synonym synonym;
-		synonym.name = "ass";
+		synonym.name = "a";
 		Entity expected_declared_assign = Entity(EntityType::IF, synonym);
 		query.addEntity(expected_declared_assign);
 
@@ -194,7 +194,7 @@ namespace UnitTesting {
 		//Synonym
 		//Expected
 		Synonym synonym;
-		synonym.name = "ass";
+		synonym.name = "a";
 		Entity expected_declared_assign = Entity(EntityType::IF, synonym);
 		query.addEntity(expected_declared_assign);
 

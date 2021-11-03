@@ -206,9 +206,6 @@ void QueryTokenizer::tokenize(Query& query, std::string input) {
 		case '.':
 			add_query_token(query, curr_query_token);
 			curr_query_token.token_value.push_back(c);
-			//curr_query_token.type = QueryToken::DOT;
-			//add_query_token(query, curr_query_token);
-			//is_attr_name = true;
 			break;
 		case '#':
 			if (curr_query_token.token_value == ".stmt") {
