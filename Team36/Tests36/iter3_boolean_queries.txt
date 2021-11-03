@@ -105,6 +105,6 @@ TRUE
 5000
 22 - valid with clause, no result
 assign a; read r;
-Selectc BOOLEAN with a.stmt# = r.stmt#
+Select BOOLEAN with a.stmt# = r.stmt#
 FALSE
 5000
