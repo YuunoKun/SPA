@@ -104,12 +104,6 @@
     <ClCompile Include="QueryEvaluatorTupleTest.cpp">
       <Filter>PQL\QueryEvaluator</Filter>
     </ClCompile>
-    <ClCompile Include="AffectsParserTest.cpp" />
-    <ClCompile Include="AffectsTParserTest.cpp" />
-    <ClCompile Include="NextBipParserTest.cpp" />
-    <ClCompile Include="NextBipTParserTest.cpp" />
-    <ClCompile Include="AffectsBipParserTest.cpp" />
-    <ClCompile Include="AffectsBipTParserTest.cpp" />
     <ClCompile Include="NextEvaluatorTest.cpp">
       <Filter>PQL\QueryEvaluator\RelationEvaluator</Filter>
     </ClCompile>
@@ -241,6 +235,24 @@
     </ClCompile>
     <ClCompile Include="QueryEvaluatorCFGBipRelationTest.cpp">
       <Filter>PQL\QueryEvaluator</Filter>
+    </ClCompile>
+    <ClCompile Include="NextBipTParserTest.cpp">
+      <Filter>PQL\QueryPreprocessor\QueryPatternRelRefParser</Filter>
+    </ClCompile>
+    <ClCompile Include="NextBipParserTest.cpp">
+      <Filter>PQL\QueryPreprocessor\QueryPatternRelRefParser</Filter>
+    </ClCompile>
+    <ClCompile Include="AffectsTParserTest.cpp">
+      <Filter>PQL\QueryPreprocessor\QueryPatternRelRefParser</Filter>
+    </ClCompile>
+    <ClCompile Include="AffectsParserTest.cpp">
+      <Filter>PQL\QueryPreprocessor\QueryPatternRelRefParser</Filter>
+    </ClCompile>
+    <ClCompile Include="AffectsBipTParserTest.cpp">
+      <Filter>PQL\QueryPreprocessor\QueryPatternRelRefParser</Filter>
+    </ClCompile>
+    <ClCompile Include="AffectsBipParserTest.cpp">
+      <Filter>PQL\QueryPreprocessor\QueryPatternRelRefParser</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
