@@ -307,6 +307,23 @@ namespace UnitTesting {
 		EXPECT_TRUE(Utility::checkIsSemanticError(query));
 	}
 
+	TEST(FollowsParserTest, semanticInvalidZeroValueConstantTest3) {
+		QueryPatternRelRefParser validator;
+
+		Query query;
+		Synonym synonym;
+		synonym.name = "y";
+		Entity declared_stmt = Entity(EntityType::STMT, synonym);
+		query.addEntity(declared_stmt);
+		std::vector<QueryToken> temp_token_chain;
+		temp_token_chain.push_back({ QueryToken::CONSTANT, "0" });
+		temp_token_chain.push_back({ QueryToken::COMMA, "" });
+		temp_token_chain.push_back({ QueryToken::IDENTIFIER, "y" });
+
+		validator.parseParameterSuchThat(query, QueryToken::FOLLOWS, temp_token_chain);
+		EXPECT_TRUE(Utility::checkIsSemanticError(query));
+	}
+
 	TEST(FollowsParserTest, syntaticInvalidFollowsEmptyParamTest) {
 		QueryPatternRelRefParser validator;
 

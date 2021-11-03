@@ -129,5 +129,82 @@ namespace UnitTesting {
 		EXPECT_TRUE(query.getClauses()[0].getPattern() == expected_pat);
 	}
 
+	TEST(IfPatternParserTest, syntacticInvalidConstantParams) {
+		QueryPatternRelRefParser validator;
+
+		Query query;
+
+		std::vector<QueryToken> temp_token_chain;
+
+		temp_token_chain.push_back({ QueryToken::CONSTANT, "9" });
+		temp_token_chain.push_back({ QueryToken::COMMA, "" });
+		temp_token_chain.push_back({ QueryToken::WILDCARD, "" });
+		temp_token_chain.push_back({ QueryToken::COMMA, "" });
+		temp_token_chain.push_back({ QueryToken::WILDCARD, "" });
+		temp_token_chain.push_back({ QueryToken::COMMA, "" });
+		temp_token_chain.push_back({ QueryToken::WILDCARD, "" });
+
+		//Synonym
+		//Expected
+		Synonym synonym;
+		synonym.name = "a";
+		Entity expected_declared_assign = Entity(EntityType::IF, synonym);
+		query.addEntity(expected_declared_assign);
+
+		EXPECT_THROW(validator.parseParameterPattern(query, expected_declared_assign, temp_token_chain), SyntacticErrorException);
+	}
+
+	TEST(AssignPatternParserTest, semanticInvalidMissingParams) {
+		QueryPatternRelRefParser validator;
+
+		Query query;
+
+		std::vector<QueryToken> temp_token_chain;
+
+		temp_token_chain.push_back({ QueryToken::WILDCARD, "" });
+		temp_token_chain.push_back({ QueryToken::COMMA, "" });
+		temp_token_chain.push_back({ QueryToken::WILDCARD, "" });
+
+		//Synonym
+		//Expected
+		Synonym synonym;
+		synonym.name = "a";
+		Entity expected_declared_assign = Entity(EntityType::IF, synonym);
+		query.addEntity(expected_declared_assign);
+
+		validator.parseParameterPattern(query, expected_declared_assign, temp_token_chain);
+		EXPECT_TRUE(Utility::checkIsSemanticError(query));
+	}
+
+	TEST(IfPatternParserTest, syntacticInvalidVarParams) {
+		QueryPatternRelRefParser validator;
+
+		Query query;
+
+		std::vector<QueryToken> temp_token_chain;
+
+		temp_token_chain.push_back({ QueryToken::WILDCARD, "" });
+		temp_token_chain.push_back({ QueryToken::COMMA, "" });
+		temp_token_chain.push_back({ QueryToken::WILDCARD, "" });
+		temp_token_chain.push_back({ QueryToken::COMMA, "" });
+		temp_token_chain.push_back({ QueryToken::WILDCARD, "" });
+		temp_token_chain.push_back({ QueryToken::COMMA, "" });
+		temp_token_chain.push_back({ QueryToken::IDENTIFIER, "var" });
+
+		//Synonym
+		//Expected
+		Synonym synonym;
+		synonym.name = "a";
+		Entity expected_declared_assign = Entity(EntityType::IF, synonym);
+		query.addEntity(expected_declared_assign);
+
+		Synonym synonym2;
+		synonym2.name = "var";
+		Entity ent2 = Entity(EntityType::VARIABLE, synonym2);
+		query.addEntity(ent2);
+
+		EXPECT_THROW(validator.parseParameterPattern(query, expected_declared_assign, temp_token_chain), SyntacticErrorException);
+	}
+
 
 }

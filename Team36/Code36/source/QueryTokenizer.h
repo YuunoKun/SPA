@@ -23,5 +23,5 @@ private:
 	std::vector<QueryToken> query_token_cache;
 
 	void handleDigit(Query&, char, QueryToken&);
-	void add_query_token(QueryToken& query_token);
+	void add_query_token(Query&, QueryToken& query_token);
 };
