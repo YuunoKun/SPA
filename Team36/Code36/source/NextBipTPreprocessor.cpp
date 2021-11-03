@@ -21,33 +21,41 @@ bool NextBipTPreprocessor::evaluateConstantAndConstant(int index1, int index2) {
 }
 
 std::vector<std::pair<StmtInfo, StmtInfo>> NextBipTPreprocessor::evaluateSynonymAndSynonym() {
-	return cache.getPairs();
+	fullyPopulate();
+	return next_bip_table->getPairs();
 }
 
 std::vector<StmtInfo> NextBipTPreprocessor::evaluateWildAndSynonym() {
-	return cache.getValues();
+	fullyPopulate();
+	return next_bip_table->getValues();
 }
 
 std::vector<StmtInfo> NextBipTPreprocessor::evaluateSynonymAndWild() {
-	return cache.getKeys();
+	fullyPopulate();
+	return next_bip_table->getKeys();
 }
 
 std::vector<StmtInfo> NextBipTPreprocessor::evaluateConstantAndSynonym(int index) {
 	StmtInfo s1 = stmt_info_list[index - 1];
-	return cache.getValues(s1);
+	fullyPopulate();
+	return next_bip_table->getValues(s1);
 }
 
 std::vector<StmtInfo> NextBipTPreprocessor::evaluateSynonymAndConstant(int index) {
 	StmtInfo s1 = stmt_info_list[index - 1];
-	return cache.getKeys(s1);
+	fullyPopulate();
+	return next_bip_table->getKeys(s1);
 }
 
 void NextBipTPreprocessor::fullyPopulate() {
-	// Does nothing, populated through Constructor.
+	if (!is_fully_populated) {
+		cache = RelationTableUtility<StmtInfo>::findTransitiveClosure(*next_bip_table);
+		is_fully_populated = true;
+	}
 }
 
-NextBipTPreprocessor::NextBipTPreprocessor(const MonotypeRelationTable<StmtInfo>& table, const std::vector<StmtInfo> v) {
-	cache = table;
+NextBipTPreprocessor::NextBipTPreprocessor(const MonotypeRelationTable<StmtInfo>& table, const std::vector<StmtInfo> v) :
+	next_bip_table(&table) {
 	stmt_info_list = v;
 	int size = stmt_info_list.size();
 	calculated_matrix.resize(size, std::vector<bool>(size, false));

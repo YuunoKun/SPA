@@ -21,4 +21,7 @@ public:
 
 	NextBipTPreprocessor(const MonotypeRelationTable<StmtInfo>&, const std::vector<StmtInfo>);
 	NextBipTPreprocessor() = default;
+
+private:
+	const MonotypeRelationTable<StmtInfo>* next_bip_table;
 };
