@@ -7,14 +7,16 @@
 #include "ExprParser.h"
 
 namespace UnitTesting {
-	class QueryEvaluatorCFGRelationTest : public testing::Test {
+	class QueryEvaluatorCFGBipRelationTest : public testing::Test {
 	protected:
-		QueryEvaluatorCFGRelationTest() {
+		QueryEvaluatorCFGBipRelationTest() {
 			PKB::getInstance().resetCache();
+
 			PKB::getInstance().addVariable({ x });
 			PKB::getInstance().addVariable({ y });
 			PKB::getInstance().addVariable({ z });
 			PKB::getInstance().addProcedure(p1);
+			PKB::getInstance().addProcedure(p2);
 			PKB::getInstance().addStmt(STMT_ASSIGN);
 			PKB::getInstance().addStmt(STMT_ASSIGN);
 			PKB::getInstance().addStmt(STMT_ASSIGN);
@@ -24,18 +26,30 @@ namespace UnitTesting {
 			PKB::getInstance().addProcContains(p1, 1);
 			PKB::getInstance().addProcContains(p1, 2);
 			PKB::getInstance().addProcContains(p1, 3);
-			PKB::getInstance().addProcContains(p1, 4);
+			PKB::getInstance().addProcContains(p2, 4);
 			PKB::getInstance().addVariable(x);
 			PKB::getInstance().addModifiesS(1, x);
 			PKB::getInstance().addUsesS(2, x);
 			PKB::getInstance().addModifiesS(2, y);
 			PKB::getInstance().addUsesS(3, y);
 
+			cfg1 = new CFG();
+			cfg1->add(1);
+			cfg1->add(2);
+			cfg1->add(3);
+
+			cfg2 = new CFG();
+			cfg2->add(4);
+			PKB::getInstance().addCFGBip(cfg1);
+			PKB::getInstance().addCFGBip(cfg2);
+
 			PKBAdapter::getRelationManager().update();
 		}
 
-		~QueryEvaluatorCFGRelationTest() override {
+		~QueryEvaluatorCFGBipRelationTest() override {
 			PKB::getInstance().resetCache();
+			delete cfg1;
+			delete cfg2;
 		}
 
 		std::vector<Entity> getInvalidConstant(std::vector<std::string> validStmt) {
@@ -100,6 +114,8 @@ namespace UnitTesting {
 				}
 			}
 		}
+		CFG* cfg1;
+		CFG* cfg2;
 
 		PKBAdapter pkb;
 		QueryEvaluator evaluator;
@@ -109,6 +125,7 @@ namespace UnitTesting {
 		const var_name y = "y";
 		const var_name z = "z";
 		const proc_name p1 = "main";
+		const proc_name p2 = "sub";
 
 		const std::string NEXT_LEFT1 = "1";
 		const std::string NEXT_LEFT2 = "2";
@@ -147,7 +164,7 @@ namespace UnitTesting {
 
 
 	//NextBip Relation Test ----------------------------------------------------------------------------------------------------
-	TEST_F(QueryEvaluatorCFGRelationTest, evaluateQueryNextBipBooleanTrue) {
+	TEST_F(QueryEvaluatorCFGBipRelationTest, evaluateQueryNextBipBooleanTrue) {
 		RelType type = NEXT_BIP;
 		std::string left1 = NEXT_LEFT1;
 		std::string left2 = NEXT_LEFT2;
@@ -166,7 +183,7 @@ namespace UnitTesting {
 
 		validateRelations(relations);
 	}
-	TEST_F(QueryEvaluatorCFGRelationTest, evaluateQueryNextBipBooleanFalse) {
+	TEST_F(QueryEvaluatorCFGBipRelationTest, evaluateQueryNextBipBooleanFalse) {
 		RelType type = NEXT_BIP;
 		std::vector<std::string> lefts = NEXT_LEFTS;
 		std::vector<std::string> rights = NEXT_RIGHTS;
@@ -196,7 +213,7 @@ namespace UnitTesting {
 
 		validateEmptyRelations(relations);
 	}
-	TEST_F(QueryEvaluatorCFGRelationTest, evaluateQueryNextBipFilterEmpty) {
+	TEST_F(QueryEvaluatorCFGBipRelationTest, evaluateQueryNextBipFilterEmpty) {
 		RelType type = NEXT_BIP;
 		std::vector<RelRef> relations;
 		std::vector<std::string> lefts = NEXT_LEFTS;
@@ -214,7 +231,7 @@ namespace UnitTesting {
 
 		validateEmptyRelations(relations);
 	}
-	TEST_F(QueryEvaluatorCFGRelationTest, evaluateQueryNextBipFilterNoCommonSynonymTrue) {
+	TEST_F(QueryEvaluatorCFGBipRelationTest, evaluateQueryNextBipFilterNoCommonSynonymTrue) {
 		RelType type = NEXT_BIP;
 		std::vector<RelRef> relations;
 		std::string left1 = NEXT_LEFT1;
@@ -242,7 +259,7 @@ namespace UnitTesting {
 		validateRelations(relations);
 	}
 
-	TEST_F(QueryEvaluatorCFGRelationTest, evaluateQueryNextBipFilterNoCommonSynonymFalse) {
+	TEST_F(QueryEvaluatorCFGBipRelationTest, evaluateQueryNextBipFilterNoCommonSynonymFalse) {
 		RelType type = NEXT_BIP;
 
 		std::vector<std::string> lefts = NEXT_LEFTS;
@@ -279,7 +296,7 @@ namespace UnitTesting {
 
 		validateEmptyRelations(relations);
 	}
-	TEST_F(QueryEvaluatorCFGRelationTest, evaluateQueryNextBipFilterCommonSynonym) {
+	TEST_F(QueryEvaluatorCFGBipRelationTest, evaluateQueryNextBipFilterCommonSynonym) {
 		RelType type = NEXT_BIP;
 		std::vector<std::string> lefts = NEXT_LEFTS;
 		std::vector<std::string> rights = NEXT_RIGHTS;
@@ -395,7 +412,7 @@ namespace UnitTesting {
 	}
 
 	//NEXT_BIP_T Relation Test ----------------------------------------------------------------------------------------------------
-	TEST_F(QueryEvaluatorCFGRelationTest, evaluateQueryNextBipTBooleanTrue) {
+	TEST_F(QueryEvaluatorCFGBipRelationTest, evaluateQueryNextBipTBooleanTrue) {
 		RelType type = NEXT_BIP_T;
 		std::string left1 = NEXT_LEFT1;
 		std::string left2 = NEXT_LEFT2;
@@ -416,7 +433,7 @@ namespace UnitTesting {
 		validateRelations(relations);
 	}
 
-	TEST_F(QueryEvaluatorCFGRelationTest, evaluateQueryNextBipTBooleanFalse) {
+	TEST_F(QueryEvaluatorCFGBipRelationTest, evaluateQueryNextBipTBooleanFalse) {
 		RelType type = NEXT_BIP_T;
 		std::vector<std::string> lefts = NEXT_LEFTS;
 		std::vector<std::string> rights = NEXT_RIGHTS;
@@ -446,7 +463,7 @@ namespace UnitTesting {
 		validateEmptyRelations(relations);
 	}
 
-	TEST_F(QueryEvaluatorCFGRelationTest, evaluateQueryNextBipTFilterEmpty) {
+	TEST_F(QueryEvaluatorCFGBipRelationTest, evaluateQueryNextBipTFilterEmpty) {
 		RelType type = NEXT_BIP_T;
 		std::vector<RelRef> relations;
 		std::vector<std::string> lefts = NEXT_LEFTS;
@@ -465,7 +482,7 @@ namespace UnitTesting {
 		validateEmptyRelations(relations);
 	}
 
-	TEST_F(QueryEvaluatorCFGRelationTest, evaluateQueryNextBipTFilterNoCommonSynonymTrue) {
+	TEST_F(QueryEvaluatorCFGBipRelationTest, evaluateQueryNextBipTFilterNoCommonSynonymTrue) {
 		RelType type = NEXT_BIP_T;
 		std::string left1 = NEXT_LEFT1;
 		std::string left2 = NEXT_LEFT2;
@@ -485,7 +502,7 @@ namespace UnitTesting {
 		validateRelations(relations);
 	}
 
-	TEST_F(QueryEvaluatorCFGRelationTest, evaluateQueryNextBipTFilterCommonSynonym) {
+	TEST_F(QueryEvaluatorCFGBipRelationTest, evaluateQueryNextBipTFilterCommonSynonym) {
 		RelType type = NEXT_BIP_T;
 		std::vector<std::string> lefts = NEXT_LEFTS;
 		std::vector<std::string> rights = NEXT_RIGHTS;
@@ -557,7 +574,7 @@ namespace UnitTesting {
 
 
 	//AffectsBip Relation Test ----------------------------------------------------------------------------------------------------
-	TEST_F(QueryEvaluatorCFGRelationTest, evaluateQueryAffectsBipBooleanTrue) {
+	TEST_F(QueryEvaluatorCFGBipRelationTest, evaluateQueryAffectsBipBooleanTrue) {
 		RelType type = AFFECT_BIP;
 		std::string left1 = NEXT_LEFT1;
 		std::string left2 = AFFECTS_LEFT2;
@@ -576,7 +593,7 @@ namespace UnitTesting {
 
 		validateRelations(relations);
 	}
-	TEST_F(QueryEvaluatorCFGRelationTest, evaluateQueryAffectsBipBooleanFalse) {
+	TEST_F(QueryEvaluatorCFGBipRelationTest, evaluateQueryAffectsBipBooleanFalse) {
 		RelType type = AFFECT_BIP;
 		std::vector<std::string> lefts = AFFECTS_LEFTS;
 		std::vector<std::string> rights = AFFECTS_RIGHTS;
@@ -606,7 +623,7 @@ namespace UnitTesting {
 
 		validateEmptyRelations(relations);
 	}
-	TEST_F(QueryEvaluatorCFGRelationTest, evaluateQueryAffectsBipFilterEmpty) {
+	TEST_F(QueryEvaluatorCFGBipRelationTest, evaluateQueryAffectsBipFilterEmpty) {
 		RelType type = AFFECT_BIP;
 		std::vector<RelRef> relations;
 		std::vector<std::string> lefts = AFFECTS_LEFTS;
@@ -624,7 +641,7 @@ namespace UnitTesting {
 
 		validateEmptyRelations(relations);
 	}
-	TEST_F(QueryEvaluatorCFGRelationTest, evaluateQueryAffectsBipFilterNoCommonSynonymTrue) {
+	TEST_F(QueryEvaluatorCFGBipRelationTest, evaluateQueryAffectsBipFilterNoCommonSynonymTrue) {
 		RelType type = AFFECT_BIP;
 		std::vector<RelRef> relations;
 		std::string left1 = AFFECTS_LEFT1;
@@ -652,7 +669,7 @@ namespace UnitTesting {
 		validateRelations(relations);
 	}
 
-	TEST_F(QueryEvaluatorCFGRelationTest, evaluateQueryAffectsBipFilterNoCommonSynonymFalse) {
+	TEST_F(QueryEvaluatorCFGBipRelationTest, evaluateQueryAffectsBipFilterNoCommonSynonymFalse) {
 		RelType type = AFFECT_BIP;
 
 		std::vector<std::string> lefts = AFFECTS_LEFTS;
@@ -689,7 +706,7 @@ namespace UnitTesting {
 
 		validateEmptyRelations(relations);
 	}
-	TEST_F(QueryEvaluatorCFGRelationTest, evaluateQueryAffectsBipFilterCommonSynonym) {
+	TEST_F(QueryEvaluatorCFGBipRelationTest, evaluateQueryAffectsBipFilterCommonSynonym) {
 		RelType type = AFFECT_BIP;
 		std::vector<std::string> lefts = AFFECTS_LEFTS;
 		std::vector<std::string> rights = AFFECTS_RIGHTS;
@@ -805,7 +822,7 @@ namespace UnitTesting {
 	}
 
 	//AFFECT_BIP_T Relation Test ----------------------------------------------------------------------------------------------------
-	TEST_F(QueryEvaluatorCFGRelationTest, evaluateQueryAffectsBipTBooleanTrue) {
+	TEST_F(QueryEvaluatorCFGBipRelationTest, evaluateQueryAffectsBipTBooleanTrue) {
 		RelType type = AFFECT_BIP_T;
 		std::string left1 = AFFECTS_LEFT1;
 		std::string left2 = AFFECTS_LEFT2;
@@ -826,7 +843,7 @@ namespace UnitTesting {
 		validateRelations(relations);
 	}
 
-	TEST_F(QueryEvaluatorCFGRelationTest, evaluateQueryAffectsBipTBooleanFalse) {
+	TEST_F(QueryEvaluatorCFGBipRelationTest, evaluateQueryAffectsBipTBooleanFalse) {
 		RelType type = AFFECT_BIP_T;
 		std::vector<std::string> lefts = AFFECTS_LEFTS;
 		std::vector<std::string> rights = AFFECTS_RIGHTS;
@@ -856,7 +873,7 @@ namespace UnitTesting {
 		validateEmptyRelations(relations);
 	}
 
-	TEST_F(QueryEvaluatorCFGRelationTest, evaluateQueryAffectsBipTFilterEmpty) {
+	TEST_F(QueryEvaluatorCFGBipRelationTest, evaluateQueryAffectsBipTFilterEmpty) {
 		RelType type = AFFECT_BIP_T;
 		std::vector<RelRef> relations;
 		std::vector<std::string> lefts = AFFECTS_LEFTS;
@@ -875,7 +892,7 @@ namespace UnitTesting {
 		validateEmptyRelations(relations);
 	}
 
-	TEST_F(QueryEvaluatorCFGRelationTest, evaluateQueryAffectsBipTFilterNoCommonSynonymTrue) {
+	TEST_F(QueryEvaluatorCFGBipRelationTest, evaluateQueryAffectsBipTFilterNoCommonSynonymTrue) {
 		RelType type = AFFECT_BIP_T;
 		std::string left1 = AFFECTS_LEFT1;
 		std::string left2 = AFFECTS_LEFT2;
@@ -895,7 +912,7 @@ namespace UnitTesting {
 		validateRelations(relations);
 	}
 
-	TEST_F(QueryEvaluatorCFGRelationTest, evaluateQueryAffectsBipTFilterCommonSynonym) {
+	TEST_F(QueryEvaluatorCFGBipRelationTest, evaluateQueryAffectsBipTFilterCommonSynonym) {
 		RelType type = AFFECT_BIP_T;
 		std::vector<std::string> lefts = AFFECTS_LEFTS;
 		std::vector<std::string> rights = AFFECTS_RIGHTS;
@@ -951,7 +968,7 @@ namespace UnitTesting {
 
 
 		//Test case for Select selected such that AffectsBipT(selected, "3")
-		result = { left2, left1 };
+		result = { left1, left2 };
 		relation = RelRef(type, selected_entity, { STMT, right2 });
 		EXPECT_EQ(evaluator.evaluateQuery(initQuery(relation, selected_entity)), result);
 

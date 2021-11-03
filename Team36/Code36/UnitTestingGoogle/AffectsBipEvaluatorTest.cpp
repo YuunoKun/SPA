@@ -8,6 +8,10 @@ namespace UnitTesting {
 	class AffectsBipEvaluatorTest : public testing::Test {
 	protected:
 		AffectsBipEvaluatorTest() {
+			cfg->add(1);
+			cfg->add(2);
+			cfg->add(3);
+			cfg->add(4);
 		}
 		virtual void SetUp() override {
 			PKB::getInstance().resetCache();
@@ -38,8 +42,15 @@ namespace UnitTesting {
 			PKB::getInstance().addUsesS(2, v1);
 			PKB::getInstance().addModifiesS(2, v2);
 			PKB::getInstance().addUsesS(3, v2);
+			PKB::getInstance().addCFGBip(cfg);
 			pkb.getRelationManager().update();
 		}
+
+		void TearDown() override {
+			delete cfg;
+		}
+
+		CFG* cfg = new CFG();
 
 		PKBAdapter pkb;
 		AffectsBipEvaluator evaluator;
@@ -63,9 +74,14 @@ namespace UnitTesting {
 		PKB::getInstance().resetCache();
 		PKB::getInstance().addStmt(STMT_ASSIGN);
 		PKB::getInstance().addStmt(STMT_ASSIGN);
+		PKB::getInstance().addStmt(STMT_ASSIGN);
+		PKB::getInstance().addStmt(STMT_ASSIGN);
 		PKB::getInstance().addProcedure(p);
 		PKB::getInstance().addProcContains(p, 1);
 		PKB::getInstance().addProcContains(p, 2);
+		PKB::getInstance().addProcContains(p, 3);
+		PKB::getInstance().addProcContains(p, 4);
+		PKB::getInstance().addCFGBip(cfg);
 		EXPECT_FALSE(evaluator.evaluateWildAndWild());
 		PKB::getInstance().addNext(1, 2);
 		PKB::getInstance().addVariable(v1);
