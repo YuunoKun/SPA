@@ -3,29 +3,6 @@
 
 #include "Utility.h"
 
-//std::string const Utility::EMPTY_STR = "";
-
-//std::string const Utility::SUCH_STR = "such";
-//std::string const Utility::SUCH_SPACE_STR = "such ";
-//std::string const Utility::SUCH_SPACE_THAT_STR = "such that";
-//std::string const Utility::PROG_STR = "prog";
-//std::string const Utility::PROG_UNDERSCORE_STR = "prog_";
-//std::string const Utility::PROG_UNDERSCORE_LINE_STR = "prog_line";
-//
-//std::string const Utility::FOLLOWS_STR = "Follows";
-//std::string const Utility::PARENT_STR = "Parent";
-//std::string const Utility::CALLS_STR = "Calls";
-//std::string const Utility::NEXT_STR = "Next";
-//std::string const Utility::NEXT_BIP_STR = "NextBip";
-//std::string const Utility::AFFECTS_STR = "Affects";
-//std::string const Utility::AFFECTS_BIP_STR = "AffectsBip";
-//
-//std::string const Utility::DOT_PROCNAME_STR = ".procName";
-//std::string const Utility::DOT_VARNAME_STR = ".varName";
-//std::string const Utility::DOT_VALIUE_STR = ".value";
-//std::string const Utility::DOT_STMT_STR = ".stmt";
-//std::string const Utility::DOT_STMT_HASH_STR = ".stmt#";
-
 std::list<std::string> Utility::constantsToStringList(std::vector<constant>& from) {
 	std::list<std::string> to;
 	for (auto& it : from) {
@@ -407,29 +384,29 @@ std::string Utility::queryTokenTypeToExprString(std::vector<QueryToken> token_ch
 		case QueryToken::IDENTIFIER:
 		case QueryToken::CONSTANT:
 			//white space added for every token to prevent 2 separate constants/identifiers in becoming one
-			result += ' ';
+			result += SPACE_C;
 			result += q.token_value;
 			break;
 		case QueryToken::PARENTHESIS_OPEN:
-			result += '(';
+			result += LEFT_PARENTHESIS_C;
 			break;
 		case QueryToken::PARENTHESIS_CLOSE:
-			result += ')';
+			result += RIGHT_PARENTHESIS_C;
 			break;
 		case QueryToken::PLUS:
-			result += '+';
+			result += PLUS_SIGN_C;
 			break;
 		case QueryToken::MINUS:
-			result += '-';
+			result += MINUS_SIGN_C;
 			break;
 		case QueryToken::MUL:
-			result += '*';
+			result += ASTERISK_C;
 			break;
 		case QueryToken::DIV:
-			result += '/';
+			result += SLASH_C;
 			break;
 		case QueryToken::MOD:
-			result += '%';
+			result += PERCENT_SIGN_C;
 			break;
 		default:
 			throw SyntacticErrorException("Not handled by Expr");
@@ -552,7 +529,7 @@ bool Utility::isStmtRef(Query& query, std::vector<QueryToken> token_chain, Entit
 	QueryToken token = token_chain[0];
 
 	if (token.type == QueryToken::CONSTANT) {
-		return token.token_value != "0";
+		return token.token_value != ZERO_S;
 	}
 
 	if (token.type == QueryToken::WILDCARD) {

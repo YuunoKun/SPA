@@ -132,15 +132,7 @@ constexpr char TABS_C = '\t';
 constexpr char DOT_C = '.';
 constexpr char HASH_C = '#';
 constexpr char ZERO_C = '0';
-
-
-
-
-
-
-
-
-
+constexpr char* ZERO_S = "0";
 
 static std::string const EMPTY_STR = "";
 
