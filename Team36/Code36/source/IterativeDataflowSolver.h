@@ -6,7 +6,6 @@
 #include "RelationTable.h"
 #include "RelationTable.cpp"
 #include "MonotypeRelationTable.h"
-#include "MonotypeRelationTable.cpp"
 
 struct ModifiesTuple {
 	stmt_index stmt_index;

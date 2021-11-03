@@ -7,7 +7,6 @@
 #include "RelationTable.h"
 #include "RelationTable.cpp"
 #include "MonotypeRelationTable.h"
-#include "MonotypeRelationTable.cpp"
 
 struct LabelledModifiesTuple {
 	LabelledProgLine labelled_prog_line;
