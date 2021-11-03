@@ -1,3 +1,5 @@
+#include <iostream>
+
 #include "IterativeDataflowSolver.h"
 
 IterativeDataflowSolver::IterativeDataflowSolver(
@@ -22,17 +24,20 @@ IterativeDataflowSolver::IterativeDataflowSolver(
 
 std::pair<std::set<stmt_index>, std::vector<std::pair<StmtInfo, StmtInfo>>> IterativeDataflowSolver::solve(std::vector<stmt_index> starting_worklist) {
 	populateDataflowSets();
-	std::queue<stmt_index> worklist;
+	std::deque<stmt_index> worklist;
 	std::set<stmt_index> visited{};
+	std::unordered_set<stmt_index> worklist_set{};
 
 	for (auto& stmt_index : starting_worklist) {
-		worklist.push(stmt_index);
+		worklist.push_back(stmt_index);
+		worklist_set.emplace(stmt_index);
 	}
 
 	while (!worklist.empty()) {
 		stmt_index curr = worklist.front();
 		visited.emplace(curr);
-		worklist.pop();
+		worklist.pop_front();
+		worklist_set.erase(curr);
 		int index = curr - 1;
 		int old_out_size = out_list[curr - 1].size();
 
@@ -40,7 +45,7 @@ std::pair<std::set<stmt_index>, std::vector<std::pair<StmtInfo, StmtInfo>>> Iter
 		processOutSet(index);
 
 		if (out_list[index].size() != old_out_size) {
-			addSuccessorsToWorklist(index, worklist);
+			addSuccessorsToUniqueWorklist(index, worklist, worklist_set);
 		}
 	}
 	resetOutList();
@@ -49,15 +54,15 @@ std::pair<std::set<stmt_index>, std::vector<std::pair<StmtInfo, StmtInfo>>> Iter
 
 bool IterativeDataflowSolver::solveIfAffectingAndAffected(stmt_index affecting, stmt_index affected) {
 	populateDataflowSets();
-	std::queue<stmt_index> worklist;
+	std::deque<stmt_index> worklist;
 	std::set<stmt_index> visited{};
 
-	worklist.push(affecting);
+	worklist.push_front(affecting);
 
 	while (!worklist.empty()) {
 		stmt_index curr = worklist.front();
 		visited.emplace(curr);
-		worklist.pop();
+		worklist.pop_front();
 		int index = curr - 1;
 		int old_out_size = out_list[curr - 1].size();
 
@@ -89,15 +94,15 @@ bool IterativeDataflowSolver::solveIfAffectingAndAffected(stmt_index affecting, 
 
 bool IterativeDataflowSolver::solveIfAffecting(stmt_index affecting_stmt) {
 	populateDataflowSets();
-	std::queue<stmt_index> worklist;
+	std::deque<stmt_index> worklist;
 	std::set<stmt_index> visited{};
 
-	worklist.push(affecting_stmt);
+	worklist.push_front(affecting_stmt);
 
 	while (!worklist.empty()) {
 		stmt_index curr = worklist.front();
 		visited.emplace(curr);
-		worklist.pop();
+		worklist.pop_front();
 		int index = curr - 1;
 		int old_out_size = out_list[curr - 1].size();
 
@@ -119,17 +124,22 @@ bool IterativeDataflowSolver::solveIfAffecting(stmt_index affecting_stmt) {
 	return false;
 }
 
-bool IterativeDataflowSolver::solveIfAffected(stmt_index affected_stmt, stmt_index starting_index) {
+bool IterativeDataflowSolver::solveIfAffected(stmt_index affected_stmt, std::vector<stmt_index> starting_worklist) {
 	populateDataflowSets();
-	std::queue<stmt_index> worklist;
+	std::deque<stmt_index> worklist;
 	std::set<stmt_index> visited{};
+	std::unordered_set<stmt_index> worklist_set{};
 
-	worklist.push(starting_index);
+	for (auto& stmt_index : starting_worklist) {
+		worklist.push_back(stmt_index);
+		worklist_set.emplace(stmt_index);
+	}
 
 	while (!worklist.empty()) {
 		stmt_index curr = worklist.front();
 		visited.emplace(curr);
-		worklist.pop();
+		worklist.pop_front();
+		worklist_set.erase(curr);
 		int index = curr - 1;
 		int old_out_size = out_list[curr - 1].size();
 
@@ -144,26 +154,29 @@ bool IterativeDataflowSolver::solveIfAffected(stmt_index affected_stmt, stmt_ind
 		processOutSet(index);
 
 		if (out_list[index].size() != old_out_size) {
-			addSuccessorsToWorklist(index, worklist);
+			addSuccessorsToUniqueWorklist(index, worklist, worklist_set);
 		}
 	}
 	resetOutList();
 	return false;
 }
 
-bool IterativeDataflowSolver::solveIfNonEmpty(std::vector<stmt_index> first_statements) {
+bool IterativeDataflowSolver::solveIfNonEmpty(std::vector<stmt_index> starting_worklist) {
 	populateDataflowSets();
-	std::queue<stmt_index> worklist;
+	std::deque<stmt_index> worklist;
 	std::set<stmt_index> visited{};
+	std::unordered_set<stmt_index> worklist_set{};
 
-	for (auto& stmt_index : first_statements) {
-		worklist.push(stmt_index);
+	for (auto& stmt_index : starting_worklist) {
+		worklist.push_back(stmt_index);
+		worklist_set.emplace(stmt_index);
 	}
 
 	while (!worklist.empty()) {
 		stmt_index curr = worklist.front();
 		visited.emplace(curr);
-		worklist.pop();
+		worklist.pop_front();
+		worklist_set.erase(curr);
 		int index = curr - 1;
 		int old_out_size = out_list[curr - 1].size();
 
@@ -243,9 +256,24 @@ bool IterativeDataflowSolver::checkIfAffected(stmt_index index) {
 	return false;
 }
 
-void IterativeDataflowSolver::addSuccessorsToWorklist(stmt_index index, std::queue<stmt_index>& worklist) {
-	for (auto& succ : succ_list[index]) {
-		worklist.push(succ);
+void IterativeDataflowSolver::addSuccessorsToWorklist(stmt_index index, std::deque<stmt_index>& worklist) {
+	auto v = succ_list[index];
+	std::set<stmt_index>::reverse_iterator rev_it;
+	for (rev_it = v.rbegin(); rev_it != v.rend(); rev_it++) {
+		worklist.push_front(*rev_it);
+	}
+}
+
+void IterativeDataflowSolver::addSuccessorsToUniqueWorklist(stmt_index index, std::deque<stmt_index>& worklist,
+	std::unordered_set<stmt_index>& worklist_set) {
+	auto v = succ_list[index];
+	std::set<stmt_index>::reverse_iterator rev_it;
+	// Add the successors of index if they are not in the worklist currently, in reverse order
+	for (rev_it = v.rbegin(); rev_it != v.rend(); rev_it++) {
+		if (worklist_set.count(*rev_it) == 0) {
+			worklist.push_front(*rev_it);
+			worklist_set.emplace(*rev_it);
+		}
 	}
 }
 

@@ -1,3 +1,5 @@
+#include <iostream>
+
 #include "IterativeDataflowSolverBip.h"
 
 IterativeDataflowSolverBip::IterativeDataflowSolverBip(
@@ -22,32 +24,36 @@ IterativeDataflowSolverBip::IterativeDataflowSolverBip(
 	kill_list.resize(size, {});
 }
 
-std::vector<std::pair<LabelledProgLine, LabelledProgLine>> IterativeDataflowSolverBip::solve(std::vector<stmt_index> starting_worklist) {
+std::vector<std::pair<LabelledProgLine, LabelledProgLine>> IterativeDataflowSolverBip::solve() {
 	populateDataflowSets();
-	std::queue<LabelledProgLine> worklist;
+	std::deque<LabelledProgLine> worklist;
 	std::set<LabelledProgLine> visited{};
 
-	for (auto& progline : starting_worklist) {
-		worklist.push({ progline, 0 });
+	for (auto& progline : labelled_progline_list) {
+		worklist.push_back(progline);
 	}
 
 	while (!worklist.empty()) {
 		LabelledProgLine curr = worklist.front();
 		visited.emplace(curr);
-		worklist.pop();
+		worklist.pop_front();
 		int old_out_size = out_list[curr].size();
 
 		processInSet(curr);
 		processOutSet(curr);
 
 		if (out_list[curr].size() != old_out_size) {
-			for (auto& succ : succ_list[curr]) {
-				worklist.push(succ);
-			}
+			addSuccessorsToWorklist(curr, worklist);
 		}
 	}
 	resetOutList();
 	return findResults();
+}
+
+void IterativeDataflowSolverBip::addSuccessorsToWorklist(LabelledProgLine index, std::deque<LabelledProgLine>& worklist) {
+	for (auto& succ : succ_list[index]) {
+		worklist.push_front(succ);
+	}
 }
 
 std::vector<std::pair<LabelledProgLine, LabelledProgLine>> IterativeDataflowSolverBip::findResults() {
@@ -93,7 +99,7 @@ StmtInfo IterativeDataflowSolverBip::getStmt(stmt_index index) {
 	return stmt_info_list[index - 1];
 }
 
-void IterativeDataflowSolverBip::updateKillGenList(stmt_index index, var_name var, bool is_assign) {
+void IterativeDataflowSolverBip::updateKillList(stmt_index index, var_name var) {
 	std::vector<StmtInfo> other_stmts_modify_var = modifiesS_table->getKeys(var);
 	std::vector<LabelledProgLine> curr_prog_lines = getProgLines(index);
 	for (auto& other_stmt : other_stmts_modify_var) {
@@ -104,10 +110,13 @@ void IterativeDataflowSolverBip::updateKillGenList(stmt_index index, var_name va
 			}
 		}
 	}
-	if (is_assign) {
-		for (auto& curr_prog_line : curr_prog_lines) {
-			gen_list[curr_prog_line].emplace(LabelledModifiesTuple{ curr_prog_line, var });
-		}
+}
+
+void IterativeDataflowSolverBip::updateGenList(stmt_index index, var_name var) {
+	std::vector<StmtInfo> other_stmts_modify_var = modifiesS_table->getKeys(var);
+	std::vector<LabelledProgLine> curr_prog_lines = getProgLines(index);
+	for (auto& curr_prog_line : curr_prog_lines) {
+		gen_list[curr_prog_line].emplace(LabelledModifiesTuple{ curr_prog_line, var });
 	}
 }
 
@@ -123,7 +132,8 @@ void IterativeDataflowSolverBip::populateDataflowSets() {
 		std::vector<var_name> var_modified_by_s = modifiesS_table->getValues(s);
 		for (auto& var : var_modified_by_s) {
 			bool is_assign = s.stmt_type == STMT_ASSIGN;
-			updateKillGenList(s.stmt_index, var, is_assign);
+			updateKillList(s.stmt_index, var);
+			if (is_assign) updateGenList(s.stmt_index, var);
 		}
 	}
 	for (auto& progline : labelled_progline_list) {

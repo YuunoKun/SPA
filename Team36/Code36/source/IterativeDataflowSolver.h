@@ -32,11 +32,11 @@ namespace std {
 class IterativeDataflowSolver
 {
 public:
-	std::pair<std::set<stmt_index>, std::vector<std::pair<StmtInfo, StmtInfo>>> solve(std::vector<stmt_index> starting_statements);
+	std::pair<std::set<stmt_index>, std::vector<std::pair<StmtInfo, StmtInfo>>> solve(std::vector<stmt_index> starting_worklist);
 	bool solveIfAffectingAndAffected(stmt_index affecting, stmt_index affected);
 	bool solveIfAffecting(stmt_index affecting);
-	bool solveIfAffected(stmt_index affected, stmt_index starting_index);
-	bool solveIfNonEmpty(std::vector<stmt_index> first_statements);
+	bool solveIfAffected(stmt_index affected, std::vector<stmt_index> starting_worklist);
+	bool solveIfNonEmpty(std::vector<stmt_index> starting_worklist);
 	void reset();
 
 	IterativeDataflowSolver(
@@ -62,7 +62,8 @@ private:
 	bool checkIfTupleAffects(ModifiesTuple, stmt_index);
 	bool checkIfAffecting(stmt_index index, stmt_index affecting_stmt);
 	bool checkIfAffected(stmt_index);
-	void addSuccessorsToWorklist(stmt_index, std::queue<stmt_index>&);
+	void addSuccessorsToWorklist(stmt_index, std::deque<stmt_index>&);
+	void addSuccessorsToUniqueWorklist(stmt_index, std::deque<stmt_index>&, std::unordered_set<stmt_index>&);
 	StmtInfo getStmt(stmt_index);
 
 	bool is_dataflow_sets_populated = false;
@@ -75,8 +76,8 @@ private:
 	std::vector<std::set<stmt_index>> succ_list;
 
 	std::vector<StmtInfo> stmt_info_list;
-	const MonotypeRelationTable<StmtInfo>* next_table;
-	const RelationTable<StmtInfo, var_name>* useS_table;
-	const RelationTable<StmtInfo, var_name>* modifiesS_table;
-	const RelationTable<proc_name, stmt_index>* procS_table;
+	const MonotypeRelationTable<StmtInfo>* next_table = nullptr;
+	const RelationTable<StmtInfo, var_name>* useS_table = nullptr;
+	const RelationTable<StmtInfo, var_name>* modifiesS_table = nullptr;
+	const RelationTable<proc_name, stmt_index>* procS_table = nullptr;
 };

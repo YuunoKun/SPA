@@ -65,8 +65,7 @@ bool CFGRelationsManager::isNextTEmpty() {
 bool CFGRelationsManager::isNextT(prog_line index1, prog_line index2) {
 	if (inSameProc(index1, index2) == false) {
 		return false;
-	}
-	else {
+	} else {
 		return next_t_preprocessor.evaluateConstantAndConstant(index1, index2);
 	}
 }
@@ -104,14 +103,13 @@ bool CFGRelationsManager::isAffectsEmpty() {
 }
 
 bool CFGRelationsManager::isAffects(stmt_index index1, stmt_index index2) {
-	bool is_nextT_calculated = next_t_preprocessor.isFullyPopulated() || next_t_preprocessor.getCalculatedMatrix()[index1 - 1][index2 - 1];
+	bool is_nextT_calculated = next_t_preprocessor.isFullyPopulated() || next_t_preprocessor.isCalculated(index1 - 1, index2 - 1);
 	if (is_nextT_calculated && !isNextT(index1, index2)) {
 		return false;
 	}
 	if (inSameProc(index1, index2) == false) {
 		return false;
-	}
-	else {
+	} else {
 		return affects_preprocessor.evaluateConstantAndConstant(index1, index2);
 	}
 }
@@ -140,8 +138,7 @@ std::vector<StmtInfo> CFGRelationsManager::getAffected(stmt_index index) {
 	auto& stmts = PKB::getInstance().getStmts();
 	if (stmts[index - 1].stmt_type != STMT_ASSIGN) {
 		return std::vector<StmtInfo>{};
-	}
-	else {
+	} else {
 		return affects_preprocessor.evaluateConstantAndSynonym(index);
 	}
 }
@@ -150,8 +147,7 @@ std::vector<StmtInfo> CFGRelationsManager::getAffecting(stmt_index index) {
 	auto& stmts = PKB::getInstance().getStmts();
 	if (stmts[index - 1].stmt_type != STMT_ASSIGN) {
 		return std::vector<StmtInfo>{};
-	}
-	else {
+	} else {
 		return affects_preprocessor.evaluateSynonymAndConstant(index);
 	}
 }
@@ -161,14 +157,12 @@ bool CFGRelationsManager::isAffectsTEmpty() {
 }
 
 bool CFGRelationsManager::isAffectsT(stmt_index index1, stmt_index index2) {
-	bool is_nextT_calculated = next_t_preprocessor.isFullyPopulated() || next_t_preprocessor.getCalculatedMatrix()[index1 - 1][index2 - 1];
+	bool is_nextT_calculated = next_t_preprocessor.isFullyPopulated() || next_t_preprocessor.isCalculated(index1 - 1, index2 - 1);
 	if (is_nextT_calculated && !isNextT(index1, index2)) {
 		return false;
-	}
-	else if (inSameProc(index1, index2) == false) {
+	} else if (inSameProc(index1, index2) == false) {
 		return false;
-	}
-	else {
+	} else {
 		affects_preprocessor.fullyPopulate();
 		return affectsT_preprocessor.evaluateConstantAndConstant(index1, index2);
 	}
@@ -199,8 +193,7 @@ std::vector<StmtInfo> CFGRelationsManager::getAffectedT(stmt_index index) {
 	auto& stmts = PKB::getInstance().getStmts();
 	if (stmts[index - 1].stmt_type != STMT_ASSIGN) {
 		return std::vector<StmtInfo>{};
-	}
-	else {
+	} else {
 		affects_preprocessor.fullyPopulate();
 		return affectsT_preprocessor.evaluateConstantAndSynonym(index);
 	}
@@ -210,8 +203,7 @@ std::vector<StmtInfo> CFGRelationsManager::getAffectingT(stmt_index index) {
 	auto& stmts = PKB::getInstance().getStmts();
 	if (stmts[index - 1].stmt_type != STMT_ASSIGN) {
 		return std::vector<StmtInfo>{};
-	}
-	else {
+	} else {
 		affects_preprocessor.fullyPopulate();
 		return affectsT_preprocessor.evaluateSynonymAndConstant(index);
 	}
