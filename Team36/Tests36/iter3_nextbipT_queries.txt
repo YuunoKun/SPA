@@ -400,12 +400,12 @@ none
 5000
 81 - false case
 prog_line n;
-Select n such that NextBip*(3, 6)
+Select n such that NextBip*(50, 5)
 none
 5000
 82 - false case
 prog_line n;
-Select n such that NextBip*(26, 20)
+Select n such that NextBip*(49, 1)
 none
 5000
 83 - select tuple

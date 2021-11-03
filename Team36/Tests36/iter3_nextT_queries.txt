@@ -226,7 +226,7 @@ Select a1 such that Next*(a1, r1)
 46 - nextT, LHS assign, RHS print
 prog_line n1, n2; stmt s1, s2; assign a1, a2; call c1, c2; read r1, r2; print pn1, pn2; while w1, w2; if ifs1, ifs2;
 Select a1 such that Next*(a1, pn1)
-2, 3, 10, 15, 17, 34, 35, 39, 41
+2, 3, 10, 15, 17, 22, 34, 35, 39, 41
 5000
 47 - nextT, LHS assign, RHS while
 prog_line n1, n2; stmt s1, s2; assign a1, a2; call c1, c2; read r1, r2; print pn1, pn2; while w1, w2; if ifs1, ifs2;
