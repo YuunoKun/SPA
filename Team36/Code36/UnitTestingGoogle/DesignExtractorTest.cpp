@@ -991,21 +991,21 @@ namespace UnitTesting {
 		std::vector<std::pair<LabelledProgLine, LabelledProgLine>> nextbip_labelled_actual = cfgbips[0]->getNextBipWithLabel();
 		std::vector<std::pair<LabelledProgLine, LabelledProgLine>> nextbip_labelled_expected =
 		{
-			{{1, 0},{2, 0}},
-			{{2, 0},{3, 0}},
-			{{3, 0},{4, 0}},
-			{{4, 0},{5, 0}},
-			{{5, 0},{6, 0}},
-			{{6, 0},{7, 0}},
-			{{7, 0},{14, 7}},
-			{{14, 7},{8, 0}},
-			{{5, 0},{9, 0}},
-			{{9, 0},{10, 0}},
-			{{10, 0},{11, 0}},
-			{{11, 0},{10, 0}},
-			{{10, 0},{12, 0}},
-			{{12, 0},{13, 0}},
-			{{8, 0},{13, 0}}
+			{{1, {0}},{2, {0}}},
+			{{2, {0}},{3, {0}}},
+			{{3, {0}},{4, {0}}},
+			{{4, {0}},{5, {0}}},
+			{{5, {0}},{6, {0}}},
+			{{6, {0}},{7, {0}}},
+			{{7, {0}},{14, {0,7}} },
+			{{14, {0,7}},{8, {0}}},
+			{{5, {0}},{9, {0}}},
+			{{9, {0}},{10, {0}}},
+			{{10, {0}},{11, {0}}},
+			{{11, {0}},{10, {0}}},
+			{{10, {0}},{12, {0}}},
+			{{12, {0}},{13, {0}}},
+			{{8, {0}},{13, {0}}}
 		};
 		sort(nextbip_actual.begin(), nextbip_actual.end());
 		sort(nextbip_expected.begin(), nextbip_expected.end());

@@ -68,12 +68,15 @@ namespace UnitTesting {
 		};
 
 		std::vector<std::pair<LabelledProgLine, LabelledProgLine>> test_next_list = {
-			{{1,0}, {2,0}}, {{2,0}, {3,0}}, {{4,0}, {5,0}}, {{5,0}, {9,5}},
-			{{9,5}, {10,5}}, {{10,5}, {12,10}}, {{12,10},{13,10}}, {{13, 10}, {14, 10}},
-			{{12,10},{15,10}},
-			{{15,10},{16,10}}, {{16,10},{15,10}}, {{14, 10}, {11, 5}}, {{15, 10}, {11, 5}}, {{11,5}, {6,0}},
-			{{6,0}, {7,0}}, {{7,0}, {12,7}}, {{12,7},{13,7}}, {{13,7}, {14,7}}, {{12,7},{15,7}},
-			{{15,7},{16,7}}, {{16,7},{15,7}}, {{14, 7}, {8,0}}, {{15, 7}, {8,0}}
+			{{1,{0}}, {2,{0}}}, {{2,{0}}, {3,{0}}}, {{4,{0}}, {5,{0}}},
+			{{5,{0}}, {9,{0,5}}}, {{9,{0,5}}, {10,{0,5}}}, 
+			{{10,{0,5}}, {12,{0,5,10}}}, {{12,{0,5,10}},{13,{0,5,10}}}, {{13,{0,5,10}}, {14,{0,5,10}}}, 
+			{{12,{0,5,10}},{15,{0,5,10}}}, {{15,{0,5,10}},{16,{0,5,10}}}, {{16,{0,5,10}},{15,{0,5,10}}},
+			{{14, {0,5,10}}, {11, {0,5}}}, {{15, {0,5,10}}, {11, {0,5}}},
+			{{11,{0,5}}, {6,{0}}}, {{6,{0}}, {7,{0}}}, 
+			{{7,{0}}, {12,{0,7}}}, {{12,{0,7}},{13,{0,7}}}, {{13,{0,7}}, {14,{0,7}}},
+			{{12,{0,7}},{15,{0,7}}}, {{15,{0,7}},{16,{0,7}}}, {{16,{0,7}},{15,{0,7}}}, 
+			{{14,{0,7}}, {8,{0}}}, {{15,{0,7}}, {8,{0}}}
 		};
 
 		MonotypeRelationTable<LabelledProgLine> test_next_table = MonotypeRelationTable<LabelledProgLine>(test_next_list);
@@ -112,7 +115,7 @@ namespace UnitTesting {
 
 		RelationTable<proc_name, stmt_index> test_procS_table = RelationTable<proc_name, stmt_index>(test_procS_list);
 
-		std::vector<LabelledProgLine> first_proglines = { {1, 0}, { 4, 0 } };
+		std::vector<LabelledProgLine> first_proglines = {{1,{0}},{4,{0}}};
 
 		AffectsBipPreprocessor processor = AffectsBipPreprocessor(test_next_table,
 			test_usesS_table, test_modifiesS_table, test_procS_table, first_proglines, stmt_list);
