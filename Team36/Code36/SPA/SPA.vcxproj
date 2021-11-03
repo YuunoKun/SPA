@@ -21,6 +21,8 @@
     <ClCompile Include="..\source\FSM.cpp" />
     <ClCompile Include="..\source\IterativeDataflowSolver.cpp" />
     <ClCompile Include="..\source\IterativeDataflowSolverBip.cpp" />
+    <ClCompile Include="..\source\NextBipPreprocessor.cpp" />
+    <ClCompile Include="..\source\NextBipTPreprocessor.cpp" />
     <ClCompile Include="..\source\Parser.cpp" />
     <ClCompile Include="..\source\Procedure.cpp" />
     <ClCompile Include="..\source\RelationPreprocessor.cpp" />
@@ -109,9 +111,11 @@
     <ClInclude Include="..\source\Extractor.h" />
     <ClInclude Include="..\source\FSM.h" />
     <ClInclude Include="..\source\AffectsPreprocessor.h" />
+    <ClInclude Include="..\source\NextBipPreprocessor.h" />
     <ClInclude Include="..\source\IterativeDataflowSolver.h" />
     <ClInclude Include="..\source\IterativeDataflowSolverBip.h" />
     <ClInclude Include="..\source\MonotypeRelationTable.h" />
+    <ClInclude Include="..\source\NextBipTPreprocessor.h" />
     <ClInclude Include="..\source\PKB.h" />
     <ClInclude Include="..\source\Parser.h" />
     <ClInclude Include="..\source\Procedure.h" />

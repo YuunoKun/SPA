@@ -357,6 +357,12 @@
     <ClCompile Include="..\source\RelationTableUtility.cpp">
       <Filter>Source Files\PKB\RelationTables</Filter>
     </ClCompile>
+    <ClCompile Include="..\source\NextBipPreprocessor.cpp">
+      <Filter>Source Files\PKB\RelationPreprocessor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\NextBipTPreprocessor.cpp">
+      <Filter>Source Files\PKB\RelationPreprocessor</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\source\Parser.h">
@@ -670,8 +676,15 @@
     </ClInclude>
     <ClInclude Include="..\source\RelationTableUtility.h">
       <Filter>Header Files\PKB\RelationTables</Filter>
+    </ClInclude>
     <ClInclude Include="..\source\SPCommon.h">
       <Filter>Header Files\SP</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\NextBipPreprocessor.h">
+      <Filter>Header Files\PKB\RelationPreprocessor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\NextBipTPreprocessor.h">
+      <Filter>Header Files\PKB\RelationPreprocessor</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
