@@ -74,6 +74,7 @@ QueryPreprocessor::QueryPreprocessor() {
 Query QueryPreprocessor::parse(std::string str) {
 	QueryTokenizer query_tokenizer;
 	QueryValidator queryValidator = QueryValidator();
+
 	//Query query
 	query_tokenizer.tokenize(this->query, str);
 
@@ -353,43 +354,57 @@ void QueryPreprocessor::handleParenthesisClose(QueryToken& token) {
 }
 
 void QueryPreprocessor::setIdentifierToQueryTokenType(QueryToken& token) {
-	if (prevToken.type == QueryToken::QueryTokenType::WHITESPACE ||
-		prevToken.type == QueryToken::QueryTokenType::TERMINATOR) {
-		if (token.token_value == "stmt") {
+	const auto firstToken = prevToken.type == QueryToken::QueryTokenType::WHITESPACE;
+	const auto newToken = prevToken.type == QueryToken::QueryTokenType::TERMINATOR;
+	const auto token_stmt = token.token_value == "stmt";
+	const auto token_procedure = token.token_value == "procedure";
+	const auto token_read = token.token_value == "read";
+	const auto token_print = token.token_value == "print";
+	const auto token_call = token.token_value == "call";
+	const auto token_if = token.token_value == "if";
+	const auto token_while = token.token_value == "while";
+	const auto token_assign = token.token_value == "assign";
+	const auto token_variable = token.token_value == "variable";
+	const auto token_constant = token.token_value == "constant";
+	const auto token_progline = token.type == QueryToken::QueryTokenType::PROG_LINE;
+	const auto condition_select = prevToken.type == QueryToken::QueryTokenType::TERMINATOR && token.token_value == "Select";
+
+	if (firstToken || newToken) {
+		if (token_stmt) {
 			declarationType = { QueryToken::QueryTokenType::STMT, "stmt" };
 		}
-		else if (token.token_value == "procedure") {
+		else if (token_procedure) {
 			declarationType = { QueryToken::QueryTokenType::PROCEDURE, "procedure" };
 		}
-		else if (token.token_value == "read") {
+		else if (token_read) {
 			declarationType = { QueryToken::QueryTokenType::READ, "read" };
 		}
-		else if (token.token_value == "print") {
+		else if (token_print) {
 			declarationType = { QueryToken::QueryTokenType::PRINT, "print" };
 		}
-		else if (token.token_value == "call") {
+		else if (token_call) {
 			declarationType = { QueryToken::QueryTokenType::CALL, "call" };
 		}
-		else if (token.token_value == "if") {
+		else if (token_if) {
 			declarationType = { QueryToken::QueryTokenType::IF, "if" };
 		}
-		else if (token.token_value == "while") {
+		else if (token_while) {
 			declarationType = { QueryToken::QueryTokenType::WHILE, "while" };
 		}
-		else if (token.token_value == "assign") {
+		else if (token_assign) {
 			declarationType = { QueryToken::QueryTokenType::ASSIGN, "assign" };
 		}
-		else if (token.token_value == "variable") {
+		else if (token_variable) {
 			declarationType = { QueryToken::QueryTokenType::VARIABLE, "variable" };
 		}
-		else if (token.token_value == "constant") {
+		else if (token_constant) {
 			declarationType = { QueryToken::QueryTokenType::CONSTANT, "constant" };
 		}
-		else if (token.type == QueryToken::QueryTokenType::PROG_LINE) {
+		else if (token_progline) {
 			declarationType = { QueryToken::QueryTokenType::PROG_LINE, "prog_line" };
 		}
 		// Need to enforce that Select must only come after a terminator
-		else if (prevToken.type == QueryToken::QueryTokenType::TERMINATOR && token.token_value == "Select") {
+		else if (condition_select) {
 			/*temp = { QueryToken::QueryTokenType::SELECT, "Select" };*/
 			isSelect = true;
 			status = ParseStatus::IS_SELECTING;
@@ -463,54 +478,71 @@ void QueryPreprocessor::updateEntityType(QueryToken& token, Entity& ent, bool& i
 }
 
 void QueryPreprocessor::setQueryParameter() {
+	const auto token_Uses = prevTokenSelect.token_value == "Uses" && prevTokenSelect.type == QueryToken::QueryTokenType::IDENTIFIER;
+	const auto token_Modifies = prevTokenSelect.token_value == "Modifies" && prevTokenSelect.type == QueryToken::QueryTokenType::IDENTIFIER;
+	const auto token_Parent = prevTokenSelect.token_value == "Parent" && prevTokenSelect.type == QueryToken::QueryTokenType::IDENTIFIER;
+	const auto token_ParentT = prevTokenSelect.token_value == "" && prevTokenSelect.type == QueryToken::QueryTokenType::PARENT_T;
+	const auto token_Follows = prevTokenSelect.token_value == "Follows" && prevTokenSelect.type == QueryToken::QueryTokenType::IDENTIFIER;
+	const auto token_FollowsT = prevTokenSelect.token_value == "" && prevTokenSelect.type == QueryToken::QueryTokenType::FOLLOWS_T;
+	const auto token_Calls = prevTokenSelect.token_value == "Calls" && prevTokenSelect.type == QueryToken::QueryTokenType::IDENTIFIER;
+	const auto token_CallsT = prevTokenSelect.token_value == "" && prevTokenSelect.type == QueryToken::QueryTokenType::CALLS_T;
+	const auto token_Next = prevTokenSelect.token_value == "Next" && prevTokenSelect.type == QueryToken::QueryTokenType::IDENTIFIER;
+	const auto token_NextT = prevTokenSelect.token_value == "" && prevTokenSelect.type == QueryToken::QueryTokenType::NEXT_T;
+	const auto token_Affects = prevTokenSelect.token_value == "Affects" && prevTokenSelect.type == QueryToken::QueryTokenType::IDENTIFIER;
+	const auto token_AffectsT = prevTokenSelect.token_value == "" && prevTokenSelect.type == QueryToken::QueryTokenType::AFFECTS_T;
+	const auto token_AffectsBip = prevTokenSelect.token_value == "AffectsBip" && prevTokenSelect.type == QueryToken::QueryTokenType::IDENTIFIER;
+	const auto token_AffectsBipT = prevTokenSelect.token_value == "" && prevTokenSelect.type == QueryToken::QueryTokenType::AFFECTS_BIP_T;
+	const auto token_NextBip = prevTokenSelect.token_value == "NextBip" && prevTokenSelect.type == QueryToken::QueryTokenType::IDENTIFIER;
+	const auto token_NextBipT = prevTokenSelect.token_value == "" && prevTokenSelect.type == QueryToken::QueryTokenType::NEXT_BIP_T;
+
 	// USES_P to be handled in PatternRelRefValidator
-	if (prevTokenSelect.token_value == "Uses" && prevTokenSelect.type == QueryToken::QueryTokenType::IDENTIFIER) {
+	if (token_Uses) {
 		queryParameter = { QueryToken::QueryTokenType::USES_S, "Uses" };
 	}
 	// MODIFIES_P to be handled in PatternRelRefValidator
-	else if (prevTokenSelect.token_value == "Modifies" && prevTokenSelect.type == QueryToken::QueryTokenType::IDENTIFIER) {
+	else if (token_Modifies) {
 		queryParameter = { QueryToken::QueryTokenType::MODIFIES_S, "Modifies" };
 	}
-	else if (prevTokenSelect.token_value == "Parent" && prevTokenSelect.type == QueryToken::QueryTokenType::IDENTIFIER) {
+	else if (token_Parent) {
 		queryParameter = { QueryToken::QueryTokenType::PARENT, "Parent" };
 	}
-	else if (prevTokenSelect.token_value == "" && prevTokenSelect.type == QueryToken::QueryTokenType::PARENT_T) {
+	else if (token_ParentT) {
 		queryParameter = { QueryToken::QueryTokenType::PARENT_T, "" };
 	}
-	else if (prevTokenSelect.token_value == "Follows" && prevTokenSelect.type == QueryToken::QueryTokenType::IDENTIFIER) {
+	else if (token_Follows) {
 		queryParameter = { QueryToken::QueryTokenType::FOLLOWS, "Follows" };
 	}
-	else if (prevTokenSelect.token_value == "" && prevTokenSelect.type == QueryToken::QueryTokenType::FOLLOWS_T) {
+	else if (token_FollowsT) {
 		queryParameter = { QueryToken::QueryTokenType::FOLLOWS_T, "" };
 	}
-	else if (prevTokenSelect.token_value == "Calls" && prevTokenSelect.type == QueryToken::QueryTokenType::IDENTIFIER) {
+	else if (token_Calls) {
 		queryParameter = { QueryToken::QueryTokenType::CALLS, "Calls" };
 	}
-	else if (prevTokenSelect.token_value == "" && prevTokenSelect.type == QueryToken::QueryTokenType::CALLS_T) {
+	else if (token_CallsT) {
 		queryParameter = { QueryToken::QueryTokenType::CALLS_T, "" };
 	}
-	else if (prevTokenSelect.token_value == "Next" && prevTokenSelect.type == QueryToken::QueryTokenType::IDENTIFIER) {
+	else if (token_Next) {
 		queryParameter = { QueryToken::QueryTokenType::NEXT, "Next" };
 	}
-	else if (prevTokenSelect.token_value == "" && prevTokenSelect.type == QueryToken::QueryTokenType::NEXT_T) {
+	else if (token_NextT) {
 		queryParameter = { QueryToken::QueryTokenType::NEXT_T, "" };
 	}
-	else if (prevTokenSelect.token_value == "Affects" && prevTokenSelect.type == QueryToken::QueryTokenType::IDENTIFIER) {
+	else if (token_Affects) {
 		queryParameter = { QueryToken::QueryTokenType::AFFECTS, "Affects" };
 	}
-	else if (prevTokenSelect.token_value == "" && prevTokenSelect.type == QueryToken::QueryTokenType::AFFECTS_T) {
+	else if (token_AffectsT) {
 		queryParameter = { QueryToken::QueryTokenType::AFFECTS_T, "" };
 	}
-	else if (prevTokenSelect.token_value == "AffectsBip" && prevTokenSelect.type == QueryToken::QueryTokenType::IDENTIFIER) {
+	else if (token_AffectsBip) {
 		queryParameter = { QueryToken::QueryTokenType::AFFECTS_BIP, "AffectsBip" };
 	}
-	else if (prevTokenSelect.token_value == "" && prevTokenSelect.type == QueryToken::QueryTokenType::AFFECTS_BIP_T) {
+	else if (token_AffectsBipT) {
 		queryParameter = { QueryToken::QueryTokenType::AFFECTS_BIP_T, "" };
 	}
-	else if (prevTokenSelect.token_value == "NextBip" && prevTokenSelect.type == QueryToken::QueryTokenType::IDENTIFIER) {
+	else if (token_NextBip) {
 		queryParameter = { QueryToken::QueryTokenType::NEXT_BIP, "NextBip" };
 	}
-	else if (prevTokenSelect.token_value == "" && prevTokenSelect.type == QueryToken::QueryTokenType::NEXT_BIP_T) {
+	else if (token_NextBipT) {
 		queryParameter = { QueryToken::QueryTokenType::NEXT_BIP_T, "" };
 	}
 }
