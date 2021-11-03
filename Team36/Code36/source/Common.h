@@ -97,25 +97,70 @@ namespace std {
 
 
 // Valid expression symbols
-constexpr char EXPR_SYMBOL_SPACE_C = ' ';
-constexpr char* EXPR_SYMBOL_SPACE_S = "	";
-constexpr char EXPR_SYMBOL_TAB_C = '	';
-constexpr char* EXPR_SYMBOL_TAB_S = "	";
-constexpr char EXPR_SYMBOL_PLUS_SIGN_C = '+';
-constexpr char* EXPR_SYMBOL_PLUS_SIGN_S = "+";
-constexpr char EXPR_SYMBOL_MINUS_SIGN_C = '-';
-constexpr char* EXPR_SYMBOL_MINUS_SIGN_S = "-";
-constexpr char EXPR_SYMBOL_ASTERISK_C = '*';
-constexpr char* EXPR_SYMBOL_ASTERISK_S = "*";
-constexpr char EXPR_SYMBOL_SLASH_C = '/';
-constexpr char* EXPR_SYMBOL_SLASH_S = "/";
-constexpr char EXPR_SYMBOL_PERCENT_SIGN_C = '%';
-constexpr char* EXPR_SYMBOL_PERCENT_SIGN_S = "%";
-constexpr char EXPR_SYMBOL_EQUAL_SIGN_C = '=';
-constexpr char* EXPR_SYMBOL_EQUAL_SIGN_S = "=";
-constexpr char EXPR_SYMBOL_LEFT_PARENTHESIS_C = '(';
-constexpr char* EXPR_SYMBOL_LEFT_PARENTHESIS_S = "(";
-constexpr char EXPR_SYMBOL_RIGHT_PARENTHESIS_C = ')';
-constexpr char* EXPR_SYMBOL_RIGHT_PARENTHESIS_S = ")";
-constexpr char EXPR_SYMBOL_SEMICOLON_C = ';'; 
-constexpr char* EXPR_SYMBOL_SEMICOLON_S = ";";
+constexpr char SPACE_C = ' ';
+constexpr char* SPACE_S = "	";
+constexpr char TAB_C = '	';
+constexpr char* TAB_S = "	";
+constexpr char PLUS_SIGN_C = '+';
+constexpr char* PLUS_SIGN_S = "+";
+constexpr char MINUS_SIGN_C = '-';
+constexpr char* MINUS_SIGN_S = "-";
+constexpr char ASTERISK_C = '*';
+constexpr char* ASTERISK_S = "*";
+constexpr char SLASH_C = '/';
+constexpr char* SLASH_S = "/";
+constexpr char PERCENT_SIGN_C = '%';
+constexpr char* PERCENT_SIGN_S = "%";
+constexpr char EQUAL_SIGN_C = '=';
+constexpr char* EQUAL_SIGN_S = "=";
+constexpr char LEFT_PARENTHESIS_C = '(';
+constexpr char* LEFT_PARENTHESIS_S = "(";
+constexpr char RIGHT_PARENTHESIS_C = ')';
+constexpr char* RIGHT_PARENTHESIS_S = ")";
+constexpr char SEMICOLON_C = ';'; 
+constexpr char* SEMICOLON_S = ";";
+
+constexpr char T_C = 't';
+constexpr char L_C = 'l';
+constexpr char TUPLE_OPEN_C = '<';
+constexpr char TUPLE_CLOSE_C = '>';
+constexpr char QUOTATION_C = '"';
+constexpr char UNDERSCORE_C = '_';
+constexpr char COMMA_C = ',';
+constexpr char NEWLINE_C = '\n';
+constexpr char TABS_C = '\t';
+constexpr char DOT_C = '.';
+constexpr char HASH_C = '#';
+constexpr char ZERO_C = '0';
+
+
+
+
+
+
+
+
+
+
+static std::string const EMPTY_STR = "";
+
+static std::string const SUCH_STR = "such";
+static std::string const SUCH_SPACE_STR = "such ";
+static std::string const SUCH_SPACE_THAT_STR = "such that";
+static std::string const PROG_STR = "prog";
+static std::string const PROG_UNDERSCORE_STR = "prog_";
+static std::string const PROG_UNDERSCORE_LINE_STR = "prog_line";
+
+static std::string const FOLLOWS_STR = "Follows";
+static std::string const PARENT_STR = "Parent";
+static std::string const CALLS_STR = "Calls";
+static std::string const NEXT_STR = "Next";
+static std::string const NEXT_BIP_STR = "NextBip";
+static std::string const AFFECTS_STR = "Affects";
+static std::string const AFFECTS_BIP_STR = "AffectsBip";
+
+static std::string const DOT_PROCNAME_STR = ".procName";
+static std::string const DOT_VARNAME_STR = ".varName";
+static std::string const DOT_VALIUE_STR = ".value";
+static std::string const DOT_STMT_STR = ".stmt";
+static std::string const DOT_STMT_HASH_STR = ".stmt#";

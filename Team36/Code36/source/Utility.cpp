@@ -3,28 +3,28 @@
 
 #include "Utility.h"
 
-std::string const Utility::EMPTY_STR = "";
+//std::string const Utility::EMPTY_STR = "";
 
-std::string const Utility::SUCH_STR = "such";
-std::string const Utility::SUCH_SPACE_STR = "such ";
-std::string const Utility::SUCH_SPACE_THAT_STR = "such that";
-std::string const Utility::PROG_STR = "prog";
-std::string const Utility::PROG_UNDERSCORE_STR = "prog_";
-std::string const Utility::PROG_UNDERSCORE_LINE_STR = "prog_line";
-
-std::string const Utility::FOLLOWS_STR = "Follows";
-std::string const Utility::PARENT_STR = "Parents";
-std::string const Utility::CALLS_STR = "Calls";
-std::string const Utility::NEXT_STR = "Next";
-std::string const Utility::NEXT_BIP_STR = "NextBip";
-std::string const Utility::AFFECTS_STR = "Affects";
-std::string const Utility::AFFECTS_BIP_STR = "AffectsBip";
-
-std::string const Utility::DOT_PROCNAME_STR = ".procName";
-std::string const Utility::DOT_VARNAME_STR = ".varName";
-std::string const Utility::DOT_VALIUE_STR = ".value";
-std::string const Utility::DOT_STMT_STR = ".stmt";
-std::string const Utility::DOT_STMT_HASH_STR = ".stmt#";
+//std::string const Utility::SUCH_STR = "such";
+//std::string const Utility::SUCH_SPACE_STR = "such ";
+//std::string const Utility::SUCH_SPACE_THAT_STR = "such that";
+//std::string const Utility::PROG_STR = "prog";
+//std::string const Utility::PROG_UNDERSCORE_STR = "prog_";
+//std::string const Utility::PROG_UNDERSCORE_LINE_STR = "prog_line";
+//
+//std::string const Utility::FOLLOWS_STR = "Follows";
+//std::string const Utility::PARENT_STR = "Parent";
+//std::string const Utility::CALLS_STR = "Calls";
+//std::string const Utility::NEXT_STR = "Next";
+//std::string const Utility::NEXT_BIP_STR = "NextBip";
+//std::string const Utility::AFFECTS_STR = "Affects";
+//std::string const Utility::AFFECTS_BIP_STR = "AffectsBip";
+//
+//std::string const Utility::DOT_PROCNAME_STR = ".procName";
+//std::string const Utility::DOT_VARNAME_STR = ".varName";
+//std::string const Utility::DOT_VALIUE_STR = ".value";
+//std::string const Utility::DOT_STMT_STR = ".stmt";
+//std::string const Utility::DOT_STMT_HASH_STR = ".stmt#";
 
 std::list<std::string> Utility::constantsToStringList(std::vector<constant>& from) {
 	std::list<std::string> to;

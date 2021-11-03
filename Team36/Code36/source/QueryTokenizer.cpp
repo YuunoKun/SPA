@@ -21,27 +21,27 @@ void QueryTokenizer::tokenize(Query& query, std::string input) {
 	for (char c : input) {
 
 		if (curr_query_token.type == QueryToken::IDENTIFIER
-			&& curr_query_token.token_value == Utility::SUCH_SPACE_STR
-			&& c != 't') {
+			&& curr_query_token.token_value == SUCH_SPACE_STR
+			&& c != T_C) {
 			curr_query_token.token_value.pop_back();
 			add_query_token(query, curr_query_token);
 			curr_query_token.type = QueryToken::WHITESPACE;
 		} else if (curr_query_token.type == QueryToken::IDENTIFIER
-			&& curr_query_token.token_value == Utility::PROG_UNDERSCORE_STR
-			&& c != 'l') {
+			&& curr_query_token.token_value == PROG_UNDERSCORE_STR
+			&& c != L_C) {
 			throw SyntacticErrorException("Unexpected symbol \"_\"");
 		}
 
 
 		switch (c) {
-		case '(':
+		case LEFT_PARENTHESIS_C:
 			add_query_token(query, curr_query_token);
 			curr_query_token.type = QueryToken::PARENTHESIS_OPEN;
 			add_query_token(query, curr_query_token);
-			parenthesis_validation_stk.push('(');
+			parenthesis_validation_stk.push(LEFT_PARENTHESIS_C);
 			break;
-		case ')':
-			if (!parenthesis_validation_stk.empty() && parenthesis_validation_stk.top() == '(') {
+		case RIGHT_PARENTHESIS_C:
+			if (!parenthesis_validation_stk.empty() && parenthesis_validation_stk.top() == LEFT_PARENTHESIS_C) {
 				parenthesis_validation_stk.pop();
 			}
 			else {
@@ -53,14 +53,14 @@ void QueryTokenizer::tokenize(Query& query, std::string input) {
 			curr_query_token.type = QueryToken::PARENTHESIS_CLOSE;
 			add_query_token(query, curr_query_token);
 			break;
-		case '<':
+		case TUPLE_OPEN_C:
 			add_query_token(query, curr_query_token);
 			curr_query_token.type = QueryToken::TUPLE_OPEN;
 			add_query_token(query, curr_query_token);
-			parenthesis_validation_stk.push('<');
+			parenthesis_validation_stk.push(TUPLE_OPEN_C);
 			break;
-		case '>':
-			if (!parenthesis_validation_stk.empty() && parenthesis_validation_stk.top() == '<') {
+		case TUPLE_CLOSE_C:
+			if (!parenthesis_validation_stk.empty() && parenthesis_validation_stk.top() == TUPLE_OPEN_C) {
 				parenthesis_validation_stk.pop();
 			}
 			else {
@@ -70,7 +70,7 @@ void QueryTokenizer::tokenize(Query& query, std::string input) {
 			curr_query_token.type = QueryToken::TUPLE_CLOSE;
 			add_query_token(query, curr_query_token);
 			break;
-		case '"':
+		case QUOTATION_C:
 			if (!quotation_validation) {
 				//No opening quotation marks
 				add_query_token(query, curr_query_token);
@@ -85,13 +85,13 @@ void QueryTokenizer::tokenize(Query& query, std::string input) {
 				quotation_validation = false;
 			}
 			break;
-		case ';':
+		case SEMICOLON_C:
 			add_query_token(query, curr_query_token);
 			curr_query_token.type = QueryToken::TERMINATOR;
 			add_query_token(query, curr_query_token);
 			break;
-		case '_':
-			if (curr_query_token.token_value == Utility::PROG_STR) {
+		case UNDERSCORE_C:
+			if (curr_query_token.token_value == PROG_STR) {
 				curr_query_token.token_value.push_back(c);
 				is_prog_line = true;
 			} else {
@@ -101,72 +101,72 @@ void QueryTokenizer::tokenize(Query& query, std::string input) {
 			}
 			break;
 
-		case ',':
+		case COMMA_C:
 			add_query_token(query, curr_query_token);
 			curr_query_token.type = QueryToken::COMMA;
 			add_query_token(query, curr_query_token);
 			break;
-		case ' ':
+		case SPACE_C:
 			// check for "such" in such that
 			if (curr_query_token.type == QueryToken::IDENTIFIER
-				&& curr_query_token.token_value == Utility::SUCH_STR) {
+				&& curr_query_token.token_value == SUCH_STR) {
 				curr_query_token.token_value.push_back(c);
 				break;
 			} else if (curr_query_token.type == QueryToken::IDENTIFIER
-				&& curr_query_token.token_value == Utility::SUCH_SPACE_THAT_STR) {
+				&& curr_query_token.token_value == SUCH_SPACE_THAT_STR) {
 				// check for "such that" in such that
 				curr_query_token.type = QueryToken::SUCH_THAT;
-				curr_query_token.token_value = "";
+				curr_query_token.token_value = EMPTY_STR;
 				add_query_token(query, curr_query_token);
 				break;
 			} else if (curr_query_token.type == QueryToken::IDENTIFIER
-				&& curr_query_token.token_value == Utility::PROG_UNDERSCORE_LINE_STR) {
+				&& curr_query_token.token_value == PROG_UNDERSCORE_LINE_STR) {
 				curr_query_token.type = QueryToken::PROG_LINE;
-				curr_query_token.token_value = "";
+				curr_query_token.token_value = EMPTY_STR;
 				add_query_token(query, curr_query_token);
 				is_prog_line = false;
 			}
 			add_query_token(query, curr_query_token);
 			curr_query_token.type = QueryToken::WHITESPACE;
 			break;
-		case '\n':
+		case NEWLINE_C:
 			add_query_token(query, curr_query_token);
 			curr_query_token.type = QueryToken::WHITESPACE;
 			break;
-		case '\t':
+		case TABS_C:
 			add_query_token(query, curr_query_token);
 			curr_query_token.type = QueryToken::WHITESPACE;
 			break;
-		case '*':
+		case ASTERISK_C:
 			// must NOT be in quotation brackets
 			if (!quotation_validation && curr_query_token.type == QueryToken::IDENTIFIER) {
-				if (curr_query_token.token_value == Utility::FOLLOWS_STR) {
+				if (curr_query_token.token_value == FOLLOWS_STR) {
 					curr_query_token.type = QueryToken::FOLLOWS_T;
-					curr_query_token.token_value = "";
+					curr_query_token.token_value = EMPTY_STR;
 					add_query_token(query, curr_query_token);
-				} else if (curr_query_token.token_value == Utility::PARENT_STR) {
+				} else if (curr_query_token.token_value == PARENT_STR) {
 					curr_query_token.type = QueryToken::PARENT_T;
-					curr_query_token.token_value = "";
+					curr_query_token.token_value = EMPTY_STR;
 					add_query_token(query, curr_query_token);
-				} else if (curr_query_token.token_value == Utility::CALLS_STR) {
+				} else if (curr_query_token.token_value == CALLS_STR) {
 					curr_query_token.type = QueryToken::CALLS_T;
-					curr_query_token.token_value = "";
+					curr_query_token.token_value = EMPTY_STR;
 					add_query_token(query, curr_query_token);
-				} else if (curr_query_token.token_value == Utility::NEXT_STR) {
+				} else if (curr_query_token.token_value == NEXT_STR) {
 					curr_query_token.type = QueryToken::NEXT_T;
-					curr_query_token.token_value = "";
+					curr_query_token.token_value = EMPTY_STR;
 					add_query_token(query, curr_query_token);
-				} else if (curr_query_token.token_value == Utility::NEXT_BIP_STR) {
+				} else if (curr_query_token.token_value == NEXT_BIP_STR) {
 					curr_query_token.type = QueryToken::NEXT_BIP_T;
-					curr_query_token.token_value = "";
+					curr_query_token.token_value = EMPTY_STR;
 					add_query_token(query, curr_query_token);
-				} else if (curr_query_token.token_value == Utility::AFFECTS_STR) {
+				} else if (curr_query_token.token_value == AFFECTS_STR) {
 					curr_query_token.type = QueryToken::AFFECTS_T;
-					curr_query_token.token_value = "";
+					curr_query_token.token_value = EMPTY_STR;
 					add_query_token(query, curr_query_token);
-				} else if (curr_query_token.token_value == Utility::AFFECTS_BIP_STR) {
+				} else if (curr_query_token.token_value == AFFECTS_BIP_STR) {
 					curr_query_token.type = QueryToken::AFFECTS_BIP_T;
-					curr_query_token.token_value = "";
+					curr_query_token.token_value = EMPTY_STR;
 					add_query_token(query, curr_query_token);
 				}
 
@@ -178,37 +178,37 @@ void QueryTokenizer::tokenize(Query& query, std::string input) {
 				add_query_token(query, curr_query_token);
 				break;
 			}
-		case Utility::PLUS_C:
+		case PLUS_SIGN_C:
 			add_query_token(query, curr_query_token);
 			curr_query_token.type = QueryToken::PLUS;
 			add_query_token(query, curr_query_token);
 			break;
-		case '-':
+		case MINUS_SIGN_C:
 			add_query_token(query, curr_query_token);
 			curr_query_token.type = QueryToken::MINUS;
 			add_query_token(query, curr_query_token);
 			break;
-		case '/':
+		case SLASH_C:
 			add_query_token(query, curr_query_token);
 			curr_query_token.type = QueryToken::DIV;
 			add_query_token(query, curr_query_token);
 			break;
-		case '%':
+		case PERCENT_SIGN_C:
 			add_query_token(query, curr_query_token);
 			curr_query_token.type = QueryToken::MOD;
 			add_query_token(query, curr_query_token);
 			break;
-		case '=':
+		case EQUAL_SIGN_C:
 			add_query_token(query, curr_query_token);
 			curr_query_token.type = QueryToken::EQUAL;
 			add_query_token(query, curr_query_token);
 			break;
-		case '.':
+		case DOT_C:
 			add_query_token(query, curr_query_token);
 			curr_query_token.token_value.push_back(c);
 			break;
-		case '#':
-			if (curr_query_token.token_value == Utility::DOT_STMT_STR) {
+		case HASH_C:
+			if (curr_query_token.token_value == DOT_STMT_STR) {
 				curr_query_token.token_value.push_back(c);
 			} else {
 				throw SyntacticErrorException("Unexpected symbol : \'#\'");
@@ -270,37 +270,37 @@ void QueryTokenizer::add_query_token(Query& query, QueryToken& query_token) {
 
 	if (query_token.type == QueryToken::IDENTIFIER) {
 
-		if (query_token.token_value == Utility::DOT_PROCNAME_STR) {
+		if (query_token.token_value == DOT_PROCNAME_STR) {
 			query_token.type = QueryToken::DOT;
-			query_token.token_value = "";
+			query_token.token_value = EMPTY_STR;
 			query_token_cache.push_back(query_token);
 			query_token.type = QueryToken::PROC_NAME;
-			query_token.token_value = "";
+			query_token.token_value = EMPTY_STR;
 		}
-		else if (query_token.token_value == Utility::DOT_VARNAME_STR) {
+		else if (query_token.token_value == DOT_VARNAME_STR) {
 			query_token.type = QueryToken::DOT;
-			query_token.token_value = "";
+			query_token.token_value = EMPTY_STR;
 			query_token_cache.push_back(query_token);
 			query_token.type = QueryToken::VAR_NAME;
-			query_token.token_value = "";
+			query_token.token_value = EMPTY_STR;
 		}
-		else if (query_token.token_value == Utility::DOT_VALIUE_STR) {
+		else if (query_token.token_value == DOT_VALIUE_STR) {
 			query_token.type = QueryToken::DOT;
-			query_token.token_value = "";
+			query_token.token_value = EMPTY_STR;
 			query_token_cache.push_back(query_token);
 			query_token.type = QueryToken::VALUE;
-			query_token.token_value = "";
+			query_token.token_value = EMPTY_STR;
 		}
-		else if (query_token.token_value == Utility::DOT_STMT_HASH_STR) {
+		else if (query_token.token_value == DOT_STMT_HASH_STR) {
 			query_token.type = QueryToken::DOT;
-			query_token.token_value = "";
+			query_token.token_value = EMPTY_STR;
 			query_token_cache.push_back(query_token);
 			query_token.type = QueryToken::STMT_INDEX;
-			query_token.token_value = "";
+			query_token.token_value = EMPTY_STR;
 		}
 	}
 	else if (query_token.type == QueryToken::CONSTANT) {
-		if (query_token.token_value[0] == '0' && query_token.token_value.length() > 1) {
+		if (query_token.token_value[0] == ZERO_C && query_token.token_value.length() > 1) {
 			query.setIsSemanticError("No leading '0's allowed ");
 		}
 	}
@@ -308,5 +308,5 @@ void QueryTokenizer::add_query_token(Query& query, QueryToken& query_token) {
 
 	query_token_cache.push_back(query_token);
 	query_token.type = QueryToken::QueryTokenType::WHITESPACE;
-	query_token.token_value = Utility::EMPTY_STR;
+	query_token.token_value = EMPTY_STR;
 }

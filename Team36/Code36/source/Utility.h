@@ -12,31 +12,7 @@
 
 class Utility {
 public:
-	//static inline std::string const PLUS_S = "+";
-	static constexpr char PLUS_C = '+';
 	
-	static std::string const EMPTY_STR;
-
-	static std::string const SUCH_STR;
-	static std::string const SUCH_SPACE_STR;
-	static std::string const SUCH_SPACE_THAT_STR;
-	static std::string const PROG_STR;
-	static std::string const PROG_UNDERSCORE_STR;
-	static std::string const PROG_UNDERSCORE_LINE_STR;
-
-	static std::string const FOLLOWS_STR;
-	static std::string const PARENT_STR;
-	static std::string const CALLS_STR;
-	static std::string const NEXT_STR;
-	static std::string const NEXT_BIP_STR;
-	static std::string const AFFECTS_STR;
-	static std::string const AFFECTS_BIP_STR;
-
-	static std::string const DOT_PROCNAME_STR;
-	static std::string const DOT_VARNAME_STR;
-	static std::string const DOT_VALIUE_STR;
-	static std::string const DOT_STMT_STR;
-	static std::string const DOT_STMT_HASH_STR;
 
 	static std::list<std::string> constantsToStringList(std::vector<constant>&);
 	static std::list<std::string> proceduresToStringList(std::vector<proc_name>&);
