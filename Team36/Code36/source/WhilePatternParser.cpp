@@ -1,13 +1,13 @@
 #include "WhilePatternParser.h"
 
 void WhilePatternParser::parse(Query& query, Entity& entity, std::vector<QueryToken> token_chain) {
-	std::vector<std::vector<QueryToken>> separated_params = Utility::splitTokenChain(2, QueryToken::COMMA, token_chain);
+	Utility::isSyntacticValidpattern(token_chain);
 
-	if (!Utility::isEntRef(query, separated_params[0]) || !Utility::isWildCard(separated_params[1])) {
-		query.setIsSemanticError("Invalid parameters for while");
-	}
+	std::vector<std::vector<QueryToken>> separated_params = Utility::splitTokenChain(3, QueryToken::COMMA, token_chain);
 
-	if (!Utility::isCorrectSynEntRef(query, separated_params[0], EntityType::VARIABLE)) {
+	if (!Utility::isSemanticValidEntRef(query, separated_params[0], EntityType::VARIABLE) || 
+		!Utility::isWildCard(separated_params[1]) ||
+		separated_params[2].size() != 0) {
 		query.setIsSemanticError("Invalid parameters for while");
 	}
 
