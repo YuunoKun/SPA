@@ -1638,6 +1638,12 @@ namespace UnitTesting {
 
 		EXPECT_THROW(qp.parse("stmt s; assign a, a1; variable v; Select a pattern a(v, _) and pattern a1(v, _)"), SyntacticErrorException);
 		qp.resetQuery();
+
+		EXPECT_THROW(qp.parse("stmt s; assign a, a1; variable v;* Select a pattern a(v, _) and pattern a1(v, _)"), SyntacticErrorException);
+		qp.resetQuery();
+
+		EXPECT_THROW(qp.parse("stmt s; assign a, a1; variable v;; Select a pattern a(v, _) and pattern a1(v, _)"), SyntacticErrorException);
+		qp.resetQuery();
 	}
 
 	TEST(QueryPreprocessor, invalidSemantic) {
