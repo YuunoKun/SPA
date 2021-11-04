@@ -43,3 +43,8 @@ prog_line n;
 Select n such that Follows(n,_)
 1, 2, 3, 4, 5, 9, 10, 12, 13, 14
 5000
+10 - select tuple
+stmt s1, s2;
+Select <s1, s2> such that Follows(s1, s2)
+1 2, 2 3, 3 4, 4 9, 5 6, 9 10, 10 11, 12 13, 13 16, 14 15
+5000

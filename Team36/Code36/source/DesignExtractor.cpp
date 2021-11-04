@@ -398,7 +398,7 @@ void DesignExtractor::populateNext(PKB& pkb) {
 	}
 
 	for (CFG* cfg: cfgs) {
-		if (cfg->getHeadLabelledProgLine().label == NON_EXISTING_STMT_NO) {
+		if (cfg->getHeadLabelledProgLine().labels.front() == NON_EXISTING_STMT_NO) {
 			pkb.addCFGBip(cfg);
 		}
 	}

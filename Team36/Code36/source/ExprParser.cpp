@@ -29,21 +29,21 @@ std::deque<std::string> ExprParser::sliceString(const std::string str) {
 
 	for (char c : str) {
 		switch (c) {
-		case EXPR_SYMBOL_PLUS_SIGN_C:
-		case EXPR_SYMBOL_MINUS_SIGN_C:
-		case EXPR_SYMBOL_ASTERISK_C:
-		case EXPR_SYMBOL_SLASH_C:
-		case EXPR_SYMBOL_PERCENT_SIGN_C:
-		case EXPR_SYMBOL_LEFT_PARENTHESIS_C:
-		case EXPR_SYMBOL_RIGHT_PARENTHESIS_C:
+		case PLUS_SIGN_C:
+		case MINUS_SIGN_C:
+		case ASTERISK_C:
+		case SLASH_C:
+		case PERCENT_SIGN_C:
+		case LEFT_PARENTHESIS_C:
+		case RIGHT_PARENTHESIS_C:
 			if (segments.rbegin()->size() == 0) {
 				segments.pop_back();
 			}
 			segments.push_back(std::string(1, c));
 			segments.push_back(std::string());
 			break;
-		case EXPR_SYMBOL_SPACE_C:
-		case EXPR_SYMBOL_TAB_C:
+		case SPACE_C:
+		case TAB_C:
 			continue;
 			break;
 		default:
@@ -69,16 +69,16 @@ ExprNode ExprParser::parseExpression(std::deque<std::string>& dq) {
 
 	while (!dq.empty()) {
 		ExprNode parent;
-		if (*dq.begin() == EXPR_SYMBOL_PLUS_SIGN_S) {
+		if (*dq.begin() == PLUS_SIGN_S) {
 			parent = ExprNode(ExprSymbol::EXPR_PLUS);
 		}
-		else if (*dq.begin() == EXPR_SYMBOL_MINUS_SIGN_S) {
+		else if (*dq.begin() == MINUS_SIGN_S) {
 			parent = ExprNode(ExprSymbol::EXPR_MINUS);
 		}
-		else if (*dq.begin() == EXPR_SYMBOL_LEFT_PARENTHESIS_S) {
+		else if (*dq.begin() == LEFT_PARENTHESIS_S) {
 			protectedPopFront(dq);
 			ExprNode node = parseExpression(dq);
-			protectedPopFront(dq, EXPR_SYMBOL_RIGHT_PARENTHESIS_S);
+			protectedPopFront(dq, RIGHT_PARENTHESIS_S);
 			parent.setLHS(lhs);
 			parent.setRHS(node);
 			lhs = parent;
@@ -101,19 +101,19 @@ ExprNode ExprParser::parseTerm(std::deque<std::string>& dq) {
 
 	while (!dq.empty()) {
 		ExprNode parent;
-		if (*dq.begin() == EXPR_SYMBOL_ASTERISK_S) {
+		if (*dq.begin() == ASTERISK_S) {
 			parent = ExprNode(ExprSymbol::EXPR_MUL);
 		}
-		else if (*dq.begin() == EXPR_SYMBOL_SLASH_S) {
+		else if (*dq.begin() == SLASH_S) {
 			parent = ExprNode(ExprSymbol::EXPR_DIV);
 		}
-		else if (*dq.begin() == EXPR_SYMBOL_PERCENT_SIGN_S) {
+		else if (*dq.begin() == PERCENT_SIGN_S) {
 			parent = ExprNode(ExprSymbol::EXPR_MOD);
 		}
-		else if (*dq.begin() == EXPR_SYMBOL_LEFT_PARENTHESIS_S) {
+		else if (*dq.begin() == LEFT_PARENTHESIS_S) {
 			protectedPopFront(dq);
 			ExprNode node = parseExpression(dq);
-			protectedPopFront(dq, EXPR_SYMBOL_RIGHT_PARENTHESIS_S);
+			protectedPopFront(dq, RIGHT_PARENTHESIS_S);
 			parent.setLHS(lhs);
 			parent.setRHS(node);
 			lhs = parent;
@@ -142,10 +142,10 @@ ExprNode ExprParser::parseFactor(std::deque<std::string>& dq) {
 		protectedPopFront(dq);
 		return node;
 	}
-	else if (*dq.begin() == EXPR_SYMBOL_LEFT_PARENTHESIS_S) {
+	else if (*dq.begin() == LEFT_PARENTHESIS_S) {
 		protectedPopFront(dq);
 		ExprNode node = parseExpression(dq);
-		protectedPopFront(dq, EXPR_SYMBOL_RIGHT_PARENTHESIS_S);
+		protectedPopFront(dq, RIGHT_PARENTHESIS_S);
 		return node;
 	}
 	else {

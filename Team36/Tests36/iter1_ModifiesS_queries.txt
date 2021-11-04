@@ -91,10 +91,30 @@ Select n such that Modifies(n, _)
 19 - Modifies, prog_line LHS, ident RHS
 prog_line n;
 Select n such that Modifies(n, "x")
-1, 13, 15
+1, 13, 15, 4, 5
 5000
 20 - Modifies, prog_line LHS, variable RHS
 prog_line n; variable v;
 Select n such that Modifies(n, v)
 1, 2, 3, 4, 5, 6, 7, 8, 12, 13, 14, 15, 17, 18, 19
+5000
+21 - select tuple, assign
+assign a; variable v;
+Select <a, v> such that Modifies(a, v)
+1 x, 2 y, 8 y, 12 var1, 14 var1, 15 x, 18 y, 19 y
+5000
+22 - select tuple, read
+read r; variable v;
+Select <r, v> such that Modifies(r, v)
+3 z
+5000
+23 - select tuple, if
+if ifs; variable v;
+Select <ifs, v> such that Modifies(ifs, v)
+6 y, 17 y
+5000
+24 - select tuple, while
+while w; variable v;
+Select <w, v> such that Modifies(w, v)
+4 y, 4 var1, 4 x, 13 var1, 13 x
 5000

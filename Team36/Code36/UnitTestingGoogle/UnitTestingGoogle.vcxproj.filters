@@ -184,6 +184,7 @@
     </ClCompile>
     <ClCompile Include="CFGTest.cpp">
       <Filter>PKB</Filter>
+    </ClCompile>
     <ClCompile Include="MonotypeRelationTableTest.cpp">
       <Filter>PKB\RelationTables</Filter>
     </ClCompile>
@@ -263,6 +264,7 @@
     </ClCompile>
     <ClCompile Include="RelationsUtilityTest.cpp">
       <Filter>PKB\RelationTables</Filter>
+    </ClCompile>
     <ClCompile Include="CFGNodeTest.cpp">
       <Filter>Common</Filter>
     </ClCompile>
