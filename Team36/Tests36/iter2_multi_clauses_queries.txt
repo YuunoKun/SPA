@@ -183,47 +183,137 @@ assign a; if ifs1, ifs2, ifs3; while w; stmt s1, s2, s3, s4; variable v1, v2, v3
 Select BOOLEAN pattern a(v1, _"a + b + c + d"_) and ifs1(v2, _, _) and w(v1, _) such that Modifies(s2, "a") and Uses(s2, v2) pattern ifs2(v4, _,_) pattern ifs3(_, _, _) such that Modifies("myFirst", "k") such that Parent(s2, s3) with s3.stmt# = n and n = 14
 TRUE
 5000
-38 - such that, with
+38 - such that, with, no common synonym
+stmt s1, s2; assign a;
+Select s1.stmt# such that Parent(s1, s2) with a.stmt# = 10
+6, 8, 12, 19, 20, 23, 30, 31, 38, 42, 43, 45
+5000
+39 - such that, with, 1 common synonym
 stmt s1, s2;
 Select s2.stmt# such that Follows(s1, s2) with s1.stmt# = 10
 11
 5000
-39 - with, pattern
+40 - such that, with, 1 common synonym
+stmt s1, s2;
+Select s2.stmt# such that Follows(s1, s2) with s1.stmt# = s2.stmt#
+none
+5000
+41 - with, pattern, no common synonym
+assign a; variable v; read r;
+Select a.stmt# pattern a(v, _) with r.varName = "a"
+2, 3, 10, 15, 17, 22, 26, 34, 35, 39, 41
+5000
+42 - with, pattern, 1 common synonym
 assign a; variable v;
 Select a.stmt# pattern a(v, _) with v.varName = "a"
 35
 5000
-40 - such that with such that
+43 - with, pattern, 2 common synonym
+assign a; variable v;
+Select a.stmt# pattern a(v, _) with v.varName = a.stmt#
+none
+5000
+44 - such that with such that, no common synonym
+prog_line n; stmt s; assign a; read r;
+Select n such that Next*(n, s) with 10 = a.stmt# such that Modifies(r, "d")
+1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 28, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46
+5000
+45 - such that with such that, 1 common synonym
+prog_line n; stmt s; assign a;
+Select n such that Next*(n, s) with 3 = a.stmt# such that Modifies(a, "d")
+none
+5000
+46 - such that with such that, 2 common synonym
 prog_line n; stmt s; assign a;
 Select n such that Next*(n, s) with n = a.stmt# such that Modifies(a, "d")
 10, 41
 5000
-41 - such that with such that pattern with
+47 - such that with such that pattern with, no common synonym
+stmt s1, s2; assign a1, a2; if ifs; variable v;
+Select v such that Affects(a1, a2) with 4 = s1.stmt# pattern ifs(v, _, _) with ifs.stmt# = s2.stmt#
+a, b, c, d, h
+5000
+48 - such that with such that pattern with, 1 common synonym
+stmt s1, s2; assign a1, a2; if ifs; variable v;
+Select v such that Affects(a1, a2) with a1.stmt# = s1.stmt# pattern ifs(v, _, _) with ifs.stmt# = s2.stmt#
+a, b, c, d, h
+5000
+49 - such that with such that pattern with, 2 common synonym
 stmt s; assign a; if ifs; variable v;
-Select v such that Affects(a, 39) with a.stmt# = s.stmt# pattern ifs(v, _, _) with ifs.stmt# = 30
+Select v such that Affects(a, 39) with a.stmt# = s.stmt# pattern ifs(v, _, _) with ifs.stmt# = 8
+c, d
+5000
+50 - such that with such that pattern with, 3 common synonym
+stmt s; assign a; if ifs; variable v;
+Select v such that Affects(a, 39) with a.stmt# = s.stmt# pattern ifs(v, _, _) with ifs.stmt# = s.stmt#
 none
 5000
-42 - pattern with such that with pattern
+51 - pattern with such that with pattern, no common synonym
+assign a; while w; procedure p, q; variable v1, v2;
+Select w pattern a(v1, _"c"_) with v2.varName = "k" such that Calls(_, q) with p.procName = "myFourth" pattern w(_, _)
+6, 12, 30, 31, 38, 43, 45
+5000
+51 - pattern with such that with pattern, 1 common synonym
+assign a; while w; procedure p, q; variable v1, v2;
+Select w pattern a(v1, _"c"_) with v1.varName = "k" such that Calls(_, q) with p.procName = "myFourth" pattern w(_, _)
+6, 12, 30, 31, 38, 43, 45
+5000
+52 - pattern with such that with pattern, 2 common synonym
 assign a; while w; procedure p, q; variable v;
 Select w pattern a(v, _"c"_) with v.varName = "k" such that Calls(p, q) with p.procName = "myFourth" pattern w(v, _)
 38
 5000
-43 - pattern with pattern
+53 - pattern with such that with pattern, 3 common synonym
+assign a; while w; procedure p, q; variable v;
+Select w pattern a(v, _"c"_) with v.varName = "k" such that Calls(p, q) with p.procName = "myFourth" pattern w(v, _) with a.stmt# = 40
+none
+5000
+54 - pattern with pattern, no common synonym
+if ifs1, ifs2; while w; stmt s;
+Select ifs1.stmt# pattern ifs1(_,_,_) with ifs2.stmt# = s.stmt# pattern w(_,_)
+8, 19, 20, 23, 42
+5000
+55 - pattern with pattern, 1 common synonym
+if ifs; while w; stmt s;
+Select ifs.stmt# pattern ifs(_,_,_) with ifs.stmt# = s.stmt# pattern w(_,_)
+8, 19, 20, 23, 42
+5000
+55 - pattern with pattern, 2 common synonym
 if ifs; while w; stmt s;
 Select ifs.stmt# pattern ifs(_,_,_) with ifs.stmt# = s.stmt# and s.stmt# = 42 pattern w(_,_)
 42
 5000
-44 - pattern and pattern with and with such that and such that
+56 - pattern with pattern, 2 common synonym
+if ifs; while w; stmt s; variable v;
+Select ifs.stmt# pattern ifs(v,_,_) with ifs.stmt# = s.stmt# and s.stmt# = 42 pattern w(v,_)
+42
+5000
+57 - pattern and pattern with and with such that and such that, no common synonym
+assign a1, a2, a3; if ifs; variable v1, v2, v3; while w; read r1, r2; print pn;
+Select w pattern a1(v1, _) and ifs(v2,_,_) with v3.varName = r1.varName and r2.varName = pn.varName such that Parent(w, a2) and Follows(a3, _)
+12, 31, 38
+5000
+58 - pattern and pattern with and with such that and such that, 1 common synonym
+assign a1, a2, a3; if ifs; variable v1, v2, v3; while w; read r1, r2; print pn;
+Select w pattern a1(v1, _) and ifs(v1,_,_) with v1.varName = r1.varName and r2.varName = pn.varName such that Parent(w, a2) and Follows(a3, _)
+12, 31, 38
+5000
+59 - pattern and pattern with and with such that and such that, 2 common synonym
+assign a, a1; if ifs; variable v; while w; read r; print pn;
+Select w pattern a(v, _) and ifs(v,_,_) with v.varName = r.varName and r.varName = pn.varName such that Parent(w, a1) and Follows(a1, _)
+31, 38
+5000
+60 - pattern and pattern with and with such that and such that, 3 common synonym
 assign a; if ifs; variable v; while w; read r; print pn;
 Select w pattern a(v, _) and ifs(v,_,_) with v.varName = r.varName and r.varName = pn.varName such that Parent(w, a) and Follows(a, _)
 31
 5000
-45 - pattern and pattern with and with such that and such that
+61 - pattern and pattern with and with such that and such that, 3 common synonym, select tuple
 assign a; if ifs; variable v; while w; read r; print pn;
 Select <w, a, v> pattern a(v, _) and ifs(v,_,_) with v.varName = r.varName and r.varName = pn.varName such that Parent(w, a) and Follows(a, _)
 31 35 a
 5000
-46 - pattern and pattern with and with such that and such that
+62 - pattern and pattern with and with such that and such that, 3 common synonym, select boolean
 assign a; if ifs; variable v; while w; read r; print pn;
 Select BOOLEAN pattern a(v, _) and ifs(v,_,_) with v.varName = r.varName and r.varName = pn.varName such that Parent(w, a) and Follows(a, _) with w.stmt# = ifs.stmt#
 FALSE
