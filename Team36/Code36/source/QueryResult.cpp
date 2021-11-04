@@ -7,10 +7,10 @@ QueryResult::QueryResult() {
 }
 
 QueryResult::~QueryResult() {
-	while (!results.empty()) {
-		delete results.front();
-		results.pop_front();
+	for (auto& result : results) {
+		delete result;
 	}
+	results.clear();
 
 }
 
@@ -75,9 +75,8 @@ void QueryResult::addResult(ResultTable& t) {
 			have_result = false;
 			return;
 		} else if (merged) {
-			ResultTable* to_delete = *it;
+			delete *it;
 			it = results.erase(it);
-			delete to_delete;
 			break;
 		} else {
 			it++;

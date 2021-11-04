@@ -235,27 +235,45 @@ void Utility::mergeColumnEqual(std::list<std::vector<value>>& table) {
 
 void Utility::joinTable(std::list<std::vector<value>>& main, int main_header_index, std::unordered_multimap<value, std::vector<value>>& to_join, int to_join_header_index,
 	std::list<std::vector<value>>& out) {
-	for (auto& it : main) {
-		if (to_join.count(it[main_header_index]) == 0) {
-			continue;
-		}
-		auto& ret = to_join.equal_range(it[main_header_index]);
+	try {
+		for (auto& it : main) {
+			if (to_join.count(it[main_header_index]) == 0) {
+				continue;
+			}
+			auto& ret = to_join.equal_range(it[main_header_index]);
 
-		for (auto& itr1 = ret.first; itr1 != ret.second; ++itr1) {
-			std::vector<value> joined_row;
-			joinRow(it, itr1->second, to_join_header_index, joined_row);
-			out.emplace_back(joined_row);
+			for (auto& itr1 = ret.first; itr1 != ret.second; ++itr1) {
+				std::vector<value> joined_row;
+				joinRow(it, itr1->second, to_join_header_index, joined_row);
+				out.emplace_back(joined_row);
+			}
 		}
+	} catch (std::exception& e) {
+		std::cout << "joinTable with 1 common column: " << e.what() << std::endl;
+		std::cout << "Current table size output: " << out.size() << std::endl;
+		out.clear();
+		main.clear();
+		to_join.clear();
+		throw e;
 	}
 }
 
 void Utility::joinTable(std::list<std::vector<value>>& main, std::list<std::vector<value>>& to_join, std::list<std::vector<value>>& out) {
-	for (auto& main_row : main) {
-		for (auto& to_join_row : to_join) {
-			std::vector<value> joined_row;
-			joinRow(main_row, to_join_row, joined_row);
-			out.emplace_back(joined_row);
+	try{
+		for (auto& main_row : main) {
+			for (auto& to_join_row : to_join) {
+				std::vector<value> joined_row;
+				joinRow(main_row, to_join_row, joined_row);
+				out.emplace_back(joined_row);
+			}
 		}
+	} catch (std::exception& e) {
+		std::cout << "joinTable: " << e.what() << std::endl;
+		std::cout << "Current table size output: " << out.size() << std::endl;
+		out.clear();
+		main.clear();
+		to_join.clear();
+		throw e;
 	}
 }
 
