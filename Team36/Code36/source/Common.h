@@ -11,6 +11,7 @@ typedef unsigned int stmt_index;
 typedef unsigned int prog_line;
 typedef unsigned int var_index;
 typedef unsigned int proc_index;
+typedef unsigned int value;
 
 static const std::string BOOLEAN_TRUE = "TRUE";
 static const std::string BOOLEAN_FALSE = "FALSE";

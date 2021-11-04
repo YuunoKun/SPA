@@ -4,28 +4,28 @@
 
 namespace UnitTesting {
 	std::pair<Entity, Entity> query_table_header1{ {WHILE, Synonym{"test"} }, { READ,Synonym{"hello"} } };
-	std::vector<std::pair<std::string, std::string>> query_list_pair1{
-		{ "1", "2" }, { "3", "4" },
-		{ "5", "6" }, { "7", "8" },
-		{ "9", "10" }, { "11", "12" },
-		{ "13", "14" }, { "15", "16" },
-		{ "17", "18" }, { "19", "20" } };
+	std::vector<std::pair<value, value>> query_list_pair1{
+		{ 1, 2 }, { 3, 4 },
+		{ 5, 6 }, { 7, 8 },
+		{ 9, 10 }, { 11, 12 },
+		{ 13, 14 }, { 15, 16 },
+		{ 17, 18 }, { 19, 20 } };
 
 	std::pair<Entity, Entity> query_table_header2{ {WHILE, Synonym{"t1"} }, { READ,Synonym{"t2"} } };
-	std::vector<std::pair<std::string, std::string>> query_list_pair2{
-		{ "1", "11", },
-		{ "2", "12", },
-		{ "3", "13",},
-		{ "4", "14",},
-		{ "5", "15", } };
+	std::vector<std::pair<value, value>> query_list_pair2{
+		{ 1, 11, },
+		{ 2, 12, },
+		{ 3, 13,},
+		{ 4, 14,},
+		{ 5, 15, } };
 
-	std::pair<Entity, Entity> query_table_header3{ {VARIABLE, Synonym{"t3"} }, { IF,Synonym{"t4"} } };
-	std::vector<std::pair<std::string, std::string>> query_list_pair3{
-		{ "6", "16", },
-		{ "7", "17", },
-		{ "8", "18",},
-		{ "9", "19",},
-		{ "10", "20", } };
+	std::pair<Entity, Entity> query_table_header3{ {CALL, Synonym{"t3"} }, { IF,Synonym{"t4"} } };
+	std::vector<std::pair<value, value>> query_list_pair3{
+		{ 6, 16, },
+		{ 7, 17, },
+		{ 8, 18,},
+		{ 9, 19,},
+		{ 10, 20, } };
 
 	TEST(QueryResult, isInTable) {
 		ResultTable result_table1(query_table_header1, query_list_pair1);
@@ -222,12 +222,12 @@ namespace UnitTesting {
 	TEST(QueryResult, addResultMergeFilterSingleColumnDoubleTable) {
 		std::pair<Entity, Entity> e1{ {STMT, Synonym{"x"} } , { STMT,Synonym{"y"} } };
 		Entity e2(STMT, Synonym{ "x" });
-		std::vector<std::pair<std::string, std::string>> a1{
-			{ "1", "2", },
-			{ "3", "4", },
-			{ "5", "6", },
-			{ "7", "8", },
-			{ "9", "10", }
+		std::vector<std::pair<value, value>> a1{
+			{ 1, 2, },
+			{ 3, 4, },
+			{ 5, 6, },
+			{ 7, 8, },
+			{ 9, 10, }
 		};
 		std::vector<StmtInfo> a2 = { { 1, STMT_WHILE }, { 5, STMT_CALL }, { 9, STMT_ASSIGN} };
 
@@ -304,11 +304,11 @@ namespace UnitTesting {
 		e1 = { {STMT, Synonym{"x"} } , { STMT,Synonym{"y"} } };
 		e2 = { STMT, Synonym{ "x" } };
 		a1 = {
-			{ "1", "2", },
-			{ "3", "4", },
-			{ "5", "6", },
-			{ "7", "8", },
-			{ "9", "10", }
+			{ 1, 2, },
+			{ 3, 4, },
+			{ 5, 6, },
+			{ 7, 8, },
+			{ 9, 10, }
 		};
 		a2 = { { 11, STMT_WHILE }, { 555, STMT_CALL }, { 99, STMT_ASSIGN} };
 
@@ -349,17 +349,17 @@ namespace UnitTesting {
 	TEST(QueryResult, addResultMergeFilterDoubleColumnDoubleTable) {
 		std::pair<Entity, Entity> e1{ {STMT, Synonym{"x"} } , { STMT,Synonym{"y"} } };
 		std::pair<Entity, Entity> e2{ {STMT, Synonym{"x"} } , { STMT,Synonym{"y"} } };
-		std::vector<std::pair<std::string, std::string>> a1{
-			{ "1", "2", },
-			{ "3", "4", },
-			{ "5", "6", },
-			{ "7", "8", },
-			{ "9", "10", }
+		std::vector<std::pair<value, value>> a1{
+			{ 1, 2, },
+			{ 3, 4, },
+			{ 5, 6, },
+			{ 7, 8, },
+			{ 9, 10, }
 		};
-		std::vector<std::pair<std::string, std::string>> a2{
-			{ "1", "2", },
-			{ "5", "6", },
-			{ "9", "10", }
+		std::vector<std::pair<value, value>> a2{
+			{ 1, 2, },
+			{ 5, 6, },
+			{ 9, 10, }
 		};
 
 		ResultTable t1(e1, a1);
@@ -381,9 +381,9 @@ namespace UnitTesting {
 
 		e2 = { {STMT, Synonym{"y"} } , { STMT,Synonym{"x"} } };
 		a2 = {
-			{ "2", "1", },
-			{ "6", "5", },
-			{ "10", "9", }
+			{ 2, 1, },
+			{ 6, 5, },
+			{ 10, 9, }
 		};
 
 		q = QueryResult();
@@ -403,9 +403,9 @@ namespace UnitTesting {
 
 		e2 = { {STMT, Synonym{"y"} } , { STMT,Synonym{"x"} } };
 		a2 = {
-			{ "2", "2", },
-			{ "6", "2", },
-			{ "10", "2", }
+			{ 2, 2, },
+			{ 6, 2, },
+			{ 10, 2, }
 		};
 
 		t1 = ResultTable(e1, a1);
@@ -424,19 +424,19 @@ namespace UnitTesting {
 		std::pair<Entity, Entity> h1{ e1, e2 };
 		std::pair<Entity, Entity> h2{ e2, e3 };
 		std::pair<Entity, Entity> h3{ e1, e3 };
-		std::vector<std::pair<std::string, std::string>> a1{
-			{ "1", "4", },
-			{ "2", "5", },
-			{ "3", "6", },
+		std::vector<std::pair<value, value>> a1{
+			{ 1, 4, },
+			{ 2, 5, },
+			{ 3, 6, },
 		};
-		std::vector<std::pair<std::string, std::string>> a2{
-			{ "4", "7", },
-			{ "5", "8", },
-			{ "6", "9", }
+		std::vector<std::pair<value, value>> a2{
+			{ 4, 7, },
+			{ 5, 8, },
+			{ 6, 9, }
 		};
-		std::vector<std::pair<std::string, std::string>> a3{
-			{ "1", "7", },
-			{ "2", "8", }
+		std::vector<std::pair<value, value>> a3{
+			{ 1, 7, },
+			{ 2, 8, }
 		};
 
 		ResultTable t1(h1, a1);
@@ -488,18 +488,18 @@ namespace UnitTesting {
 		h2 = { e3, e2 };
 		h3 = { e1, e2 };
 		a1 = {
-			{ "1", "4", },
-			{ "2", "5", },
-			{ "3", "6", },
+			{ 1, 4, },
+			{ 2, 5, },
+			{ 3, 6, },
 		};
 		a2 = {
-			{ "7", "4", },
-			{ "8", "5", },
-			{ "9", "6", }
+			{ 7, 4, },
+			{ 8, 5, },
+			{ 9, 6, }
 		};
 		a3 = {
-			{ "4", "7", },
-			{ "5", "9", },
+			{ 4, 7, },
+			{ 5, 9, },
 		};
 
 		t1 = ResultTable(h1, a1);
@@ -518,15 +518,15 @@ namespace UnitTesting {
 		Entity e3 = { STMT, Synonym{"z"} };
 		std::pair<Entity, Entity> h1{ e1, e2 };
 		std::pair<Entity, Entity> h2{ e2, e3 };
-		std::vector<std::pair<std::string, std::string>> a1{
-			{ "1", "4", },
-			{ "2", "5", },
-			{ "3", "6", },
+		std::vector<std::pair<value, value>> a1{
+			{ 1, 4, },
+			{ 2, 5, },
+			{ 3, 6, },
 		};
-		std::vector<std::pair<std::string, std::string>> a2{
-			{ "4", "7", },
-			{ "5", "8", },
-			{ "6", "9", }
+		std::vector<std::pair<value, value>> a2{
+			{ 4, 7, },
+			{ 5, 8, },
+			{ 6, 9, }
 		};
 
 		ResultTable t1(h1, a1);
@@ -553,14 +553,14 @@ namespace UnitTesting {
 		h1 = { e1, e2 };
 		h2 = { e3, e2 };
 		a1 = {
-			{ "1", "4", },
-			{ "2", "5", },
-			{ "3", "6", },
+			{ 1, 4, },
+			{ 2, 5, },
+			{ 3, 6, },
 		};
 		a2 = {
-			{ "7", "4", },
-			{ "8", "5", },
-			{ "9", "6", }
+			{ 7, 4, },
+			{ 8, 5, },
+			{ 9, 6, }
 		};
 
 		t1 = ResultTable(h1, a1);
@@ -600,14 +600,14 @@ namespace UnitTesting {
 		h1 = { e1, e2 };
 		h2 = { e1, e3 };
 		a1 = {
-			{ "1", "4", },
-			{ "2", "5", },
-			{ "3", "6", },
+			{ 1, 4, },
+			{ 2, 5, },
+			{ 3, 6, },
 		};
 		a2 = {
-			{ "1", "7", },
-			{ "2", "8", },
-			{ "3", "9", }
+			{ 1, 7, },
+			{ 2, 8, },
+			{ 3, 9, }
 		};
 
 		t1 = ResultTable(h1, a1);
@@ -654,25 +654,25 @@ namespace UnitTesting {
 		std::pair<Entity, Entity> h2{ e2, e3 };
 		std::pair<Entity, Entity> h3{ e1, e2 };
 		std::pair<Entity, Entity> h4{ e2, e4 };
-		std::vector<std::pair<std::string, std::string>> a1{
-			{ "1", "4", },
-			{ "2", "5", },
-			{ "3", "6", },
+		std::vector<std::pair<value, value>> a1{
+			{ 1, 4, },
+			{ 2, 5, },
+			{ 3, 6, },
 		};
-		std::vector<std::pair<std::string, std::string>> a2{
-			{ "4", "7", },
-			{ "5", "8", },
-			{ "6", "9", }
+		std::vector<std::pair<value, value>> a2{
+			{ 4, 7, },
+			{ 5, 8, },
+			{ 6, 9, }
 		};
-		std::vector<std::pair<std::string, std::string>> a3{
-			{ "1", "4", },
-			{ "2", "5", },
-			{ "3", "6", },
+		std::vector<std::pair<value, value>> a3{
+			{ 1, 4, },
+			{ 2, 5, },
+			{ 3, 6, },
 		};
-		std::vector<std::pair<std::string, std::string>> a4{
-			{ "4", "a", },
-			{ "5", "b", },
-			{ "6", "c", }
+		std::vector<std::pair<value, value>> a4{
+			{ 4, 11, },
+			{ 5, 22, },
+			{ 6, 33, }
 		};
 
 		ResultTable t1(h1, a1);
@@ -687,7 +687,7 @@ namespace UnitTesting {
 		std::list<std::string> b1 = { "1", "2", "3" };
 		std::list<std::string> b2 = { "4", "5", "6" };
 		std::list<std::string> b3 = { "7", "8", "9" };
-		std::list<std::string> b4 = { "a", "b", "c" };
+		std::list<std::string> b4 = { "11", "22", "33" };
 
 		t1 = ResultTable(h1, a1);
 		t2 = ResultTable(h2, a2);
@@ -824,21 +824,21 @@ namespace UnitTesting {
 		h3 = { e1, e3 };
 		h4 = { e3, e4 };
 		a1 = {
-			{ "1", "4", },
-			{ "2", "5", },
-			{ "3", "6", },
+			{ 1, 4, },
+			{ 2, 5, },
+			{ 3, 6, },
 		};
 		a2 = {
-			{ "7", "4", },
-			{ "8", "5", },
-			{ "9", "6", }
+			{ 7, 4, },
+			{ 8, 5, },
+			{ 9, 6, }
 		};
 		a3 = {
-			{ "1", "7", },
-			{ "3", "9", }
+			{ 1, 7, },
+			{ 3, 9, }
 		};
 		a4 = {
-			{ "7", "10", },
+			{ 7, 10, },
 		};
 
 		t1 = ResultTable(h1, a1);
@@ -877,23 +877,23 @@ namespace UnitTesting {
 		h3 = { e2, e3 };
 		h4 = { e3, e4 };
 		a1 = {
-			{ "1", "1", },
-			{ "1", "2", },
-			{ "1", "3", },
+			{ 1, 1, },
+			{ 1, 2, },
+			{ 1, 3, },
 		};
 		a2 = {
-			{ "1", "1", },
-			{ "1", "2", },
-			{ "1", "3", }
+			{ 1, 1, },
+			{ 1, 2, },
+			{ 1, 3, }
 		};
 		a3 = {
-			{ "1", "1", },
-			{ "2", "1", },
+			{ 1, 1, },
+			{ 2, 1, },
 		};
 		a4 = {
-			{ "1", "4", },
-			{ "1", "5", },
-			{ "1", "6", }
+			{ 1, 4, },
+			{ 1, 5, },
+			{ 1, 6, }
 		};
 
 		t1 = ResultTable(h1, a1);
@@ -931,23 +931,23 @@ namespace UnitTesting {
 		h3 = { e2, e3 };
 		h4 = { e3, e4 };
 		a1 = {
-			{ "1", "1", },
-			{ "1", "2", },
-			{ "1", "3", },
+			{ 1, 1, },
+			{ 1, 2, },
+			{ 1, 3, },
 		};
 		a2 = {
-			{ "1", "1", },
-			{ "1", "2", },
-			{ "1", "3", }
+			{ 1, 1, },
+			{ 1, 2, },
+			{ 1, 3, }
 		};
 		a3 = {
-			{ "1", "1", },
-			{ "2", "1", },
+			{ 1, 1, },
+			{ 2, 1, },
 		};
 		a4 = {
-			{ "2", "4", },
-			{ "2", "5", },
-			{ "2", "6", }
+			{ 2, 4, },
+			{ 2, 5, },
+			{ 2, 6, }
 		};
 
 		t1 = ResultTable(h1, a1);
@@ -973,20 +973,20 @@ namespace UnitTesting {
 		std::pair<Entity, Entity> h1{ e1, e2 };
 		std::pair<Entity, Entity> h2{ e3, e4 };
 		std::pair<Entity, Entity> h3{ e5, e6 };
-		std::vector<std::pair<std::string, std::string>> a1{
-			{ "1", "4", },
-			{ "2", "5", },
-			{ "3", "6", },
+		std::vector<std::pair<value, value>> a1{
+			{ 1, 4, },
+			{ 2, 5, },
+			{ 3, 6, },
 		};
-		std::vector<std::pair<std::string, std::string>> a2{
-			{ "4", "7", },
-			{ "5", "8", },
-			{ "6", "9", }
+		std::vector<std::pair<value, value>> a2{
+			{ 4, 7, },
+			{ 5, 8, },
+			{ 6, 9, }
 		};
-		std::vector<std::pair<std::string, std::string>> a3{
-			{ "1", "4", },
-			{ "2", "5", },
-			{ "3", "6", },
+		std::vector<std::pair<value, value>> a3{
+			{ 1, 4, },
+			{ 2, 5, },
+			{ 3, 6, },
 		};
 
 		ResultTable t1(h1, a1);

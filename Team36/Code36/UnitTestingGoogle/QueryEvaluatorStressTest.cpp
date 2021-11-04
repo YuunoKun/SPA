@@ -20,22 +20,22 @@ namespace UnitTesting {
 			}
 		}
 
-		std::list<std::vector<std::string>> generateTable(int size) {
-			std::list<std::vector<std::string>> table;
-			for (int i = 0; i < size; i++) {
-				for (int j = 0; j < size; j++) {
-					table.push_back({ std::to_string(i), std::to_string(j) });
+		std::list<std::vector<value>> generateTable(int size) {
+			std::list<std::vector<value>> table;
+			for (value i = 0; i < size; i++) {
+				for (value j = 0; j < size; j++) {
+					table.push_back({ i, j});
 				}
 			}
 			return table;
 		}
 
-		std::unordered_multimap<std::string, std::vector<std::string>> generateJoinTable(int size) {
-			std::unordered_multimap<std::string, std::vector<std::string>> table;
+		std::unordered_multimap<value, std::vector<value>> generateJoinTable(int size) {
+			std::unordered_multimap<value, std::vector<value>> table;
 
-			for (int i = 0; i < size; i++) {
-				for (int j = 0; j < size; j++) {
-					table.insert({ std::to_string(i), { std::to_string(i), std::to_string(j) } });
+			for (value i = 0; i < size; i++) {
+				for (value j = 0; j < size; j++) {
+					table.insert({ i, { i, j } });
 				}
 			}
 			return table;
@@ -58,9 +58,9 @@ namespace UnitTesting {
 		bool disable_stress_test = true;
 		// table size = x ^ 2
 		std::vector<int> source_code_size = { 10, 20, 30, 40, 50, 100 , 250 };//, 250 };
-		std::vector<std::list<std::vector<std::string>>> tables;
-		std::vector<std::list<std::vector<std::string>>> tables2;
-		std::vector<std::unordered_multimap<std::string, std::vector<std::string>>> join_tables;
+		std::vector<std::list<std::vector<value>>> tables;
+		std::vector<std::list<std::vector<value>>> tables2;
+		std::vector<std::unordered_multimap<value, std::vector<value>>> join_tables;
 	};
 
 	// Join Table merge column algorithm Speed Test
@@ -69,7 +69,7 @@ namespace UnitTesting {
 			return;
 		}
 		for (int i = 0; i < source_code_size.size(); i++) {
-			std::list<std::vector<std::string>> out;
+			std::list<std::vector<value>> out;
 			startTimer();
 			Utility::joinTable(tables[i], 0, join_tables[i], 0, out);
 			endTimer();
@@ -84,7 +84,7 @@ namespace UnitTesting {
 			return;
 		}
 		for (int i = 0; i < source_code_size.size(); i++) {
-			std::list<std::vector<std::string>> out;
+			std::list<std::vector<value>> out;
 			startTimer();
 			Utility::joinTable(tables[i], tables2[i], out);
 			endTimer();

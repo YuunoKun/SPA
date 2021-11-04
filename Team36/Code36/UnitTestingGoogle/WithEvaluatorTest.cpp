@@ -67,7 +67,7 @@ namespace UnitTesting {
 	}
 
 	TEST_F(WithEvaluatorTest, evaluateSynonymAndSynonym) {
-		std::vector<std::string> v = { "1", "2" };
+		std::vector<value> v = { 1, 2 };
 		std::vector<Entity> headers = { { WHILE, Synonym{"a"} }, { WHILE, Synonym{"a"} } };
 		EXPECT_EQ(evaluator.evaluateSynonymAndSynonym(headers[0], headers[1]), ResultTable(headers[0], v));
 
@@ -120,96 +120,96 @@ namespace UnitTesting {
 	}
 
 	TEST_F(WithEvaluatorTest, evaluateSynonymAndConstant) {
-		std::vector<std::string> v = { "1" };
+		std::vector<value> v = { 1 };
 		Entity header = { STMT, Synonym{"a"} };
 		EXPECT_EQ(evaluator.evaluateConstantAndSynonym({ STMT, "1" }, header), ResultTable(header, v));
-		v = { "2" };
+		v = { 2 };
 		EXPECT_EQ(evaluator.evaluateSynonymAndConstant(header, { STMT, "2" }), ResultTable(header, v));
 
 		header = { WHILE, Synonym{"a"} };
-		v = { "1" };
+		v = { 1 };
 		EXPECT_EQ(evaluator.evaluateConstantAndSynonym({ WHILE, "1" }, header), ResultTable(header, v));
-		v = { "2" };
+		v = { 2 };
 		EXPECT_EQ(evaluator.evaluateSynonymAndConstant(header, { WHILE, "2" }), ResultTable(header, v));
 		v = { };
 		EXPECT_EQ(evaluator.evaluateSynonymAndConstant(header, { WHILE, "3" }), ResultTable(header, v));
 
 		header = { IF, Synonym{"a"} };
-		v = { "3" };
+		v = { 3 };
 		EXPECT_EQ(evaluator.evaluateConstantAndSynonym({ IF, "3" }, header), ResultTable(header, v));
-		v = { "4" };
+		v = { 4 };
 		EXPECT_EQ(evaluator.evaluateSynonymAndConstant(header, { IF, "4" }), ResultTable(header, v));
 		v = { };
 		EXPECT_EQ(evaluator.evaluateSynonymAndConstant(header, { IF, "1" }), ResultTable(header, v));
 
 		header = { PRINT, Synonym{"a"} };
-		v = { "5" };
+		v = { 5 };
 		EXPECT_EQ(evaluator.evaluateConstantAndSynonym({ PRINT, "5" }, header), ResultTable(header, v));
-		v = { "6" };
+		v = { 6 };
 		EXPECT_EQ(evaluator.evaluateSynonymAndConstant(header, { PRINT, "6" }), ResultTable(header, v));
 		v = { };
 		EXPECT_EQ(evaluator.evaluateSynonymAndConstant(header, { PRINT, "1" }), ResultTable(header, v));
 
 		header = { PRINT, Synonym{"a"}, VAR_NAME };
-		v = { "5" };
+		v = { 5 };
 		EXPECT_EQ(evaluator.evaluateConstantAndSynonym({ PRINT, s1, VAR_NAME }, header), ResultTable(header, v));
-		v = { "6" };
+		v = { 6 };
 		EXPECT_EQ(evaluator.evaluateSynonymAndConstant(header, { PRINT, s2, VAR_NAME }), ResultTable(header, v));
 		v = { };
 		EXPECT_EQ(evaluator.evaluateSynonymAndConstant(header, { PRINT, s3, VAR_NAME }), ResultTable(header, v));
 
 		header = { READ, Synonym{"a"} };
-		v = { "7" };
+		v = { 7 };
 		EXPECT_EQ(evaluator.evaluateConstantAndSynonym({ READ, "7" }, header), ResultTable(header, v));
-		v = { "8" };
+		v = { 8 };
 		EXPECT_EQ(evaluator.evaluateSynonymAndConstant(header, { READ, "8" }), ResultTable(header, v));
 		v = { };
 		EXPECT_EQ(evaluator.evaluateSynonymAndConstant(header, { READ, "1" }), ResultTable(header, v));
 
 		header = { READ, Synonym{"a"}, VAR_NAME };
-		v = { "7" };
+		v = { 7 };
 		EXPECT_EQ(evaluator.evaluateConstantAndSynonym({ READ, s1, VAR_NAME }, header), ResultTable(header, v));
-		v = { "8" };
+		v = { 8 };
 		EXPECT_EQ(evaluator.evaluateSynonymAndConstant(header, { READ, s2, VAR_NAME }), ResultTable(header, v));
 		v = { };
 		EXPECT_EQ(evaluator.evaluateSynonymAndConstant(header, { READ, s3, VAR_NAME }), ResultTable(header, v));
 
 		header = { CALL, Synonym{"a"} };
-		v = { "9" };
+		v = { 9 };
 		EXPECT_EQ(evaluator.evaluateConstantAndSynonym({ CALL, "9" }, header), ResultTable(header, v));
-		v = { "10" };
+		v = { 10 };
 		EXPECT_EQ(evaluator.evaluateSynonymAndConstant(header, { CALL, "10" }), ResultTable(header, v));
 		v = { };
 		EXPECT_EQ(evaluator.evaluateSynonymAndConstant(header, { WHILE, "1" }), ResultTable(header, v));
 
 		header = { CALL, Synonym{"a"}, PROC_NAME };
-		v = { "9" };
+		v = { 9 };
 		EXPECT_EQ(evaluator.evaluateConstantAndSynonym({ CALL, s1, PROC_NAME }, header), ResultTable(header, v));
-		v = { "10" };
+		v = { 10 };
 		EXPECT_EQ(evaluator.evaluateSynonymAndConstant(header, { CALL, s2, PROC_NAME }), ResultTable(header, v));
 		v = { };
 		EXPECT_EQ(evaluator.evaluateSynonymAndConstant(header, { CALL, s3, PROC_NAME }), ResultTable(header, v));
 
 		header = { VARIABLE, Synonym{"a"} };
-		v = { s1 };
-		EXPECT_EQ(evaluator.evaluateConstantAndSynonym({ VARIABLE, s1 }, header), ResultTable(header, v));
-		v = { s2 };
-		EXPECT_EQ(evaluator.evaluateSynonymAndConstant(header, { VARIABLE, s2 }), ResultTable(header, v));
-		v = { };
-		EXPECT_EQ(evaluator.evaluateSynonymAndConstant(header, { VARIABLE, s3 }), ResultTable(header, v));
+		std::vector<std::string> s = { s1 };
+		EXPECT_EQ(evaluator.evaluateConstantAndSynonym({ VARIABLE, s1 }, header), ResultTable(header, s));
+		s = { s2 };
+		EXPECT_EQ(evaluator.evaluateSynonymAndConstant(header, { VARIABLE, s2 }), ResultTable(header, s));
+		s = { };
+		EXPECT_EQ(evaluator.evaluateSynonymAndConstant(header, { VARIABLE, s3 }), ResultTable(header, s));
 
 		header = { PROCEDURE, Synonym{"a"} };
-		v = { s1 };
-		EXPECT_EQ(evaluator.evaluateConstantAndSynonym({ PROCEDURE, s1 }, header), ResultTable(header, v));
-		v = { s2 };
-		EXPECT_EQ(evaluator.evaluateSynonymAndConstant(header, { PROCEDURE, s2 }), ResultTable(header, v));
-		v = { };
-		EXPECT_EQ(evaluator.evaluateSynonymAndConstant(header, { PROCEDURE, s3 }), ResultTable(header, v));
+		s = { s1 };
+		EXPECT_EQ(evaluator.evaluateConstantAndSynonym({ PROCEDURE, s1 }, header), ResultTable(header, s));
+		s = { s2 };
+		EXPECT_EQ(evaluator.evaluateSynonymAndConstant(header, { PROCEDURE, s2 }), ResultTable(header, s));
+		s = { };
+		EXPECT_EQ(evaluator.evaluateSynonymAndConstant(header, { PROCEDURE, s3 }), ResultTable(header, s));
 
 		header = { CONSTANT, Synonym{"a"} };
-		v = { "1" };
+		v = { 1 };
 		EXPECT_EQ(evaluator.evaluateConstantAndSynonym({ CONSTANT, "1" }, header), ResultTable(header, v));
-		v = { "2" };
+		v = { 2 };
 		EXPECT_EQ(evaluator.evaluateSynonymAndConstant(header, { CONSTANT, "2" }), ResultTable(header, v));
 		v = { };
 		EXPECT_EQ(evaluator.evaluateSynonymAndConstant(header, { CONSTANT, "3" }), ResultTable(header, v));

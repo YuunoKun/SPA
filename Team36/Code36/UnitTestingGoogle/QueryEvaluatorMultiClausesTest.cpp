@@ -87,7 +87,10 @@ namespace UnitTesting {
 		}
 
 		void validate(Query q, std::list<std::string> result, int i, int j) {
-			EXPECT_EQ(evaluator.evaluateQuery(q), result) << "Error at results : " << i + 1 << " : " << j + 1;
+			std::list<std::string> query_result = evaluator.evaluateQuery(q);
+			result.sort();
+			query_result.sort();
+			EXPECT_EQ(query_result, result) << "Error at results : " << i + 1 << " : " << j + 1;
 		}
 
 		void validate(std::vector<RelRef> relations, std::vector<Pattern> patterns, int i, int j) {

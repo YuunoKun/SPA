@@ -14,8 +14,7 @@ private:
 	void evaluateClauses(Query&, QueryResult&);
 
 	void getResult(Query&, QueryResult&, std::list<std::string>&);
-	void getRawResult(Entity, std::list<std::string>&);
-	void getRawResultWithSecondaryAttribute(Entity, std::list<std::string>&);
+	ResultTable getRawResult(Entity&);
 	void getTupleResult(Query&, QueryResult&, std::list<std::string>&);
 
 	std::string getEntitySecondaryAttribute(std::string, Entity&);

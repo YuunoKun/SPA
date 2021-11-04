@@ -10,43 +10,43 @@ ResultTable::ResultTable(Entity& header, std::vector<StmtInfo>& table) {
 }
 
 ResultTable::ResultTable(Entity& header, std::vector<stmt_index>& table) {
-	Utility::stmtIndexToStringTable(table, this->table);
+	Utility::stmtIndexToTable(table, this->table);
 	addHeader(header);
 }
 
 ResultTable::ResultTable(Entity& header, std::vector<std::string>& table) {
-	Utility::stringToStringTable(table, this->table);
+	Utility::stringToTable(table, this->table, this->hash_map);
 	addHeader(header);
 }
 
 ResultTable::ResultTable(Entity& header, std::list<std::string>& table) {
-	Utility::stringToStringTable(table, this->table);
+	Utility::stringToTable(table, this->table, this->hash_map);
 	addHeader(header);
 }
 
-ResultTable::ResultTable(Entity& header, std::list<std::vector<std::string>>& table) {
-	this->table = table;
-	addHeader(header);
-}
-
-ResultTable::ResultTable(std::vector<Entity>& e, std::list<std::vector<std::string>>& table) {
-	this->table = table;
+ResultTable::ResultTable(std::vector<Entity>& e, std::list<std::vector<value>>& table, std::unordered_map<value, std::string>& hash_map) {
+	this->table = table; 
+	this->hash_map = hash_map;
 	addHeader(e);
 }
 
-
 ResultTable::ResultTable(std::pair<Entity, Entity> header, std::vector<std::pair<std::string, std::string>>& table) {
-	Utility::pairToStringTable(table, this->table);
+	Utility::pairToTable(table, this->table, this->hash_map);
 	addHeader(header);
 }
 
-ResultTable::ResultTable(std::pair<Entity, Entity> header, std::vector<std::pair<stmt_index, std::string>>& table) {
-	Utility::pairToStringTable(table, this->table);
+ResultTable::ResultTable(std::pair<Entity, Entity> header, std::vector<std::pair<value, value>>& table) {
+	Utility::pairToTable(table, this->table);
+	addHeader(header);
+}
+
+ResultTable::ResultTable(std::pair<Entity, Entity> header, std::vector<std::pair<value, std::string>>& table) {
+	Utility::pairToTable(table, this->table, this->hash_map);
 	addHeader(header);
 }
 
 ResultTable::ResultTable(std::pair<Entity, Entity>  header, std::vector<std::pair<StmtInfo, std::string>>& table) {
-	Utility::filterResults(header.first.getType(), table, this->table);
+	Utility::filterResults(header.first.getType(), table, this->table, this->hash_map);
 	addHeader(header);
 }
 
@@ -90,23 +90,44 @@ bool ResultTable::isEmpty() {
 
 void ResultTable::getEntityResult(Entity& e, std::list<std::string>& out) {
 	int columnIndex = Utility::getIndex(header, e);
+	bool isStringEntityType = Utility::isStringEntityType(e.getType());
 	std::unordered_set<std::string> result_set;
-	for (auto row : table) {
-		result_set.insert(row[columnIndex]);
+	if (Utility::isStringEntityType(e.getType())) {
+		getStringEntityResult(columnIndex, result_set);
+	} else {
+		getIntEntityResult(columnIndex, result_set);
 	}
 	Utility::unorderedSetToStringList(result_set, out);
 }
+void ResultTable::getStringEntityResult(int columnIndex, std::unordered_set<std::string>& out) {
+	for (auto row : table) {
+		out.insert(hash_map[row[columnIndex]]);
+	}
+}
+
+void ResultTable::getIntEntityResult(int columnIndex, std::unordered_set<std::string>& out) {
+	for (auto row : table) {
+		out.insert(std::to_string(row[columnIndex]));
+	}
+}
+
 
 void ResultTable::getEntityResults(std::vector<Entity> entities, std::list<std::list<std::string>>& out) {
 	std::vector<int> indexes;
+	std::vector<bool> is_string;
 	for (auto& e : entities) {
 		indexes.push_back(getHeaderIndex(e));
+		is_string.push_back(Utility::isStringEntityType(e.getType()));
 	}
 
 	for (auto row : table) {
 		std::list<std::string> row_result;
 		for (int i = 0; i < indexes.size(); i++) {
-			row_result.emplace_back(row[indexes[i]]);
+			if (is_string[i]) {
+				row_result.emplace_back(hash_map[row[indexes[i]]]);
+			} else {
+				row_result.emplace_back(std::to_string(row[indexes[i]]));
+			}
 		}
 		out.emplace_back(row_result);
 	}
@@ -129,9 +150,9 @@ ResultTable ResultTable::getResultTable(std::vector<Entity>& entities) {
 	for (auto& e : entities) {
 		indexes.push_back(getHeaderIndex(e));
 	}
-	std::list<std::vector<std::string>> result;
+	std::list<std::vector<value>> result;
 	Utility::getColumnsWithoutDuplicate(table, indexes, result);
-	return ResultTable(entities, result);
+	return ResultTable(entities, result, hash_map);
 }
 
 std::vector<Entity> ResultTable::getHeaders() {
@@ -143,7 +164,7 @@ bool ResultTable::operator==(const ResultTable& other) const {
 }
 
 
-void ResultTable::addHeader(std::pair<Entity, Entity> header) {
+void ResultTable::addHeader(std::pair<Entity, Entity>& header) {
 	if (header.first == header.second) {
 		Utility::mergeColumnEqual(table);
 		addHeader(header.first);
@@ -153,7 +174,7 @@ void ResultTable::addHeader(std::pair<Entity, Entity> header) {
 	}
 }
 
-void ResultTable::addHeader(Entity entity) {
+void ResultTable::addHeader(Entity& entity) {
 	if (header_set.count(entity.getSynonym()) == 0) {
 		header.push_back(entity);
 		header_set.insert(entity.getSynonym());
@@ -164,6 +185,10 @@ void ResultTable::addHeader(std::vector<Entity>& v) {
 	for (auto& it : v) {
 		addHeader(it);
 	}
+}
+
+void ResultTable::addHashToStringMap(std::unordered_map<value, std::string>& in) {
+	hash_map.insert(in.begin(), in.end());
 }
 
 int ResultTable::getHeaderIndex(Entity e) {
@@ -177,8 +202,8 @@ int ResultTable::getHeaderIndex(Entity e) {
 
 void ResultTable::filter_table(ResultTable& t, Entity common_header) {
 	int header_index;
-	std::list<std::vector<std::string>> main_table;
-	std::list<std::vector<std::string>> filter_table;
+	std::list<std::vector<value>> main_table;
+	std::list<std::vector<value>> filter_table;
 
 	if (t.header.size() == 1) {
 		header_index = getHeaderIndex(common_header);
@@ -190,15 +215,16 @@ void ResultTable::filter_table(ResultTable& t, Entity common_header) {
 		filter_table = table;
 		header = t.header;
 		header_set = t.header_set;
+		addHashToStringMap(t.hash_map);
 	} else {
 		throw std::exception("Error: table filter 1 column scenario is not handled!!!");
 	}
 
-	std::unordered_set<std::string> filter;
+	std::unordered_set<value> filter;
 	for (auto& it : filter_table) {
 		filter.insert(it[0]);
 	}
-	table = std::list<std::vector<std::string>>();
+	table = std::list<std::vector<value>>();
 	Utility::filterResults(main_table, filter, header_index, table);
 }
 
@@ -207,8 +233,8 @@ void ResultTable::filter_table(ResultTable& t, Entity common_header1, Entity com
 	int header_index2;
 	int filter_index1;
 	int filter_index2;
-	std::list<std::vector<std::string>> main_table;
-	std::list<std::vector<std::string>> filter_table;
+	std::list<std::vector<value>> main_table;
+	std::list<std::vector<value>> filter_table;
 
 	if (t.header.size() == 2) {
 		header_index1 = getHeaderIndex(common_header1);
@@ -226,11 +252,12 @@ void ResultTable::filter_table(ResultTable& t, Entity common_header1, Entity com
 		filter_table = table;
 		header = t.header;
 		header_set = t.header_set;
+		addHashToStringMap(t.hash_map);
 	} else {
 		throw std::exception("Error: table filter 2 column scenario is not handled!!!");
 	}
 
-	std::unordered_map<std::string, std::unordered_set<std::string>> filters;
+	std::unordered_map<value, std::unordered_set<value>> filters;
 	for (auto& it : filter_table) {
 		if (filters.find(it[filter_index1]) == filters.end()) {
 			filters.insert({ it[filter_index1], {} });
@@ -239,7 +266,7 @@ void ResultTable::filter_table(ResultTable& t, Entity common_header1, Entity com
 		container->second.insert(it[filter_index2]);
 	}
 
-	table = std::list<std::vector<std::string>>();
+	table = std::list<std::vector<value>>();
 	Utility::filterResults(main_table, filters, header_index1, header_index2, table);
 }
 
@@ -247,9 +274,9 @@ void ResultTable::joinTable(ResultTable& t, Entity common_header) {
 	int header_index = getHeaderIndex(common_header);
 	int to_join_index = t.getHeaderIndex(common_header);
 
-	std::list<std::vector<std::string>> main = table;
-	table = std::list<std::vector<std::string>>();
-	std::unordered_multimap<std::string, std::vector<std::string>> to_join;
+	std::list<std::vector<value>> main = table;
+	table = std::list<std::vector<value>>();
+	std::unordered_multimap<value, std::vector<value>> to_join;
 
 	for (auto& it : t.table) {
 		to_join.insert({ it[to_join_index], it });
@@ -261,15 +288,18 @@ void ResultTable::joinTable(ResultTable& t, Entity common_header) {
 
 
 
+
 void ResultTable::joinTable(ResultTable& t) {
 	if (this->header.empty()) {
 		this->table = t.table;
 		addHeader(t.header);
+		addHashToStringMap(t.hash_map);
 		return;
 	}
 
-	std::list<std::vector<std::string>> main = this->table;
-	table = std::list<std::vector<std::string>>();
+	std::list<std::vector<value>> main = this->table;
+	table = std::list<std::vector<value>>();
 	Utility::joinTable(main, t.table, table);
 	addHeader(t.header);
+	addHashToStringMap(t.hash_map);
 }

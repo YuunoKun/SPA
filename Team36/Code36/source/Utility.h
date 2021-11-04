@@ -20,44 +20,45 @@ public:
 	static void unorderedSetToStringList(std::unordered_set<std::string>&, std::list<std::string>&);
 	static void stmtIndexToStringList(std::vector<stmt_index>&, std::list<std::string>&);
 
-	static void stringListToStringTablePair(std::list<std::string>&, std::list<std::vector<std::string>>&);
+	static std::vector<std::pair<std::string, std::string>> duplicateColumn(std::vector<std::string>&);
+	static std::vector<std::pair<value, value>> duplicateColumn(std::vector<value>&);
+	static std::vector<std::pair<StmtInfo, StmtInfo>> duplicateColumn(std::vector<StmtInfo>&);
 
+	static void constantToTable(std::vector<constant>&, std::list<std::vector<value>>&);
+	static void stmtInfoToTable(std::vector<StmtInfo>&, std::list<std::vector<value>>&);
+	static void stmtIndexToTable(std::vector<stmt_index>&, std::list<std::vector<value>>&);
+	static void stringToTable(std::vector<std::string>&, std::list<std::vector<value>>&, std::unordered_map<value, std::string>&);
+	static void stringToTable(std::list<std::string>&, std::list<std::vector<value>>&, std::unordered_map<value, std::string>&);
 
-	static void constantToStringTable(std::vector<constant>&, std::list<std::vector<std::string>>&);
-	static void stringToStringTable(std::vector<std::string>&, std::list<std::vector<std::string>>&);
-	static void stringToStringTable(std::list<std::string>&, std::list<std::vector<std::string>>&);
-	static void stmtInfoToStringTable(std::vector<StmtInfo>&, std::list<std::vector<std::string>>&);
-	static void stmtIndexToStringTable(std::vector<stmt_index>&, std::list<std::vector<std::string>>&);
+	static void pairToTable(std::vector<std::pair<StmtInfo, std::string>>&, std::list<std::vector<value>>&, std::unordered_map<value, std::string>&);
+	static void pairToTable(std::vector<std::pair<StmtInfo, StmtInfo>>&, std::list<std::vector<value>>&);
+	static void pairToTable(std::vector<std::pair<value, value>>&, std::list<std::vector<value>>&);
+	static void pairToTable(std::vector<std::pair<std::string, std::string>>&, std::list<std::vector<value>>&, std::unordered_map<value, std::string>&);
+	static void pairToTable(std::vector<std::pair<value, std::string>>&, std::list<std::vector<value>>&, std::unordered_map<value, std::string>&);
 
-	static void pairToStringTable(std::vector<std::pair<StmtInfo, std::string>>&, std::list<std::vector<std::string>>&);
-	static void pairToStringTable(std::vector<std::pair<StmtInfo, StmtInfo>>&, std::list<std::vector<std::string>>&);
-	static void pairToStringTable(std::vector<std::pair<std::string, std::string>>&, std::list<std::vector<std::string>>&);
-	static void pairToStringTable(std::vector<std::pair<stmt_index, std::string>>&, std::list<std::vector<std::string>>&);
-
-	static int getIndex(std::vector<std::string>, std::string);
 	static int getIndex(std::vector<Entity>, Entity);
 
 	static StmtType convertType(EntityType);
 	static std::vector<StmtInfo> filterResult(EntityType, std::vector<StmtInfo>&);
-	static void filterResults(EntityType, std::vector<StmtInfo>&, std::list<std::vector<std::string>>&);
-	static void filterResults(EntityType, std::vector<std::pair<StmtInfo, std::string>>&, std::list<std::vector<std::string>>&);
-	static void filterResults(std::pair<EntityType, EntityType>, std::vector<std::pair<StmtInfo, StmtInfo>>&, std::list<std::vector<std::string>>&);
+	static void filterResults(EntityType, std::vector<StmtInfo>&, std::list<std::vector<value>>&);
+	static void filterResults(EntityType, std::vector<std::pair<StmtInfo, std::string>>&, std::list<std::vector<value>>&, std::unordered_map<value, std::string>&);
+	static void filterResults(std::pair<EntityType, EntityType>, std::vector<std::pair<StmtInfo, StmtInfo>>&, std::list<std::vector<value>>&);
 
-	static void filterResults(std::list<std::vector<std::string>>&, std::unordered_set<std::string>&, int, std::list<std::vector<std::string>>&);
-	static void filterResults(std::list<std::vector<std::string>>&, std::unordered_map<std::string, std::unordered_set<std::string>>&, int, int, std::list<std::vector<std::string>>&);
+	static void filterResults(std::list<std::vector<value>>&, std::unordered_set<value>&, int, std::list<std::vector<value>>&);
+	static void filterResults(std::list<std::vector<value>>&, std::unordered_map<value, std::unordered_set<value>>&, int, int, std::list<std::vector<value>>&);
 
-	static void mergeColumnEqual(std::list<std::vector<std::string>>&);
+	static void mergeColumnEqual(std::list<std::vector<value>>&);
 
-	static void joinTable(std::list<std::vector<std::string>>&, int,
-		std::unordered_multimap<std::string, std::vector<std::string>>&, int,
-		std::list<std::vector<std::string>>&);
-	static void joinTable(std::list<std::vector<std::string>>&, 
-		std::list<std::vector<std::string>>&, std::list<std::vector<std::string>>&);
+	static void joinTable(std::list<std::vector<value>>&, int,
+		std::unordered_multimap<value, std::vector<value>>&, int,
+		std::list<std::vector<value>>&);
+	static void joinTable(std::list<std::vector<value>>&,
+		std::list<std::vector<value>>&, std::list<std::vector<value>>&);
 
 	static std::vector<Entity> getEntitiesExclude(std::vector<Entity>&, std::vector<Entity>&);
 	static std::vector<Entity> getEntitiesWithoutDuplicate(std::vector<Entity>&);
 
-	static void getColumnsWithoutDuplicate(std::list<std::vector<std::string>>&, std::vector<int>&, std::list<std::vector<std::string>>&);
+	static void getColumnsWithoutDuplicate(std::list<std::vector<value>>&, std::vector<int>&, std::list<std::vector<value>>&);
 
 	static bool isSecondaryAttribute(Entity);
 
@@ -84,9 +85,14 @@ public:
 	static std::string setExpr(std::vector<QueryToken>);
 	static bool checkIsSemanticError(Query&);
 	static std::vector<std::vector<QueryToken>> splitTokenChain(int, QueryToken::QueryTokenType, std::vector<QueryToken>);
+
+	static bool isStringEntityType(EntityType);
+	static value hashString(std::string, std::unordered_map<value, std::string>&);
+
 private:
 	static bool isStmt(EntityType);
 
-	static void joinRow(std::vector<std::string>&, std::vector<std::string>&, std::vector<std::string>&);
-	static void joinRow(std::vector<std::string>&, std::vector<std::string>&, int, std::vector<std::string>&);
+	static void joinRow(std::vector<value>&, std::vector<value>&, std::vector<value>&);
+	static void joinRow(std::vector<value>&, std::vector<value>&, int, std::vector<value>&);
+
 };

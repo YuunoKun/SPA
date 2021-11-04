@@ -38,52 +38,24 @@ void QueryEvaluator::evaluateClauses(Query& query, QueryResult& query_result) {
 }
 
 
-void QueryEvaluator::getRawResult(Entity selected, std::list<std::string>& out) {
-	if (Utility::isSecondaryAttribute(selected)) {
-		getRawResultWithSecondaryAttribute(selected, out);
-		return;
-	}
-
+ResultTable QueryEvaluator::getRawResult(Entity& selected) {
 	switch (selected.getType()) {
 	case EntityType::PROG_LINE:
-	case EntityType::STMT: Utility::stmtInfoToStringList(pkb.getStmts(), out); break;
-	case EntityType::READ: Utility::stmtInfoToStringList(pkb.getReads(), out);  break;
-	case EntityType::PRINT: Utility::stmtInfoToStringList(pkb.getPrints(), out); break;
-	case EntityType::CALL: Utility::stmtInfoToStringList(pkb.getCalls(), out); break;
-	case EntityType::WHILE: Utility::stmtInfoToStringList(pkb.getWhiles(), out); break;
-	case EntityType::IF: Utility::stmtInfoToStringList(pkb.getIfs(), out); break;
-	case EntityType::ASSIGN: Utility::stmtInfoToStringList(pkb.getAssigns(), out); break;
-	case EntityType::VARIABLE: Utility::variableToStringList(pkb.getVariables(), out);  break;
-	case EntityType::CONSTANT: Utility::constantToStringList(pkb.getConstants(), out);  break;
-	case EntityType::PROCEDURE: Utility::procedureToStringList(pkb.getProcedures(), out);  break;
+	case EntityType::STMT: 
+	case EntityType::READ: 
+	case EntityType::PRINT: 
+	case EntityType::CALL: 
+	case EntityType::WHILE: 
+	case EntityType::IF: 
+	case EntityType::ASSIGN: return ResultTable(selected, pkb.getStmts()); break;
+	case EntityType::VARIABLE: return ResultTable(selected, pkb.getVariables()); break;
+	case EntityType::CONSTANT: return ResultTable(selected, pkb.getConstants()); break;
+	case EntityType::PROCEDURE: return ResultTable(selected, pkb.getProcedures()); break;
 	}
 
+	throw std::domain_error("Selected Entity is not supported for select");
 }
 
-void QueryEvaluator::getRawResultWithSecondaryAttribute(Entity selected, std::list<std::string>& out) {
-	switch (selected.getType()) {
-	case EntityType::READ:
-		if (selected.getAttribute() == AttrRef::VAR_NAME) {
-			Utility::variableToStringList(pkb.getPrintVar(), out);
-			return;
-		}
-		break;
-	case EntityType::PRINT:
-		if (selected.getAttribute() == AttrRef::VAR_NAME) {
-			Utility::variableToStringList(pkb.getReadVar(), out);
-			return;
-		}
-		break;
-	case EntityType::CALL:
-		if (selected.getAttribute() == AttrRef::PROC_NAME) {
-			Utility::procedureToStringList(pkb.getCalledS(), out);
-			return;
-		}
-		break;
-	}
-
-	throw std::domain_error("Selected Entity type does not have Secondary Attribute!");
-}
 
 std::string QueryEvaluator::getEntitySecondaryAttribute(std::string primary, Entity& type) {
 	switch (type.getType()) {
@@ -149,9 +121,7 @@ void QueryEvaluator::getTupleResult(Query& query, QueryResult& query_result, std
 	}
 
 	for (auto& selected : selected_entities) {
-		std::list<std::string> raw_result;
-		getRawResult(selected, raw_result);
-		result.joinTable(ResultTable(selected, raw_result));
+		result.joinTable(getRawResult(selected));
 	}
 
 	mergeTable(result, query.getSelected(), out);
@@ -177,12 +147,12 @@ void QueryEvaluator::getResult(Query& query, QueryResult& result, std::list<std:
 		return;
 	}
 
-	if (!result.isInTables(query.getSelected()[0])) {
-		getRawResult(query.getSelected()[0], out);
-	} else {
+	Entity selected = query.getSelected()[0];
+	if (result.isInTables(selected)) {
 		result.getResult(query.getSelected()[0], out);
+	} else {
+		getRawResult(selected).getEntityResult(selected, out);
 	}
-
 
 	if (Utility::isSecondaryAttribute(query.getSelected()[0])) {
 		convertToSecondaryAttribute(out, query.getSelected()[0]);
