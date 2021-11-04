@@ -250,6 +250,7 @@
     </ClCompile>
     <ClCompile Include="AffectsBipParserTest.cpp">
       <Filter>PQL\QueryPreprocessor\QueryPatternRelRefParser</Filter>
+    </ClCompile>
     <ClCompile Include="AffectsBipPreprocessorTest.cpp">
       <Filter>PKB\RelationPreprocessor</Filter>
     </ClCompile>
