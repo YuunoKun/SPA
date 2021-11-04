@@ -12,6 +12,7 @@
 
 class Utility {
 public:
+	
 
 	static void constantToStringList(std::vector<constant>&, std::list<std::string>&);
 	static void procedureToStringList(std::vector<proc_name>&, std::list<std::string>&);

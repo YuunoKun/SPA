@@ -126,9 +126,6 @@
     <ClCompile Include="..\source\QueryToken.cpp">
       <Filter>Source Files\PQL\QueryPreprocessor</Filter>
     </ClCompile>
-    <ClCompile Include="..\source\QueryPreprocessor.cpp">
-      <Filter>Source Files\PQL\QueryPreprocessor</Filter>
-    </ClCompile>
     <ClCompile Include="..\source\Pattern.cpp">
       <Filter>Source Files\PQL\QueryObject</Filter>
     </ClCompile>
@@ -339,11 +336,11 @@
     <ClCompile Include="..\source\RelationTable.cpp">
       <Filter>Source Files\PKB\RelationTables</Filter>
     </ClCompile>
-    <ClCompile Include="..\source\MonotypeRelationTable.cpp">
-      <Filter>Source Files\PKB\RelationTables</Filter>
-    </ClCompile>
     <ClCompile Include="..\source\AffectsTPreprocessor.cpp">
       <Filter>Source Files\PKB\RelationPreprocessor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\QueryPreprocessor.cpp">
+      <Filter>Source Files\PQL\QueryPreprocessor</Filter>
     </ClCompile>
     <ClCompile Include="..\source\AffectsBipPreprocessor.cpp">
       <Filter>Source Files\PKB\RelationPreprocessor</Filter>
@@ -670,7 +667,7 @@
     </ClInclude>
     <ClInclude Include="..\source\RelationTableUtility.h">
       <Filter>Header Files\PKB\RelationTables</Filter>
-	</ClInclude>
+    </ClInclude>
     <ClInclude Include="..\source\SPCommon.h">
       <Filter>Header Files\SP</Filter>
     </ClInclude>

@@ -409,29 +409,29 @@ std::string Utility::queryTokenTypeToExprString(std::vector<QueryToken> token_ch
 		case QueryToken::IDENTIFIER:
 		case QueryToken::CONSTANT:
 			//white space added for every token to prevent 2 separate constants/identifiers in becoming one
-			result += ' ';
+			result += SPACE_C;
 			result += q.token_value;
 			break;
 		case QueryToken::PARENTHESIS_OPEN:
-			result += '(';
+			result += LEFT_PARENTHESIS_C;
 			break;
 		case QueryToken::PARENTHESIS_CLOSE:
-			result += ')';
+			result += RIGHT_PARENTHESIS_C;
 			break;
 		case QueryToken::PLUS:
-			result += '+';
+			result += PLUS_SIGN_C;
 			break;
 		case QueryToken::MINUS:
-			result += '-';
+			result += MINUS_SIGN_C;
 			break;
 		case QueryToken::MUL:
-			result += '*';
+			result += ASTERISK_C;
 			break;
 		case QueryToken::DIV:
-			result += '/';
+			result += SLASH_C;
 			break;
 		case QueryToken::MOD:
-			result += '%';
+			result += PERCENT_SIGN_C;
 			break;
 		default:
 			throw SyntacticErrorException("Not handled by Expr");
@@ -502,7 +502,7 @@ bool Utility::isStmtRef(Query& query, std::vector<QueryToken> token_chain) {
 	QueryToken token = token_chain[0];
 
 	if (token.type == QueryToken::CONSTANT) {
-		if (token.token_value == "0") {
+		if (token.token_value == ZERO_S) {
 			query.setIsSemanticError("0 is not a valid stmtRef");
 		}
 		return true;
@@ -549,7 +549,7 @@ bool Utility::isStmtRef(Query& query, std::vector<QueryToken> token_chain, Entit
 	QueryToken token = token_chain[0];
 
 	if (token.type == QueryToken::CONSTANT) {
-		return token.token_value != "0";
+		return token.token_value != ZERO_S;
 	}
 
 	if (token.type == QueryToken::WILDCARD) {
@@ -633,22 +633,25 @@ bool Utility::isEntRef(Query& query, std::vector<QueryToken> token_chain, Entity
 
 		if (token.type == QueryToken::WILDCARD) {
 			return true;
-		} else if (token.type == QueryToken::IDENTIFIER) {
-			// check synonym if is EntRef
-			std::unordered_map<std::string, Entity> ent_chain = query.getEntities();
-
-			if (ent_chain.find(token.token_value) != ent_chain.end()) {
-				return ent_chain.at(token.token_value).getType() == entity_type;
-			} else {
-				// Undeclared Syn, Cannot find Entity in Query
-				return false;
-			}
-		} else {
-			// unknown character
+		}
+		else if (token.type != QueryToken::IDENTIFIER) {
 			throw SyntacticErrorException("Invalid entRef arguments");
 		}
 
-	} else if (token_chain.size() == 3) {
+		// check synonym if is EntRef
+		std::unordered_map<std::string, Entity> ent_chain = query.getEntities();
+
+		if (ent_chain.find(token.token_value) != ent_chain.end()) {
+			return ent_chain.at(token.token_value).getType() == entity_type;
+		}
+		else {
+			// Undeclared Syn, Cannot find Entity in Query
+			return false;
+		}
+
+
+	}
+	else if (token_chain.size() == 3) {
 		//checking for " IDENT " 
 		if (token_chain[0].type == QueryToken::QUOTATION_OPEN &&
 			token_chain[1].type == QueryToken::IDENTIFIER &&
@@ -675,25 +678,26 @@ bool Utility::isLineRef(Query& query, std::vector<QueryToken> token_chain) {
 	} else if (token.type == QueryToken::WILDCARD) {
 		return true;
 	}
-	// check synonym if is program lines
-	else if (token.type == QueryToken::IDENTIFIER) {
-		std::unordered_map<std::string, Entity> ent_chain = query.getEntities();
-		if (ent_chain.find(token.token_value) != ent_chain.end()) {
-			return ent_chain.at(token.token_value).getType() == EntityType::STMT ||
-				ent_chain.at(token.token_value).getType() == EntityType::READ ||
-				ent_chain.at(token.token_value).getType() == EntityType::PRINT ||
-				ent_chain.at(token.token_value).getType() == EntityType::CALL ||
-				ent_chain.at(token.token_value).getType() == EntityType::PROG_LINE ||
-				ent_chain.at(token.token_value).getType() == EntityType::WHILE ||
-				ent_chain.at(token.token_value).getType() == EntityType::IF ||
-				ent_chain.at(token.token_value).getType() == EntityType::ASSIGN;
-		} else {
-			// Undeclared Syn, Cannot find Entity in Query
-			return false;
-		}
-	} else {
-		// unknown character
+	else if (token.type != QueryToken::IDENTIFIER) {
 		throw SyntacticErrorException("Invalid lineRef arguments");
+	}
+	
+	std::unordered_map<std::string, Entity> ent_chain = query.getEntities();
+	
+	if (ent_chain.find(token.token_value) != ent_chain.end()) {
+	// check synonym if is program lines
+		return ent_chain.at(token.token_value).getType() == EntityType::STMT ||
+			ent_chain.at(token.token_value).getType() == EntityType::READ ||
+			ent_chain.at(token.token_value).getType() == EntityType::PRINT ||
+			ent_chain.at(token.token_value).getType() == EntityType::CALL ||
+			ent_chain.at(token.token_value).getType() == EntityType::PROG_LINE ||
+			ent_chain.at(token.token_value).getType() == EntityType::WHILE ||
+			ent_chain.at(token.token_value).getType() == EntityType::IF ||
+			ent_chain.at(token.token_value).getType() == EntityType::ASSIGN;
+	}
+	else {
+		// Undeclared Syn, Cannot find Entity in Query
+		return false;
 	}
 }
 
@@ -708,17 +712,18 @@ bool Utility::isRef(Query& query, std::vector<QueryToken> token_chain) {
 		QueryToken token = token_chain[0];
 		if (token.type == QueryToken::CONSTANT) {
 			return true;
-		} else if (token.type == QueryToken::IDENTIFIER) {
-			// check synonym if is declared
-
-			if (ent_chain.find(token.token_value) != ent_chain.end()) {
-				return ent_chain.at(token.token_value).getType() == EntityType::PROG_LINE;
-			} else {
-				// Undeclared Syn, Cannot find Entity in Query
-				return false;
-			}
-		} else {
-			throw SyntacticErrorException("Invalid Ref arguments");
+		}
+		if (token.type != QueryToken::IDENTIFIER) { 
+			throw SyntacticErrorException("Invalid Ref arguments"); 
+		}
+		
+		// check synonym if is declared
+		if (ent_chain.find(token.token_value) != ent_chain.end()) {
+			return ent_chain.at(token.token_value).getType() == EntityType::PROG_LINE;
+		}
+		else {
+			// Undeclared Syn, Cannot find Entity in Query
+			return false;
 		}
 
 	} else if (token_chain.size() == 3) {
@@ -1034,8 +1039,8 @@ std::vector<std::vector<QueryToken>> Utility::splitTokenChain(int max_params, Qu
 		if (token_chain[0].type == delimiter) {
 			token_chain.erase(token_chain.begin());
 			delimiter_count++;
-		} else if (delimiter_count >= 0 && delimiter_count < max_params) {
-			// 1st param
+		}
+		else if (delimiter_count >= 0 && delimiter_count < max_params) {
 			separated_params[delimiter_count].push_back(token_chain[0]);
 			token_chain.erase(token_chain.begin());
 		} else {
@@ -1046,7 +1051,7 @@ std::vector<std::vector<QueryToken>> Utility::splitTokenChain(int max_params, Qu
 }
 
 bool Utility::checkIsSemanticError(Query& query) {
-	return query.getIsSemanticError() != "";
+	return query.getIsSemanticError() != EMPTY_S;
 }
 
 bool Utility::isStringEntityType(EntityType e) {

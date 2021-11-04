@@ -27,7 +27,6 @@
     <ClCompile Include="..\source\RelationTableUtility.cpp" />
     <ClCompile Include="..\source\RelationTable.cpp" />
     <ClCompile Include="..\source\PKB.cpp" />
-    <ClCompile Include="..\source\MonotypeRelationTable.cpp" />
     <ClCompile Include="..\source\Statement.cpp" />
     <ClCompile Include="..\source\Entity.cpp" />
     <ClCompile Include="..\source\Pattern.cpp" />
