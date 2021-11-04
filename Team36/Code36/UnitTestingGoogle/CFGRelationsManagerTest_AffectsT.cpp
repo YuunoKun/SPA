@@ -38,7 +38,7 @@ namespace UnitTesting {
 				PKB::getInstance().addProcContains(pair.first, pair.second);
 			}
 
-			manager.update();
+			manager.reset();
 		}
 
 		CFGRelationsManager manager;

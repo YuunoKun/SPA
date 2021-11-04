@@ -24,7 +24,7 @@ public:
 	NextTPreprocessor() = default;
 
 private:
-	const MonotypeRelationTable<StmtInfo>* next_table;
+	const MonotypeRelationTable<StmtInfo>* next_table = nullptr;
 
 	void checkCache();
 };

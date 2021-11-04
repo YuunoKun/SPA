@@ -40,8 +40,8 @@ void RelationsEvaluator::evaluateRelation(QueryResult& result, RelRef& relation)
 	case RelType::AFFECT_T: evaluateRelation(result, relation, AffectsTEvaluator()); break;
 	case RelType::NEXT_BIP: evaluateRelation(result, relation, NextBipEvaluator()); break;
 	case RelType::NEXT_BIP_T: evaluateRelation(result, relation, NextBipTEvaluator()); break;
-	case RelType::AFFECT_BIP: evaluateRelation(result, relation, AffectsBipEvaluator()); break;
 	case RelType::AFFECT_BIP_T: evaluateRelation(result, relation, AffectsBipTEvaluator()); break;
+	case RelType::AFFECT_BIP: evaluateRelation(result, relation, AffectsBipEvaluator()); break;
 	default: throw std::domain_error("Some Relation is not being handle!!!!");
 	}
 }
@@ -54,40 +54,30 @@ void RelationsEvaluator::evaluateRelation(QueryResult& query_result, RelRef& rel
 		//if there is at least one side is synonym, merge table generated
 		if (clauses1.isSynonym() && clauses2.isSynonym()) {
 			query_result.addResult(evaluator.evaluateSynonymAndSynonym(clauses1, clauses2));
-		}
-		else if (clauses1.isSynonym() && clauses2.getType() == EntityType::WILD) {
+		} else if (clauses1.isSynonym() && clauses2.getType() == EntityType::WILD) {
 			ResultTable resultTable = evaluator.evaluateSynonymAndWild(clauses1);
 			query_result.addResult(evaluator.evaluateSynonymAndWild(clauses1));
-		}
-		else if (clauses1.getType() == EntityType::WILD && clauses2.isSynonym()) {
+		} else if (clauses1.getType() == EntityType::WILD && clauses2.isSynonym()) {
 			query_result.addResult(evaluator.evaluateWildAndSynonym(clauses2));
-		}
-		else if (clauses1.isSynonym() && !clauses2.isSynonym()) {
+		} else if (clauses1.isSynonym() && !clauses2.isSynonym()) {
 			query_result.addResult(evaluator.evaluateSynonymAndConstant(clauses1, clauses2));
-		}
-		else if (!clauses1.isSynonym() && clauses2.isSynonym()) {
+		} else if (!clauses1.isSynonym() && clauses2.isSynonym()) {
 			query_result.addResult(evaluator.evaluateConstantAndSynonym(clauses1, clauses2));
-		}
-		else {
+		} else {
 			throw std::out_of_range("Some Follow logic have not be handle for synonym");
 		}
-	}
-	else {
+	} else {
 		//check if result exist for relation with no synonym
 		bool haveResult = false;
 		if (clauses1.getType() == EntityType::WILD && clauses2.getType() == EntityType::WILD) {
 			haveResult = evaluator.evaluateWildAndWild();
-		}
-		else if (!clauses1.isSynonym() && clauses2.getType() == EntityType::WILD) {
+		} else if (!clauses1.isSynonym() && clauses2.getType() == EntityType::WILD) {
 			haveResult = evaluator.evaluateConstantAndWild(clauses1);
-		}
-		else if (clauses1.getType() == EntityType::WILD && !clauses2.isSynonym()) {
+		} else if (clauses1.getType() == EntityType::WILD && !clauses2.isSynonym()) {
 			haveResult = evaluator.evaluateWildAndConstant(clauses2);;
-		}
-		else if (!clauses1.isSynonym() && !clauses2.isSynonym()) {
+		} else if (!clauses1.isSynonym() && !clauses2.isSynonym()) {
 			haveResult = evaluator.evaluateConstantAndConstant(clauses1, clauses2);
-		}
-		else {
+		} else {
 			throw std::out_of_range("Some Follow logic have not be handle for both side no synonym");
 		}
 

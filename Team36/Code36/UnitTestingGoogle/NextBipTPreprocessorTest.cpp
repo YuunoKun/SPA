@@ -64,6 +64,18 @@ namespace UnitTesting {
 			{s14, s11}, {s15, s8}, {s15, s11}, {s15, s16}, {s16, s15}
 		};
 
+		std::vector<std::pair<LabelledProgLine, LabelledProgLine>> test_labelled_next_list = {
+			{{1,{0}},{2,{0}}}, {{2,{0}},{3,{0}}}, {{4,{0}},{5,{0}}},
+			{{5,{0}},{9,{0,5}}}, {{9,{0,5}},{10,{0,5}}},
+			{{10,{0,5}},{12,{0,5,10}}}, {{12,{0,5,10}},{13,{0,5,10}}}, {{13,{0,5,10}},{14,{0,5,10}}},
+			{{12,{0,5,10}},{15,{0,5,10}}}, {{15,{0,5,10}},{16,{0,5,10}}}, {{16,{0,5,10}},{15,{0,5,10}}},
+			{{14,{0,5,10}},{11,{0,5}}}, {{15,{0,5,10}},{11,{0,5}}},
+			{{11,{0,5}},{6,{0}}}, {{6,{0}},{7,{0}}},
+			{{7,{0}},{12,{0,7}}}, {{12,{0,7}},{13,{0,7}}}, {{13,{0,7}},{14,{0,7}}}, {{12,{0,7}},{15,{0,7}}}, {{15,{0,7}},{16,{0,7}}}, {{16,{0,7}},{15,{0,7}}},
+			{{14,{0,7}},{8,{0}}}, {{15,{0,7}},{8,{0}}}, {{9,{0}},{10,{0}}}, {{14,{0,10}},{11,{0}}}, {{15,{0,10}},{11,{0}}},
+			{{12,{0}},{13,{0}}}, {{13,{0}},{14,{0}}}, {{12,{0}},{15,{0}}}, {{15,{0}},{16,{0}}}, {{16,{0}},{15,{0}}}
+		};
+
 		std::vector<std::pair<StmtInfo, StmtInfo>> expected_pairs = {
 			{s1, s2}, {s1, s3}, {s2, s3},
 			{s4, s5}, {s4, s6}, {s4, s7}, {s4, s8}, {s4, s9}, {s4, s10}, {s4, s11}, {s4, s12}, {s4, s13}, {s4, s14}, {s4, s15}, {s4, s16},
@@ -81,8 +93,8 @@ namespace UnitTesting {
 		};
 
 		MonotypeRelationTable<StmtInfo> test_next_table = MonotypeRelationTable<StmtInfo>(test_next_list);
-
-		NextBipTPreprocessor processor = NextBipTPreprocessor(test_next_table, stmt_list);
+		MonotypeRelationTable<LabelledProgLine> test_next_bip_table = MonotypeRelationTable<LabelledProgLine>(test_labelled_next_list);
+		NextBipTPreprocessor processor = NextBipTPreprocessor(test_next_table, test_next_bip_table, stmt_list);
 
 		void TearDown() override {
 			processor.reset();

@@ -19,9 +19,10 @@ public:
 	std::vector<StmtInfo> evaluateSynonymAndConstant(int) override;
 	void fullyPopulate() override;
 
-	NextBipTPreprocessor(const MonotypeRelationTable<StmtInfo>&, const std::vector<StmtInfo>);
+	NextBipTPreprocessor(const MonotypeRelationTable<StmtInfo>&, const MonotypeRelationTable<LabelledProgLine>&, const std::vector<StmtInfo>);
 	NextBipTPreprocessor() = default;
 
 private:
-	const MonotypeRelationTable<StmtInfo>* next_bip_table;
+	const MonotypeRelationTable<StmtInfo>* next_bip_table = nullptr;
+	const MonotypeRelationTable<LabelledProgLine>* labelled_next_bip_table = nullptr;
 };

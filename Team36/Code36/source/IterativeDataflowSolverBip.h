@@ -70,7 +70,7 @@ private:
 	std::vector<LabelledProgLine> first_proglines;
 	bool is_dataflow_sets_populated = false;
 
-	const MonotypeRelationTable<LabelledProgLine>* next_table;
-	const RelationTable<StmtInfo, var_name>* useS_table;
-	const RelationTable<StmtInfo, var_name>* modifiesS_table;
+	const MonotypeRelationTable<LabelledProgLine>* next_table = nullptr;
+	const RelationTable<StmtInfo, var_name>* useS_table = nullptr;
+	const RelationTable<StmtInfo, var_name>* modifiesS_table = nullptr;
 };

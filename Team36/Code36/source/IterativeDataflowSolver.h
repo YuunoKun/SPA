@@ -76,8 +76,8 @@ private:
 	std::vector<std::set<stmt_index>> succ_list;
 
 	std::vector<StmtInfo> stmt_info_list;
-	const MonotypeRelationTable<StmtInfo>* next_table;
-	const RelationTable<StmtInfo, var_name>* useS_table;
-	const RelationTable<StmtInfo, var_name>* modifiesS_table;
-	const RelationTable<proc_name, stmt_index>* procS_table;
+	const MonotypeRelationTable<StmtInfo>* next_table = nullptr;
+	const RelationTable<StmtInfo, var_name>* useS_table = nullptr;
+	const RelationTable<StmtInfo, var_name>* modifiesS_table = nullptr;
+	const RelationTable<proc_name, stmt_index>* procS_table = nullptr;
 };

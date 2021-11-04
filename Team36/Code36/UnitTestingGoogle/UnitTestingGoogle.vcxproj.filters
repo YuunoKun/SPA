@@ -173,9 +173,6 @@
     <ClCompile Include="CFGTest.cpp">
       <Filter>PKB</Filter>
     </ClCompile>
-    <ClCompile Include="MonotypeRelationTableTest.cpp">
-      <Filter>PKB\RelationTables</Filter>
-    </ClCompile>
     <ClCompile Include="ParentParserTest.cpp">
       <Filter>PQL\QueryPreprocessor\QueryPatternRelRefParser</Filter>
     </ClCompile>
@@ -242,6 +239,7 @@
     <ClCompile Include="CFGTest.cpp">
       <Filter>Common</Filter>
     </ClCompile>
+    <ClCompile Include="CFGRelationsManagerTest_NextBipT.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />

@@ -59,6 +59,7 @@
     <ClCompile Include="CFGRelationManagerTest_NextBip.cpp" />
     <ClCompile Include="CFGRelationsManagerTest_AffectsBipT.cpp" />
     <ClCompile Include="CFGRelationsManagerTest_AffectsT.cpp" />
+    <ClCompile Include="CFGRelationsManagerTest_NextBipT.cpp" />
     <ClCompile Include="CFGRelationsManagerTest_NextT.cpp" />
     <ClCompile Include="ClauseTest.cpp" />
     <ClCompile Include="DesignExtractorTest.cpp" />

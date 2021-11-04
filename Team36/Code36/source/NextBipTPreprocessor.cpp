@@ -50,12 +50,22 @@ std::vector<StmtInfo> NextBipTPreprocessor::evaluateSynonymAndConstant(int index
 
 void NextBipTPreprocessor::fullyPopulate() {
 	if (!is_fully_populated) {
-		cache = RelationTableUtility<StmtInfo>::findTransitiveClosure(*next_bip_table);
-		is_fully_populated = true;
+		MonotypeRelationTable<LabelledProgLine> labelled_next_bipT_table =
+			RelationTableUtility<LabelledProgLine>::findTransitiveClosure(*labelled_next_bip_table);
+		for (auto& pair : labelled_next_bipT_table.getPairs()) {
+			stmt_index progline_previous = pair.first.program_line;
+			stmt_index progline_next = pair.second.program_line;
+			StmtInfo statement_affecting = stmt_info_list[progline_previous - 1];
+			StmtInfo statement_affected = stmt_info_list[progline_next - 1];
+			cache.insert(statement_affecting, statement_affected);
+			is_fully_populated = true;
+		}
 	}
 }
 
-NextBipTPreprocessor::NextBipTPreprocessor(const MonotypeRelationTable<StmtInfo>& table, const std::vector<StmtInfo> v) :
-	next_bip_table(&table) {
+NextBipTPreprocessor::NextBipTPreprocessor(const MonotypeRelationTable<StmtInfo>& next_bip_table,
+	const MonotypeRelationTable<LabelledProgLine>& labelled_next_bip_table, const std::vector<StmtInfo> v) :
+	next_bip_table(&next_bip_table),
+	labelled_next_bip_table(&labelled_next_bip_table) {
 	stmt_info_list = v;
 }

@@ -71,6 +71,7 @@ void AffectsBipPreprocessor::reset() {
 	is_fully_populated = false;
 	solver.reset();
 	cache = MonotypeRelationTable<StmtInfo>();
+	labelled_progline_cache = MonotypeRelationTable<LabelledProgLine>();
 }
 
 void AffectsBipPreprocessor::fullyPopulate() {

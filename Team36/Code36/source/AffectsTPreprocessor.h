@@ -27,5 +27,5 @@ public:
 private:
 	void checkCache();
 
-	const MonotypeRelationTable<StmtInfo>* affects_table;
+	const MonotypeRelationTable<StmtInfo>* affects_table = nullptr;
 };

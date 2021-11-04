@@ -24,7 +24,7 @@ namespace UnitTesting {
 			PKB::getInstance().addProcContains(p, 2);
 			PKB::getInstance().addProcContains(p, 3);
 			PKB::getInstance().addProcContains(p, 4);
-			pkb.getRelationManager().update();
+			pkb.getRelationManager().reset();
 		}
 
 		PKBAdapter pkb;
@@ -186,7 +186,6 @@ namespace UnitTesting {
 	}
 
 	TEST_F(NextBipEvaluatorTest, evaluateConstantAndSynonym) {
-
 		std::vector<StmtInfo> v = { p2 };
 		Entity header = { STMT, Synonym{"a"} };
 		Entity match = { STMT, "1" };
