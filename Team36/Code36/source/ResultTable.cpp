@@ -284,6 +284,7 @@ void ResultTable::joinTable(ResultTable& t, Entity common_header) {
 
 	Utility::joinTable(main, header_index, to_join, to_join_index, table);
 	addHeader(t.header);
+	addHashToStringMap(t.hash_map);
 }
 
 
