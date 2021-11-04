@@ -75,7 +75,6 @@ Query QueryPreprocessor::parse(std::string str) {
 	QueryTokenizer query_tokenizer;
 	QueryValidator queryValidator = QueryValidator();
 
-	//Query query
 	query_tokenizer.tokenize(this->query, str);
 
 	std::vector<QueryToken> tokens = query_tokenizer.get_query_token_chain();
@@ -405,12 +404,10 @@ void QueryPreprocessor::setIdentifierToQueryTokenType(QueryToken& token) {
 		}
 		// Need to enforce that Select must only come after a terminator
 		else if (condition_select) {
-			/*temp = { QueryToken::QueryTokenType::SELECT, "Select" };*/
 			isSelect = true;
 			status = ParseStatus::IS_SELECTING;
 		}
 		else {
-			//throw std::runtime_error("Invalid syntax for declaration or select");
 			throw SyntacticErrorException("Invalid syntax for declaration or select");
 		}
 	}
@@ -550,14 +547,12 @@ void QueryPreprocessor::setQueryParameter() {
 Query QueryPreprocessor::returnAndResetQuery() {
 	Query query_result = this->query;
 
-	// Reset variables
 	QueryPreprocessor::resetQuery();
 
 	return query_result;
 }
 
 void QueryPreprocessor::resetQuery() {
-	// Reset variables
 	this->query = Query();
 	this->isSelect = false;
 	this->isParameter = false;
