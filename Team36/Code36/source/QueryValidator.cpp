@@ -1,3 +1,4 @@
+#include "Common.h"
 #include "Query.h"
 #include "QueryToken.h"
 #include "QueryValidator.h"
@@ -52,7 +53,7 @@ void QueryValidator::validateSelecting(QueryToken& token, QueryToken& prevTokenS
 		(token.type != QueryToken::QueryTokenType::DOT &&
 			token.type != QueryToken::QueryTokenType::SUCH_THAT &&
 			token.type != QueryToken::QueryTokenType::PATTERN &&
-			token.token_value != "with")) {
+			token.token_value != WITH_STR)) {
 		throw SyntacticErrorException("After selection needs to have such that or pattern clause or with");
 	}
 }
@@ -104,11 +105,11 @@ void QueryValidator::validateAnd(QueryToken& patternOrSuchThat, QueryToken& next
 
 	bool patternDeclared = false;
 	for (QueryToken declaredToken : output) {
-		if (declaredToken.token_value == "pattern") {
+		if (declaredToken.token_value == PATTERN_STR) {
 			patternDeclared = true;
 		}
 	}
-	if (nextToken.token_value == "pattern" && !patternDeclared) {
+	if (nextToken.token_value == PATTERN_STR && !patternDeclared) {
 		throw SyntacticErrorException("and pattern is syntactically valid unless pattern is a declared synonym");
 	}
 }
