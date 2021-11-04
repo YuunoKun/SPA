@@ -249,8 +249,9 @@ void Utility::joinTable(std::list<std::vector<value>>& main, int main_header_ind
 			}
 		}
 	} catch (std::exception& e) {
-		std::cout << "joinTable with 1 common column: " << e.what() << std::endl;
 		std::cout << "Current table size output: " << out.size() << std::endl;
+		std::cout << "joinTable with 1 common column: " << e.what() << std::endl;
+		std::cin.get();
 		out.clear();
 		main.clear();
 		to_join.clear();
@@ -260,16 +261,18 @@ void Utility::joinTable(std::list<std::vector<value>>& main, int main_header_ind
 
 void Utility::joinTable(std::list<std::vector<value>>& main, std::list<std::vector<value>>& to_join, std::list<std::vector<value>>& out) {
 	try{
-		for (auto& main_row : main) {
+		while (!main.empty()) {
 			for (auto& to_join_row : to_join) {
 				std::vector<value> joined_row;
-				joinRow(main_row, to_join_row, joined_row);
+				joinRow(main.front(), to_join_row, joined_row);
 				out.emplace_back(joined_row);
 			}
+			main.pop_front();
 		}
 	} catch (std::exception& e) {
-		std::cout << "joinTable: " << e.what() << std::endl;
 		std::cout << "Current table size output: " << out.size() << std::endl;
+		std::cout << "joinTable: " << e.what() << std::endl;
+		std::cin.get();
 		out.clear();
 		main.clear();
 		to_join.clear();

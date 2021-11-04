@@ -4,13 +4,6 @@
 ResultTable::ResultTable() {
 }
 
-ResultTable::~ResultTable() {
-	table.clear();
-	header.clear();
-	header_set.clear();
-	hash_map.clear();
-}
-
 ResultTable::ResultTable(ResultTable& t) {
 	this->table = t.table;
 	this->header = t.header;

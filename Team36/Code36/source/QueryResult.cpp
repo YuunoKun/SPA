@@ -11,7 +11,6 @@ QueryResult::~QueryResult() {
 		delete result;
 	}
 	results.clear();
-
 }
 
 bool QueryResult::haveResult() {
