@@ -1,3 +1,4 @@
+#include "Common.h"
 #include "Query.h"
 #include "QueryToken.h"
 #include "QueryValidator.h"
@@ -52,7 +53,7 @@ void QueryValidator::validateSelecting(QueryToken& token, QueryToken& prevTokenS
 		(token.type != QueryToken::QueryTokenType::DOT &&
 			token.type != QueryToken::QueryTokenType::SUCH_THAT &&
 			token.type != QueryToken::QueryTokenType::PATTERN &&
-			token.token_value != "with")) {
+			token.token_value != WITH_STR)) {
 		throw SyntacticErrorException("After selection needs to have such that or pattern clause or with");
 	}
 }
@@ -60,9 +61,6 @@ void QueryValidator::validateSelecting(QueryToken& token, QueryToken& prevTokenS
 void QueryValidator::validateQuery(Query& query, bool& endOfCurrentClauses) {
 	if (query.getIsSemanticError() != "") {
 		throw SemanticErrorException(query.getIsSemanticError(), query);
-	}
-	if (query.getEntities().size() == 0) {
-		throw SyntacticErrorException("No declaration has been made in your query");
 	}
 	if (query.getSelected().size() == 0) {
 		throw SyntacticErrorException("There is no selected variable in your query");
@@ -72,7 +70,6 @@ void QueryValidator::validateQuery(Query& query, bool& endOfCurrentClauses) {
 	}
 
 	// Final check
-
 
 	for (std::pair<std::string, Entity> ent : query.getEntities()) {
 		if (ent.second.getType() != EntityType::STMT &&
@@ -99,11 +96,21 @@ void QueryValidator::validatePatternType(Entity& patternTypeEntity, Query& query
 	}
 }
 
-void QueryValidator::validateAnd(QueryToken& patternOrSuchThat) {
+void QueryValidator::validateAnd(QueryToken& patternOrSuchThat, QueryToken& nextToken, std::vector<QueryToken>& output) {
 	if (patternOrSuchThat.type != QueryToken::QueryTokenType::PATTERN &&
 		patternOrSuchThat.type != QueryToken::QueryTokenType::SUCH_THAT &&
 		patternOrSuchThat.type != QueryToken::QueryTokenType::WITH) {
 		throw SyntacticErrorException("The keyword 'and' should come after pattern/ relations have been initalized previously");
+	}
+
+	bool patternDeclared = false;
+	for (QueryToken declaredToken : output) {
+		if (declaredToken.token_value == PATTERN_STR) {
+			patternDeclared = true;
+		}
+	}
+	if (nextToken.token_value == PATTERN_STR && !patternDeclared) {
+		throw SyntacticErrorException("and pattern is syntactically valid unless pattern is a declared synonym");
 	}
 }
 
@@ -140,5 +147,17 @@ void QueryValidator::validateAttributeType(Query& query, QueryToken& prevToken, 
 			entType != EntityType::CALL && entType != EntityType::WHILE && entType != EntityType::IF &&
 			entType != EntityType::ASSIGN)) {
 		query.setIsSemanticError("Entity type for .stmt# attribute is not valid");
+	}
+}
+
+void QueryValidator::isExpectingIdentifier(QueryToken& nextToken) {
+	if (nextToken.type != QueryToken::QueryTokenType::IDENTIFIER) {
+		throw SyntacticErrorException("Expected identifier but receives a different token type");
+	}
+}
+
+void QueryValidator::validateNotSuchThat(QueryToken& token) {
+	if (token.type == QueryToken::QueryTokenType::SUCH_THAT) {
+		throw SyntacticErrorException("Invalid query, token cannot be such that");
 	}
 }
