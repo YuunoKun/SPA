@@ -30,7 +30,7 @@ std::list<std::string> QuerySystem::processQuery(std::string input) {
 			return returnEmptyResult(err.getQuery().getSelected().front());
 		}
 	} catch (std::exception& e) {
-		std::cout << e.what() << std::endl;
+		std::cout << "QuerySystem processQuery(): " << e.what() << std::endl;
 		preprocessor.resetQuery();
 		return {};
 	}

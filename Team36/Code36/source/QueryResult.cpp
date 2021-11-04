@@ -43,10 +43,9 @@ void QueryResult::addResult(ResultTable& t) {
 		have_result = false;
 		return;
 	}
-	ResultTable* new_result = new ResultTable();
-	new_result->joinTable(t);
 	//If new result table cannot be merge
 	if (!isInTables(t.getHeaders())) {
+		ResultTable* new_result = new ResultTable(t);
 		results.push_back(new_result);
 		addHeader(t.getHeaders());
 		return;
@@ -54,22 +53,36 @@ void QueryResult::addResult(ResultTable& t) {
 	addHeader(t.getHeaders());
 
 	//Common header found, began merge
+	ResultTable* holder = nullptr;
 	auto& it = results.begin();
 	while (it != results.end()) {
-		bool merged = new_result->merge(**it);
-		if (merged && new_result->isEmpty()) {
+		bool merged = (*it)->merge(t);
+		if (merged && (*it)->isEmpty()) {
+			have_result = false;
+			return;
+		} else if (merged) {
+			holder = *it;
+			it++;
+			break;
+		} else {
+			it++;
+		}
+	}
+
+	while (it != results.end()) {
+		bool merged = holder->merge(**it);
+		if (merged && holder->isEmpty()) {
 			have_result = false;
 			return;
 		} else if (merged) {
 			ResultTable* to_delete = *it;
 			it = results.erase(it);
 			delete to_delete;
+			break;
 		} else {
 			it++;
 		}
 	}
-
-	results.push_back(new_result);
 }
 
 void QueryResult::addHeader(std::vector<Entity> v) {

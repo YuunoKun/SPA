@@ -4,6 +4,13 @@
 ResultTable::ResultTable() {
 }
 
+ResultTable::ResultTable(ResultTable& t) {
+	this->table = t.table;
+	this->header = t.header;
+	this->header_set = t.header_set;
+	this->hash_map = t.hash_map;
+}
+
 ResultTable::ResultTable(Entity& header, std::vector<StmtInfo>& table) {
 	Utility::filterResults(header.getType(), table, this->table);
 	addHeader(header);

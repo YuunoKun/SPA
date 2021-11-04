@@ -12,14 +12,19 @@ QueryEvaluator::QueryEvaluator() {
 
 std::list<std::string> QueryEvaluator::evaluateQuery(Query& query) {
 	QueryResult result;
+	try {
+		evaluateClauses(query, result);
+		PKBAdapter::getRelationManager().reset();
 
-	evaluateClauses(query, result);
+		std::list<std::string> out;
+		getResult(query, result, out);
+		return out;
+	} catch (std::exception& e) {
+		std::cout << "QueryEvaluator evaluateQuery(): " << e.what() << std::endl;
+		PKBAdapter::getRelationManager().reset();
+		return {};
+	}
 
-	PKBAdapter::getRelationManager().reset();
-
-	std::list<std::string> out;
-	getResult(query, result, out);
-	return out;
 }
 
 void QueryEvaluator::evaluateClauses(Query& query, QueryResult& query_result) {

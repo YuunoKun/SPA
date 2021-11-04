@@ -7,6 +7,7 @@
 class ResultTable {
 public:
 	ResultTable();
+	ResultTable(ResultTable&);
 	ResultTable(Entity&, std::vector<StmtInfo>&);
 	ResultTable(Entity&, std::vector<value>&);
 	ResultTable(Entity&, std::vector<std::string>&);
