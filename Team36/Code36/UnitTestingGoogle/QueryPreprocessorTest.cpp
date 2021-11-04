@@ -367,6 +367,27 @@ namespace UnitTesting {
 		EXPECT_EQ(test3, q3);
 	}
 
+	TEST(QueryPreprocessor, noDeclaration) {
+		QueryPreprocessor qp;
+		Query test = qp.parse("Select BOOLEAN");
+
+		EXPECT_EQ(test.getSelected()[0], Entity(EntityType::BOOLEAN));
+
+		Query test2 = qp.parse("Select BOOLEAN with 1 = 1");
+
+		EXPECT_EQ(test2.getSelected()[0], Entity(EntityType::BOOLEAN));
+
+		Query test3 = qp.parse("Select BOOLEAN with \"test\" = \"test\"");
+
+		EXPECT_EQ(test3.getSelected()[0], Entity(EntityType::BOOLEAN));
+
+		EXPECT_THROW(qp.parse("Select BOOLEAN pattern a(v, _)"), SemanticErrorException);
+		qp.resetQuery();
+
+		EXPECT_THROW(qp.parse("Select BOOLEAN such that Modifies(_,v)"), SemanticErrorException);
+		qp.resetQuery();
+	}
+
 	TEST(QueryPreprocessor, selectBOOLEAN) {
 		QueryPreprocessor qp;
 		Query test = qp.parse("procedure p; Select BOOLEAN");

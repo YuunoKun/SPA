@@ -366,7 +366,7 @@ void QueryPreprocessor::setIdentifierToQueryTokenType(QueryToken& token) {
 	const auto token_variable = token.token_value == "variable";
 	const auto token_constant = token.token_value == "constant";
 	const auto token_progline = token.type == QueryToken::QueryTokenType::PROG_LINE;
-	const auto condition_select = prevToken.type == QueryToken::QueryTokenType::TERMINATOR && token.token_value == "Select";
+	const auto condition_select = token.token_value == "Select";
 
 	if (firstToken || newToken) {
 		if (token_stmt) {

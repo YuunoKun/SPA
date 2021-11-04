@@ -61,9 +61,6 @@ void QueryValidator::validateQuery(Query& query, bool& endOfCurrentClauses) {
 	if (query.getIsSemanticError() != "") {
 		throw SemanticErrorException(query.getIsSemanticError(), query);
 	}
-	if (query.getEntities().size() == 0) {
-		throw SyntacticErrorException("No declaration has been made in your query");
-	}
 	if (query.getSelected().size() == 0) {
 		throw SyntacticErrorException("There is no selected variable in your query");
 	}
