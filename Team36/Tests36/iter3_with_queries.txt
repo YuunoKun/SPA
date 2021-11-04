@@ -431,7 +431,7 @@ myFirst
 87 - select c.procName
 call c;
 Select c.procName with c.procName = "mySecond"
-7, 47
+mySecond
 5000
 88 - select v.varName
 variable v;
@@ -441,12 +441,12 @@ a
 89 - select r.varName
 read r;
 Select r.varName with r.varName = "a"
-1
+a
 5000
 90 - select pn.varName
 print pn;
 Select pn.varName with pn.varName = "k"
-40
+k
 5000
 91 - select c1.value
 constant c1;
@@ -597,4 +597,14 @@ none
 assign a;
 Select a.varName with a.varName = "a"
 none
+5000
+121 - select tuple
+assign a; stmt s;
+Select <a.stmt#, s.stmt#> with a.stmt# = s.stmt#
+2 2, 3 3, 10 10, 15 15, 17 17, 22 22, 26 26, 34 34, 35 35, 39 39, 41 41, 48 48
+5000
+121 - select tuple
+read r; print pn;
+Select <r.stmt#, pn.varName> with r.varName = pn.varName
+1 a, 4 d, 21 h, 28 j, 33 k, 50 myFourth
 5000
