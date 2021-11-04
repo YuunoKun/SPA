@@ -8,10 +8,15 @@ void CFGRelationsManager::reset() {
 	next_bipT_preprocessor = NextBipTPreprocessor();
 	affects_bip_preprocessor = AffectsBipPreprocessor();
 	affects_bipT_preprocessor = AffectsBipTPreprocessor();
-	is_nextT_preprocessor_init, is_affects_preprocessor_init,
-		is_affectsT_preprocessor_init, is_next_bip_preprocessor_init,
-		is_next_bipT_preprocessor_init, is_affects_bip_preprocessor_init,
-		is_affects_bipT_preprocessor_init = false;
+
+	is_nextT_preprocessor_init = false;
+	is_affects_preprocessor_init = false;
+	is_affectsT_preprocessor_init = false;
+	is_next_bip_preprocessor_init = false;
+	is_next_bipT_preprocessor_init = false;
+	is_affects_bip_preprocessor_init = false;
+	is_affects_bipT_preprocessor_init = false;
+
 	next_bip_table.clear();
 	labelled_next_table.clear();
 }
