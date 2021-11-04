@@ -5,6 +5,7 @@
 #include "SemanticErrorException.h"
 #include "SyntacticErrorException.h"
 #include "Utility.h"
+#include "Common.h"
 
 class QueryTokenizer
 {
@@ -23,5 +24,10 @@ private:
 	std::vector<QueryToken> query_token_cache;
 
 	void handleDigit(Query&, char, QueryToken&);
-	void add_query_token(Query&, QueryToken& query_token);
+	void handleAlpha(Query&, char, QueryToken&);
+	void handleChar(Query&, char, QueryToken&);
+	void handleSpace(Query&, bool&, QueryToken&);
+	void handleQuotation(Query&, bool&, QueryToken&);
+	void handleRelrefStr(Query&, QueryToken&);
+	void addQueryToken(Query&, QueryToken& query_token);
 };

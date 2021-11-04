@@ -25,6 +25,4 @@ public:
 
 private:
 	const MonotypeRelationTable<StmtInfo>* next_table;
-
-	void checkCache();
 };

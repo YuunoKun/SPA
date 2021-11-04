@@ -153,3 +153,8 @@ procedure p, q; constant c;
 Select q such that Calls(c, q)
 none
 5000
+32 - select tuple
+procedure p, q;
+Select <p, q> such that Calls(p, q)
+first second, first third, first fourth, second third, second fifth, third fourth, fourth fifth
+5000

@@ -339,9 +339,6 @@
     <ClCompile Include="..\source\RelationTable.cpp">
       <Filter>Source Files\PKB\RelationTables</Filter>
     </ClCompile>
-    <ClCompile Include="..\source\MonotypeRelationTable.cpp">
-      <Filter>Source Files\PKB\RelationTables</Filter>
-    </ClCompile>
     <ClCompile Include="..\source\AffectsTPreprocessor.cpp">
       <Filter>Source Files\PKB\RelationPreprocessor</Filter>
     </ClCompile>

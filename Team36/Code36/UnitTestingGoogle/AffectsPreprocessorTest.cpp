@@ -186,14 +186,14 @@ namespace UnitTesting {
 		for (auto& pair : true_list) {
 			EXPECT_TRUE(processor.evaluateConstantAndConstant(pair.first.stmt_index, pair.second.stmt_index)) << "Expected true but fail at " <<
 				pair.first.stmt_index << " and" << pair.second.stmt_index;
-			EXPECT_EQ(processor.getCalculatedMatrix()[pair.first.stmt_index - 1][pair.second.stmt_index - 1], 1);
+			EXPECT_EQ(processor.isCalculated(pair.first.stmt_index - 1, pair.second.stmt_index - 1), 1);
 			EXPECT_TRUE(processor.evaluateConstantAndConstant(pair.first.stmt_index, pair.second.stmt_index)) << "Expected true but fail at " <<
 				pair.first.stmt_index << " and" << pair.second.stmt_index;
 		}
 		for (auto& pair : false_list) {
 			EXPECT_FALSE(processor.evaluateConstantAndConstant(pair.first.stmt_index, pair.second.stmt_index)) << "Expected false but fail at " <<
 				pair.first.stmt_index << " and" << pair.second.stmt_index;
-			EXPECT_EQ(processor.getCalculatedMatrix()[pair.first.stmt_index - 1][pair.second.stmt_index - 1], 1);
+			EXPECT_EQ(processor.isCalculated(pair.first.stmt_index - 1, pair.second.stmt_index - 1), 1);
 			EXPECT_FALSE(processor.evaluateConstantAndConstant(pair.first.stmt_index, pair.second.stmt_index)) << "Expected false but fail at " <<
 				pair.first.stmt_index << " and" << pair.second.stmt_index;
 		}
@@ -250,7 +250,7 @@ namespace UnitTesting {
 			}
 			EXPECT_EQ(v1, v2);
 			for (int i = 0; i < PKB::getInstance().getStmts().size(); i++) {
-				EXPECT_TRUE(processor.getCalculatedMatrix()[stmt.stmt_index - 1][i]);
+				EXPECT_TRUE(processor.isCalculated(stmt.stmt_index - 1, i));
 				EXPECT_TRUE(processor.isDFSForwardComputed(stmt.stmt_index));
 			}
 		}
@@ -269,7 +269,7 @@ namespace UnitTesting {
 			}
 			EXPECT_EQ(v1, v2);
 			for (int i = 0; i < PKB::getInstance().getStmts().size(); i++) {
-				EXPECT_TRUE(processor.getCalculatedMatrix()[i][stmt.stmt_index - 1]);
+				EXPECT_TRUE(processor.isCalculated(i, stmt.stmt_index - 1));
 				EXPECT_TRUE(processor.isDFSBackwardComputed(stmt.stmt_index));
 			}
 		}
@@ -297,7 +297,7 @@ namespace UnitTesting {
 			}
 			EXPECT_EQ(v1, v2);
 			for (int i = 0; i < PKB::getInstance().getStmts().size(); i++) {
-				EXPECT_TRUE(processor.getCalculatedMatrix()[i][stmt.stmt_index - 1]);
+				EXPECT_TRUE(processor.isCalculated(i, stmt.stmt_index - 1));
 				EXPECT_TRUE(processor.isDFSBackwardComputed(stmt.stmt_index));
 			}
 		}
@@ -363,25 +363,24 @@ namespace UnitTesting {
 	TEST_F(AffectsPreprocessorTest, reset) {
 		for (auto& stmt : stmt_list) {
 			processor.evaluateSynonymAndConstant(stmt.stmt_index);
-			for (int i = 0; i < PKB::getInstance().getStmts().size(); i++) {
-				EXPECT_TRUE(processor.getCalculatedMatrix()[i][stmt.stmt_index - 1]);
+			for (int i = 0; i < stmt_list.size(); i++) {
+				EXPECT_TRUE(processor.isCalculated(i, stmt.stmt_index - 1));
 				EXPECT_TRUE(processor.isDFSBackwardComputed(stmt.stmt_index));
 			}
 		}
 		for (auto& stmt : stmt_list) {
 			processor.evaluateConstantAndSynonym(stmt.stmt_index);
-			for (int i = 0; i < PKB::getInstance().getStmts().size(); i++) {
-				EXPECT_TRUE(processor.getCalculatedMatrix()[stmt.stmt_index - 1][i]);
+			for (int i = 0; i < stmt_list.size(); i++) {
+				EXPECT_TRUE(processor.isCalculated(stmt.stmt_index - 1, i));
 				EXPECT_TRUE(processor.isDFSForwardComputed(stmt.stmt_index));
 			}
 		}
 		processor.reset();
-		for (auto& stmt : stmt_list) {
-			for (int i = 0; i < PKB::getInstance().getStmts().size(); i++) {
-				EXPECT_FALSE(processor.getCalculatedMatrix()[i][stmt.stmt_index - 1]);
-				EXPECT_FALSE(processor.isDFSBackwardComputed(stmt.stmt_index));
-				EXPECT_FALSE(processor.getCalculatedMatrix()[stmt.stmt_index - 1][i]);
-				EXPECT_FALSE(processor.isDFSForwardComputed(stmt.stmt_index));
+		for (int i = 0; i < stmt_list.size(); i++) {
+			EXPECT_FALSE(processor.isDFSBackwardComputed(i + 1));
+			EXPECT_FALSE(processor.isDFSForwardComputed(i + 1));
+			for (int j = 0; j < stmt_list.size(); j++) {
+				EXPECT_FALSE(processor.isCalculated(i, j));
 			}
 		}
 		processor.evaluateSynonymAndSynonym();

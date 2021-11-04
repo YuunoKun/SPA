@@ -98,3 +98,13 @@ procedure p, q;
 Select p such that Calls*(_, _)
 none
 5000
+21 - select tuple
+procedure p, q;
+Select <p, q> such that Calls(p, q)
+none
+5000
+22 - select tuple
+procedure p, q;
+Select <p, q> such that Calls*(p, q)
+none
+5000

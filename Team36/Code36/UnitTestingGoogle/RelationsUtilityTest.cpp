@@ -1,7 +1,6 @@
 #include "pch.h"
 
 #include "MonotypeRelationTable.h"
-#include "MonotypeRelationTable.cpp"
 #include "Common.h"
 #include "RelationTableUtility.cpp"
 
