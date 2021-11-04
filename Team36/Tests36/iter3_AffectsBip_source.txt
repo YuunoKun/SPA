@@ -1,0 +1,43 @@
+procedure myFirst {
+    a = 1;
+    b = 2;
+    c = 3;
+    while (a > 0) {
+        a = 2 + b;
+    }
+    d = a + c;
+    call mySecond;
+    e = b * 5 + c;
+    if (b > 1) then {
+        call myThird;
+    } else {
+        call myFourth;
+    }
+    f = e + b * d;
+}
+procedure mySecond {
+    b = a + d * c;
+    read b;
+    call myFifth;
+}
+procedure myThird {
+   e = a + d;
+   read e;
+   call mySecond;
+   call myFourth;
+}
+procedure myFourth {
+    c = 9 + c;
+    while (a != 1) {
+        read c;
+    }
+    if ( 1 == 1) then {
+        read b;
+    } else {
+        call mySecond;
+     }
+    h = c * 6 + b - a;
+}
+procedure myFifth {
+    read d;
+}
