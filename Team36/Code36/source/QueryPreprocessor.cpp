@@ -193,9 +193,8 @@ void QueryPreprocessor::handleWithClause() {
 
 void QueryPreprocessor::handleAnd() {
 	QueryValidator queryValidator = QueryValidator();
-	queryValidator.validateAnd(patternOrSuchThat);
+	queryValidator.validateAnd(patternOrSuchThat, nextToken, output);
 	if (patternOrSuchThat.type == QueryToken::QueryTokenType::PATTERN) {
-		queryValidator.validateNotAndPattern(nextToken, output);
 		isExpectingPatternType = true;
 	}
 	else if (patternOrSuchThat.type == QueryToken::QueryTokenType::WITH) {

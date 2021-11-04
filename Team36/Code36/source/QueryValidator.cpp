@@ -95,11 +95,21 @@ void QueryValidator::validatePatternType(Entity& patternTypeEntity, Query& query
 	}
 }
 
-void QueryValidator::validateAnd(QueryToken& patternOrSuchThat) {
+void QueryValidator::validateAnd(QueryToken& patternOrSuchThat, QueryToken& nextToken, std::vector<QueryToken>& output) {
 	if (patternOrSuchThat.type != QueryToken::QueryTokenType::PATTERN &&
 		patternOrSuchThat.type != QueryToken::QueryTokenType::SUCH_THAT &&
 		patternOrSuchThat.type != QueryToken::QueryTokenType::WITH) {
 		throw SyntacticErrorException("The keyword 'and' should come after pattern/ relations have been initalized previously");
+	}
+
+	bool patternDeclared = false;
+	for (QueryToken declaredToken : output) {
+		if (declaredToken.token_value == "pattern") {
+			patternDeclared = true;
+		}
+	}
+	if (nextToken.token_value == "pattern" && !patternDeclared) {
+		throw SyntacticErrorException("and pattern is syntactically valid unless pattern is a declared synonym");
 	}
 }
 
@@ -142,18 +152,6 @@ void QueryValidator::validateAttributeType(Query& query, QueryToken& prevToken, 
 void QueryValidator::isExpectingIdentifier(QueryToken& nextToken) {
 	if (nextToken.type != QueryToken::QueryTokenType::IDENTIFIER) {
 		throw SyntacticErrorException("Expected identifier but receives a different token type");
-	}
-}
-
-void QueryValidator::validateNotAndPattern(QueryToken& nextToken, std::vector<QueryToken>& output) {
-	bool patternDeclared = false;
-	for (QueryToken declaredToken : output) {
-		if (declaredToken.token_value == "pattern") {
-			patternDeclared = true;
-		}
-	}
-	if (nextToken.token_value == "pattern" && !patternDeclared) {
-		throw SyntacticErrorException("and pattern is syntactically valid unless pattern is a declared synonym");
 	}
 }
 
