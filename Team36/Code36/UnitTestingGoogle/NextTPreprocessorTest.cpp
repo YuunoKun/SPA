@@ -165,7 +165,7 @@ namespace UnitTesting {
 			}
 			EXPECT_EQ(v1, v2);
 			for (int i = 0; i < PKB::getInstance().getStmts().size(); i++) {
-				EXPECT_TRUE(processor.getCalculatedMatrix()[stmt.stmt_index - 1][i]);
+				EXPECT_TRUE(processor.isCalculated(stmt.stmt_index - 1, i));
 				EXPECT_TRUE(processor.isDFSForwardComputed(stmt.stmt_index));
 			}
 		}
@@ -185,7 +185,7 @@ namespace UnitTesting {
 			}
 			EXPECT_EQ(v1, v2);
 			for (int i = 0; i < PKB::getInstance().getStmts().size(); i++) {
-				EXPECT_TRUE(processor.getCalculatedMatrix()[i][stmt.stmt_index - 1]);
+				EXPECT_TRUE(processor.isCalculated(i, stmt.stmt_index - 1));
 				EXPECT_TRUE(processor.isDFSBackwardComputed(stmt.stmt_index));
 			}
 		}
@@ -195,25 +195,24 @@ namespace UnitTesting {
 	TEST_F(NextTPreprocessorTest, reset) {
 		for (auto& stmt : s) {
 			processor.evaluateSynonymAndConstant(stmt.stmt_index);
-			for (int i = 0; i < PKB::getInstance().getStmts().size(); i++) {
-				EXPECT_TRUE(processor.getCalculatedMatrix()[i][stmt.stmt_index - 1]);
+			for (int i = 0; i < s.size(); i++) {
+				EXPECT_TRUE(processor.isCalculated(i, stmt.stmt_index - 1));
 				EXPECT_TRUE(processor.isDFSBackwardComputed(stmt.stmt_index));
 			}
 		}
 		for (auto& stmt : s) {
 			processor.evaluateConstantAndSynonym(stmt.stmt_index);
-			for (int i = 0; i < PKB::getInstance().getStmts().size(); i++) {
-				EXPECT_TRUE(processor.getCalculatedMatrix()[stmt.stmt_index - 1][i]);
+			for (int i = 0; i < s.size(); i++) {
+				EXPECT_TRUE(processor.isCalculated(stmt.stmt_index - 1, i));
 				EXPECT_TRUE(processor.isDFSForwardComputed(stmt.stmt_index));
 			}
 		}
 		processor.reset();
-		for (auto& stmt : s) {
-			for (int i = 0; i < PKB::getInstance().getStmts().size(); i++) {
-				EXPECT_FALSE(processor.getCalculatedMatrix()[i][stmt.stmt_index - 1]);
-				EXPECT_FALSE(processor.isDFSBackwardComputed(stmt.stmt_index));
-				EXPECT_FALSE(processor.getCalculatedMatrix()[stmt.stmt_index - 1][i]);
-				EXPECT_FALSE(processor.isDFSForwardComputed(stmt.stmt_index));
+		for (int i = 0; i < s.size(); i++) {
+			EXPECT_FALSE(processor.isDFSBackwardComputed(i + 1));
+			EXPECT_FALSE(processor.isDFSForwardComputed(i + 1));
+			for (int j = 0; j < s.size(); j++) {
+				EXPECT_FALSE(processor.isCalculated(i, j));
 			}
 		}
 		processor.evaluateSynonymAndSynonym();

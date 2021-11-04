@@ -29,7 +29,7 @@ public:
 	bool isFullyPopulated();
 	const MonotypeRelationTable<StmtInfo>& getCache();
 	bool isCacheEmpty();
-	std::vector<std::vector<bool>> getCalculatedMatrix();
+	bool isCalculated(int, int);
 	bool isDFSForwardComputed(int);
 	bool isDFSBackwardComputed(int);
 

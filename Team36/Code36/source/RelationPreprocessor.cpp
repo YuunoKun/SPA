@@ -39,8 +39,8 @@ bool RelationPreprocessor::isCacheEmpty() {
 	return cache.isEmpty();
 }
 
-std::vector<std::vector<bool>> RelationPreprocessor::getCalculatedMatrix() {
-	return calculated_matrix;
+bool RelationPreprocessor::isCalculated(int key, int value) {
+	return calculated_matrix[key][value];
 }
 
 bool RelationPreprocessor::isDFSForwardComputed(int index) {
