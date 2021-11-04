@@ -186,7 +186,8 @@ namespace UnitTesting {
 		for (auto& pair : true_list) {
 			EXPECT_TRUE(manager.isAffectsT(pair.first.stmt_index, pair.second.stmt_index)) << "Expected true but fail at " <<
 				pair.first.stmt_index << " and" << pair.second.stmt_index;
-			EXPECT_EQ(manager.getAffectsTPreprocessor().getCalculatedMatrix()[pair.first.stmt_index - 1][pair.second.stmt_index - 1], 1);
+
+			EXPECT_EQ(manager.getAffectsTPreprocessor().isCalculated(pair.first.stmt_index - 1, pair.second.stmt_index - 1), 1);
 			EXPECT_TRUE(manager.isAffectsT(pair.first.stmt_index, pair.second.stmt_index)) << "Expected true but fail at " <<
 				pair.first.stmt_index << " and" << pair.second.stmt_index;
 		}
@@ -335,7 +336,7 @@ namespace UnitTesting {
 		for (auto& pair : true_list_c_c) {
 			EXPECT_TRUE(manager.isAffectsT(pair.first.stmt_index, pair.second.stmt_index)) << "Expected true but fail at " <<
 				pair.first.stmt_index << " and" << pair.second.stmt_index;
-			EXPECT_EQ(manager.getAffectsTPreprocessor().getCalculatedMatrix()[pair.first.stmt_index - 1][pair.second.stmt_index - 1], 1);
+			EXPECT_EQ(manager.getAffectsTPreprocessor().isCalculated(pair.first.stmt_index - 1, pair.second.stmt_index - 1), 1);
 			EXPECT_TRUE(manager.isAffectsT(pair.first.stmt_index, pair.second.stmt_index)) << "Expected true but fail at " <<
 				pair.first.stmt_index << " and" << pair.second.stmt_index;
 		}

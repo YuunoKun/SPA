@@ -6,19 +6,13 @@
 class QueryValidator {
 public:
 
-	// Constructor
 	QueryValidator();
-
-	// Methods
 	void validateSelectMultipleClauses(QueryToken&, QueryToken&);
-
 	void validateQuery(Query&, bool&);
-
 	void validateSelecting(QueryToken&, QueryToken&);
-
 	void validatePatternType(Entity&, Query&);
-
-	void validateAnd(QueryToken&);
-
+	void validateAnd(QueryToken&, QueryToken&, std::vector<QueryToken>&);
 	void validateAttributeType(Query&, QueryToken&, QueryToken&);
+	void isExpectingIdentifier(QueryToken&);
+	void validateNotSuchThat(QueryToken&);
 };

@@ -78,15 +78,18 @@ bool CFGRelationsManager::isAffectsEmpty() {
 bool CFGRelationsManager::isAffects(stmt_index index1, stmt_index index2) {
 	bool is_nextT_calculated = is_nextT_preprocessor_init &&
 		(next_t_preprocessor.isFullyPopulated() ||
-			next_t_preprocessor.getCalculatedMatrix()[index1 - 1][index2 - 1]);
+			next_t_preprocessor.isCalculated(index1 - 1, index2 - 1));
 	if (is_nextT_calculated && !isNextT(index1, index2)) {
-		return false;
-	}
-	if (inSameProc(index1, index2) == false) {
-		return false;
-	} else {
-		initAffectsPreprocessor();
-		return affects_preprocessor.evaluateConstantAndConstant(index1, index2);
+		if (is_nextT_calculated && !isNextT(index1, index2)) {
+			return false;
+		}
+		if (inSameProc(index1, index2) == false) {
+			return false;
+		} else {
+			initAffectsPreprocessor();
+			initAffectsPreprocessor();
+			return affects_preprocessor.evaluateConstantAndConstant(index1, index2);
+		}
 	}
 }
 
@@ -143,8 +146,7 @@ bool CFGRelationsManager::isAffectsTEmpty() {
 bool CFGRelationsManager::isAffectsT(stmt_index index1, stmt_index index2) {
 	bool is_nextT_calculated = is_nextT_preprocessor_init &&
 		(next_t_preprocessor.isFullyPopulated() ||
-			next_t_preprocessor.getCalculatedMatrix()[index1 - 1][index2 - 1]);
-	if (is_nextT_calculated && !isNextT(index1, index2)) {
+			next_t_preprocessor.isCalculated(index1 - 1, index2 - 1));	if (is_nextT_calculated && !isNextT(index1, index2)) {
 		return false;
 	} else if (inSameProc(index1, index2) == false) {
 		return false;
