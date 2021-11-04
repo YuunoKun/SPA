@@ -98,7 +98,6 @@ namespace std {
 	};
 }
 
-
 constexpr char SPACE_C = ' ';
 constexpr char* SPACE_S = "	";
 constexpr char TAB_C = '	';
@@ -119,7 +118,7 @@ constexpr char LEFT_PARENTHESIS_C = '(';
 constexpr char* LEFT_PARENTHESIS_S = "(";
 constexpr char RIGHT_PARENTHESIS_C = ')';
 constexpr char* RIGHT_PARENTHESIS_S = ")";
-constexpr char SEMICOLON_C = ';'; 
+constexpr char SEMICOLON_C = ';';
 constexpr char* SEMICOLON_S = ";";
 
 constexpr char T_C = 't';
@@ -145,16 +144,42 @@ constexpr char* PROG_STR = "prog";
 constexpr char* PROG_UNDERSCORE_STR = "prog_";
 constexpr char* PROG_UNDERSCORE_LINE_STR = "prog_line";
 
-constexpr char* FOLLOWS_STR = "Follows";
-constexpr char* PARENT_STR = "Parent";
-constexpr char* CALLS_STR = "Calls";
-constexpr char* NEXT_STR = "Next";
-constexpr char* NEXT_BIP_STR = "NextBip";
-constexpr char* AFFECTS_STR = "Affects";
-constexpr char* AFFECTS_BIP_STR = "AffectsBip";
-
 constexpr char* DOT_PROCNAME_STR = ".procName";
 constexpr char* DOT_VARNAME_STR = ".varName";
 constexpr char* DOT_VALIUE_STR = ".value";
 constexpr char* DOT_STMT_STR = ".stmt";
 constexpr char* DOT_STMT_HASH_STR = ".stmt#";
+
+constexpr char* USES_STR = "Uses";
+constexpr char* MODIFIES_STR = "Modifies";
+constexpr char* PARENT_STR = "Parent";
+constexpr char* PARENTT_STR = "";
+constexpr char* FOLLOWS_STR = "Follows";
+constexpr char* FOLLOWST_STR = "";
+constexpr char* CALLS_STR = "Calls";
+constexpr char* CALLST_STR = "";
+constexpr char* NEXT_STR = "Next";
+constexpr char* NEXTT_STR = "";
+constexpr char* AFFECTS_STR = "Affects";
+constexpr char* AFFECTST_STR = "";
+constexpr char* AFFECTS_BIP_STR = "AffectsBip";
+constexpr char* AFFECTS_BIPT_STR = "";
+constexpr char* NEXT_BIP_STR = "NextBip";
+constexpr char* NEXT_BIPT_STR = "";
+
+constexpr char* STMT_STR = "stmt";
+constexpr char* PROCEDURE_STR = "procedure";
+constexpr char* READ_STR = "read";
+constexpr char* PRINT_STR = "print";
+constexpr char* CALL_STR = "call";
+constexpr char* IF_STR = "if";
+constexpr char* WHILE_STR = "while";
+constexpr char* ASSIGN_STR = "assign";
+constexpr char* VARIABLE_STR = "variable";
+constexpr char* CONSTANT_STR = "constant";
+constexpr char* PROGLINE_STR = "prog_line";
+constexpr char* SELECT_STR = "Select";
+
+constexpr char* AND_STR = "and";
+constexpr char* PATTERN_STR = "pattern";
+constexpr char* WITH_STR = "with";
