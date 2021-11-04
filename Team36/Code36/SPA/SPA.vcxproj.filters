@@ -126,9 +126,6 @@
     <ClCompile Include="..\source\QueryToken.cpp">
       <Filter>Source Files\PQL\QueryPreprocessor</Filter>
     </ClCompile>
-    <ClCompile Include="..\source\QueryPreprocessor.cpp">
-      <Filter>Source Files\PQL\QueryPreprocessor</Filter>
-    </ClCompile>
     <ClCompile Include="..\source\Pattern.cpp">
       <Filter>Source Files\PQL\QueryObject</Filter>
     </ClCompile>
@@ -341,6 +338,9 @@
     </ClCompile>
     <ClCompile Include="..\source\AffectsTPreprocessor.cpp">
       <Filter>Source Files\PKB\RelationPreprocessor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\QueryPreprocessor.cpp">
+      <Filter>Source Files\PQL\QueryPreprocessor</Filter>
     </ClCompile>
     <ClCompile Include="..\source\AffectsBipPreprocessor.cpp">
       <Filter>Source Files\PKB\RelationPreprocessor</Filter>
