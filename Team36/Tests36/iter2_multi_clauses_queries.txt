@@ -163,3 +163,68 @@ assign a; if ifs1, ifs2, ifs3; while w; stmt s1, s2, s3, s4; variable v1, v2, v3
 Select s2 pattern a(v1, _"a + b + c + d"_) and ifs1(v2, _, _) and w(v1, _) such that Modifies(s2, "a") and Uses(s2, v2) pattern ifs2(v4, _,_) pattern ifs3(_, _, _) such that Modifies("myFirst", "k") such that Parent(s2, s3)
 30, 31, 6, 8, 12
 5000
+34 - pattern a and if and while such that Modifies and Uses pattern if pattern if such that ModifiesP such that Parent with, 3 common synonym
+assign a; if ifs1, ifs2, ifs3; while w; stmt s1, s2, s3, s4; variable v1, v2, v3, v4; procedure p, q; prog_line n;
+Select s2 pattern a(v1, _"a + b + c + d"_) and ifs1(v2, _, _) and w(v1, _) such that Modifies(s2, "a") and Uses(s2, v2) pattern ifs2(v4, _,_) pattern ifs3(_, _, _) such that Modifies("myFirst", "k") such that Parent(s2, s3) with s3.stmt# = n and n = 14
+12
+5000
+35 - select tuple, pattern a and if and while such that Modifies and Uses pattern if pattern if such that ModifiesP such that Parent, select tuple, 3 common synonym
+assign a; if ifs1, ifs2, ifs3; while w; stmt s1, s2, s3, s4; variable v1, v2, v3, v4; procedure p, q; prog_line n;
+Select <v1, s2> pattern a(v1, _"a + b + c + d"_) and ifs1(v2, _, _) and w(v1, _) such that Modifies(s2, "a") and Uses(s2, v2) pattern ifs2(v4, _,_) pattern ifs3(_, _, _) such that Modifies("myFirst", "k") such that Parent(s2, s3)
+k 30, k 31, k 6, k 8, k 12
+5000
+36 - select tuple, pattern a and if and while such that Modifies and Uses pattern if pattern if such that ModifiesP such that Parent, select tuple, with, 3 common synonym
+assign a; if ifs1, ifs2, ifs3; while w; stmt s1, s2, s3, s4; variable v1, v2, v3, v4; procedure p, q; prog_line n;
+Select <v1, s2> pattern a(v1, _"a + b + c + d"_) and ifs1(v2, _, _) and w(v1, _) such that Modifies(s2, "a") and Uses(s2, v2) pattern ifs2(v4, _,_) pattern ifs3(_, _, _) such that Modifies("myFirst", "k") such that Parent(s2, s3) with s3.stmt# = n and n = 14
+k 12
+5000
+37 - select BOOLEAN, pattern a and if and while such that Modifies and Uses pattern if pattern if such that ModifiesP such that Parent, select tuple, with, 3 common synonym
+assign a; if ifs1, ifs2, ifs3; while w; stmt s1, s2, s3, s4; variable v1, v2, v3, v4; procedure p, q; prog_line n;
+Select BOOLEAN pattern a(v1, _"a + b + c + d"_) and ifs1(v2, _, _) and w(v1, _) such that Modifies(s2, "a") and Uses(s2, v2) pattern ifs2(v4, _,_) pattern ifs3(_, _, _) such that Modifies("myFirst", "k") such that Parent(s2, s3) with s3.stmt# = n and n = 14
+TRUE
+5000
+38 - such that, with
+stmt s1, s2;
+Select s2.stmt# such that Follows(s1, s2) with s1.stmt# = 10
+11
+5000
+39 - with, pattern
+assign a; variable v;
+Select a.stmt# pattern a(v, _) with v.varName = "a"
+35
+5000
+40 - such that with such that
+prog_line n; stmt s; assign a;
+Select n such that Next*(n, s) with n = a.stmt# such that Modifies(a, "d")
+10, 41
+5000
+41 - such that with such that pattern with
+stmt s; assign a; if ifs; variable v;
+Select v such that Affects(a, 39) with a.stmt# = s.stmt# pattern ifs(v, _, _) with ifs.stmt# = 30
+none
+5000
+42 - pattern with such that with pattern
+assign a; while w; procedure p, q; variable v;
+Select w pattern a(v, _"c"_) with v.varName = "k" such that Calls(p, q) with p.procName = "myFourth" pattern w(v, _)
+38
+5000
+43 - pattern with pattern
+if ifs; while w; stmt s;
+Select ifs.stmt# pattern ifs(_,_,_) with ifs.stmt# = s.stmt# and s.stmt# = 42 pattern w(_,_)
+42
+5000
+44 - pattern and pattern with and with such that and such that
+assign a; if ifs; variable v; while w; read r; print pn;
+Select w pattern a(v, _) and ifs(v,_,_) with v.varName = r.varName and r.varName = pn.varName such that Parent(w, a) and Follows(a, _)
+31
+5000
+45 - pattern and pattern with and with such that and such that
+assign a; if ifs; variable v; while w; read r; print pn;
+Select <w, a, v> pattern a(v, _) and ifs(v,_,_) with v.varName = r.varName and r.varName = pn.varName such that Parent(w, a) and Follows(a, _)
+31 35 a
+5000
+46 - pattern and pattern with and with such that and such that
+assign a; if ifs; variable v; while w; read r; print pn;
+Select BOOLEAN pattern a(v, _) and ifs(v,_,_) with v.varName = r.varName and r.varName = pn.varName such that Parent(w, a) and Follows(a, _) with w.stmt# = ifs.stmt#
+FALSE
+5000
