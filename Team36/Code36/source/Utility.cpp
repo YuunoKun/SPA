@@ -249,12 +249,8 @@ void Utility::joinTable(std::list<std::vector<value>>& main, int main_header_ind
 			}
 		}
 	} catch (std::exception& e) {
-		std::cout << "Current table size output: " << out.size() << std::endl;
-		std::cout << "joinTable with 1 common column: " << e.what() << std::endl;
-		std::cin.get();
+		std::cout << "joinTable(1 common column) size: " << out.size() << " cause: " << e.what() << std::endl;
 		out.clear();
-		main.clear();
-		to_join.clear();
 		throw e;
 	}
 }
@@ -270,12 +266,8 @@ void Utility::joinTable(std::list<std::vector<value>>& main, std::list<std::vect
 			main.pop_front();
 		}
 	} catch (std::exception& e) {
-		std::cout << "Current table size output: " << out.size() << std::endl;
-		std::cout << "joinTable: " << e.what() << std::endl;
-		std::cin.get();
+		std::cout << "joinTable(Cross Product)  size: " << out.size() << " cause: " << e.what() << std::endl;
 		out.clear();
-		main.clear();
-		to_join.clear();
 		throw e;
 	}
 }
