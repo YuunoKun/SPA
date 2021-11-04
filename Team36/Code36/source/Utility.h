@@ -13,21 +13,15 @@
 class Utility {
 public:
 	
-
-	static void constantToStringList(std::vector<constant>&, std::list<std::string>&);
-	static void procedureToStringList(std::vector<proc_name>&, std::list<std::string>&);
-	static void stmtInfoToStringList(std::vector<StmtInfo>&, std::list<std::string>&);
-	static void variableToStringList(std::vector<var_name>&, std::list<std::string>&);
 	static void unorderedSetToStringList(std::unordered_set<std::string>&, std::list<std::string>&);
-	static void stmtIndexToStringList(std::vector<stmt_index>&, std::list<std::string>&);
+
 
 	static std::vector<std::pair<std::string, std::string>> duplicateColumn(std::vector<std::string>&);
 	static std::vector<std::pair<value, value>> duplicateColumn(std::vector<value>&);
 	static std::vector<std::pair<StmtInfo, StmtInfo>> duplicateColumn(std::vector<StmtInfo>&);
 
-	static void constantToTable(std::vector<constant>&, std::list<std::vector<value>>&);
 	static void stmtInfoToTable(std::vector<StmtInfo>&, std::list<std::vector<value>>&);
-	static void stmtIndexToTable(std::vector<stmt_index>&, std::list<std::vector<value>>&);
+	static void valueToTable(std::vector<value>&, std::list<std::vector<value>>&);
 	static void stringToTable(std::vector<std::string>&, std::list<std::vector<value>>&, std::unordered_map<value, std::string>&);
 	static void stringToTable(std::list<std::string>&, std::list<std::vector<value>>&, std::unordered_map<value, std::string>&);
 
@@ -39,7 +33,6 @@ public:
 
 	static int getIndex(std::vector<Entity>, Entity);
 
-	static StmtType convertType(EntityType);
 	static std::vector<StmtInfo> filterResult(EntityType, std::vector<StmtInfo>&);
 	static void filterResults(EntityType, std::vector<StmtInfo>&, std::list<std::vector<value>>&);
 	static void filterResults(EntityType, std::vector<std::pair<StmtInfo, std::string>>&, std::list<std::vector<value>>&, std::unordered_map<value, std::string>&);
@@ -91,6 +84,7 @@ public:
 	static value hashString(std::string, std::unordered_map<value, std::string>&);
 
 private:
+	static StmtType convertType(EntityType);
 	static bool isStmt(EntityType);
 
 	static void joinRow(std::vector<value>&, std::vector<value>&, std::vector<value>&);

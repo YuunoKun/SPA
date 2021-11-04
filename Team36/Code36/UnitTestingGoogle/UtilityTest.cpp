@@ -29,82 +29,7 @@ namespace UnitTesting {
 		value h7 = Utility::hashString(s7, hash_out);
 		value h8 = Utility::hashString(s8, hash_out);
 	};
-	TEST_F(UtilityTest, constantsToStringList) {
-		std::vector<constant> a{ 1, 2, 3, 4, 5 };
-		std::list<std::string> b{ "1", "2", "3", "4", "5" };
 
-		std::list<std::string> out;
-		Utility::constantToStringList(a, out);
-		EXPECT_EQ(out, b);
-
-		std::list<std::string> c{ "1", "2", "3", "4" };
-		EXPECT_NE(out, c);
-
-		std::vector<constant> d{ 1, 2 };
-		std::list<std::string> e{ "1", "2" };
-
-		out.clear();
-		Utility::constantToStringList(d, out);
-		EXPECT_EQ(out, e);
-	}
-
-	TEST_F(UtilityTest, proceduresToStringList) {
-		std::vector<proc_name> a{ s1, s2, s3, s4, s5 };
-		std::list<std::string> b{ s1, s2, s3, s4, s5 };
-
-		std::list<std::string> out;
-		Utility::procedureToStringList(a, out);
-		EXPECT_EQ(out, b);
-
-		std::list<std::string> c{ s1, s2, s3, s4 };
-		EXPECT_NE(out, c);
-
-		std::vector<proc_name> d{ s1, s2 };
-		std::list<std::string> e{ s1, s2 };
-
-		out.clear();
-		Utility::procedureToStringList(d, out);
-		EXPECT_EQ(out, e);
-	}
-
-	TEST_F(UtilityTest, stmtInfoToStringList) {
-		std::vector<StmtInfo> a{ {1, STMT_ASSIGN}, {2, STMT_CALL} ,
-			{3, STMT_IF} ,{4, STMT_WHILE} ,{5, STMT_PRINT} };
-		std::list<std::string> b{ "1", "2", "3", "4", "5" };
-
-		std::list<std::string> out;
-		Utility::stmtInfoToStringList(a, out);
-		EXPECT_EQ(out, b);
-
-		std::list<std::string> c{ "1", "2", "3", "4" };
-		EXPECT_NE(out, c);
-
-		std::vector<StmtInfo> d{ {1, STMT_ASSIGN}, {2, STMT_CALL} };
-		std::list<std::string> e{ "1", "2" };
-
-		out.clear();
-		Utility::stmtInfoToStringList(d, out);
-		EXPECT_EQ(out, e);
-	}
-
-	TEST_F(UtilityTest, variablesToStringList) {
-		std::vector<var_name> a{ s1, s2, s3, s4, s5 };
-		std::list<std::string> b{ s1, s2, s3, s4, s5 };
-
-		std::list<std::string> out;
-		Utility::variableToStringList(a, out);
-		EXPECT_EQ(out, b);
-
-		std::list<std::string> c{ s1, s2, s3, s4 };
-		EXPECT_NE(out, c);
-
-		std::vector<var_name> d{ s1, s2 };
-		std::list<std::string> e{ s1, s2 };
-
-		out.clear();
-		Utility::variableToStringList(d, out);
-		EXPECT_EQ(out, e);
-	}
 
 	TEST_F(UtilityTest, unorderedSetToStringList) {
 		std::unordered_set<std::string> a{ s1, s2, s3, s4, s5 };
@@ -123,14 +48,6 @@ namespace UnitTesting {
 		out.clear();
 		Utility::unorderedSetToStringList(d, out);
 		EXPECT_EQ(out, e);
-	}
-
-	TEST_F(UtilityTest, stmtIndexToStringList) {
-		std::vector<stmt_index> a = { 1, 2, 3, 4 };
-		std::list<std::string> b{ "1", "2", "3", "4" };
-		std::list<std::string> out;
-		Utility::stmtIndexToStringList(a, out);
-		EXPECT_EQ(out, b);
 	}
 
 	TEST_F(UtilityTest, duplicateColumn) {
@@ -187,26 +104,6 @@ namespace UnitTesting {
 		EXPECT_EQ(Utility::getIndex(e, e[1]), 1);
 		EXPECT_EQ(Utility::getIndex(e, e[2]), 2);
 		EXPECT_EQ(Utility::getIndex(e, e[3]), 3);
-	}
-
-	TEST_F(UtilityTest, convertType) {
-		EntityType a = WHILE;
-		EXPECT_EQ(Utility::convertType(a), STMT_WHILE);
-
-		a = IF;
-		EXPECT_EQ(Utility::convertType(a), STMT_IF);
-
-		a = READ;
-		EXPECT_EQ(Utility::convertType(a), STMT_READ);
-
-		a = PRINT;
-		EXPECT_EQ(Utility::convertType(a), STMT_PRINT);
-
-		a = CALL;
-		EXPECT_EQ(Utility::convertType(a), STMT_CALL);
-
-		a = ASSIGN;
-		EXPECT_EQ(Utility::convertType(a), STMT_ASSIGN);
 	}
 
 	TEST_F(UtilityTest, filterResult) {

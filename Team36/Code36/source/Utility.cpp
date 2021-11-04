@@ -4,34 +4,6 @@
 #include "Utility.h"
 
 
-void Utility::constantToStringList(std::vector<constant>& from, std::list<std::string>& out) {
-	for (auto& it : from) {
-		out.push_back(std::to_string(it));
-	}
-}
-
-void Utility::procedureToStringList(std::vector<proc_name>& from, std::list<std::string>& out) {
-	for (auto& it : from) {
-		out.push_back(it.c_str());
-	}
-}
-
-void Utility::stmtInfoToStringList(std::vector<StmtInfo>& from, std::list<std::string>& out) {
-	for (auto& it : from) {
-		out.push_back(std::to_string(it.stmt_index));
-	}
-}
-void Utility::stmtIndexToStringList(std::vector<stmt_index>& from, std::list<std::string>& out) {
-	for (auto& it : from) {
-		out.push_back(std::to_string(it));
-	}
-}
-
-void Utility::variableToStringList(std::vector<var_name>& from, std::list<std::string>& out) {
-	for (auto& it : from) {
-		out.push_back(it.c_str());
-	}
-}
 
 void Utility::unorderedSetToStringList(std::unordered_set<std::string>& from, std::list<std::string>& out) {
 	out.insert(out.end(), from.begin(), from.end());
@@ -62,11 +34,6 @@ std::vector<std::pair<StmtInfo, StmtInfo>> Utility::duplicateColumn(std::vector<
 	return out;
 }
 
-void Utility::constantToTable(std::vector<constant>& in, std::list<std::vector<value>>& out) {
-	for (auto& it : in) {
-		out.push_back({ it });
-	}
-}
 
 void Utility::stringToTable(std::vector<std::string>& in, std::list<std::vector<value>>& out, std::unordered_map<value, std::string>& hash_storage) {
 	for (auto& it : in) {
@@ -88,7 +55,7 @@ void Utility::stmtInfoToTable(std::vector<StmtInfo>& in, std::list<std::vector<v
 	}
 }
 
-void Utility::stmtIndexToTable(std::vector<stmt_index>& in, std::list<std::vector<value>>& out) {
+void Utility::valueToTable(std::vector<value>& in, std::list<std::vector<value>>& out) {
 	for (auto& it : in) {
 		out.push_back({ it });
 	}

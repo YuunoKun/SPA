@@ -10,7 +10,6 @@ public:
 	ResultTable(Entity&, std::vector<StmtInfo>&);
 	ResultTable(Entity&, std::vector<value>&);
 	ResultTable(Entity&, std::vector<std::string>&);
-	ResultTable(Entity&, std::list<std::string>&);
 	ResultTable(std::vector<Entity>&, std::list<std::vector<value>>&, std::unordered_map<value, std::string>&);
 	ResultTable(std::pair<Entity, Entity>, std::vector<std::pair<std::string, std::string>>&);
 	ResultTable(std::pair<Entity, Entity>, std::vector<std::pair<value, std::string>>&);

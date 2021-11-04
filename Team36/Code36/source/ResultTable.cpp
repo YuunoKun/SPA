@@ -9,17 +9,12 @@ ResultTable::ResultTable(Entity& header, std::vector<StmtInfo>& table) {
 	addHeader(header);
 }
 
-ResultTable::ResultTable(Entity& header, std::vector<stmt_index>& table) {
-	Utility::stmtIndexToTable(table, this->table);
+ResultTable::ResultTable(Entity& header, std::vector<value>& table) {
+	Utility::valueToTable(table, this->table);
 	addHeader(header);
 }
 
 ResultTable::ResultTable(Entity& header, std::vector<std::string>& table) {
-	Utility::stringToTable(table, this->table, this->hash_map);
-	addHeader(header);
-}
-
-ResultTable::ResultTable(Entity& header, std::list<std::string>& table) {
 	Utility::stringToTable(table, this->table, this->hash_map);
 	addHeader(header);
 }
