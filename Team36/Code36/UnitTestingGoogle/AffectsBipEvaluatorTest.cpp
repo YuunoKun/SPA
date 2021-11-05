@@ -13,6 +13,11 @@ namespace UnitTesting {
 			cfg->add(3);
 			cfg->add(4);
 		}
+
+		~AffectsBipEvaluatorTest() {
+			delete cfg;
+		}
+
 		virtual void SetUp() override {
 			PKB::getInstance().resetCache();
 
@@ -44,10 +49,6 @@ namespace UnitTesting {
 			PKB::getInstance().addUsesS(3, v2);
 			PKB::getInstance().addCFGBip(cfg);
 			pkb.getRelationManager().reset();
-		}
-
-		void TearDown() override {
-			delete cfg;
 		}
 
 		CFG* cfg = new CFG();

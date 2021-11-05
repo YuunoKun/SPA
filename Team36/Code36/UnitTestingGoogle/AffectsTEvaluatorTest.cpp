@@ -61,12 +61,12 @@ namespace UnitTesting {
 	};
 	TEST_F(AffectsTEvaluatorTest, evaluateWildAndWild) {
 		PKB::getInstance().resetCache();
-		pkb.getRelationManager().reset();
 		PKB::getInstance().addStmt(STMT_ASSIGN);
 		PKB::getInstance().addStmt(STMT_ASSIGN);
 		PKB::getInstance().addProcedure(p);
 		PKB::getInstance().addProcContains(p, 1);
 		PKB::getInstance().addProcContains(p, 2);
+		pkb.getRelationManager().reset();
 		EXPECT_FALSE(evaluator.evaluateWildAndWild());
 		PKB::getInstance().addNext(1, 2);
 		PKB::getInstance().addVariable(v1);

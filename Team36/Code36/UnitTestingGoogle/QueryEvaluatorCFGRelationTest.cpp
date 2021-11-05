@@ -31,11 +31,20 @@ namespace UnitTesting {
 			PKB::getInstance().addModifiesS(2, y);
 			PKB::getInstance().addUsesS(3, y);
 
+			cfg = new CFG();
+			cfg->add(1);
+			cfg->add(2);
+			cfg->add(3);
+			cfg->add(4);
+
+			PKB::getInstance().addCFGBip(cfg);
+
 			PKBAdapter::getRelationManager().reset();
 		}
 
 		~QueryEvaluatorCFGRelationTest() override {
 			PKB::getInstance().resetCache();
+			delete cfg;
 		}
 
 		std::vector<Entity> getInvalidConstant(std::vector<std::string> validStmt) {
@@ -100,6 +109,7 @@ namespace UnitTesting {
 				}
 			}
 		}
+		CFG* cfg;
 
 		PKBAdapter pkb;
 		QueryEvaluator evaluator;
