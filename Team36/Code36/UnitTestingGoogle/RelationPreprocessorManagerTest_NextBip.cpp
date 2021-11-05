@@ -3,12 +3,12 @@
 #include "pch.h"
 #include "PKB.h"
 #include "CFG.h"
-#include "CFGRelationsManager.h"
+#include "RelationPreprocessorManager.h"
 
 namespace UnitTesting {
-	class CFGRelationsManagerTest_NextBip : public testing::Test {
+	class RelationPreprocessorManagerTest_NextBip : public testing::Test {
 	protected:
-		CFGRelationsManagerTest_NextBip() {
+		RelationPreprocessorManagerTest_NextBip() {
 			PKB::getInstance().resetCache();
 
 			cfg1->add(1);
@@ -53,7 +53,7 @@ namespace UnitTesting {
 			manager.reset();
 		}
 
-		CFGRelationsManager manager;
+		RelationPreprocessorManager manager;
 
 		CFG* cfg1 = new CFG();
 		CFG* cfg2 = new CFG();
@@ -101,7 +101,7 @@ namespace UnitTesting {
 		}
 	};
 
-	TEST_F(CFGRelationsManagerTest_NextBip, isPreviousBip_identifier) {
+	TEST_F(RelationPreprocessorManagerTest_NextBip, isPreviousBip_identifier) {
 		std::vector<StmtInfo> true_list, false_list;
 		std::set<StmtInfo> set;
 		for (auto& pair : expected_pairs) {
@@ -124,7 +124,7 @@ namespace UnitTesting {
 		EXPECT_TRUE(manager.getNextBipPreprocessor().isFullyPopulated());
 	}
 
-	TEST_F(CFGRelationsManagerTest_NextBip, isNextBip_identifier) {
+	TEST_F(RelationPreprocessorManagerTest_NextBip, isNextBip_identifier) {
 		std::vector<StmtInfo> true_list, false_list;
 		std::set<StmtInfo> set;
 		for (auto& pair : expected_pairs) {
@@ -147,7 +147,7 @@ namespace UnitTesting {
 		EXPECT_TRUE(manager.getNextBipPreprocessor().isFullyPopulated());
 	}
 
-	TEST_F(CFGRelationsManagerTest_NextBip, isNextBip_double_identifier) {
+	TEST_F(RelationPreprocessorManagerTest_NextBip, isNextBip_double_identifier) {
 		std::vector<std::pair<StmtInfo, StmtInfo>> true_list = expected_pairs,
 			false_list, all_list;
 		std::set<StmtInfo> set;
@@ -178,14 +178,14 @@ namespace UnitTesting {
 		EXPECT_TRUE(manager.getNextBipPreprocessor().isFullyPopulated());
 	}
 
-	TEST_F(CFGRelationsManagerTest_NextBip, getAllNextBipRelation) {
+	TEST_F(RelationPreprocessorManagerTest_NextBip, getAllNextBipRelation) {
 		auto v1 = manager.getAllNextBipRelation();
 		std::sort(v1.begin(), v1.end());
 		EXPECT_EQ(v1, expected_pairs);
 		EXPECT_TRUE(manager.getNextBipPreprocessor().isFullyPopulated());
 	}
 
-	TEST_F(CFGRelationsManagerTest_NextBip, getPreviousBip_all) {
+	TEST_F(RelationPreprocessorManagerTest_NextBip, getPreviousBip_all) {
 		auto v1 = manager.getPreviousBip();
 		std::sort(v1.begin(), v1.end());
 
@@ -200,7 +200,7 @@ namespace UnitTesting {
 		EXPECT_TRUE(manager.getNextBipPreprocessor().isFullyPopulated());
 	}
 
-	TEST_F(CFGRelationsManagerTest_NextBip, getNextBip_all) {
+	TEST_F(RelationPreprocessorManagerTest_NextBip, getNextBip_all) {
 		auto v1 = manager.getNextBip();
 		std::sort(v1.begin(), v1.end());
 
@@ -215,7 +215,7 @@ namespace UnitTesting {
 		EXPECT_TRUE(manager.getNextBipPreprocessor().isFullyPopulated());
 	}
 
-	TEST_F(CFGRelationsManagerTest_NextBip, getNextBip_identifier) {
+	TEST_F(RelationPreprocessorManagerTest_NextBip, getNextBip_identifier) {
 		for (auto& stmt : stmt_list) {
 			auto v1 = manager.getNextBip(stmt.stmt_index);
 			std::sort(v1.begin(), v1.end());
@@ -230,7 +230,7 @@ namespace UnitTesting {
 		}
 	}
 
-	TEST_F(CFGRelationsManagerTest_NextBip, getPreviousBip_identifier) {
+	TEST_F(RelationPreprocessorManagerTest_NextBip, getPreviousBip_identifier) {
 		for (auto& stmt : stmt_list) {
 			auto v1 = manager.getPreviousBip(stmt.stmt_index);
 			std::sort(v1.begin(), v1.end());

@@ -13,7 +13,7 @@
 #include "AffectsBipPreprocessor.h"
 #include "AffectsBipTPreprocessor.h"
 
-class CFGRelationsManager {
+class RelationPreprocessorManager {
 public:
 	void reset();
 

@@ -2,7 +2,7 @@
 
 #include "AffectsTEvaluator.h"
 #include "PKB.h"
-#include "CFGRelationsManager.h"
+#include "RelationPreprocessorManager.h"
 
 namespace UnitTesting {
 	class AffectsTEvaluatorTest : public testing::Test {

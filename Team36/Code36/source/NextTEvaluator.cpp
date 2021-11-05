@@ -4,7 +4,7 @@
 #include "QueryResult.h"
 #include "PKBAdapter.h"
 #include "NextTEvaluator.h"
-#include "CFGRelationsManager.h"
+#include "RelationPreprocessorManager.h"
 
 bool NextTEvaluator::evaluateWildAndWild() {
 	return !pkb.getRelationManager().isNextTEmpty();

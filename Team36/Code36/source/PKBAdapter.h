@@ -4,7 +4,7 @@
 #include <vector>
 
 #include "Common.h"
-#include "CFGRelationsManager.h"
+#include "RelationPreprocessorManager.h"
 
 class PKBAdapter {
 public:
@@ -173,7 +173,7 @@ public:
 	bool isCalledS(proc_name);
 	std::vector<stmt_index> getCalleeS(proc_name);
 
-	static CFGRelationsManager& getRelationManager();
+	static RelationPreprocessorManager& getRelationManager();
 
 private:
 	std::vector<stmt_index> getAssignInfoFiltered(std::vector<stmt_index>&, expr, bool);

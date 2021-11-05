@@ -721,7 +721,7 @@ std::vector<stmt_index> PKBAdapter::getCalleeS(proc_name proc) {
 	return a.getKeys(proc);
 }
 
-CFGRelationsManager& PKBAdapter::getRelationManager() {
-	static CFGRelationsManager relation_manager;
+RelationPreprocessorManager& PKBAdapter::getRelationManager() {
+	static RelationPreprocessorManager relation_manager;
 	return relation_manager;
 }
