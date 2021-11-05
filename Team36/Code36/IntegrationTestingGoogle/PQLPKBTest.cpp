@@ -119,7 +119,7 @@ namespace UnitTesting {
 
 		const std::list<std::string> PRINTS = { PRINT1, PRINT2 };
 
-		const std::list<std::string> ASSIGNS = { ASSIGN1, ASSIGN2 };
+		const std::list<std::string> ASSIGNS = { ASSIGN2, ASSIGN1 };
 
 		const std::list<std::string> CALLS = { CALL1, CALL2 };
 

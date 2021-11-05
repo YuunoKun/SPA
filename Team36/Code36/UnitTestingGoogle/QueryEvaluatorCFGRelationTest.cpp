@@ -31,11 +31,20 @@ namespace UnitTesting {
 			PKB::getInstance().addModifiesS(2, y);
 			PKB::getInstance().addUsesS(3, y);
 
+			cfg = new CFG();
+			cfg->add(1);
+			cfg->add(2);
+			cfg->add(3);
+			cfg->add(4);
+
+			PKB::getInstance().addCFGBip(cfg);
+
 			PKBAdapter::getRelationManager().reset();
 		}
 
 		~QueryEvaluatorCFGRelationTest() override {
 			PKB::getInstance().resetCache();
+			delete cfg;
 		}
 
 		std::vector<Entity> getInvalidConstant(std::vector<std::string> validStmt) {
@@ -100,6 +109,7 @@ namespace UnitTesting {
 				}
 			}
 		}
+		CFG* cfg;
 
 		PKBAdapter pkb;
 		QueryEvaluator evaluator;
@@ -552,7 +562,7 @@ namespace UnitTesting {
 	//Affects Relation Test ----------------------------------------------------------------------------------------------------
 	TEST_F(QueryEvaluatorCFGRelationTest, evaluateQueryAffectsBooleanTrue) {
 		RelType type = AFFECT;
-		std::string left1 = NEXT_LEFT1;
+		std::string left1 = AFFECTS_LEFT1;
 		std::string left2 = AFFECTS_LEFT2;
 		std::string right1 = AFFECTS_RIGHT1;
 		std::string right2 = AFFECTS_RIGHT2;

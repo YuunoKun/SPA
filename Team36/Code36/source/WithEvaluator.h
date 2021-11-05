@@ -8,6 +8,8 @@
 
 class WithEvaluator : public RelationEvaluatorInterface {
 public:
+	WithEvaluator();
+
 	bool evaluateWildAndWild() override;
 	bool evaluateConstantAndConstant(Entity, Entity) override;
 	bool evaluateConstantAndWild(Entity) override;
@@ -19,10 +21,12 @@ public:
 	ResultTable evaluateSynonymAndConstant(Entity, Entity) override;
 
 private:
-	std::list<std::vector<std::string>> getEntity(Entity);
-	std::list<std::vector<std::string>> getEntityAndSecondaryAttribute(Entity);
+	Entity string_dummy, num_dummy;
+
+	ResultTable getEntity(Entity&);
+	ResultTable getEntityAndSecondaryAttribute(Entity&);
 
 
-	std::list<std::string> getEntityWithAttribute(Entity, Entity);
-	std::list<std::string> getEntityWithSecondaryAttribute(Entity);
+	ResultTable getEntityWithAttribute(Entity&, Entity&);
+	ResultTable getEntityWithSecondaryAttribute(Entity&, Entity&);
 };

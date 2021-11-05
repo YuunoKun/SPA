@@ -1,60 +1,160 @@
-1 - Stress test 1 Next
+1 - Stress test number of table size 3
+stmt s1, s2, s3, s4, s5, s6;
+Select BOOLEAN such that Follows*(s1, s2) and Follows*(s3, s4) and Follows*(s5, s6) 
+TRUE
+50000
+2 - Stress test number of table size 10
+stmt s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11, s12, s13, s14, s15, s16, s17, s18, s19, s20;
+Select BOOLEAN such that Follows*(s1, s2) and Follows*(s3, s4) and Follows*(s5, s6) and Follows*(s7, s8) and Follows*(s9, s10) and Follows*(s11, s12) and Follows*(s13, s14) and Follows*(s15, s16) and Follows*(s17, s18) and Follows*(s19, s20)
+TRUE
+50000
+3 - Stress test number of table size limit 20
+stmt s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11, s12, s13, s14, s15, s16, s17, s18, s19, s20, s21, s22, s23, s24, s25, s26, s27, s28, s29, s30, s31, s32, s33, s34, s35, s36, s37, s38, s39, s40;
+Select BOOLEAN such that Follows*(s1, s2) and Follows*(s3, s4) and Follows*(s5, s6) and Follows*(s7, s8) and Follows*(s9, s10) and Follows*(s11, s12) and Follows*(s13, s14) and Follows*(s15, s16) and Follows*(s17, s18) and Follows*(s19, s20) and Follows*(s21, s22) and Follows*(s23, s24) and Follows*(s25, s26) and Follows*(s27, s28)  and Follows*(s29, s30)  and Follows*(s31, s32) and Follows*(s33, s34) and Follows*(s35, s36) and Follows*(s37, s38)  and Follows*(s39, s40) 
+TRUE
+50000
+1 - Stress test 1 Next*
 stmt s1, s2;
-Select BOOLEAN such that Next*(s1, s2);
+Select BOOLEAN such that Next*(s1, s2)
 TRUE
-5000
-2 - Stress test 2 Next
-stmt s1, s2, s3;
-Select BOOLEAN such that Next*(s1, s2) and Next*(s2, s3)
-TRUE
-5000
-3 - Stress test 2 Next
+50000
+2 - Stress test 2 Next* without join
 stmt s1, s2, s3, s4;
 Select BOOLEAN such that Next*(s1, s2) and Next*(s3, s4)
 TRUE
-5000
-4 - Stress test 3 Next
+50000
+3 - Stress test 2 Next* single filter
+stmt s1, s2;
+Select BOOLEAN such that Next*(s1, s2) and Next*(s1, _)
+TRUE
+50000
+4 - Stress test 2 Next* double filter
+stmt s1, s2;
+Select BOOLEAN such that Next*(s1, s2) and Next*(s1, s2)
+TRUE
+50000
+5 - Stress test 2 Next* with join
+stmt s1, s2, s3;
+Select BOOLEAN such that Next*(s1, s2) and Next*(s2, s3)
+TRUE
+50000
+6 - Stress test 3 Next* triple join
 stmt s1, s2, s3, s4;
 Select BOOLEAN such that Next*(s1, s2) and Next*(s2, s3) and Next*(s3, s4)
 TRUE
-5000
-1 - Stress test 1 Affect
+50000
+1 - Stress test 1 Affects
 stmt s1, s2;
-Select BOOLEAN such that Affect(s1, s2);
+Select BOOLEAN such that Affects(s1, s2)
 TRUE
-5000
-2 - Stress test 2 Affect
-stmt s1, s2, s3;
-Select BOOLEAN such that Affect(s1, s2) and Affect(s2, s3)
-TRUE
-5000
-3 - Stress test 2 Affect
+50000
+2 - Stress test 2 Affects without join
 stmt s1, s2, s3, s4;
-Select BOOLEAN such that Affect(s1, s2) and Affect(s3, s4)
+Select BOOLEAN such that Affects(s1, s2) and Affects(s3, s4)
 TRUE
-5000
-4 - Stress test 3 Affect
-stmt s1, s2, s3, s4;
-Select BOOLEAN such that Affect(s1, s2) and Affect(s2, s3) and Affect(s3, s4)
-TRUE
-5000
-1 - Stress test 1 Affect*
+50000
+3 - Stress test 2 Affects single filter
 stmt s1, s2;
-Select BOOLEAN such that Affect*(s1, s2);
+Select BOOLEAN such that Affects(s1, s2) and Affects(s1, _)
 TRUE
-5000
-2 - Stress test 2 Affect*
+50000
+4 - Stress test 2 Affects double filter
+stmt s1, s2;
+Select BOOLEAN such that Affects(s1, s2) and Affects(s1, s2)
+TRUE
+50000
+5 - Stress test 2 Affects with join
 stmt s1, s2, s3;
-Select BOOLEAN such that Affect*(s1, s2) and Affect*(s2, s3)
+Select BOOLEAN such that Affects(s1, s2) and Affects(s2, s3)
 TRUE
-5000
-3 - Stress test 2 Affect*
+50000
+6 - Stress test 3 Affects triple join
 stmt s1, s2, s3, s4;
-Select BOOLEAN such that Affect*(s1, s2) and Affect*(s3, s4)
+Select BOOLEAN such that Affects(s1, s2) and Affects(s2, s3) and Affects(s3, s4)
 TRUE
-5000
-4 - Stress test 3 Affect*
+50000
+1 - Stress test number of table size 3
+stmt s1, s2, s3, s4, s5, s6;
+Select BOOLEAN such that Follows*(s1, s2) and Follows*(s3, s4) and Follows*(s5, s6) 
+TRUE
+50000
+18 - Stress test number of table size limit 20
+stmt s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11, s12, s13, s14, s15, s16, s17, s18, s19, s20, s21, s22, s23, s24, s25, s26, s27, s28, s29, s30, s31, s32, s33, s34, s35, s36, s37, s38, s39, s40;
+Select BOOLEAN such that Follows*(s1, s2) and Follows*(s3, s4) and Follows*(s5, s6) and Follows*(s7, s8) and Follows*(s9, s10) and Follows*(s11, s12) and Follows*(s13, s14) and Follows*(s15, s16) and Follows*(s17, s18) and Follows*(s19, s20) and Follows*(s21, s22) and Follows*(s23, s24) and Follows*(s25, s26) and Follows*(s27, s28)  and Follows*(s29, s30)  and Follows*(s31, s32) and Follows*(s33, s34) and Follows*(s35, s36) and Follows*(s37, s38)  and Follows*(s39, s40) 
+TRUE
+50000
+1 - Stress test 1 Affects*
+stmt s1, s2;
+Select BOOLEAN such that Affects*(s1, s2)
+TRUE
+50000
+2 - Stress test 2 Affects* without join
 stmt s1, s2, s3, s4;
-Select BOOLEAN such that Affect*(s1, s2) and Affect*(s2, s3) and Affect*(s3, s4)
+Select BOOLEAN such that Affects*(s1, s2) and Affects*(s3, s4)
 TRUE
-5000
+50000
+3 - Stress test 2 Affects* single filter
+stmt s1, s2;
+Select BOOLEAN such that Affects*(s1, s2) and Affects*(s1, _)
+TRUE
+50000
+4 - Stress test 2 Affects* double filter
+stmt s1, s2;
+Select BOOLEAN such that Affects*(s1, s2) and Affects*(s1, s2)
+TRUE
+50000
+5 - Stress test 2 Affects* with join
+stmt s1, s2, s3;
+Select BOOLEAN such that Affects*(s1, s2) and Affects*(s2, s3)
+TRUE
+50000
+6 - Stress test 3 Affects* triple join
+stmt s1, s2, s3, s4;
+Select BOOLEAN such that Affects*(s1, s2) and Affects*(s2, s3) and Affects*(s3, s4)
+TRUE
+50000
+1 - Stress test number of table size 3
+stmt s1, s2, s3, s4, s5, s6;
+Select BOOLEAN such that Follows*(s1, s2) and Follows*(s3, s4) and Follows*(s5, s6) 
+TRUE
+50000
+2 - Stress test number of table size 10
+stmt s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11, s12, s13, s14, s15, s16, s17, s18, s19, s20;
+Select BOOLEAN such that Next*(s1, s2) and Next*(s3, s4) and Next*(s5, s6) and Next*(s7, s8) and Next*(s9, s10) and Next*(s11, s12) and Next*(s13, s14) and Next*(s15, s16) and Next*(s17, s18) and Next*(s19, s20)
+TRUE
+50000
+3 - Stress test number of table size limit 20
+stmt s1, s2, s3, s4, s5, s6, s7, s8, s9, s10, s11, s12, s13, s14, s15, s16, s17, s18, s19, s20, s21, s22, s23, s24, s25, s26, s27, s28, s29, s30, s31, s32, s33, s34, s35, s36, s37, s38, s39, s40;
+Select BOOLEAN such that Next*(s1, s2) and Affects*(s3, s4) and Next*(s5, s6) and Affects*(s7, s8) and Next*(s9, s10) and Affects*(s11, s12) and Next*(s13, s14) and Next*(s15, s16) and Next*(s17, s18) and Affects*(s19, s20) and Affects*(s21, s22) and Affects*(s23, s24) and Affects*(s25, s26) and Affects*(s27, s28)  and Affects*(s29, s30)  and Next*(s31, s32) and Next*(s33, s34) and Next*(s35, s36) and Next*(s37, s38)  and Follows*(s39, s40) 
+TRUE
+50000
+1 - Stress test 1 Follow*
+stmt s1, s2;
+Select BOOLEAN such that Follows*(s1, s2)
+TRUE
+50000
+2 - Stress test 2 Follow* without join
+stmt s1, s2, s3, s4;
+Select BOOLEAN such that Follows*(s1, s2) and Follows*(s3, s4)
+TRUE
+50000
+3 - Stress test 2 Follow* single filter
+stmt s1, s2;
+Select BOOLEAN such that Follows*(s1, s2) and Follows*(s1, _)
+TRUE
+50000
+4 - Stress test 2 Follow* double filter
+stmt s1, s2;
+Select BOOLEAN such that Follows*(s1, s2) and Follows*(s1, s2)
+TRUE
+50000
+5 - Stress test 2 Follow* with join
+stmt s1, s2, s3;
+Select BOOLEAN such that Follows*(s1, s2) and Follows*(s2, s3)
+TRUE
+50000
+6 - Stress test 3 Follow* triple join
+stmt s1, s2, s3, s4;
+Select BOOLEAN such that Follows*(s1, s2) and Follows*(s2, s3) and Follows*(s3, s4)
+TRUE
+50000

@@ -42,6 +42,11 @@ namespace UnitTesting {
 			PKB::getInstance().addIf(std::stoi(IF_LEFT2), IF_RIGHT2);
 			PKB::getInstance().addWhile(std::stoi(WHILE_LEFT1), WHILE_RIGHT1);
 			PKB::getInstance().addWhile(std::stoi(WHILE_LEFT2), WHILE_RIGHT2);
+
+
+			for (unsigned int i = 0; i < ALL_RESULT.size(); i++) {
+				ALL_RESULT[i].sort();
+			}
 		}
 
 		~QueryEvaluatorPatternTest() override {
@@ -78,7 +83,9 @@ namespace UnitTesting {
 			for (unsigned int i = 0; i < patterns.size(); i++) {
 				for (unsigned int j = 0; j < ALL_SELECT.size(); j++) {
 					Query q = initQuery(patterns[i], ALL_SELECT[j]);
-					EXPECT_EQ(evaluator.evaluateQuery(q), ALL_RESULT[j]) << "Error at results : " << i + 1 << " : " << j + 1;
+					std::list<std::string> query_result = evaluator.evaluateQuery(q);
+					query_result.sort();
+					EXPECT_EQ(query_result, ALL_RESULT[j]) << "Error at results : " << i + 1 << " : " << j + 1;
 					q = initQuery(patterns[i], SELECT_BOOLEAN);
 					EXPECT_EQ(evaluator.evaluateQuery(q), BOOLEAN_TRUE_RESULT) << "Error at results : " << i + 1 << " : " << j + 1;
 				}
@@ -206,7 +213,7 @@ namespace UnitTesting {
 		// select Boolean
 		const Entity SELECT_BOOLEAN = { BOOLEAN };
 
-		const std::vector<std::list<std::string>> ALL_RESULT = {
+		std::vector<std::list<std::string>> ALL_RESULT = {
 			ALL_VARIABLE , ALL_CONSTANT , ALL_PROCEDURE, ALL_STMT, ALL_IF,
 			ALL_WHILE, ALL_READ, ALL_PRINT, ALL_ASSIGN, ALL_CALL };
 

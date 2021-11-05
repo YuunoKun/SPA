@@ -28,36 +28,6 @@ std::vector<proc_name> PKBAdapter::getProcedures() {
 	return PKB::getInstance().PKB::getProcedures();
 }
 
-std::vector<StmtInfo> PKBAdapter::getAssigns() {
-	std::vector<StmtInfo> v = getStmts();
-	return Utility::filterResult(EntityType::ASSIGN, v);
-}
-
-std::vector<StmtInfo> PKBAdapter::getPrints() {
-	std::vector<StmtInfo> v = getStmts();
-	return Utility::filterResult(EntityType::PRINT, v);
-}
-
-std::vector<StmtInfo> PKBAdapter::getCalls() {
-	std::vector<StmtInfo> v = getStmts();
-	return Utility::filterResult(EntityType::CALL, v);
-}
-
-std::vector<StmtInfo> PKBAdapter::getReads() {
-	std::vector<StmtInfo> v = getStmts();
-	return Utility::filterResult(EntityType::READ, v);
-}
-
-std::vector<StmtInfo> PKBAdapter::getWhiles() {
-	std::vector<StmtInfo> v = getStmts();
-	return Utility::filterResult(EntityType::WHILE, v);
-}
-
-std::vector<StmtInfo> PKBAdapter::getIfs() {
-	std::vector<StmtInfo> v = getStmts();
-	return Utility::filterResult(EntityType::IF, v);
-}
-
 bool PKBAdapter::isVariable(var_name var) {
 	//TODO Optimize
 	auto a = getVariables();

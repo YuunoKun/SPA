@@ -56,7 +56,7 @@ namespace UnitTesting {
 		RelRef q2(RelRef(PARENT, e3, e4));
 
 		Query q = initQuery({ q1,q2 }, { e1, e2 });
-		std::list<std::string> result= {"1 2", "2 3", "3 4"};
+		std::list<std::string> result = { "1 2", "2 3", "3 4" };
 		EXPECT_EQ(evaluator.evaluateQuery(q), result);
 
 		q = initQuery({ q1, q2 }, { e1, e1 });
@@ -64,7 +64,7 @@ namespace UnitTesting {
 		EXPECT_EQ(evaluator.evaluateQuery(q), result);
 
 		q = initQuery({ q1, q2 }, { e2, e2 });
-		result = { "2 2", "3 3", "4 4"};
+		result = { "2 2", "3 3", "4 4" };
 		EXPECT_EQ(evaluator.evaluateQuery(q), result);
 
 		q = initQuery({ q1, q2 }, { e1, e2, e1 });
@@ -107,8 +107,8 @@ namespace UnitTesting {
 		result = { "1 2 5 6 1", "1 2 6 7 1", "1 2 7 8 1", "2 3 5 6 2", "2 3 6 7 2", "2 3 7 8 2", "3 4 5 6 3", "3 4 6 7 3", "3 4 7 8 3" };
 		EXPECT_EQ(evaluator.evaluateQuery(q), result);
 
-		q = initQuery({ q1, q2 }, { e1, e2, e3, e4, e1, e2});
-		result = { "1 2 5 6 1 2", "1 2 6 7 1 2", "1 2 7 8 1 2", "2 3 5 6 2 3", 
+		q = initQuery({ q1, q2 }, { e1, e2, e3, e4, e1, e2 });
+		result = { "1 2 5 6 1 2", "1 2 6 7 1 2", "1 2 7 8 1 2", "2 3 5 6 2 3",
 			"2 3 6 7 2 3", "2 3 7 8 2 3", "3 4 5 6 3 4", "3 4 6 7 3 4", "3 4 7 8 3 4" };
 		EXPECT_EQ(evaluator.evaluateQuery(q), result);
 
@@ -122,7 +122,7 @@ namespace UnitTesting {
 			"2 3 6 7 2 3 6 7", "2 3 7 8 2 3 7 8", "3 4 5 6 3 4 5 6", "3 4 6 7 3 4 6 7", "3 4 7 8 3 4 7 8" };
 		EXPECT_EQ(evaluator.evaluateQuery(q), result);
 
-		q = initQuery({ q1, q2 }, { e1, e2, e3, e4, e1, e2, e3, e4, e1});
+		q = initQuery({ q1, q2 }, { e1, e2, e3, e4, e1, e2, e3, e4, e1 });
 		result = { "1 2 5 6 1 2 5 6 1", "1 2 6 7 1 2 6 7 1", "1 2 7 8 1 2 7 8 1", "2 3 5 6 2 3 5 6 2",
 			"2 3 6 7 2 3 6 7 2", "2 3 7 8 2 3 7 8 2", "3 4 5 6 3 4 5 6 3", "3 4 6 7 3 4 6 7 3", "3 4 7 8 3 4 7 8 3" };
 		EXPECT_EQ(evaluator.evaluateQuery(q), result);
