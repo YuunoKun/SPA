@@ -80,15 +80,13 @@ bool CFGRelationsManager::isAffects(stmt_index index1, stmt_index index2) {
 		(next_t_preprocessor.isFullyPopulated() ||
 			next_t_preprocessor.isCalculated(index1 - 1, index2 - 1));
 	if (is_nextT_calculated && !isNextT(index1, index2)) {
-		if (is_nextT_calculated && !isNextT(index1, index2)) {
-			return false;
-		}
-		if (inSameProc(index1, index2) == false) {
-			return false;
-		} else {
-			initAffectsPreprocessor();
-			return affects_preprocessor.evaluateConstantAndConstant(index1, index2);
-		}
+		return false;
+	}
+	if (inSameProc(index1, index2) == false) {
+		return false;
+	} else {
+		initAffectsPreprocessor();
+		return affects_preprocessor.evaluateConstantAndConstant(index1, index2);
 	}
 }
 
