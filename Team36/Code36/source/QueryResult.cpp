@@ -103,9 +103,33 @@ void QueryResult::mergeResultTable(ResultTable& t, std::list<ResultTable*>& affe
 void QueryResult::getMergedTable(std::vector<Entity> selected, std::list<ResultTable>& out) {
 	
 	out.emplace_back(ResultTable());
-	for (auto& result : results) {
-		out.front().joinTable(*result.second);
+	std::list<ResultTable*> result_list;
+	for (auto& it = results.begin(); it != results.end(); ++it) {
+		result_list.emplace_back(it->second);
 	}
+
+	bool selected_list_updated = true;
+	while (selected_list_updated) {
+		selected_list_updated = false;
+
+		auto& it = result_list.begin();
+		while (it != result_list.end()) {
+			std::vector<Entity> common = (*it)->getCommonHeaders(selected);
+			if (common.empty()) {
+				it++;
+				continue;
+			}
+
+			std::vector<Entity> new_selected = Utility::getEntitiesExclude((*it)->getHeaders(), common);
+			for (auto& e : new_selected) {
+				selected_list_updated = true;
+				selected.emplace_back(e);
+			}
+			out.front().joinTable(**it);
+			it = result_list.erase(it);
+		}
+	}
+
 }
 
 
