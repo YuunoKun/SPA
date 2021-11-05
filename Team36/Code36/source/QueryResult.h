@@ -21,12 +21,12 @@ private:
 	ResultTable* generateNewResultTable(ResultTable&);
 
 
-	bool tryMergeResultTableCommonHeader(ResultTable&, std::list<ResultTable*>);
-	bool tryMergeResultTableIntoCurrentTable(ResultTable&, std::list<ResultTable*>);
-	bool tryMergeResultTableWithNewTable(ResultTable&, std::list<ResultTable*>);
+	bool tryMergeResultTableCommonHeader(ResultTable&, std::list<ResultTable*>&);
+	bool tryMergeResultTableIntoCurrentTable(ResultTable&, std::list<ResultTable*>&);
+	void mergeResultTableWithNewTable(ResultTable&, std::list<ResultTable*>&);
 
 	bool mergeResultTable(ResultTable*, ResultTable&);
-	void mergeResultTable(ResultTable&, std::list<ResultTable*>);
+	void mergeResultTable(ResultTable&, std::list<ResultTable*>&);
 	
 	std::unordered_set<std::string> header_set;
 

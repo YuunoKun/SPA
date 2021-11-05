@@ -32,10 +32,7 @@ bool QueryResult::isInTables(std::vector<Entity> v) {
 }
 
 bool QueryResult::isInTables(Entity e) {
-	if (header_set.find(e.getSynonym()) != header_set.end()) {
-		return true;
-	}
-	return false;
+	return header_set.find(e.getSynonym()) != header_set.end();
 }
 ResultTable* QueryResult::generateNewResultTable(ResultTable& t) {
 	ResultTable* new_table = new ResultTable(t);
@@ -43,19 +40,21 @@ ResultTable* QueryResult::generateNewResultTable(ResultTable& t) {
 	return new_table;
 }
 
-bool QueryResult::tryMergeResultTableCommonHeader(ResultTable& t, std::list<ResultTable*> affected) {
+bool QueryResult::tryMergeResultTableCommonHeader(ResultTable& t, std::list<ResultTable*>& affected) {
 	auto& it = results.find(t.getHeadersName());
-	if (it != results.end()) {
-		if (mergeResultTable(it->second, t)) {
-			affected.emplace_back(it->second);
-			return true;
-		}
+	if (it == results.end()) {
+		return false;
+	}
+
+	if (mergeResultTable(it->second, t)) {
+		affected.emplace_back(it->second);
+		return true;
+	} else {
 		throw std::exception("mergeResultTable() : merging should be successful");
 	}
-	return false;
 }
 
-bool QueryResult::tryMergeResultTableIntoCurrentTable(ResultTable& t, std::list<ResultTable*> affected) {
+bool QueryResult::tryMergeResultTableIntoCurrentTable(ResultTable& t, std::list<ResultTable*>& affected) {
 	auto& it = results.begin();
 	while (it != results.end()) {
 		if (mergeResultTable(it->second, t)) {
@@ -67,15 +66,13 @@ bool QueryResult::tryMergeResultTableIntoCurrentTable(ResultTable& t, std::list<
 	throw std::domain_error("There should exist duplicate column when this method is called");
 }
 
-bool QueryResult::tryMergeResultTableWithNewTable(ResultTable& t, std::list<ResultTable*> affected) {
-	bool merged = false;
+void QueryResult::mergeResultTableWithNewTable(ResultTable& t, std::list<ResultTable*>& affected) {
 	ResultTable* new_table = generateNewResultTable(t);
 	auto& it = results.begin();
 	while (it != results.end()) {
 		if (mergeResultTable(new_table, *it->second)) {
 			delete it->second;
 			it = results.erase(it);
-			merged = true;
 		} else {
 			it++;
 		}
@@ -83,8 +80,6 @@ bool QueryResult::tryMergeResultTableWithNewTable(ResultTable& t, std::list<Resu
 
 	results.insert({ new_table->getHeadersName(), new_table });
 	affected.emplace_back(new_table);
-
-	return merged;
 }
 
 bool QueryResult::mergeResultTable(ResultTable* table, ResultTable& to_merge) {
@@ -95,15 +90,14 @@ bool QueryResult::mergeResultTable(ResultTable* table, ResultTable& to_merge) {
 	return merged;
 }
 
-void QueryResult::mergeResultTable(ResultTable& t, std::list<ResultTable*> affected) {
+void QueryResult::mergeResultTable(ResultTable& t, std::list<ResultTable*>& affected) {
 	if (tryMergeResultTableCommonHeader(t, affected)) {
 		return;
 	}else if (t.getHeaders().size() == 1 && tryMergeResultTableCommonHeader(t, affected)) {
 		return;
-	}else  if (tryMergeResultTableWithNewTable(t, affected)) {
-		return;
+	}else{
+		mergeResultTableWithNewTable(t, affected);
 	}
-	throw std::exception("mergeResultTable() : merging failed : nothing has been merged");
 }
 
 
