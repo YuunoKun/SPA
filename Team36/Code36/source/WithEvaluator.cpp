@@ -3,11 +3,6 @@
 #include "Query.h"
 #include "QueryResult.h"
 #include "PKBAdapter.h"
-#include "WithEvaluator.h"
-
-#include "Query.h"
-#include "QueryResult.h"
-#include "PKBAdapter.h"
 #include "Utility.h"
 #include "WithEvaluator.h"
 
@@ -88,14 +83,12 @@ ResultTable WithEvaluator::getEntity(Entity& synonym) {
 	}
 }
 
-
 ResultTable WithEvaluator::getEntityAndSecondaryAttribute(Entity& synonym) {
-
 	std::pair<Entity, Entity> header = { synonym,  string_dummy };
 	switch (synonym.getType()) {
 	case EntityType::READ:
 		if (synonym.getAttribute() == AttrRef::VAR_NAME) {
-			return ResultTable(header, pkb.getAllReadVars()); 
+			return ResultTable(header, pkb.getAllReadVars());
 		}
 		break;
 	case EntityType::PRINT:
@@ -136,7 +129,7 @@ ResultTable WithEvaluator::getEntityWithAttribute(Entity& e, Entity& constant) {
 	if (is_true && Utility::isStringEntityType(e.getType())) {
 		std::vector<std::string> list = { constant.getValue() };
 		return ResultTable(e, list);
-	} else if(is_true) {
+	} else if (is_true) {
 		std::vector<value> list = { std::stoul(constant.getValue()) };
 		return ResultTable(e, list);
 	} else {
@@ -165,4 +158,3 @@ ResultTable WithEvaluator::getEntityWithSecondaryAttribute(Entity& e, Entity& co
 
 	throw std::domain_error("getEntityWithSecondaryAttribute(Entity): Entity type does not have Secondary Attribute!");
 }
-
