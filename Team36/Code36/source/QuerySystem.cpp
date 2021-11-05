@@ -18,12 +18,10 @@ std::list<std::string> QuerySystem::processQuery(std::string input) {
 		query.setClauses(optimizer.optimizeClausesOrder(query.getClauses()));
 
 		return evaluator.evaluateQuery(query);;
-	}
-	catch (SyntacticErrorException&) {
+	} catch (SyntacticErrorException&) {
 		preprocessor.resetQuery();
 		return {};
-	}
-	catch (SemanticErrorException& err) {
+	} catch (SemanticErrorException& err) {
 		preprocessor.resetQuery();
 
 		if (err.getQuery().getSelected().size() == 0) {
@@ -31,9 +29,8 @@ std::list<std::string> QuerySystem::processQuery(std::string input) {
 		} else {
 			return returnEmptyResult(err.getQuery().getSelected().front());
 		}
-	}
-	catch (std::exception& e) {
-		std::cout << e.what() << std::endl;
+	} catch (std::exception& e) {
+		std::cout << "QuerySystem processQuery(): " << e.what() << std::endl;
 		preprocessor.resetQuery();
 		return {};
 	}

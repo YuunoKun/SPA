@@ -3,96 +3,96 @@
 
 #include "Utility.h"
 
-std::list<std::string> Utility::constantsToStringList(std::vector<constant>& from) {
-	std::list<std::string> to;
-	for (auto& it : from) {
-		to.push_back(std::to_string(it));
-	}
-	return to;
+void Utility::unorderedSetToStringList(std::unordered_set<std::string>& from, std::list<std::string>& out) {
+	out.insert(out.end(), from.begin(), from.end());
 }
 
-std::list<std::string> Utility::proceduresToStringList(std::vector<proc_name>& from) {
-	std::list<std::string> to;
+std::vector<std::pair<std::string, std::string>> Utility::duplicateColumn(std::vector<std::string>& from) {
+	std::vector<std::pair<std::string, std::string>> out;
 	for (auto& it : from) {
-		to.push_back(it.c_str());
+		out.push_back({ it, it });
 	}
-	return to;
+	return out;
 }
 
-std::list<std::string> Utility::stmtInfoToStringList(std::vector<StmtInfo>& from) {
-	std::list<std::string> to;
+std::vector<std::pair<value, value>> Utility::duplicateColumn(std::vector<value>& from) {
+	std::vector<std::pair<value, value>> out;
 	for (auto& it : from) {
-		to.push_back(std::to_string(it.stmt_index));
+		out.push_back({ it, it });
 	}
-	return to;
-}
-std::list<std::string> Utility::stmtIndexToStringList(std::vector<stmt_index>& from) {
-	std::list<std::string> to;
-	for (auto& it : from) {
-		to.push_back(std::to_string(it));
-	}
-	return to;
+	return out;
 }
 
-std::vector<std::pair<std::string, std::string>> Utility::stringListToStringPair(std::list<std::string>& from) {
-	std::vector<std::pair<std::string, std::string>> to;
+std::vector<std::pair<StmtInfo, StmtInfo>> Utility::duplicateColumn(std::vector<StmtInfo>& from) {
+	std::vector<std::pair<StmtInfo, StmtInfo>> out;
 	for (auto& it : from) {
-		to.push_back({ it, it });
+		out.push_back({ it, it });
 	}
-	return to;
+	return out;
 }
 
-std::list<std::vector<std::string>> Utility::pairToStringTable(std::vector<std::pair<std::string, std::string>>& from) {
-	std::list< std::vector<std::string>> to;
+void Utility::stringToTable(std::vector<std::string>& in, std::list<std::vector<value>>& out, std::unordered_map<value, std::string>& hash_storage) {
+	for (auto& it : in) {
+		value hash = hashString(it, hash_storage);
+		out.push_back({ hash });
+	}
+}
+
+void Utility::stringToTable(std::list<std::string>& in, std::list<std::vector<value>>& out, std::unordered_map<value, std::string>& hash_storage) {
+	for (auto& it : in) {
+		value hash = hashString(it, hash_storage);
+		out.push_back({ hash });
+	}
+}
+
+void Utility::stmtInfoToTable(std::vector<StmtInfo>& in, std::list<std::vector<value>>& out) {
+	for (auto& it : in) {
+		out.push_back({ it.stmt_index });
+	}
+}
+
+void Utility::valueToTable(std::vector<value>& in, std::list<std::vector<value>>& out) {
+	for (auto& it : in) {
+		out.push_back({ it });
+	}
+}
+
+void Utility::pairToTable(std::vector<std::pair<std::string, std::string>>& from, std::list<std::vector<value>>& out,
+	std::unordered_map<value, std::string>& hash_storage) {
 	for (auto& it : from) {
-		to.push_back({ it.first, it.second });
+		value hash1 = hashString(it.first, hash_storage);
+		value hash2 = hashString(it.second, hash_storage);
+		out.push_back({ hash1, hash2 });
 	}
-	return to;
 }
 
-std::list<std::vector<std::string>> Utility::pairToStringTable(std::vector<std::pair<stmt_index, std::string>>& from) {
-	std::list< std::vector<std::string>> to;
+void Utility::pairToTable(std::vector<std::pair<StmtInfo, StmtInfo>>& from,
+	std::list<std::vector<value>>& out) {
 	for (auto& it : from) {
-		to.push_back({ std::to_string(it.first), it.second });
+		out.push_back({ it.first.stmt_index, it.second.stmt_index });
 	}
-	return to;
 }
 
-std::list<std::vector<std::string>> Utility::pairToStringTable(std::vector<std::pair<StmtInfo, std::string>>& from) {
-	std::list< std::vector<std::string>> to;
+void Utility::pairToTable(std::vector<std::pair<value, value>>& from,
+	std::list<std::vector<value>>& out) {
 	for (auto& it : from) {
-		to.push_back({ std::to_string(it.first.stmt_index), it.second });
+		out.push_back({ it.first, it.second });
 	}
-	return to;
 }
 
-std::list<std::vector<std::string>> Utility::pairToStringTable(std::vector<std::pair<StmtInfo, StmtInfo>>& from) {
-	std::list< std::vector<std::string>> to;
+void Utility::pairToTable(std::vector<std::pair<StmtInfo, std::string>>& from, std::list<std::vector<value>>& out,
+	std::unordered_map<value, std::string>& hash_storage) {
 	for (auto& it : from) {
-		to.push_back({ std::to_string(it.first.stmt_index), std::to_string(it.second.stmt_index) });
+		value hash = hashString(it.second, hash_storage);
+		out.push_back({ it.first.stmt_index, hash });
 	}
-	return to;
 }
 
-std::list<std::string> Utility::variablesToStringList(std::vector<var_name>& from) {
-	std::list<std::string> to;
+void Utility::pairToTable(std::vector<std::pair<value, std::string>>& from, std::list<std::vector<value>>& out,
+	std::unordered_map<value, std::string>& hash_storage) {
 	for (auto& it : from) {
-		to.push_back(it.c_str());
-	}
-	return to;
-}
-
-std::list<std::string> Utility::unorderedSetToStringList(std::unordered_set<std::string>& from) {
-	return std::list<std::string>(from.begin(), from.end());
-}
-
-int Utility::getIndex(std::vector<std::string> v, std::string s) {
-	auto it = std::find(v.begin(), v.end(), s);
-	if (it != v.end()) {
-		int index = it - v.begin();
-		return index;
-	} else {
-		return -1;
+		value hash = hashString(it.second, hash_storage);
+		out.push_back({ it.first, hash });
 	}
 }
 
@@ -137,137 +137,154 @@ std::vector<StmtInfo> Utility::filterResult(EntityType e, std::vector<StmtInfo>&
 	return  result;
 }
 
-std::list<std::vector<std::string>> Utility::filterResults(EntityType e,
-	std::vector<std::pair<StmtInfo, std::string>>& v) {
+void Utility::filterResults(EntityType e, std::vector<StmtInfo>& table, std::list<std::vector<value>>& out) {
 	if (isStmt(e)) {
-		return pairToStringTable(v);
+		stmtInfoToTable(table, out);
+		return;
 	}
 
 	StmtType type = convertType(e);;
-	std::vector<std::pair<StmtInfo, std::string>> result;
-	for (auto& it : v) {
-		if (it.first.stmt_type == type) {
-			result.push_back(it);
+	for (auto& it : table) {
+		if (it.stmt_type == type) {
+			out.push_back({ it.stmt_index });
 		}
 	}
-	return pairToStringTable(result);
 }
 
-std::list<std::vector<std::string>> Utility::filterResults(
-	std::pair<EntityType, EntityType> type, std::vector<std::pair<StmtInfo, StmtInfo>>& table) {
-	if (isStmt(type.first) && isStmt(type.second)) {
-		return pairToStringTable(table);
+void Utility::filterResults(EntityType e, std::vector<std::pair<StmtInfo, std::string>>& table, std::list<std::vector<value>>& out,
+	std::unordered_map<value, std::string>& hash_storage) {
+	if (isStmt(e)) {
+		pairToTable(table, out, hash_storage);
+		return;
 	}
 
-	std::vector < std::pair<StmtInfo, StmtInfo>> results;
+	StmtType type = convertType(e);;
+	for (auto& it : table) {
+		if (it.first.stmt_type == type) {
+			value hash = hashString(it.second, hash_storage);
+			out.push_back({ it.first.stmt_index, hash });
+		}
+	}
+}
+
+void Utility::filterResults(std::pair<EntityType, EntityType> type, std::vector<std::pair<StmtInfo, StmtInfo>>& table,
+	std::list<std::vector<value>>& out) {
+	if (isStmt(type.first) && isStmt(type.second)) {
+		pairToTable(table, out);
+		return;
+	}
+
 	StmtType type1 = convertType(type.first);
 	StmtType type2 = convertType(type.second);
 	for (auto& row : table) {
 		if ((isStmt(type.first) || type1 == row.first.stmt_type) &&
 			(isStmt(type.second) || type2 == row.second.stmt_type)) {
-			results.push_back(row);
+			out.push_back({ row.first.stmt_index, row.second.stmt_index });
 		}
 	}
-
-	return pairToStringTable(results);
 }
 
-std::list<std::vector<std::string>> Utility::filterResults(
-	std::list<std::vector<std::string>>& from, std::unordered_set<std::string>& filter, int index) {
-	std::list<std::vector<std::string>> results;
-
+void Utility::filterResults(
+	std::list<std::vector<value>>& from, std::unordered_set<value>& filter, int index,
+	std::list<std::vector<value>>& out) {
 	for (auto& it : from) {
 		if (filter.find(it[index]) != filter.end()) {
-			results.push_back(it);
+			out.push_back(it);
 		}
 	}
-
-	return results;
 }
 
-std::list<std::vector<std::string>> Utility::filterResults(std::list<std::vector<std::string>>& from,
-	std::unordered_map<std::string, std::unordered_set<std::string>>& filter, int index1, int index2) {
-	std::list<std::vector<std::string>> results;
-
+void Utility::filterResults(std::list<std::vector<value>>& from,
+	std::unordered_map<value, std::unordered_set<value>>& filter, int index1, int index2,
+	std::list<std::vector<value>>& out) {
 	for (auto& v : from) {
 		auto it1 = filter.find(v[index1]);
 		if (it1 != filter.end()) {
 			if (it1->second.find(v[index2]) != it1->second.end()) {
-				results.push_back(v);
+				out.push_back(v);
 			}
 		}
 	}
-
-	return results;
 }
 
-std::list<std::string> Utility::mergeColumnEqual(std::list<std::vector<std::string>>& v) {
-	std::list<std::string> to;
-	for (auto& row : v) {
-		bool equal = true;
-		for (unsigned int j = 1; j < row.size(); j++) {
-			if (row[j - 1] != row[j]) {
-				equal = false;
+void Utility::mergeColumnEqual(std::list<std::vector<value>>& table) {
+	auto i = table.begin();
+	while (i != table.end()) {
+		bool not_equal = false;
+		for (unsigned int j = 1; j < i->size(); j++) {
+			if (i->at(j - 1) != i->at(j)) {
+				not_equal = true;
 				break;
 			}
 		}
-		if (equal) {
-			to.push_back(row[0]);
-		}
-	}
-	return to;
-}
-
-std::list<std::vector<std::string>> Utility::joinTable(std::list<std::vector<std::string>>& main, int main_header_index,
-	std::unordered_multimap<std::string, std::vector<std::string>>& to_join, int to_join_header_index) {
-	std::list<std::vector<std::string>> results;
-
-	for (auto& it : main) {
-		if (to_join.count(it[main_header_index]) == 0) {
+		if (not_equal) {
+			table.erase(i++);
 			continue;
 		}
-		std::pair<std::unordered_multimap<std::string, std::vector<std::string>>::iterator,
-			std::unordered_multimap<std::string, std::vector<std::string>>::iterator> ret;
-
-		ret = to_join.equal_range(it[main_header_index]);
-
-		for (std::unordered_multimap<std::string, std::vector<std::string>>::iterator itr1 = ret.first; itr1 != ret.second; ++itr1) {
-			results.emplace_back(joinRow(it, itr1->second, to_join_header_index));
+		while (i->size() > 1) {
+			i->pop_back();
 		}
+		i++;
 	}
-	return results;
 }
 
-std::vector<std::string> Utility::joinRow(std::vector<std::string>& main, std::vector<std::string>& to_join) {
-	std::vector<std::string> result(main);
+void Utility::joinTable(std::list<std::vector<value>>& main, int main_header_index, std::unordered_multimap<value, std::vector<value>>& to_join, int to_join_header_index,
+	std::list<std::vector<value>>& out) {
+	try {
+		for (auto& it : main) {
+			if (to_join.count(it[main_header_index]) == 0) {
+				continue;
+			}
+			auto& ret = to_join.equal_range(it[main_header_index]);
+
+			for (auto& itr1 = ret.first; itr1 != ret.second; ++itr1) {
+				std::vector<value> joined_row;
+				joinRow(it, itr1->second, to_join_header_index, joined_row);
+				out.emplace_back(joined_row);
+			}
+		}
+	} catch (std::exception& e) {
+		std::cout << "joinTable(1 common column) size: " << out.size() << " cause: " << e.what() << std::endl;
+		out.clear();
+		throw e;
+	}
+}
+
+void Utility::joinTable(std::list<std::vector<value>>& main, std::list<std::vector<value>>& to_join, std::list<std::vector<value>>& out) {
+	try{
+		while (!main.empty()) {
+			for (auto& to_join_row : to_join) {
+				std::vector<value> joined_row;
+				joinRow(main.front(), to_join_row, joined_row);
+				out.emplace_back(joined_row);
+			}
+			main.pop_front();
+		}
+	} catch (std::exception& e) {
+		std::cout << "joinTable(Cross Product)  size: " << out.size() << " cause: " << e.what() << std::endl;
+		out.clear();
+		throw e;
+	}
+}
+
+void Utility::joinRow(std::vector<value>& main, std::vector<value>& to_join, std::vector<value>& out) {
+	out.insert(out.end(), main.begin(), main.end());
 	for (unsigned int i = 0; i < to_join.size(); i++) {
-		result.push_back(to_join[i]);
+		out.push_back(to_join[i]);
 	}
-	return result;
 }
 
-std::vector<std::string> Utility::joinRow(std::vector<std::string>& main, std::vector<std::string>& to_join, int common_index) {
-	std::vector<std::string> result(main);
+void Utility::joinRow(std::vector<value>& main, std::vector<value>& to_join, int common_index, std::vector<value>& out) {
+	out.insert(out.end(), main.begin(), main.end());
 	for (unsigned int i = 0; i < to_join.size(); i++) {
 		if (i == common_index) {
 			continue;
 		}
-		result.push_back(to_join[i]);
+		out.push_back(to_join[i]);
 	}
-	return result;
 }
 
-std::list<std::vector<std::string>> Utility::joinTable(std::list<std::vector<std::string>>& main, std::list<std::vector<std::string>>& to_join) {
-	std::list<std::vector<std::string>> result;
-	for (auto& main_row : main) {
-		for (auto& to_join_row : to_join) {
-			result.push_back(joinRow(main_row, to_join_row));
-		}
-	}
-	return result;
-}
-
-std::vector<Entity> Utility::removeEntities(std::vector<Entity>& main, std::vector<Entity>& to_remove) {
+std::vector<Entity> Utility::getEntitiesExclude(std::vector<Entity>& main, std::vector<Entity>& to_remove) {
 	std::unordered_set<std::string> to_remove_set;
 	for (auto& e : to_remove) {
 		to_remove_set.insert(e.getSynonym());
@@ -277,42 +294,40 @@ std::vector<Entity> Utility::removeEntities(std::vector<Entity>& main, std::vect
 
 	for (auto& e : main) {
 		if (to_remove_set.count(e.getSynonym()) == 0) {
-			result.push_back(e);
+			result.emplace_back(e);
 		}
 	}
 
 	return result;
 }
 
-std::vector<Entity> Utility::removeDuplicateEntities(std::vector<Entity>& main) {
+std::vector<Entity> Utility::getEntitiesWithoutDuplicate(std::vector<Entity>& main) {
 	std::unordered_set<std::string> unique;
 	std::vector<Entity> result;
 
 	for (auto& e : main) {
 		if (unique.count(e.getSynonym()) == 0) {
-			result.push_back(e);
+			result.emplace_back(e);
 			unique.insert(e.getSynonym());
 		}
 	}
 	return result;
 }
 
-std::list<std::vector<std::string>> Utility::getColumnsNoDuplicate(std::list<std::vector<std::string>>& main, std::vector<int>& indexes) {
+void Utility::getColumnsWithoutDuplicate(std::list<std::vector<value>>& main, std::vector<int>& indexes, std::list<std::vector<value>>& out) {
 	std::unordered_set<std::string> unique;
-	std::list<std::vector<std::string>> result;
 	for (auto& row : main) {
-		std::vector<std::string> newRow;
+		std::vector<value> newRow;
 		std::string rowString;
 		for (int i = 0; i < indexes.size(); i++) {
 			newRow.emplace_back(row[indexes[i]]);
-			rowString += row[indexes[i]] + " ";
+			rowString += std::to_string(row[indexes[i]]) + " ";
 		}
 		if (unique.count(rowString) == 0) {
-			result.emplace_back(newRow);
+			out.emplace_back(newRow);
 			unique.insert(rowString);
 		}
 	}
-	return result;
 }
 
 bool Utility::isSecondaryAttribute(Entity e) {
@@ -972,6 +987,16 @@ bool Utility::checkIsSemanticError(Query& query) {
 	return query.getIsSemanticError() != EMPTY_S;
 }
 
-bool Utility::Utility::isStmt(EntityType e) {
+bool Utility::isStringEntityType(EntityType e) {
+	return e == EntityType::PROCEDURE || e == EntityType::VARIABLE;
+}
+
+bool Utility::isStmt(EntityType e) {
 	return e == EntityType::STMT || e == EntityType::PROG_LINE;
+}
+
+value Utility::hashString(std::string to_hash, std::unordered_map<value, std::string>& hash_storage) {
+	value hash = std::hash<std::string>{}(to_hash);
+	hash_storage.insert({ hash, to_hash });
+	return hash;
 }

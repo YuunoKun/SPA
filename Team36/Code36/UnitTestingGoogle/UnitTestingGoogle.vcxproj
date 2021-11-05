@@ -92,6 +92,7 @@
     <ClCompile Include="QueryEvaluatorPatternTest.cpp" />
     <ClCompile Include="QueryEvaluatorRelationTest.cpp" />
     <ClCompile Include="PatternTest.cpp" />
+    <ClCompile Include="QueryEvaluatorStressTest.cpp" />
     <ClCompile Include="QueryEvaluatorTupleTest.cpp" />
     <ClCompile Include="QueryEvaluatorWithTest.cpp" />
     <ClCompile Include="QueryResultTest.cpp" />

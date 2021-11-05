@@ -14,12 +14,6 @@ public:
 	std::vector<StmtInfo> getStmts();
 	std::vector<constant> getConstants();
 	std::vector<proc_name> getProcedures();
-	std::vector<StmtInfo> getAssigns();
-	std::vector<StmtInfo> getPrints();
-	std::vector<StmtInfo> getCalls();
-	std::vector<StmtInfo> getReads();
-	std::vector<StmtInfo> getWhiles();
-	std::vector<StmtInfo> getIfs();
 
 	bool isVariable(var_name);
 	bool isStmt(stmt_index);

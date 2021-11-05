@@ -7,6 +7,15 @@ namespace UnitTesting {
 	class NextBipEvaluatorTest : public testing::Test {
 	protected:
 		NextBipEvaluatorTest() {
+			cfg1->add(1);
+			cfg1->add(2);
+			cfg1->add(3);
+			cfg2->add(4);
+		}
+
+		~NextBipEvaluatorTest() {
+			delete cfg1;
+			delete cfg2;
 		}
 
 		virtual void SetUp() override {
@@ -19,13 +28,19 @@ namespace UnitTesting {
 			PKB::getInstance().addNext(1, 2);
 			PKB::getInstance().addNext(2, 3);
 
-			PKB::getInstance().addProcedure(p);
-			PKB::getInstance().addProcContains(p, 1);
-			PKB::getInstance().addProcContains(p, 2);
-			PKB::getInstance().addProcContains(p, 3);
-			PKB::getInstance().addProcContains(p, 4);
+			PKB::getInstance().addProcedure(pr1);
+			PKB::getInstance().addProcedure(pr2);
+			PKB::getInstance().addProcContains(pr1, 1);
+			PKB::getInstance().addProcContains(pr1, 2);
+			PKB::getInstance().addProcContains(pr1, 3);
+			PKB::getInstance().addProcContains(pr2, 4);
+			PKB::getInstance().addCFGBip(cfg1);
+			PKB::getInstance().addCFGBip(cfg2);
 			pkb.getRelationManager().reset();
 		}
+
+		CFG* cfg1 = new CFG();
+		CFG* cfg2 = new CFG();
 
 		PKBAdapter pkb;
 		NextBipEvaluator evaluator;
@@ -40,7 +55,8 @@ namespace UnitTesting {
 		Entity e3 = { STMT, "3" };
 		Entity e4 = { STMT, "4" };
 
-		proc_name p = "p";
+		proc_name pr1 = "p";
+		proc_name pr2 = "s";
 	};
 
 	TEST_F(NextBipEvaluatorTest, evaluateWildAndWild) {
@@ -51,6 +67,10 @@ namespace UnitTesting {
 		PKB::getInstance().addStmt(STMT_IF);
 		EXPECT_FALSE(evaluator.evaluateWildAndWild());
 		PKB::getInstance().addNext(1, 2);
+		PKB::getInstance().addNext(2, 3);
+		PKB::getInstance().addCFGBip(cfg1);
+		PKB::getInstance().addCFGBip(cfg2);
+		pkb.getRelationManager().reset();
 		EXPECT_TRUE(evaluator.evaluateWildAndWild());
 	}
 
@@ -88,7 +108,7 @@ namespace UnitTesting {
 	}
 
 	TEST_F(NextBipEvaluatorTest, evaluateSynonymAndSynonym) {
-		std::vector<std::pair<StmtInfo, StmtInfo>> v = pkb.getAllNextRelation();
+		std::vector<std::pair<StmtInfo, StmtInfo>> v = pkb.getRelationManager().getAllNextBipRelation();
 		Entity left = { STMT, Synonym{"a"} };
 		Entity right = { STMT, Synonym{"b"} };
 		std::pair<Entity, Entity> header = { left, right };
@@ -124,7 +144,7 @@ namespace UnitTesting {
 	}
 
 	TEST_F(NextBipEvaluatorTest, evaluateWildAndSynonym) {
-		std::vector<StmtInfo> v = pkb.getNext();
+		std::vector<StmtInfo> v = pkb.getRelationManager().getNextBip();
 		Entity header = { STMT, Synonym{"a"} };
 		ResultTable t(header, v);
 		EXPECT_EQ(evaluator.evaluateWildAndSynonym(header), t);
@@ -155,7 +175,7 @@ namespace UnitTesting {
 	}
 
 	TEST_F(NextBipEvaluatorTest, evaluateSynonymAndWild) {
-		std::vector<StmtInfo> v = pkb.getPrevious();
+		std::vector<StmtInfo> v = pkb.getRelationManager().getPreviousBip();
 		Entity header = { STMT, Synonym{"a"} };
 		ResultTable t(header, v);
 		EXPECT_EQ(evaluator.evaluateSynonymAndWild(header), t);

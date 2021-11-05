@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
+    <ClCompile Include="pch.cpp" />
     <ClCompile Include="ExprNodeTest.cpp">
       <Filter>Common</Filter>
     </ClCompile>
@@ -139,6 +140,15 @@
     <ClCompile Include="CallsTEvaluatorTest.cpp">
       <Filter>PQL\QueryEvaluator\RelationEvaluator</Filter>
     </ClCompile>
+    <ClCompile Include="CFGRelationManagerTest_Affects.cpp">
+      <Filter>PKB</Filter>
+    </ClCompile>
+    <ClCompile Include="CFGRelationsManagerTest_AffectsT.cpp">
+      <Filter>PKB</Filter>
+    </ClCompile>
+    <ClCompile Include="CFGRelationsManagerTest_NextT.cpp">
+      <Filter>PKB</Filter>
+    </ClCompile>
     <ClCompile Include="RelationTableTest.cpp">
       <Filter>PKB\RelationTables</Filter>
     </ClCompile>
@@ -220,6 +230,9 @@
     <ClCompile Include="QueryEvaluatorCFGBipRelationTest.cpp">
       <Filter>PQL\QueryEvaluator</Filter>
     </ClCompile>
+    <ClCompile Include="QueryEvaluatorStressTest.cpp">
+      <Filter>PQL\QueryEvaluator</Filter>
+    </ClCompile>
     <ClCompile Include="NextBipTParserTest.cpp">
       <Filter>PQL\QueryPreprocessor\QueryPatternRelRefParser</Filter>
     </ClCompile>
@@ -247,6 +260,18 @@
     <ClCompile Include="RelationsUtilityTest.cpp">
       <Filter>PKB\RelationTables</Filter>
     </ClCompile>
+    <ClCompile Include="CFGRelationManagerTest_AffectsBip.cpp">
+      <Filter>PKB</Filter>
+    </ClCompile>
+    <ClCompile Include="CFGRelationsManagerTest_AffectsBipT.cpp">
+      <Filter>PKB</Filter>
+    </ClCompile>
+    <ClCompile Include="RelationsUtilityTest.cpp">
+      <Filter>PKB\RelationTables</Filter>
+    </ClCompile>
+    <ClCompile Include="CFGRelationsManagerTest_NextBipT.cpp">
+      <Filter>PKB</Filter>
+    </ClCompile>
     <ClCompile Include="CFGNodeTest.cpp">
       <Filter>Common</Filter>
     </ClCompile>
@@ -256,6 +281,8 @@
     <ClCompile Include="pch.cpp" />
     <ClCompile Include="NextBipPreprocessorTest.cpp">
       <Filter>PKB\RelationPreprocessor</Filter>
+    <ClCompile Include="CFGRelationManagerTest_NextBip.cpp">
+      <Filter>PKB</Filter>
     </ClCompile>
     <ClCompile Include="NextBipTPreprocessorTest.cpp">
       <Filter>PKB\RelationPreprocessor</Filter>
@@ -280,6 +307,8 @@
     </ClCompile>
     <ClCompile Include="CFGRelationsManagerTest_NextT.cpp">
       <Filter>PKB\CFGRelationManager</Filter>
+    <ClCompile Include="NextBipPreprocessorTest.cpp">
+      <Filter>PKB\RelationPreprocessor</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

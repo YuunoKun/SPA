@@ -50,7 +50,7 @@ namespace UnitTesting {
 		ResultTable t(left, v);
 		EXPECT_EQ(evaluator.evaluateConstant(Pattern(left, match)), t);
 
-		v = {  3 };
+		v = { 3 };
 		match = v2;
 		t = ResultTable(left, v);
 		EXPECT_EQ(evaluator.evaluateConstant(Pattern(left, match)), t);
