@@ -7,7 +7,7 @@
 
 using namespace SourceProcessor;
 
-DesignExtractor::DesignExtractor() {
+DesignExtractor::DesignExtractor(PKBSourceInterface& instance) : Extractor(instance) {
 	curr_proc_id = DE_INIT_PROC_NO;
 	curr_stmt_id = DE_INIT_STMT_NO;
 	curr_stmt_list_id = DE_INIT_STMT_LIST_NO;
@@ -101,19 +101,19 @@ void DesignExtractor::addConstant(constant val) {
 	de_constants.insert(val);
 }
 
-const std::vector<Procedure*>& DesignExtractor::getProcedures() {
+const std::vector<Procedure*>& DesignExtractor::getProcedures() const {
 	return de_procedures;
 }
 
-const std::vector<Statement*>& DesignExtractor::getStatements() {
+const std::vector<Statement*>& DesignExtractor::getStatements() const {
 	return de_statements;
 }
 
-const std::unordered_set<var_name>& DesignExtractor::getVariables() {
+const std::unordered_set<var_name>& DesignExtractor::getVariables() const {
 	return de_variables;
 }
 
-const std::unordered_set<constant>& DesignExtractor::getConstants() {
+const std::unordered_set<constant>& DesignExtractor::getConstants() const {
 	return de_constants;
 }
 
@@ -264,125 +264,125 @@ void DesignExtractor::populatePostValidation() {
 	}
 }
 
-void DesignExtractor::populateEntities(PKBSourceInterface& pkb) {
-	populateProcedures(pkb);
-	populateStatements(pkb);
-	populateVariables(pkb);
-	populateConstants(pkb);
+void DesignExtractor::populateEntities() {
+	populateProcedures();
+	populateStatements();
+	populateVariables();
+	populateConstants();
 }
 
-void DesignExtractor::populateRelations(PKBSourceInterface& pkb) {
-	populateFollows(pkb);
-	pkb.generateFollowsT();
-	populateParent(pkb);
-	pkb.generateParentT();
-	populateUses(pkb);
-	populateModifies(pkb);
-	populateCalls(pkb);
-	pkb.generateCallsPT();
-	populateIfs(pkb);
-	populateWhiles(pkb);
-	populateNext(pkb);
+void DesignExtractor::populateRelations() {
+	populateFollows();
+	pkb_instance.generateFollowsT();
+	populateParent();
+	pkb_instance.generateParentT();
+	populateUses();
+	populateModifies();
+	populateCalls();
+	pkb_instance.generateCallsPT();
+	populateIfs();
+	populateWhiles();
+	populateNext();
 }
 
-void DesignExtractor::populateProcedures(PKBSourceInterface& pkb) {
+void DesignExtractor::populateProcedures() {
 	for (Procedure* p : de_procedures) {
-		pkb.addProcedure(p->getName());
+		pkb_instance.addProcedure(p->getName());
 
 		for (stmt_index id : p->getChild()) {
-			pkb.addProcContains(p->getName(), id);
+			pkb_instance.addProcContains(p->getName(), id);
 		}
 	}
 }
 
-void DesignExtractor::populateStatements(PKBSourceInterface& pkb) {
+void DesignExtractor::populateStatements() {
 	ExprParser expr_parser;
 	for (Statement* s : de_statements) {
-		pkb.addStmt(s->getType());
+		pkb_instance.addStmt(s->getType());
 
 		if (s->getType() == StmtType::STMT_ASSIGN) {
-			pkb.addExprTree(s->getIndex(), expr_parser.parse(s->getExprStr()));
+			pkb_instance.addExprTree(s->getIndex(), expr_parser.parse(s->getExprStr()));
 		}
 	}
 }
 
-void DesignExtractor::populateVariables(PKBSourceInterface& pkb) {
+void DesignExtractor::populateVariables() {
 	for (var_name v : de_variables) {
-		pkb.addVariable(v);
+		pkb_instance.addVariable(v);
 	}
 }
 
-void DesignExtractor::populateConstants(PKBSourceInterface& pkb) {
+void DesignExtractor::populateConstants() {
 	for (constant c : de_constants) {
-		pkb.addConstant(c);
+		pkb_instance.addConstant(c);
 	}
 }
 
-void DesignExtractor::populateFollows(PKBSourceInterface& pkb) {
+void DesignExtractor::populateFollows() {
 	std::unordered_map<int, stmt_index> um;
 
 	for (Statement* s : de_statements) {
 		int list_id = s->getStmtList();
 		if (um.find(list_id) != um.end()) {
-			pkb.addFollows(um[list_id], s->getIndex());
+			pkb_instance.addFollows(um[list_id], s->getIndex());
 		}
 		um[list_id] = s->getIndex();
 	}
 }
 
-void DesignExtractor::populateParent(PKBSourceInterface& pkb) {
+void DesignExtractor::populateParent() {
 	for (Statement* s : de_statements) {
 		for (stmt_index id : s->getDirectChild()) {
-			pkb.addParent(s->getIndex(), id);
+			pkb_instance.addParent(s->getIndex(), id);
 		}
 	}
 }
 
-void DesignExtractor::populateUses(PKBSourceInterface& pkb) {
+void DesignExtractor::populateUses() {
 	for (Statement* s : de_statements) {
 		for (var_name used_var : s->getUsedVariable()) {
-			pkb.addUsesS(s->getIndex(), used_var);
+			pkb_instance.addUsesS(s->getIndex(), used_var);
 		}
 	}
 
 	for (Procedure* p : de_procedures) {
 		for (var_name used_var : p->getUsedVariable()) {
-			pkb.addUsesP(p->getName(), used_var);
+			pkb_instance.addUsesP(p->getName(), used_var);
 		}
 	}
 }
 
-void DesignExtractor::populateModifies(PKBSourceInterface& pkb) {
+void DesignExtractor::populateModifies() {
 	for (Statement* s : de_statements) {
 		for (var_name modified_var : s->getModifiedVariable()) {
-			pkb.addModifiesS(s->getIndex(), modified_var);
+			pkb_instance.addModifiesS(s->getIndex(), modified_var);
 		}
 	}
 
 	for (Procedure* p : de_procedures) {
 		for (var_name modified_var : p->getModifiedVariable()) {
-			pkb.addModifiesP(p->getName(), modified_var);
+			pkb_instance.addModifiesP(p->getName(), modified_var);
 		}
 	}
 }
 
-void DesignExtractor::populateCalls(PKBSourceInterface& pkb) {
+void DesignExtractor::populateCalls() {
 	for (Statement* s : de_statements) {
 		if (s->getType() == StmtType::STMT_CALL) {
-			pkb.addCallsS(s->getIndex(), s->getCallee());
-			pkb.addCallsP(s->getProcName(), s->getCallee());
+			pkb_instance.addCallsS(s->getIndex(), s->getCallee());
+			pkb_instance.addCallsP(s->getProcName(), s->getCallee());
 		}
 	}
 }
 
-void DesignExtractor::populateNext(PKBSourceInterface& pkb) {
+void DesignExtractor::populateNext() {
 
 	std::vector<CFG*> cfgs;
 	for (Procedure* p : de_procedures) {
 		CFG* cfg = generateCFG(p->getChild());
 		std::vector<std::pair<prog_line, prog_line>> nexts = cfg->getNexts();
 		for (auto next_rel : nexts) {
-			pkb.addNext(next_rel.first, next_rel.second);
+			pkb_instance.addNext(next_rel.first, next_rel.second);
 		}
 		cfgs.push_back(cfg);
 	}
@@ -398,28 +398,28 @@ void DesignExtractor::populateNext(PKBSourceInterface& pkb) {
 
 	for (CFG* cfg: cfgs) {
 		if (cfg->getHeadLabelledProgLine().labels.front() == NON_EXISTING_STMT_NO) {
-			pkb.addCFGBip(cfg);
+			pkb_instance.addCFGBip(cfg);
 		}
 	}
 
-	pkb.addCFGsToDestroy(cfgs);
+	pkb_instance.addCFGsToDestroy(cfgs);
 }
 
-void DesignExtractor::populateIfs(PKBSourceInterface& pkb) {
+void DesignExtractor::populateIfs() {
 	for (Statement* s : de_statements) {
 		if (s->getType() == StmtType::STMT_IF) {
 			for (var_name v : s->getUsedCondVariable()) {
-				pkb.addIf(s->getIndex(), v);
+				pkb_instance.addIf(s->getIndex(), v);
 			}
 		}
 	}
 }
 
-void DesignExtractor::populateWhiles(PKBSourceInterface& pkb) {
+void DesignExtractor::populateWhiles() {
 	for (Statement* s : de_statements) {
 		if (s->getType() == StmtType::STMT_WHILE) {
 			for (var_name v : s->getUsedCondVariable()) {
-				pkb.addWhile(s->getIndex(), v);
+				pkb_instance.addWhile(s->getIndex(), v);
 			}
 		}
 	}

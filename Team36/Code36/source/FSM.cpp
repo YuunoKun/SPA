@@ -4,7 +4,7 @@ using namespace SourceProcessor;
 
 FSM::FSM(Tokenizer& t) {
 	tokenizer = t;
-	design_extractor = new DesignExtractor();
+	design_extractor = new DesignExtractor(PKB::getInstance());
 }
 
 FSM::FSM(Tokenizer& t, Extractor *extractor) {
@@ -29,12 +29,10 @@ void FSM::build() {
 		expectProcedure();
 	}
 
-	PKBSourceInterface& pkb_instance = PKB::getInstance();
-
-	design_extractor->populateEntities(pkb_instance);
+	design_extractor->populateEntities();
 	design_extractor->validate();
 	design_extractor->populatePostValidation();
-	design_extractor->populateRelations(pkb_instance);
+	design_extractor->populateRelations();
 }
 
 void FSM::expectProcedure() {
@@ -246,18 +244,6 @@ void FSM::expectRelationalExpression() {
 
 void FSM::expectRelationalFactor() {
 	expectExpression();
-	//switch (tokenizer.peekToken().getTokenType()) {
-	//case TokenType::IDENTIFIER:
-	//	design_extractor.addVariable(expectTokenAndPop(TokenType::IDENTIFIER).getTokenValue());
-	//	break;
-	//case TokenType::CONSTANT:
-	//	design_extractor.addConstant(std::stoul(expectTokenAndPop(TokenType::CONSTANT).getTokenValue(), nullptr, 0));
-	//	break;
-	//default:
-	//	// start of expression
-	//	expectExpression();
-	//	break;
-	//}
 }
 
 void FSM::expectExpression() {
