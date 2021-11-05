@@ -123,6 +123,7 @@ void ResultTable::getEntityResult(Entity& e, std::list<std::string>& out) {
 	}
 	Utility::unorderedSetToStringList(result_set, out);
 }
+
 void ResultTable::getStringEntityResult(int columnIndex, std::unordered_set<std::string>& out) {
 	for (auto row : table) {
 		out.insert(hash_map[row[columnIndex]]);
@@ -314,12 +315,6 @@ void ResultTable::filter_table(ResultTable& t, Entity common_header1, Entity com
 
 	table = std::list<std::vector<value>>();
 	Utility::filterResults(main_table, filters, header_index1, header_index2, table);
-}
-void ResultTable::filter_both_table(ResultTable& t, Entity common_header) {
-	int header_index = getHeaderIndex(common_header);
-	int to_join_index = t.getHeaderIndex(common_header);
-
-	Utility::filterBothResults(table, header_index, t.table, to_join_index);
 }
 
 void ResultTable::joinTable(ResultTable& t, Entity common_header) {

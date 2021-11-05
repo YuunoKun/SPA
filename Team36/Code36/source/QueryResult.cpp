@@ -134,6 +134,7 @@ void QueryResult::addResult(ResultTable& t) {
 		auto& it = results.begin();
 		while (it != results.end()) {
 			if (it->second->getHeadersName() == current->getHeadersName()) {
+				it++;
 				continue;
 			}
 			size_t original_size = it->second->size();

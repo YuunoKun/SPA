@@ -52,7 +52,6 @@ private:
 	int getHeaderIndex(Entity);
 
 	void filter_table(ResultTable&, Entity);
-	void filter_both_table(ResultTable&, Entity);
 	void filter_table(ResultTable&, Entity, Entity);
 
 	void joinTable(ResultTable&, Entity);

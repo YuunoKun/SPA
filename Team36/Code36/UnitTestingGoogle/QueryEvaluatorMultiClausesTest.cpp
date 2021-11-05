@@ -803,7 +803,7 @@ namespace UnitTesting {
 		relation = RelRef(USES_S, stmt_common, lhs_common);
 
 		selected = assign_common;
-		result = { MODIFIES_LEFT3, MODIFIES_LEFT4 };
+		result = { MODIFIES_LEFT4, MODIFIES_LEFT3 };
 		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation }, { pattern }, selected)), result);
 
 		selected = lhs_common;
@@ -834,7 +834,7 @@ namespace UnitTesting {
 		pattern = Pattern(assign_common, lhs_common, "", true);
 		relation = RelRef(USES_S, stmt_common, lhs_common);
 		selected = assign_common;
-		result = { MODIFIES_LEFT3, MODIFIES_LEFT4 };
+		result = { MODIFIES_LEFT4, MODIFIES_LEFT3 };
 		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation }, { pattern }, selected)), result);
 
 		selected = lhs_common;
