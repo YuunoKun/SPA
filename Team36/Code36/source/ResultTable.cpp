@@ -27,7 +27,7 @@ ResultTable::ResultTable(Entity& header, std::vector<std::string>& table) {
 }
 
 ResultTable::ResultTable(std::vector<Entity>& e, std::list<std::vector<value>>& table, std::unordered_map<value, std::string>& hash_map) {
-	this->table = table; 
+	this->table = table;
 	this->hash_map = hash_map;
 	addHeader(e);
 }
@@ -56,7 +56,6 @@ ResultTable::ResultTable(std::pair<Entity, Entity>  header, std::vector<std::pai
 	Utility::filterResults(std::make_pair(header.first.getType(), header.second.getType()), table, this->table);
 	addHeader(header);
 }
-
 
 //Return true if merge is successful
 bool ResultTable::merge(ResultTable& t) {
@@ -113,7 +112,6 @@ void ResultTable::getIntEntityResult(int columnIndex, std::unordered_set<std::st
 	}
 }
 
-
 void ResultTable::getEntityResults(std::vector<Entity> entities, std::list<std::list<std::string>>& out) {
 	std::vector<int> indexes;
 	std::vector<bool> is_string;
@@ -164,7 +162,6 @@ std::vector<Entity> ResultTable::getHeaders() {
 bool ResultTable::operator==(const ResultTable& other) const {
 	return header == other.header && table == other.table;
 }
-
 
 void ResultTable::addHeader(std::pair<Entity, Entity>& header) {
 	if (header.first == header.second) {
@@ -288,9 +285,6 @@ void ResultTable::joinTable(ResultTable& t, Entity common_header) {
 	addHeader(t.header);
 	addHashToStringMap(t.hash_map);
 }
-
-
-
 
 void ResultTable::joinTable(ResultTable& t) {
 	if (this->header.empty()) {

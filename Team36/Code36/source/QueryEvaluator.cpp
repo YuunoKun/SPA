@@ -24,7 +24,6 @@ std::list<std::string> QueryEvaluator::evaluateQuery(Query& query) {
 		PKBAdapter::getRelationManager().reset();
 		return {};
 	}
-
 }
 
 void QueryEvaluator::evaluateClauses(Query& query, QueryResult& query_result) {
@@ -42,16 +41,15 @@ void QueryEvaluator::evaluateClauses(Query& query, QueryResult& query_result) {
 	}
 }
 
-
 ResultTable QueryEvaluator::getRawResult(Entity& selected) {
 	switch (selected.getType()) {
 	case EntityType::PROG_LINE:
-	case EntityType::STMT: 
-	case EntityType::READ: 
-	case EntityType::PRINT: 
-	case EntityType::CALL: 
-	case EntityType::WHILE: 
-	case EntityType::IF: 
+	case EntityType::STMT:
+	case EntityType::READ:
+	case EntityType::PRINT:
+	case EntityType::CALL:
+	case EntityType::WHILE:
+	case EntityType::IF:
 	case EntityType::ASSIGN: return ResultTable(selected, pkb.getStmts()); break;
 	case EntityType::VARIABLE: return ResultTable(selected, pkb.getVariables()); break;
 	case EntityType::CONSTANT: return ResultTable(selected, pkb.getConstants()); break;
@@ -60,7 +58,6 @@ ResultTable QueryEvaluator::getRawResult(Entity& selected) {
 
 	throw std::domain_error("Selected Entity is not supported for select");
 }
-
 
 std::string QueryEvaluator::getEntitySecondaryAttribute(std::string primary, Entity& type) {
 	switch (type.getType()) {
@@ -90,7 +87,6 @@ void QueryEvaluator::convertToSecondaryAttribute(std::list<std::string>& table, 
 		*it = getEntitySecondaryAttribute(*it, type);
 		it++;
 	}
-
 }
 
 void QueryEvaluator::mergeTable(ResultTable& result_table, std::vector<Entity>& selected, std::list<std::string>& out) {
@@ -116,7 +112,6 @@ void QueryEvaluator::mergeTable(ResultTable& result_table, std::vector<Entity>& 
 	}
 }
 
-
 void QueryEvaluator::getTupleResult(Query& query, QueryResult& query_result, std::list<std::string>& out) {
 	std::vector<Entity> selected_entities = Utility::getEntitiesWithoutDuplicate(query.getSelected());
 	ResultTable result;
@@ -131,7 +126,6 @@ void QueryEvaluator::getTupleResult(Query& query, QueryResult& query_result, std
 
 	mergeTable(result, query.getSelected(), out);
 }
-
 
 void QueryEvaluator::getResult(Query& query, QueryResult& result, std::list<std::string>& out) {
 	if (query.getSelected()[0].getType() == EntityType::BOOLEAN) {
@@ -162,5 +156,4 @@ void QueryEvaluator::getResult(Query& query, QueryResult& result, std::list<std:
 	if (Utility::isSecondaryAttribute(query.getSelected()[0])) {
 		convertToSecondaryAttribute(out, query.getSelected()[0]);
 	}
-
 }

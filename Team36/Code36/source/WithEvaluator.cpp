@@ -88,14 +88,12 @@ ResultTable WithEvaluator::getEntity(Entity& synonym) {
 	}
 }
 
-
 ResultTable WithEvaluator::getEntityAndSecondaryAttribute(Entity& synonym) {
-
 	std::pair<Entity, Entity> header = { synonym,  string_dummy };
 	switch (synonym.getType()) {
 	case EntityType::READ:
 		if (synonym.getAttribute() == AttrRef::VAR_NAME) {
-			return ResultTable(header, pkb.getAllReadVars()); 
+			return ResultTable(header, pkb.getAllReadVars());
 		}
 		break;
 	case EntityType::PRINT:
@@ -165,4 +163,3 @@ ResultTable WithEvaluator::getEntityWithSecondaryAttribute(Entity& e, Entity& co
 
 	throw std::domain_error("getEntityWithSecondaryAttribute(Entity): Entity type does not have Secondary Attribute!");
 }
-

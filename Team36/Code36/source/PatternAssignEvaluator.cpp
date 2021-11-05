@@ -1,9 +1,7 @@
-
 #include "PatternAssignEvaluator.h"
 #include "Query.h"
 #include "QueryResult.h"
 #include "PKBAdapter.h"
-
 
 ResultTable PatternAssignEvaluator::evaluateSynonym(Pattern& pattern) {
 	std::pair<Entity, Entity> header = { pattern.getPatternType(), pattern.getLeftExpression() };

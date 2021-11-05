@@ -54,7 +54,6 @@ public:
 
 	void generateFollowsT() {}
 
-
 	std::unordered_set<proc_name> stub_proc_table;
 	std::unordered_set<var_name> stub_var_table;
 	std::vector<std::pair<stmt_index, StmtType>> stub_stmt_table;
@@ -67,20 +66,15 @@ public:
 	std::unordered_map<stmt_index, std::unordered_set<var_name>> stub_modifies_table;
 
 	unsigned int stub_curr_stmt_id{ 1 };
-
 };
 */
 
-
 namespace UnitTesting {
-
 	using namespace SourceProcessor;
-
 
 	TEST(DesignExtractor, full_behavior_test) {
 		PKB::getInstance().resetCache();
 		DesignExtractor* extractor = new DesignExtractor();
-
 
 		/*
 		* procedure main {
@@ -99,7 +93,7 @@ namespace UnitTesting {
 				}
 		12		afterWhile = afterWhile;}
 		13	afterIf = afterIf;}
-		* 
+		*
 		* procedure p2 {
 		14	p2Var = p2Var - 11;
 		* }
@@ -107,7 +101,7 @@ namespace UnitTesting {
 
 		// procedure main {
 		extractor->addProcedure("main");
-		
+
 		// 1  mainX = 1;
 		extractor->addStatement(TokenType::ASSIGN);
 		extractor->addVariable("mainX");
@@ -116,7 +110,7 @@ namespace UnitTesting {
 		extractor->addConstant(1);
 		extractor->addExprSegment("1");
 		extractor->endExpr();
-		 
+
 		// 2  read readVar;
 		extractor->addStatement(TokenType::READ);
 		extractor->addVariable("readVar");
@@ -203,7 +197,6 @@ namespace UnitTesting {
 		// }
 		extractor->endNesting();
 
-
 		// 5->12 afterWhile = afterWhile;
 		extractor->addStatement(TokenType::ASSIGN);
 		extractor->addVariable("afterWhile");
@@ -225,7 +218,6 @@ namespace UnitTesting {
 		extractor->addExprSegment("afterIf");
 		extractor->endExpr();
 
-
 		// procedure p2 {
 		extractor->addProcedure("p2");
 
@@ -239,29 +231,25 @@ namespace UnitTesting {
 		extractor->addExprSegment("p2Var-11");
 		extractor->endExpr();
 
-
 		std::vector<Procedure*> procedures = extractor->getProcedures();
 		std::vector<Statement*> statements = extractor->getStatements();
 		std::unordered_set<var_name> variables = extractor->getVariables();
 		std::unordered_set<constant> constants = extractor->getConstants();
 
-
 		ASSERT_EQ(procedures.size(), 2);
 		ASSERT_EQ(statements.size(), 14);
 		ASSERT_EQ(variables.size(), 13);
 		ASSERT_EQ(constants.size(), 6);
-		
+
 		ASSERT_NO_THROW(extractor->validate());
 		ASSERT_NO_THROW(extractor->populatePostValidation());
 
-
 		// test constants
-		std::vector<constant> expected_constants = {1,13,2,4,15,11};
+		std::vector<constant> expected_constants = { 1,13,2,4,15,11 };
 		ASSERT_EQ(constants.size(), expected_constants.size());
 		for (constant c : expected_constants) {
 			ASSERT_TRUE(constants.find(c) != constants.end());
 		}
-		
 
 		// test variables
 		std::vector<var_name> expected_variables = {
@@ -273,7 +261,6 @@ namespace UnitTesting {
 		for (var_name v : expected_variables) {
 			ASSERT_TRUE(variables.find(v) != variables.end());
 		}
-
 
 		// test statements
 		// stmt1 mainX = 1;
@@ -292,7 +279,6 @@ namespace UnitTesting {
 
 		ASSERT_EQ(s1->getStmtList(), 1);
 
-
 		// stmt2 read readVar;
 		Statement* s2 = statements[1];
 		ASSERT_EQ(s2->getIndex(), 2);
@@ -308,7 +294,6 @@ namespace UnitTesting {
 		ASSERT_EQ(s2->getModifiedVariable()[0], "readVar");
 
 		ASSERT_EQ(s2->getStmtList(), 1);
-
 
 		// stmt3 print printVar;
 		Statement* s3 = statements[2];
@@ -326,7 +311,6 @@ namespace UnitTesting {
 
 		ASSERT_EQ(s3->getStmtList(), 1);
 
-
 		// stmt4 beforeIf = beforeIf * mainX;
 		Statement* s4 = statements[3];
 		ASSERT_EQ(s4->getIndex(), 4);
@@ -338,14 +322,13 @@ namespace UnitTesting {
 		ASSERT_EQ(s4->getDirectChild().size(), 0);
 		ASSERT_EQ(s4->getUsedVariable().size(), 2);
 		ASSERT_EQ(s4->getModifiedVariable().size(), 1);
-		std::unordered_set<var_name> expected_stmt4_used = {"beforeIf","mainX"};
+		std::unordered_set<var_name> expected_stmt4_used = { "beforeIf","mainX" };
 		for (var_name v : s4->getUsedVariable()) {
 			ASSERT_TRUE(expected_stmt4_used.find(v) != expected_stmt4_used.end());
 		}
 		ASSERT_EQ(s4->getModifiedVariable()[0], "beforeIf");
 
 		ASSERT_EQ(s4->getStmtList(), 1);
-
 
 		// stmt5 if(mainIfCond==13) then {....
 		Statement* s5 = statements[4];
@@ -382,7 +365,6 @@ namespace UnitTesting {
 
 		ASSERT_EQ(s5->getStmtList(), 1);
 
-
 		// stmt6 beforeCall = beforeCall + 2;
 		Statement* s6 = statements[5];
 		ASSERT_EQ(s6->getIndex(), 6);
@@ -398,7 +380,6 @@ namespace UnitTesting {
 		ASSERT_EQ(s6->getModifiedVariable()[0], "beforeCall");
 
 		ASSERT_EQ(s6->getStmtList(), 6);
-
 
 		// stmt7 call p2;
 		Statement* s7 = statements[6];
@@ -416,7 +397,6 @@ namespace UnitTesting {
 
 		ASSERT_EQ(s7->getStmtList(), 6);
 
-
 		// stmt8 afterCall = afterCall + 4;
 		Statement* s8 = statements[7];
 		ASSERT_EQ(s8->getIndex(), 8);
@@ -432,7 +412,6 @@ namespace UnitTesting {
 		ASSERT_EQ(s8->getModifiedVariable()[0], "afterCall");
 
 		ASSERT_EQ(s8->getStmtList(), 6);
-
 
 		// stmt9 beforeWhile = beforeWhile;
 		Statement* s9 = statements[8];
@@ -450,7 +429,6 @@ namespace UnitTesting {
 
 		ASSERT_EQ(s9->getStmtList(), 9);
 
-
 		// stmt10 while(whileCond < 15) {......
 		Statement* s10 = statements[9];
 		ASSERT_EQ(s10->getIndex(), 10);
@@ -463,14 +441,13 @@ namespace UnitTesting {
 		ASSERT_EQ(s10->getUsedVariable().size(), 2);
 		ASSERT_EQ(s10->getModifiedVariable().size(), 1);
 		ASSERT_EQ(s10->getDirectChild()[0], 11);
-		std::unordered_set<var_name> expected_stmt10_used = {"whileCond","inWhile"};
+		std::unordered_set<var_name> expected_stmt10_used = { "whileCond","inWhile" };
 		for (var_name v : s10->getUsedVariable()) {
 			ASSERT_TRUE(expected_stmt10_used.find(v) != expected_stmt10_used.end());
 		}
 		ASSERT_EQ(s10->getModifiedVariable()[0], "inWhile");
 
 		ASSERT_EQ(s10->getStmtList(), 9);
-
 
 		// stmt11 inWhile = inWhile;
 		Statement* s11 = statements[10];
@@ -488,7 +465,6 @@ namespace UnitTesting {
 
 		ASSERT_EQ(s11->getStmtList(), 11);
 
-
 		// stmt12 afterWhile = afterWhile;}
 		Statement* s12 = statements[11];
 		ASSERT_EQ(s12->getIndex(), 12);
@@ -504,7 +480,6 @@ namespace UnitTesting {
 		ASSERT_EQ(s12->getModifiedVariable()[0], "afterWhile");
 
 		ASSERT_EQ(s12->getStmtList(), 9);
-
 
 		// stmt13 beforeWhile = beforeWhile;
 		Statement* s13 = statements[12];
@@ -522,7 +497,6 @@ namespace UnitTesting {
 
 		ASSERT_EQ(s13->getStmtList(), 1);
 
-
 		// stmt14 p2Var = p2Var - 11;
 		Statement* s14 = statements[13];
 		ASSERT_EQ(s14->getIndex(), 14);
@@ -538,9 +512,6 @@ namespace UnitTesting {
 		ASSERT_EQ(s14->getModifiedVariable()[0], "p2Var");
 
 		ASSERT_EQ(s14->getStmtList(), 14);
-
-
-
 
 		// test procedures
 		// procedure1 main
@@ -586,15 +557,13 @@ namespace UnitTesting {
 		//ASSERT_EQ(p1->getCaller().size(), 1);
 		//ASSERT_EQ(p1->getCaller()[0], 1);
 
-
 		/*
-		
+
 		// test population
 		PKB stub_pkb;
 
 		// test populate entites
 		extractor->populateEntities(stub_pkb);
-
 
 		std::vector<constant> expected_populated_constants = {1,13,2,4,15,11};
 		ASSERT_EQ(stub_pkb.stub_const_table.size(), expected_populated_constants.size());
@@ -618,8 +587,8 @@ namespace UnitTesting {
 			ASSERT_TRUE(stub_pkb.stub_proc_table.find(p) != stub_pkb.stub_proc_table.end());
 		}
 
-		std::vector<std::pair<stmt_index, StmtType>> expected_populated_stmt = 
-		{ 
+		std::vector<std::pair<stmt_index, StmtType>> expected_populated_stmt =
+		{
 			{1, STMT_ASSIGN},
 			{2, STMT_READ},
 			{3, STMT_PRINT},
@@ -640,7 +609,6 @@ namespace UnitTesting {
 			ASSERT_EQ(stub_pkb.stub_stmt_table[i].first, expected_populated_stmt[i].first);
 			ASSERT_EQ(stub_pkb.stub_stmt_table[i].second, expected_populated_stmt[i].second);
 		}
-
 
 		// test populate relations
 		extractor->populateRelations(stub_pkb);
@@ -698,14 +666,13 @@ namespace UnitTesting {
 		}
 		*/
 
-
-		// test population 
+		// test population
 
 		// test populate entites
 		PKB* pkb = &PKB::getInstance();
 		extractor->populateEntities(*pkb);
 
-		std::unordered_set<constant> expected_populated_constants = {1,13,2,4,15,11};
+		std::unordered_set<constant> expected_populated_constants = { 1,13,2,4,15,11 };
 		ASSERT_EQ(pkb->getConstants().size(), expected_populated_constants.size());
 		for (constant c : pkb->getConstants()) {
 			ASSERT_TRUE(expected_populated_constants.find(c) != expected_populated_constants.end());
@@ -727,8 +694,8 @@ namespace UnitTesting {
 			ASSERT_TRUE(expected_populated_proc.find(p) != expected_populated_proc.end());
 		}
 
-		std::vector<std::pair<stmt_index, StmtType>> expected_populated_stmt = 
-		{ 
+		std::vector<std::pair<stmt_index, StmtType>> expected_populated_stmt =
+		{
 			{1, STMT_ASSIGN},
 			{2, STMT_READ},
 			{3, STMT_PRINT},
@@ -751,8 +718,6 @@ namespace UnitTesting {
 			ASSERT_EQ(res[i].stmt_index, expected_populated_stmt[i].first);
 			ASSERT_EQ(res[i].stmt_type, expected_populated_stmt[i].second);
 		}
-
-
 
 		std::vector<StmtInfo> expected_stmt_info =
 		{
@@ -796,11 +761,10 @@ namespace UnitTesting {
 		auto table_u = pkb->getUsesS();
 		ASSERT_EQ(table_u.getPairs().size(), 21);
 		for (size_t i = 0; i < expected_used_variables.size(); i++) {
-			for (var_name v: expected_used_variables[i]) {
+			for (var_name v : expected_used_variables[i]) {
 				ASSERT_TRUE(table_u.containsPair(expected_stmt_info[i], v));
 			}
 		}
-
 
 		// usesP
 		auto table_uP = pkb->getUsesP();
@@ -824,8 +788,6 @@ namespace UnitTesting {
 		for (auto p : expected_usesP) {
 			ASSERT_TRUE(table_uP.containsPair(p.first, p.second));
 		}
-
-
 
 		// modifies
 		std::vector<std::vector<var_name>> expected_modified_variables =
@@ -853,7 +815,6 @@ namespace UnitTesting {
 			}
 		}
 
-
 		// modifiesP
 		auto table_mP = pkb->getModifiesP();
 		std::vector<std::pair<proc_name, var_name>> expected_modifiesP =
@@ -875,19 +836,17 @@ namespace UnitTesting {
 			ASSERT_TRUE(table_mP.containsPair(p.first, p.second));
 		}
 
-
 		// Follows
 		auto table_f = pkb->getFollows();
-		std::vector<std::pair<stmt_index,stmt_index>> expected_follows =
+		std::vector<std::pair<stmt_index, stmt_index>> expected_follows =
 		{
 			{1,2},{2,3},{3,4},{4,5},{6,7},{7,8},
 			{9,10},{10,12},{5,13}
 		};
 		ASSERT_EQ(table_f.getPairs().size(), expected_follows.size());
-		for (auto p: expected_follows) {
+		for (auto p : expected_follows) {
 			ASSERT_TRUE(table_f.containsPair(expected_stmt_info[p.first - 1], expected_stmt_info[p.second - 1]));
 		}
-
 
 		// Parent
 		auto table_p = pkb->getParent();
@@ -900,7 +859,6 @@ namespace UnitTesting {
 		for (auto p : expected_parent) {
 			ASSERT_TRUE(table_p.containsPair(expected_stmt_info[p.first - 1], expected_stmt_info[p.second - 1]));
 		}
-
 
 		// CallsP
 		auto table_cp = pkb->getCallsP();
@@ -946,24 +904,23 @@ namespace UnitTesting {
 			ASSERT_TRUE(table_whiles.containsPair(whiles.first, whiles.second));
 		}
 
-
 		// Nexts
 		auto table_nexts = pkb->getNext();
 		std::vector<std::pair<StmtInfo, StmtInfo>> expected_nexts =
 		{
-			{{1, STMT_ASSIGN},{2, STMT_READ}}, 
-			{{2, STMT_READ},{3, STMT_PRINT}}, 
-			{{3, STMT_PRINT},{4, STMT_ASSIGN}}, 
+			{{1, STMT_ASSIGN},{2, STMT_READ}},
+			{{2, STMT_READ},{3, STMT_PRINT}},
+			{{3, STMT_PRINT},{4, STMT_ASSIGN}},
 			{{4, STMT_ASSIGN},{5, STMT_IF}},
-			{{5, STMT_IF},{6, STMT_ASSIGN}}, 
+			{{5, STMT_IF},{6, STMT_ASSIGN}},
 			{{5, STMT_IF},{9, STMT_ASSIGN}},
-			{{6, STMT_ASSIGN},{7, STMT_CALL}}, 
-			{{7, STMT_CALL},{8, STMT_ASSIGN}}, 
+			{{6, STMT_ASSIGN},{7, STMT_CALL}},
+			{{7, STMT_CALL},{8, STMT_ASSIGN}},
 			{{8, STMT_ASSIGN},{13, STMT_ASSIGN}},
-			{{9, STMT_ASSIGN},{10, STMT_WHILE}}, 
-			{{10, STMT_WHILE},{12, STMT_ASSIGN}}, 
-			{{10, STMT_WHILE}, {11, STMT_ASSIGN}}, 
-			{{11, STMT_ASSIGN},{10, STMT_WHILE}}, 
+			{{9, STMT_ASSIGN},{10, STMT_WHILE}},
+			{{10, STMT_WHILE},{12, STMT_ASSIGN}},
+			{{10, STMT_WHILE}, {11, STMT_ASSIGN}},
+			{{11, STMT_ASSIGN},{10, STMT_WHILE}},
 			{{12, STMT_ASSIGN}, {13, STMT_ASSIGN}}
 		};
 		ASSERT_EQ(table_nexts.getPairs().size(), expected_nexts.size());
@@ -974,7 +931,7 @@ namespace UnitTesting {
 		//NextBip
 		auto cfgbips = pkb->getCFGBips();
 		ASSERT_EQ(cfgbips.size(), 1);
-		
+
 		std::vector<std::pair<prog_line, prog_line>> nextbip_actual = cfgbips[0]->getNextBip();
 		std::vector<std::pair<prog_line, prog_line>> nextbip_expected =
 		{
@@ -1014,7 +971,6 @@ namespace UnitTesting {
 		delete extractor;
 	}
 
-
 	TEST(DesignExtractor, validation_duplicate_proc_name) {
 		DesignExtractor* extractor = new DesignExtractor();
 
@@ -1051,7 +1007,6 @@ namespace UnitTesting {
 		ASSERT_THROW(extractor->validate(), std::runtime_error);
 	}
 
-
 	TEST(DesignExtractor, validation_undefined_proc_name) {
 		DesignExtractor* extractor = new DesignExtractor();
 
@@ -1082,7 +1037,6 @@ namespace UnitTesting {
 		ASSERT_THROW(extractor->validate(), std::runtime_error);
 	}
 
-
 	TEST(DesignExtractor, validation_cyclic_call) {
 		DesignExtractor* extractor = new DesignExtractor();
 
@@ -1106,7 +1060,6 @@ namespace UnitTesting {
 
 		ASSERT_THROW(extractor->validate(), std::runtime_error);
 	}
-
 
 	TEST(DesignExtractor, validation_recursive) {
 		DesignExtractor* extractor = new DesignExtractor();
