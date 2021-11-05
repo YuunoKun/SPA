@@ -87,7 +87,6 @@ bool CFGRelationsManager::isAffects(stmt_index index1, stmt_index index2) {
 			return false;
 		} else {
 			initAffectsPreprocessor();
-			initAffectsPreprocessor();
 			return affects_preprocessor.evaluateConstantAndConstant(index1, index2);
 		}
 	}
