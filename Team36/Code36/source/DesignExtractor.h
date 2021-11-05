@@ -5,6 +5,7 @@
 #include <unordered_set>
 #include <unordered_map>
 #include "SPCommon.h"
+#include "Parser.h"
 #include "CFG.h"
 #include "Extractor.h"
 #include "Procedure.h"
@@ -14,7 +15,9 @@
 namespace SourceProcessor {
 	class DesignExtractor : public Extractor {
 	public:
-		DesignExtractor();
+		DesignExtractor() = delete;
+
+		DesignExtractor(PKBSourceInterface&);
 
 		~DesignExtractor();
 
@@ -26,10 +29,10 @@ namespace SourceProcessor {
 		void addStatement(TokenType);
 		void addVariable(var_name);
 		void addConstant(constant);
-		const std::vector<Procedure*>& getProcedures();
-		const std::vector<Statement*>& getStatements();
-		const std::unordered_set<var_name>& getVariables();
-		const std::unordered_set<constant>& getConstants();
+		const std::vector<Procedure*>& getProcedures() const;
+		const std::vector<Statement*>& getStatements() const;
+		const std::unordered_set<var_name>& getVariables() const;
+		const std::unordered_set<constant>& getConstants() const;
 		void addStatementUses(var_name);
 		void addStatementModifies(var_name);
 		void startExpr();
@@ -40,8 +43,8 @@ namespace SourceProcessor {
 		void validate();
 
 		void populatePostValidation();
-		void populateEntities(PKBSourceInterface&);
-		void populateRelations(PKBSourceInterface&);
+		void populateEntities();
+		void populateRelations();
 
 	private:
 		std::vector<Procedure*> de_procedures;
@@ -57,22 +60,23 @@ namespace SourceProcessor {
 		std::vector<proc_index> call_sequence;
 		bool is_cond_expr;
 
-		void populateProcedures(PKBSourceInterface&);
-		void populateStatements(PKBSourceInterface&);
-		void populateVariables(PKBSourceInterface&);
-		void populateConstants(PKBSourceInterface&);
+		void populateProcedures();
+		void populateStatements();
+		void populateVariables();
+		void populateConstants();
 
-		void populateFollows(PKBSourceInterface&);
-		void populateParent(PKBSourceInterface&);
-		void populateUses(PKBSourceInterface&);
-		void populateModifies(PKBSourceInterface&);
-		void populateCalls(PKBSourceInterface&);
-		void populateNext(PKBSourceInterface&);
+		void populateFollows();
+		void populateParent();
+		void populateUses();
+		void populateModifies();
+		void populateCalls();
+		void populateNext();
 
-		void populateIfs(PKBSourceInterface&);
-		void populateWhiles(PKBSourceInterface&);
+		void populateIfs();
+		void populateWhiles();
 
 		CFG* generateCFG(std::vector<stmt_index>);
+
 	};
 
 } // namespace SourceProcessor
