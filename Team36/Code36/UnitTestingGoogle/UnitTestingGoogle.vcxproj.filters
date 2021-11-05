@@ -281,6 +281,7 @@
     <ClCompile Include="pch.cpp" />
     <ClCompile Include="NextBipPreprocessorTest.cpp">
       <Filter>PKB\RelationPreprocessor</Filter>
+    </ClCompile>
     <ClCompile Include="CFGRelationManagerTest_NextBip.cpp">
       <Filter>PKB</Filter>
     </ClCompile>
@@ -307,6 +308,7 @@
     </ClCompile>
     <ClCompile Include="CFGRelationsManagerTest_NextT.cpp">
       <Filter>PKB\CFGRelationManager</Filter>
+    </ClCompile>
     <ClCompile Include="NextBipPreprocessorTest.cpp">
       <Filter>PKB\RelationPreprocessor</Filter>
     </ClCompile>
