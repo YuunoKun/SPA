@@ -31,7 +31,7 @@ namespace UnitTesting {
 			PKB::getInstance().addModifiesS(2, y);
 			PKB::getInstance().addUsesS(3, y);
 
-			PKBAdapter::getRelationManager().update();
+			PKBAdapter::getRelationManager().reset();
 		}
 
 		~QueryEvaluatorCFGRelationTest() override {
@@ -131,7 +131,6 @@ namespace UnitTesting {
 
 		const Entity SELECT_BOOLEAN = { BOOLEAN };
 
-
 		const std::list<std::string> EMPTY_RESULT = {};
 		const std::list<std::string> BOOLEAN_TRUE_RESULT = { BOOLEAN_TRUE };
 		const std::list<std::string> BOOLEAN_FALSE_RESULT = { BOOLEAN_FALSE };
@@ -144,7 +143,6 @@ namespace UnitTesting {
 
 		std::vector<Entity> ALL_VARIABLES = { { VARIABLE, x }, { VARIABLE, y }, { VARIABLE, z } };
 	};
-
 
 	//NextBip Relation Test ----------------------------------------------------------------------------------------------------
 	TEST_F(QueryEvaluatorCFGRelationTest, evaluateQueryNextBipBooleanTrue) {
@@ -494,7 +492,6 @@ namespace UnitTesting {
 		std::string right1 = NEXT_RIGHT1;
 		std::string right2 = NEXT_RIGHT2;
 
-
 		Entity selected_entity(STMT, COMMON_SYNONYM1);
 
 		//Test case for Select selected such that NextBipT(selected, a)
@@ -525,7 +522,6 @@ namespace UnitTesting {
 		relation = RelRef(type, { STMT, left2 }, selected_entity);
 		EXPECT_EQ(evaluator.evaluateQuery(initQuery(relation, selected_entity)), result);
 
-
 		//Test case for remaining Select selected such that NextBipT(anyEmpty, selected)
 		std::vector<Entity> emptyList = getInvalidConstant(lefts);
 		for (unsigned int j = 0; j < emptyList.size(); j++) {
@@ -538,7 +534,6 @@ namespace UnitTesting {
 		result = { left1 };
 		relation = RelRef(type, selected_entity, { STMT, right1 });
 		EXPECT_EQ(evaluator.evaluateQuery(initQuery(relation, selected_entity)), result);
-
 
 		//Test case for Select selected such that NextBipT(selected, "3")
 		result = { left2, left1 };
@@ -553,8 +548,6 @@ namespace UnitTesting {
 			EXPECT_EQ(evaluator.evaluateQuery(q), EMPTY_RESULT) << "Error at results : " << j + 1;
 		}
 	}
-
-
 
 	//AffectsBip Relation Test ----------------------------------------------------------------------------------------------------
 	TEST_F(QueryEvaluatorCFGRelationTest, evaluateQueryAffectsBipBooleanTrue) {
@@ -904,7 +897,6 @@ namespace UnitTesting {
 		std::string right1 = AFFECTS_RIGHT1;
 		std::string right2 = AFFECTS_RIGHT2;
 
-
 		Entity selected_entity(STMT, COMMON_SYNONYM1);
 
 		//Test case for Select selected such that AffectsBipT(selected, a)
@@ -935,7 +927,6 @@ namespace UnitTesting {
 		relation = RelRef(type, { STMT, left2 }, selected_entity);
 		EXPECT_EQ(evaluator.evaluateQuery(initQuery(relation, selected_entity)), result);
 
-
 		//Test case for remaining Select selected such that AffectsBipT(anyEmpty, selected)
 		std::vector<Entity> emptyList = getInvalidConstant(lefts);
 		for (unsigned int j = 0; j < emptyList.size(); j++) {
@@ -948,7 +939,6 @@ namespace UnitTesting {
 		result = { left1 };
 		relation = RelRef(type, selected_entity, { STMT, right1 });
 		EXPECT_EQ(evaluator.evaluateQuery(initQuery(relation, selected_entity)), result);
-
 
 		//Test case for Select selected such that AffectsBipT(selected, "3")
 		result = { left2, left1 };

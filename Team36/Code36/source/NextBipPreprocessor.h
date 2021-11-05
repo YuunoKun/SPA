@@ -3,11 +3,9 @@
 
 #include "PKB.h"
 #include "Common.h"
-#include "RelationTable.h"
-#include "RelationTable.cpp"
 #include "RelationPreprocessor.h"
 
-class AffectsTPreprocessor : public RelationPreprocessor
+class NextBipPreprocessor : public RelationPreprocessor
 {
 public:
 	bool evaluateWildAndWild() override;
@@ -21,11 +19,6 @@ public:
 	std::vector<StmtInfo> evaluateSynonymAndConstant(int) override;
 	void fullyPopulate() override;
 
-	AffectsTPreprocessor(const MonotypeRelationTable<StmtInfo>&, const std::vector<StmtInfo>);
-	AffectsTPreprocessor() = default;
-
-private:
-	void checkCache();
-
-	const MonotypeRelationTable<StmtInfo>* affects_table = nullptr;
+	NextBipPreprocessor(const MonotypeRelationTable<StmtInfo>&, const std::vector<StmtInfo>);
+	NextBipPreprocessor() = default;
 };

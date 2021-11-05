@@ -4,8 +4,6 @@
 #include "pkb.h"
 
 namespace UnitTesting {
-
-
 	//Type 1 test relation that take in stmt (left) and stmt (right)
 	//The following relations is tested : FOLLOWS, PARENT, FOLLOWS_T, PARENT_T, NEXT
 	TEST(RelationsEvaluatorTest, evaluateRelationType1) {
@@ -18,7 +16,7 @@ namespace UnitTesting {
 		PKB::getInstance().addProcedure(p);
 		PKB::getInstance().addProcContains(p, 1);
 		PKB::getInstance().addProcContains(p, 2);
-		pkb.getRelationManager().update();
+		pkb.getRelationManager().reset();
 
 		RelationsEvaluator evaluator;
 		QueryResult result;
@@ -52,7 +50,7 @@ namespace UnitTesting {
 		PKB::getInstance().generateParentT();
 		PKB::getInstance().addProcContains(p, 1);
 		PKB::getInstance().addProcContains(p, 2);
-		pkb.getRelationManager().update();
+		pkb.getRelationManager().reset();
 
 		//Positive Test Case
 		for (auto type : types) {
@@ -160,7 +158,6 @@ namespace UnitTesting {
 		}
 	}
 
-
 	//Type 3 test relation that take in procedure (left) and variable (right)
 	//The following relations is tested : MODIFIES_P, USES_P
 	TEST(RelationsEvaluatorTest, evaluateRelationType3) {
@@ -183,7 +180,7 @@ namespace UnitTesting {
 			RelRef relation2(type, { PROCEDURE, main1 }, { WILD });
 			RelRef relation3(type, { PROCEDURE, Synonym{"a"} }, { VARIABLE, Synonym{"a"} });
 			RelRef relation4(type, { PROCEDURE, Synonym{"a"} }, { WILD });
-			RelRef relation5(type, { PROCEDURE, main1  }, { VARIABLE, Synonym{"a"} });
+			RelRef relation5(type, { PROCEDURE, main1 }, { VARIABLE, Synonym{"a"} });
 			RelRef relation6(type, { PROCEDURE, Synonym{"a"} }, { VARIABLE, "x" });
 
 			std::vector<RelRef> relations{ relation1, relation2, relation3, relation4,
@@ -230,7 +227,6 @@ namespace UnitTesting {
 			}
 		}
 	}
-
 
 	//Type 4 test relation that take in procedure (left) and procedure (right)
 	//The following relations is tested : CALLS, CALLS_T

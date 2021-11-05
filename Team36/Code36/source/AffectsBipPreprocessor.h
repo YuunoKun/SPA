@@ -38,10 +38,10 @@ private:
 	void updateCache(std::vector<std::pair<LabelledProgLine, LabelledProgLine>> results);
 	std::vector<stmt_index> getAssignments();
 
-	const MonotypeRelationTable<LabelledProgLine>* next_table;
-	const RelationTable<StmtInfo, var_name>* useS_table;
-	const RelationTable<StmtInfo, var_name>* modifiesS_table;
-	const RelationTable<proc_name, stmt_index>* procS_table;
+	const MonotypeRelationTable<LabelledProgLine>* next_table = nullptr;
+	const RelationTable<StmtInfo, var_name>* useS_table = nullptr;
+	const RelationTable<StmtInfo, var_name>* modifiesS_table = nullptr;
+	const RelationTable<proc_name, stmt_index>* procS_table = nullptr;
 	IterativeDataflowSolverBip solver;
 
 	MonotypeRelationTable<LabelledProgLine> labelled_progline_cache;

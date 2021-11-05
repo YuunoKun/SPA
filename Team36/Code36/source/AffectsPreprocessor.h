@@ -39,10 +39,10 @@ private:
 	void updateCache(std::set<stmt_index>, std::vector<std::pair<StmtInfo, StmtInfo>>);
 	std::vector<stmt_index> getAssignments(proc_name proc);
 
-	const MonotypeRelationTable<StmtInfo>* next_table;
-	const RelationTable<StmtInfo, var_name>* useS_table;
-	const RelationTable<StmtInfo, var_name>* modifiesS_table;
-	const RelationTable<proc_name, stmt_index>* procS_table;
+	const MonotypeRelationTable<StmtInfo>* next_table = nullptr;
+	const RelationTable<StmtInfo, var_name>* useS_table = nullptr;
+	const RelationTable<StmtInfo, var_name>* modifiesS_table = nullptr;
+	const RelationTable<proc_name, stmt_index>* procS_table = nullptr;
 	IterativeDataflowSolver solver;
 
 	BooleanStatus is_non_empty = STATUS_UNKNOWN;
