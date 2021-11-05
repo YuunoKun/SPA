@@ -18,17 +18,13 @@ void PatternsEvaluator::evaluatePattern(QueryResult& query_result, Pattern& patt
 	}
 }
 
-
-
 void PatternsEvaluator::evaluatePattern(QueryResult& query_result, Pattern& pattern, PatternEvaluatorInterface& evaluator) {
 	Entity lhs_entity = pattern.getLeftExpression();
 	if (lhs_entity.isSynonym()) {
 		query_result.addResult(evaluator.evaluateSynonym(pattern));
-	}
-	else if(lhs_entity.getType() == EntityType::WILD) {
+	} else if (lhs_entity.getType() == EntityType::WILD) {
 		query_result.addResult(evaluator.evaluateWild(pattern));
-	}
-	else {
+	} else {
 		query_result.addResult(evaluator.evaluateConstant(pattern));
 	}
 }

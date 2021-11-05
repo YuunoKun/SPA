@@ -19,8 +19,7 @@ void Parser::loadSourceFile(std::string file) {
 			source_program.append(temp);
 			source_program.push_back(' ');
 		}
-	}
-	else {
+	} else {
 		throw std::runtime_error("Failed to open file");
 	}
 	input_file.close();

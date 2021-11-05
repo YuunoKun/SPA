@@ -39,7 +39,6 @@ ResultTable::ResultTable(std::vector<Entity>& e, std::list<std::vector<std::stri
 	addHeader(e);
 }
 
-
 //Return true if merge is successful
 bool ResultTable::merge(ResultTable& t) {
 	std::vector<Entity> common_headers = getCommonHeaders(t.header);
@@ -51,16 +50,13 @@ bool ResultTable::merge(ResultTable& t) {
 	if (common_headers.size() == 1 && (t.header.size() == 1 || header.size() == 1)) {
 		//If table a or b only have 1 column, filter the result
 		filter_table(t, common_headers[0]);
-	}
-	else if (common_headers.size() == 2 && (t.header.size() == 2 || header.size() == 2)) {
+	} else if (common_headers.size() == 2 && (t.header.size() == 2 || header.size() == 2)) {
 		//If table a or b only have 2 column, and both synonym is in the common_header, filter the result
 		filter_table(t, common_headers[0], common_headers[1]);
-	}
-	else if (common_headers.size() == 1) {
+	} else if (common_headers.size() == 1) {
 		//If table a and b have more than 1 column and there is 1 common header, join table
 		joinTable(t, common_headers[0]);
-	}
-	else {
+	} else {
 		throw std::exception("Error: table merging scenario is not handled!!!");
 	}
 
@@ -141,8 +137,7 @@ void ResultTable::init(std::pair<Entity, Entity> header, std::list<std::vector<s
 	if (header.first == header.second) {
 		//If the header is the same, merge column if equal.
 		init(header.first, Utility::mergeColumnEqual(table));
-	}
-	else {
+	} else {
 		addHeader(header.first);
 		addHeader(header.second);
 		this->table = table;
@@ -180,15 +175,13 @@ void ResultTable::filter_table(ResultTable& t, Entity common_header) {
 		header_index = getHeaderIndex(common_header);
 		main_table = table;
 		filter_table = t.table;
-	}
-	else if (header.size() == 1) {
+	} else if (header.size() == 1) {
 		header_index = t.getHeaderIndex(common_header);
 		main_table = t.table;
 		filter_table = table;
 		header = t.header;
 		header_set = t.header_set;
-	}
-	else {
+	} else {
 		throw std::exception("Error: table filter 1 column scenario is not handled!!!");
 	}
 
@@ -215,8 +208,7 @@ void ResultTable::filter_table(ResultTable& t, Entity common_header1, Entity com
 		filter_index2 = t.getHeaderIndex(common_header2);
 		main_table = table;
 		filter_table = t.table;
-	}
-	else if (header.size() == 2) {
+	} else if (header.size() == 2) {
 		header_index1 = t.getHeaderIndex(common_header1);
 		header_index2 = t.getHeaderIndex(common_header2);
 		filter_index1 = getHeaderIndex(common_header1);
@@ -225,8 +217,7 @@ void ResultTable::filter_table(ResultTable& t, Entity common_header1, Entity com
 		filter_table = table;
 		header = t.header;
 		header_set = t.header_set;
-	}
-	else {
+	} else {
 		throw std::exception("Error: table filter 2 column scenario is not handled!!!");
 	}
 
@@ -255,8 +246,6 @@ void ResultTable::joinTable(ResultTable& t, Entity common_header) {
 	table = Utility::joinTable(table, header_index, to_join, to_join_index);
 	addHeader(t.header);
 }
-
-
 
 void ResultTable::joinTable(ResultTable& t) {
 	table = Utility::joinTable(table, t.table);

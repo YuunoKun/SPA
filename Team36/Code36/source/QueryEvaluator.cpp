@@ -34,14 +34,13 @@ void QueryEvaluator::evaluateClauses(Query& query, QueryResult& query_result) {
 	}
 }
 
-
 std::list<std::string> QueryEvaluator::getRawResult(Entity selected) {
 	if (Utility::isSecondaryAttribute(selected)) {
 		return getRawResultWithSecondaryAttribute(selected);
 	}
 	std::list<std::string> result;
 	switch (selected.getType()) {
-	case EntityType::PROG_LINE :
+	case EntityType::PROG_LINE:
 	case EntityType::STMT: result = Utility::stmtInfoToStringList(pkb.getStmts()); break;
 	case EntityType::READ: result = Utility::stmtInfoToStringList(pkb.getReads());  break;
 	case EntityType::PRINT: result = Utility::stmtInfoToStringList(pkb.getPrints()); break;
@@ -110,7 +109,6 @@ std::list<std::string> QueryEvaluator::convertToSecondaryAttribute(std::list<std
 }
 
 std::list<std::string> QueryEvaluator::mergeResultTables(std::list<std::list<std::string>> table, std::vector<Entity> selected) {
-
 	std::list<std::string> results;
 	for (auto row : table) {
 		int index = 0;
@@ -122,9 +120,8 @@ std::list<std::string> QueryEvaluator::mergeResultTables(std::list<std::list<std
 		while (!row.empty()) {
 			index++;
 			if (Utility::isSecondaryAttribute(selected[index])) {
-				row_result += " " +getEntitySecondaryAttribute(row.front(), selected[index]);
-			}
-			else {
+				row_result += " " + getEntitySecondaryAttribute(row.front(), selected[index]);
+			} else {
 				row_result += " " + row.front();
 			}
 			row.pop_front();
@@ -133,7 +130,6 @@ std::list<std::string> QueryEvaluator::mergeResultTables(std::list<std::list<std
 	}
 	return results;
 }
-
 
 std::list<std::string> QueryEvaluator::getTupleResult(Query& query, QueryResult& query_result) {
 	std::vector<Entity> selected_entities = Utility::removeDuplicateEntities(query.getSelected());
@@ -156,13 +152,11 @@ std::list<std::string> QueryEvaluator::getTupleResult(Query& query, QueryResult&
 	return mergeResultTables(result.getEntityResults(query.getSelected()), query.getSelected());
 }
 
-
 std::list<std::string> QueryEvaluator::getResult(Query& query, QueryResult& result) {
 	if (query.getSelected()[0].getType() == EntityType::BOOLEAN) {
 		if (result.haveResult()) {
 			return { BOOLEAN_TRUE };
-		}
-		else {
+		} else {
 			return { BOOLEAN_FALSE };
 		}
 	}

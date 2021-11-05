@@ -52,7 +52,7 @@ void QueryResult::addResult(ResultTable t) {
 		if (merged && t.isEmpty()) {
 			have_result = false;
 			return;
-		}else if(!merged) {
+		} else if (!merged) {
 			new_results.emplace_back(r);
 		}
 	}

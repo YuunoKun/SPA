@@ -59,7 +59,6 @@ ResultTable WithEvaluator::evaluateSynonymAndConstant(Entity header, Entity cons
 }
 
 std::list<std::vector<std::string>> WithEvaluator::getEntity(Entity e) {
-
 	if (Utility::isSecondaryAttribute(e)) {
 		return getEntityAndSecondaryAttribute(e);
 	}
@@ -81,8 +80,6 @@ std::list<std::vector<std::string>> WithEvaluator::getEntity(Entity e) {
 	}
 	return Utility::pairToStringTable(Utility::stringListToStringPair(result));
 }
-
-
 
 std::list<std::vector<std::string>> WithEvaluator::getEntityAndSecondaryAttribute(Entity synonym) {
 	switch (synonym.getType()) {
@@ -128,8 +125,7 @@ std::list<std::string> WithEvaluator::getEntityWithAttribute(Entity e, Entity co
 	}
 	if (is_true) {
 		return { constant.getValue() };
-	}
-	else {
+	} else {
 		return { };
 	}
 }
@@ -138,7 +134,7 @@ std::list<std::string> WithEvaluator::getEntityWithSecondaryAttribute(Entity con
 	switch (constant.getType()) {
 	case EntityType::READ:
 		if (constant.getAttribute() == AttrRef::VAR_NAME) {
-		return Utility::stmtIndexToStringList(pkb.getRead(constant.getValue()));
+			return Utility::stmtIndexToStringList(pkb.getRead(constant.getValue()));
 		}
 		break;
 	case EntityType::PRINT:
@@ -146,7 +142,7 @@ std::list<std::string> WithEvaluator::getEntityWithSecondaryAttribute(Entity con
 			return Utility::stmtIndexToStringList(pkb.getPrint(constant.getValue()));
 		}
 		break;
-	case EntityType::CALL: 
+	case EntityType::CALL:
 		if (constant.getAttribute() == AttrRef::PROC_NAME) {
 			return Utility::stmtIndexToStringList(pkb.getCalleeS(constant.getValue()));
 		}
@@ -155,4 +151,3 @@ std::list<std::string> WithEvaluator::getEntityWithSecondaryAttribute(Entity con
 
 	throw std::domain_error("getEntityWithSecondaryAttribute(Entity): Entity type does not have Secondary Attribute!");
 }
-

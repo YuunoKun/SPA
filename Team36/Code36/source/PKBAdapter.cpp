@@ -131,8 +131,7 @@ std::vector<pattern_info> PKBAdapter::getAssignInfo(expr matchExpression, bool i
 		expr expression = PKB::getInstance().PKB::getExpression(s.first);
 		if (isWild && expression.contains(&matchExpression)) {
 			a.push_back(s);
-		}
-		else if (expression.equals(&matchExpression)) {
+		} else if (expression.equals(&matchExpression)) {
 			a.push_back(s);
 		}
 	}
@@ -163,8 +162,7 @@ std::vector<stmt_index> PKBAdapter::getAssignInfoFiltered(std::vector<stmt_index
 		expr expression = PKB::getInstance().PKB::getExpression(s);
 		if (isWild && expression.contains(&matchExpression)) {
 			a.push_back(s);
-		}
-		else if (expression.equals(&matchExpression)) {
+		} else if (expression.equals(&matchExpression)) {
 			a.push_back(s);
 		}
 	}
@@ -723,7 +721,6 @@ std::vector<stmt_index> PKBAdapter::getRead(var_name var) {
 	return a.getKeys(var);
 }
 
-
 std::vector<std::pair<stmt_index, proc_name>> PKBAdapter::getAllCallS() {
 	auto a = PKB::getInstance().PKB::getCallsS();
 	return a.getPairs();
@@ -734,7 +731,6 @@ std::vector<proc_name> PKBAdapter::getCalledS(stmt_index index) {
 	return a.getValues(index);
 }
 
-
 std::vector<proc_name> PKBAdapter::getCalledS() {
 	auto a = PKB::getInstance().PKB::getCallsS();
 	return a.getValues();
@@ -744,7 +740,6 @@ bool PKBAdapter::isCalledS(proc_name p) {
 	auto a = PKB::getInstance().PKB::getCallsS();
 	return a.containsValue(p);
 }
-
 
 std::vector<stmt_index> PKBAdapter::getCalleeS(proc_name proc) {
 	auto a = PKB::getInstance().PKB::getCallsS();

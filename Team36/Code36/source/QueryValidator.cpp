@@ -14,27 +14,23 @@ void QueryValidator::validateSelectMultipleClauses(QueryToken& token, QueryToken
 		prevTokenSelect.type != QueryToken::QueryTokenType::TUPLE_OPEN &&
 		prevTokenSelect.type != QueryToken::QueryTokenType::COMMA) {
 		throw SyntacticErrorException("During multiple selects, identifier can only come after '<' or ','");
-	}
-	else if (token.type == QueryToken::QueryTokenType::DOT &&
+	} else if (token.type == QueryToken::QueryTokenType::DOT &&
 		prevTokenSelect.type != QueryToken::QueryTokenType::IDENTIFIER) {
 		throw SyntacticErrorException("During multiple selects, '.' can only come after identifier");
-	}
-	else if ((token.type == QueryToken::QueryTokenType::PROC_NAME ||
+	} else if ((token.type == QueryToken::QueryTokenType::PROC_NAME ||
 		token.type == QueryToken::QueryTokenType::VAR_NAME ||
 		token.type == QueryToken::QueryTokenType::VALUE ||
 		token.type == QueryToken::QueryTokenType::STMT_INDEX) &&
 		prevTokenSelect.type != QueryToken::QueryTokenType::DOT) {
 		throw SyntacticErrorException("During multiple selects, attributes can only come after '.'");
-	}
-	else if (token.type == QueryToken::QueryTokenType::COMMA &&
+	} else if (token.type == QueryToken::QueryTokenType::COMMA &&
 		(prevTokenSelect.type != QueryToken::QueryTokenType::PROC_NAME &&
 			prevTokenSelect.type != QueryToken::QueryTokenType::VAR_NAME &&
 			prevTokenSelect.type != QueryToken::QueryTokenType::VALUE &&
 			prevTokenSelect.type != QueryToken::QueryTokenType::IDENTIFIER &&
 			prevTokenSelect.type != QueryToken::QueryTokenType::STMT_INDEX)) {
 		throw SyntacticErrorException("During multiple selects, comma can only come after attributes");
-	}
-	else if (token.type == QueryToken::QueryTokenType::TUPLE_CLOSE &&
+	} else if (token.type == QueryToken::QueryTokenType::TUPLE_CLOSE &&
 		prevTokenSelect.type != QueryToken::QueryTokenType::PROC_NAME &&
 		prevTokenSelect.type != QueryToken::QueryTokenType::VAR_NAME &&
 		prevTokenSelect.type != QueryToken::QueryTokenType::VALUE &&
@@ -133,16 +129,13 @@ void QueryValidator::validateAttributeType(Query& query, QueryToken& prevToken, 
 	if (nextToken.type == QueryToken::QueryTokenType::PROC_NAME &&
 		(entType != EntityType::PROCEDURE && entType != EntityType::CALL)) {
 		query.setIsSemanticError("Only procedure and call can have a procName attribute");
-	}
-	else if (nextToken.type == QueryToken::QueryTokenType::VAR_NAME &&
+	} else if (nextToken.type == QueryToken::QueryTokenType::VAR_NAME &&
 		(entType != EntityType::VARIABLE && entType != EntityType::READ && entType != EntityType::PRINT)) {
 		query.setIsSemanticError("Only variable, read and print can have varName attribute");
-	}
-	else if (nextToken.type == QueryToken::QueryTokenType::VALUE &&
+	} else if (nextToken.type == QueryToken::QueryTokenType::VALUE &&
 		entType != EntityType::CONSTANT) {
 		query.setIsSemanticError("Only constant can have value attribute");
-	}
-	else if (nextToken.type == QueryToken::QueryTokenType::STMT_INDEX &&
+	} else if (nextToken.type == QueryToken::QueryTokenType::STMT_INDEX &&
 		(entType != EntityType::STMT && entType != EntityType::READ && entType != EntityType::PRINT &&
 			entType != EntityType::CALL && entType != EntityType::WHILE && entType != EntityType::IF &&
 			entType != EntityType::ASSIGN)) {

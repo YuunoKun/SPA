@@ -19,24 +19,20 @@ std::list<std::string> QuerySystem::processQuery(std::string input) {
 
 		return evaluator.evaluateQuery(query);;
 	}
-	catch (SyntacticErrorException&)
-	{
+	catch (SyntacticErrorException&) {
 		preprocessor.resetQuery();
 		return {};
 	}
-	catch (SemanticErrorException& err)
-	{
+	catch (SemanticErrorException& err) {
 		preprocessor.resetQuery();
 
 		if (err.getQuery().getSelected().size() == 0) {
 			return {};
-		}
-		else {
+		} else {
 			return returnEmptyResult(err.getQuery().getSelected().front());
 		}
 	}
-	catch (std::exception& e)
-	{
+	catch (std::exception& e) {
 		std::cout << e.what() << std::endl;
 		preprocessor.resetQuery();
 		return {};
@@ -46,8 +42,7 @@ std::list<std::string> QuerySystem::processQuery(std::string input) {
 std::list<std::string> QuerySystem::returnEmptyResult(Entity& selected) {
 	if (selected.getType() == BOOLEAN) {
 		return { BOOLEAN_FALSE };
-	}
-	else {
+	} else {
 		return { };
 	}
 }

@@ -73,8 +73,7 @@ struct LabelledProgLine {
 	bool operator<(const LabelledProgLine& other) const {
 		if (program_line == other.program_line) {
 			return labels < other.labels;
-		}
-		else {
+		} else {
 			return program_line < other.program_line;
 		}
 	}
