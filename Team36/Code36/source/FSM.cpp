@@ -1,4 +1,5 @@
 #include "FSM.h"
+#include "DesignExtractor.h"
 
 using namespace SourceProcessor;
 

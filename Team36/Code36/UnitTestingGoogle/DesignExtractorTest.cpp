@@ -631,7 +631,7 @@ namespace UnitTesting {
 
 		// test populate entites
 		MockPKB pkb;
-		extractor->populateEntities(pkb);
+		extractor->populateEntities();
 
 		std::unordered_set<constant> expected_populated_constants = {1,13,2,4,15,11};
 		ASSERT_EQ(pkb.mock_const_table.size(), expected_populated_constants.size());
@@ -695,7 +695,7 @@ namespace UnitTesting {
 		};
 
 		// test populate relations
-		extractor->populateRelations(pkb);
+		extractor->populateRelations();
 
 		// usesS
 		std::vector<std::pair<stmt_index, var_name>> expected_used_variables =
@@ -947,7 +947,7 @@ namespace UnitTesting {
 
 
 	TEST(DesignExtractor, validation_cyclic_call) {
-		DesignExtractor* extractor = new DesignExtractor();
+		DesignExtractor* extractor = new DesignExtractor(PKB::getInstance());
 
 		/*
 		* procedure p {
