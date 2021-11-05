@@ -4,7 +4,6 @@
 #include <algorithm>
 #include <numeric>
 #include "DesignExtractor.h"
-#include "PKB.h"
 
 using namespace SourceProcessor;
 
@@ -265,14 +264,14 @@ void DesignExtractor::populatePostValidation() {
 	}
 }
 
-void DesignExtractor::populateEntities(PKB& pkb) {
+void DesignExtractor::populateEntities(PKBSourceInterface& pkb) {
 	populateProcedures(pkb);
 	populateStatements(pkb);
 	populateVariables(pkb);
 	populateConstants(pkb);
 }
 
-void DesignExtractor::populateRelations(PKB& pkb) {
+void DesignExtractor::populateRelations(PKBSourceInterface& pkb) {
 	populateFollows(pkb);
 	pkb.generateFollowsT();
 	populateParent(pkb);
@@ -286,7 +285,7 @@ void DesignExtractor::populateRelations(PKB& pkb) {
 	populateNext(pkb);
 }
 
-void DesignExtractor::populateProcedures(PKB& pkb) {
+void DesignExtractor::populateProcedures(PKBSourceInterface& pkb) {
 	for (Procedure* p : de_procedures) {
 		pkb.addProcedure(p->getName());
 
@@ -296,7 +295,7 @@ void DesignExtractor::populateProcedures(PKB& pkb) {
 	}
 }
 
-void DesignExtractor::populateStatements(PKB& pkb) {
+void DesignExtractor::populateStatements(PKBSourceInterface& pkb) {
 	ExprParser expr_parser;
 	for (Statement* s : de_statements) {
 		pkb.addStmt(s->getType());
@@ -307,19 +306,19 @@ void DesignExtractor::populateStatements(PKB& pkb) {
 	}
 }
 
-void DesignExtractor::populateVariables(PKB& pkb) {
+void DesignExtractor::populateVariables(PKBSourceInterface& pkb) {
 	for (var_name v : de_variables) {
 		pkb.addVariable(v);
 	}
 }
 
-void DesignExtractor::populateConstants(PKB& pkb) {
+void DesignExtractor::populateConstants(PKBSourceInterface& pkb) {
 	for (constant c : de_constants) {
 		pkb.addConstant(c);
 	}
 }
 
-void DesignExtractor::populateFollows(PKB& pkb) {
+void DesignExtractor::populateFollows(PKBSourceInterface& pkb) {
 	std::unordered_map<int, stmt_index> um;
 
 	for (Statement* s : de_statements) {
@@ -331,7 +330,7 @@ void DesignExtractor::populateFollows(PKB& pkb) {
 	}
 }
 
-void DesignExtractor::populateParent(PKB& pkb) {
+void DesignExtractor::populateParent(PKBSourceInterface& pkb) {
 	for (Statement* s : de_statements) {
 		for (stmt_index id : s->getDirectChild()) {
 			pkb.addParent(s->getIndex(), id);
@@ -339,7 +338,7 @@ void DesignExtractor::populateParent(PKB& pkb) {
 	}
 }
 
-void DesignExtractor::populateUses(PKB& pkb) {
+void DesignExtractor::populateUses(PKBSourceInterface& pkb) {
 	for (Statement* s : de_statements) {
 		for (var_name used_var : s->getUsedVariable()) {
 			pkb.addUsesS(s->getIndex(), used_var);
@@ -353,7 +352,7 @@ void DesignExtractor::populateUses(PKB& pkb) {
 	}
 }
 
-void DesignExtractor::populateModifies(PKB& pkb) {
+void DesignExtractor::populateModifies(PKBSourceInterface& pkb) {
 	for (Statement* s : de_statements) {
 		for (var_name modified_var : s->getModifiedVariable()) {
 			pkb.addModifiesS(s->getIndex(), modified_var);
@@ -367,7 +366,7 @@ void DesignExtractor::populateModifies(PKB& pkb) {
 	}
 }
 
-void DesignExtractor::populateCalls(PKB& pkb) {
+void DesignExtractor::populateCalls(PKBSourceInterface& pkb) {
 	for (Statement* s : de_statements) {
 		if (s->getType() == StmtType::STMT_CALL) {
 			pkb.addCallsS(s->getIndex(), s->getCallee());
@@ -376,7 +375,7 @@ void DesignExtractor::populateCalls(PKB& pkb) {
 	}
 }
 
-void DesignExtractor::populateNext(PKB& pkb) {
+void DesignExtractor::populateNext(PKBSourceInterface& pkb) {
 
 	std::vector<CFG*> cfgs;
 	for (Procedure* p : de_procedures) {
@@ -406,7 +405,7 @@ void DesignExtractor::populateNext(PKB& pkb) {
 	pkb.addCFGsToDestroy(cfgs);
 }
 
-void DesignExtractor::populateIfs(PKB& pkb) {
+void DesignExtractor::populateIfs(PKBSourceInterface& pkb) {
 	for (Statement* s : de_statements) {
 		if (s->getType() == StmtType::STMT_IF) {
 			for (var_name v : s->getUsedCondVariable()) {
@@ -416,7 +415,7 @@ void DesignExtractor::populateIfs(PKB& pkb) {
 	}
 }
 
-void DesignExtractor::populateWhiles(PKB& pkb) {
+void DesignExtractor::populateWhiles(PKBSourceInterface& pkb) {
 	for (Statement* s : de_statements) {
 		if (s->getType() == StmtType::STMT_WHILE) {
 			for (var_name v : s->getUsedCondVariable()) {

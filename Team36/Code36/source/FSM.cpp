@@ -29,10 +29,12 @@ void FSM::build() {
 		expectProcedure();
 	}
 
-	design_extractor->populateEntities(PKB::getInstance());
+	PKBSourceInterface& pkb_instance = PKB::getInstance();
+
+	design_extractor->populateEntities(pkb_instance);
 	design_extractor->validate();
 	design_extractor->populatePostValidation();
-	design_extractor->populateRelations(PKB::getInstance());
+	design_extractor->populateRelations(pkb_instance);
 }
 
 void FSM::expectProcedure() {

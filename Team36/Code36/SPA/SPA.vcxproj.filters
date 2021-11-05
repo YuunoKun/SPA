@@ -683,5 +683,11 @@
     <ClInclude Include="..\source\NextBipTPreprocessor.h">
       <Filter>Header Files\PKB\RelationPreprocessor</Filter>
     </ClInclude>
+    <ClInclude Include="..\source\PKBSourceInterface.h">
+      <Filter>Header Files\PKB</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\PKBQueryInterface.h">
+      <Filter>Header Files\PKB</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

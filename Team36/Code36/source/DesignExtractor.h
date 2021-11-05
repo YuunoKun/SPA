@@ -18,30 +18,30 @@ namespace SourceProcessor {
 
 		~DesignExtractor();
 
-		void startNesting() override;
-		void chopNesting() override;
-		void endNesting() override;
-		void setCondExpr(bool) override;
-		void addProcedure(proc_name) override;
-		void addStatement(TokenType) override;
-		void addVariable(var_name) override;
-		void addConstant(constant) override;
+		void startNesting();
+		void chopNesting();
+		void endNesting();
+		void setCondExpr(bool);
+		void addProcedure(proc_name);
+		void addStatement(TokenType);
+		void addVariable(var_name);
+		void addConstant(constant);
 		const std::vector<Procedure*>& getProcedures();
 		const std::vector<Statement*>& getStatements();
 		const std::unordered_set<var_name>& getVariables();
 		const std::unordered_set<constant>& getConstants();
-		void addStatementUses(var_name) override;
-		void addStatementModifies(var_name) override;
-		void startExpr() override;
-		void addExprSegment(std::string) override;
-		void endExpr() override;
-		void addCallee(proc_name) override;
+		void addStatementUses(var_name);
+		void addStatementModifies(var_name);
+		void startExpr();
+		void addExprSegment(std::string);
+		void endExpr();
+		void addCallee(proc_name);
 
-		void validate() override;
+		void validate();
 
-		void populatePostValidation() override;
-		void populateEntities(PKB&) override;
-		void populateRelations(PKB&) override;
+		void populatePostValidation();
+		void populateEntities(PKBSourceInterface&);
+		void populateRelations(PKBSourceInterface&);
 
 	private:
 		std::vector<Procedure*> de_procedures;
@@ -57,20 +57,20 @@ namespace SourceProcessor {
 		std::vector<proc_index> call_sequence;
 		bool is_cond_expr;
 
-		void populateProcedures(PKB&);
-		void populateStatements(PKB&);
-		void populateVariables(PKB&);
-		void populateConstants(PKB&);
+		void populateProcedures(PKBSourceInterface&);
+		void populateStatements(PKBSourceInterface&);
+		void populateVariables(PKBSourceInterface&);
+		void populateConstants(PKBSourceInterface&);
 
-		void populateFollows(PKB&);
-		void populateParent(PKB&);
-		void populateUses(PKB&);
-		void populateModifies(PKB&);
-		void populateCalls(PKB&);
-		void populateNext(PKB&);
+		void populateFollows(PKBSourceInterface&);
+		void populateParent(PKBSourceInterface&);
+		void populateUses(PKBSourceInterface&);
+		void populateModifies(PKBSourceInterface&);
+		void populateCalls(PKBSourceInterface&);
+		void populateNext(PKBSourceInterface&);
 
-		void populateIfs(PKB&);
-		void populateWhiles(PKB&);
+		void populateIfs(PKBSourceInterface&);
+		void populateWhiles(PKBSourceInterface&);
 
 		CFG* generateCFG(std::vector<stmt_index>);
 	};

@@ -13,52 +13,25 @@ namespace UnitTesting {
 	class DummyDesignExtractor : public Extractor {
 	public:
 		DummyDesignExtractor() {}
-
 		~DummyDesignExtractor() {}
-
 		void startNesting() {}
-
 		void chopNesting() {}
-
 		void endNesting() {}
-
 		void setCondExpr(bool flag) {}
-
-		void addProcedure(proc_name name) {
-			std::cout << "Adds procedure : " << name << std::endl;
-		}
-
-		void addStatement(TokenType type) {
-			std::cout << "Adds statement of type : " << tokenTypeStrings[type] << std::endl;
-		}
-
-		void addVariable(var_name name) {
-			std::cout << "Adds variable : " << name << std::endl;
-		}
-
-		void addConstant(constant c) {
-			std::cout << "Adds constant : " << c << std::endl;
-		}
-
+		void addProcedure(proc_name name) {}
+		void addStatement(TokenType type) {}
+		void addVariable(var_name name) {}
+		void addConstant(constant c) {}
 		void addStatementUses(var_name name) {}
-
 		void addStatementModifies(var_name name) {}
-
 		void startExpr() {}
-
 		void addExprSegment(std::string str) {}
-
 		void endExpr() {}
-
 		void addCallee(proc_name name) {}
-
 		void validate() {}
-
 		void populatePostValidation() {}
-
-		void populateEntities(PKB&) {}
-
-		void populateRelations(PKB&) {}
+		void populateEntities(PKBSourceInterface&) {}
+		void populateRelations(PKBSourceInterface&) {}
 	};
 
 	TEST(FSM, expectIdentifier) {
