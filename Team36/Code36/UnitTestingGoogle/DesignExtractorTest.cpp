@@ -25,6 +25,7 @@ public:
 
 	void addStmt(StmtType stmt_type) {
 		mock_stmt_table.push_back({mock_curr_stmt_id, stmt_type});
+		mock_curr_stmt_id++;
 	}
 
 	void addExprTree(stmt_index stmt_index, expr expr) {
@@ -120,10 +121,9 @@ public:
 namespace UnitTesting {
 
 	using namespace SourceProcessor;
-
-
 	TEST(DesignExtractor, full_behavior_test) {
-		DesignExtractor* extractor = new DesignExtractor(PKB::getInstance());
+		MockPKB pkb;
+		DesignExtractor* extractor = new DesignExtractor(pkb);
 
 		/*
 		* procedure main {
@@ -630,31 +630,41 @@ namespace UnitTesting {
 		// Test Population of entities and relations
 
 		// test populate entites
-		MockPKB pkb;
 		extractor->populateEntities();
 
-		std::unordered_set<constant> expected_populated_constants = {1,13,2,4,15,11};
-		ASSERT_EQ(pkb.mock_const_table.size(), expected_populated_constants.size());
-		for (constant c : pkb.mock_const_table) {
-			ASSERT_TRUE(expected_populated_constants.find(c) != expected_populated_constants.end());
-		}
 
-		std::unordered_set<var_name> expected_populated_variables = {
+		// test constants
+		std::vector<constant> expected_populated_constants = {1,13,2,4,15,11};
+		auto actual_constants = std::vector<constant>(pkb.mock_const_table.begin(), pkb.mock_const_table.end());
+		sort(actual_constants.begin(), actual_constants.end());
+		sort(expected_populated_constants.begin(), expected_populated_constants.end());
+		ASSERT_EQ(actual_constants.size(), expected_populated_constants.size());
+		ASSERT_EQ(actual_constants, expected_populated_constants);
+
+
+		// test variables
+		std::vector<var_name> expected_populated_variables = {
 			"mainX","readVar","printVar","beforeIf",
 			"mainIfCond","beforeCall","afterCall","beforeWhile",
 			"whileCond","inWhile","afterWhile","afterIf","p2Var"
 		};
-		ASSERT_EQ(pkb.mock_var_table.size(), expected_populated_variables.size());
-		for (var_name v : pkb.mock_var_table) {
-			ASSERT_TRUE(expected_populated_variables.find(v) != expected_populated_variables.end());
-		}
+		auto actual_variables = std::vector<var_name>(pkb.mock_var_table.begin(), pkb.mock_var_table.end());
+		sort(actual_variables.begin(), actual_variables.end());
+		sort(expected_populated_variables.begin(), expected_populated_variables.end());
+		ASSERT_EQ(actual_variables.size(), expected_populated_variables.size());
+		ASSERT_EQ(actual_variables, expected_populated_variables);
 
-		std::unordered_set<proc_name> expected_populated_proc = { "main","p2" };
-		ASSERT_EQ(pkb.mock_proc_table.size(), expected_populated_proc.size());
-		for (proc_name p : pkb.mock_proc_table) {
-			ASSERT_TRUE(expected_populated_proc.find(p) != expected_populated_proc.end());
-		}
 
+		// test procedures
+		std::vector<proc_name> expected_populated_procedures = { "main","p2" };
+		auto actual_procedures = std::vector<var_name>(pkb.mock_proc_table.begin(), pkb.mock_proc_table.end());
+		sort(actual_procedures.begin(), actual_procedures.end());
+		sort(expected_populated_procedures.begin(), expected_populated_procedures.end());
+		ASSERT_EQ(actual_procedures.size(), expected_populated_procedures.size());
+		ASSERT_EQ(actual_procedures, expected_populated_procedures);
+
+
+		// test statements
 		std::vector<std::pair<stmt_index, StmtType>> expected_populated_stmt = 
 		{ 
 			{1, STMT_ASSIGN},
@@ -672,33 +682,20 @@ namespace UnitTesting {
 			{13, STMT_ASSIGN},
 			{14, STMT_ASSIGN}
 		};
-		ASSERT_EQ(pkb.mock_stmt_table.size(), expected_populated_stmt.size());
-		ASSERT_EQ(pkb.mock_stmt_table, expected_populated_stmt);
-		
+		auto actual_statements = std::vector<std::pair<stmt_index, StmtType>>(pkb.mock_stmt_table.begin(), pkb.mock_stmt_table.end());
+		sort(actual_statements.begin(), actual_statements.end());
+		sort(expected_populated_stmt.begin(), expected_populated_stmt.end());
+		ASSERT_EQ(actual_statements.size(), expected_populated_stmt.size());
+		ASSERT_EQ(actual_statements, expected_populated_stmt);
 
-		std::vector<StmtInfo> expected_stmt_info =
-		{
-			{1, STMT_ASSIGN},
-			{2, STMT_READ},
-			{3, STMT_PRINT},
-			{4, STMT_ASSIGN},
-			{5, STMT_IF},
-			{6, STMT_ASSIGN},
-			{7, STMT_CALL},
-			{8, STMT_ASSIGN},
-			{9, STMT_ASSIGN},
-			{10, STMT_WHILE},
-			{11, STMT_ASSIGN},
-			{12, STMT_ASSIGN},
-			{13, STMT_ASSIGN},
-			{14, STMT_ASSIGN}
-		};
+
 
 		// test populate relations
 		extractor->populateRelations();
 
+
 		// usesS
-		std::vector<std::pair<stmt_index, var_name>> expected_used_variables =
+		std::vector<std::pair<stmt_index, var_name>> expected_usesS =
 		{
 			{3, "printVar"},
 			{4, "beforeIf"}, 
@@ -722,13 +719,14 @@ namespace UnitTesting {
 			{13, "afterIf"},
 			{14, "p2Var"}
 		};
-		auto table_u = pkb.mock_usesS_table;
-		ASSERT_EQ(table_u.size(), expected_used_variables.size());
-		ASSERT_EQ(table_u, expected_used_variables);
+		auto actual_usesS = pkb.mock_usesS_table;
+		sort(actual_usesS.begin(), actual_usesS.end());
+		sort(expected_usesS.begin(), expected_usesS.end());
+		ASSERT_EQ(actual_usesS.size(), expected_usesS.size());
+		ASSERT_EQ(actual_usesS, expected_usesS);
 
 
 		// usesP
-		auto table_uP = pkb.mock_usesP_table;
 		std::vector<std::pair<proc_name, var_name>> expected_usesP =
 		{
 			{"main","mainX"},
@@ -745,19 +743,21 @@ namespace UnitTesting {
 			{"main","p2Var"},
 			{"p2","p2Var"}
 		};
-		ASSERT_EQ(table_uP.size(), expected_usesP.size());
-		ASSERT_EQ(table_uP, expected_usesP);
-
+		auto actual_usesP = pkb.mock_usesP_table;
+		sort(actual_usesP.begin(), actual_usesP.end());
+		sort(expected_usesP.begin(), expected_usesP.end());
+		ASSERT_EQ(actual_usesP.size(), expected_usesP.size());
+		ASSERT_EQ(actual_usesP, expected_usesP);
 
 
 		// modifiesS
-		std::vector<std::pair<stmt_index, var_name>> expected_modified_variables =
+		std::vector<std::pair<stmt_index, var_name>> expected_modifiesS =
 		{
 			{1, "mainX"},
 			{2, "readVar"},
 			{4, "beforeIf"},
 			{5, "beforeCall"},
-			{5, "befop2VarreIf"},
+			{5, "p2Var"},
 			{5, "afterCall"},
 			{5, "beforeWhile"},
 			{5, "inWhile"},
@@ -772,13 +772,14 @@ namespace UnitTesting {
 			{13, "afterIf"},
 			{14, "p2Var"}
 		};
-		auto table_m = pkb.mock_modifiesS_table;
-		ASSERT_EQ(table_m.size(), expected_modified_variables.size());
-		ASSERT_EQ(table_m, expected_modified_variables);
+		auto actual_modifiesS = pkb.mock_modifiesS_table;
+		sort(actual_modifiesS.begin(), actual_modifiesS.end());
+		sort(expected_modifiesS.begin(), expected_modifiesS.end());
+		ASSERT_EQ(actual_modifiesS.size(), expected_modifiesS.size());
+		ASSERT_EQ(actual_modifiesS, expected_modifiesS);
 
 
 		// modifiesP
-		auto table_mP = pkb.mock_modifiesP_table;
 		std::vector<std::pair<proc_name, var_name>> expected_modifiesP =
 		{
 			{"main","mainX"},
@@ -793,71 +794,88 @@ namespace UnitTesting {
 			{"main","p2Var"},
 			{"p2","p2Var"}
 		};
-		ASSERT_EQ(table_mP.size(), expected_modifiesP.size());
-		ASSERT_EQ(table_mP, expected_modifiesP);
+		auto actual_modifiesP = pkb.mock_modifiesP_table;
+		sort(actual_modifiesP.begin(), actual_modifiesP.end());
+		sort(expected_modifiesP.begin(), expected_modifiesP.end());
+		ASSERT_EQ(actual_modifiesP.size(), expected_modifiesP.size());
+		ASSERT_EQ(actual_modifiesP, expected_modifiesP);
 
 
 		// Follows
-		auto table_f = pkb.mock_follows_table;
 		std::vector<std::pair<stmt_index,stmt_index>> expected_follows =
 		{
 			{1,2},{2,3},{3,4},{4,5},{6,7},{7,8},
 			{9,10},{10,12},{5,13}
 		};
-		ASSERT_EQ(table_f.size(), expected_follows.size());
-		ASSERT_EQ(table_f, expected_follows);
+		auto actual_follows = pkb.mock_follows_table;
+		sort(actual_follows.begin(), actual_follows.end());
+		sort(expected_follows.begin(), expected_follows.end());
+		ASSERT_EQ(actual_follows.size(), expected_follows.size());
+		ASSERT_EQ(actual_follows, expected_follows);
 
 
 		// Parent
-		auto table_p = pkb.mock_parent_table;
 		std::vector<std::pair<stmt_index, stmt_index>> expected_parent =
 		{
 			{5,6},{5,7},{5,8},{5,9},{5,10},{5,12},
 			{10,11}
 		};
-		ASSERT_EQ(table_p.size(), expected_parent.size());
-		ASSERT_EQ(table_p, expected_parent);
+		auto actual_parent = pkb.mock_parent_table;
+		sort(actual_parent.begin(), actual_parent.end());
+		sort(expected_parent.begin(), expected_parent.end());
+		ASSERT_EQ(actual_parent.size(), expected_parent.size());
+		ASSERT_EQ(actual_parent, expected_parent);
 
 
 		// CallsP
-		auto table_cp = pkb.mock_callsP_table;
-		std::vector<std::pair<proc_name, proc_name>> expected_cp =
+		std::vector<std::pair<proc_name, proc_name>> expected_callsP =
 		{
 			{"main","p2"}
 		};
-		ASSERT_EQ(table_cp.size(), expected_cp.size());
-		ASSERT_EQ(table_cp, expected_cp);
+		auto actual_callsP = pkb.mock_callsP_table;
+		sort(actual_callsP.begin(), actual_callsP.end());
+		sort(expected_callsP.begin(), expected_callsP.end());
+		ASSERT_EQ(actual_callsP.size(), expected_callsP.size());
+		ASSERT_EQ(actual_callsP, expected_callsP);
+
 
 		// CallsS
-		auto table_cs = pkb.mock_callsS_table;
-		std::vector<std::pair<stmt_index, proc_name>> expected_cs =
+		std::vector<std::pair<stmt_index, proc_name>> expected_callsS =
 		{
 			{7,"p2"}
 		};
-		ASSERT_EQ(table_cs.size(), expected_cs.size());
-		ASSERT_EQ(table_cs, expected_cs);
+		auto actual_callsS = pkb.mock_callsS_table;
+		sort(actual_callsS.begin(), actual_callsS.end());
+		sort(expected_callsS.begin(), expected_callsS.end());
+		ASSERT_EQ(actual_callsS.size(), expected_callsS.size());
+		ASSERT_EQ(actual_callsS, expected_callsS);
+
 
 		// Ifs
-		auto table_ifs = pkb.mock_if_table;
 		std::vector<std::pair<stmt_index, var_name>> expected_ifs =
 		{
 			{5,"mainIfCond"}
 		};
-		ASSERT_EQ(table_ifs.size(), expected_ifs.size());
-		ASSERT_EQ(table_ifs, expected_ifs);
+		auto actual_ifs = pkb.mock_if_table;
+		sort(actual_ifs.begin(), actual_ifs.end());
+		sort(expected_ifs.begin(), expected_ifs.end());
+		ASSERT_EQ(actual_ifs.size(), expected_ifs.size());
+		ASSERT_EQ(actual_ifs, expected_ifs);
+
 
 		// Whiles
-		auto table_whiles = pkb.mock_while_table;
 		std::vector<std::pair<stmt_index, var_name>> expected_whiles =
 		{
 			{10,"whileCond"}
 		};
-		ASSERT_EQ(table_whiles.size(), expected_whiles.size());
-		ASSERT_EQ(table_whiles, expected_whiles);
+		auto actual_whiles = pkb.mock_while_table;
+		sort(actual_whiles.begin(), actual_whiles.end());
+		sort(expected_whiles.begin(), expected_whiles.end());
+		ASSERT_EQ(actual_whiles.size(), expected_whiles.size());
+		ASSERT_EQ(actual_whiles, expected_whiles);
 
 
 		// Nexts
-		auto table_nexts = pkb.mock_next_table;
 		std::vector<std::pair<stmt_index, stmt_index>> expected_nexts =
 		{
 			{1, 2}, {2, 3}, {3, 4}, {4, 5},
@@ -865,13 +883,16 @@ namespace UnitTesting {
 			{8, 13}, {9, 10}, {10, 12}, {10, 11}, 
 			{11, 10}, {12, 13}
 		};
-		ASSERT_EQ(table_nexts.size(), expected_nexts.size());
-		ASSERT_EQ(table_nexts, expected_nexts);
+		auto actual_nexts = pkb.mock_next_table;
+		sort(actual_nexts.begin(), actual_nexts.end());
+		sort(expected_nexts.begin(), expected_nexts.end());
+		ASSERT_EQ(actual_nexts.size(), expected_nexts.size());
+		ASSERT_EQ(actual_nexts, expected_nexts);
 
 		// CFGs
 		auto table_cfg = pkb.mock_cfgs;
 		ASSERT_EQ(table_cfg.size(), 1);
-		LabelledProgLine expected_lpl = { 0,{0} };
+		LabelledProgLine expected_lpl = { 1,{0} };
 		ASSERT_EQ(table_cfg[0]->getHeadLabelledProgLine(), expected_lpl);
 
 		delete extractor;
