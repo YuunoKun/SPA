@@ -27,6 +27,11 @@ private:
 
 	bool mergeResultTable(ResultTable*, ResultTable&);
 	void mergeResultTable(ResultTable&, std::list<ResultTable*>&);
+
+
+	void getMergedTable(std::vector<Entity>, std::list<ResultTable*>&);
+
+	void getMergedTable(std::vector<Entity>, std::list<ResultTable>&);
 	
 	std::unordered_set<std::string> header_set;
 

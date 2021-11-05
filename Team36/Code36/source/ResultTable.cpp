@@ -348,7 +348,7 @@ void ResultTable::joinTable(ResultTable& t) {
 		std::list<std::vector<value>> main = this->table;
 		table = std::list<std::vector<value>>();
 		Utility::joinTable(main, t.table, table);
-	} else {
+	} else if (!merge(t)){
 		joinTable(t, common_headers[0]);
 	}
 

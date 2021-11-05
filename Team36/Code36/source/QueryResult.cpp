@@ -100,6 +100,14 @@ void QueryResult::mergeResultTable(ResultTable& t, std::list<ResultTable*>& affe
 	}
 }
 
+void QueryResult::getMergedTable(std::vector<Entity> selected, std::list<ResultTable>& out) {
+	
+	out.emplace_back(ResultTable());
+	for (auto& result : results) {
+		out.front().joinTable(*result.second);
+	}
+}
+
 
 void QueryResult::addResult(ResultTable& t) {
 	if (t.isEmpty()) {
@@ -164,13 +172,16 @@ void QueryResult::addHeader(std::vector<Entity> v) {
 }
 
 void QueryResult::getResults(std::vector<Entity>& selected, ResultTable& out) {
-	for (auto& result : results) {
-		std::vector<Entity> common = result.second->getCommonHeaders(selected);
+	std::list<ResultTable> merged_table;
+	getMergedTable(selected, merged_table);
+
+	for (auto& result : merged_table) {
+		std::vector<Entity> common = result.getCommonHeaders(selected);
 		if (common.empty()) {
 			continue;
 		}
 		selected = Utility::getEntitiesExclude(selected, common);
-		out.joinTable(result.second->getResultTable(common));
+		out.joinTable(result.getResultTable(common));
 	}
 
 }
