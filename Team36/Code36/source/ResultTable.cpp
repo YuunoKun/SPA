@@ -73,8 +73,8 @@ bool ResultTable::merge(ResultTable& t) {
 		//If table a or b only have 2 column, and both synonym is in the common_header, filter the result
 		filter_table(t, common_headers[0], common_headers[1]);
 	} else if (common_headers.size() == 1) {
-		//If table a and b have more than 1 column and there is 1 common header, join table
-		joinTable(t, common_headers[0]);
+		//If table a and b have more than 1 column and there is 1 common header, filter both table
+		filter_both_table(t, common_headers[0]);
 	} else {
 		throw std::exception("Error: table merging scenario is not handled!!!");
 	}
@@ -271,6 +271,12 @@ void ResultTable::filter_table(ResultTable& t, Entity common_header1, Entity com
 	table = std::list<std::vector<value>>();
 	Utility::filterResults(main_table, filters, header_index1, header_index2, table);
 }
+void ResultTable::filter_both_table(ResultTable& t, Entity common_header) {
+	int header_index = getHeaderIndex(common_header);
+	int to_join_index = t.getHeaderIndex(common_header);
+
+	Utility::filterBothResults(table, header_index, t.table, to_join_index);
+}
 
 void ResultTable::joinTable(ResultTable& t, Entity common_header) {
 	int header_index = getHeaderIndex(common_header);
@@ -285,8 +291,6 @@ void ResultTable::joinTable(ResultTable& t, Entity common_header) {
 	}
 
 	Utility::joinTable(main, header_index, to_join, to_join_index, table);
-	addHeader(t.header);
-	addHashToStringMap(t.hash_map);
 }
 
 
@@ -299,10 +303,16 @@ void ResultTable::joinTable(ResultTable& t) {
 		addHashToStringMap(t.hash_map);
 		return;
 	}
+	std::vector<Entity> common_headers = getCommonHeaders(t.header);
 
-	std::list<std::vector<value>> main = this->table;
-	table = std::list<std::vector<value>>();
-	Utility::joinTable(main, t.table, table);
+	if (common_headers.empty()) {
+		std::list<std::vector<value>> main = this->table;
+		table = std::list<std::vector<value>>();
+		Utility::joinTable(main, t.table, table);
+	} else {
+		joinTable(t, common_headers[0]);
+	}
+
 	addHeader(t.header);
 	addHashToStringMap(t.hash_map);
 }

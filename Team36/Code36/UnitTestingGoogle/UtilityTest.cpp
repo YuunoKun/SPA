@@ -643,6 +643,84 @@ namespace UnitTesting {
 		EXPECT_EQ(t3, r3);
 	}
 
+
+
+	TEST_F(UtilityTest, filterBothResults) {
+		std::list<std::vector<value>> from1 = {
+			{1, 1},
+			{1, 2},
+			{1, 3},
+			{2, 1},
+			{2, 2},
+			{2, 3},
+			{3, 1},
+			{3, 2},
+			{3, 3},
+		};
+
+		std::list<std::vector<value>> from2 = {
+			{1, 3},
+			{1, 4},
+			{1, 5},
+		};
+
+		int fromIndex = 0;
+		int to_join_index = 0;
+
+		std::list<std::vector<value>> to1 = {
+			{1, 1},
+			{1, 2},
+			{1, 3},
+		};
+
+		std::list<std::vector<value>> to2 = {
+			{1, 3},
+			{1, 4},
+			{1, 5},
+		};
+
+		Utility::filterBothResults(from1, fromIndex, from2, to_join_index);
+		EXPECT_EQ(from1, to1);
+		EXPECT_EQ(from2, to2);
+
+
+		from1 = {
+			{1, 1},
+			{1, 2},
+			{1, 3},
+			{2, 1},
+			{2, 2},
+			{2, 3},
+			{3, 1},
+			{3, 2},
+			{3, 3},
+		};
+
+		from2 = {
+			{1, 3},
+			{1, 4},
+			{1, 5},
+		};
+
+		fromIndex = 0;
+		to_join_index = 1;
+
+		to1 = {
+			{3, 1},
+			{3, 2},
+			{3, 3}
+		};
+
+		to2 = {
+			{1, 3}
+		};
+
+		Utility::filterBothResults(from1, fromIndex, from2, to_join_index);
+		EXPECT_EQ(from1, to1);
+		EXPECT_EQ(from2, to2);
+	}
+
+
 	TEST_F(UtilityTest, joinTableSingleColumn) {
 		std::list<std::vector<value>> from = {
 			{1, 1},

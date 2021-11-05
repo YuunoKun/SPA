@@ -41,6 +41,8 @@ public:
 	static void filterResults(std::list<std::vector<value>>&, std::unordered_set<value>&, int, std::list<std::vector<value>>&);
 	static void filterResults(std::list<std::vector<value>>&, std::unordered_map<value, std::unordered_set<value>>&, int, int, std::list<std::vector<value>>&);
 
+	static void filterBothResults(std::list<std::vector<value>>&, int, std::list<std::vector<value>>&, int);
+
 	static void mergeColumnEqual(std::list<std::vector<value>>&);
 
 	static void joinTable(std::list<std::vector<value>>&, int,

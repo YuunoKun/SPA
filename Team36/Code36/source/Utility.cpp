@@ -211,6 +211,42 @@ void Utility::filterResults(std::list<std::vector<value>>& from,
 	}
 }
 
+void Utility::filterBothResults(std::list<std::vector<value>>& t1, int t1_index, std::list<std::vector<value>>& t2, int t2_index) {
+
+	std::unordered_set<value> set;
+
+	for (auto& it : t2) {
+		set.insert({ it[t2_index] });
+	}
+
+	std::unordered_set<value> common_set;
+
+	for (auto& it : t1) {
+		if (set.find(it[t1_index]) == set.end()) {
+			continue;
+		}
+		common_set.insert({ it[t1_index] });
+	}
+
+	auto& it = t1.begin();
+	while (it != t1.end()) {
+		if (common_set.find((*it)[t1_index]) == common_set.end()) {
+			it = t1.erase(it);
+		} else {
+			it++;
+		}
+	}
+	it = t2.begin();
+	while (it != t2.end()) {
+		if (common_set.find((*it)[t2_index]) == common_set.end()) {
+			it = t2.erase(it);
+		} else {
+			it++;
+		}
+	}
+
+}
+
 void Utility::mergeColumnEqual(std::list<std::vector<value>>& table) {
 	auto i = table.begin();
 	while (i != table.end()) {
