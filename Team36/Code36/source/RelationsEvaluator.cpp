@@ -40,8 +40,8 @@ void RelationsEvaluator::evaluateRelation(QueryResult& result, RelRef& relation)
 	case RelType::AFFECT_T: evaluateRelation(result, relation, AffectsTEvaluator()); break;
 	case RelType::NEXT_BIP: evaluateRelation(result, relation, NextBipEvaluator()); break;
 	case RelType::NEXT_BIP_T: evaluateRelation(result, relation, NextBipTEvaluator()); break;
-	case RelType::AFFECT_BIP: evaluateRelation(result, relation, AffectsBipEvaluator()); break;
 	case RelType::AFFECT_BIP_T: evaluateRelation(result, relation, AffectsBipTEvaluator()); break;
+	case RelType::AFFECT_BIP: evaluateRelation(result, relation, AffectsBipEvaluator()); break;
 	default: throw std::domain_error("Some Relation is not being handle!!!!");
 	}
 }

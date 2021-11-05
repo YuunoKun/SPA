@@ -23,7 +23,7 @@ public:
 	AffectsBipTPreprocessor() = default;
 
 private:
-	const MonotypeRelationTable<StmtInfo>* affects_bip_table;
-	const MonotypeRelationTable<LabelledProgLine>* labelled_affects_bip_table;
+	const MonotypeRelationTable<StmtInfo>* affects_bip_table = nullptr;
+	const MonotypeRelationTable<LabelledProgLine>* labelled_affects_bip_table = nullptr;
 	MonotypeRelationTable<LabelledProgLine> labelled_cache;
 };

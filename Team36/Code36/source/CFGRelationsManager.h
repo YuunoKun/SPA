@@ -8,13 +8,13 @@
 #include "NextTPreprocessor.h"
 #include "AffectsPreprocessor.h"
 #include "AffectsTPreprocessor.h"
+#include "NextBipPreprocessor.h"
+#include "NextBipTPreprocessor.h"
 #include "AffectsBipPreprocessor.h"
 #include "AffectsBipTPreprocessor.h"
 
 class CFGRelationsManager {
 public:
-	CFGRelationsManager();
-	void update();
 	void reset();
 
 	bool isNextTEmpty();
@@ -90,18 +90,41 @@ public:
 	NextTPreprocessor getNextTPreprocessor();
 	AffectsPreprocessor getAffectsPreprocessor();
 	AffectsTPreprocessor getAffectsTPreprocessor();
+	NextBipPreprocessor getNextBipPreprocessor();
+	NextBipTPreprocessor getNextBipTPreprocessor();
 	AffectsBipPreprocessor getAffectsBipPreprocessor();
 	AffectsBipTPreprocessor getAffectsBipTPreprocessor();
-	MonotypeRelationTable<LabelledProgLine> labelled_next_table;
 
 private:
+	std::vector<LabelledProgLine> getFirstProgs();
+	const MonotypeRelationTable<StmtInfo>& getNextBipTable();
+	const MonotypeRelationTable<LabelledProgLine>& getLabelledNextBipTable();
+	bool inSameProc(stmt_index index1, stmt_index index2);
+
+	void initNextTPreprocessor();
+	void initAffectsPreprocessor();
+	void initAffectsTPreprocessor();
+	void initNextBipPreprocessor();
+	void initNextBipTPreprocessor();
+	void initAffectsBipPreprocessor();
+	void initAffectsBipTPreprocessor();
+
 	NextTPreprocessor next_t_preprocessor;
 	AffectsPreprocessor affects_preprocessor;
 	AffectsTPreprocessor affectsT_preprocessor;
+	NextBipPreprocessor next_bip_preprocessor;
+	NextBipTPreprocessor next_bipT_preprocessor;
 	AffectsBipPreprocessor affects_bip_preprocessor;
 	AffectsBipTPreprocessor affects_bipT_preprocessor;
 
-	std::vector<LabelledProgLine> getFirstProgs();
-	const MonotypeRelationTable<LabelledProgLine>& getLabelledNextTable();
-	bool inSameProc(stmt_index index1, stmt_index index2);
+	bool is_nextT_preprocessor_init = false,
+		is_affects_preprocessor_init = false,
+		is_affectsT_preprocessor_init = false,
+		is_next_bip_preprocessor_init = false,
+		is_next_bipT_preprocessor_init = false,
+		is_affects_bip_preprocessor_init = false,
+		is_affects_bipT_preprocessor_init = false;
+
+	MonotypeRelationTable<StmtInfo> next_bip_table;
+	MonotypeRelationTable<LabelledProgLine> labelled_next_table;
 };

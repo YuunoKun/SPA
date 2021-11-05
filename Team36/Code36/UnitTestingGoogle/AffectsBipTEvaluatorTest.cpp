@@ -44,7 +44,7 @@ namespace UnitTesting {
 			PKB::getInstance().addModifiesS(2, v2);
 			PKB::getInstance().addUsesS(3, v2);
 			PKB::getInstance().addCFGBip(cfg);
-			PKBAdapter::getRelationManager().update();
+			pkb.getRelationManager().reset();
 		}
 
 		void TearDown() override {
@@ -84,15 +84,14 @@ namespace UnitTesting {
 		PKB::getInstance().addProcContains(p, 3);
 		PKB::getInstance().addProcContains(p, 4);
 		PKB::getInstance().addCFGBip(cfg);
-		pkb.getRelationManager().update();
+		pkb.getRelationManager().reset();
 		EXPECT_FALSE(evaluator.evaluateWildAndWild());
 		PKB::getInstance().addVariable(v1);
 		PKB::getInstance().addModifiesS(1, v1);
 		PKB::getInstance().addUsesS(2, v1);
-		pkb.getRelationManager().update();
+		pkb.getRelationManager().reset();
 		EXPECT_TRUE(evaluator.evaluateWildAndWild());
 	}
-
 
 	TEST_F(AffectsBipTEvaluatorTest, evaluateConstantAndConstant) {
 		EXPECT_TRUE(evaluator.evaluateConstantAndConstant(e1, e2));
@@ -128,7 +127,6 @@ namespace UnitTesting {
 	}
 
 	TEST_F(AffectsBipTEvaluatorTest, evaluateSynonymAndSynonym) {
-
 		std::vector<std::pair<StmtInfo, StmtInfo>> v = pkb.getRelationManager().getAllAffectsBipTRelation();
 		Entity left = { STMT, Synonym{"a"} };
 		Entity right = { STMT, Synonym{"b"} };
@@ -191,7 +189,6 @@ namespace UnitTesting {
 	}
 
 	TEST_F(AffectsBipTEvaluatorTest, evaluateSynonymAndWild) {
-
 		std::vector<StmtInfo> v = pkb.getRelationManager().getAffectingBipT();
 		Entity header = { STMT, Synonym{"a"} };
 		ResultTable t(header, v);
@@ -219,7 +216,6 @@ namespace UnitTesting {
 	}
 
 	TEST_F(AffectsBipTEvaluatorTest, evaluateConstantAndSynonym) {
-
 		std::vector<StmtInfo> v = { p2, p3 };
 		Entity header = { STMT, Synonym{"a"} };
 		Entity match = { ASSIGN, "1" };
@@ -278,7 +274,6 @@ namespace UnitTesting {
 	}
 
 	TEST_F(AffectsBipTEvaluatorTest, evaluateSynonymAndConstant) {
-
 		std::vector<StmtInfo> v = { p1, p2 };
 		Entity header = { STMT, Synonym{"a"} };
 		Entity match = { ASSIGN, "3" };
@@ -313,5 +308,4 @@ namespace UnitTesting {
 		t = ResultTable(header, v);
 		EXPECT_EQ(evaluator.evaluateSynonymAndConstant(header, match), t);
 	}
-
 }

@@ -25,7 +25,7 @@ namespace UnitTesting {
 			PKB::getInstance().addProcContains(p, 2);
 			PKB::getInstance().addProcContains(p, 3);
 			PKB::getInstance().addProcContains(p, 4);
-			pkb.getRelationManager().update();
+			pkb.getRelationManager().reset();
 		}
 
 		PKBAdapter pkb;
@@ -51,7 +51,7 @@ namespace UnitTesting {
 		PKB::getInstance().addStmt(STMT_IF);
 		EXPECT_FALSE(evaluator.evaluateWildAndWild());
 		PKB::getInstance().addNext(1, 2);
-		pkb.getRelationManager().update();
+		pkb.getRelationManager().reset();
 		EXPECT_TRUE(evaluator.evaluateWildAndWild());
 	}
 

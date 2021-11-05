@@ -70,7 +70,7 @@ namespace UnitTesting {
 			PKB::getInstance().addCFGBip(cfg3);
 			PKB::getInstance().addCFGBip(cfg4);
 
-			manager.update();
+			manager.reset();
 		}
 
 		CFGRelationsManager manager;
@@ -167,9 +167,6 @@ namespace UnitTesting {
 		std::vector<LabelledProgLine> first_proglines = { {1, {0}}, { 4, {0 }} };
 
 		void TearDown() override {
-			for (auto& cfg : test_cfg_bips) {
-				delete cfg;
-			}
 			manager.reset();
 			PKB::getInstance().resetCache();
 		}
@@ -265,7 +262,6 @@ namespace UnitTesting {
 		std::copy(set.begin(), set.end(), v2.begin());
 		std::sort(v2.begin(), v2.end());
 		EXPECT_EQ(v1, v2);
-		EXPECT_TRUE(manager.getAffectsBipTPreprocessor().isFullyPopulated());
 	}
 
 	TEST_F(CFGRelationsManagerTest_AffectsBipT, getAffectedBipT_all) {
@@ -280,7 +276,6 @@ namespace UnitTesting {
 		std::copy(set.begin(), set.end(), v2.begin());
 		std::sort(v2.begin(), v2.end());
 		EXPECT_EQ(v1, v2);
-		EXPECT_TRUE(manager.getAffectsBipTPreprocessor().isFullyPopulated());
 	}
 
 	TEST_F(CFGRelationsManagerTest_AffectsBipT, getAffectedBipT_identifier) {

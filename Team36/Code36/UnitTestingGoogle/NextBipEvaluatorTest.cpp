@@ -24,7 +24,7 @@ namespace UnitTesting {
 			PKB::getInstance().addProcContains(p, 2);
 			PKB::getInstance().addProcContains(p, 3);
 			PKB::getInstance().addProcContains(p, 4);
-			pkb.getRelationManager().update();
+			pkb.getRelationManager().reset();
 		}
 
 		PKBAdapter pkb;
@@ -88,7 +88,7 @@ namespace UnitTesting {
 	}
 
 	TEST_F(NextBipEvaluatorTest, evaluateSynonymAndSynonym) {
-		std::vector<std::pair<StmtInfo, StmtInfo>> v = pkb.getAllNextRelation();
+		std::vector<std::pair<StmtInfo, StmtInfo>> v = pkb.getRelationManager().getAllNextBipRelation();
 		Entity left = { STMT, Synonym{"a"} };
 		Entity right = { STMT, Synonym{"b"} };
 		std::pair<Entity, Entity> header = { left, right };
@@ -124,7 +124,7 @@ namespace UnitTesting {
 	}
 
 	TEST_F(NextBipEvaluatorTest, evaluateWildAndSynonym) {
-		std::vector<StmtInfo> v = pkb.getNext();
+		std::vector<StmtInfo> v = pkb.getRelationManager().getNextBip();
 		Entity header = { STMT, Synonym{"a"} };
 		ResultTable t(header, v);
 		EXPECT_EQ(evaluator.evaluateWildAndSynonym(header), t);
@@ -155,7 +155,7 @@ namespace UnitTesting {
 	}
 
 	TEST_F(NextBipEvaluatorTest, evaluateSynonymAndWild) {
-		std::vector<StmtInfo> v = pkb.getPrevious();
+		std::vector<StmtInfo> v = pkb.getRelationManager().getPreviousBip();
 		Entity header = { STMT, Synonym{"a"} };
 		ResultTable t(header, v);
 		EXPECT_EQ(evaluator.evaluateSynonymAndWild(header), t);
@@ -186,7 +186,6 @@ namespace UnitTesting {
 	}
 
 	TEST_F(NextBipEvaluatorTest, evaluateConstantAndSynonym) {
-
 		std::vector<StmtInfo> v = { p2 };
 		Entity header = { STMT, Synonym{"a"} };
 		Entity match = { STMT, "1" };

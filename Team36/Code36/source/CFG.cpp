@@ -251,13 +251,13 @@ std::vector<std::pair<prog_line, prog_line>> CFG::getNextBip() {
 		}
 
 		if (node->getNextMain() && node->getNextMain()->isTermination()) {
-			if (call_stack.empty()) {
-				return;
-			}
-
 			if (node->getNextBranch()) {
 				result.insert({ node->getProgramLines().back(), node->getNextBranch()->getProgramLines().front() });
 				action(node->getNextBranch(), action, call_stack);
+			}
+
+			if (call_stack.size() == 1) {
+				return;
 			}
 
 			prog_line from = call_stack.top();
@@ -294,7 +294,9 @@ std::vector<std::pair<prog_line, prog_line>> CFG::getNextBip() {
 			action(node->getNextMain(), action, call_stack);
 		}
 	};
-	action(head, action, std::stack<prog_line>());
+	std::stack<prog_line> stk_init;
+	stk_init.push(0);
+	action(head, action, stk_init);
 	resetAllVisited();
 
 	std::vector<std::pair<prog_line, prog_line>> temp(result.begin(), result.end());
@@ -342,28 +344,29 @@ std::vector<std::pair<LabelledProgLine, LabelledProgLine>> CFG::getNextBipWithLa
 		}
 
 		if (node->getNextMain() && node->getNextMain()->isTermination()) {
-			if (call_stack.size() == 1) {
-				return;
-			}
-
 			if (node->getNextBranch()) {
 				result.insert({ {node->getProgramLines().back(), call_stack},
 					{node->getNextBranch()->getProgramLines().front(), call_stack} });
 				action(node->getNextBranch(), action, call_stack);
 			}
+
+			if (call_stack.size() == 1) {
+				return;
+			}
+
 			prog_line from = call_stack.back();
 			std::vector<prog_line> label = call_stack;
 			call_stack.pop_back();
 			CFGNode* to = node->getNextMain()->getNextReturn()[from];
 			if (!to) {
-				throw std::runtime_error("Error traversing CFG for NextBip. Invalid call return.");
+				throw std::runtime_error("Error traversing CFG for NextBipWithLabels. Invalid call return.");
 			}
 			while (to->isTermination() && to->isReturn()) {
 				from = call_stack.back();
 				call_stack.pop_back();
 				to = to->getNextReturn()[from];
 				if (!to) {
-					throw std::runtime_error("Error traversing CFG for NextBip. Invalid call return.");
+					throw std::runtime_error("Error traversing CFG for NextBipWithLabels. Invalid call return.");
 				}
 			}
 

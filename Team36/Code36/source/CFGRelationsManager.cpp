@@ -1,64 +1,28 @@
 #include "CFGRelationsManager.h"
 
-CFGRelationsManager::CFGRelationsManager() {
-	next_t_preprocessor = NextTPreprocessor(PKB::getInstance().getNext(),
-		PKB::getInstance().getStmts());
-	affects_preprocessor = AffectsPreprocessor(
-		PKB::getInstance().getNext(),
-		PKB::getInstance().getUsesS(),
-		PKB::getInstance().getModifiesS(),
-		PKB::getInstance().getProcContains(),
-		PKB::getInstance().getStmts());
-	affectsT_preprocessor = AffectsTPreprocessor(
-		affects_preprocessor.getCache(),
-		PKB::getInstance().getStmts());
-	affects_bip_preprocessor = AffectsBipPreprocessor(
-		getLabelledNextTable(),
-		PKB::getInstance().getUsesS(),
-		PKB::getInstance().getModifiesS(),
-		PKB::getInstance().getProcContains(),
-		getFirstProgs(),
-		PKB::getInstance().getStmts());
-	affects_bipT_preprocessor = AffectsBipTPreprocessor(
-		affects_bip_preprocessor.getCache(),
-		affects_bip_preprocessor.getLabelledProgLineCache(),
-		PKB::getInstance().getStmts());
-}
-
-void CFGRelationsManager::update() {
-	next_t_preprocessor = NextTPreprocessor(PKB::getInstance().getNext(),
-		PKB::getInstance().getStmts());
-	affects_preprocessor = AffectsPreprocessor(
-		PKB::getInstance().getNext(),
-		PKB::getInstance().getUsesS(),
-		PKB::getInstance().getModifiesS(),
-		PKB::getInstance().getProcContains(),
-		PKB::getInstance().getStmts());
-	affectsT_preprocessor = AffectsTPreprocessor(
-		affects_preprocessor.getCache(),
-		PKB::getInstance().getStmts());
-	affects_bip_preprocessor = AffectsBipPreprocessor(
-		getLabelledNextTable(),
-		PKB::getInstance().getUsesS(),
-		PKB::getInstance().getModifiesS(),
-		PKB::getInstance().getProcContains(),
-		getFirstProgs(),
-		PKB::getInstance().getStmts());
-	affects_bipT_preprocessor = AffectsBipTPreprocessor(
-		affects_bip_preprocessor.getCache(),
-		affects_bip_preprocessor.getLabelledProgLineCache(),
-		PKB::getInstance().getStmts());
-}
-
 void CFGRelationsManager::reset() {
-	next_t_preprocessor.reset();
-	affects_preprocessor.reset();
-	affectsT_preprocessor.reset();
-	affects_bip_preprocessor.reset();
-	affects_bipT_preprocessor.reset();
+	next_t_preprocessor = NextTPreprocessor();
+	affects_preprocessor = AffectsPreprocessor();
+	affectsT_preprocessor = AffectsTPreprocessor();
+	next_bip_preprocessor = NextBipPreprocessor();
+	next_bipT_preprocessor = NextBipTPreprocessor();
+	affects_bip_preprocessor = AffectsBipPreprocessor();
+	affects_bipT_preprocessor = AffectsBipTPreprocessor();
+
+	is_nextT_preprocessor_init = false;
+	is_affects_preprocessor_init = false;
+	is_affectsT_preprocessor_init = false;
+	is_next_bip_preprocessor_init = false;
+	is_next_bipT_preprocessor_init = false;
+	is_affects_bip_preprocessor_init = false;
+	is_affects_bipT_preprocessor_init = false;
+
+	next_bip_table.clear();
+	labelled_next_table.clear();
 }
 
 bool CFGRelationsManager::isNextTEmpty() {
+	initNextTPreprocessor();
 	return !next_t_preprocessor.evaluateWildAndWild();
 }
 
@@ -66,71 +30,90 @@ bool CFGRelationsManager::isNextT(prog_line index1, prog_line index2) {
 	if (inSameProc(index1, index2) == false) {
 		return false;
 	} else {
+		initNextTPreprocessor();
 		return next_t_preprocessor.evaluateConstantAndConstant(index1, index2);
 	}
 }
 
 bool CFGRelationsManager::isPreviousT(prog_line index) {
+	initNextTPreprocessor();
 	return next_t_preprocessor.evaluateConstantAndWild(index);
 }
 
 bool CFGRelationsManager::isNextT(prog_line index) {
+	initNextTPreprocessor();
 	return next_t_preprocessor.evaluateWildAndConstant(index);
 }
 
 std::vector<std::pair<StmtInfo, StmtInfo>> CFGRelationsManager::getAllNextTRelation() {
+	initNextTPreprocessor();
 	return next_t_preprocessor.evaluateSynonymAndSynonym();
 }
 
 std::vector<StmtInfo> CFGRelationsManager::getPreviousT() {
+	initNextTPreprocessor();
 	return next_t_preprocessor.evaluateSynonymAndWild();
 }
 
 std::vector<StmtInfo> CFGRelationsManager::getNextT() {
+	initNextTPreprocessor();
 	return next_t_preprocessor.evaluateWildAndSynonym();
 }
 
 std::vector<StmtInfo> CFGRelationsManager::getPreviousT(prog_line index) {
+	initNextTPreprocessor();
 	return next_t_preprocessor.evaluateSynonymAndConstant(index);
 }
 
 std::vector<StmtInfo> CFGRelationsManager::getNextT(prog_line index) {
+	initNextTPreprocessor();
 	return next_t_preprocessor.evaluateConstantAndSynonym(index);
 }
 
 bool CFGRelationsManager::isAffectsEmpty() {
+	initAffectsPreprocessor();
 	return !affects_preprocessor.evaluateWildAndWild();
 }
 
 bool CFGRelationsManager::isAffects(stmt_index index1, stmt_index index2) {
-	bool is_nextT_calculated = next_t_preprocessor.isFullyPopulated() || next_t_preprocessor.isCalculated(index1 - 1, index2 - 1);
+	bool is_nextT_calculated = is_nextT_preprocessor_init &&
+		(next_t_preprocessor.isFullyPopulated() ||
+			next_t_preprocessor.isCalculated(index1 - 1, index2 - 1));
 	if (is_nextT_calculated && !isNextT(index1, index2)) {
-		return false;
-	}
-	if (inSameProc(index1, index2) == false) {
-		return false;
-	} else {
-		return affects_preprocessor.evaluateConstantAndConstant(index1, index2);
+		if (is_nextT_calculated && !isNextT(index1, index2)) {
+			return false;
+		}
+		if (inSameProc(index1, index2) == false) {
+			return false;
+		} else {
+			initAffectsPreprocessor();
+			return affects_preprocessor.evaluateConstantAndConstant(index1, index2);
+		}
 	}
 }
 
 bool CFGRelationsManager::isAffecting(stmt_index index) {
+	initAffectsPreprocessor();
 	return affects_preprocessor.evaluateConstantAndWild(index);
 }
 
 bool CFGRelationsManager::isAffected(stmt_index index) {
+	initAffectsPreprocessor();
 	return affects_preprocessor.evaluateWildAndConstant(index);
 }
 
 std::vector<std::pair<StmtInfo, StmtInfo>> CFGRelationsManager::getAllAffectsRelation() {
+	initAffectsPreprocessor();
 	return affects_preprocessor.evaluateSynonymAndSynonym();
 }
 
 std::vector<StmtInfo> CFGRelationsManager::getAffected() {
+	initAffectsPreprocessor();
 	return affects_preprocessor.evaluateWildAndSynonym();
 }
 
 std::vector<StmtInfo> CFGRelationsManager::getAffecting() {
+	initAffectsPreprocessor();
 	return affects_preprocessor.evaluateSynonymAndWild();
 }
 
@@ -139,6 +122,7 @@ std::vector<StmtInfo> CFGRelationsManager::getAffected(stmt_index index) {
 	if (stmts[index - 1].stmt_type != STMT_ASSIGN) {
 		return std::vector<StmtInfo>{};
 	} else {
+		initAffectsPreprocessor();
 		return affects_preprocessor.evaluateConstantAndSynonym(index);
 	}
 }
@@ -148,21 +132,25 @@ std::vector<StmtInfo> CFGRelationsManager::getAffecting(stmt_index index) {
 	if (stmts[index - 1].stmt_type != STMT_ASSIGN) {
 		return std::vector<StmtInfo>{};
 	} else {
+		initAffectsPreprocessor();
 		return affects_preprocessor.evaluateSynonymAndConstant(index);
 	}
 }
 
 bool CFGRelationsManager::isAffectsTEmpty() {
-	return isAffectsEmpty();
+	initAffectsTPreprocessor();
+	return affectsT_preprocessor.evaluateWildAndWild();
 }
 
 bool CFGRelationsManager::isAffectsT(stmt_index index1, stmt_index index2) {
-	bool is_nextT_calculated = next_t_preprocessor.isFullyPopulated() || next_t_preprocessor.isCalculated(index1 - 1, index2 - 1);
-	if (is_nextT_calculated && !isNextT(index1, index2)) {
+	bool is_nextT_calculated = is_nextT_preprocessor_init &&
+		(next_t_preprocessor.isFullyPopulated() ||
+			next_t_preprocessor.isCalculated(index1 - 1, index2 - 1));	if (is_nextT_calculated && !isNextT(index1, index2)) {
 		return false;
 	} else if (inSameProc(index1, index2) == false) {
 		return false;
 	} else {
+		initAffectsTPreprocessor();
 		affects_preprocessor.fullyPopulate();
 		return affectsT_preprocessor.evaluateConstantAndConstant(index1, index2);
 	}
@@ -177,6 +165,7 @@ bool CFGRelationsManager::isAffectedT(stmt_index index) {
 }
 
 std::vector<std::pair<StmtInfo, StmtInfo>> CFGRelationsManager::getAllAffectsTRelation() {
+	initAffectsTPreprocessor();
 	affects_preprocessor.fullyPopulate();
 	return affectsT_preprocessor.evaluateSynonymAndSynonym();
 }
@@ -194,6 +183,7 @@ std::vector<StmtInfo> CFGRelationsManager::getAffectedT(stmt_index index) {
 	if (stmts[index - 1].stmt_type != STMT_ASSIGN) {
 		return std::vector<StmtInfo>{};
 	} else {
+		initAffectsTPreprocessor();
 		affects_preprocessor.fullyPopulate();
 		return affectsT_preprocessor.evaluateConstantAndSynonym(index);
 	}
@@ -204,89 +194,99 @@ std::vector<StmtInfo> CFGRelationsManager::getAffectingT(stmt_index index) {
 	if (stmts[index - 1].stmt_type != STMT_ASSIGN) {
 		return std::vector<StmtInfo>{};
 	} else {
+		initAffectsTPreprocessor();
 		affects_preprocessor.fullyPopulate();
 		return affectsT_preprocessor.evaluateSynonymAndConstant(index);
 	}
 }
 
-//Temp implementation
 bool CFGRelationsManager::isNextBipEmpty() {
-	return isNextTEmpty();
+	initNextBipPreprocessor();
+	return !next_bip_preprocessor.evaluateWildAndWild();
 }
 
 bool CFGRelationsManager::isNextBip(prog_line index1, prog_line index2) {
-	auto a = PKB::getInstance().PKB::getNext();
-	return a.containsPair(PKB::getInstance().PKB::getStmt(index1), PKB::getInstance().PKB::getStmt(index2));
+	initNextBipPreprocessor();
+	return next_bip_preprocessor.evaluateConstantAndConstant(index1, index2);
 }
 
 bool CFGRelationsManager::isPreviousBip(prog_line index) {
-	return isPreviousT(index);
+	initNextBipPreprocessor();
+	return next_bip_preprocessor.evaluateConstantAndWild(index);
 }
 
 bool CFGRelationsManager::isNextBip(prog_line index) {
-	return isNextT(index);
+	initNextBipPreprocessor();
+	return next_bip_preprocessor.evaluateWildAndConstant(index);
 }
 
 std::vector<std::pair<StmtInfo, StmtInfo>> CFGRelationsManager::getAllNextBipRelation() {
-	auto a = PKB::getInstance().PKB::getNext();
-	return a.getPairs();
+	initNextBipPreprocessor();
+	return next_bip_preprocessor.evaluateSynonymAndSynonym();
 }
 
 std::vector<StmtInfo> CFGRelationsManager::getPreviousBip() {
-	return getPreviousT();
+	initNextBipPreprocessor();
+	return next_bip_preprocessor.evaluateSynonymAndWild();
 }
 
 std::vector<StmtInfo> CFGRelationsManager::getNextBip() {
-	return getNextT();
+	initNextBipPreprocessor();
+	return next_bip_preprocessor.evaluateWildAndSynonym();
 }
 
 std::vector<StmtInfo> CFGRelationsManager::getPreviousBip(prog_line index) {
-	auto a = PKB::getInstance().PKB::getNext();
-	return a.getKeys(PKB::getInstance().PKB::getStmt(index));
+	initNextBipPreprocessor();
+	return next_bip_preprocessor.evaluateSynonymAndConstant(index);
 }
 
 std::vector<StmtInfo> CFGRelationsManager::getNextBip(prog_line index) {
-	auto a = PKB::getInstance().PKB::getNext();
-	return a.getValues(PKB::getInstance().PKB::getStmt(index));
+	initNextBipPreprocessor();
+	return next_bip_preprocessor.evaluateConstantAndSynonym(index);
 }
 
 bool CFGRelationsManager::isNextBipTEmpty() {
-	return isNextTEmpty();
+	return isNextBipEmpty();
 }
 
 bool CFGRelationsManager::isNextBipT(prog_line index1, prog_line index2) {
-	return isNextT(index1, index2);
+	initNextBipTPreprocessor();
+	return next_bipT_preprocessor.evaluateConstantAndConstant(index1, index2);
 }
 
 bool CFGRelationsManager::isPreviousBipT(prog_line index) {
-	return isPreviousT(index);
+	return isPreviousBip(index);
 }
 
 bool CFGRelationsManager::isNextBipT(prog_line index) {
-	return isNextT(index);
+	return isNextBip(index);
 }
 
 std::vector<std::pair<StmtInfo, StmtInfo>> CFGRelationsManager::getAllNextBipTRelation() {
-	return getAllNextTRelation();
+	initNextBipTPreprocessor();
+	return next_bipT_preprocessor.evaluateSynonymAndSynonym();
 }
 
 std::vector<StmtInfo> CFGRelationsManager::getPreviousBipT() {
-	return getPreviousT();
+	return getPreviousBip();
 }
 
 std::vector<StmtInfo> CFGRelationsManager::getNextBipT() {
-	return getNextT();
+	return getNextBip();
 }
 
 std::vector<StmtInfo> CFGRelationsManager::getPreviousBipT(prog_line index) {
-	return getPreviousT(index);
+	initNextBipTPreprocessor();
+	return next_bipT_preprocessor.evaluateSynonymAndConstant(index);
 }
 
 std::vector<StmtInfo> CFGRelationsManager::getNextBipT(prog_line index) {
-	return getNextT(index);
+	initNextBipTPreprocessor();
+	return next_bipT_preprocessor.evaluateConstantAndSynonym(index);
 }
 
 bool CFGRelationsManager::isAffectsBipEmpty() {
+	initAffectsBipPreprocessor();
 	return !affects_bip_preprocessor.evaluateWildAndWild();
 }
 
@@ -295,6 +295,7 @@ bool CFGRelationsManager::isAffectsBip(stmt_index index1, stmt_index index2) {
 	if (stmts[index1 - 1].stmt_type != STMT_ASSIGN || stmts[index2 - 1].stmt_type != STMT_ASSIGN) {
 		return false;
 	}
+	initAffectsBipPreprocessor();
 	return affects_bip_preprocessor.evaluateConstantAndConstant(index1, index2);
 }
 
@@ -303,6 +304,7 @@ bool CFGRelationsManager::isAffectingBip(stmt_index index) {
 	if (stmts[index - 1].stmt_type != STMT_ASSIGN) {
 		return false;
 	}
+	initAffectsBipPreprocessor();
 	return affects_bip_preprocessor.evaluateConstantAndWild(index);
 }
 
@@ -311,18 +313,22 @@ bool CFGRelationsManager::isAffectedBip(stmt_index index) {
 	if (stmts[index - 1].stmt_type != STMT_ASSIGN) {
 		return false;
 	}
+	initAffectsBipPreprocessor();
 	return affects_bip_preprocessor.evaluateWildAndConstant(index);
 }
 
 std::vector<std::pair<StmtInfo, StmtInfo>> CFGRelationsManager::getAllAffectsBipRelation() {
+	initAffectsBipPreprocessor();
 	return affects_bip_preprocessor.evaluateSynonymAndSynonym();
 }
 
 std::vector<StmtInfo> CFGRelationsManager::getAffectedBip() {
+	initAffectsBipPreprocessor();
 	return affects_bip_preprocessor.evaluateWildAndSynonym();
 }
 
 std::vector<StmtInfo> CFGRelationsManager::getAffectingBip() {
+	initAffectsBipPreprocessor();
 	return affects_bip_preprocessor.evaluateSynonymAndWild();
 }
 
@@ -331,6 +337,7 @@ std::vector<StmtInfo> CFGRelationsManager::getAffectedBip(stmt_index index) {
 	if (stmts[index - 1].stmt_type != STMT_ASSIGN) {
 		return std::vector<StmtInfo>{};
 	}
+	initAffectsBipPreprocessor();
 	return affects_bip_preprocessor.evaluateConstantAndSynonym(index);
 }
 
@@ -339,6 +346,7 @@ std::vector<StmtInfo> CFGRelationsManager::getAffectingBip(stmt_index index) {
 	if (stmts[index - 1].stmt_type != STMT_ASSIGN) {
 		return std::vector<StmtInfo>{};
 	}
+	initAffectsBipPreprocessor();
 	return affects_bip_preprocessor.evaluateSynonymAndConstant(index);
 }
 
@@ -351,6 +359,7 @@ bool CFGRelationsManager::isAffectsBipT(stmt_index index1, stmt_index index2) {
 	if (stmts[index1 - 1].stmt_type != STMT_ASSIGN || stmts[index2 - 1].stmt_type != STMT_ASSIGN) {
 		return false;
 	}
+	initAffectsBipTPreprocessor();
 	affects_bip_preprocessor.fullyPopulate();
 	return affects_bipT_preprocessor.evaluateConstantAndConstant(index1, index2);
 }
@@ -364,18 +373,17 @@ bool CFGRelationsManager::isAffectedBipT(stmt_index index) {
 }
 
 std::vector<std::pair<StmtInfo, StmtInfo>> CFGRelationsManager::getAllAffectsBipTRelation() {
+	initAffectsBipTPreprocessor();
 	affects_bip_preprocessor.fullyPopulate();
 	return affects_bipT_preprocessor.evaluateSynonymAndSynonym();
 }
 
 std::vector<StmtInfo> CFGRelationsManager::getAffectedBipT() {
-	affects_bip_preprocessor.fullyPopulate();
-	return affects_bipT_preprocessor.evaluateWildAndSynonym();
+	return getAffectedBip();
 }
 
 std::vector<StmtInfo> CFGRelationsManager::getAffectingBipT() {
-	affects_bip_preprocessor.fullyPopulate();
-	return affects_bipT_preprocessor.evaluateSynonymAndWild();
+	return getAffectingBip();
 }
 
 std::vector<StmtInfo> CFGRelationsManager::getAffectedBipT(stmt_index index) {
@@ -383,6 +391,7 @@ std::vector<StmtInfo> CFGRelationsManager::getAffectedBipT(stmt_index index) {
 	if (stmts[index - 1].stmt_type != STMT_ASSIGN) {
 		return std::vector<StmtInfo>{};
 	}
+	initAffectsBipTPreprocessor();
 	affects_bip_preprocessor.fullyPopulate();
 	return affects_bipT_preprocessor.evaluateConstantAndSynonym(index);
 }
@@ -392,6 +401,7 @@ std::vector<StmtInfo> CFGRelationsManager::getAffectingBipT(stmt_index index) {
 	if (stmts[index - 1].stmt_type != STMT_ASSIGN) {
 		return std::vector<StmtInfo>{};
 	}
+	initAffectsBipTPreprocessor();
 	affects_bip_preprocessor.fullyPopulate();
 	return affects_bipT_preprocessor.evaluateSynonymAndConstant(index);
 }
@@ -399,6 +409,82 @@ std::vector<StmtInfo> CFGRelationsManager::getAffectingBipT(stmt_index index) {
 bool CFGRelationsManager::inSameProc(stmt_index index1, stmt_index index2) {
 	std::vector<proc_name> v = PKB::getInstance().getProcContains().getKeys(index1);
 	return PKB::getInstance().getProcContains().containsPair(v[0], index2);
+}
+
+void CFGRelationsManager::initNextTPreprocessor() {
+	if (!is_nextT_preprocessor_init) {
+		next_t_preprocessor = NextTPreprocessor(PKB::getInstance().getNext(),
+			PKB::getInstance().getStmts());
+		is_nextT_preprocessor_init = true;
+	}
+}
+
+void CFGRelationsManager::initAffectsPreprocessor() {
+	if (!is_affects_preprocessor_init) {
+		affects_preprocessor = AffectsPreprocessor(
+			PKB::getInstance().getNext(),
+			PKB::getInstance().getUsesS(),
+			PKB::getInstance().getModifiesS(),
+			PKB::getInstance().getProcContains(),
+			PKB::getInstance().getStmts());
+		is_affects_preprocessor_init = true;
+	}
+}
+
+void CFGRelationsManager::initAffectsTPreprocessor() {
+	if (!is_affectsT_preprocessor_init) {
+		initAffectsPreprocessor();
+		affectsT_preprocessor = AffectsTPreprocessor(
+			affects_preprocessor.getCache(),
+			PKB::getInstance().getStmts());
+		is_affectsT_preprocessor_init = true;
+	}
+}
+
+void CFGRelationsManager::initNextBipPreprocessor() {
+	if (!is_next_bip_preprocessor_init) {
+		next_bip_preprocessor = NextBipPreprocessor(
+			getNextBipTable(),
+			PKB::getInstance().getStmts()
+		);
+		is_next_bip_preprocessor_init = true;
+	}
+}
+
+void CFGRelationsManager::initNextBipTPreprocessor() {
+	if (!is_next_bipT_preprocessor_init) {
+		initNextBipPreprocessor();
+		next_bipT_preprocessor = NextBipTPreprocessor(
+			next_bip_table,
+			getLabelledNextBipTable(),
+			PKB::getInstance().getStmts()
+		);
+		is_next_bipT_preprocessor_init = true;
+	}
+}
+
+void CFGRelationsManager::initAffectsBipPreprocessor() {
+	if (!is_affects_bip_preprocessor_init) {
+		affects_bip_preprocessor = AffectsBipPreprocessor(
+			getLabelledNextBipTable(),
+			PKB::getInstance().getUsesS(),
+			PKB::getInstance().getModifiesS(),
+			PKB::getInstance().getProcContains(),
+			getFirstProgs(),
+			PKB::getInstance().getStmts());
+		is_affects_bip_preprocessor_init = true;
+	}
+}
+
+void CFGRelationsManager::initAffectsBipTPreprocessor() {
+	if (!is_affects_bipT_preprocessor_init) {
+		initAffectsBipPreprocessor();
+		affects_bipT_preprocessor = AffectsBipTPreprocessor(
+			affects_bip_preprocessor.getCache(),
+			affects_bip_preprocessor.getLabelledProgLineCache(),
+			PKB::getInstance().getStmts());
+		is_affects_bipT_preprocessor_init = true;
+	}
 }
 
 NextTPreprocessor CFGRelationsManager::getNextTPreprocessor() {
@@ -411,6 +497,14 @@ AffectsPreprocessor CFGRelationsManager::getAffectsPreprocessor() {
 
 AffectsTPreprocessor CFGRelationsManager::getAffectsTPreprocessor() {
 	return affectsT_preprocessor;
+}
+
+NextBipPreprocessor CFGRelationsManager::getNextBipPreprocessor() {
+	return next_bip_preprocessor;
+}
+
+NextBipTPreprocessor CFGRelationsManager::getNextBipTPreprocessor() {
+	return next_bipT_preprocessor;
 }
 
 AffectsBipPreprocessor CFGRelationsManager::getAffectsBipPreprocessor() {
@@ -430,10 +524,20 @@ std::vector<LabelledProgLine> CFGRelationsManager::getFirstProgs() {
 	return res;
 }
 
-const MonotypeRelationTable<LabelledProgLine>& CFGRelationsManager::getLabelledNextTable() {
+const MonotypeRelationTable<StmtInfo>& CFGRelationsManager::getNextBipTable() {
 	auto cfgs = PKB::getInstance().getCFGBips();
 	for (CFG* cfg : cfgs) {
-		for (auto pair : cfg->getNextBipWithLabel()) {
+		for (const auto& pair : cfg->getNextBip()) {
+			next_bip_table.insert(PKB::getInstance().getStmt(pair.first), PKB::getInstance().getStmt(pair.second));
+		}
+	}
+	return next_bip_table;
+}
+
+const MonotypeRelationTable<LabelledProgLine>& CFGRelationsManager::getLabelledNextBipTable() {
+	auto cfgs = PKB::getInstance().getCFGBips();
+	for (CFG* cfg : cfgs) {
+		for (const auto& pair : cfg->getNextBipWithLabel()) {
 			labelled_next_table.insert(pair.first, pair.second);
 		}
 	}
