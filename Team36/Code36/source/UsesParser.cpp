@@ -1,6 +1,6 @@
 #include "UsesParser.h"
 
-void UsesParser::parse(Query& query, std::vector<QueryToken> token_chain) {
+void UsesParser::parse(Query& query, std::vector<QueryToken> token_chain, QueryToken::QueryTokenType& token_type) {
     // stmtRef , entRef
     // entRef, entRef
 

@@ -11,9 +11,9 @@
 #include "SyntacticErrorException.h"
 #include "Utility.h"
 
-class WithParser : public RelationParserInterface {
+class WithParser {
 public:
-    void parse(Query&, std::vector<QueryToken>) override;
+    void parse(Query&, std::vector<QueryToken>);
 private:
     static bool isSameRefType(Query&, std::vector<QueryToken>, std::vector<QueryToken>);
     EntityType getEntityType(Query&, std::vector<QueryToken>);

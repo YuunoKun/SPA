@@ -1,6 +1,6 @@
 #include "ParentParser.h"
 
-void ParentParser::parse(Query& query, std::vector<QueryToken> token_chain) {
+void ParentParser::parse(Query& query, std::vector<QueryToken> token_chain, QueryToken::QueryTokenType& token_type) {
     // stmtRef , stmtRef
     std::vector<std::vector<QueryToken>> separated_params = Utility::splitTokenChain(2, QueryToken::COMMA, token_chain);
 
@@ -16,8 +16,9 @@ void ParentParser::parse(Query& query, std::vector<QueryToken> token_chain) {
 
     QueryToken stmt2 = separated_params[1][0];
 
+
     if (!Utility::checkIsSemanticError(query)) {
-        query.addRelation(RelRef(RelType::PARENT,
+        query.addRelation(RelRef(Utility::queryTokenTypeToRelType(token_type),
             Utility::setStmtRef(query, stmt, EntityType::STMT),
             Utility::setStmtRef(query, stmt2, EntityType::STMT)));
     }

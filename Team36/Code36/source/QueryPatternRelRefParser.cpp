@@ -7,84 +7,47 @@ void QueryPatternRelRefParser::parseParameterSuchThat(
     std::vector<QueryToken> token_chain) {
     switch (token_type) {
     case QueryToken::MODIFIES_S: {
-
-        ModifiesParser usesParser;
-        usesParser.parse(query, token_chain);
+        ModifiesParser modifies_Parser;
+        modifies_Parser.parse(query, token_chain, token_type);
         break;
     }
     case QueryToken::USES_S: {
-        UsesParser usesParser;
-        usesParser.parse(query, token_chain);
+        UsesParser uses_parser;
+        uses_parser.parse(query, token_chain, token_type);
         break;
     }
-    case QueryToken::PARENT: {
-        ParentParser parentParser;
-        parentParser.parse(query, token_chain);
-        break;
-    }
+    case QueryToken::PARENT: 
     case QueryToken::PARENT_T: {
-        ParentTParser parentTParser;
-        parentTParser.parse(query, token_chain);
+        ParentParser parent_parser;
+        parent_parser.parse(query, token_chain, token_type);
         break;
     }
-    case QueryToken::FOLLOWS: {
-        FollowsParser followsParser;
-        followsParser.parse(query, token_chain);
-        break;
-    }
+    case QueryToken::FOLLOWS: 
     case QueryToken::FOLLOWS_T: {
-        FollowsTParser followsTParser;
-        followsTParser.parse(query, token_chain);
+        FollowsParser follows_parser;
+        follows_parser.parse(query, token_chain, token_type);
         break;
     }
-    case QueryToken::CALLS: {
-        CallsParser callsParser;
-        callsParser.parse(query, token_chain);
-        break;
-    }
+    case QueryToken::CALLS: 
     case QueryToken::CALLS_T: {
-        CallsTParser callsTParser;
-        callsTParser.parse(query, token_chain);
+        CallsParser calls_parser;
+        calls_parser.parse(query, token_chain, token_type);
         break;
     }
-    case QueryToken::NEXT: {
-        NextParser nextParser;
-        nextParser.parse(query, token_chain);
-        break;
-    }
-    case QueryToken::NEXT_T: {
-        NextTParser nextTParser;
-        nextTParser.parse(query, token_chain);
-        break;
-    }
-    case QueryToken::NEXT_BIP: {
-        NextBipParser nextBipParser;
-        nextBipParser.parse(query, token_chain);
-        break;
-    }
+    case QueryToken::NEXT: 
+    case QueryToken::NEXT_T: 
+    case QueryToken::NEXT_BIP: 
     case QueryToken::NEXT_BIP_T: {
-        NextBipTParser nextBipTParser;
-        nextBipTParser.parse(query, token_chain);
+        NextParser next_parser;
+        next_parser.parse(query, token_chain, token_type);
         break;
     }
-    case QueryToken::AFFECTS: {
-        AffectsParser affectsParser;
-        affectsParser.parse(query, token_chain);
-        break;
-    }
-    case QueryToken::AFFECTS_T: {
-        AffectsTParser affectsTParser;
-        affectsTParser.parse(query, token_chain);
-        break;
-    }
-    case QueryToken::AFFECTS_BIP: {
-        AffectsBipParser affectsBipParser;
-        affectsBipParser.parse(query, token_chain);
-        break;
-    }
+    case QueryToken::AFFECTS: 
+    case QueryToken::AFFECTS_T: 
+    case QueryToken::AFFECTS_BIP: 
     case QueryToken::AFFECTS_BIP_T: {
-        AffectsBipTParser affectsBipTParser;
-        affectsBipTParser.parse(query, token_chain);
+        AffectsParser affects_parser;
+        affects_parser.parse(query, token_chain, token_type);
         break;
     }
     default:

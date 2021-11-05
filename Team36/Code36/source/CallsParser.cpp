@@ -1,6 +1,6 @@
 #include "CallsParser.h"
 
-void CallsParser::parse(Query& query, std::vector<QueryToken> token_chain) {
+void CallsParser::parse(Query& query, std::vector<QueryToken> token_chain, QueryToken::QueryTokenType& token_type) {
     // entRef , entRef
     std::vector<std::vector<QueryToken>> separated_params = Utility::splitTokenChain(2, QueryToken::COMMA, token_chain);
 
@@ -9,7 +9,7 @@ void CallsParser::parse(Query& query, std::vector<QueryToken> token_chain) {
     }
 
     if (!Utility::checkIsSemanticError(query)) {
-        query.addRelation(RelRef(RelType::CALLS,
+        query.addRelation(RelRef(Utility::queryTokenTypeToRelType(token_type),
             Utility::setEntRef(query, separated_params[0], EntityType::PROCEDURE),
             Utility::setEntRef(query, separated_params[1], EntityType::PROCEDURE)));
     }

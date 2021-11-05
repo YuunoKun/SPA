@@ -1,6 +1,6 @@
 #include "ModifiesParser.h"
 
-void ModifiesParser::parse(Query& query, std::vector<QueryToken> token_chain) {
+void ModifiesParser::parse(Query& query, std::vector<QueryToken> token_chain, QueryToken::QueryTokenType& token_type) {
     // stmtRef , entRef
        // entRef, entRef
 
