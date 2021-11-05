@@ -365,7 +365,7 @@ void Utility::getColumnsWithoutDuplicate(std::list<std::vector<value>>& main, st
 		std::string rowString;
 		for (int i = 0; i < indexes.size(); i++) {
 			newRow.emplace_back(row[indexes[i]]);
-			rowString += std::to_string(row[indexes[i]]) + " ";
+			rowString += std::to_string(row[indexes[i]]) + SPACE;
 		}
 		if (unique.count(rowString) == 0) {
 			out.emplace_back(newRow);

@@ -16,6 +16,7 @@ typedef unsigned int value;
 
 static const std::string BOOLEAN_TRUE = "TRUE";
 static const std::string BOOLEAN_FALSE = "FALSE";
+static const std::string SPACE = " ";
 
 enum StmtType {
 	STMT_READ,

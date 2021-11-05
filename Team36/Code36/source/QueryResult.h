@@ -17,8 +17,21 @@ public:
 	void getResult(Entity, std::list<std::string>&);
 
 private:
-	std::list<ResultTable*> results;
+
+	ResultTable* generateNewResultTable(ResultTable&);
+
+
+	bool tryMergeResultTableCommonHeader(ResultTable&, std::list<ResultTable*>);
+	bool tryMergeResultTableIntoCurrentTable(ResultTable&, std::list<ResultTable*>);
+	bool tryMergeResultTableWithNewTable(ResultTable&, std::list<ResultTable*>);
+
+	bool mergeResultTable(ResultTable*, ResultTable&);
+	void mergeResultTable(ResultTable&, std::list<ResultTable*>);
+	
 	std::unordered_set<std::string> header_set;
+
+	std::unordered_map<std::string, ResultTable*> results;
+
 	bool have_result;
 
 	void addHeader(std::vector<Entity>);

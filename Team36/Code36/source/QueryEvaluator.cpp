@@ -106,9 +106,9 @@ void QueryEvaluator::mergeTable(ResultTable& result_table, std::vector<Entity>& 
 		while (!row.empty()) {
 			index++;
 			if (Utility::isSecondaryAttribute(selected[index])) {
-				row_result += " " + getEntitySecondaryAttribute(row.front(), selected[index]);
+				row_result += SPACE + getEntitySecondaryAttribute(row.front(), selected[index]);
 			} else {
-				row_result += " " + row.front();
+				row_result += SPACE + row.front();
 			}
 			row.pop_front();
 		}

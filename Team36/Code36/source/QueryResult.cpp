@@ -1,6 +1,7 @@
 #include "QueryResult.h"
 #include <stdexcept>
 #include "Utility.h"
+#include <algorithm>
 
 QueryResult::QueryResult() {
 	have_result = true;
@@ -8,7 +9,7 @@ QueryResult::QueryResult() {
 
 QueryResult::~QueryResult() {
 	for (auto& result : results) {
-		delete result;
+		delete result.second;
 	}
 	results.clear();
 }
@@ -36,6 +37,75 @@ bool QueryResult::isInTables(Entity e) {
 	}
 	return false;
 }
+ResultTable* QueryResult::generateNewResultTable(ResultTable& t) {
+	ResultTable* new_table = new ResultTable(t);
+	addHeader(t.getHeaders());
+	return new_table;
+}
+
+bool QueryResult::tryMergeResultTableCommonHeader(ResultTable& t, std::list<ResultTable*> affected) {
+	auto& it = results.find(t.getHeadersName());
+	if (it != results.end()) {
+		if (mergeResultTable(it->second, t)) {
+			affected.emplace_back(it->second);
+			return true;
+		}
+		throw std::exception("mergeResultTable() : merging should be successful");
+	}
+	return false;
+}
+
+bool QueryResult::tryMergeResultTableIntoCurrentTable(ResultTable& t, std::list<ResultTable*> affected) {
+	auto& it = results.begin();
+	while (it != results.end()) {
+		if (mergeResultTable(it->second, t)) {
+			affected.emplace_back(it->second);
+			return true;
+		}
+		it++;
+	}
+	throw std::domain_error("There should exist duplicate column when this method is called");
+}
+
+bool QueryResult::tryMergeResultTableWithNewTable(ResultTable& t, std::list<ResultTable*> affected) {
+	bool merged = false;
+	ResultTable* new_table = generateNewResultTable(t);
+	auto& it = results.begin();
+	while (it != results.end()) {
+		if (mergeResultTable(new_table, *it->second)) {
+			delete it->second;
+			it = results.erase(it);
+			merged = true;
+		} else {
+			it++;
+		}
+	}
+
+	results.insert({ new_table->getHeadersName(), new_table });
+	affected.emplace_back(new_table);
+
+	return merged;
+}
+
+bool QueryResult::mergeResultTable(ResultTable* table, ResultTable& to_merge) {
+	bool merged = table->merge(to_merge);
+	if (table->isEmpty()) {
+		have_result = false;
+	}
+	return merged;
+}
+
+void QueryResult::mergeResultTable(ResultTable& t, std::list<ResultTable*> affected) {
+	if (tryMergeResultTableCommonHeader(t, affected)) {
+		return;
+	}else if (t.getHeaders().size() == 1 && tryMergeResultTableCommonHeader(t, affected)) {
+		return;
+	}else  if (tryMergeResultTableWithNewTable(t, affected)) {
+		return;
+	}
+	throw std::exception("mergeResultTable() : merging failed : nothing has been merged");
+}
+
 
 void QueryResult::addResult(ResultTable& t) {
 	if (t.isEmpty()) {
@@ -44,41 +114,50 @@ void QueryResult::addResult(ResultTable& t) {
 	}
 	//If new result table cannot be merge
 	if (!isInTables(t.getHeaders())) {
-		ResultTable* new_result = new ResultTable(t);
-		results.push_back(new_result);
-		addHeader(t.getHeaders());
+		ResultTable* new_table = generateNewResultTable(t);
+		results.insert({ new_table->getHeadersName(), new_table });
 		return;
 	}
-	addHeader(t.getHeaders());
 
-	//Common header found, began merge
-	ResultTable* holder = nullptr;
-	auto& it = results.begin();
-	while (it != results.end()) {
-		bool merged = (*it)->merge(t);
-		if (merged && (*it)->isEmpty()) {
-			have_result = false;
-			return;
-		} else if (merged) {
-			holder = *it;
-			it++;
-			break;
-		} else {
-			it++;
-		}
+	std::list<ResultTable*> affected;
+	mergeResultTable(t, affected);
+	if (!have_result) {
+		return;
 	}
 
-	while (it != results.end()) {
-		bool merged = holder->merge(**it);
-		if (merged && holder->isEmpty()) {
-			have_result = false;
-			return;
-		} else if (merged) {
-			delete *it;
-			it = results.erase(it);
-			break;
-		} else {
+	std::unordered_set<std::string> affected_name;
+	for (auto& rt : affected) {
+		affected_name.insert(rt->getHeadersName());
+	}
+
+	while (!affected.empty()) {
+		ResultTable* current = affected.front();
+		affected.pop_front();
+		affected_name.erase(current->getHeadersName());
+
+		size_t current_original_size = current->size();
+
+		auto& it = results.begin();
+		while (it != results.end()) {
+			if (it->second->getHeadersName() == current->getHeadersName()) {
+				continue;
+			}
+			size_t original_size = it->second->size();
+			bool filtered = it->second->filter(*current);
+			if (it->second->isEmpty() || current->isEmpty()) {
+				have_result = false;
+				return;
+			} else if (filtered && original_size > it->second->size() && 
+				affected_name.find(it->second->getHeadersName()) == affected_name.end()) {
+				affected_name.insert(it->second->getHeadersName());
+				affected.push_back(it->second);
+			}
 			it++;
+		}
+		if (current_original_size > current->size() &&
+			affected_name.find(current->getHeadersName()) == affected_name.end()) {
+			affected_name.insert(current->getHeadersName());
+			affected.push_back(current);
 		}
 	}
 }
@@ -91,22 +170,23 @@ void QueryResult::addHeader(std::vector<Entity> v) {
 
 void QueryResult::getResults(std::vector<Entity>& selected, ResultTable& out) {
 	for (auto& result : results) {
-		std::vector<Entity> common = result->getCommonHeaders(selected);
+		std::vector<Entity> common = result.second->getCommonHeaders(selected);
 		if (common.empty()) {
 			continue;
 		}
 		selected = Utility::getEntitiesExclude(selected, common);
-		out.joinTable(result->getResultTable(common));
+		out.joinTable(result.second->getResultTable(common));
 	}
 
 }
 
 void QueryResult::getResult(Entity e, std::list<std::string>& out) {
 	for (auto& table : results) {
-		if (table->isInTable(e)) {
-			table->getEntityResult(e, out);
+		if (table.second->isInTable(e)) {
+			table.second->getEntityResult(e, out);
 			return;
 		}
 	}
 	throw std::domain_error("Invalid Entity, Source: QueryResult.getResult");
 }
+

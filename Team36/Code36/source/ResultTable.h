@@ -20,13 +20,16 @@ public:
 
 	void joinTable(ResultTable&);
 	bool merge(ResultTable&);
+	bool filter(ResultTable&);
 	bool isInTable(Entity);
 	bool isEmpty();
+	size_t size();
 	void getEntityResult(Entity&, std::list<std::string>&);
 	void getEntityResults(std::vector<Entity>, std::list<std::list<std::string>>&);
 	std::vector<Entity> getCommonHeaders(std::vector<Entity>&);
 	ResultTable getResultTable(std::vector<Entity>&);
 	std::vector<Entity> getHeaders();
+	std::string getHeadersName();
 
 	bool operator==(const ResultTable&) const;
 
@@ -36,6 +39,11 @@ private:
 	void addHeader(std::vector<Entity>&);
 	void addHashToStringMap(std::unordered_map<value, std::string>&);
 
+
+	void generateHeaderName();
+
+	bool header_outdated = false;
+	std::string header_name;
 	std::vector<Entity> header;
 	std::unordered_set<std::string> header_set;
 	std::list<std::vector<value>> table;

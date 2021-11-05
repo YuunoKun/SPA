@@ -516,7 +516,7 @@ namespace UnitTesting {
 		EXPECT_TRUE(t1.isEmpty());
 	}
 
-	TEST(ResultTable, mergeFilterDoubleColumnTripleTable) {
+	TEST(ResultTable, fliterTable) {
 		Entity e1 = { STMT, Synonym{"x"} };
 		Entity e2 = { STMT, Synonym{"y"} };
 		Entity e3 = { STMT, Synonym{"z"} };
@@ -541,8 +541,8 @@ namespace UnitTesting {
 		ResultTable t1(h1, a1);
 		ResultTable t2(h2, a2);
 		ResultTable t3(h3, a3);
-		EXPECT_TRUE(t1.merge(t2));
-		EXPECT_TRUE(t1.merge(t3));
+		EXPECT_TRUE(t1.filter(t2));
+		EXPECT_TRUE(t1.filter(t3));
 		std::list<std::string> b1 = { "1", "2" };
 		std::list<std::string> b2 = { "4", "5" };
 		std::list<std::string> b3 = { "7", "8" };
@@ -553,7 +553,7 @@ namespace UnitTesting {
 		t1.getEntityResult(e2, out);
 		EXPECT_EQ(out, b2);
 		out.clear();
-		t1.getEntityResult(e3, out);
+		t3.getEntityResult(e3, out);
 		EXPECT_EQ(out, b3);
 
 		out.clear();
@@ -561,21 +561,6 @@ namespace UnitTesting {
 		EXPECT_EQ(out, b1);
 		out.clear();
 		t1.getEntityResult(e2, out);
-		EXPECT_EQ(out, b2);
-		out.clear();
-		t1.getEntityResult(e3, out);
-		EXPECT_EQ(out, b3);
-
-		t1 = ResultTable(h1, a1);
-		t2 = ResultTable(h2, a2);
-		t3 = ResultTable(h3, a3);
-		EXPECT_TRUE(t1.merge(t2));
-		EXPECT_TRUE(t3.merge(t1));
-		out.clear();
-		t3.getEntityResult(e1, out);
-		EXPECT_EQ(out, b1);
-		out.clear();
-		t3.getEntityResult(e2, out);
 		EXPECT_EQ(out, b2);
 		out.clear();
 		t3.getEntityResult(e3, out);
@@ -584,8 +569,23 @@ namespace UnitTesting {
 		t1 = ResultTable(h1, a1);
 		t2 = ResultTable(h2, a2);
 		t3 = ResultTable(h3, a3);
-		EXPECT_TRUE(t1.merge(t3));
-		EXPECT_TRUE(t1.merge(t2));
+		EXPECT_TRUE(t1.filter(t2));
+		EXPECT_TRUE(t3.filter(t1));
+		out.clear();
+		t3.getEntityResult(e1, out);
+		EXPECT_EQ(out, b1);
+		out.clear();
+		t1.getEntityResult(e2, out);
+		EXPECT_EQ(out, b2);
+		out.clear();
+		t3.getEntityResult(e3, out);
+		EXPECT_EQ(out, b3);
+
+		t1 = ResultTable(h1, a1);
+		t2 = ResultTable(h2, a2);
+		t3 = ResultTable(h3, a3);
+		EXPECT_TRUE(t1.filter(t3));
+		EXPECT_TRUE(t1.filter(t2));
 		out.clear();
 		t1.getEntityResult(e1, out);
 		EXPECT_EQ(out, b1);
@@ -593,14 +593,14 @@ namespace UnitTesting {
 		t1.getEntityResult(e2, out);
 		EXPECT_EQ(out, b2);
 		out.clear();
-		t1.getEntityResult(e3, out);
+		t3.getEntityResult(e3, out);
 		EXPECT_EQ(out, b3);
 
 		t1 = ResultTable(h1, a1);
 		t2 = ResultTable(h2, a2);
 		t3 = ResultTable(h3, a3);
-		EXPECT_TRUE(t1.merge(t3));
-		EXPECT_TRUE(t2.merge(t1));
+		EXPECT_TRUE(t1.filter(t3));
+		EXPECT_TRUE(t2.filter(t1));
 		out.clear();
 		t1.getEntityResult(e1, out);
 		EXPECT_EQ(out, b1);
@@ -608,16 +608,46 @@ namespace UnitTesting {
 		t1.getEntityResult(e2, out);
 		EXPECT_EQ(out, b2);
 		out.clear();
-		t1.getEntityResult(e3, out);
+		t2.getEntityResult(e3, out);
 		EXPECT_EQ(out, b3);
 
 		t1 = ResultTable(h1, a1);
 		t2 = ResultTable(h2, a2);
 		t3 = ResultTable(h3, a3);
-		EXPECT_TRUE(t2.merge(t1));
-		EXPECT_TRUE(t2.merge(t3));
+		EXPECT_TRUE(t2.filter(t1));
+		EXPECT_TRUE(t2.filter(t3));
 		out.clear();
-		t2.getEntityResult(e1, out);
+		t3.getEntityResult(e1, out);
+		EXPECT_EQ(out, b1);
+		out.clear();
+		t2.getEntityResult(e2, out);
+		EXPECT_EQ(out, b2);
+		out.clear();
+		t3.getEntityResult(e3, out);
+		EXPECT_EQ(out, b3);
+
+		t1 = ResultTable(h1, a1);
+		t2 = ResultTable(h2, a2);
+		t3 = ResultTable(h3, a3);
+		EXPECT_TRUE(t2.filter(t1));
+		EXPECT_TRUE(t3.filter(t2));
+		out.clear();
+		t3.getEntityResult(e1, out);
+		EXPECT_EQ(out, b1);
+		out.clear();
+		t2.getEntityResult(e2, out);
+		EXPECT_EQ(out, b2);
+		out.clear();
+		t3.getEntityResult(e3, out);
+		EXPECT_EQ(out, b3);
+
+		t1 = ResultTable(h1, a1);
+		t2 = ResultTable(h2, a2);
+		t3 = ResultTable(h3, a3);
+		EXPECT_TRUE(t2.filter(t3));
+		EXPECT_TRUE(t2.filter(t1));
+		out.clear();
+		t3.getEntityResult(e1, out);
 		EXPECT_EQ(out, b1);
 		out.clear();
 		t2.getEntityResult(e2, out);
@@ -629,13 +659,13 @@ namespace UnitTesting {
 		t1 = ResultTable(h1, a1);
 		t2 = ResultTable(h2, a2);
 		t3 = ResultTable(h3, a3);
-		EXPECT_TRUE(t2.merge(t1));
-		EXPECT_TRUE(t3.merge(t2));
+		EXPECT_TRUE(t2.filter(t3));
+		EXPECT_TRUE(t1.filter(t3));
 		out.clear();
-		t3.getEntityResult(e1, out);
+		t1.getEntityResult(e1, out);
 		EXPECT_EQ(out, b1);
 		out.clear();
-		t3.getEntityResult(e2, out);
+		t2.getEntityResult(e2, out);
 		EXPECT_EQ(out, b2);
 		out.clear();
 		t3.getEntityResult(e3, out);
@@ -644,10 +674,25 @@ namespace UnitTesting {
 		t1 = ResultTable(h1, a1);
 		t2 = ResultTable(h2, a2);
 		t3 = ResultTable(h3, a3);
-		EXPECT_TRUE(t2.merge(t3));
-		EXPECT_TRUE(t2.merge(t1));
+		EXPECT_TRUE(t3.filter(t1));
+		EXPECT_TRUE(t3.filter(t2));
 		out.clear();
-		t2.getEntityResult(e1, out);
+		t3.getEntityResult(e1, out);
+		EXPECT_EQ(out, b1);
+		out.clear();
+		t2.getEntityResult(e2, out);
+		EXPECT_EQ(out, b2);
+		out.clear();
+		t3.getEntityResult(e3, out);
+		EXPECT_EQ(out, b3);
+
+		t1 = ResultTable(h1, a1);
+		t2 = ResultTable(h2, a2);
+		t3 = ResultTable(h3, a3);
+		EXPECT_TRUE(t3.filter(t1));
+		EXPECT_TRUE(t2.filter(t3));
+		out.clear();
+		t1.getEntityResult(e1, out);
 		EXPECT_EQ(out, b1);
 		out.clear();
 		t2.getEntityResult(e2, out);
@@ -659,68 +704,23 @@ namespace UnitTesting {
 		t1 = ResultTable(h1, a1);
 		t2 = ResultTable(h2, a2);
 		t3 = ResultTable(h3, a3);
-		EXPECT_TRUE(t2.merge(t3));
-		EXPECT_TRUE(t1.merge(t3));
-		out.clear();
-		t1.getEntityResult(e1, out);
-		EXPECT_EQ(out, b1);
-		out.clear();
-		t1.getEntityResult(e2, out);
-		EXPECT_EQ(out, b2);
-		out.clear();
-		t1.getEntityResult(e3, out);
-		EXPECT_EQ(out, b3);
-
-		t1 = ResultTable(h1, a1);
-		t2 = ResultTable(h2, a2);
-		t3 = ResultTable(h3, a3);
-		EXPECT_TRUE(t3.merge(t1));
-		EXPECT_TRUE(t3.merge(t2));
+		EXPECT_TRUE(t3.filter(t2));
+		EXPECT_TRUE(t3.filter(t1));
 		out.clear();
 		t3.getEntityResult(e1, out);
-		EXPECT_EQ(out, b1);
-		out.clear();
-		t3.getEntityResult(e2, out);
-		EXPECT_EQ(out, b2);
-		out.clear();
-		t3.getEntityResult(e3, out);
-		EXPECT_EQ(out, b3);
-
-		t1 = ResultTable(h1, a1);
-		t2 = ResultTable(h2, a2);
-		t3 = ResultTable(h3, a3);
-		EXPECT_TRUE(t3.merge(t1));
-		EXPECT_TRUE(t2.merge(t3));
-		out.clear();
-		t2.getEntityResult(e1, out);
 		EXPECT_EQ(out, b1);
 		out.clear();
 		t2.getEntityResult(e2, out);
 		EXPECT_EQ(out, b2);
 		out.clear();
-		t2.getEntityResult(e3, out);
-		EXPECT_EQ(out, b3);
-
-		t1 = ResultTable(h1, a1);
-		t2 = ResultTable(h2, a2);
-		t3 = ResultTable(h3, a3);
-		EXPECT_TRUE(t3.merge(t2));
-		EXPECT_TRUE(t3.merge(t1));
-		out.clear();
-		t3.getEntityResult(e1, out);
-		EXPECT_EQ(out, b1);
-		out.clear();
-		t3.getEntityResult(e2, out);
-		EXPECT_EQ(out, b2);
-		out.clear();
 		t3.getEntityResult(e3, out);
 		EXPECT_EQ(out, b3);
 
 		t1 = ResultTable(h1, a1);
 		t2 = ResultTable(h2, a2);
 		t3 = ResultTable(h3, a3);
-		EXPECT_TRUE(t3.merge(t2));
-		EXPECT_TRUE(t1.merge(t3));
+		EXPECT_TRUE(t3.filter(t2));
+		EXPECT_TRUE(t1.filter(t3));
 		out.clear();
 		t1.getEntityResult(e1, out);
 		EXPECT_EQ(out, b1);
@@ -728,12 +728,12 @@ namespace UnitTesting {
 		t1.getEntityResult(e2, out);
 		EXPECT_EQ(out, b2);
 		out.clear();
-		t1.getEntityResult(e3, out);
+		t3.getEntityResult(e3, out);
 		EXPECT_EQ(out, b3);
 
 		h1 = { e1, e2 };
 		h2 = { e3, e2 };
-		h3 = { e1, e2 };
+		h3 = { e1, e3 };
 		a1 = {
 			{ 1, 4, },
 			{ 2, 5, },
@@ -752,8 +752,8 @@ namespace UnitTesting {
 		t1 = ResultTable(h1, a1);
 		t2 = ResultTable(h2, a2);
 		t2 = ResultTable(h3, a3);
-		EXPECT_TRUE(t1.merge(t2));
-		EXPECT_TRUE(t1.merge(t3));
+		EXPECT_TRUE(t1.filter(t2));
+		EXPECT_TRUE(t1.filter(t3));
 		EXPECT_TRUE(t1.isEmpty());
 	}
 
@@ -776,7 +776,7 @@ namespace UnitTesting {
 
 		ResultTable t1(h1, a1);
 		ResultTable t2(h2, a2);
-		EXPECT_TRUE(t1.merge(t2));
+		t1.joinTable(t2);
 		std::list<std::string> b1 = { "1", "2", "3" };
 		std::list<std::string> b2 = { "4", "5", "6" };
 		std::list<std::string> b3 = { "7", "8", "9" };
@@ -805,7 +805,7 @@ namespace UnitTesting {
 
 		t1 = ResultTable(h1, a1);
 		t2 = ResultTable(h2, a2);
-		EXPECT_TRUE(t1.merge(t2));
+		t1.joinTable(t2);
 		out.clear();
 		t1.getEntityResult(e1, out);
 		EXPECT_EQ(out, b1);
@@ -831,7 +831,7 @@ namespace UnitTesting {
 
 		t1 = ResultTable(h1, a1);
 		t2 = ResultTable(h2, a2);
-		EXPECT_TRUE(t1.merge(t2));
+		t1.joinTable(t2);
 		out.clear();
 		t1.getEntityResult(e1, out);
 		EXPECT_EQ(out, b1);

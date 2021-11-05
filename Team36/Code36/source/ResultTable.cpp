@@ -1,5 +1,6 @@
 #include "ResultTable.h"
 #include "Utility.h"
+#include <algorithm>
 
 ResultTable::ResultTable() {
 }
@@ -9,6 +10,7 @@ ResultTable::ResultTable(ResultTable& t) {
 	this->header = t.header;
 	this->header_set = t.header_set;
 	this->hash_map = t.hash_map;
+	this->header_outdated = true;
 }
 
 ResultTable::ResultTable(Entity& header, std::vector<StmtInfo>& table) {
@@ -72,12 +74,28 @@ bool ResultTable::merge(ResultTable& t) {
 	} else if (common_headers.size() == 2 && (t.header.size() == 2 || header.size() == 2)) {
 		//If table a or b only have 2 column, and both synonym is in the common_header, filter the result
 		filter_table(t, common_headers[0], common_headers[1]);
-	} else if (common_headers.size() == 1) {
-		//If table a and b have more than 1 column and there is 1 common header, filter both table
-		filter_both_table(t, common_headers[0]);
 	} else {
-		throw std::exception("Error: table merging scenario is not handled!!!");
+		return false;
 	}
+
+	return true;
+}
+
+//Return true if fliter is successful
+bool ResultTable::filter(ResultTable& t) {
+	std::vector<Entity> common_headers = getCommonHeaders(t.header);
+	//No common header, abandon merge.
+	if (common_headers.empty()) {
+		return false;
+	} else if (common_headers.size() > 1) {
+		throw std::exception("There shouldn't be any pair table with more than 1 common header size!!!");
+	}
+
+	int header_index = getHeaderIndex(common_headers[0]);
+	int to_join_index = t.getHeaderIndex(common_headers[0]);
+
+
+	Utility::filterBothResults(table, header_index, t.table, to_join_index);
 
 	return true;
 }
@@ -88,6 +106,10 @@ bool ResultTable::isInTable(Entity e) {
 
 bool ResultTable::isEmpty() {
 	return table.empty();
+}
+
+size_t  ResultTable::size() {
+	return table.size();
 }
 
 void ResultTable::getEntityResult(Entity& e, std::list<std::string>& out) {
@@ -161,6 +183,27 @@ std::vector<Entity> ResultTable::getHeaders() {
 	return header;
 }
 
+std::string ResultTable::getHeadersName() {
+	if (header_outdated) {
+		generateHeaderName();
+	}
+	return header_name;
+}
+
+void ResultTable::generateHeaderName() {
+	std::vector<std::string> names;
+	for (auto& e : header) {
+		names.push_back(e.getSynonym());
+	}
+	std::sort(names.begin(), names.end());
+	header_name = names.front();
+	for (int i = 1; i < names.size(); i++) {
+		header_name += SPACE + names[i];
+	}
+	header_outdated = false;
+}
+
+
 bool ResultTable::operator==(const ResultTable& other) const {
 	return header == other.header && table == other.table;
 }
@@ -180,6 +223,7 @@ void ResultTable::addHeader(Entity& entity) {
 	if (header_set.count(entity.getSynonym()) == 0) {
 		header.push_back(entity);
 		header_set.insert(entity.getSynonym());
+		header_outdated = true;
 	}
 }
 
