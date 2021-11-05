@@ -35,8 +35,8 @@ bool WithEvaluator::evaluateWildAndConstant(Entity e) {
 ResultTable WithEvaluator::evaluateSynonymAndSynonym(Entity left, Entity right) {
 	ResultTable rt1 = getEntity(left);
 	ResultTable rt2 = getEntity(right);
-
-	if (!rt1.merge(rt2)) {
+	rt1.joinTable(rt2);
+	if (rt1.isEmpty()) {
 		return ResultTable();
 	}
 
