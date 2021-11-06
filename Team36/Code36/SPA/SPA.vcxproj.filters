@@ -366,6 +366,9 @@
 		<ClCompile Include="..\source\QueryTupleGraph.cpp">
 			<Filter>Source Files\PQL\QueryObject</Filter>
 		</ClCompile>
+		<ClCompile Include="..\source\QueryTupleOptimizer.cpp">
+			<Filter>Source Files\PQL\QueryEvaluator</Filter>
+		</ClCompile>
 	</ItemGroup>
 	<ItemGroup>
 		<ClInclude Include="..\source\Parser.h">
@@ -694,6 +697,9 @@
 		</ClInclude>
 		<ClInclude Include="..\source\QueryTupleGraph.h">
 			<Filter>Header Files\PQL\QueryObject</Filter>
+		</ClInclude>
+		<ClInclude Include="..\source\QueryTupleOptimizer.h">
+			<Filter>Header Files\PQL\QueryEvaluator</Filter>
 		</ClInclude>
 	</ItemGroup>
 </Project>
