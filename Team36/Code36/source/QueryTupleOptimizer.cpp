@@ -5,5 +5,9 @@
 QueryTupleOptimizer::QueryTupleOptimizer() {
 }
 
-std::list<std::list<std::pair<Entity, Entity>>> groupCommonEntities(std::list<std::pair<Entity, Entity>>) {
+std::list<std::list<std::pair<Entity, Entity>>> groupCommonEntities(std::list<std::pair<Entity, Entity>> input) {
+	for (auto element : input) {
+		Entity first_ent = element.first;
+		Entity second_ent = element.second;
+	}
 }
