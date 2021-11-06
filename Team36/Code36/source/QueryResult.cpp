@@ -118,9 +118,9 @@ void QueryResult::getSelectedEntitiesMergedTable(std::vector<Entity> selected, s
 		if (list_selected_group.empty()) {
 			continue;
 		}
-		ResultTable result;
-		joinResultTables(group, list_selected_group, result);
-		out.emplace_back(result);
+
+		out.emplace_back(ResultTable());
+		joinResultTables(group, list_selected_group, out.back());
 	}
 }
 
