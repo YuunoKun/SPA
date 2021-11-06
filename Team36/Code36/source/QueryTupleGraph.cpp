@@ -8,7 +8,9 @@ QueryTupleGraph::QueryTupleGraph(int V) {
 	this->adj = new std::list<int>[V];
 }
 
-void QueryTupleGraph::DFSUtil(int v, bool visited[], std::list<int>& each_group) {
+std::list<int> QueryTupleGraph::DFSUtil(int v, bool visited[]) {
+	std::list<int> res;
+
 	// Mark the current node as visited and print it
 	visited[v] = true;
 
@@ -17,10 +19,12 @@ void QueryTupleGraph::DFSUtil(int v, bool visited[], std::list<int>& each_group)
 	std::list<int>::iterator i;
 	for (i = adj[v].begin(); i != adj[v].end(); ++i) {
 		if (!visited[*i]) {
-			each_group.push_back(v);
-			DFSUtil(*i, visited, each_group);
+			res.push_back(v);
+			DFSUtil(*i, visited);
 		}
 	}
+
+	return res;
 }
 
 void QueryTupleGraph::addEdge(int v, int w) {
@@ -28,8 +32,8 @@ void QueryTupleGraph::addEdge(int v, int w) {
 	adj[w].push_back(v);
 }
 
-void QueryTupleGraph::connectedComponents(std::list<std::list<std::pair<Entity, Entity>>>& group) {
-	std::list<int> each_group;
+std::list<std::list<std::pair<int, int>>> QueryTupleGraph::connectedComponents() {
+	std::list<std::list<int>> each_group;
 
 	// Mark all the vertices as not visited
 	bool* visited = new bool[V];
@@ -41,7 +45,7 @@ void QueryTupleGraph::connectedComponents(std::list<std::list<std::pair<Entity, 
 		if (visited[v] == false) {
 			// print all reachable vertices
 			// from v
-			DFSUtil(v, visited, each_group);
+			std::list<int> dfs = DFSUtil(v, visited);
 		}
 	}
 	delete[] visited;
