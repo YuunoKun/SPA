@@ -511,7 +511,8 @@
     </ClInclude>
     <ClInclude Include="..\source\AssignPatternParser.h">
       <Filter>Header Files\PQL\QueryPreprocessor\QueryClauseParser</Filter>
-    <ClInclude Include="..\source\IfPatternParser.h">
+	</ClInclude>
+	<ClInclude Include="..\source\IfPatternParser.h">
       <Filter>Header Files\PQL\QueryPreprocessor\QueryPatternRelRefParser</Filter>
     </ClInclude>
     <ClInclude Include="..\source\WhilePatternParser.h">
@@ -633,6 +634,7 @@
     </ClInclude>
     <ClInclude Include="..\source\WhilePatternParser.h">
       <Filter>Header Files\PQL\QueryPreprocessor\QueryClauseParser</Filter>
+	</ClInclude>
     <ClInclude Include="..\source\PKBSourceInterface.h">
       <Filter>Header Files\PKB</Filter>
     </ClInclude>

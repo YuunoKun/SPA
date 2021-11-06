@@ -582,4 +582,3 @@ namespace UnitTesting {
 
 		validateAnswer(EXPECTED_AFFECT_BIP_T, ans);
 	}
-}
