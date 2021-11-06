@@ -82,13 +82,13 @@
     <Filter Include="Header Files\PKB\RelationTables">
       <UniqueIdentifier>{f957a021-55f2-4b7b-9944-6a4eca9469b3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\PQL\PKB">
+    <Filter Include="Source Files\PKB">
       <UniqueIdentifier>{3d599b16-4269-49f5-a655-f4fcf01aa7a5}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\PQL\PKB\RelationPreprocessor">
+    <Filter Include="Source Files\PKB\RelationPreprocessor">
       <UniqueIdentifier>{b9384b05-16a0-4d44-9108-e1e886e14b72}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\PQL\PKB\RelationTables">
+    <Filter Include="Source Files\PKB\RelationTables">
       <UniqueIdentifier>{1dfc2e37-cdb3-4da1-a698-b0ffca623e2b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -97,7 +97,7 @@
       <Filter>Source Files\PQL</Filter>
     </ClCompile>
     <ClCompile Include="..\source\PKB.cpp">
-      <Filter>Source Files\PQL\PKB</Filter>
+      <Filter>Source Files\PKB</Filter>
     </ClCompile>
     <ClCompile Include="..\source\Tokenizer.cpp">
       <Filter>Source Files\SP</Filter>
@@ -181,7 +181,7 @@
       <Filter>Source Files\PQL\QueryEvaluator\RelationEvaluator</Filter>
     </ClCompile>
     <ClCompile Include="..\source\PKBAdapter.cpp">
-      <Filter>Source Files\PQL\PKB</Filter>
+      <Filter>Source Files\PKB</Filter>
     </ClCompile>
     <ClCompile Include="..\source\RelationsEvaluator.cpp">
       <Filter>Source Files\PQL\QueryEvaluator</Filter>
@@ -306,14 +306,11 @@
     <ClCompile Include="..\source\PatternsEvaluator.cpp">
       <Filter>Source Files\PQL\QueryEvaluator</Filter>
     </ClCompile>
-    <ClCompile Include="..\source\RelationPreprocessorManager.cpp">
-      <Filter>Source Files\PKB</Filter>
-    </ClCompile>
     <ClCompile Include="..\source\NextTPreprocessor.cpp">
-      <Filter>Source Files\PQL\PKB\RelationPreprocessor</Filter>
+      <Filter>Source Files\PKB\RelationPreprocessor</Filter>
     </ClCompile>
     <ClCompile Include="..\source\RelationPreprocessor.cpp">
-      <Filter>Source Files\PQL\PKB\RelationPreprocessor</Filter>
+      <Filter>Source Files\PKB\RelationPreprocessor</Filter>
     </ClCompile>
     <ClCompile Include="..\source\AffectsBipParser.cpp">
       <Filter>Source Files\PQL\QueryPreprocessor\QueryPatternRelRefParser</Filter>
@@ -328,37 +325,40 @@
       <Filter>Source Files\PQL\QueryPreprocessor\QueryPatternRelRefParser</Filter>
     </ClCompile>
     <ClCompile Include="..\source\AffectsPreprocessor.cpp">
-      <Filter>Source Files\PQL\PKB\RelationPreprocessor</Filter>
+      <Filter>Source Files\PKB\RelationPreprocessor</Filter>
     </ClCompile>
     <ClCompile Include="..\source\IterativeDataflowSolver.cpp">
-      <Filter>Source Files\PQL\PKB\RelationPreprocessor</Filter>
+      <Filter>Source Files\PKB\RelationPreprocessor</Filter>
     </ClCompile>
     <ClCompile Include="..\source\RelationTable.cpp">
-      <Filter>Source Files\PQL\PKB\RelationTables</Filter>
+      <Filter>Source Files\PKB\RelationTables</Filter>
     </ClCompile>
     <ClCompile Include="..\source\AffectsTPreprocessor.cpp">
-      <Filter>Source Files\PQL\PKB\RelationPreprocessor</Filter>
+      <Filter>Source Files\PKB\RelationPreprocessor</Filter>
     </ClCompile>
     <ClCompile Include="..\source\QueryPreprocessor.cpp">
       <Filter>Source Files\PQL\QueryPreprocessor</Filter>
     </ClCompile>
     <ClCompile Include="..\source\AffectsBipPreprocessor.cpp">
-      <Filter>Source Files\PQL\PKB\RelationPreprocessor</Filter>
+      <Filter>Source Files\PKB\RelationPreprocessor</Filter>
     </ClCompile>
     <ClCompile Include="..\source\AffectsBipTPreprocessor.cpp">
-      <Filter>Source Files\PQL\PKB\RelationPreprocessor</Filter>
+      <Filter>Source Files\PKB\RelationPreprocessor</Filter>
     </ClCompile>
     <ClCompile Include="..\source\IterativeDataflowSolverBip.cpp">
-      <Filter>Source Files\PQL\PKB\RelationPreprocessor</Filter>
+      <Filter>Source Files\PKB\RelationPreprocessor</Filter>
     </ClCompile>
     <ClCompile Include="..\source\RelationTableUtility.cpp">
-      <Filter>Source Files\PQL\PKB\RelationTables</Filter>
+      <Filter>Source Files\PKB\RelationTables</Filter>
     </ClCompile>
     <ClCompile Include="..\source\NextBipPreprocessor.cpp">
-      <Filter>Source Files\PQL\PKB\RelationPreprocessor</Filter>
+      <Filter>Source Files\PKB\RelationPreprocessor</Filter>
     </ClCompile>
     <ClCompile Include="..\source\NextBipTPreprocessor.cpp">
-      <Filter>Source Files\PQL\PKB\RelationPreprocessor</Filter>
+      <Filter>Source Files\PKB\RelationPreprocessor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\RelationPreprocessorManager.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
