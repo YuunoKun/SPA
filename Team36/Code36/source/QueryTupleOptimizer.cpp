@@ -70,8 +70,30 @@ std::list<std::list<std::pair<Entity, Entity>>> QueryTupleOptimizer::groupCommon
 		intermediary_result.push_back(entities);
 	}
 
-	return QueryTupleOptimizer::processToEntityPairs(intermediary_result);
+	return QueryTupleOptimizer::processToEntityPairs(intermediary_result, input);
 }
 
-std::list<std::list<std::pair<Entity, Entity>>> QueryTupleOptimizer::processToEntityPairs(std::list<std::list<Entity>> entities) {
+std::list<std::list<std::pair<Entity, Entity>>> QueryTupleOptimizer::processToEntityPairs(std::list<std::list<Entity>> entities,
+	std::list<std::pair<Entity, Entity>> input) {
+	std::list<std::list<std::pair<Entity, Entity>>> final_result;
+
+	std::list<Entity>::iterator i;
+	for (std::list<std::list<Entity>>::iterator i = entities.begin(); i != entities.end(); ++i) {
+		std::list<std::pair<Entity, Entity>> list_of_pairs;
+		for (std::list<Entity>::iterator idx = i->begin(); idx != std::prev(i->end()); ++idx) {
+			std::pair<Entity, Entity> pairing1 = std::make_pair(*idx, *std::next(idx));
+			std::pair<Entity, Entity> pairing2 = std::make_pair(*std::next(idx), *idx);
+			for (std::pair<Entity, Entity> input_pair : input) {
+				if (pairing1 == input_pair) {
+					list_of_pairs.push_back(pairing1);
+				}
+				if (pairing2 == input_pair) {
+					list_of_pairs.push_back(pairing2);
+				}
+			}
+		}
+		final_result.push_back(list_of_pairs);
+	}
+
+	return final_result;
 }

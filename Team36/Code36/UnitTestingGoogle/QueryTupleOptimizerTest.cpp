@@ -48,14 +48,16 @@ namespace UnitTesting {
 		res = qto.groupCommonEntities(input);
 
 		std::list<std::list<std::pair<Entity, Entity>>> expected_output;
-		std::list<std::pair<Entity, Entity>> list_pair_output;
+		std::list<std::pair<Entity, Entity>> list_pair_output1;
+		std::list<std::pair<Entity, Entity>> list_pair_output2;
 		std::pair<Entity, Entity> pair_output1;
 		std::pair<Entity, Entity> pair_output2;
 		pair_output1 = std::make_pair(ent1, ent2);
 		pair_output2 = std::make_pair(ent3, ent4);
-		list_pair_output.push_back(pair_output1);
-		list_pair_output.push_back(pair_output2);
-		expected_output.push_back(list_pair_output);
+		list_pair_output1.push_back(pair_output1);
+		list_pair_output2.push_back(pair_output2);
+		expected_output.push_back(list_pair_output1);
+		expected_output.push_back(list_pair_output2);
 
 		EXPECT_EQ(res, expected_output);
 	}
