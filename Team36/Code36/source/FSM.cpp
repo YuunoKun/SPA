@@ -7,13 +7,13 @@ FSM::FSM(Tokenizer& t) {
 	design_extractor = new DesignExtractor();
 }
 
-FSM::FSM(Tokenizer& t, Extractor *extractor) {
+FSM::FSM(Tokenizer& t, Extractor* extractor) {
 	tokenizer = t;
 	design_extractor = extractor;
 }
 
 FSM::~FSM() {
-	if(design_extractor) design_extractor->~Extractor();
+	if (design_extractor) design_extractor->~Extractor();
 }
 
 Tokenizer& FSM::getTokenizer() {
@@ -63,8 +63,7 @@ void FSM::expectStatement() {
 	if (probeAndPeek(TokenType::ASSIGN)) {
 		design_extractor->addStatement(TokenType::ASSIGN);
 		expectStatementTypeAssign();
-	}
-	else if (probeAndPeek(TokenType::PARENTHESIS_OPEN)) {
+	} else if (probeAndPeek(TokenType::PARENTHESIS_OPEN)) {
 		switch (tokenizer.peekToken().getTokenType()) {
 		case TokenType::WHILE:
 			design_extractor->addStatement(TokenType::WHILE);
@@ -78,8 +77,7 @@ void FSM::expectStatement() {
 			unexpectedToken("error starting of statement.");
 			break;
 		}
-	}
-	else {
+	} else {
 		switch (tokenizer.peekToken().getTokenType()) {
 		case TokenType::READ:
 			design_extractor->addStatement(TokenType::READ);
@@ -202,7 +200,7 @@ void FSM::expectConditionalExpression() {
 		expectTokenAndPop(TokenType::PARENTHESIS_OPEN);
 		expectConditionalExpression();
 		expectTokenAndPop(TokenType::PARENTHESIS_CLOSE);
-		
+
 		switch (tokenizer.peekToken().getTokenType()) {
 		case TokenType::BOOL_AND:
 		case TokenType::BOOL_OR:
@@ -215,7 +213,7 @@ void FSM::expectConditionalExpression() {
 			unexpectedToken("expectConditionalExpression error. Expecting '&&' or '||'.");
 			break;
 		}
-		
+
 		break;
 	default:
 		unexpectedToken("expectConditionalExpression error.");
@@ -388,13 +386,11 @@ bool FSM::optionalTerm() {
 }
 
 bool FSM::optionalFactor() {
-	if(optionalIdentifier() || probeAndPop(TokenType::CONSTANT)) {
+	if (optionalIdentifier() || probeAndPop(TokenType::CONSTANT)) {
 		return true;
-	}
-	else if (probeAndPop(TokenType::PARENTHESIS_OPEN)) {
+	} else if (probeAndPop(TokenType::PARENTHESIS_OPEN)) {
 		return optionalExpression() && probeAndPop(TokenType::PARENTHESIS_CLOSE);
-	}
-	else {
+	} else {
 		return false;
 	}
 }
@@ -425,8 +421,7 @@ Token FSM::expectTokenAndPop(TokenType token_type) {
 	tokenizer.resetProbe();
 	if (peekToken(token_type)) {
 		return tokenizer.popToken();
-	}
-	else {
+	} else {
 		unexpectedToken("");
 		return Token(TokenType::INVAL, TOKENVALUE_PLACEHOLDER);
 	}
@@ -440,8 +435,7 @@ bool FSM::probeAndPop(TokenType token_type) {
 	if (probeAndPeek(token_type)) {
 		tokenizer.popProbe();
 		return true;
-	}
-	else {
+	} else {
 		return false;
 	}
 }
@@ -451,7 +445,7 @@ bool FSM::probeAndPeek(TokenType token_type) {
 }
 
 void FSM::unexpectedToken(std::string message) {
-	throw std::runtime_error(message + std::string("Unexpected token: ") 
-		+ tokenTypeStrings[tokenizer.peekToken().getTokenType()] 
+	throw std::runtime_error(message + std::string("Unexpected token: ")
+		+ tokenTypeStrings[tokenizer.peekToken().getTokenType()]
 		+ " = " + tokenizer.peekToken().getTokenValue());
 }

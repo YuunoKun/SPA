@@ -598,3 +598,13 @@ assign a;
 Select a.varName with a.varName = "a"
 none
 5000
+121 - select tuple
+assign a; stmt s;
+Select <a.stmt#, s.stmt#> with a.stmt# = s.stmt#
+2 2, 3 3, 10 10, 15 15, 17 17, 22 22, 26 26, 34 34, 35 35, 39 39, 41 41, 48 48
+5000
+121 - select tuple
+read r; print pn;
+Select <r.stmt#, pn.varName> with r.varName = pn.varName
+1 a, 4 d, 21 h, 28 j, 33 k, 50 myFourth
+5000
