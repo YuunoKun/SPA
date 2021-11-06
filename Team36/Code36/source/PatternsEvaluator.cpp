@@ -18,8 +18,6 @@ void PatternsEvaluator::evaluatePattern(QueryResult& query_result, Pattern& patt
 	}
 }
 
-
-
 void PatternsEvaluator::evaluatePattern(QueryResult& query_result, Pattern& pattern, PatternEvaluatorInterface& evaluator) {
 	Entity lhs_entity = pattern.getLeftExpression();
 	if (lhs_entity.isSynonym()) {

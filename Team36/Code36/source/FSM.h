@@ -8,7 +8,6 @@
 #include "Extractor.h"
 
 namespace SourceProcessor {
-
 	class FSM {
 	public:
 		FSM(Tokenizer&);
@@ -56,18 +55,18 @@ namespace SourceProcessor {
 		void expectStatementTypeAssign();
 
 		// Expects a conditional expression.
-		// cond_expr: rel_expr 
-		//			| '!' '(' cond_expr ')' 
-		//			| '(' cond_expr ')' '&&' '(' cond_expr ')' 
+		// cond_expr: rel_expr
+		//			| '!' '(' cond_expr ')'
+		//			| '(' cond_expr ')' '&&' '(' cond_expr ')'
 		//			| '(' cond_expr ')' '||' '(' cond_expr ')'
 		void expectConditionalExpression();
 
 		// Expects a relational expression.
 		// rel_expr : rel_factor '>' rel_factor
-		//			| rel_factor '>=' rel_factor 
-		//			| rel_factor '<' rel_factor 
-		//			| rel_factor '<=' rel_factor 
-		//			| rel_factor '==' rel_factor 
+		//			| rel_factor '>=' rel_factor
+		//			| rel_factor '<' rel_factor
+		//			| rel_factor '<=' rel_factor
+		//			| rel_factor '==' rel_factor
 		//			| rel_factor '!=' rel_factor
 		void expectRelationalExpression();
 
@@ -99,7 +98,7 @@ namespace SourceProcessor {
 
 	private:
 		Tokenizer tokenizer;
-		Extractor *design_extractor;
+		Extractor* design_extractor;
 
 		// Expects a compulsory token with given token type, or else the build fails.
 		Token expectTokenAndPop(TokenType);
@@ -112,5 +111,4 @@ namespace SourceProcessor {
 		// Throws exception
 		void unexpectedToken(std::string);
 	};
-
-} // namespace SourceProcessor
+}

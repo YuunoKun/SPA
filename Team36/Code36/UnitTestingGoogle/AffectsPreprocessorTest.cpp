@@ -32,36 +32,6 @@ namespace UnitTesting {
 			s10, s11, s12, s13, s14, s15, s16, s17, s18, s19
 		};
 
-		// Sample program:
-		//procedure First{
-		//01        x = 0;
-		//02        i = 5;
-		//03        while (i != 0) {
-		//04            a = a + 1;
-		//05            if (x < 3) then {
-		//06                read a;
-		//              } else {
-		//07                print a;
-		//              }
-		//08            x = x + 2 * y;
-		//09            call Second;
-		//10            i = i - 1;
-		//          }
-		//11        if (x == 1) then {
-		//12            x = x + 1; }
-		//	  	    else {
-		//13            z = 1;
-		//          }
-		//14        z = z + x + i;
-		//15        y = z + 2;
-		//16        x = x * y + z;
-		//}
-		//procedure Second{
-		//17	x = 5;
-		//18	v = z;
-		//19	print v;
-		//}
-
 		std::vector<std::pair<StmtInfo, StmtInfo>> expected_pairs = {
 			{s1, s8}, {s1, s12}, {s1, s14}, {s1, s16}, {s2, s10}, {s4, s4 },
 			{s10, s10}, {s12, s14}, {s12, s16}, {s13, s14}, {s14, s15},

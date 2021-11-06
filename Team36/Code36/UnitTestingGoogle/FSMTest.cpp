@@ -7,7 +7,6 @@
 #include "../../source/Tokenizer.h"
 
 namespace UnitTesting {
-
 	using namespace SourceProcessor;
 
 	class DummyDesignExtractor : public Extractor {
@@ -41,9 +40,9 @@ namespace UnitTesting {
 		tokenizer.initTokenStack();
 		FSM fsm(tokenizer, &dde);
 
-		std::vector<std::string> expected = { "bac", "procedure", "read", "print", "call", "if", "then", "else", "while", "abc"};
+		std::vector<std::string> expected = { "bac", "procedure", "read", "print", "call", "if", "then", "else", "while", "abc" };
 		for (auto s : expected) {
-			ASSERT_EQ(fsm.expectIdentifier().getTokenValue(),s);
+			ASSERT_EQ(fsm.expectIdentifier().getTokenValue(), s);
 		}
 	}
 
@@ -56,7 +55,6 @@ namespace UnitTesting {
 		FSM fsm_1(tokenizer, &dde);
 		ASSERT_NO_THROW(fsm_1.expectFactor());
 		ASSERT_NO_THROW(fsm_1.expectFactor());
-
 
 		tokenizer.parseIntoTokens("a");
 		tokenizer.initTokenStack();
@@ -335,7 +333,6 @@ namespace UnitTesting {
 		ASSERT_NO_THROW(fsm_1.expectProcedure());
 	}
 
-
 	TEST(FSM, optionalFactor) {
 		Tokenizer tokenizer;
 		DummyDesignExtractor dde(PKB::getInstance());
@@ -345,7 +342,6 @@ namespace UnitTesting {
 		FSM fsm_1(tokenizer, &dde);
 		ASSERT_TRUE(fsm_1.optionalFactor());
 		ASSERT_TRUE(fsm_1.optionalFactor());
-
 
 		tokenizer.parseIntoTokens("a");
 		tokenizer.initTokenStack();

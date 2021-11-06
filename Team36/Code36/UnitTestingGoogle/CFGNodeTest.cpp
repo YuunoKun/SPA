@@ -5,7 +5,6 @@
 #include "../../source/CFGNode.cpp"
 
 namespace UnitTesting {
-
 	TEST(CFGNode, setters_and_getters) {
 		std::vector<prog_line> v1 = { 1, 2, 3 };
 		CFGNode* node1 = new CFGNode();
@@ -14,7 +13,7 @@ namespace UnitTesting {
 		ASSERT_EQ(node1->getNextMain(), nullptr);
 		ASSERT_EQ(node1->getNextBranch(), nullptr);
 
-		std::vector<prog_line> v2 = {4, 5};
+		std::vector<prog_line> v2 = { 4, 5 };
 		CFGNode* node2 = new CFGNode();
 		node2->setProgramLines(v2);
 		ASSERT_EQ(node2->getProgramLines(), v2);
@@ -29,8 +28,8 @@ namespace UnitTesting {
 		ASSERT_EQ(node2->getProgramLines(), v2);
 		ASSERT_EQ(node2->getNextMain(), nullptr);
 		ASSERT_EQ(node2->getNextBranch(), nullptr);
-		
-		std::vector<prog_line> v3 = {6, 7, 8};
+
+		std::vector<prog_line> v3 = { 6, 7, 8 };
 		CFGNode* node3 = new CFGNode();
 		node3->setProgramLines(v3);
 		node1->setNextBranch(node3);
@@ -46,7 +45,7 @@ namespace UnitTesting {
 		ASSERT_EQ(node3->getProgramLines(), v3);
 		ASSERT_EQ(node3->getNextMain(), nullptr);
 		ASSERT_EQ(node3->getNextBranch(), nullptr);
-		
+
 		delete node1;
 	}
 
@@ -78,8 +77,7 @@ namespace UnitTesting {
 		auto action = [](CFGNode* node) {
 			if (node->isVisited()) {
 				return false;
-			}
-			else {
+			} else {
 				node->addLabel(node->getProgramLines()[0]);
 				node->toggleVisited();
 				return true;
@@ -113,13 +111,11 @@ namespace UnitTesting {
 		node1->setNextBranch(node2);
 		node2->setNextMain(node3);
 
-
 		auto action = [](CFGNode* node, prog_line line, prog_line nil) {
 			if (node->isVisited()) {
 				return false;
-			}
-			else {
-				node->setProgramLines({line});
+			} else {
+				node->setProgramLines({ line });
 				node->toggleVisited();
 				return true;
 			}

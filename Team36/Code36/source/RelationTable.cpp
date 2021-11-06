@@ -56,8 +56,7 @@ bool RelationTable<T, S>::insert(T key, S value) {
 	if (keyExistsForward) {
 		forward_table[key].push_back(value);
 		lookup_table[key].emplace(value);
-	}
-	else {
+	} else {
 		std::vector<S> new_forward_v;
 		new_forward_v.push_back(value);
 		forward_table.emplace(key, new_forward_v);
@@ -68,8 +67,7 @@ bool RelationTable<T, S>::insert(T key, S value) {
 
 	if (valueExistsBackward) {
 		backward_table[value].push_back(key);
-	}
-	else {
+	} else {
 		std::vector<T> new_backward_v;
 		new_backward_v.push_back(key);
 		backward_table.emplace(value, new_backward_v);
@@ -82,8 +80,7 @@ std::vector<T> RelationTable<T, S>::getKeys(S value) const {
 	auto iter = backward_table.find(value);
 	if (iter != backward_table.end()) {
 		return iter->second;
-	}
-	else {
+	} else {
 		return std::vector<T> {};
 	}
 }
@@ -93,8 +90,7 @@ std::vector<S> RelationTable<T, S>::getValues(T key) const {
 	auto iter = forward_table.find(key);
 	if (iter != forward_table.end()) {
 		return iter->second;
-	}
-	else {
+	} else {
 		return std::vector<S> {};
 	}
 }

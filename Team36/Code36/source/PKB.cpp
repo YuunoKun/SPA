@@ -52,11 +52,9 @@ void PKB::addStmt(StmtType stmt_type) {
 void PKB::addExprTree(stmt_index stmt_index, expr expr) {
 	if (stmt_index <= 0) {
 		throw std::invalid_argument("Stmt index must be greater than zero: " + std::to_string(stmt_index));
-	}
-	else if (stmt_index > stmt_table.size()) {
+	} else if (stmt_index > stmt_table.size()) {
 		throw std::invalid_argument("Invalid stmt index: " + std::to_string(stmt_index));
-	}
-	else if (stmt_table[stmt_index - 1].stmt_type != STMT_ASSIGN) {
+	} else if (stmt_table[stmt_index - 1].stmt_type != STMT_ASSIGN) {
 		throw std::invalid_argument("Stmt index does not belong to an assignment statement: " + std::to_string(stmt_index));
 	}
 	expr_table.insert({ stmt_index, expr });
@@ -100,8 +98,7 @@ void PKB::addUsesS(stmt_index user, var_name used) {
 			if (user_stmt_type == STMT_PRINT) {
 				print_table.insert(user, used);
 			}
-		}
-		else {
+		} else {
 			throw std::invalid_argument("addUsesS: Invalid var name: " + used);
 		}
 	}
@@ -119,12 +116,10 @@ void PKB::addModifiesS(stmt_index modifier, var_name modified) {
 			StmtType modifier_stmt_type = stmt_table[modifier - 1].stmt_type;
 			if (modifier_stmt_type == STMT_ASSIGN) {
 				assignment_table.insert(modifier, modified);
-			}
-			else if (modifier_stmt_type == STMT_READ) {
+			} else if (modifier_stmt_type == STMT_READ) {
 				read_table.insert(modifier, modified);
 			}
-		}
-		else {
+		} else {
 			throw std::invalid_argument("addModifiesS: Invalid var name: " + modified);
 		}
 	}
@@ -139,8 +134,7 @@ void PKB::addModifiesP(proc_name proc, var_name modified) {
 
 	if (it_var == var_table.end()) {
 		throw std::invalid_argument("addModifiesP: Invalid var name: " + modified);
-	}
-	else if (it_proc == proc_table.end()) {
+	} else if (it_proc == proc_table.end()) {
 		throw std::invalid_argument("addModifiesP: Invalid proc name: " + proc);
 	}
 	modifiesP_table.insert(proc, modified);
@@ -152,8 +146,7 @@ void PKB::addUsesP(proc_name proc, var_name used) {
 
 	if (it_var == var_table.end()) {
 		throw std::invalid_argument("addUsesP: Invalid var name: " + used);
-	}
-	else if (it_proc == proc_table.end()) {
+	} else if (it_proc == proc_table.end()) {
 		throw std::invalid_argument("addUsesP: Invalid proc name: " + proc);
 	}
 	usesP_table.insert(proc, used);
@@ -165,8 +158,7 @@ void PKB::addCallsP(proc_name caller_proc_name, proc_name callee_proc_name) {
 
 	if (it_proc_caller == proc_table.end()) {
 		throw std::invalid_argument("addCallsP: Invalid caller proc: " + caller_proc_name);
-	}
-	else if (it_proc_callee == proc_table.end()) {
+	} else if (it_proc_callee == proc_table.end()) {
 		throw std::invalid_argument("addCallsP: Invalid callee proc: " + callee_proc_name);
 	}
 	callsP_table.insert(caller_proc_name, callee_proc_name);
@@ -314,8 +306,7 @@ const std::vector<StmtInfo>& PKB::getStmts() {
 const StmtInfo PKB::getStmt(stmt_index stmt_index) {
 	if (stmt_index <= 0) {
 		throw std::invalid_argument("Stmt index must be greater than zero. ");
-	}
-	else if (stmt_index > stmt_table.size()) {
+	} else if (stmt_index > stmt_table.size()) {
 		throw std::invalid_argument("Invalid stmt index. ");
 	}
 	return stmt_table[stmt_index - 1];
@@ -324,14 +315,11 @@ const StmtInfo PKB::getStmt(stmt_index stmt_index) {
 const var_name PKB::getAssignment(stmt_index stmt_index) {
 	if (stmt_index <= 0) {
 		throw std::invalid_argument("Stmt index must be greater than zero: " + std::to_string(stmt_index));
-	}
-	else if (stmt_index > stmt_table.size()) {
+	} else if (stmt_index > stmt_table.size()) {
 		throw std::invalid_argument("Invalid stmt index: " + std::to_string(stmt_index));
-	}
-	else if (stmt_table[stmt_index - 1].stmt_type != STMT_ASSIGN) {
+	} else if (stmt_table[stmt_index - 1].stmt_type != STMT_ASSIGN) {
 		throw std::invalid_argument("Stmt index does not belong to an assignment statement: " + std::to_string(stmt_index));
-	}
-	else if (!assignment_table.containsKey(stmt_index)) {
+	} else if (!assignment_table.containsKey(stmt_index)) {
 		throw std::invalid_argument("Stmt-related assignment has not been initiated: " + std::to_string(stmt_index));
 	}
 	return assignment_table.getValues(stmt_index)[0];
@@ -340,14 +328,11 @@ const var_name PKB::getAssignment(stmt_index stmt_index) {
 expr PKB::getExpression(stmt_index stmt_index) {
 	if (stmt_index <= 0) {
 		throw std::invalid_argument("Stmt index must be greater than zero: " + std::to_string(stmt_index));
-	}
-	else if (stmt_index > stmt_table.size()) {
+	} else if (stmt_index > stmt_table.size()) {
 		throw std::invalid_argument("Invalid stmt index: " + std::to_string(stmt_index));
-	}
-	else if (stmt_table[stmt_index - 1].stmt_type != STMT_ASSIGN) {
+	} else if (stmt_table[stmt_index - 1].stmt_type != STMT_ASSIGN) {
 		throw std::invalid_argument("Stmt index does not belong to an assignment statement: " + std::to_string(stmt_index));
-	}
-	else if (expr_table.find(stmt_index) == expr_table.end()) {
+	} else if (expr_table.find(stmt_index) == expr_table.end()) {
 		throw std::invalid_argument("Stmt-related expression has not been initiated: " + std::to_string(stmt_index));
 	}
 	return expr_table.at(stmt_index);

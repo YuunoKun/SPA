@@ -98,7 +98,6 @@ void QueryResult::getResults(std::vector<Entity>& selected, ResultTable& out) {
 		selected = Utility::getEntitiesExclude(selected, common);
 		out.joinTable(result->getResultTable(common));
 	}
-
 }
 
 void QueryResult::getResult(Entity e, std::list<std::string>& out) {
