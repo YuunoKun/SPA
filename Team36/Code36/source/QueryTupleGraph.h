@@ -1,16 +1,16 @@
 #pragma once
 
 #include <string>
-#include <vector>
 #include "QueryTupleNode.h"
 
 class QueryTupleGraph {
 public:
 
-	QueryTupleGraph(QueryTupleNode, std::vector<QueryTupleNode>);
+	QueryTupleGraph(Entity, std::vector<Entity>*);
 
 private:
 
-	QueryTupleNode node;
-	std::vector<QueryTupleNode> neighbours;
+	Entity entity;
+	std::vector<Entity>* neighbours;
+	void DFSUtil(Entity, bool);
 };

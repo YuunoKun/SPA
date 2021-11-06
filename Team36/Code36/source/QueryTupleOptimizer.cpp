@@ -5,5 +5,5 @@
 QueryTupleOptimizer::QueryTupleOptimizer() {
 }
 
-std::list<std::list<Entity, Entity>> extractCommonTuples(std::vector<Entity>, std::list<std::pair<Entity, Entity>>) {
+std::list<std::list<std::pair<Entity, Entity>>> groupCommonEntities(std::list<std::pair<Entity, Entity>>) {
 }

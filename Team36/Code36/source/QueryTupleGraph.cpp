@@ -2,7 +2,7 @@
 #include "QueryTupleGraph.h"
 #include "QueryTupleNode.h"
 
-QueryTupleGraph::QueryTupleGraph(QueryTupleNode node, std::vector<QueryTupleNode> neighbours) {
-	this->node = node;
+QueryTupleGraph::QueryTupleGraph(Entity entity, std::vector<Entity>* neighbours) {
+	this->entity = entity;
 	this->neighbours = neighbours;
 }
