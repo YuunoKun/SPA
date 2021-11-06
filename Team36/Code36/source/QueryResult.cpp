@@ -151,6 +151,11 @@ void QueryResult::addResult(ResultTable& t) {
 		return;
 	}
 
+	updateAllAffectedTable(affected);
+}
+
+void QueryResult::updateAllAffectedTable(std::list<ResultTable*>& affected) {
+
 	std::unordered_set<std::string> affected_name;
 	for (auto& rt : affected) {
 		affected_name.insert(rt->getHeadersName());
@@ -174,7 +179,7 @@ void QueryResult::addResult(ResultTable& t) {
 			if (it->second->isEmpty() || current->isEmpty()) {
 				have_result = false;
 				return;
-			} else if (filtered && original_size > it->second->size() && 
+			} else if (filtered && original_size > it->second->size() &&
 				affected_name.find(it->second->getHeadersName()) == affected_name.end()) {
 				affected_name.insert(it->second->getHeadersName());
 				affected.push_back(it->second);
@@ -188,7 +193,6 @@ void QueryResult::addResult(ResultTable& t) {
 		}
 	}
 }
-
 void QueryResult::addHeader(std::vector<Entity> v) {
 	for (auto& it : v) {
 		header_set.insert(it.getSynonym());

@@ -28,6 +28,7 @@ private:
 	bool mergeResultTable(ResultTable*, ResultTable&);
 	void mergeResultTable(ResultTable&, std::list<ResultTable*>&);
 
+	void QueryResult::updateAllAffectedTable(std::list<ResultTable*>& affected);
 
 	void getMergedTable(std::vector<Entity>, std::list<ResultTable*>&);
 
