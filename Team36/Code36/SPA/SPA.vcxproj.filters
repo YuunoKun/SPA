@@ -518,15 +518,6 @@
     <ClInclude Include="..\source\AssignPatternParser.h">
       <Filter>Header Files\PQL\QueryPreprocessor\QueryClauseParser</Filter>
     </ClInclude>
-    <ClInclude Include="..\source\IfPatternParser.h">
-      <Filter>Header Files\PQL\QueryPreprocessor\QueryClauseParser</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\WhilePatternParser.h">
-      <Filter>Header Files\PQL\QueryPreprocessor\QueryClauseParser</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\NextParser.h">
-      <Filter>Header Files\PQL\QueryPreprocessor\QueryClauseParser</Filter>
-    </ClInclude>
     <ClInclude Include="..\source\UsesParser.h">
       <Filter>Header Files\PQL\QueryPreprocessor\QueryClauseParser</Filter>
     </ClInclude>
@@ -628,6 +619,15 @@
     </ClInclude>
     <ClInclude Include="..\source\NextBipTPreprocessor.h">
       <Filter>Header Files\PKB\RelationPreprocessor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\NextParser.h">
+      <Filter>Header Files\PQL\QueryPreprocessor\QueryClauseParser</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\IfPatternParser.h">
+      <Filter>Header Files\PQL\QueryPreprocessor\QueryClauseParser</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\WhilePatternParser.h">
+      <Filter>Header Files\PQL\QueryPreprocessor\QueryClauseParser</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
