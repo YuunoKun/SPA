@@ -24,8 +24,6 @@ public:
 	virtual void reset();
 	virtual void fullyPopulate() = 0;
 
-	void setDFSForwardTrue(int);
-	void setDFSBackwardTrue(int);
 	bool isFullyPopulated();
 	const MonotypeRelationTable<StmtInfo>& getCache();
 	bool isCacheEmpty();
@@ -40,4 +38,7 @@ protected:
 	std::vector<bool> calculated_dfs_forward;
 	std::vector<bool> calculated_dfs_backward;
 	std::vector<StmtInfo> stmt_info_list;
+
+	void setDFSForwardTrue(int);
+	void setDFSBackwardTrue(int);
 };

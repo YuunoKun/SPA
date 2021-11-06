@@ -35,6 +35,9 @@ public:
 		const std::vector<StmtInfo> v);
 	AffectsBipPreprocessor() = default;
 private:
+	MonotypeRelationTable<LabelledProgLine> labelled_progline_cache;
+	std::vector<LabelledProgLine> first_labelled_proglines;
+
 	void updateCache(std::vector<std::pair<LabelledProgLine, LabelledProgLine>> results);
 	std::vector<stmt_index> getAssignments();
 
@@ -43,7 +46,4 @@ private:
 	const RelationTable<StmtInfo, var_name>* modifiesS_table = nullptr;
 	const RelationTable<proc_name, stmt_index>* procS_table = nullptr;
 	IterativeDataflowSolverBip solver;
-
-	MonotypeRelationTable<LabelledProgLine> labelled_progline_cache;
-	std::vector<LabelledProgLine> first_labelled_proglines;
 };

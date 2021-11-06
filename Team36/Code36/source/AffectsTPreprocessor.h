@@ -25,7 +25,7 @@ public:
 	AffectsTPreprocessor() = default;
 
 private:
-	void checkCache();
-
 	const MonotypeRelationTable<StmtInfo>* affects_table = nullptr;
+
+	void checkCache();
 };
