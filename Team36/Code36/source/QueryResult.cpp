@@ -193,6 +193,7 @@ void QueryResult::updateAllAffectedTable(std::list<ResultTable*>& affected) {
 		}
 	}
 }
+
 void QueryResult::addHeader(std::vector<Entity> v) {
 	for (auto& it : v) {
 		header_set.insert(it.getSynonym());
@@ -201,7 +202,7 @@ void QueryResult::addHeader(std::vector<Entity> v) {
 
 void QueryResult::getResults(std::vector<Entity>& selected, ResultTable& out) {
 	std::list<ResultTable> merged_table;
-	getMergedTable(selected, merged_table);
+	getSelectedEntitiesMergedTable(selected, merged_table);
 
 	for (auto& result : merged_table) {
 		std::vector<Entity> common = result.getCommonHeaders(selected);

@@ -30,7 +30,6 @@ private:
 
 	void QueryResult::updateAllAffectedTable(std::list<ResultTable*>& affected);
 
-	void getMergedTable(std::vector<Entity>, std::list<ResultTable*>&);
 
 	void getSelectedEntitiesMergedTable(std::vector<Entity>, std::list<ResultTable>&);
 	
