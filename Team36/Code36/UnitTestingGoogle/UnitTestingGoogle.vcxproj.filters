@@ -287,6 +287,9 @@
     <ClCompile Include="CFGRelationsManagerTest_NextT.cpp">
       <Filter>PKB\CFGRelationManager</Filter>
     </ClCompile>
+    <ClCompile Include="QueryTupleOptimizerTest.cpp">
+      <Filter>PQL\QueryEvaluator</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />

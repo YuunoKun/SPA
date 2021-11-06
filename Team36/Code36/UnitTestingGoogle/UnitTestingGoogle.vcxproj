@@ -98,6 +98,7 @@
     <ClCompile Include="QueryResultTest.cpp" />
     <ClCompile Include="QueryPreprocessorTest.cpp" />
     <ClCompile Include="QueryTest.cpp" />
+    <ClCompile Include="QueryTupleOptimizerTest.cpp" />
     <ClCompile Include="RelationsEvaluatorTest.cpp" />
     <ClCompile Include="FollowsEvaluatorTest.cpp" />
     <ClCompile Include="FollowsTEvaluatorTest.cpp" />

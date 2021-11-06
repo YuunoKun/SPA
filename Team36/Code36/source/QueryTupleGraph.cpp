@@ -48,7 +48,7 @@ std::list<std::list<int>> QueryTupleGraph::connectedComponents() {
 			std::list<int> dfs = DFSUtil(v, visited);
 			each_group.push_back(dfs);
 		}
-	}
+ 	}
 	delete[] visited;
 
 	return each_group;

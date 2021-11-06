@@ -6,7 +6,7 @@
 QueryTupleOptimizer::QueryTupleOptimizer() {
 }
 
-std::list<std::list<std::pair<Entity, Entity>>> QueryTupleOptimizer::groupCommonEntities(std::list<std::pair<Entity, Entity>> input)
+std::list<std::list<Entity>> QueryTupleOptimizer::groupCommonEntities(std::list<std::pair<Entity, Entity>> input)
 {
 	int counter = 0;
 	for (std::pair<Entity, Entity> element : input) {
@@ -70,5 +70,5 @@ std::list<std::list<std::pair<Entity, Entity>>> QueryTupleOptimizer::groupCommon
 		intermediary_result.push_back(entities);
 	}
 
-	return this->result;
+	return intermediary_result;
 }
