@@ -53,7 +53,7 @@ bool CFG::isInvalidCFG() {
 	return getTail()->isInvalid();
 }
 
-void CFG::add(prog_line new_line) {
+void CFG::addLine(prog_line new_line) {
 	checkValidity();
 
 	if (isEmptyCFG()) {
@@ -102,7 +102,7 @@ CFGNode* CFG::findNode(CFGNode* curr, prog_line line) {
 	return result;
 }
 
-void CFG::loop(CFG* cfg, prog_line line_attached) {
+void CFG::addLoopAt(CFG* cfg, prog_line line_attached) {
 	checkValidity();
 
 	CFGNode* target = makeStandalone(line_attached);
@@ -118,42 +118,42 @@ void CFG::loop(CFG* cfg, prog_line line_attached) {
 	cfg->setHead(nullptr);
 }
 
-void CFG::fork(CFG* cfg_if, CFG* cfg_else, prog_line line_attached) {
+void CFG::addForkAt(CFG* cfg_if, CFG* cfg_else, prog_line line_attached) {
 	checkValidity();
 
-	CFGNode* fork_start = makeStandalone(line_attached);
-	CFGNode* fork_end = fork_start->getNextMain();
+	CFGNode* addForkAt_start = makeStandalone(line_attached);
+	CFGNode* addForkAt_end = addForkAt_start->getNextMain();
 
-	if (fork_start->getNextMain() && !fork_start->getNextBranch()) {
-		fork_start->setNextMain(cfg_if->getHead());
-		cfg_if->getHead()->setPrevMain(fork_start);
+	if (addForkAt_start->getNextMain() && !addForkAt_start->getNextBranch()) {
+		addForkAt_start->setNextMain(cfg_if->getHead());
+		cfg_if->getHead()->setPrevMain(addForkAt_start);
 
-		fork_start->setNextBranch(cfg_else->getHead());
-		cfg_else->getHead()->setPrevBranch(fork_start);
+		addForkAt_start->setNextBranch(cfg_else->getHead());
+		cfg_else->getHead()->setPrevBranch(addForkAt_start);
 
-		fork_end->setPrevMain(cfg_if->getTail()->getPrevMain());
-		cfg_if->getTail()->getPrevMain()->setNextMain(fork_end);
+		addForkAt_end->setPrevMain(cfg_if->getTail()->getPrevMain());
+		cfg_if->getTail()->getPrevMain()->setNextMain(addForkAt_end);
 		cfg_if->getTail()->getPrev().pop_front();
 
 		for (auto previous : cfg_if->getTail()->getPrev()) {
-			previous->setNextMain(fork_end);
-			fork_end->setPrevBranch(previous);
+			previous->setNextMain(addForkAt_end);
+			addForkAt_end->setPrevBranch(previous);
 		}
 		cfg_if->getTail()->setInvalid();
 		cfg_if->setHead(nullptr);
 
 		for (auto previous : cfg_else->getTail()->getPrev()) {
-			previous->setNextMain(fork_end);
-			fork_end->setPrevBranch(previous);
+			previous->setNextMain(addForkAt_end);
+			addForkAt_end->setPrevBranch(previous);
 		}
 		cfg_else->getTail()->setInvalid();
 		cfg_else->setHead(nullptr);
 	} else {
-		throw std::runtime_error("Unable to fork CFG. Target fork start already has a branch.");
+		throw std::runtime_error("Unable to addForkAt CFG. Target addForkAt start already has a branch.");
 	}
 }
 
-void CFG::call(CFG* cfg_call, prog_line call_node) {
+void CFG::addCallAt(CFG* cfg_call, prog_line call_node) {
 	checkValidity();
 
 	if (!cfg_call) {

@@ -391,7 +391,7 @@ void DesignExtractor::populateNext() {
 		for (stmt_index s: de_procedures[p - OFFSET]->getChild()) {
 			Statement* stmt = de_statements[s - OFFSET];
 			if (stmt->getType() == StmtType::STMT_CALL) {
-				cfgs[p - OFFSET]->call(cfgs[proc_name_to_id[stmt->getCallee()] - OFFSET], s);
+				cfgs[p - OFFSET]->addCallAt(cfgs[proc_name_to_id[stmt->getCallee()] - OFFSET], s);
 			}
 		}
 	}
@@ -442,7 +442,7 @@ CFG* DesignExtractor::generateCFG(std::vector<stmt_index> indexes) {
 	}
 
 	for (stmt_index id : main) {
-		cfg->add(id);
+		cfg->addLine(id);
 	}
 
 	for (size_t i = 0; i < main.size(); i++) {
@@ -482,7 +482,7 @@ CFG* DesignExtractor::generateCFG(std::vector<stmt_index> indexes) {
 			std::iota(else_scope.begin(), else_scope.end(), else_start);
 			CFG* cfg_else = generateCFG(else_scope);
 
-			cfg->fork(cfg_then, cfg_else, curr);
+			cfg->addForkAt(cfg_then, cfg_else, curr);
 
 			delete cfg_then, cfg_else;
 		}
@@ -491,7 +491,7 @@ CFG* DesignExtractor::generateCFG(std::vector<stmt_index> indexes) {
 			std::iota(scope.begin(), scope.end(), curr + 1);
 			CFG* cfg_while = generateCFG(scope);
 
-			cfg->loop(cfg_while, curr);
+			cfg->addLoopAt(cfg_while, curr);
 
 			delete cfg_while;
 		}
