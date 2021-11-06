@@ -140,15 +140,6 @@
     <ClCompile Include="CallsTEvaluatorTest.cpp">
       <Filter>PQL\QueryEvaluator\RelationEvaluator</Filter>
     </ClCompile>
-    <ClCompile Include="CFGRelationManagerTest_Affects.cpp">
-      <Filter>PKB</Filter>
-    </ClCompile>
-    <ClCompile Include="CFGRelationsManagerTest_AffectsT.cpp">
-      <Filter>PKB</Filter>
-    </ClCompile>
-    <ClCompile Include="CFGRelationsManagerTest_NextT.cpp">
-      <Filter>PKB</Filter>
-    </ClCompile>
     <ClCompile Include="RelationTableTest.cpp">
       <Filter>PKB\RelationTables</Filter>
     </ClCompile>
@@ -269,9 +260,6 @@
     <ClCompile Include="RelationsUtilityTest.cpp">
       <Filter>PKB\RelationTables</Filter>
     </ClCompile>
-    <ClCompile Include="CFGRelationsManagerTest_NextBipT.cpp">
-      <Filter>PKB</Filter>
-    </ClCompile>
     <ClCompile Include="CFGNodeTest.cpp">
       <Filter>Common</Filter>
     </ClCompile>
@@ -311,6 +299,27 @@
     </ClCompile>
     <ClCompile Include="NextBipPreprocessorTest.cpp">
       <Filter>PKB\RelationPreprocessor</Filter>
+    </ClCompile>
+    <ClCompile Include="RelationPreprocessorManagerTest_Affects.cpp">
+      <Filter>PKB\RelationPreprocessorManager</Filter>
+    </ClCompile>
+    <ClCompile Include="RelationPreprocessorManagerTest_AffectsBip.cpp">
+      <Filter>PKB\RelationPreprocessorManager</Filter>
+    </ClCompile>
+    <ClCompile Include="RelationPreprocessorManagerTest_AffectsBipT.cpp">
+      <Filter>PKB\RelationPreprocessorManager</Filter>
+    </ClCompile>
+    <ClCompile Include="RelationPreprocessorManagerTest_AffectsT.cpp">
+      <Filter>PKB\RelationPreprocessorManager</Filter>
+    </ClCompile>
+    <ClCompile Include="RelationPreprocessorManagerTest_NextBip.cpp">
+      <Filter>PKB\RelationPreprocessorManager</Filter>
+    </ClCompile>
+    <ClCompile Include="RelationPreprocessorManagerTest_NextBipT.cpp">
+      <Filter>PKB\RelationPreprocessorManager</Filter>
+    </ClCompile>
+    <ClCompile Include="RelationPreprocessorManagerTest_NextT.cpp">
+      <Filter>PKB\RelationPreprocessorManager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -359,6 +368,8 @@
     <Filter Include="PQL\QueryPreprocessor\QueryPatternRelRefParser">
       <UniqueIdentifier>{02759e7f-c0fc-4177-b5a7-6ad19b337bea}</UniqueIdentifier>
     </Filter>
+    <Filter Include="PKB\RelationPreprocessorManager">
+      <UniqueIdentifier>{02bb02c6-2c41-49f9-b2f0-ed1c33295826}</UniqueIdentifier>
     <Filter Include="PKB\CFGRelationManager">
       <UniqueIdentifier>{d0e3eb59-d00b-4caf-95f4-29bd8152c2b8}</UniqueIdentifier>
     </Filter>

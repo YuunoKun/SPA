@@ -4,7 +4,7 @@
 #include "QueryResult.h"
 #include "PKBAdapter.h"
 #include "NextBipTEvaluator.h"
-#include "CFGRelationsManager.h"
+#include "RelationPreprocessorManager.h"
 
 bool NextBipTEvaluator::evaluateWildAndWild() {
 	return !pkb.getRelationManager().isNextBipTEmpty();

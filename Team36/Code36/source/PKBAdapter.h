@@ -4,11 +4,12 @@
 #include <vector>
 
 #include "Common.h"
-#include "CFGRelationsManager.h"
+#include "RelationPreprocessorManager.h"
 
 class PKBAdapter {
 public:
 	PKBAdapter();
+	PKBAdapter(PKBQueryInterface&);
 
 	std::vector<var_name> getVariables();
 	std::vector<StmtInfo> getStmts();
@@ -172,11 +173,12 @@ public:
 	bool isCalledS(proc_name);
 	std::vector<stmt_index> getCalleeS(proc_name);
 
-
-	static CFGRelationsManager& getRelationManager();
+	static RelationPreprocessorManager& getRelationManager();
 
 private:
 	std::vector<stmt_index> getAssignInfoFiltered(std::vector<stmt_index>&, expr, bool);
 
 	StmtInfo getStmt(stmt_index);
+
+	PKBQueryInterface& pkb_instance;
 };

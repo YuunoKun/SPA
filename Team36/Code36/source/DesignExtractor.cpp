@@ -4,11 +4,10 @@
 #include <algorithm>
 #include <numeric>
 #include "DesignExtractor.h"
-#include "PKB.h"
 
 using namespace SourceProcessor;
 
-DesignExtractor::DesignExtractor() {
+DesignExtractor::DesignExtractor(PKBSourceInterface& instance) : Extractor(instance) {
 	curr_proc_id = DE_INIT_PROC_NO;
 	curr_stmt_id = DE_INIT_STMT_NO;
 	curr_stmt_list_id = DE_INIT_STMT_LIST_NO;
@@ -102,19 +101,19 @@ void DesignExtractor::addConstant(constant val) {
 	de_constants.insert(val);
 }
 
-const std::vector<Procedure*>& DesignExtractor::getProcedures() {
+const std::vector<Procedure*>& DesignExtractor::getProcedures() const {
 	return de_procedures;
 }
 
-const std::vector<Statement*>& DesignExtractor::getStatements() {
+const std::vector<Statement*>& DesignExtractor::getStatements() const {
 	return de_statements;
 }
 
-const std::unordered_set<var_name>& DesignExtractor::getVariables() {
+const std::unordered_set<var_name>& DesignExtractor::getVariables() const {
 	return de_variables;
 }
 
-const std::unordered_set<constant>& DesignExtractor::getConstants() {
+const std::unordered_set<constant>& DesignExtractor::getConstants() const {
 	return de_constants;
 }
 
@@ -185,7 +184,8 @@ void DesignExtractor::validate() {
 			proc_name callee = s->getCallee();
 			if (proc_name_to_id.find(callee) != proc_name_to_id.end()) {
 				call_cache.push_back({ proc_name_to_id[s->getProcName()], proc_name_to_id[callee] });
-			} else {
+			}
+			else {
 				throw std::runtime_error("Call statement calls undefined procedure.");
 			}
 		}
@@ -264,130 +264,131 @@ void DesignExtractor::populatePostValidation() {
 	}
 }
 
-void DesignExtractor::populateEntities(PKB& pkb) {
-	populateProcedures(pkb);
-	populateStatements(pkb);
-	populateVariables(pkb);
-	populateConstants(pkb);
+void DesignExtractor::populateEntities() {
+	populateProcedures();
+	populateStatements();
+	populateVariables();
+	populateConstants();
 }
 
-void DesignExtractor::populateRelations(PKB& pkb) {
-	populateFollows(pkb);
-	pkb.generateFollowsT();
-	populateParent(pkb);
-	pkb.generateParentT();
-	populateUses(pkb);
-	populateModifies(pkb);
-	populateCalls(pkb);
-	pkb.generateCallsPT();
-	populateIfs(pkb);
-	populateWhiles(pkb);
-	populateNext(pkb);
+void DesignExtractor::populateRelations() {
+	populateFollows();
+	pkb_instance.generateFollowsT();
+	populateParent();
+	pkb_instance.generateParentT();
+	populateUses();
+	populateModifies();
+	populateCalls();
+	pkb_instance.generateCallsPT();
+	populateIfs();
+	populateWhiles();
+	populateNext();
 }
 
-void DesignExtractor::populateProcedures(PKB& pkb) {
+void DesignExtractor::populateProcedures() {
 	for (Procedure* p : de_procedures) {
-		pkb.addProcedure(p->getName());
+		pkb_instance.addProcedure(p->getName());
 
 		for (stmt_index id : p->getChild()) {
-			pkb.addProcContains(p->getName(), id);
+			pkb_instance.addProcContains(p->getName(), id);
 		}
 	}
 }
 
-void DesignExtractor::populateStatements(PKB& pkb) {
+void DesignExtractor::populateStatements() {
 	ExprParser expr_parser;
 	for (Statement* s : de_statements) {
-		pkb.addStmt(s->getType());
+		pkb_instance.addStmt(s->getType());
 
 		if (s->getType() == StmtType::STMT_ASSIGN) {
-			pkb.addExprTree(s->getIndex(), expr_parser.parse(s->getExprStr()));
+			pkb_instance.addExprTree(s->getIndex(), expr_parser.parse(s->getExprStr()));
 		}
 	}
 }
 
-void DesignExtractor::populateVariables(PKB& pkb) {
+void DesignExtractor::populateVariables() {
 	for (var_name v : de_variables) {
-		pkb.addVariable(v);
+		pkb_instance.addVariable(v);
 	}
 }
 
-void DesignExtractor::populateConstants(PKB& pkb) {
+void DesignExtractor::populateConstants() {
 	for (constant c : de_constants) {
-		pkb.addConstant(c);
+		pkb_instance.addConstant(c);
 	}
 }
 
-void DesignExtractor::populateFollows(PKB& pkb) {
+void DesignExtractor::populateFollows() {
 	std::unordered_map<int, stmt_index> um;
 
 	for (Statement* s : de_statements) {
 		int list_id = s->getStmtList();
 		if (um.find(list_id) != um.end()) {
-			pkb.addFollows(um[list_id], s->getIndex());
+			pkb_instance.addFollows(um[list_id], s->getIndex());
 		}
 		um[list_id] = s->getIndex();
 	}
 }
 
-void DesignExtractor::populateParent(PKB& pkb) {
+void DesignExtractor::populateParent() {
 	for (Statement* s : de_statements) {
 		for (stmt_index id : s->getDirectChild()) {
-			pkb.addParent(s->getIndex(), id);
+			pkb_instance.addParent(s->getIndex(), id);
 		}
 	}
 }
 
-void DesignExtractor::populateUses(PKB& pkb) {
+void DesignExtractor::populateUses() {
 	for (Statement* s : de_statements) {
 		for (var_name used_var : s->getUsedVariable()) {
-			pkb.addUsesS(s->getIndex(), used_var);
+			pkb_instance.addUsesS(s->getIndex(), used_var);
 		}
 	}
 
 	for (Procedure* p : de_procedures) {
 		for (var_name used_var : p->getUsedVariable()) {
-			pkb.addUsesP(p->getName(), used_var);
+			pkb_instance.addUsesP(p->getName(), used_var);
 		}
 	}
 }
 
-void DesignExtractor::populateModifies(PKB& pkb) {
+void DesignExtractor::populateModifies() {
 	for (Statement* s : de_statements) {
 		for (var_name modified_var : s->getModifiedVariable()) {
-			pkb.addModifiesS(s->getIndex(), modified_var);
+			pkb_instance.addModifiesS(s->getIndex(), modified_var);
 		}
 	}
 
 	for (Procedure* p : de_procedures) {
 		for (var_name modified_var : p->getModifiedVariable()) {
-			pkb.addModifiesP(p->getName(), modified_var);
+			pkb_instance.addModifiesP(p->getName(), modified_var);
 		}
 	}
 }
 
-void DesignExtractor::populateCalls(PKB& pkb) {
+void DesignExtractor::populateCalls() {
 	for (Statement* s : de_statements) {
 		if (s->getType() == StmtType::STMT_CALL) {
-			pkb.addCallsS(s->getIndex(), s->getCallee());
-			pkb.addCallsP(s->getProcName(), s->getCallee());
+			pkb_instance.addCallsS(s->getIndex(), s->getCallee());
+			pkb_instance.addCallsP(s->getProcName(), s->getCallee());
 		}
 	}
 }
 
-void DesignExtractor::populateNext(PKB& pkb) {
+void DesignExtractor::populateNext() {
+
 	std::vector<CFG*> cfgs;
 	for (Procedure* p : de_procedures) {
 		CFG* cfg = generateCFG(p->getChild());
 		std::vector<std::pair<prog_line, prog_line>> nexts = cfg->getNexts();
 		for (auto next_rel : nexts) {
-			pkb.addNext(next_rel.first, next_rel.second);
+			pkb_instance.addNext(next_rel.first, next_rel.second);
 		}
 		cfgs.push_back(cfg);
 	}
 
 	for (proc_index p : call_sequence) {
-		for (stmt_index s : de_procedures[p - OFFSET]->getChild()) {
+		for (stmt_index s: de_procedures[p - OFFSET]->getChild()) {
 			Statement* stmt = de_statements[s - OFFSET];
 			if (stmt->getType() == StmtType::STMT_CALL) {
 				cfgs[p - OFFSET]->call(cfgs[proc_name_to_id[stmt->getCallee()] - OFFSET], s);
@@ -395,30 +396,30 @@ void DesignExtractor::populateNext(PKB& pkb) {
 		}
 	}
 
-	for (CFG* cfg : cfgs) {
+	for (CFG* cfg: cfgs) {
 		if (cfg->getHeadLabelledProgLine().labels.front() == NON_EXISTING_STMT_NO) {
-			pkb.addCFGBip(cfg);
+			pkb_instance.addCFGBip(cfg);
 		}
 	}
 
-	pkb.addCFGsToDestroy(cfgs);
+	pkb_instance.addCFGsToDestroy(cfgs);
 }
 
-void DesignExtractor::populateIfs(PKB& pkb) {
+void DesignExtractor::populateIfs() {
 	for (Statement* s : de_statements) {
 		if (s->getType() == StmtType::STMT_IF) {
 			for (var_name v : s->getUsedCondVariable()) {
-				pkb.addIf(s->getIndex(), v);
+				pkb_instance.addIf(s->getIndex(), v);
 			}
 		}
 	}
 }
 
-void DesignExtractor::populateWhiles(PKB& pkb) {
+void DesignExtractor::populateWhiles() {
 	for (Statement* s : de_statements) {
 		if (s->getType() == StmtType::STMT_WHILE) {
 			for (var_name v : s->getUsedCondVariable()) {
-				pkb.addWhile(s->getIndex(), v);
+				pkb_instance.addWhile(s->getIndex(), v);
 			}
 		}
 	}
@@ -433,8 +434,8 @@ CFG* DesignExtractor::generateCFG(std::vector<stmt_index> indexes) {
 
 	stmt_index parent = de_statements[indexes.front() - OFFSET]->getDirectParent();
 	std::vector<stmt_index> main;
-	for (stmt_index id : indexes) {
-		if (de_statements[id - OFFSET]->getDirectParent() == parent
+	for (stmt_index id: indexes) {
+		if (de_statements[id - OFFSET]->getDirectParent() == parent 
 			&& de_statements[id - OFFSET]->getStmtList() == indexes.front()) {
 			main.push_back(id);
 		}
@@ -448,7 +449,8 @@ CFG* DesignExtractor::generateCFG(std::vector<stmt_index> indexes) {
 		prog_line curr = main[i], next;
 		if (i == main.size() - 1) {
 			next = indexes.back() + 1;
-		} else {
+		}
+		else {
 			next = main[i + 1];
 		}
 
@@ -483,7 +485,8 @@ CFG* DesignExtractor::generateCFG(std::vector<stmt_index> indexes) {
 			cfg->fork(cfg_then, cfg_else, curr);
 
 			delete cfg_then, cfg_else;
-		} else if (container->getType() == StmtType::STMT_WHILE) {
+		}
+		else if (container->getType() == StmtType::STMT_WHILE) {
 			std::vector<stmt_index> scope(next - curr - 1);
 			std::iota(scope.begin(), scope.end(), curr + 1);
 			CFG* cfg_while = generateCFG(scope);
@@ -491,7 +494,8 @@ CFG* DesignExtractor::generateCFG(std::vector<stmt_index> indexes) {
 			cfg->loop(cfg_while, curr);
 
 			delete cfg_while;
-		} else {
+		}
+		else {
 			throw std::runtime_error("CFG build failure. Gap involved non-container statement.");
 		}
 	}

@@ -4,7 +4,7 @@
 #include "QueryResult.h"
 #include "PKBAdapter.h"
 #include "AffectsTEvaluator.h"
-#include "CFGRelationsManager.h"
+#include "RelationPreprocessorManager.h"
 
 bool AffectsTEvaluator::evaluateWildAndWild() {
 	return !pkb.getRelationManager().isAffectsTEmpty();

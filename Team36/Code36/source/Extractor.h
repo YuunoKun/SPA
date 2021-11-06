@@ -3,13 +3,15 @@
 #include <string>
 #include "SPCommon.h"
 #include "Token.h"
-#include "PKB.h"
+#include "PKBSourceInterface.h"
 
 namespace SourceProcessor {
 
 	class Extractor {
 	public:
-		virtual ~Extractor() {};
+		Extractor() = delete;
+
+		Extractor(PKBSourceInterface& instance) : pkb_instance(instance) {}
 
 		virtual void startNesting() = 0;
 		virtual void chopNesting() = 0;
@@ -29,8 +31,11 @@ namespace SourceProcessor {
 		virtual void validate() = 0;
 
 		virtual void populatePostValidation() = 0;
-		virtual void populateEntities(PKB&) = 0;
-		virtual void populateRelations(PKB&) = 0;
+		virtual void populateEntities() = 0;
+		virtual void populateRelations() = 0;
+
+	protected:
+		PKBSourceInterface& pkb_instance;
 	};
 
 } // namespace SourceProcessor

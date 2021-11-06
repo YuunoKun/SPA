@@ -3,12 +3,12 @@
 #include "pch.h"
 #include "PKB.h"
 #include "CFG.h"
-#include "CFGRelationsManager.h"
+#include "RelationPreprocessorManager.h"
 
 namespace UnitTesting {
-	class CFGRelationsManagerTest_NextBipT : public testing::Test {
+	class RelationPreprocessorManagerTest_NextBipT : public testing::Test {
 	protected:
-		CFGRelationsManagerTest_NextBipT() {
+		RelationPreprocessorManagerTest_NextBipT() {
 			PKB::getInstance().resetCache();
 
 			cfg1->add(1);
@@ -53,7 +53,7 @@ namespace UnitTesting {
 			manager.reset();
 		}
 
-		CFGRelationsManager manager;
+		RelationPreprocessorManager manager;
 
 		CFG* cfg1 = new CFG();
 		CFG* cfg2 = new CFG();
@@ -110,7 +110,7 @@ namespace UnitTesting {
 		}
 	};
 
-	TEST_F(CFGRelationsManagerTest_NextBipT, isPreviousBipT_identifier) {
+	TEST_F(RelationPreprocessorManagerTest_NextBipT, isPreviousBipT_identifier) {
 		std::vector<StmtInfo> true_list, false_list;
 		std::set<StmtInfo> set;
 		for (auto& pair : expected_pairs) {
@@ -132,7 +132,7 @@ namespace UnitTesting {
 		}
 	}
 
-	TEST_F(CFGRelationsManagerTest_NextBipT, isNextBipT_identifier) {
+	TEST_F(RelationPreprocessorManagerTest_NextBipT, isNextBipT_identifier) {
 		std::vector<StmtInfo> true_list, false_list;
 		std::set<StmtInfo> set;
 		for (auto& pair : expected_pairs) {
@@ -154,7 +154,7 @@ namespace UnitTesting {
 		}
 	}
 
-	TEST_F(CFGRelationsManagerTest_NextBipT, isNextBipT_double_identifier) {
+	TEST_F(RelationPreprocessorManagerTest_NextBipT, isNextBipT_double_identifier) {
 		std::vector<std::pair<StmtInfo, StmtInfo>> true_list = expected_pairs,
 			false_list, all_list;
 		std::set<StmtInfo> set;
@@ -185,13 +185,13 @@ namespace UnitTesting {
 		EXPECT_TRUE(manager.getNextBipTPreprocessor().isFullyPopulated());
 	}
 
-	TEST_F(CFGRelationsManagerTest_NextBipT, getAllNextBipTRelation) {
+	TEST_F(RelationPreprocessorManagerTest_NextBipT, getAllNextBipTRelation) {
 		auto v1 = manager.getAllNextBipTRelation();
 		std::sort(v1.begin(), v1.end());
 		EXPECT_EQ(v1, expected_pairs);
 	}
 
-	TEST_F(CFGRelationsManagerTest_NextBipT, getPreviousBipT_all) {
+	TEST_F(RelationPreprocessorManagerTest_NextBipT, getPreviousBipT_all) {
 		auto v1 = manager.getPreviousBipT();
 		std::sort(v1.begin(), v1.end());
 
@@ -205,7 +205,7 @@ namespace UnitTesting {
 		EXPECT_EQ(v1, v2);
 	}
 
-	TEST_F(CFGRelationsManagerTest_NextBipT, getNextBipT_all) {
+	TEST_F(RelationPreprocessorManagerTest_NextBipT, getNextBipT_all) {
 		auto v1 = manager.getNextBipT();
 		std::sort(v1.begin(), v1.end());
 
@@ -219,7 +219,7 @@ namespace UnitTesting {
 		EXPECT_EQ(v1, v2);
 	}
 
-	TEST_F(CFGRelationsManagerTest_NextBipT, getNextBipT_identifier) {
+	TEST_F(RelationPreprocessorManagerTest_NextBipT, getNextBipT_identifier) {
 		for (auto& stmt : stmt_list) {
 			auto v1 = manager.getNextBipT(stmt.stmt_index);
 			std::sort(v1.begin(), v1.end());
@@ -234,7 +234,7 @@ namespace UnitTesting {
 		}
 	}
 
-	TEST_F(CFGRelationsManagerTest_NextBipT, getPreviousBipT_identifier) {
+	TEST_F(RelationPreprocessorManagerTest_NextBipT, getPreviousBipT_identifier) {
 		for (auto& stmt : stmt_list) {
 			auto v1 = manager.getPreviousBipT(stmt.stmt_index);
 			std::sort(v1.begin(), v1.end());
@@ -249,7 +249,7 @@ namespace UnitTesting {
 		}
 	}
 
-	TEST_F(CFGRelationsManagerTest_NextBipT, reset) {
+	TEST_F(RelationPreprocessorManagerTest_NextBipT, reset) {
 		manager.getAllNextBipTRelation();
 		EXPECT_TRUE(manager.getNextBipTPreprocessor().isFullyPopulated());
 		EXPECT_FALSE(manager.getNextBipTPreprocessor().isCacheEmpty());
