@@ -50,42 +50,8 @@ std::list<std::list<std::pair<Entity, Entity>>> QueryTupleOptimizer::groupCommon
 std::list<std::list<std::pair<Entity, Entity>>> QueryTupleOptimizer::processToEntityPairs(std::list<std::list<Entity>> entities,
 	std::list<std::pair<Entity, Entity>> input) {
 	std::list<std::list<std::pair<Entity, Entity>>> final_result;
-
-	//std::list<Entity>::iterator i;
-	//for (std::list<std::list<Entity>>::iterator i = entities.begin(); i != entities.end(); ++i) {
-	//	std::list<std::pair<Entity, Entity>> list_of_pairs;
-	//	for (std::list<Entity>::iterator idx = i->begin(); idx != std::prev(i->end()); ++idx) {
-			//std::pair<Entity, Entity> pairing1 = std::make_pair(*idx, *std::next(idx));
-			//std::pair<Entity, Entity> pairing2 = std::make_pair(*std::next(idx), *idx);
-			//for (std::pair<Entity, Entity> input_pair : input) {
-			//	if (pairing1 == input_pair) {
-			//		list_of_pairs.push_back(pairing1);
-			//	}
-			//	if (pairing2 == input_pair) {
-			//		list_of_pairs.push_back(pairing2);
-			//	}
-			//	Entity first_ent = input_pair.first;
-			//	Entity second_ent = input_pair.second;
-			//	
-			//}
-	//	}
-	//	final_result.push_back(list_of_pairs);
-	//}
 	for (std::list<Entity> list_of_entities : entities) {
 		std::list<std::pair<Entity, Entity>> list_of_pairs;
-			//std::pair<Entity, Entity> pairing1 = std::make_pair(*idx, *std::next(idx));
-			//std::pair<Entity, Entity> pairing2 = std::make_pair(*std::next(idx), *idx);
-			//for (std::pair<Entity, Entity> input_pair : input) {
-			//	if (pairing1 == input_pair) {
-			//		list_of_pairs.push_back(pairing1);
-			//	}
-			//	if (pairing2 == input_pair) {
-			//		list_of_pairs.push_back(pairing2);
-			//	}
-			//	Entity first_ent = input_pair.first;
-			//	Entity second_ent = input_pair.second;
-			//	
-			//}
 		for (std::pair<Entity, Entity> input_pair : input) {
 			bool is_first_matching = false;
 			bool is_second_matching = false;
@@ -101,7 +67,7 @@ std::list<std::list<std::pair<Entity, Entity>>> QueryTupleOptimizer::processToEn
 				list_of_pairs.push_back(input_pair);
 			}
 		}
-		
+
 		final_result.push_back(list_of_pairs);
 	}
 
