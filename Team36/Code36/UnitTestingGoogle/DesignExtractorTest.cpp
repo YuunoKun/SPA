@@ -35,8 +35,16 @@ public:
 		mock_parent_table.push_back({ parent, child });
 	}
 
+	void addParentT(stmt_index parent, stmt_index child) {
+		mock_parentT_table.push_back({ parent, child });
+	}
+
 	void addFollows(stmt_index first, stmt_index second) {
 		mock_follows_table.push_back({ first, second });
+	}
+
+	void addFollowsT(stmt_index first, stmt_index second) {
+		mock_followsT_table.push_back({ first, second });
 	}
 
 	void addUsesS(stmt_index user, var_name used) {
@@ -87,10 +95,6 @@ public:
 		mock_cfgs.push_back(cfg);
 	}
 
-	//void generateParentT() {}
-	void generateFollowsT() {}
-	void generateCallsPT() {}
-
 	std::unordered_set<proc_name> mock_proc_table;
 	std::vector<std::pair<stmt_index, StmtType>> mock_stmt_table;
 	std::unordered_set<var_name> mock_var_table;
@@ -99,7 +103,9 @@ public:
 	std::vector<std::pair<stmt_index, expr>> mock_expr_table;
 
 	std::vector<std::pair<stmt_index, stmt_index>> mock_parent_table;
+	std::vector<std::pair<stmt_index, stmt_index>> mock_parentT_table;
 	std::vector<std::pair<stmt_index, stmt_index>> mock_follows_table;
+	std::vector<std::pair<stmt_index, stmt_index>> mock_followsT_table;
 	std::vector<std::pair<stmt_index, var_name>> mock_usesS_table;
 	std::vector<std::pair<proc_name, var_name>> mock_usesP_table;
 	std::vector<std::pair<stmt_index, var_name>> mock_modifiesS_table;

@@ -618,13 +618,10 @@ namespace UnitTesting {
 		PKB::getInstance().addStmt(STMT_PRINT);
 		PKB::getInstance().addStmt(STMT_READ);
 		PKB::getInstance().addStmt(STMT_IF);
-		PKB::getInstance().generateFollowsT();
 		EXPECT_TRUE(pkb.isFollowTEmpty());
-		PKB::getInstance().addFollows(1, 2);
-		PKB::getInstance().generateFollowsT();
+		PKB::getInstance().addFollowsT(1, 2);
 		EXPECT_FALSE(pkb.isFollowTEmpty());
-		PKB::getInstance().addFollows(2, 3);
-		PKB::getInstance().generateFollowsT();
+		PKB::getInstance().addFollowsT(2, 3);
 		EXPECT_FALSE(pkb.isFollowTEmpty());
 	}
 
@@ -633,9 +630,9 @@ namespace UnitTesting {
 		PKB::getInstance().addStmt(STMT_PRINT);
 		PKB::getInstance().addStmt(STMT_READ);
 		PKB::getInstance().addStmt(STMT_IF);
-		PKB::getInstance().addFollows(1, 2);
-		PKB::getInstance().addFollows(2, 3);
-		PKB::getInstance().generateFollowsT();
+		PKB::getInstance().addFollowsT(1, 2);
+		PKB::getInstance().addFollowsT(1, 3);
+		PKB::getInstance().addFollowsT(2, 3);
 
 		EXPECT_TRUE(pkb.isFollowT(1, 2));
 		EXPECT_TRUE(pkb.isFollowT(1, 3));
@@ -662,7 +659,9 @@ namespace UnitTesting {
 		PKB::getInstance().addStmt(STMT_IF);
 		PKB::getInstance().addFollows(1, 2);
 		PKB::getInstance().addFollows(2, 3);
-		PKB::getInstance().generateFollowsT();
+		PKB::getInstance().addFollowsT(1, 2);
+		PKB::getInstance().addFollowsT(1, 3);
+		PKB::getInstance().addFollowsT(2, 3);
 
 		EXPECT_TRUE(pkb.isFollowedT(1));
 		EXPECT_TRUE(pkb.isFollowedT(2));
@@ -676,7 +675,10 @@ namespace UnitTesting {
 		PKB::getInstance().addStmt(STMT_IF);
 		PKB::getInstance().addFollows(1, 2);
 		PKB::getInstance().addFollows(2, 3);
-		PKB::getInstance().generateFollowsT();
+		PKB::getInstance().addFollowsT(1, 2);
+		PKB::getInstance().addFollowsT(1, 3);
+		PKB::getInstance().addFollowsT(2, 3);
+
 		EXPECT_FALSE(pkb.isFollowingT(1));
 		EXPECT_TRUE(pkb.isFollowingT(2));
 		EXPECT_TRUE(pkb.isFollowingT(3));
@@ -695,7 +697,9 @@ namespace UnitTesting {
 		PKB::getInstance().addStmt(STMT_IF);
 		PKB::getInstance().addFollows(1, 2);
 		PKB::getInstance().addFollows(2, 3);
-		PKB::getInstance().generateFollowsT();
+		PKB::getInstance().addFollowsT(1, 2);
+		PKB::getInstance().addFollowsT(1, 3);
+		PKB::getInstance().addFollowsT(2, 3);
 
 		std::vector<StmtInfo> v1 = { p1, p2 };
 		std::vector<StmtInfo> v2 = pkb.getFollowedT();
@@ -732,7 +736,9 @@ namespace UnitTesting {
 		PKB::getInstance().addStmt(STMT_IF);
 		PKB::getInstance().addFollows(1, 2);
 		PKB::getInstance().addFollows(2, 3);
-		PKB::getInstance().generateFollowsT();
+		PKB::getInstance().addFollowsT(1, 2);
+		PKB::getInstance().addFollowsT(1, 3);
+		PKB::getInstance().addFollowsT(2, 3);
 
 		std::vector<StmtInfo> v1 = { p2, p3 };
 		std::vector<StmtInfo> v2 = pkb.getFollowingT();
@@ -768,7 +774,10 @@ namespace UnitTesting {
 		PKB::getInstance().addStmt(STMT_IF);
 		PKB::getInstance().addFollows(1, 2);
 		PKB::getInstance().addFollows(2, 3);
-		PKB::getInstance().generateFollowsT();
+		PKB::getInstance().addFollowsT(1, 2);
+		PKB::getInstance().addFollowsT(1, 3);
+		PKB::getInstance().addFollowsT(2, 3);
+
 		std::vector<std::pair<StmtInfo, StmtInfo>> v1 = { {p1, p2}, {p1, p3}, {p2, p3} };
 		std::vector<std::pair<StmtInfo, StmtInfo>> v2 = pkb.getFollowsT();
 		std::sort(v2.begin(), v2.end());
@@ -1145,7 +1154,12 @@ namespace UnitTesting {
 		PKB::getInstance().addParent(1, 3);
 		PKB::getInstance().addParent(2, 3);
 		PKB::getInstance().addParent(3, 4);
-		PKB::getInstance().generateParentT();
+		PKB::getInstance().addParentT(1, 2);
+		PKB::getInstance().addParentT(1, 3);
+		PKB::getInstance().addParentT(1, 4);
+		PKB::getInstance().addParentT(2, 3);
+		PKB::getInstance().addParentT(2, 4);
+		PKB::getInstance().addParentT(3, 4);
 
 		std::vector<std::pair<StmtInfo, StmtInfo>> v = { {p1, p2}, {p1, p3}, {p1, p4}, {p2, p3}, {p2, p4}, {p3, p4} };
 		EXPECT_EQ(pkb.getAllParentTRelation(), v);
