@@ -1,13 +1,13 @@
 #include "pch.h"
 
-#include "QueryPatternRelRefParser.h"
+#include "QueryClauseParser.h"
 #include "Common.h"
 #include <iostream>
 
 namespace UnitTesting {
-	class QueryPatternRelRefParserTest : public ::testing::Test {
+	class QueryClauseParserTest : public ::testing::Test {
 	protected:
-		QueryPatternRelRefParserTest() {
+		QueryClauseParserTest() {
 		}
 
 		virtual void SetUp() override {
@@ -19,7 +19,7 @@ namespace UnitTesting {
 
 	// Test setStmtRef
 	// 3 diff params
-	TEST(QueryPatternRelRefParserTest, setStmtRefTest) {
+	TEST(QueryClauseParserTest, setStmtRefTest) {
 		Query query;
 
 		//Expected
@@ -61,8 +61,8 @@ namespace UnitTesting {
 	}
 
 	// Test setEntRef
-	TEST(QueryPatternRelRefParserTest, setEntRefTest) {
-		QueryPatternRelRefParser validator;
+	TEST(QueryClauseParserTest, setEntRefTest) {
+		QueryClauseParser validator;
 		Query query;
 		std::vector<QueryToken> temp_token_chain;
 
@@ -115,8 +115,8 @@ namespace UnitTesting {
 	}
 
 	// Test setExpr
-	TEST(QueryPatternRelRefParserTest, setExprTest) {
-		QueryPatternRelRefParser validator;
+	TEST(QueryClauseParserTest, setExprTest) {
+		QueryClauseParser validator;
 
 		std::vector<QueryToken> temp_token_chain;
 

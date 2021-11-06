@@ -1,7 +1,14 @@
 #include "ParentParser.h"
 
+// Parses Parent Relationships and its variants
 void ParentParser::parse(Query& query, std::vector<QueryToken> token_chain, QueryToken::QueryTokenType& token_type) {
     // stmtRef , stmtRef
+
+    if (token_type != QueryToken::PARENT &&
+        token_type != QueryToken::PARENT_T) {
+        throw std::invalid_argument("Only Follows and its variants for this method");
+    }
+
     std::vector<std::vector<QueryToken>> separated_params = Utility::splitTokenChain(2, QueryToken::COMMA, token_chain);
 
     if (separated_params[0].size() != 1 || separated_params[1].size() != 1) {

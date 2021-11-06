@@ -4,13 +4,16 @@ void UsesParser::parse(Query& query, std::vector<QueryToken> token_chain, QueryT
     // stmtRef , entRef
     // entRef, entRef
 
+    if(token_type != QueryToken::USES_S ) {
+        throw std::invalid_argument("Only Uses and its variants for this method");
+    }
+
     bool is_USES_S = true;
 
     std::vector<std::vector<QueryToken>> separated_params = Utility::splitTokenChain(2, QueryToken::COMMA, token_chain);
 
     //Validate first param
     if (Utility::isStmtRef(query, separated_params[0])) {
-        //is stmRef (WILDCARD incld)
         if (separated_params[0][0].type == QueryToken::WILDCARD) {
             //Throw semantic erros
             query.setIsSemanticError("Invalid parameters for Uses");

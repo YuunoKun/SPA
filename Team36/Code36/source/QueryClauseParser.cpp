@@ -1,8 +1,8 @@
-#include "QueryPatternRelRefParser.h"
+#include "QueryClauseParser.h"
 
-QueryPatternRelRefParser::QueryPatternRelRefParser() {}
+QueryClauseParser::QueryClauseParser() {}
 
-void QueryPatternRelRefParser::parseParameterSuchThat(
+void QueryClauseParser::parseParameterSuchThat(
     Query& query, QueryToken::QueryTokenType token_type,
     std::vector<QueryToken> token_chain) {
     switch (token_type) {
@@ -56,7 +56,7 @@ void QueryPatternRelRefParser::parseParameterSuchThat(
     }
 }
 
-void QueryPatternRelRefParser::parseParameterPattern(
+void QueryClauseParser::parseParameterPattern(
     Query& query, Entity& synonym_ent, std::vector
     <QueryToken> token_chain) {
     bool wild = false;
@@ -80,7 +80,7 @@ void QueryPatternRelRefParser::parseParameterPattern(
 
 }
 
-void QueryPatternRelRefParser::parseWith(Query& query, std::vector
+void QueryClauseParser::parseWith(Query& query, std::vector
     <QueryToken> token_chain) {
     WithParser parser;
     parser.parse(query, token_chain);

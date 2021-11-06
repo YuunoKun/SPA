@@ -1,6 +1,6 @@
 #include "pch.h"
 
-#include "QueryPatternRelRefParser.h"
+#include "QueryClauseParser.h"
 #include "Common.h"
 #include <iostream>
 
@@ -20,7 +20,7 @@ namespace UnitTesting {
 	// Test parseParameterPattern
 	// Test ASSIGN
 	TEST(AssignPatternParserTest, AssignIdentIdentTest) {
-		QueryPatternRelRefParser validator;
+		QueryClauseParser validator;
 		Query query;
 
 		std::vector<QueryToken> temp_token_chain;
@@ -59,7 +59,7 @@ namespace UnitTesting {
 	}
 
 	TEST(AssignPatternParserTest, AssignIdentIdentTest2) {
-		QueryPatternRelRefParser validator;
+		QueryClauseParser validator;
 		Query query;
 
 		std::vector<QueryToken> temp_token_chain;
@@ -102,7 +102,7 @@ namespace UnitTesting {
 	}
 
 	TEST(AssignPatternParserTest, AssignIdentWildCardTest) {
-		QueryPatternRelRefParser validator;
+		QueryClauseParser validator;
 
 		Query query;
 
@@ -140,7 +140,7 @@ namespace UnitTesting {
 	}
 
 	TEST(AssignPatternParserTest, AssignIdentIdentWildCardTest) {
-		QueryPatternRelRefParser validator;
+		QueryClauseParser validator;
 
 		Query query;
 
@@ -185,7 +185,7 @@ namespace UnitTesting {
 	}
 
 	TEST(AssignPatternParserTest, AssignIdentIdentWildCardTest2) {
-		QueryPatternRelRefParser validator;
+		QueryClauseParser validator;
 
 		Query query;
 
@@ -234,7 +234,7 @@ namespace UnitTesting {
 	}
 
 	TEST(AssignPatternParserTest, AssignSynWildCardTest) {
-		QueryPatternRelRefParser validator;
+		QueryClauseParser validator;
 
 		Query query;
 
@@ -272,7 +272,7 @@ namespace UnitTesting {
 	}
 
 	TEST(AssignPatternParserTest, AssignSynIdentTest) {
-		QueryPatternRelRefParser validator;
+		QueryClauseParser validator;
 
 		Query query;
 
@@ -318,7 +318,7 @@ namespace UnitTesting {
 	}
 
 	TEST(AssignPatternParserTest, AssignSynIdentWildCardTest) {
-		QueryPatternRelRefParser validator;
+		QueryClauseParser validator;
 
 		Query query;
 
@@ -366,7 +366,7 @@ namespace UnitTesting {
 	}
 
 	TEST(AssignPatternParserTest, AssignWildCardWildCardTest) {
-		QueryPatternRelRefParser validator;
+		QueryClauseParser validator;
 
 		Query query;
 
@@ -399,7 +399,7 @@ namespace UnitTesting {
 	}
 
 	TEST(AssignPatternParserTest, AssignWildCardIdentTest) {
-		QueryPatternRelRefParser validator;
+		QueryClauseParser validator;
 
 		Query query;
 
@@ -440,7 +440,7 @@ namespace UnitTesting {
 	}
 
 	TEST(AssignPatternParserTest, AssignWildCardIdentWildCardTest) {
-		QueryPatternRelRefParser validator;
+		QueryClauseParser validator;
 
 		Query query;
 
@@ -484,7 +484,7 @@ namespace UnitTesting {
 
 	//semantically invalid
 	TEST(AssignPatternParserTest, semanticInvalidAssignSynIdentWildCardTest2) {
-		QueryPatternRelRefParser validator;
+		QueryClauseParser validator;
 
 		Query query;
 
@@ -527,7 +527,7 @@ namespace UnitTesting {
 	}
 
 	TEST(AssignPatternParserTest, semanticInvalidAssignExtraParams) {
-		QueryPatternRelRefParser validator;
+		QueryClauseParser validator;
 
 		Query query;
 
@@ -552,7 +552,7 @@ namespace UnitTesting {
 
 
 	TEST(AssignPatternParserTest, syntacticInvalidExprTest) {
-		QueryPatternRelRefParser validator;
+		QueryClauseParser validator;
 
 		Query query;
 
@@ -597,7 +597,7 @@ namespace UnitTesting {
 		EXPECT_THROW(validator.parseParameterPattern(query, expected_declared_assign, temp_token_chain), SyntacticErrorException);
 	}
 	TEST(AssignPatternParserTest, syntacticInvalidExtraParams) {
-		QueryPatternRelRefParser validator;
+		QueryClauseParser validator;
 
 		Query query;
 

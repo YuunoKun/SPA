@@ -1,7 +1,13 @@
 #include "FollowsParser.h"
 
+// Parses Follows Relationships and its variants
 void FollowsParser::parse(Query& query, std::vector<QueryToken> token_chain, QueryToken::QueryTokenType& token_type) {
     // stmtRef , stmtRef
+
+    if (token_type != QueryToken::FOLLOWS &&
+        token_type != QueryToken::FOLLOWS_T) {
+        throw std::invalid_argument("Only Follows and its variants for this method");
+    }
 
     std::vector<std::vector<QueryToken>> separated_params = Utility::splitTokenChain(2, QueryToken::COMMA, token_chain);
 

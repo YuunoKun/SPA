@@ -4,6 +4,10 @@ void ModifiesParser::parse(Query& query, std::vector<QueryToken> token_chain, Qu
     // stmtRef , entRef
        // entRef, entRef
 
+    if (token_type != QueryToken::MODIFIES_S) {
+        throw std::invalid_argument("Only Modifies and its variants for this method");
+    }
+
     bool is_MODIFIES_S = true;
     std::vector<std::vector<QueryToken>> separated_params = Utility::splitTokenChain(2, QueryToken::COMMA, token_chain);
 
