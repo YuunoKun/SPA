@@ -29,9 +29,4 @@ public:
 
 	virtual void addCFGsToDestroy(std::vector<CFG*>) = 0;
 	virtual void addCFGBip(CFG*) = 0;
-
-	virtual void generateParentT() = 0;
-	virtual void generateFollowsT() = 0;
-	virtual void generateCallsPT() = 0;
-
 };

@@ -76,6 +76,22 @@ void PKB::addParent(stmt_index parent, stmt_index child) {
 	}
 }
 
+void PKB::addParentT(stmt_index parent, stmt_index child) {
+	try {
+		StmtInfo parent_stmt_info{ parent, stmt_table.at(parent - 1).stmt_type };
+		StmtInfo child_stmt_info{ child, stmt_table.at(child - 1).stmt_type };
+		StmtType parent_stmt_type = stmt_table[parent - 1].stmt_type;
+		if (parent_stmt_type != STMT_WHILE && parent_stmt_type != STMT_IF) {
+			throw std::invalid_argument("Parent stmt index does not belong to an while/if statement: " + std::to_string(parent));
+		}
+		parentT_table.insert(parent_stmt_info, child_stmt_info);
+	}
+	catch (std::out_of_range&) {
+		throw std::invalid_argument("addParentT: Invalid stmt indexes: [" + std::to_string(parent)
+			+ "," + std::to_string(child) + "]");
+	}
+}
+
 void PKB::addFollows(stmt_index first, stmt_index second) {
 	try {
 		StmtInfo first_stmt_info{ first, stmt_table.at(first - 1).stmt_type };
@@ -84,6 +100,18 @@ void PKB::addFollows(stmt_index first, stmt_index second) {
 	}
 	catch (std::out_of_range&) {
 		throw std::invalid_argument("addFollows: Invalid stmt indexes: [" + std::to_string(first)
+			+ "," + std::to_string(second) + "]");
+	}
+}
+
+void PKB::addFollowsT(stmt_index first, stmt_index second) {
+	try {
+		StmtInfo first_stmt_info{ first, stmt_table.at(first - 1).stmt_type };
+		StmtInfo second_stmt_info{ second, stmt_table.at(second - 1).stmt_type };
+		followsT_table.insert(first_stmt_info, second_stmt_info);
+	}
+	catch (std::out_of_range&) {
+		throw std::invalid_argument("addFollowsT: Invalid stmt indexes: [" + std::to_string(first)
 			+ "," + std::to_string(second) + "]");
 	}
 }
@@ -162,6 +190,18 @@ void PKB::addCallsP(proc_name caller_proc_name, proc_name callee_proc_name) {
 		throw std::invalid_argument("addCallsP: Invalid callee proc: " + callee_proc_name);
 	}
 	callsP_table.insert(caller_proc_name, callee_proc_name);
+}
+
+void PKB::addCallsPT(proc_name caller_proc_name, proc_name callee_proc_name) {
+	std::vector<proc_name>::iterator it_proc_caller = std::find(proc_table.begin(), proc_table.end(), caller_proc_name);
+	std::vector<proc_name>::iterator it_proc_callee = std::find(proc_table.begin(), proc_table.end(), callee_proc_name);
+
+	if (it_proc_caller == proc_table.end()) {
+		throw std::invalid_argument("addCallsPT: Invalid caller proc: " + caller_proc_name);
+	} else if (it_proc_callee == proc_table.end()) {
+		throw std::invalid_argument("addCallsPT: Invalid callee proc: " + callee_proc_name);
+	}
+	callsPT_table.insert(caller_proc_name, callee_proc_name);
 }
 
 void PKB::addCallsS(stmt_index caller_stmt_index, proc_name callee_proc_name) {
@@ -243,18 +283,6 @@ void PKB::addCFGsToDestroy(std::vector<CFG*> cfgs) {
 
 void PKB::addCFGBip(CFG* new_cfg) {
 	cfg_bips.push_back(new_cfg);
-}
-
-void PKB::generateParentT() {
-	parentT_table = RelationTableUtility<StmtInfo>::findTransitiveClosure(parent_table);
-}
-
-void PKB::generateFollowsT() {
-	followsT_table = RelationTableUtility<StmtInfo>::findTransitiveClosure(follows_table);
-}
-
-void PKB::generateCallsPT() {
-	callsPT_table = RelationTableUtility<proc_name>::findTransitiveClosure(callsP_table);
 }
 
 void PKB::resetCache() {
