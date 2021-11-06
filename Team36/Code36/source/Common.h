@@ -2,7 +2,6 @@
 #include <string>
 #include <stdexcept>
 #include <vector>
-#include <set>
 #include "ExprNode.h"
 
 typedef std::string proc_name;
@@ -97,51 +96,6 @@ namespace std {
 			return ((hash<int>()(l.program_line) ^ (hash<int>()(v_hash) << 1)) >> 1);
 		}
 	};
-}
-
-template<class T>
-std::vector<std::pair<T, T>> findTransitiveClosure(std::vector<std::pair<T, T>> input) {
-	std::vector<T> res;
-	std::set<T> keys;
-
-	for (auto& it : input) {
-		keys.push(it.first);
-	}
-
-	for (T& k : keys) {
-		std::vector<T> dfs_val = transitiveClosureDFS(input, k);
-		for (T& value : dfs_val) {
-			res.insert(k, value);
-		}
-	}
-	return res;
-}
-
-template<class T>
-std::vector<std::pair<T, T>> transitiveClosureDFS(std::vector<std::pair<T, T>> input, T start) {
-	std::vector<T> res;
-
-	std::unordered_set<T> visited;
-	std::stack<T> stack;
-
-	stack.push(start);
-
-	while (!stack.empty()) {
-		T s = stack.top();
-		stack.pop();
-
-		if (!visited.count(s)) {
-			visited.emplace(s);
-			res.push_back(s);
-		}
-
-		for (auto& it : input) {
-			if (it.first == start && !visited.count(it.second)) {
-				stack.push(it.second);
-			}
-		}
-	}
-	return res;
 }
 
 constexpr char SPACE_C = ' ';

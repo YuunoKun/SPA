@@ -17,7 +17,9 @@ namespace UnitTesting {
 			PKB::getInstance().addStmt(STMT_IF);
 			PKB::getInstance().addParent(1, 2);
 			PKB::getInstance().addParent(2, 3);
-			//PKB::getInstance().generateParentT();
+			PKB::getInstance().addParentT(1, 2);
+			PKB::getInstance().addParentT(1, 3);
+			PKB::getInstance().addParentT(2, 3);
 		}
 
 		PKBAdapter pkb;
@@ -42,7 +44,7 @@ namespace UnitTesting {
 		PKB::getInstance().addStmt(STMT_IF);
 		EXPECT_FALSE(evaluator.evaluateWildAndWild());
 		PKB::getInstance().addParent(1, 2);
-		//PKB::getInstance().generateParentT();
+		PKB::getInstance().addParentT(1, 2);
 		EXPECT_TRUE(evaluator.evaluateWildAndWild());
 	}
 

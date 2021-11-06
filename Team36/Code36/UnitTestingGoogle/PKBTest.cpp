@@ -156,6 +156,9 @@ namespace UnitTesting {
 		PKB::getInstance().addParentT(2, 4);
 		PKB::getInstance().addParentT(2, 5);
 		PKB::getInstance().addParentT(2, 6);
+		PKB::getInstance().addParentT(4, 5);
+		PKB::getInstance().addParentT(4, 6);
+		PKB::getInstance().addParentT(5, 6);
 
 		auto output = PKB::getInstance().getParentT();
 		EXPECT_EQ(expected_table, output);
@@ -204,10 +207,10 @@ namespace UnitTesting {
 		PKB::getInstance().addStmt(STMT_IF);
 		PKB::getInstance().addStmt(STMT_IF);
 		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addFollows(1, 2);
-		PKB::getInstance().addFollows(3, 4);
-		PKB::getInstance().addFollows(4, 5);
-		PKB::getInstance().generateFollowsT();
+		PKB::getInstance().addFollowsT(1, 2);
+		PKB::getInstance().addFollowsT(3, 4);
+		PKB::getInstance().addFollowsT(3, 5);
+		PKB::getInstance().addFollowsT(4, 5);
 
 		auto output = PKB::getInstance().getFollowsT();
 		EXPECT_EQ(expected_table, output);
@@ -360,11 +363,11 @@ namespace UnitTesting {
 		proc_name third = "third";
 		proc_name fourth = "fourth";
 		RelationTable<proc_name, proc_name> expected_table;
-		expected_table.insert(first, fourth);
 		expected_table.insert(first, second);
 		expected_table.insert(first, third);
-		expected_table.insert(second, fourth);
+		expected_table.insert(first, fourth);
 		expected_table.insert(second, third);
+		expected_table.insert(second, fourth);
 		expected_table.insert(third, fourth);
 
 		PKB::getInstance().addProcedure(first);
@@ -374,7 +377,12 @@ namespace UnitTesting {
 		PKB::getInstance().addCallsP(first, second);
 		PKB::getInstance().addCallsP(second, third);
 		PKB::getInstance().addCallsP(third, fourth);
-		PKB::getInstance().generateCallsPT();
+		PKB::getInstance().addCallsPT(first, second);
+		PKB::getInstance().addCallsPT(first, third);
+		PKB::getInstance().addCallsPT(first, fourth);
+		PKB::getInstance().addCallsPT(second, third);
+		PKB::getInstance().addCallsPT(second, fourth);
+		PKB::getInstance().addCallsPT(third, fourth);
 
 		EXPECT_EQ(expected_table, PKB::getInstance().getCallsPT());
 		PKB::getInstance().resetCache();

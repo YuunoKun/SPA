@@ -680,5 +680,8 @@
     <ClInclude Include="..\source\PKBQueryInterface.h">
       <Filter>Header Files\PKB</Filter>
     </ClInclude>
+    <ClInclude Include="..\source\TransitiveClosureHelper.h">
+      <Filter>Header Files\Common</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

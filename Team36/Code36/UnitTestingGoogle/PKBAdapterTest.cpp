@@ -1854,16 +1854,16 @@ namespace UnitTesting {
 		PKB::getInstance().addProcedure(first);
 		PKB::getInstance().addProcedure(second);
 		PKB::getInstance().addProcedure(third);
-		PKB::getInstance().generateCallsPT();
 
 		EXPECT_TRUE(pkb.isCallsPTEmpty());
 
 		PKB::getInstance().addCallsP(first, second);
-		PKB::getInstance().generateCallsPT();
+		PKB::getInstance().addCallsPT(first, second);
 		EXPECT_FALSE(pkb.isCallsPTEmpty());
 
 		PKB::getInstance().addCallsP(second, third);
-		PKB::getInstance().generateCallsPT();
+		PKB::getInstance().addCallsPT(second, third);
+		PKB::getInstance().addCallsPT(first, third);
 		EXPECT_FALSE(pkb.isCallsPTEmpty());
 	}
 
@@ -1871,36 +1871,25 @@ namespace UnitTesting {
 		proc_name first = "first";
 		proc_name second = "second";
 		proc_name third = "third";
-		proc_name fourth = "fourth";
-		proc_name fifth = "fifth";
 
 		PKB::getInstance().addProcedure(first);
 		PKB::getInstance().addProcedure(second);
 		PKB::getInstance().addProcedure(third);
-		PKB::getInstance().addProcedure(fourth);
 
 		PKB::getInstance().addCallsP(first, second);
 		PKB::getInstance().addCallsP(second, third);
-		PKB::getInstance().addCallsP(third, fourth);
-		PKB::getInstance().generateCallsPT();
+
+		PKB::getInstance().addCallsPT(first, second);
+		PKB::getInstance().addCallsPT(first, third);
+		PKB::getInstance().addCallsPT(second, third);
 
 		EXPECT_TRUE(pkb.isCallsPT(first, second));
 		EXPECT_TRUE(pkb.isCallsPT(first, third));
-		EXPECT_TRUE(pkb.isCallsPT(first, fourth));
 		EXPECT_TRUE(pkb.isCallsPT(second, third));
-		EXPECT_TRUE(pkb.isCallsPT(second, fourth));
-		EXPECT_TRUE(pkb.isCallsPT(third, fourth));
-
-		EXPECT_FALSE(pkb.isCallsPT(first, fifth));
-		EXPECT_FALSE(pkb.isCallsPT(second, fifth));
-		EXPECT_FALSE(pkb.isCallsPT(third, fifth));
-		EXPECT_FALSE(pkb.isCallsPT(fourth, fifth));
 
 		EXPECT_FALSE(pkb.isCallsPT(first, first));
 		EXPECT_FALSE(pkb.isCallsPT(second, second));
 		EXPECT_FALSE(pkb.isCallsPT(third, third));
-		EXPECT_FALSE(pkb.isCallsPT(fourth, fourth));
-		EXPECT_FALSE(pkb.isCallsPT(fifth, fifth));
 	}
 
 	TEST_F(PKBAdapterTest, isCallerPT) {
@@ -1915,7 +1904,9 @@ namespace UnitTesting {
 
 		PKB::getInstance().addCallsP(first, second);
 		PKB::getInstance().addCallsP(second, third);
-		PKB::getInstance().generateCallsPT();
+		PKB::getInstance().addCallsPT(first, second);
+		PKB::getInstance().addCallsPT(first, third);
+		PKB::getInstance().addCallsPT(second, third);
 
 		EXPECT_TRUE(pkb.isCallerPT(first));
 		EXPECT_TRUE(pkb.isCallerPT(second));
@@ -1935,7 +1926,9 @@ namespace UnitTesting {
 
 		PKB::getInstance().addCallsP(first, second);
 		PKB::getInstance().addCallsP(second, third);
-		PKB::getInstance().generateCallsPT();
+		PKB::getInstance().addCallsPT(first, second);
+		PKB::getInstance().addCallsPT(first, third);
+		PKB::getInstance().addCallsPT(second, third);
 
 		EXPECT_FALSE(pkb.isCalleePT(first));
 		EXPECT_TRUE(pkb.isCalleePT(second));
@@ -1955,7 +1948,9 @@ namespace UnitTesting {
 
 		PKB::getInstance().addCallsP(first, second);
 		PKB::getInstance().addCallsP(second, third);
-		PKB::getInstance().generateCallsPT();
+		PKB::getInstance().addCallsPT(first, second);
+		PKB::getInstance().addCallsPT(first, third);
+		PKB::getInstance().addCallsPT(second, third);
 
 		std::vector<proc_name> v1 = { first, second };
 		std::vector<proc_name> v2 = pkb.getCallerPT();
@@ -1992,7 +1987,9 @@ namespace UnitTesting {
 
 		PKB::getInstance().addCallsP(first, second);
 		PKB::getInstance().addCallsP(second, third);
-		PKB::getInstance().generateCallsPT();
+		PKB::getInstance().addCallsPT(first, second);
+		PKB::getInstance().addCallsPT(first, third);
+		PKB::getInstance().addCallsPT(second, third);
 
 		std::vector<proc_name> v1 = { second, third };
 		std::vector<proc_name> v2 = pkb.getCalleePT();
@@ -2028,7 +2025,9 @@ namespace UnitTesting {
 
 		PKB::getInstance().addCallsP(first, second);
 		PKB::getInstance().addCallsP(second, third);
-		PKB::getInstance().generateCallsPT();
+		PKB::getInstance().addCallsPT(first, second);
+		PKB::getInstance().addCallsPT(first, third);
+		PKB::getInstance().addCallsPT(second, third);
 
 		std::vector<std::pair<proc_name, proc_name>> v = { {first, second}, {first, third}, {second, third} };
 		EXPECT_EQ(pkb.getCallsPTRelation(), v);

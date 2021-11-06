@@ -184,8 +184,7 @@ void DesignExtractor::validate() {
 			proc_name callee = s->getCallee();
 			if (proc_name_to_id.find(callee) != proc_name_to_id.end()) {
 				call_cache.push_back({ proc_name_to_id[s->getProcName()], proc_name_to_id[callee] });
-			}
-			else {
+			} else {
 				throw std::runtime_error("Call statement calls undefined procedure.");
 			}
 		}
@@ -273,13 +272,13 @@ void DesignExtractor::populateEntities() {
 
 void DesignExtractor::populateRelations() {
 	populateFollows();
-	pkb_instance.generateFollowsT();
+	//pkb_instance.generateFollowsT();
 	populateParent();
-	pkb_instance.generateParentT();
+	//pkb_instance.generateParentT();
 	populateUses();
 	populateModifies();
 	populateCalls();
-	pkb_instance.generateCallsPT();
+	//pkb_instance.generateCallsPT();
 	populateIfs();
 	populateWhiles();
 	populateNext();
@@ -376,7 +375,6 @@ void DesignExtractor::populateCalls() {
 }
 
 void DesignExtractor::populateNext() {
-
 	std::vector<CFG*> cfgs;
 	for (Procedure* p : de_procedures) {
 		CFG* cfg = generateCFG(p->getChild());
@@ -388,7 +386,7 @@ void DesignExtractor::populateNext() {
 	}
 
 	for (proc_index p : call_sequence) {
-		for (stmt_index s: de_procedures[p - OFFSET]->getChild()) {
+		for (stmt_index s : de_procedures[p - OFFSET]->getChild()) {
 			Statement* stmt = de_statements[s - OFFSET];
 			if (stmt->getType() == StmtType::STMT_CALL) {
 				cfgs[p - OFFSET]->call(cfgs[proc_name_to_id[stmt->getCallee()] - OFFSET], s);
@@ -396,7 +394,7 @@ void DesignExtractor::populateNext() {
 		}
 	}
 
-	for (CFG* cfg: cfgs) {
+	for (CFG* cfg : cfgs) {
 		if (cfg->getHeadLabelledProgLine().labels.front() == NON_EXISTING_STMT_NO) {
 			pkb_instance.addCFGBip(cfg);
 		}
@@ -434,8 +432,8 @@ CFG* DesignExtractor::generateCFG(std::vector<stmt_index> indexes) {
 
 	stmt_index parent = de_statements[indexes.front() - OFFSET]->getDirectParent();
 	std::vector<stmt_index> main;
-	for (stmt_index id: indexes) {
-		if (de_statements[id - OFFSET]->getDirectParent() == parent 
+	for (stmt_index id : indexes) {
+		if (de_statements[id - OFFSET]->getDirectParent() == parent
 			&& de_statements[id - OFFSET]->getStmtList() == indexes.front()) {
 			main.push_back(id);
 		}
@@ -449,8 +447,7 @@ CFG* DesignExtractor::generateCFG(std::vector<stmt_index> indexes) {
 		prog_line curr = main[i], next;
 		if (i == main.size() - 1) {
 			next = indexes.back() + 1;
-		}
-		else {
+		} else {
 			next = main[i + 1];
 		}
 
@@ -485,8 +482,7 @@ CFG* DesignExtractor::generateCFG(std::vector<stmt_index> indexes) {
 			cfg->fork(cfg_then, cfg_else, curr);
 
 			delete cfg_then, cfg_else;
-		}
-		else if (container->getType() == StmtType::STMT_WHILE) {
+		} else if (container->getType() == StmtType::STMT_WHILE) {
 			std::vector<stmt_index> scope(next - curr - 1);
 			std::iota(scope.begin(), scope.end(), curr + 1);
 			CFG* cfg_while = generateCFG(scope);
@@ -494,8 +490,7 @@ CFG* DesignExtractor::generateCFG(std::vector<stmt_index> indexes) {
 			cfg->loop(cfg_while, curr);
 
 			delete cfg_while;
-		}
-		else {
+		} else {
 			throw std::runtime_error("CFG build failure. Gap involved non-container statement.");
 		}
 	}
