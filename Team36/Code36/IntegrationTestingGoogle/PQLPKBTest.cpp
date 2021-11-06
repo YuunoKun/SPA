@@ -20,6 +20,7 @@ namespace UnitTesting {
 			PKB::getInstance().addProcedure(p1);
 			PKB::getInstance().addProcedure(p2);
 			PKB::getInstance().addProcedure(p3);
+			PKB::getInstance().addProcedure(p4);
 			PKB::getInstance().addStmt(STMT_IF);
 			PKB::getInstance().addStmt(STMT_IF);
 			PKB::getInstance().addStmt(STMT_WHILE);
@@ -57,6 +58,9 @@ namespace UnitTesting {
 			PKB::getInstance().addWhile(std::stoi(WHILE_LEFT1), WHILE_RIGHT1);
 			PKB::getInstance().addWhile(std::stoi(WHILE_LEFT2), WHILE_RIGHT2);
 			PKB::getInstance().addCallsP(p1, p2);
+			PKB::getInstance().addCallsP(p2, p3);
+			PKB::getInstance().generateCallsPT();
+
 		}
 
 		QuerySystem qs;
@@ -91,9 +95,10 @@ namespace UnitTesting {
 		const std::list<std::string> CONSTANTS = { c1s, c2s, c3s };
 
 		const proc_name p1 = "main";
-		const proc_name p2 = "sub";
-		const proc_name p3 = "sub1";
-		const std::list<std::string> PROCEDURES = { p1, p2, p3 };
+		const proc_name p2 = "sub1";
+		const proc_name p3 = "sub2";
+		const proc_name p4 = "sub3";
+		const std::list<std::string> PROCEDURES = { p1, p2, p3, p4 };
 
 		const std::string IF1 = "1";
 		const std::string IF2 = "2";
@@ -107,6 +112,8 @@ namespace UnitTesting {
 		const std::string ASSIGN2 = "10";
 		const std::string CALL1 = "11";
 		const std::string CALL2 = "12";
+
+		const std::list<std::string> EMPTY_RESULT = {};
 
 		const std::list<std::string> STMTS = { IF1, IF2, WHILE1, WHILE2, READ1, READ2,
 			PRINT1, PRINT2, ASSIGN1, ASSIGN2, CALL1, CALL2 };
@@ -223,7 +230,6 @@ namespace UnitTesting {
 		//const Synonym COMMON_SYNONYM1 = { "cs1" };
 		//const Synonym COMMON_SYNONYM2 = { "cs2" };
 
-		const std::list<std::string> EXPECTED_P_CALLS = { p1 };
 
 		const std::string IF_LEFT1 = IF1;
 		const std::string IF_LEFT2 = IF2;
@@ -247,9 +253,9 @@ namespace UnitTesting {
 		const std::list<std::string> EXPECTED_WHILES2 = { WHILE_LEFT2 };
 		const std::list<std::string> EXPECTED_WHILES3 = { WHILE_LEFT1, WHILE_LEFT2 };
 
+		const std::list<std::string> EXPECTED_P_CALLS = { p1, p2 };
+		const std::list<std::string> EXPECTED_P_CALLS_T = { p2, p3 };
 
-
-		const std::list<std::string> EMPTY_RESULT = {};
 
 		virtual void SetUp() override {
 		}
@@ -492,5 +498,11 @@ namespace UnitTesting {
 		std::list<std::string> ans = qs.processQuery("procedure p, q; Select p such that Calls(p, q) ");
 
 		validateAnswer(EXPECTED_P_CALLS, ans);
+	}
+
+	TEST_F(PQLPKBTest, CallsTTest) {
+		std::list<std::string> ans = qs.processQuery("procedure q; Select q such that Calls*(\"main\", q) ");
+
+		validateAnswer(EXPECTED_P_CALLS_T, ans);
 	}
 }

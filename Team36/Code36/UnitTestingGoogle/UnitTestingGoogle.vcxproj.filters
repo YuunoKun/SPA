@@ -733,6 +733,7 @@
     </Filter>
     <Filter Include="PKB\RelationPreprocessorManager">
       <UniqueIdentifier>{02bb02c6-2c41-49f9-b2f0-ed1c33295826}</UniqueIdentifier>
+	</Filter>
     <Filter Include="PKB\CFGRelationManager">
       <UniqueIdentifier>{d0e3eb59-d00b-4caf-95f4-29bd8152c2b8}</UniqueIdentifier>
     </Filter>
