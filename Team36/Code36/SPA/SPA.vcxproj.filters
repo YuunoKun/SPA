@@ -363,6 +363,9 @@
 		<ClCompile Include="..\source\QueryTupleNode.cpp">
 			<Filter>Source Files\PQL\QueryObject</Filter>
 		</ClCompile>
+		<ClCompile Include="..\source\QueryTupleGraph.cpp">
+			<Filter>Source Files\PQL\QueryObject</Filter>
+		</ClCompile>
 	</ItemGroup>
 	<ItemGroup>
 		<ClInclude Include="..\source\Parser.h">
