@@ -2,6 +2,7 @@
 #include <stdexcept>
 #include "Utility.h"
 #include <algorithm>
+#include "QueryTupleOptimizer.h"
 
 QueryResult::QueryResult() {
 	have_result = true;
@@ -109,8 +110,9 @@ void QueryResult::getSelectedEntitiesMergedTable(std::vector<Entity> selected, s
 		}
 	}
 
+	QueryTupleOptimizer optimizer;
 	std::list<std::pair<Entity, Entity>> headers = getAllTableHeaderWithTwoSynonym();
-	std::list<std::list<std::pair<Entity, Entity>>> grouped_header = { headers };
+	std::list<std::list<std::pair<Entity, Entity>>> grouped_header = optimizer.groupCommonEntities(headers);
 
 	for (auto& group : grouped_header) {
 		std::vector<Entity> group_entity_list = Utility::getEntityListFromPair(group);
@@ -289,8 +291,9 @@ void QueryResult::getResult(Entity e, std::list<std::string>& out) {
 }
 
 void QueryResult::updateHaveResultAfterTableJoin() {
+	QueryTupleOptimizer optimizer;
 	std::list<std::pair<Entity, Entity>> headers = getAllTableHeaderWithTwoSynonym();
-	std::list<std::list<std::pair<Entity, Entity>>> grouped_header = { headers };
+	std::list<std::list<std::pair<Entity, Entity>>> grouped_header = optimizer.groupCommonEntities(headers);
 
 	for (auto& group : grouped_header) {
 		if (joinResultTables(group)) {
