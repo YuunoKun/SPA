@@ -32,7 +32,7 @@ void QueryTupleGraph::addEdge(int v, int w) {
 	adj[w].push_back(v);
 }
 
-std::list<std::list<std::pair<int, int>>> QueryTupleGraph::connectedComponents() {
+std::list<std::list<int>> QueryTupleGraph::connectedComponents() {
 	std::list<std::list<int>> each_group;
 
 	// Mark all the vertices as not visited
@@ -46,9 +46,10 @@ std::list<std::list<std::pair<int, int>>> QueryTupleGraph::connectedComponents()
 			// print all reachable vertices
 			// from v
 			std::list<int> dfs = DFSUtil(v, visited);
+			each_group.push_back(dfs);
 		}
 	}
 	delete[] visited;
 
-	//group.push_back(each_group);
+	return each_group;
 }

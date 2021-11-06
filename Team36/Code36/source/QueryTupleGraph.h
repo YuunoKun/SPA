@@ -8,7 +8,7 @@ public:
 
 	QueryTupleGraph(int V);
 	void addEdge(int v, int w);
-	std::list<std::list<std::pair<int, int>>> connectedComponents();
+	std::list<std::list<int>> connectedComponents();
 
 private:
 

@@ -55,7 +55,20 @@ std::list<std::list<std::pair<Entity, Entity>>> QueryTupleOptimizer::groupCommon
 		g.addEdge(first_ent_no, second_ent_no);
 	}
 
-	g.connectedComponents(this->result);
+	std::list<std::list<int>> raw_result = g.connectedComponents();
+	std::list<std::list<Entity>> intermediary_result;
+
+	for (std::list<int> el : raw_result) {
+		std::list<Entity> entities;
+		for (int integer : el) {
+			for (std::pair<Entity, int> pr : entityToInt) {
+				if (pr.second == integer) {
+					entities.push_back(pr.first);
+				}
+			}
+		}
+		intermediary_result.push_back(entities);
+	}
 
 	return this->result;
 }
