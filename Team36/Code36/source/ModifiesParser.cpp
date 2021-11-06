@@ -16,13 +16,11 @@ void ModifiesParser::parse(Query& query, std::vector<QueryToken> token_chain, Qu
         if (separated_params[0][0].type == QueryToken::WILDCARD) {
             query.setIsSemanticError("Invalid parameters for Modifies");
         }
-    }
-    else {
+    } else {
         // Not stmtRef
         if (Utility::isEntRef(query, separated_params[0], EntityType::PROCEDURE)) {
             is_MODIFIES_S = false;
-        }
-        else {
+        } else {
             //Not stmtRef or entRef
             query.setIsSemanticError("Invalid parameters for Modifies");
         }
@@ -39,8 +37,7 @@ void ModifiesParser::parse(Query& query, std::vector<QueryToken> token_chain, Qu
             query.addRelation(RelRef(RelType::MODIFIES_S, Utility::setStmtRef(query, stmt, EntityType::STMT),
                 Utility::setEntRef(query, separated_params[1], EntityType::VARIABLE)));
         }
-    }
-    else {
+    } else {
         if (!Utility::checkIsSemanticError(query)) {
             query.addRelation(RelRef(RelType::MODIFIES_P, Utility::setEntRef(query, separated_params[0], EntityType::PROCEDURE),
                 Utility::setEntRef(query, separated_params[1], EntityType::VARIABLE)));

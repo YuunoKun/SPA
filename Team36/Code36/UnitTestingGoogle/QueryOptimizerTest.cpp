@@ -105,7 +105,7 @@ namespace UnitTesting {
 		RelRef rel_ref_two_synonym(FOLLOWS_T, { STMT, Synonym("a") }, { STMT, Synonym("b") });
 		Pattern pattern_no_synonym({ ASSIGN, "1" }, { WILD }, "", true);
 		Pattern pattern_one_synonym({ ASSIGN, Synonym("a") }, { WILD }, "", true);
-		Pattern patternTwoSynonym({ ASSIGN, Synonym("a") }, { VARIABLE, Synonym("b")}, "", true);
+		Pattern patternTwoSynonym({ ASSIGN, Synonym("a") }, { VARIABLE, Synonym("b") }, "", true);
 
 		std::vector<Clause> unordered_clauses, ordered_clauses;
 		unordered_clauses.push_back({ rel_ref_one_synonym });
@@ -154,7 +154,7 @@ namespace UnitTesting {
 		RelRef compute_next_t_data(NEXT_T, { STMT, Synonym("a") }, { STMT, Synonym("b") });
 		RelRef no_synonym_graph_search_before_precompute(NEXT_T, { STMT, "1" }, { STMT, "2" });
 		RelRef one_synonym_graph_search_before_precompute1(NEXT_T, { STMT, Synonym("a") }, { STMT, "2" });
-		RelRef one_synonym_graph_search_before_precompute2(NEXT_T, { STMT, "2" },  { STMT, Synonym("a") });
+		RelRef one_synonym_graph_search_before_precompute2(NEXT_T, { STMT, "2" }, { STMT, Synonym("a") });
 		RelRef two_synonym_next_after_compute(NEXT_T, { STMT, Synonym("a") }, { STMT, Synonym("b") });
 
 
@@ -221,7 +221,7 @@ namespace UnitTesting {
 		QueryOptimizer optimizer(false, true);
 		RelRef no_synonym1(AFFECT, { WILD }, { WILD });
 		RelRef no_synonym2(AFFECT, { STMT, "1" }, { WILD });
-		RelRef no_synonym3(AFFECT, { WILD } , { STMT, "1" });
+		RelRef no_synonym3(AFFECT, { WILD }, { STMT, "1" });
 		RelRef one_synonym1(AFFECT, { STMT, Synonym("a") }, { WILD });
 		RelRef one_synonym2(AFFECT, { WILD }, { STMT, Synonym("a") });
 		RelRef compute_affect_data(AFFECT, { STMT, Synonym("a") }, { STMT, Synonym("b") });
@@ -577,7 +577,7 @@ namespace UnitTesting {
 		QueryOptimizer optimizer;
 
 		RelRef stmt_constant_synonym1(FOLLOWS, { STMT, Synonym("a") }, { STMT, "1" });
-		RelRef stmt_constant_synonym2(FOLLOWS, { IF, "1"}, {STMT, Synonym("a") });
+		RelRef stmt_constant_synonym2(FOLLOWS, { IF, "1" }, { STMT, Synonym("a") });
 		RelRef if_constant_synonym(FOLLOWS, { STMT, Synonym("a") }, { STMT, "1" });
 		Pattern stmt_constant_synonym3({ ASSIGN, "1" }, { WILD }, "", true);
 

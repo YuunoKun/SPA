@@ -31,8 +31,8 @@ Debug\AutoTester.exe ..\Tests36\iter3_nextT_source.txt ..\Tests36\iter3_nextT_qu
 Debug\AutoTester.exe ..\Tests36\iter3_boolean_source.txt ..\Tests36\iter3_boolean_queries.txt .\Tests\out-27-iter3_boolean_queries.xml
 Debug\AutoTester.exe ..\Tests36\iter3_tuple_source.txt ..\Tests36\iter3_tuple_queries.txt .\Tests\out-28-iter3_tuple_queries.xml
 Debug\AutoTester.exe ..\Tests36\iter3_with_source.txt ..\Tests36\iter3_with_queries.txt .\Tests\out-29-iter3_with_queries.xml
-Debug\AutoTester.exe ..\Tests36\iter3_Affects_source.txt ..\Tests36\iter3_Affects_queries.txt .\Tests\out-30-iter3_Affects_queries.xml
-Debug\AutoTester.exe ..\Tests36\iter3_AffectsT_source.txt ..\Tests36\iter3_AffectsT_queries.txt .\Tests\out-31-iter3_AffectsT_queries.xml
+Debug\AutoTester.exe ..\Tests36\iter3_Affects_source.txt ..\Tests36\iter3_Affects_queries.txt .\Tests\out-30-iter3_affects_queries.xml
+Debug\AutoTester.exe ..\Tests36\iter3_AffectsT_source.txt ..\Tests36\iter3_AffectsT_queries.txt .\Tests\out-31-iter3_affectsT_queries.xml
 Debug\AutoTester.exe ..\Tests36\iter3_nextbip_source.txt ..\Tests36\iter3_nextbip_queries.txt .\Tests\out-32-iter3_nextbip_queries.xml
 Debug\AutoTester.exe ..\Tests36\iter3_nextbipT_source.txt ..\Tests36\iter3_nextbipT_queries.txt .\Tests\out-33-iter3_nextbipT_queries.xml
 Debug\AutoTester.exe ..\Tests36\iter3_affectsbip_source.txt ..\Tests36\iter3_affectsbip_queries.txt .\Tests\out-34-iter3_affectsbip_queries.xml

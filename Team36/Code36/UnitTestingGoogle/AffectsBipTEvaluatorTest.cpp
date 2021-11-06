@@ -8,9 +8,18 @@ namespace UnitTesting {
 	class AffectsBipTEvaluatorTest : public testing::Test {
 	protected:
 		AffectsBipTEvaluatorTest() {
+			cfg->add(1);
+			cfg->add(2);
+			cfg->add(3);
+			cfg->add(4);
+		}
+
+		~AffectsBipTEvaluatorTest() {
+			delete cfg;
 		}
 		virtual void SetUp() override {
 			PKB::getInstance().resetCache();
+
 
 			PKB::getInstance().addStmt(STMT_ASSIGN);
 			PKB::getInstance().addStmt(STMT_ASSIGN);
@@ -38,8 +47,11 @@ namespace UnitTesting {
 			PKB::getInstance().addUsesS(2, v1);
 			PKB::getInstance().addModifiesS(2, v2);
 			PKB::getInstance().addUsesS(3, v2);
+			PKB::getInstance().addCFGBip(cfg);
 			pkb.getRelationManager().reset();
 		}
+
+		CFG* cfg = new CFG();
 
 		PKBAdapter pkb;
 		AffectsBipTEvaluator evaluator;
@@ -64,11 +76,16 @@ namespace UnitTesting {
 
 		PKB::getInstance().addStmt(STMT_ASSIGN);
 		PKB::getInstance().addStmt(STMT_ASSIGN);
+		PKB::getInstance().addStmt(STMT_ASSIGN);
+		PKB::getInstance().addStmt(STMT_ASSIGN);
 		PKB::getInstance().addProcedure(p);
 		PKB::getInstance().addProcContains(p, 1);
 		PKB::getInstance().addProcContains(p, 2);
+		PKB::getInstance().addProcContains(p, 3);
+		PKB::getInstance().addProcContains(p, 4);
+		PKB::getInstance().addCFGBip(cfg);
+		pkb.getRelationManager().reset();
 		EXPECT_FALSE(evaluator.evaluateWildAndWild());
-		PKB::getInstance().addNext(1, 2);
 		PKB::getInstance().addVariable(v1);
 		PKB::getInstance().addModifiesS(1, v1);
 		PKB::getInstance().addUsesS(2, v1);
@@ -110,7 +127,7 @@ namespace UnitTesting {
 	}
 
 	TEST_F(AffectsBipTEvaluatorTest, evaluateSynonymAndSynonym) {
-		std::vector<std::pair<StmtInfo, StmtInfo>> v = pkb.getRelationManager().getAllAffectsTRelation();
+		std::vector<std::pair<StmtInfo, StmtInfo>> v = pkb.getRelationManager().getAllAffectsBipTRelation();
 		Entity left = { STMT, Synonym{"a"} };
 		Entity right = { STMT, Synonym{"b"} };
 		std::pair<Entity, Entity> header = { left, right };
@@ -150,7 +167,7 @@ namespace UnitTesting {
 	}
 
 	TEST_F(AffectsBipTEvaluatorTest, evaluateWildAndSynonym) {
-		std::vector<StmtInfo> v = pkb.getRelationManager().getAffectedT();
+		std::vector<StmtInfo> v = pkb.getRelationManager().getAffectedBipT();
 		Entity header = { STMT, Synonym{"a"} };
 		ResultTable t(header, v);
 		EXPECT_EQ(evaluator.evaluateWildAndSynonym(header), t);
@@ -172,7 +189,7 @@ namespace UnitTesting {
 	}
 
 	TEST_F(AffectsBipTEvaluatorTest, evaluateSynonymAndWild) {
-		std::vector<StmtInfo> v = pkb.getRelationManager().getAffectingT();
+		std::vector<StmtInfo> v = pkb.getRelationManager().getAffectingBipT();
 		Entity header = { STMT, Synonym{"a"} };
 		ResultTable t(header, v);
 		EXPECT_EQ(evaluator.evaluateSynonymAndWild(header), t);
@@ -257,7 +274,7 @@ namespace UnitTesting {
 	}
 
 	TEST_F(AffectsBipTEvaluatorTest, evaluateSynonymAndConstant) {
-		std::vector<StmtInfo> v = { p2, p1 };
+		std::vector<StmtInfo> v = { p1, p2 };
 		Entity header = { STMT, Synonym{"a"} };
 		Entity match = { ASSIGN, "3" };
 		ResultTable t(header, v);

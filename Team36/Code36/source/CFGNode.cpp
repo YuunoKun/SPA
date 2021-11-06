@@ -107,8 +107,7 @@ CFGNode* CFGNode::getNextCall() {
 CFGNode* CFGNode::getPrevMain() {
 	if (prev.size() > 0) {
 		return prev.front();
-	}
-	else {
+	} else {
 		return nullptr;
 	}
 }
@@ -116,8 +115,7 @@ CFGNode* CFGNode::getPrevMain() {
 CFGNode* CFGNode::getPrevBranch() {
 	if (prev.size() > 0) {
 		return prev.back();
-	}
-	else {
+	} else {
 		return nullptr;
 	}
 }

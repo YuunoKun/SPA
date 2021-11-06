@@ -29,35 +29,6 @@ namespace UnitTesting {
 			s10, s11, s12, s13, s14, s15, s16
 		};
 
-		//procedure Sally{
-		//01	x = 5;
-		//02	v = z;
-		//03	print v;
-		//}
-		//	procedure Bill{
-		//04      x = 5;
-		//05      call Mary;
-		//06      y = x + 6;
-		//07      call John;
-		//08      z = x * y + 2; }
-
-		//procedure Mary{
-		//09      y = x * 3;
-		//10      call John;
-		//11      z = x + y; }
-
-		//procedure John{
-		//12      if (i > 0) then {
-		//13              x = x + z;
-		//14              y = x;
-		// } }
-		//		  else {
-		//15          while (v > 5) {
-		//16               y = x * y;
-		//			  }
-		//         }
-		//	}
-
 		std::vector<std::pair<StmtInfo, StmtInfo>> expected_pairs = {
 			{s4, s6}, {s4, s8}, {s4, s9}, {s4, s11}, {s4, s13}, {s4, s16},
 			{s6, s8}, {s6, s16},
@@ -69,13 +40,13 @@ namespace UnitTesting {
 
 		std::vector<std::pair<LabelledProgLine, LabelledProgLine>> test_next_list = {
 			{{1,{0}}, {2,{0}}}, {{2,{0}}, {3,{0}}}, {{4,{0}}, {5,{0}}},
-			{{5,{0}}, {9,{0,5}}}, {{9,{0,5}}, {10,{0,5}}}, 
-			{{10,{0,5}}, {12,{0,5,10}}}, {{12,{0,5,10}},{13,{0,5,10}}}, {{13,{0,5,10}}, {14,{0,5,10}}}, 
+			{{5,{0}}, {9,{0,5}}}, {{9,{0,5}}, {10,{0,5}}},
+			{{10,{0,5}}, {12,{0,5,10}}}, {{12,{0,5,10}},{13,{0,5,10}}}, {{13,{0,5,10}}, {14,{0,5,10}}},
 			{{12,{0,5,10}},{15,{0,5,10}}}, {{15,{0,5,10}},{16,{0,5,10}}}, {{16,{0,5,10}},{15,{0,5,10}}},
 			{{14, {0,5,10}}, {11, {0,5}}}, {{15, {0,5,10}}, {11, {0,5}}},
-			{{11,{0,5}}, {6,{0}}}, {{6,{0}}, {7,{0}}}, 
+			{{11,{0,5}}, {6,{0}}}, {{6,{0}}, {7,{0}}},
 			{{7,{0}}, {12,{0,7}}}, {{12,{0,7}},{13,{0,7}}}, {{13,{0,7}}, {14,{0,7}}},
-			{{12,{0,7}},{15,{0,7}}}, {{15,{0,7}},{16,{0,7}}}, {{16,{0,7}},{15,{0,7}}}, 
+			{{12,{0,7}},{15,{0,7}}}, {{15,{0,7}},{16,{0,7}}}, {{16,{0,7}},{15,{0,7}}},
 			{{14,{0,7}}, {8,{0}}}, {{15,{0,7}}, {8,{0}}}
 		};
 
@@ -115,7 +86,7 @@ namespace UnitTesting {
 
 		RelationTable<proc_name, stmt_index> test_procS_table = RelationTable<proc_name, stmt_index>(test_procS_list);
 
-		std::vector<LabelledProgLine> first_proglines = {{1,{0}},{4,{0}}};
+		std::vector<LabelledProgLine> first_proglines = { {1,{0}},{4,{0}} };
 
 		AffectsBipPreprocessor processor = AffectsBipPreprocessor(test_next_table,
 			test_usesS_table, test_modifiesS_table, test_procS_table, first_proglines, stmt_list);

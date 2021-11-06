@@ -29,35 +29,6 @@ namespace UnitTesting {
 			s10, s11, s12, s13, s14, s15, s16
 		};
 
-		//procedure Sally{
-		//01	x = 5;
-		//02	v = z;
-		//03	print v;
-		//}
-		//	procedure Bill{
-		//04      x = 5;
-		//05      call Mary;
-		//06      y = x + 6;
-		//07      call John;
-		//08      z = x * y + 2; }
-
-		//procedure Mary{
-		//09      y = x * 3;
-		//10      call John;
-		//11      z = x + y; }
-
-		//procedure John{
-		//12      if (i > 0) then {
-		//13              x = x + z;
-		//14              y = x;
-		// } }
-		//		  else {
-		//15          while (v > 5) {
-		//16               y = x * y;
-		//			  }
-		//         }
-		//	}
-
 		std::vector<std::pair<StmtInfo, StmtInfo>> test_next_list = {
 			{s1, s2}, {s2, s3}, {s4, s5}, {s5, s9}, {s6, s7}, {s7, s12}, {s9, s10}, {s10, s12},
 			{s11, s6}, {s12, s13}, {s12, s15}, {s13, s14}, {s14, s8},

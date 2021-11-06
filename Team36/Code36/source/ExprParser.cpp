@@ -11,13 +11,11 @@ ExprNode ExprParser::parse(std::string str) {
 	std::deque<std::string> strs = sliceString(str);
 	if (strs.size() == 0) {
 		return ExprNode(EXPR_NULL);
-	}
-	else {
+	} else {
 		ExprNode res = parseExpression(strs);
 		if (strs.size() == 0) {
 			return res;
-		}
-		else {
+		} else {
 			throw SyntacticErrorException("ExprParser failure : Syntax error while parsing expression.");
 		}
 	}
@@ -49,8 +47,7 @@ std::deque<std::string> ExprParser::sliceString(const std::string str) {
 		default:
 			if (isalnum(c)) {
 				segments.rbegin()->push_back(c);
-			}
-			else {
+			} else {
 				throw SyntacticErrorException("ExprParser failure : Invalid symbol detected in expression.");
 			}
 			break;
@@ -71,11 +68,9 @@ ExprNode ExprParser::parseExpression(std::deque<std::string>& dq) {
 		ExprNode parent;
 		if (*dq.begin() == PLUS_SIGN_S) {
 			parent = ExprNode(ExprSymbol::EXPR_PLUS);
-		}
-		else if (*dq.begin() == MINUS_SIGN_S) {
+		} else if (*dq.begin() == MINUS_SIGN_S) {
 			parent = ExprNode(ExprSymbol::EXPR_MINUS);
-		}
-		else if (*dq.begin() == LEFT_PARENTHESIS_S) {
+		} else if (*dq.begin() == LEFT_PARENTHESIS_S) {
 			protectedPopFront(dq);
 			ExprNode node = parseExpression(dq);
 			protectedPopFront(dq, RIGHT_PARENTHESIS_S);
@@ -83,8 +78,7 @@ ExprNode ExprParser::parseExpression(std::deque<std::string>& dq) {
 			parent.setRHS(node);
 			lhs = parent;
 			continue;
-		}
-		else {
+		} else {
 			break;
 		}
 		protectedPopFront(dq);
@@ -103,14 +97,11 @@ ExprNode ExprParser::parseTerm(std::deque<std::string>& dq) {
 		ExprNode parent;
 		if (*dq.begin() == ASTERISK_S) {
 			parent = ExprNode(ExprSymbol::EXPR_MUL);
-		}
-		else if (*dq.begin() == SLASH_S) {
+		} else if (*dq.begin() == SLASH_S) {
 			parent = ExprNode(ExprSymbol::EXPR_DIV);
-		}
-		else if (*dq.begin() == PERCENT_SIGN_S) {
+		} else if (*dq.begin() == PERCENT_SIGN_S) {
 			parent = ExprNode(ExprSymbol::EXPR_MOD);
-		}
-		else if (*dq.begin() == LEFT_PARENTHESIS_S) {
+		} else if (*dq.begin() == LEFT_PARENTHESIS_S) {
 			protectedPopFront(dq);
 			ExprNode node = parseExpression(dq);
 			protectedPopFront(dq, RIGHT_PARENTHESIS_S);
@@ -119,8 +110,7 @@ ExprNode ExprParser::parseTerm(std::deque<std::string>& dq) {
 			lhs = parent;
 
 			continue;
-		}
-		else {
+		} else {
 			break;
 		}
 		protectedPopFront(dq);
@@ -141,14 +131,12 @@ ExprNode ExprParser::parseFactor(std::deque<std::string>& dq) {
 		ExprNode node = ExprNode(*dq.begin());
 		protectedPopFront(dq);
 		return node;
-	}
-	else if (*dq.begin() == LEFT_PARENTHESIS_S) {
+	} else if (*dq.begin() == LEFT_PARENTHESIS_S) {
 		protectedPopFront(dq);
 		ExprNode node = parseExpression(dq);
 		protectedPopFront(dq, RIGHT_PARENTHESIS_S);
 		return node;
-	}
-	else {
+	} else {
 		throw SyntacticErrorException("ExprParser failure : Possible syntax error while parsing expression.");
 	}
 }
@@ -156,8 +144,7 @@ ExprNode ExprParser::parseFactor(std::deque<std::string>& dq) {
 void ExprParser::protectedPopFront(std::deque<std::string>& dq) {
 	if (dq.empty()) {
 		throw SyntacticErrorException("ExprParser failure : Unexpected end of expression.");
-	}
-	else {
+	} else {
 		dq.pop_front();
 	}
 }
@@ -165,11 +152,9 @@ void ExprParser::protectedPopFront(std::deque<std::string>& dq) {
 void ExprParser::protectedPopFront(std::deque<std::string>& dq, std::string str) {
 	if (dq.empty()) {
 		throw SyntacticErrorException("ExprParser failure : Unexpected end of expression.");
-	}
-	else if(*dq.begin() != str) {
+	} else if (*dq.begin() != str) {
 		throw SyntacticErrorException("ExprParser failure : Invalid expression.");
-	}
-	else {
+	} else {
 		dq.pop_front();
 	}
 }

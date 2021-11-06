@@ -57,6 +57,10 @@ namespace UnitTesting {
 			PKB::getInstance().generateFollowsT();
 			PKB::getInstance().generateParentT();
 			PKB::getInstance().generateCallsPT();
+
+			for (unsigned int i = 0; i < ALL_RESULT.size(); i++) {
+				ALL_RESULT[i].sort();
+			}
 		}
 
 		~QueryEvaluatorRelationTest() override {
@@ -89,7 +93,9 @@ namespace UnitTesting {
 		}
 
 		void validate(Query q, std::list<std::string> result, int i, int j) {
-			EXPECT_EQ(evaluator.evaluateQuery(q), result) << "Error at results : " << i + 1 << " : " << j + 1;
+			std::list<std::string> query_result = evaluator.evaluateQuery(q);
+			query_result.sort();
+			EXPECT_EQ(query_result, result) << "Error at results : " << i + 1 << " : " << j + 1;
 		}
 
 		void validate(RelRef relation, int i) {
@@ -271,7 +277,7 @@ namespace UnitTesting {
 		// select Boolean
 		const Entity SELECT_BOOLEAN = { BOOLEAN };
 
-		const std::vector<std::list<std::string>> ALL_RESULT = {
+		std::vector<std::list<std::string>> ALL_RESULT = {
 			ALL_VARIABLE , ALL_CONSTANT , ALL_PROCEDURE, ALL_STMT, ALL_PROG_LINE, ALL_IF,
 			ALL_WHILE, ALL_READ, ALL_PRINT, ALL_ASSIGN, ALL_CALL };
 
@@ -299,7 +305,9 @@ namespace UnitTesting {
 			Query q;
 			Entity selected = ALL_SELECT[i];
 			q.addSelected(selected);
-			EXPECT_EQ(evaluator.evaluateQuery(q), ALL_RESULT[i]) << "Error at results : " << i + 1;
+			std::list<std::string> result = evaluator.evaluateQuery(q);
+			result.sort();
+			EXPECT_EQ(result, ALL_RESULT[i]) << "Error at results : " << i + 1;
 		}
 	}
 

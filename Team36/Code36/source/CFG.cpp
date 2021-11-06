@@ -16,8 +16,7 @@ CFG::CFG() {
 CFG::~CFG() {
 	if (isInvalidCFG()) {
 		delete tail;
-	}
-	else {
+	} else {
 		delete head;
 	}
 }
@@ -64,14 +63,11 @@ void CFG::add(prog_line new_line) {
 		head->setNextMain(tail);
 		tail->setPrevMain(head);
 		head->setPrevMain(nullptr);
-	}
-	else if (new_line <= tail->getPrevMain()->getProgramLines().back()) {
+	} else if (new_line <= tail->getPrevMain()->getProgramLines().back()) {
 		return;
-	}
-	else if (new_line == tail->getPrevMain()->getProgramLines().back() + 1) {
+	} else if (new_line == tail->getPrevMain()->getProgramLines().back() + 1) {
 		tail->getPrevMain()->insertLine(new_line);
-	}
-	else {
+	} else {
 		CFGNode* new_node = new CFGNode();
 		new_node->insertLine(new_line);
 		tail->getPrevMain()->setNextMain(new_node);
@@ -152,8 +148,7 @@ void CFG::fork(CFG* cfg_if, CFG* cfg_else, prog_line line_attached) {
 		}
 		cfg_else->getTail()->setInvalid();
 		cfg_else->setHead(nullptr);
-	}
-	else {
+	} else {
 		throw std::runtime_error("Unable to fork CFG. Target fork start already has a branch.");
 	}
 }
@@ -172,8 +167,7 @@ void CFG::call(CFG* cfg_call, prog_line call_node) {
 	auto label_nodes = [](CFGNode* self, prog_line from, CFGNode* to) {
 		if (self->isVisited()) {
 			return false;
-		}
-		else {
+		} else {
 			self->addLabel(from);
 			self->toggleVisited();
 		}
@@ -274,7 +268,7 @@ std::vector<std::pair<prog_line, prog_line>> CFG::getNextBip() {
 					throw std::runtime_error("Error traversing CFG for NextBip. Invalid call return.");
 				}
 			}
-			
+
 			if (!to->isTermination()) {
 				result.insert({ node->getProgramLines().back(), to->getProgramLines().front() });
 			}
@@ -404,8 +398,7 @@ void CFG::resetAllVisited() {
 			if (node->isVisited()) {
 				node->toggleVisited();
 				return true;
-			}
-			else {
+			} else {
 				return false;
 			}
 		};
@@ -421,8 +414,7 @@ CFGNode* CFG::makeStandalone(prog_line target_line) {
 
 	if (target_node->getProgramLines().size() == 1) {
 		return target_node;
-	}
-	else if (target_node->getProgramLines().size() > 1) {
+	} else if (target_node->getProgramLines().size() > 1) {
 		std::vector<prog_line> to_split = target_node->getProgramLines();
 		std::vector<prog_line>::iterator target_it = find(to_split.begin(), to_split.end(), target_line);
 
@@ -451,7 +443,7 @@ CFGNode* CFG::makeStandalone(prog_line target_line) {
 			curr = curr->getNextMain();
 			curr->setProgramLines(std::vector<prog_line>(target_it + 1, to_split.end()));
 		}
-		
+
 		if (next_main) {
 			curr->setNextMain(next_main);
 			*find(next_main->getPrev().begin(), next_main->getPrev().end(), start) = curr;
@@ -462,8 +454,7 @@ CFGNode* CFG::makeStandalone(prog_line target_line) {
 		}
 
 		return res;
-	}
-	else {
+	} else {
 		throw std::runtime_error("Unable to perform action on CFG. Cannot split empty node.");
 	}
 }

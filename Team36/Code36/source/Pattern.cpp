@@ -17,7 +17,7 @@ Pattern::Pattern(Entity pattern_type, Entity left_expression, std::string expr, 
 	this->left_expression = left_expression;
 	if (expr == "") {
 		//empty
-	}else {
+	} else {
 		ExprParser expr_parser;
 		this->expression = expr_parser.parse(expr);
 	}
@@ -40,7 +40,7 @@ Pattern::Pattern(Entity pattern_type, Entity left_expression) {
 	this->is_wild = true;
 }
 
-Pattern::Pattern(){
+Pattern::Pattern() {
 }
 
 Entity Pattern::getPatternType() {
@@ -58,7 +58,6 @@ expr Pattern::getExpression() {
 bool Pattern::isWild() {
 	return is_wild;
 }
-
 
 //TODO: compare expression when == TNode is updated
 bool Pattern::operator==(const Pattern& pattern) const {

@@ -24,7 +24,6 @@ ExprNode::ExprNode() {
 	symbol = ExprSymbol::EXPR_NULL;
 }
 
-
 ExprNode::~ExprNode() {
 	delete lhs;
 	delete rhs;
@@ -69,8 +68,7 @@ bool ExprNode::contains(ExprNode* expr) {
 
 	if (this->equals(expr)) {
 		return true;
-	}
-	else {
+	} else {
 		return (lhs && lhs->contains(expr)) || (rhs && rhs->contains(expr));
 	}
 }
@@ -78,8 +76,7 @@ bool ExprNode::contains(ExprNode* expr) {
 bool ExprNode::equals(ExprNode* expr) {
 	if (!this && !expr) {
 		return true;
-	}
-	else if (!this) {
+	} else if (!this) {
 		return false;
 	}
 
@@ -90,15 +87,12 @@ bool ExprNode::equals(ExprNode* expr) {
 
 		if ((lhs && !expr->getLHS()) || (!lhs && expr->getLHS()) || (rhs && !expr->getRHS()) || (!rhs && expr->getRHS())) {
 			return false;
-		}
-		else {
+		} else {
 			if (lhs == expr->getLHS()) {
 				return rhs->equals(expr->getRHS());
-			}
-			else if (rhs == expr->getRHS()) {
+			} else if (rhs == expr->getRHS()) {
 				return lhs->equals(expr->getLHS());
-			}
-			else {
+			} else {
 				return lhs->equals(expr->getLHS()) && rhs->equals(expr->getRHS());
 			}
 		}
@@ -106,7 +100,6 @@ bool ExprNode::equals(ExprNode* expr) {
 
 	return false;
 }
-
 
 bool ExprNode::operator==(const ExprNode& other) const {
 	if (symbol == other.symbol && value == other.value) {

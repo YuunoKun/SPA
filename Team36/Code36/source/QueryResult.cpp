@@ -6,6 +6,13 @@ QueryResult::QueryResult() {
 	have_result = true;
 }
 
+QueryResult::~QueryResult() {
+	for (auto& result : results) {
+		delete result;
+	}
+	results.clear();
+}
+
 bool QueryResult::haveResult() {
 	return have_result;
 }
@@ -30,35 +37,50 @@ bool QueryResult::isInTables(Entity e) {
 	return false;
 }
 
-void QueryResult::addResult(ResultTable t) {
+void QueryResult::addResult(ResultTable& t) {
 	if (t.isEmpty()) {
 		have_result = false;
 		return;
 	}
 	//If new result table cannot be merge
 	if (!isInTables(t.getHeaders())) {
-		results.push_back(t);
+		ResultTable* new_result = new ResultTable(t);
+		results.push_back(new_result);
 		addHeader(t.getHeaders());
 		return;
 	}
 	addHeader(t.getHeaders());
 
 	//Common header found, began merge
-	std::vector<ResultTable> new_results;
-	while (!results.empty()) {
-		ResultTable r = results.back();
-		results.pop_back();
-		bool merged = t.merge(r);
-		if (merged && t.isEmpty()) {
+	ResultTable* holder = nullptr;
+	auto& it = results.begin();
+	while (it != results.end()) {
+		bool merged = (*it)->merge(t);
+		if (merged && (*it)->isEmpty()) {
 			have_result = false;
 			return;
-		}else if(!merged) {
-			new_results.emplace_back(r);
+		} else if (merged) {
+			holder = *it;
+			it++;
+			break;
+		} else {
+			it++;
 		}
 	}
 
-	new_results.emplace_back(t);
-	results = new_results;
+	while (it != results.end()) {
+		bool merged = holder->merge(**it);
+		if (merged && holder->isEmpty()) {
+			have_result = false;
+			return;
+		} else if (merged) {
+			delete *it;
+			it = results.erase(it);
+			break;
+		} else {
+			it++;
+		}
+	}
 }
 
 void QueryResult::addHeader(std::vector<Entity> v) {
@@ -67,33 +89,22 @@ void QueryResult::addHeader(std::vector<Entity> v) {
 	}
 }
 
-ResultTable QueryResult::getResults(std::vector<Entity> selected) {
-	std::list<ResultTable> tables;
+void QueryResult::getResults(std::vector<Entity>& selected, ResultTable& out) {
 	for (auto& result : results) {
-		std::vector<Entity> common = result.getCommonHeaders(selected);
+		std::vector<Entity> common = result->getCommonHeaders(selected);
 		if (common.empty()) {
 			continue;
 		}
-		selected = Utility::removeEntities(selected, common);
-		tables.emplace_back(result.getResultTable(common));
+		selected = Utility::getEntitiesExclude(selected, common);
+		out.joinTable(result->getResultTable(common));
 	}
-	if (tables.size() == 1) {
-		return tables.front();
-	}
-	ResultTable resultTable = tables.front();
-	tables.pop_front();
-	while (!tables.empty()) {
-		resultTable.joinTable(tables.front());
-		tables.pop_front();
-	}
-
-	return resultTable;
 }
 
-std::list<std::string> QueryResult::getResult(Entity e) {
+void QueryResult::getResult(Entity e, std::list<std::string>& out) {
 	for (auto& table : results) {
-		if (table.isInTable(e)) {
-			return table.getEntityResult(e);
+		if (table->isInTable(e)) {
+			table->getEntityResult(e, out);
+			return;
 		}
 	}
 	throw std::domain_error("Invalid Entity, Source: QueryResult.getResult");

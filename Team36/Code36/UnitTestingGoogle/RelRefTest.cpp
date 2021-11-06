@@ -16,11 +16,9 @@ namespace UnitTesting {
 			try {
 				RelRef invalidEntityUseP(USES_P, it, it);
 				FAIL();
-			}
-			catch (std::invalid_argument const& err) {
+			} catch (std::invalid_argument const& err) {
 				EXPECT_EQ(err.what(), std::string("Clause Type is invalid for USES_P type"));
-			}
-			catch (...) {
+			} catch (...) {
 				// Test case should fail if not caught as std::invalid argument
 				FAIL();
 			}
@@ -40,11 +38,9 @@ namespace UnitTesting {
 			try {
 				RelRef invalidEntityUseP(MODIFIES_P, it, it);
 				FAIL();
-			}
-			catch (std::invalid_argument const& err) {
+			} catch (std::invalid_argument const& err) {
 				EXPECT_EQ(err.what(), std::string("Clause Type is invalid for MODIFIES_P type"));
-			}
-			catch (...) {
+			} catch (...) {
 				// Test case should fail if not caught as std::invalid argument
 				FAIL();
 			}

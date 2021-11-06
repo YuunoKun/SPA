@@ -48,10 +48,10 @@ assign a; stmt s;
 Select BOOLEAN pattern a(s, _)
 FALSE
 5000
-11 - invalid pattern, syntactically invalid
+11 - invalid pattern, semantically invalid
 if w;
 Select BOOLEAN pattern w(_,_)
-none
+FAlSE
 5000
 12 - invalid pattern, syntactically invalid
 if ifs; variable v;

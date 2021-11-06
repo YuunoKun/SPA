@@ -85,12 +85,10 @@ Query QueryPreprocessor::parse(std::string str) {
 		// Check what is my previous token
 		if (!isSelect) {
 			handleDeclaration(tokens[i]);
-		}
-		else if (isSelect) {
+		} else if (isSelect) {
 			if (i < tokens.size() - 1) {
 				nextToken = tokens[i + 1];
-			}
-			else {
+			} else {
 				nextToken = QueryToken();
 			}
 			handleSelection(tokens[i]);
@@ -106,18 +104,14 @@ void QueryPreprocessor::handleDeclaration(QueryToken& token) {
 		setIdentifierToQueryTokenType(token);
 		haveNextDeclaration = true;
 		endOfCurrentDeclaration = false;
-	}
-	else if (haveNextDeclaration && token.type == QueryToken::QueryTokenType::IDENTIFIER) {
+	} else if (haveNextDeclaration && token.type == QueryToken::QueryTokenType::IDENTIFIER) {
 		addEntityToQuery(token);
 		haveNextDeclaration = false;
-	}
-	else if (!haveNextDeclaration && !endOfCurrentDeclaration && token.type == QueryToken::QueryTokenType::TERMINATOR) {
+	} else if (!haveNextDeclaration && !endOfCurrentDeclaration && token.type == QueryToken::QueryTokenType::TERMINATOR) {
 		endOfCurrentDeclaration = true;
-	}
-	else if (!haveNextDeclaration && !endOfCurrentDeclaration && token.type == QueryToken::QueryTokenType::COMMA) {
+	} else if (!haveNextDeclaration && !endOfCurrentDeclaration && token.type == QueryToken::QueryTokenType::COMMA) {
 		haveNextDeclaration = true;
-	}
-	else {
+	} else {
 		throw SyntacticErrorException("Invalid declaration");
 	}
 	prevToken = token;
@@ -128,44 +122,35 @@ void QueryPreprocessor::handleSelection(QueryToken& token) {
 		// Select content
 		if (status == ParseStatus::IS_SELECTING) {
 			QueryPreprocessor::handleIsSelecting(token);
-		}
-		else if (status == ParseStatus::IS_SELECTING_MULTIPLE_CLAUSE) {
+		} else if (status == ParseStatus::IS_SELECTING_MULTIPLE_CLAUSE) {
 			QueryPreprocessor::handleSelectingMultipleClause(token);
-		}
-		else if (token.type == QueryToken::QueryTokenType::SUCH_THAT) {
+		} else if (token.type == QueryToken::QueryTokenType::SUCH_THAT) {
 			QueryPreprocessor::handleSuchThatClause();
 		}
 		// pattern only valid when previous token is either identifier or )
 		else if (token.type == QueryToken::QueryTokenType::IDENTIFIER &&
 			token.token_value == PATTERN_STR) {
 			QueryPreprocessor::handlePatternClause();
-		}
-		else if (token.type == QueryToken::QueryTokenType::IDENTIFIER &&
+		} else if (token.type == QueryToken::QueryTokenType::IDENTIFIER &&
 			token.token_value == WITH_STR) {
 			QueryPreprocessor::handleWithClause();
-		}
-		else if (token.type == QueryToken::QueryTokenType::IDENTIFIER &&
+		} else if (token.type == QueryToken::QueryTokenType::IDENTIFIER &&
 			token.token_value == AND_STR) {
 			QueryPreprocessor::handleAnd();
-		}
-		else {
+		} else {
 			throw SyntacticErrorException("Invalid query");
 		}
-	}
-	else {
+	} else {
 		QueryValidator queryValidator = QueryValidator();
 		queryValidator.validateNotSuchThat(token);
 
 		if (isParameter) {
 			handleWithinParameter(token);
-		}
-		else if (patternOrSuchThat.type == QueryToken::QueryTokenType::SUCH_THAT) {
+		} else if (patternOrSuchThat.type == QueryToken::QueryTokenType::SUCH_THAT) {
 			QueryPreprocessor::setSuchThatParameter(token);
-		}
-		else if (patternOrSuchThat.type == QueryToken::QueryTokenType::PATTERN) {
+		} else if (patternOrSuchThat.type == QueryToken::QueryTokenType::PATTERN) {
 			QueryPreprocessor::setPatternParameter(token);
-		}
-		else {
+		} else {
 			throw SyntacticErrorException("Invalid query");
 		}
 	}
@@ -197,8 +182,7 @@ void QueryPreprocessor::handleAnd() {
 	queryValidator.validateAnd(patternOrSuchThat, nextToken, output);
 	if (patternOrSuchThat.type == QueryToken::QueryTokenType::PATTERN) {
 		isExpectingPatternType = true;
-	}
-	else if (patternOrSuchThat.type == QueryToken::QueryTokenType::WITH) {
+	} else if (patternOrSuchThat.type == QueryToken::QueryTokenType::WITH) {
 		isParameter = true;
 	}
 	endOfCurrentClauses = false;
@@ -221,21 +205,17 @@ void QueryPreprocessor::handleIsSelecting(QueryToken& token) {
 		prevToken.type == QueryToken::QueryTokenType::IDENTIFIER) {
 		queryValidator.validateAttributeType(query, prevTokenSelect, nextToken);
 		isExpectingAttribute = true;
-	}
-	else if (isExpectingAttribute && prevTokenSelect.type == QueryToken::QueryTokenType::DOT) {
+	} else if (isExpectingAttribute && prevTokenSelect.type == QueryToken::QueryTokenType::DOT) {
 		AttrRef attrRef = Utility::queryTokenTypeToAttrRef(token.type);
 		this->query.setSelectedAttribute(attrRef);
 		isExpectingAttribute = false;
-	}
-	else if (prevToken.token_value == SELECT_STR && token.type == QueryToken::QueryTokenType::TUPLE_OPEN) {
+	} else if (prevToken.token_value == SELECT_STR && token.type == QueryToken::QueryTokenType::TUPLE_OPEN) {
 		status = ParseStatus::IS_SELECTING_MULTIPLE_CLAUSE;
-	}
-	else if (prevToken.token_value == SELECT_STR &&
+	} else if (prevToken.token_value == SELECT_STR &&
 		token.type == QueryToken::QueryTokenType::IDENTIFIER) {
 		addSelectedToQuery(token);
 		haveNextDeclaration = false;
-	}
-	else {
+	} else {
 		throw SyntacticErrorException("Invalid query during selection parsing");
 	}
 }
@@ -247,17 +227,14 @@ void QueryPreprocessor::handleSelectingMultipleClause(QueryToken& token) {
 	if (token.type == QueryToken::QueryTokenType::DOT) {
 		queryValidator.validateAttributeType(query, prevTokenSelect, nextToken);
 		isExpectingAttribute = true;
-	}
-	else if (isExpectingAttribute) {
+	} else if (isExpectingAttribute) {
 		AttrRef attrRef = Utility::queryTokenTypeToAttrRef(token.type);
 		this->query.setSelectedAttribute(attrRef);
 		isExpectingAttribute = false;
-	}
-	else if (token.type == QueryToken::QueryTokenType::IDENTIFIER) {
+	} else if (token.type == QueryToken::QueryTokenType::IDENTIFIER) {
 		addSelectedToQuery(token);
 		haveNextDeclaration = false;
-	}
-	else if (token.type == QueryToken::QueryTokenType::TUPLE_CLOSE) {
+	} else if (token.type == QueryToken::QueryTokenType::TUPLE_CLOSE) {
 		status = ParseStatus::NEUTRAL;
 	}
 }
@@ -273,8 +250,7 @@ void QueryPreprocessor::setPatternParameter(QueryToken& token) {
 	if ((prevTokenSelect.token_value == PATTERN_STR || prevTokenSelect.token_value == AND_STR) && isExpectingPatternType) {
 		QueryPreprocessor::addPatternToQuery(token);
 		isExpectingPatternType = false;
-	}
-	else if (!isParameter && token.type == QueryToken::QueryTokenType::PARENTHESIS_OPEN) {
+	} else if (!isParameter && token.type == QueryToken::QueryTokenType::PARENTHESIS_OPEN) {
 		isParameter = true;
 	}
 }
@@ -334,8 +310,7 @@ void QueryPreprocessor::handleValidatePatternAndSuchThat(QueryToken& token) {
 			clauseParser.parseParameterPattern(this->query, patternTypeEntity, parameterClause);
 			parameterClause.clear();
 			parenthesis_counter = 0;
-		}
-		else if (patternOrSuchThat.type == QueryToken::QueryTokenType::SUCH_THAT) {
+		} else if (patternOrSuchThat.type == QueryToken::QueryTokenType::SUCH_THAT) {
 			isParameter = false;
 			QueryClauseParser clauseParser;
 			clauseParser.parseParameterSuchThat(this->query, queryParameter.type, parameterClause);
@@ -371,43 +346,32 @@ void QueryPreprocessor::setIdentifierToQueryTokenType(QueryToken& token) {
 	if (isFirstToken || isNewToken) {
 		if (isStmtToken) {
 			declarationType = { QueryToken::QueryTokenType::STMT, STMT_STR };
-		}
-		else if (isProcedureToken) {
+		} else if (isProcedureToken) {
 			declarationType = { QueryToken::QueryTokenType::PROCEDURE, PROCEDURE_STR };
-		}
-		else if (isReadToken) {
+		} else if (isReadToken) {
 			declarationType = { QueryToken::QueryTokenType::READ,READ_STR };
-		}
-		else if (isPrintToken) {
+		} else if (isPrintToken) {
 			declarationType = { QueryToken::QueryTokenType::PRINT,PRINT_STR };
-		}
-		else if (isCallToken) {
+		} else if (isCallToken) {
 			declarationType = { QueryToken::QueryTokenType::CALL, CALL_STR };
-		}
-		else if (isIfToken) {
+		} else if (isIfToken) {
 			declarationType = { QueryToken::QueryTokenType::IF, IF_STR };
-		}
-		else if (isWhileToken) {
+		} else if (isWhileToken) {
 			declarationType = { QueryToken::QueryTokenType::WHILE, WHILE_STR };
-		}
-		else if (isAssignToken) {
+		} else if (isAssignToken) {
 			declarationType = { QueryToken::QueryTokenType::ASSIGN, ASSIGN_STR };
-		}
-		else if (isVariableToken) {
+		} else if (isVariableToken) {
 			declarationType = { QueryToken::QueryTokenType::VARIABLE, VARIABLE_STR };
-		}
-		else if (isConstantToken) {
+		} else if (isConstantToken) {
 			declarationType = { QueryToken::QueryTokenType::CONSTANT, CONSTANT_STR };
-		}
-		else if (isProgLineToken) {
+		} else if (isProgLineToken) {
 			declarationType = { QueryToken::QueryTokenType::PROG_LINE, PROGLINE_STR };
 		}
 		// Need to enforce that Select must only come after a terminator
 		else if (isSelectCondition) {
 			isSelect = true;
 			status = ParseStatus::IS_SELECTING;
-		}
-		else {
+		} else {
 			throw SyntacticErrorException("Invalid syntax for declaration or select");
 		}
 	}
@@ -456,8 +420,7 @@ void QueryPreprocessor::addSelectedToQuery(QueryToken& token) {
 
 	if (!isValid) {
 		this->query.setIsSemanticError("Select variable content has not been declared");
-	}
-	else {
+	} else {
 		this->query.addSelected(ent);
 	}
 }
@@ -499,47 +462,33 @@ void QueryPreprocessor::setQueryParameter() {
 	// MODIFIES_P to be handled in PatternRelRefValidator
 	else if (isModifiesToken) {
 		queryParameter = { QueryToken::QueryTokenType::MODIFIES_S, MODIFIES_STR };
-	}
-	else if (isParentToken) {
+	} else if (isParentToken) {
 		queryParameter = { QueryToken::QueryTokenType::PARENT, PARENT_STR };
-	}
-	else if (isParentTToken) {
+	} else if (isParentTToken) {
 		queryParameter = { QueryToken::QueryTokenType::PARENT_T, PARENTT_STR };
-	}
-	else if (isFollowsToken) {
+	} else if (isFollowsToken) {
 		queryParameter = { QueryToken::QueryTokenType::FOLLOWS, FOLLOWS_STR };
-	}
-	else if (isFollowsTToken) {
+	} else if (isFollowsTToken) {
 		queryParameter = { QueryToken::QueryTokenType::FOLLOWS_T, FOLLOWST_STR };
-	}
-	else if (isCallsToken) {
+	} else if (isCallsToken) {
 		queryParameter = { QueryToken::QueryTokenType::CALLS, CALLS_STR };
-	}
-	else if (isCallsTToken) {
+	} else if (isCallsTToken) {
 		queryParameter = { QueryToken::QueryTokenType::CALLS_T, CALLST_STR };
-	}
-	else if (isNextToken) {
+	} else if (isNextToken) {
 		queryParameter = { QueryToken::QueryTokenType::NEXT, NEXT_STR };
-	}
-	else if (isNextTToken) {
+	} else if (isNextTToken) {
 		queryParameter = { QueryToken::QueryTokenType::NEXT_T, NEXTT_STR };
-	}
-	else if (isAffectsToken) {
+	} else if (isAffectsToken) {
 		queryParameter = { QueryToken::QueryTokenType::AFFECTS, AFFECTS_STR };
-	}
-	else if (isAffectsTToken) {
+	} else if (isAffectsTToken) {
 		queryParameter = { QueryToken::QueryTokenType::AFFECTS_T, AFFECTST_STR };
-	}
-	else if (isAffectsBipToken) {
+	} else if (isAffectsBipToken) {
 		queryParameter = { QueryToken::QueryTokenType::AFFECTS_BIP, AFFECTS_BIP_STR };
-	}
-	else if (isAffectsBipTToken) {
+	} else if (isAffectsBipTToken) {
 		queryParameter = { QueryToken::QueryTokenType::AFFECTS_BIP_T, AFFECTS_BIPT_STR };
-	}
-	else if (isNextBipToken) {
+	} else if (isNextBipToken) {
 		queryParameter = { QueryToken::QueryTokenType::NEXT_BIP, NEXT_BIP_STR };
-	}
-	else if (isNextBipTToken) {
+	} else if (isNextBipTToken) {
 		queryParameter = { QueryToken::QueryTokenType::NEXT_BIP_T, NEXT_BIPT_STR };
 	}
 }
