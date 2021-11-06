@@ -2,12 +2,12 @@
 
 #include "pch.h"
 #include "PKB.h"
-#include "CFGRelationsManager.h"
+#include "RelationPreprocessorManager.h"
 
 namespace UnitTesting {
-	class CFGRelationsManagerTest_Affects : public testing::Test {
+	class RelationPreprocessorManager_Affects : public testing::Test {
 	protected:
-		CFGRelationsManagerTest_Affects() {
+		RelationPreprocessorManager_Affects() {
 			PKB::getInstance().resetCache();
 
 			for (auto& stmt : stmt_list) {
@@ -41,7 +41,7 @@ namespace UnitTesting {
 			manager.reset();
 		}
 
-		CFGRelationsManager manager;
+		RelationPreprocessorManager manager;
 
 		StmtInfo s1{ 1, STMT_ASSIGN };
 		StmtInfo s2{ 2, STMT_ASSIGN };
@@ -118,12 +118,12 @@ namespace UnitTesting {
 		}
 	};
 
-	TEST_F(CFGRelationsManagerTest_Affects, isAffectsEmpty) {
+	TEST_F(RelationPreprocessorManager_Affects, isAffectsEmpty) {
 		EXPECT_FALSE(manager.isAffectsEmpty());
 		EXPECT_TRUE(manager.getAffectsPreprocessor().isNonEmpty());
 	}
 
-	TEST_F(CFGRelationsManagerTest_Affects, isAffecting_identifier) {
+	TEST_F(RelationPreprocessorManager_Affects, isAffecting_identifier) {
 		std::vector<StmtInfo> true_list, false_list;
 		std::set<StmtInfo> set;
 		for (auto& pair : expected_pairs) {
@@ -146,7 +146,7 @@ namespace UnitTesting {
 		}
 	}
 
-	TEST_F(CFGRelationsManagerTest_Affects, isAffected_identifier) {
+	TEST_F(RelationPreprocessorManager_Affects, isAffected_identifier) {
 		std::vector<StmtInfo> true_list, false_list;
 		std::set<StmtInfo> set;
 		for (auto& pair : expected_pairs) {
@@ -168,7 +168,7 @@ namespace UnitTesting {
 		}
 	}
 
-	TEST_F(CFGRelationsManagerTest_Affects, isAffects_double_identifier) {
+	TEST_F(RelationPreprocessorManager_Affects, isAffects_double_identifier) {
 		std::vector < std::pair<StmtInfo, StmtInfo>> true_list = expected_pairs, false_list, all_list;
 		std::set<StmtInfo> set;
 		for (auto& s1 : stmt_list) {
@@ -196,14 +196,14 @@ namespace UnitTesting {
 		}
 	}
 
-	TEST_F(CFGRelationsManagerTest_Affects, getAllAffectsRelation) {
+	TEST_F(RelationPreprocessorManager_Affects, getAllAffectsRelation) {
 		auto v1 = manager.getAllAffectsRelation();
 		std::sort(v1.begin(), v1.end());
 		EXPECT_EQ(v1, expected_pairs);
 		EXPECT_TRUE(manager.getAffectsPreprocessor().isFullyPopulated());
 	}
 
-	TEST_F(CFGRelationsManagerTest_Affects, getAffecting_all) {
+	TEST_F(RelationPreprocessorManager_Affects, getAffecting_all) {
 		auto v1 = manager.getAffecting();
 		std::sort(v1.begin(), v1.end());
 
@@ -218,7 +218,7 @@ namespace UnitTesting {
 		EXPECT_TRUE(manager.getAffectsPreprocessor().isFullyPopulated());
 	}
 
-	TEST_F(CFGRelationsManagerTest_Affects, getAffected_all) {
+	TEST_F(RelationPreprocessorManager_Affects, getAffected_all) {
 		auto v1 = manager.getAffected();
 		std::sort(v1.begin(), v1.end());
 
@@ -233,7 +233,7 @@ namespace UnitTesting {
 		EXPECT_TRUE(manager.getAffectsPreprocessor().isFullyPopulated());
 	}
 
-	TEST_F(CFGRelationsManagerTest_Affects, getAffected_identifier) {
+	TEST_F(RelationPreprocessorManager_Affects, getAffected_identifier) {
 		for (auto& stmt : stmt_list) {
 			auto v1 = manager.getAffected(stmt.stmt_index);
 			std::sort(v1.begin(), v1.end());
@@ -249,7 +249,7 @@ namespace UnitTesting {
 		}
 	}
 
-	TEST_F(CFGRelationsManagerTest_Affects, getAffecting_identifier) {
+	TEST_F(RelationPreprocessorManager_Affects, getAffecting_identifier) {
 		for (auto& stmt : stmt_list) {
 			auto v1 = manager.getAffecting(stmt.stmt_index);
 			std::sort(v1.begin(), v1.end());
@@ -265,7 +265,7 @@ namespace UnitTesting {
 		}
 	}
 
-	TEST_F(CFGRelationsManagerTest_Affects, reset) {
+	TEST_F(RelationPreprocessorManager_Affects, reset) {
 		manager.getAllAffectsRelation();
 		EXPECT_TRUE(manager.getAffectsPreprocessor().isFullyPopulated());
 		EXPECT_FALSE(manager.getAffectsPreprocessor().isCacheEmpty());

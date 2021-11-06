@@ -4,7 +4,7 @@
 #include "QueryResult.h"
 #include "PKBAdapter.h"
 #include "AffectsBipTEvaluator.h"
-#include "CFGRelationsManager.h"
+#include "RelationPreprocessorManager.h"
 
 bool AffectsBipTEvaluator::evaluateWildAndWild() {
 	return !pkb.getRelationManager().isAffectsBipTEmpty();

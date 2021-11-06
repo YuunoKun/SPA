@@ -3,12 +3,12 @@
 #include "pch.h"
 #include "PKB.h"
 #include "CFG.h"
-#include "CFGRelationsManager.h"
+#include "RelationPreprocessorManager.h"
 
 namespace UnitTesting {
-	class CFGRelationsManagerTest_AffectsBipT : public testing::Test {
+	class RelationPreprocessorManagerTest_AffectsBipT : public testing::Test {
 	protected:
-		CFGRelationsManagerTest_AffectsBipT() {
+		RelationPreprocessorManagerTest_AffectsBipT() {
 			PKB::getInstance().resetCache();
 
 			cfg1->add(1);
@@ -73,7 +73,7 @@ namespace UnitTesting {
 			manager.reset();
 		}
 
-		CFGRelationsManager manager;
+		RelationPreprocessorManager manager;
 
 		CFG* cfg1 = new CFG();
 		CFG* cfg2 = new CFG();
@@ -172,7 +172,7 @@ namespace UnitTesting {
 		}
 	};
 
-	TEST_F(CFGRelationsManagerTest_AffectsBipT, isAffectingBipT_identifier) {
+	TEST_F(RelationPreprocessorManagerTest_AffectsBipT, isAffectingBipT_identifier) {
 		std::vector<StmtInfo> true_list, false_list;
 		std::set<StmtInfo> set;
 		for (auto& pair : expected_pairs) {
@@ -193,7 +193,7 @@ namespace UnitTesting {
 		}
 	}
 
-	TEST_F(CFGRelationsManagerTest_AffectsBipT, isAffectedBipT_identifier) {
+	TEST_F(RelationPreprocessorManagerTest_AffectsBipT, isAffectedBipT_identifier) {
 		std::vector<StmtInfo> true_list, false_list;
 		std::set<StmtInfo> set;
 		for (auto& pair : expected_pairs) {
@@ -214,7 +214,7 @@ namespace UnitTesting {
 		}
 	}
 
-	TEST_F(CFGRelationsManagerTest_AffectsBipT, isAffectsBipT_double_identifier) {
+	TEST_F(RelationPreprocessorManagerTest_AffectsBipT, isAffectsBipT_double_identifier) {
 		std::vector < std::pair<StmtInfo, StmtInfo>> true_list = expected_pairs, false_list, all_list;
 		std::set<StmtInfo> set;
 		for (auto& s1 : stmt_list) {
@@ -243,14 +243,14 @@ namespace UnitTesting {
 		EXPECT_TRUE(manager.getAffectsBipTPreprocessor().isFullyPopulated());
 	}
 
-	TEST_F(CFGRelationsManagerTest_AffectsBipT, getAllAffectsBipTRelation) {
+	TEST_F(RelationPreprocessorManagerTest_AffectsBipT, getAllAffectsBipTRelation) {
 		auto v1 = manager.getAllAffectsBipTRelation();
 		std::sort(v1.begin(), v1.end());
 		EXPECT_EQ(v1, expected_pairs);
 		EXPECT_TRUE(manager.getAffectsBipTPreprocessor().isFullyPopulated());
 	}
 
-	TEST_F(CFGRelationsManagerTest_AffectsBipT, getAffectingBipT_all) {
+	TEST_F(RelationPreprocessorManagerTest_AffectsBipT, getAffectingBipT_all) {
 		auto v1 = manager.getAffectingBipT();
 		std::sort(v1.begin(), v1.end());
 
@@ -264,7 +264,7 @@ namespace UnitTesting {
 		EXPECT_EQ(v1, v2);
 	}
 
-	TEST_F(CFGRelationsManagerTest_AffectsBipT, getAffectedBipT_all) {
+	TEST_F(RelationPreprocessorManagerTest_AffectsBipT, getAffectedBipT_all) {
 		auto v1 = manager.getAffectedBipT();
 		std::sort(v1.begin(), v1.end());
 
@@ -278,7 +278,7 @@ namespace UnitTesting {
 		EXPECT_EQ(v1, v2);
 	}
 
-	TEST_F(CFGRelationsManagerTest_AffectsBipT, getAffectedBipT_identifier) {
+	TEST_F(RelationPreprocessorManagerTest_AffectsBipT, getAffectedBipT_identifier) {
 		for (auto& stmt : stmt_list) {
 			auto v1 = manager.getAffectedBipT(stmt.stmt_index);
 			std::sort(v1.begin(), v1.end());
@@ -293,7 +293,7 @@ namespace UnitTesting {
 		}
 	}
 
-	TEST_F(CFGRelationsManagerTest_AffectsBipT, getAffectingBipT_identifier) {
+	TEST_F(RelationPreprocessorManagerTest_AffectsBipT, getAffectingBipT_identifier) {
 		for (auto& stmt : stmt_list) {
 			auto v1 = manager.getAffectingBipT(stmt.stmt_index);
 			std::sort(v1.begin(), v1.end());
@@ -308,7 +308,7 @@ namespace UnitTesting {
 		}
 	}
 
-	TEST_F(CFGRelationsManagerTest_AffectsBipT, reset) {
+	TEST_F(RelationPreprocessorManagerTest_AffectsBipT, reset) {
 		manager.getAllAffectsBipTRelation();
 		EXPECT_TRUE(manager.getAffectsBipTPreprocessor().isFullyPopulated());
 		EXPECT_FALSE(manager.getAffectsBipTPreprocessor().isCacheEmpty());

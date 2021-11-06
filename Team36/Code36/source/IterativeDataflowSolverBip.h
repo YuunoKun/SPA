@@ -45,6 +45,22 @@ public:
 	IterativeDataflowSolverBip() = default;
 
 private:
+	const MonotypeRelationTable<LabelledProgLine>* next_table = nullptr;
+	const RelationTable<StmtInfo, var_name>* useS_table = nullptr;
+	const RelationTable<StmtInfo, var_name>* modifiesS_table = nullptr;
+
+	std::vector<std::set<LabelledModifiesTuple>> kill_list;
+	std::unordered_map<LabelledProgLine, std::set<LabelledModifiesTuple>> gen_list;
+	std::unordered_map<LabelledProgLine, std::set<LabelledModifiesTuple>> in_list;
+	std::unordered_map<LabelledProgLine, std::set<LabelledModifiesTuple>> out_list;
+	std::unordered_map<LabelledProgLine, std::set<LabelledProgLine>> pred_list;
+	std::unordered_map<LabelledProgLine, std::set<LabelledProgLine>> succ_list;
+
+	std::vector<StmtInfo> stmt_info_list;
+	std::vector<LabelledProgLine> labelled_progline_list;
+	std::vector<LabelledProgLine> first_proglines;
+	bool is_dataflow_sets_populated = false;
+
 	void populateDataflowSets();
 	void processInSet(LabelledProgLine index);
 	void processOutSet(LabelledProgLine index);
@@ -59,20 +75,4 @@ private:
 	void addSuccessorsToWorklist(LabelledProgLine index, std::deque<LabelledProgLine>& worklist, std::unordered_set<LabelledProgLine>& worklist_set);
 	std::vector<std::pair<LabelledProgLine, LabelledProgLine>> findResults();
 	bool checkIfTupleAffects(LabelledModifiesTuple, LabelledProgLine);
-
-	std::vector<std::set<LabelledModifiesTuple>> kill_list;
-	std::unordered_map<LabelledProgLine, std::set<LabelledModifiesTuple>> gen_list;
-	std::unordered_map<LabelledProgLine, std::set<LabelledModifiesTuple>> in_list;
-	std::unordered_map<LabelledProgLine, std::set<LabelledModifiesTuple>> out_list;
-	std::unordered_map<LabelledProgLine, std::set<LabelledProgLine>> pred_list;
-	std::unordered_map<LabelledProgLine, std::set<LabelledProgLine>> succ_list;
-
-	std::vector<StmtInfo> stmt_info_list;
-	std::vector<LabelledProgLine> labelled_progline_list;
-	std::vector<LabelledProgLine> first_proglines;
-	bool is_dataflow_sets_populated = false;
-
-	const MonotypeRelationTable<LabelledProgLine>* next_table = nullptr;
-	const RelationTable<StmtInfo, var_name>* useS_table = nullptr;
-	const RelationTable<StmtInfo, var_name>* modifiesS_table = nullptr;
 };

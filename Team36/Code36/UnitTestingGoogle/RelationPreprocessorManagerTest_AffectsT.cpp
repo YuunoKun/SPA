@@ -2,12 +2,12 @@
 
 #include "pch.h"
 #include "PKB.h"
-#include "CFGRelationsManager.h"
+#include "RelationPreprocessorManager.h"
 
 namespace UnitTesting {
-	class CFGRelationsManagerTest_AffectsT : public testing::Test {
+	class RelationPreprocessorManagerTest_AffectsT : public testing::Test {
 	protected:
-		CFGRelationsManagerTest_AffectsT() {
+		RelationPreprocessorManagerTest_AffectsT() {
 			PKB::getInstance().resetCache();
 
 			for (auto& stmt : stmt_list) {
@@ -41,7 +41,7 @@ namespace UnitTesting {
 			manager.reset();
 		}
 
-		CFGRelationsManager manager;
+		RelationPreprocessorManager manager;
 
 		StmtInfo s1{ 1, STMT_ASSIGN };
 		StmtInfo s2{ 2, STMT_ASSIGN };
@@ -118,12 +118,12 @@ namespace UnitTesting {
 		}
 	};
 
-	TEST_F(CFGRelationsManagerTest_AffectsT, isAffectsTEmpty) {
+	TEST_F(RelationPreprocessorManagerTest_AffectsT, isAffectsTEmpty) {
 		EXPECT_FALSE(manager.isAffectsTEmpty());
 		EXPECT_TRUE(manager.getAffectsPreprocessor().isNonEmpty());
 	}
 
-	TEST_F(CFGRelationsManagerTest_AffectsT, isAffectingT_identifier) {
+	TEST_F(RelationPreprocessorManagerTest_AffectsT, isAffectingT_identifier) {
 		std::vector<StmtInfo> true_list, false_list;
 		std::set<StmtInfo> set;
 		for (auto& pair : expected_pairs) {
@@ -146,7 +146,7 @@ namespace UnitTesting {
 		}
 	}
 
-	TEST_F(CFGRelationsManagerTest_AffectsT, isAffectedT_identifier) {
+	TEST_F(RelationPreprocessorManagerTest_AffectsT, isAffectedT_identifier) {
 		std::vector<StmtInfo> true_list, false_list;
 		std::set<StmtInfo> set;
 		for (auto& pair : expected_pairs) {
@@ -169,7 +169,7 @@ namespace UnitTesting {
 		}
 	}
 
-	TEST_F(CFGRelationsManagerTest_AffectsT, isAffectsT_double_identifier) {
+	TEST_F(RelationPreprocessorManagerTest_AffectsT, isAffectsT_double_identifier) {
 		std::vector < std::pair<StmtInfo, StmtInfo>> true_list = expected_pairs, false_list, all_list;
 		std::set<StmtInfo> set;
 		for (auto& s1 : stmt_list) {
@@ -199,7 +199,7 @@ namespace UnitTesting {
 		}
 	}
 
-	TEST_F(CFGRelationsManagerTest_AffectsT, getAllAffectsTRelation) {
+	TEST_F(RelationPreprocessorManagerTest_AffectsT, getAllAffectsTRelation) {
 		auto v1 = manager.getAllAffectsTRelation();
 		std::sort(v1.begin(), v1.end());
 		EXPECT_EQ(v1, expected_pairs);
@@ -207,7 +207,7 @@ namespace UnitTesting {
 		EXPECT_EQ(v1, expected_pairs);
 	}
 
-	TEST_F(CFGRelationsManagerTest_AffectsT, getAffectingT_all) {
+	TEST_F(RelationPreprocessorManagerTest_AffectsT, getAffectingT_all) {
 		auto v1 = manager.getAffectingT();
 		std::sort(v1.begin(), v1.end());
 
@@ -223,7 +223,7 @@ namespace UnitTesting {
 		EXPECT_TRUE(manager.getAffectsPreprocessor().isFullyPopulated());
 	}
 
-	TEST_F(CFGRelationsManagerTest_AffectsT, getAffectedT_all) {
+	TEST_F(RelationPreprocessorManagerTest_AffectsT, getAffectedT_all) {
 		auto v1 = manager.getAffectedT();
 		std::sort(v1.begin(), v1.end());
 
@@ -239,7 +239,7 @@ namespace UnitTesting {
 		EXPECT_TRUE(manager.getAffectsPreprocessor().isFullyPopulated());
 	}
 
-	TEST_F(CFGRelationsManagerTest_AffectsT, getAffectingT_identifier) {
+	TEST_F(RelationPreprocessorManagerTest_AffectsT, getAffectingT_identifier) {
 		for (auto& stmt : stmt_list) {
 			auto v1 = manager.getAffectingT(stmt.stmt_index);
 			std::sort(v1.begin(), v1.end());
@@ -254,7 +254,7 @@ namespace UnitTesting {
 		}
 	}
 
-	TEST_F(CFGRelationsManagerTest_AffectsT, getAffectedT_identifier) {
+	TEST_F(RelationPreprocessorManagerTest_AffectsT, getAffectedT_identifier) {
 		for (auto& stmt : stmt_list) {
 			auto v1 = manager.getAffectedT(stmt.stmt_index);
 			std::sort(v1.begin(), v1.end());
@@ -269,7 +269,7 @@ namespace UnitTesting {
 		}
 	}
 
-	TEST_F(CFGRelationsManagerTest_AffectsT, combinations) {
+	TEST_F(RelationPreprocessorManagerTest_AffectsT, combinations) {
 		// _, _
 		EXPECT_FALSE(manager.isAffectsTEmpty());
 		EXPECT_TRUE(manager.getAffectsPreprocessor().isNonEmpty());
@@ -413,7 +413,7 @@ namespace UnitTesting {
 		EXPECT_EQ(v1_s_s, expected_pairs);
 	}
 
-	TEST_F(CFGRelationsManagerTest_AffectsT, reset) {
+	TEST_F(RelationPreprocessorManagerTest_AffectsT, reset) {
 		manager.getAllAffectsTRelation();
 		EXPECT_TRUE(manager.getAffectsTPreprocessor().isFullyPopulated());
 		EXPECT_FALSE(manager.getAffectsTPreprocessor().isCacheEmpty());

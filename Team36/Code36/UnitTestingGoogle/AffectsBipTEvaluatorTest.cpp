@@ -2,7 +2,7 @@
 
 #include "AffectsBipTEvaluator.h"
 #include "PKB.h"
-#include "CFGRelationsManager.h"
+#include "RelationPreprocessorManager.h"
 
 namespace UnitTesting {
 	class AffectsBipTEvaluatorTest : public testing::Test {
@@ -19,7 +19,6 @@ namespace UnitTesting {
 		}
 		virtual void SetUp() override {
 			PKB::getInstance().resetCache();
-
 
 			PKB::getInstance().addStmt(STMT_ASSIGN);
 			PKB::getInstance().addStmt(STMT_ASSIGN);

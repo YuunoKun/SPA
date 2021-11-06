@@ -4,7 +4,7 @@
 #include "QueryResult.h"
 #include "PKBAdapter.h"
 #include "NextBipEvaluator.h"
-#include "CFGRelationsManager.h"
+#include "RelationPreprocessorManager.h"
 
 bool NextBipEvaluator::evaluateWildAndWild() {
 	return !pkb.getRelationManager().isNextBipEmpty();

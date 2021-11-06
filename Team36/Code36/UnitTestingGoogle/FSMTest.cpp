@@ -11,58 +11,30 @@ namespace UnitTesting {
 
 	class DummyDesignExtractor : public Extractor {
 	public:
-		DummyDesignExtractor() {}
-
-		~DummyDesignExtractor() {}
-
+		DummyDesignExtractor(PKBSourceInterface& instance) : Extractor(instance) {}
 		void startNesting() {}
-
 		void chopNesting() {}
-
 		void endNesting() {}
-
 		void setCondExpr(bool flag) {}
-
-		void addProcedure(proc_name name) {
-			std::cout << "Adds procedure : " << name << std::endl;
-		}
-
-		void addStatement(TokenType type) {
-			std::cout << "Adds statement of type : " << tokenTypeStrings[type] << std::endl;
-		}
-
-		void addVariable(var_name name) {
-			std::cout << "Adds variable : " << name << std::endl;
-		}
-
-		void addConstant(constant c) {
-			std::cout << "Adds constant : " << c << std::endl;
-		}
-
+		void addProcedure(proc_name name) {}
+		void addStatement(TokenType type) {}
+		void addVariable(var_name name) {}
+		void addConstant(constant c) {}
 		void addStatementUses(var_name name) {}
-
 		void addStatementModifies(var_name name) {}
-
 		void startExpr() {}
-
 		void addExprSegment(std::string str) {}
-
 		void endExpr() {}
-
 		void addCallee(proc_name name) {}
-
 		void validate() {}
-
 		void populatePostValidation() {}
-
-		void populateEntities(PKB&) {}
-
-		void populateRelations(PKB&) {}
+		void populateEntities() {}
+		void populateRelations() {}
 	};
 
 	TEST(FSM, expectIdentifier) {
 		Tokenizer tokenizer;
-		DummyDesignExtractor dde;
+		DummyDesignExtractor dde(PKB::getInstance());
 
 		tokenizer.parseIntoTokens("bac procedure read print call if then else while abc");
 		tokenizer.initTokenStack();
@@ -76,7 +48,7 @@ namespace UnitTesting {
 
 	TEST(FSM, expectFactor_valid) {
 		Tokenizer tokenizer;
-		DummyDesignExtractor dde;
+		DummyDesignExtractor dde(PKB::getInstance());
 
 		tokenizer.parseIntoTokens("arandomvariable 983425");
 		tokenizer.initTokenStack();
@@ -97,7 +69,7 @@ namespace UnitTesting {
 
 	TEST(FSM, expectFactor_invalid) {
 		Tokenizer tokenizer;
-		DummyDesignExtractor dde;
+		DummyDesignExtractor dde(PKB::getInstance());
 
 		tokenizer.parseIntoTokens("{");
 		tokenizer.initTokenStack();
@@ -112,7 +84,7 @@ namespace UnitTesting {
 
 	TEST(FSM, expectTerm) {
 		Tokenizer tokenizer;
-		DummyDesignExtractor dde;
+		DummyDesignExtractor dde(PKB::getInstance());
 		tokenizer.parseIntoTokens("something*somethingelse/ anotherthing %lastthing ;&&");
 		tokenizer.initTokenStack();
 		FSM fsm(tokenizer, &dde);
@@ -121,7 +93,7 @@ namespace UnitTesting {
 
 	TEST(FSM, expectExpression) {
 		Tokenizer tokenizer;
-		DummyDesignExtractor dde;
+		DummyDesignExtractor dde(PKB::getInstance());
 
 		tokenizer.parseIntoTokens("x");
 		tokenizer.initTokenStack();
@@ -168,7 +140,7 @@ namespace UnitTesting {
 
 	TEST(FSM, expectRelationalFactor) {
 		Tokenizer tokenizer;
-		DummyDesignExtractor dde;
+		DummyDesignExtractor dde(PKB::getInstance());
 
 		tokenizer.parseIntoTokens("x");
 		tokenizer.initTokenStack();
@@ -193,7 +165,7 @@ namespace UnitTesting {
 
 	TEST(FSM, expect_relational_expression) {
 		Tokenizer tokenizer;
-		DummyDesignExtractor dde;
+		DummyDesignExtractor dde(PKB::getInstance());
 
 		tokenizer.parseIntoTokens("1==1");
 		tokenizer.initTokenStack();
@@ -228,7 +200,7 @@ namespace UnitTesting {
 
 	TEST(FSM, expectConditionalExpression) {
 		Tokenizer tokenizer;
-		DummyDesignExtractor dde;
+		DummyDesignExtractor dde(PKB::getInstance());
 
 		tokenizer.parseIntoTokens("1==1");
 		tokenizer.initTokenStack();
@@ -263,7 +235,7 @@ namespace UnitTesting {
 
 	TEST(FSM, expectStatementTypeRead) {
 		Tokenizer tokenizer;
-		DummyDesignExtractor dde;
+		DummyDesignExtractor dde(PKB::getInstance());
 
 		tokenizer.parseIntoTokens("read abc;");
 		tokenizer.initTokenStack();
@@ -273,7 +245,7 @@ namespace UnitTesting {
 
 	TEST(FSM, expectStatementTypePrint) {
 		Tokenizer tokenizer;
-		DummyDesignExtractor dde;
+		DummyDesignExtractor dde(PKB::getInstance());
 
 		tokenizer.parseIntoTokens("print xyz;");
 		tokenizer.initTokenStack();
@@ -283,7 +255,7 @@ namespace UnitTesting {
 
 	TEST(FSM, expectStatementTypeCall) {
 		Tokenizer tokenizer;
-		DummyDesignExtractor dde;
+		DummyDesignExtractor dde(PKB::getInstance());
 
 		tokenizer.parseIntoTokens("call myProcedure;");
 		tokenizer.initTokenStack();
@@ -293,7 +265,7 @@ namespace UnitTesting {
 
 	TEST(FSM, expectStatementTypeWhile) {
 		Tokenizer tokenizer;
-		DummyDesignExtractor dde;
+		DummyDesignExtractor dde(PKB::getInstance());
 
 		tokenizer.parseIntoTokens("while(1==1){x=1;}");
 		tokenizer.initTokenStack();
@@ -303,7 +275,7 @@ namespace UnitTesting {
 
 	TEST(FSM, expectStatementTypeIf) {
 		Tokenizer tokenizer;
-		DummyDesignExtractor dde;
+		DummyDesignExtractor dde(PKB::getInstance());
 
 		tokenizer.parseIntoTokens("if(n>0)then{call someProcedure;}else{print anotherVariable;}");
 		tokenizer.initTokenStack();
@@ -313,7 +285,7 @@ namespace UnitTesting {
 
 	TEST(FSM, expectStatementTypeAssign) {
 		Tokenizer tokenizer;
-		DummyDesignExtractor dde;
+		DummyDesignExtractor dde(PKB::getInstance());
 
 		tokenizer.parseIntoTokens("x=1;");
 		tokenizer.initTokenStack();
@@ -333,7 +305,7 @@ namespace UnitTesting {
 
 	TEST(FSM, expectStatementList) {
 		Tokenizer tokenizer;
-		DummyDesignExtractor dde;
+		DummyDesignExtractor dde(PKB::getInstance());
 
 		tokenizer.parseIntoTokens("x=1;}");
 		tokenizer.initTokenStack();
@@ -353,7 +325,7 @@ namespace UnitTesting {
 
 	TEST(FSM, expectProcedure) {
 		Tokenizer tokenizer;
-		DummyDesignExtractor dde;
+		DummyDesignExtractor dde(PKB::getInstance());
 
 		tokenizer.parseIntoTokens("procedure myProcedure{x=y+1;}");
 		tokenizer.initTokenStack();
@@ -363,7 +335,7 @@ namespace UnitTesting {
 
 	TEST(FSM, optionalFactor) {
 		Tokenizer tokenizer;
-		DummyDesignExtractor dde;
+		DummyDesignExtractor dde(PKB::getInstance());
 
 		tokenizer.parseIntoTokens("arandomvariable 0983425");
 		tokenizer.initTokenStack();
@@ -384,7 +356,7 @@ namespace UnitTesting {
 
 	TEST(FSM, optionalTerm) {
 		Tokenizer tokenizer;
-		DummyDesignExtractor dde;
+		DummyDesignExtractor dde(PKB::getInstance());
 		tokenizer.parseIntoTokens("something*somethingelse/ anotherthing %lastthing ;&&");
 		tokenizer.initTokenStack();
 		FSM fsm(tokenizer, &dde);
@@ -393,7 +365,7 @@ namespace UnitTesting {
 
 	TEST(FSM, optionalExpression) {
 		Tokenizer tokenizer;
-		DummyDesignExtractor dde;
+		DummyDesignExtractor dde(PKB::getInstance());
 
 		tokenizer.parseIntoTokens("x");
 		tokenizer.initTokenStack();
@@ -432,7 +404,7 @@ namespace UnitTesting {
 
 	TEST(FSM, optionalRelationalFactor) {
 		Tokenizer tokenizer;
-		DummyDesignExtractor dde;
+		DummyDesignExtractor dde(PKB::getInstance());
 
 		tokenizer.parseIntoTokens("x");
 		tokenizer.initTokenStack();
@@ -457,7 +429,7 @@ namespace UnitTesting {
 
 	TEST(FSM, optionalRelationalExpression) {
 		Tokenizer tokenizer;
-		DummyDesignExtractor dde;
+		DummyDesignExtractor dde(PKB::getInstance());
 
 		tokenizer.parseIntoTokens("1==1");
 		tokenizer.initTokenStack();
@@ -492,7 +464,7 @@ namespace UnitTesting {
 
 	TEST(FSM, keywords_variable_name) {
 		Tokenizer tokenizer;
-		DummyDesignExtractor dde;
+		DummyDesignExtractor dde(PKB::getInstance());
 
 		tokenizer.parseIntoTokens("procedure procedure{call call; print print; read read;if(if<then)then{then=else;}else{else=while;}while(while>procedure){while=if;}}");
 		tokenizer.initTokenStack();

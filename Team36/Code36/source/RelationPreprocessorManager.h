@@ -13,7 +13,7 @@
 #include "AffectsBipPreprocessor.h"
 #include "AffectsBipTPreprocessor.h"
 
-class CFGRelationsManager {
+class RelationPreprocessorManager {
 public:
 	void reset();
 
@@ -127,4 +127,5 @@ private:
 
 	MonotypeRelationTable<StmtInfo> next_bip_table;
 	MonotypeRelationTable<LabelledProgLine> labelled_next_table;
+	PKBQueryInterface& pkb_instance = PKB::getInstance();
 };
