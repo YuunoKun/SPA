@@ -5,12 +5,10 @@
 
 QueryTupleGraph::QueryTupleGraph(int V) {
 	this->V = V;
-	this->adj = new std::list<int>[V];
+	adj = new std::list<int>[V];
 }
 
-std::list<int> QueryTupleGraph::DFSUtil(int v, bool visited[]) {
-	std::list<int> res;
-
+void QueryTupleGraph::DFSUtil(int v, bool visited[], std::list<int>& dfs_res) {
 	// Mark the current node as visited and print it
 	visited[v] = true;
 
@@ -19,12 +17,10 @@ std::list<int> QueryTupleGraph::DFSUtil(int v, bool visited[]) {
 	std::list<int>::iterator i;
 	for (i = adj[v].begin(); i != adj[v].end(); ++i) {
 		if (!visited[*i]) {
-			res.push_back(v);
-			DFSUtil(*i, visited);
+			dfs_res.push_back(*i);
+			DFSUtil(*i, visited, dfs_res);
 		}
 	}
-
-	return res;
 }
 
 void QueryTupleGraph::addEdge(int v, int w) {
@@ -45,10 +41,12 @@ std::list<std::list<int>> QueryTupleGraph::connectedComponents() {
 		if (visited[v] == false) {
 			// print all reachable vertices
 			// from v
-			std::list<int> dfs = DFSUtil(v, visited);
-			each_group.push_back(dfs);
+			std::list<int> dfs_res;
+			dfs_res.push_back(v);
+			DFSUtil(v, visited, dfs_res);
+			each_group.push_back(dfs_res);
 		}
- 	}
+	}
 	delete[] visited;
 
 	return each_group;

@@ -14,5 +14,5 @@ private:
 
 	int V;
 	std::list<int>* adj;
-	std::list<int> DFSUtil(int, bool visited[]);
+	void DFSUtil(int, bool visited[], std::list<int>&);
 };
