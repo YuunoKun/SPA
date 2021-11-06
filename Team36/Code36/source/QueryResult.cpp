@@ -100,7 +100,7 @@ void QueryResult::mergeResultTable(ResultTable& t, std::list<ResultTable*>& affe
 	}
 }
 
-void QueryResult::getMergedTable(std::vector<Entity> selected, std::list<ResultTable>& out) {
+void QueryResult::getSelectedEntitiesMergedTable(std::vector<Entity> selected, std::list<ResultTable>& out) {
 	
 	out.emplace_back(ResultTable());
 	std::list<ResultTable*> result_list;

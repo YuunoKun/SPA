@@ -32,7 +32,7 @@ private:
 
 	void getMergedTable(std::vector<Entity>, std::list<ResultTable*>&);
 
-	void getMergedTable(std::vector<Entity>, std::list<ResultTable>&);
+	void getSelectedEntitiesMergedTable(std::vector<Entity>, std::list<ResultTable>&);
 	
 	std::unordered_set<std::string> header_set;
 
