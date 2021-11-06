@@ -101,7 +101,14 @@ void QueryResult::mergeResultTable(ResultTable& t, std::list<ResultTable*>& affe
 }
 
 void QueryResult::getSelectedEntitiesMergedTable(std::vector<Entity> selected, std::list<ResultTable>& out) {
-	/*
+
+
+	for (auto& it = results.begin(); it != results.end(); ++it) {
+		if (it->second->getHeaders().size() == 1 && it->second->getCommonHeaders(selected).size() == 1) {
+			out.emplace_back(*it->second);
+		}
+	}
+
 	std::list<std::pair<Entity, Entity>> headers = getAllTableHeaderWithTwoSynonym();
 	std::list<std::list<std::pair<Entity, Entity>>> grouped_header = { headers };
 
@@ -111,39 +118,10 @@ void QueryResult::getSelectedEntitiesMergedTable(std::vector<Entity> selected, s
 		if (list_selected_group.empty()) {
 			continue;
 		}
-
-		out.emplace_back(ResultTable());
-		joinResultTables(group, list_selected_group, out.back());
+		ResultTable result;
+		joinResultTables(group, list_selected_group, result);
+		out.emplace_back(result);
 	}
-	*/
-	out.emplace_back(ResultTable());
-	std::list<ResultTable*> result_list;
-	for (auto& it = results.begin(); it != results.end(); ++it) {
-		result_list.emplace_back(it->second);
-	}
-
-	bool selected_list_updated = true;
-	while (selected_list_updated) {
-		selected_list_updated = false;
-
-		auto& it = result_list.begin();
-		while (it != result_list.end()) {
-			std::vector<Entity> common = (*it)->getCommonHeaders(selected);
-			if (common.empty()) {
-				it++;
-				continue;
-			}
-
-			std::vector<Entity> new_selected = Utility::getEntitiesExclude((*it)->getHeaders(), common);
-			for (auto& e : new_selected) {
-				selected_list_updated = true;
-				selected.emplace_back(e);
-			}
-			out.front().joinTable(**it);
-			it = result_list.erase(it);
-		}
-	}
-
 }
 
 
@@ -230,7 +208,9 @@ bool QueryResult::joinResultTables(std::list<std::pair<Entity, Entity>>& table_n
 		remaining_entity_to_keep.insert(remaining_entity_to_keep.end(), selected_list.begin(), selected_list.end());
 		std::vector<Entity> table_headers_without_unnecessary_header = Utility::getEntitiesInclude(result.getHeaders(), remaining_entity_to_keep);
 
-		if (table_headers_without_unnecessary_header.size() < result.getHeaders().size() && table_headers_without_unnecessary_header.size() > 0) {
+		if (table_headers_without_unnecessary_header.size() == 0) {
+			result = ResultTable();
+		} else if (table_headers_without_unnecessary_header.size() < result.getHeaders().size()) {
 			result = result.getResultTable(table_headers_without_unnecessary_header);
 		}
 
@@ -238,7 +218,12 @@ bool QueryResult::joinResultTables(std::list<std::pair<Entity, Entity>>& table_n
 			break;
 		}
 
-		selected = Utility::getEntityNameWithLeastFrequency(table_names, table_headers_without_unnecessary_header);
+		std::vector<Entity> common_entity = Utility::getEntitiesInclude(result.getHeaders(), Utility::getEntityListFromPair(table_names));
+		if (common_entity.empty()) {
+			selected = Utility::getEntityNameWithLeastFrequency(table_names);
+		} else {
+			selected = Utility::getEntityNameWithLeastFrequency(table_names, table_headers_without_unnecessary_header);
+		}
 	}
 
 	if (!selected_list.empty()) {
@@ -308,7 +293,10 @@ void QueryResult::updateHaveResultAfterTableJoin() {
 	std::list<std::list<std::pair<Entity, Entity>>> grouped_header = { headers };
 
 	for (auto& group : grouped_header) {
-		joinResultTables(group);
+		if (joinResultTables(group)) {
+			continue;
+		}
+		break;
 	}
 
 }

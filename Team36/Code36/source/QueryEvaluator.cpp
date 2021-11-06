@@ -16,6 +16,8 @@ std::list<std::string> QueryEvaluator::evaluateQuery(Query& query) {
 		evaluateClauses(query, result);
 		PKBAdapter::getRelationManager().reset();
 
+		result.updateHaveResultAfterTableJoin();
+
 		std::list<std::string> out;
 		getResult(query, result, out);
 		return out;
