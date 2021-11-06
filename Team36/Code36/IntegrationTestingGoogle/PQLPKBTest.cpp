@@ -260,7 +260,7 @@ namespace UnitTesting {
 
 		const std::vector<std::string> IF_LEFTS = { IF_LEFT1, IF_LEFT2 };
 		const std::vector<std::string> IF_RIGHTS = { IF_RIGHT1, IF_RIGHT2 };
-		const std::list<std::string> EXPECTED_IFS1 = { IF_LEFT1};
+		const std::list<std::string> EXPECTED_IFS1 = { IF_LEFT1 };
 		const std::list<std::string> EXPECTED_IFS2 = { IF_LEFT2 };
 		const std::list<std::string> EXPECTED_IFS3 = { IF_LEFT1, IF_LEFT2 };
 
@@ -285,6 +285,12 @@ namespace UnitTesting {
 		const std::list<std::string> EXPECTED_AFFECT_T = { ASSIGN2 };
 		const std::list<std::string> EXPECTED_AFFECT_BIP = { ASSIGN2 };
 		const std::list<std::string> EXPECTED_AFFECT_BIP_T = { ASSIGN2 };
+
+		const std::list<std::string> EXPECTED_WITH_AND = { IF2 };
+
+		const std::list<std::string> EXPECTED_TUPLE = { "1 2" };
+
+		const std::list<std::string> EXPECTED_BOOLEAN = { "TRUE" };
 
 		virtual void SetUp() override {
 		}
@@ -389,7 +395,7 @@ namespace UnitTesting {
 		validateAnswer(EXPECTED_USES3, ans);
 	}
 
-	
+
 	TEST_F(PQLPKBTest, SuchThatParentTest1) {
 		std::list<std::string> ans = qs.processQuery("stmt s; Select s such that Parent(1,s)");
 
@@ -534,7 +540,7 @@ namespace UnitTesting {
 
 		validateAnswer(EXPECTED_P_CALLS_T, ans);
 	}
-	
+
 	TEST_F(PQLPKBTest, NextTest) {
 		std::list<std::string> ans = qs.processQuery("prog_line p, q; Select q such that Next(1, q) ");
 
@@ -582,3 +588,20 @@ namespace UnitTesting {
 
 		validateAnswer(EXPECTED_AFFECT_BIP_T, ans);
 	}
+
+	TEST_F(PQLPKBTest, WithAndTest) {
+		std::list<std::string> ans = qs.processQuery("stmt s, s1; Select s1 such that Parent(s,s1) with s.stmt# = 1 and s1.stmt# = 2");
+		validateAnswer(EXPECTED_WITH_AND, ans);
+	}
+
+	TEST_F(PQLPKBTest, TupleTest) {
+		std::list<std::string> ans = qs.processQuery("stmt s, s1; Select <s, s1> such that Parent(s,s1) with s.stmt# = 1 and s1.stmt# = 2");
+		validateAnswer(EXPECTED_TUPLE, ans);
+	}
+
+	TEST_F(PQLPKBTest, BooleanTest) {
+		std::list<std::string> ans = qs.processQuery("stmt s, s1; Select BOOLEAN such that Parent(s,s1)");
+		validateAnswer(EXPECTED_BOOLEAN, ans);
+	}
+}
+
