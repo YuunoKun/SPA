@@ -48,6 +48,21 @@ public:
 	IterativeDataflowSolver() = default;
 
 private:
+	std::vector<StmtInfo> stmt_info_list;
+	const MonotypeRelationTable<StmtInfo>* next_table = nullptr;
+	const RelationTable<StmtInfo, var_name>* useS_table = nullptr;
+	const RelationTable<StmtInfo, var_name>* modifiesS_table = nullptr;
+	const RelationTable<proc_name, stmt_index>* procS_table = nullptr;
+
+	bool is_dataflow_sets_populated = false;
+
+	std::vector<std::set<ModifiesTuple>> kill_list;
+	std::vector<std::set<ModifiesTuple>> gen_list;
+	std::vector<std::set<ModifiesTuple>> in_list;
+	std::vector<std::set<ModifiesTuple>> out_list;
+	std::vector<std::set<stmt_index>> pred_list;
+	std::vector<std::set<stmt_index>> succ_list;
+
 	void populateDataflowSets();
 	void processInSet(int index);
 	void processOutSet(int index);
@@ -65,19 +80,4 @@ private:
 	void addSuccessorsToWorklist(stmt_index, std::deque<stmt_index>&);
 	void addSuccessorsToUniqueWorklist(stmt_index, std::deque<stmt_index>&, std::unordered_set<stmt_index>&);
 	StmtInfo getStmt(stmt_index);
-
-	bool is_dataflow_sets_populated = false;
-
-	std::vector<std::set<ModifiesTuple>> kill_list;
-	std::vector<std::set<ModifiesTuple>> gen_list;
-	std::vector<std::set<ModifiesTuple>> in_list;
-	std::vector<std::set<ModifiesTuple>> out_list;
-	std::vector<std::set<stmt_index>> pred_list;
-	std::vector<std::set<stmt_index>> succ_list;
-
-	std::vector<StmtInfo> stmt_info_list;
-	const MonotypeRelationTable<StmtInfo>* next_table = nullptr;
-	const RelationTable<StmtInfo, var_name>* useS_table = nullptr;
-	const RelationTable<StmtInfo, var_name>* modifiesS_table = nullptr;
-	const RelationTable<proc_name, stmt_index>* procS_table = nullptr;
 };

@@ -4,7 +4,7 @@
 #include "ResultTable.h"
 #include "RelationsEvaluator.h"
 #include "PatternsEvaluator.h"
-#include "CFGRelationsManager.h"
+#include "RelationPreprocessorManager.h"
 #include "Clause.h"
 
 QueryEvaluator::QueryEvaluator() {
@@ -19,7 +19,8 @@ std::list<std::string> QueryEvaluator::evaluateQuery(Query& query) {
 		std::list<std::string> out;
 		getResult(query, result, out);
 		return out;
-	} catch (std::exception& e) {
+	}
+	catch (std::exception& e) {
 		std::cout << "QueryEvaluator evaluateQuery(): " << e.what() << std::endl;
 		PKBAdapter::getRelationManager().reset();
 		return {};

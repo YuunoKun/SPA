@@ -5,7 +5,7 @@
 #include "SPCommon.h"
 #include "PKB.h"
 #include "Tokenizer.h"
-#include "DesignExtractor.h"
+#include "Extractor.h"
 
 namespace SourceProcessor {
 	class FSM {

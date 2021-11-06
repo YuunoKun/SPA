@@ -93,7 +93,7 @@
     <ClCompile Include="..\source\AffectsParser.cpp" />
     <ClCompile Include="..\source\AffectsTParser.cpp" />
     <ClCompile Include="..\source\WithParser.cpp" />
-    <ClCompile Include="..\source\CFGRelationsManager.cpp" />
+    <ClCompile Include="..\source\RelationPreprocessorManager.cpp" />
     <ClCompile Include="..\source\NextTPreprocessor.cpp" />
     <ClCompile Include="..\source\AffectsBipParser.cpp" />
     <ClCompile Include="..\source\AffectsBipTParser.cpp" />
@@ -117,8 +117,9 @@
     <ClInclude Include="..\source\NextBipTPreprocessor.h" />
     <ClInclude Include="..\source\PKB.h" />
     <ClInclude Include="..\source\Parser.h" />
+    <ClInclude Include="..\source\PKBQueryInterface.h" />
+    <ClInclude Include="..\source\PKBSourceInterface.h" />
     <ClInclude Include="..\source\Procedure.h" />
-    <ClInclude Include="..\source\KnowledgeBase.h" />
     <ClInclude Include="..\source\RelationTableUtility.h" />
     <ClInclude Include="..\source\RelationTable.h" />
     <ClInclude Include="..\source\SPCommon.h" />
@@ -191,7 +192,7 @@
     <ClInclude Include="..\source\WithParser.h" />
     <ClInclude Include="..\source\RelationParserInterface.h" />
     <ClInclude Include="..\source\PatternParserInterface.h" />
-    <ClInclude Include="..\source\CFGRelationsManager.h" />
+    <ClInclude Include="..\source\RelationPreprocessorManager.h" />
     <ClInclude Include="..\source\NextTPreprocessor.h" />
     <ClInclude Include="..\source\RelationPreprocessor.h" />
     <ClInclude Include="..\source\AffectsBipParser.h" />

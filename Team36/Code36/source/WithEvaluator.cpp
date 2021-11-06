@@ -3,11 +3,6 @@
 #include "Query.h"
 #include "QueryResult.h"
 #include "PKBAdapter.h"
-#include "WithEvaluator.h"
-
-#include "Query.h"
-#include "QueryResult.h"
-#include "PKBAdapter.h"
 #include "Utility.h"
 #include "WithEvaluator.h"
 
@@ -134,7 +129,7 @@ ResultTable WithEvaluator::getEntityWithAttribute(Entity& e, Entity& constant) {
 	if (is_true && Utility::isStringEntityType(e.getType())) {
 		std::vector<std::string> list = { constant.getValue() };
 		return ResultTable(e, list);
-	} else if(is_true) {
+	} else if (is_true) {
 		std::vector<value> list = { std::stoul(constant.getValue()) };
 		return ResultTable(e, list);
 	} else {

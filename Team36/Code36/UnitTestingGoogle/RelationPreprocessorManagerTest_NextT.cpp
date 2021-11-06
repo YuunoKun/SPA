@@ -2,12 +2,12 @@
 
 #include "pch.h"
 #include "PKB.h"
-#include "CFGRelationsManager.h"
+#include "RelationPreprocessorManager.h"
 
 namespace UnitTesting {
-	class CFGRelationsManagerTest_NextT : public testing::Test {
+	class RelationPreprocessorManagerTest_NextT : public testing::Test {
 	protected:
-		CFGRelationsManagerTest_NextT() {
+		RelationPreprocessorManagerTest_NextT() {
 			PKB::getInstance().resetCache();
 
 			for (auto& stmt : stmt_list) {
@@ -36,7 +36,7 @@ namespace UnitTesting {
 			manager.reset();
 		}
 
-		CFGRelationsManager manager;
+		RelationPreprocessorManager manager;
 
 		StmtInfo s1{ 1, STMT_READ };
 		StmtInfo s2{ 2, STMT_WHILE };
@@ -65,11 +65,11 @@ namespace UnitTesting {
 		}
 	};
 
-	TEST_F(CFGRelationsManagerTest_NextT, isNextTEmpty) {
+	TEST_F(RelationPreprocessorManagerTest_NextT, isNextTEmpty) {
 		EXPECT_FALSE(manager.isNextTEmpty());
 	}
 
-	TEST_F(CFGRelationsManagerTest_NextT, isPreviousT) {
+	TEST_F(RelationPreprocessorManagerTest_NextT, isPreviousT) {
 		EXPECT_TRUE(manager.isPreviousT(1));
 		EXPECT_TRUE(manager.isPreviousT(2));
 		EXPECT_TRUE(manager.isPreviousT(3));
@@ -78,7 +78,7 @@ namespace UnitTesting {
 		EXPECT_FALSE(manager.isPreviousT(6));
 	}
 
-	TEST_F(CFGRelationsManagerTest_NextT, isNextT_identifier) {
+	TEST_F(RelationPreprocessorManagerTest_NextT, isNextT_identifier) {
 		EXPECT_FALSE(manager.isNextT(1));
 		EXPECT_TRUE(manager.isNextT(2));
 		EXPECT_TRUE(manager.isNextT(3));
@@ -87,7 +87,7 @@ namespace UnitTesting {
 		EXPECT_TRUE(manager.isNextT(6));
 	}
 
-	TEST_F(CFGRelationsManagerTest_NextT, isNextT_all) {
+	TEST_F(RelationPreprocessorManagerTest_NextT, isNextT_all) {
 		EXPECT_FALSE(manager.isNextT(1, 1));
 		EXPECT_TRUE(manager.isNextT(1, 2));
 		EXPECT_TRUE(manager.isNextT(1, 3));
@@ -137,13 +137,13 @@ namespace UnitTesting {
 		EXPECT_TRUE(manager.isNextT(1, 5));
 		EXPECT_TRUE(manager.isNextT(1, 6));
 	}
-	TEST_F(CFGRelationsManagerTest_NextT, getAllNextTRelation) {
+	TEST_F(RelationPreprocessorManagerTest_NextT, getAllNextTRelation) {
 		auto v1 = manager.getAllNextTRelation();
 		std::sort(v1.begin(), v1.end());
 		EXPECT_EQ(v1, expected_pairs);
 	}
 
-	TEST_F(CFGRelationsManagerTest_NextT, getNextT_double_identifier) {
+	TEST_F(RelationPreprocessorManagerTest_NextT, getNextT_double_identifier) {
 		auto v1 = manager.getNextT();
 		std::sort(v1.begin(), v1.end());
 
@@ -157,7 +157,7 @@ namespace UnitTesting {
 		EXPECT_EQ(v1, v2);
 	}
 
-	TEST_F(CFGRelationsManagerTest_NextT, getPreviousT_all) {
+	TEST_F(RelationPreprocessorManagerTest_NextT, getPreviousT_all) {
 		auto v1 = manager.getPreviousT();
 		std::sort(v1.begin(), v1.end());
 
@@ -171,7 +171,7 @@ namespace UnitTesting {
 		EXPECT_EQ(v1, v2);
 	}
 
-	TEST_F(CFGRelationsManagerTest_NextT, getNextT_identifier) {
+	TEST_F(RelationPreprocessorManagerTest_NextT, getNextT_identifier) {
 		for (auto& stmt : stmt_list) {
 			auto v1 = manager.getNextT(stmt.stmt_index);
 			std::sort(v1.begin(), v1.end());
@@ -186,7 +186,7 @@ namespace UnitTesting {
 		}
 	}
 
-	TEST_F(CFGRelationsManagerTest_NextT, getPreviousT_identifier) {
+	TEST_F(RelationPreprocessorManagerTest_NextT, getPreviousT_identifier) {
 		for (auto& stmt : stmt_list) {
 			auto v1 = manager.getPreviousT(stmt.stmt_index);
 			std::sort(v1.begin(), v1.end());
@@ -201,7 +201,7 @@ namespace UnitTesting {
 		}
 	}
 
-	TEST_F(CFGRelationsManagerTest_NextT, reset) {
+	TEST_F(RelationPreprocessorManagerTest_NextT, reset) {
 		manager.getAllNextTRelation();
 		EXPECT_TRUE(manager.getNextTPreprocessor().isFullyPopulated());
 		EXPECT_FALSE(manager.getNextTPreprocessor().isCacheEmpty());

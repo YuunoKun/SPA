@@ -35,8 +35,6 @@ public:
 		const std::vector<StmtInfo> v);
 	AffectsBipPreprocessor() = default;
 private:
-	void updateCache(std::vector<std::pair<LabelledProgLine, LabelledProgLine>> results);
-	std::vector<stmt_index> getAssignments();
 
 	const MonotypeRelationTable<LabelledProgLine>* next_table = nullptr;
 	const RelationTable<StmtInfo, var_name>* useS_table = nullptr;
@@ -46,4 +44,7 @@ private:
 
 	MonotypeRelationTable<LabelledProgLine> labelled_progline_cache;
 	std::vector<LabelledProgLine> first_labelled_proglines;
+
+	void updateCache(std::vector<std::pair<LabelledProgLine, LabelledProgLine>> results);
+	std::vector<stmt_index> getAssignments();
 };
