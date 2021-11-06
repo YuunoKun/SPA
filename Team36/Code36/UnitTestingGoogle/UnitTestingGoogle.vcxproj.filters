@@ -536,9 +536,6 @@
     <ClCompile Include="WhilePatternParserTest.cpp">
       <Filter>PQL\QueryPreprocessor\QueryPatternRelRefParser</Filter>
     </ClCompile>
-    <ClCompile Include="CFGTest.cpp">
-      <Filter>PKB</Filter>
-    </ClCompile>
     <ClCompile Include="ParentParserTest.cpp">
       <Filter>PQL\QueryPreprocessor\QueryPatternRelRefParser</Filter>
     </ClCompile>
@@ -614,15 +611,6 @@
     <ClCompile Include="RelationsUtilityTest.cpp">
       <Filter>PKB\RelationTables</Filter>
     </ClCompile>
-    <ClCompile Include="CFGRelationManagerTest_AffectsBip.cpp">
-      <Filter>PKB</Filter>
-    </ClCompile>
-    <ClCompile Include="CFGRelationsManagerTest_AffectsBipT.cpp">
-      <Filter>PKB</Filter>
-    </ClCompile>
-    <ClCompile Include="RelationsUtilityTest.cpp">
-      <Filter>PKB\RelationTables</Filter>
-    </ClCompile>
     <ClCompile Include="CFGNodeTest.cpp">
       <Filter>Common</Filter>
     </ClCompile>
@@ -633,34 +621,7 @@
     <ClCompile Include="NextBipPreprocessorTest.cpp">
       <Filter>PKB\RelationPreprocessor</Filter>
     </ClCompile>
-    <ClCompile Include="CFGRelationManagerTest_NextBip.cpp">
-      <Filter>PKB</Filter>
-    </ClCompile>
     <ClCompile Include="NextBipTPreprocessorTest.cpp">
-      <Filter>PKB\RelationPreprocessor</Filter>
-    </ClCompile>
-    <ClCompile Include="CFGRelationManagerTest_Affects.cpp">
-      <Filter>PKB\CFGRelationManager</Filter>
-    </ClCompile>
-    <ClCompile Include="CFGRelationManagerTest_AffectsBip.cpp">
-      <Filter>PKB\CFGRelationManager</Filter>
-    </ClCompile>
-    <ClCompile Include="CFGRelationManagerTest_NextBip.cpp">
-      <Filter>PKB\CFGRelationManager</Filter>
-    </ClCompile>
-    <ClCompile Include="CFGRelationsManagerTest_AffectsBipT.cpp">
-      <Filter>PKB\CFGRelationManager</Filter>
-    </ClCompile>
-    <ClCompile Include="CFGRelationsManagerTest_AffectsT.cpp">
-      <Filter>PKB\CFGRelationManager</Filter>
-    </ClCompile>
-    <ClCompile Include="CFGRelationsManagerTest_NextBipT.cpp">
-      <Filter>PKB\CFGRelationManager</Filter>
-    </ClCompile>
-    <ClCompile Include="CFGRelationsManagerTest_NextT.cpp">
-      <Filter>PKB\CFGRelationManager</Filter>
-    </ClCompile>
-    <ClCompile Include="NextBipPreprocessorTest.cpp">
       <Filter>PKB\RelationPreprocessor</Filter>
     </ClCompile>
     <ClCompile Include="RelationPreprocessorManagerTest_Affects.cpp">
