@@ -16,6 +16,9 @@ public:
 	void getResults(std::vector<Entity>&, ResultTable&);
 	void getResult(Entity, std::list<std::string>&);
 
+
+	void updateHaveResultAfterTableJoin();
+
 private:
 
 	ResultTable* generateNewResultTable(ResultTable&);
@@ -30,6 +33,9 @@ private:
 
 	void QueryResult::updateAllAffectedTable(std::list<ResultTable*>& affected);
 
+	bool joinResultTables(std::list<std::pair<Entity, Entity >> &);
+	bool joinResultTables(std::list<std::pair<Entity, Entity >> &, std::vector<Entity> selected_list, ResultTable& out);
+	bool joinResultTable(ResultTable&, std::pair<Entity,Entity>);
 
 	void getSelectedEntitiesMergedTable(std::vector<Entity>, std::list<ResultTable>&);
 	
@@ -40,4 +46,6 @@ private:
 	bool have_result;
 
 	void addHeader(std::vector<Entity>);
+
+	std::list<std::pair<Entity, Entity>> getAllTableHeaderWithTwoSynonym();
 };

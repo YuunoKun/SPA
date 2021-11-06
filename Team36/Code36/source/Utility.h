@@ -52,6 +52,7 @@ public:
 		std::list<std::vector<value>>&, std::list<std::vector<value>>&);
 
 	static std::vector<Entity> getEntitiesExclude(std::vector<Entity>&, std::vector<Entity>&);
+	static std::vector<Entity> getEntitiesInclude(std::vector<Entity>&, std::vector<Entity>&);
 	static std::vector<Entity> getEntitiesWithoutDuplicate(std::vector<Entity>&);
 
 	static void getColumnsWithoutDuplicate(std::list<std::vector<value>>&, std::vector<int>&, std::list<std::vector<value>>&);
@@ -85,11 +86,27 @@ public:
 	static bool isStringEntityType(EntityType);
 	static value hashString(std::string, std::unordered_map<value, std::string>&);
 
+
+	static std::vector<Entity> getEntityListFromPair(std::list<std::pair<Entity, Entity>>&);
+
+	static Entity getEntityNameWithLeastFrequency(std::list<std::pair<Entity, Entity>>&);
+	static Entity getEntityNameWithLeastFrequency(std::list<std::pair<Entity, Entity>>&, std::vector<Entity> selected);
+
+
+	static std::list<std::pair<Entity, Entity>> splitEntityPairs(std::list<std::pair<Entity, Entity>>&, Entity);
+
+	static std::string getSortedEntityName(std::vector<Entity>);
+	static std::string getSortedEntityName(std::pair<Entity, Entity>);
+
+
 private:
 	static StmtType convertType(EntityType);
 	static bool isStmt(EntityType);
 
 	static void joinRow(std::vector<value>&, std::vector<value>&, std::vector<value>&);
-	static void joinRow(std::vector<value>&, std::vector<value>&, int, std::vector<value>&);
+	static void joinRow(std::vector<value>&, std::vector<value>&, int, std::vector<value>&);	
+	
+	static Entity getEntityNameWithLeastFrequency(std::list<std::pair<Entity, Entity>>&, std::unordered_set<std::string> selected);
+
 
 };

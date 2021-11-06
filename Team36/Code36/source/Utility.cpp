@@ -329,7 +329,24 @@ std::vector<Entity> Utility::getEntitiesExclude(std::vector<Entity>& main, std::
 	std::vector<Entity> result;
 
 	for (auto& e : main) {
-		if (to_remove_set.count(e.getSynonym()) == 0) {
+		if (to_remove_set.find(e.getSynonym()) == to_remove_set.end()) {
+			result.emplace_back(e);
+		}
+	}
+
+	return result;
+}
+
+std::vector<Entity> Utility::getEntitiesInclude(std::vector<Entity>& main, std::vector<Entity>& to_include) {
+	std::unordered_set<std::string> to_include_set;
+	for (auto& e : to_include) {
+		to_include_set.insert(e.getSynonym());
+	}
+
+	std::vector<Entity> result;
+
+	for (auto& e : main) {
+		if (to_include_set.find(e.getSynonym()) != to_include_set.end()) {
 			result.emplace_back(e);
 		}
 	}
@@ -1035,4 +1052,102 @@ value Utility::hashString(std::string to_hash, std::unordered_map<value, std::st
 	value hash = std::hash<std::string>{}(to_hash);
 	hash_storage.insert({ hash, to_hash });
 	return hash;
+}
+
+std::vector<Entity> Utility::getEntityListFromPair(std::list<std::pair<Entity, Entity>>& pairs) {
+	std::unordered_set<std::string> unique;
+	std::vector<Entity> result;
+
+	for (auto& e : pairs) {
+		if (unique.count(e.first.getSynonym()) == 0) {
+			result.emplace_back(e.first);
+			unique.insert(e.first.getSynonym());
+		}
+		if (unique.count(e.second.getSynonym()) == 0) {
+			result.emplace_back(e.second);
+			unique.insert(e.second.getSynonym());
+		}
+	}
+	return result;
+}
+
+Entity Utility::getEntityNameWithLeastFrequency(std::list<std::pair<Entity, Entity>>& list) {
+	std::unordered_set<std::string> selected_name;
+	for (auto& p : list) {
+		selected_name.insert(p.first.getSynonym());
+		selected_name.insert(p.second.getSynonym());
+	}
+	return getEntityNameWithLeastFrequency(list, selected_name);
+}
+
+Entity Utility::getEntityNameWithLeastFrequency(std::list<std::pair<Entity, Entity>>& list, std::vector<Entity> selected) {
+	std::unordered_set<std::string> selected_name;
+	for (auto& e : selected) {
+		selected_name.insert(e.getSynonym());
+	}
+	return getEntityNameWithLeastFrequency(list, selected_name);
+}
+
+Entity Utility::getEntityNameWithLeastFrequency(std::list<std::pair<Entity, Entity>>& list, std::unordered_set<std::string> selected_set) {
+	std::unordered_map<std::string, Entity> entity_map;
+	std::unordered_map<std::string, int> count;
+
+	auto& it = list.begin();
+	while (it != list.end()) {
+		std::list<Entity> entity_name = { it->first, it->second };
+		for (auto& entity : entity_name) {
+			if (count.find(entity.getSynonym()) == count.end()) {
+				count.insert({ entity.getSynonym(), 0 });
+				entity_map.insert({ entity.getSynonym(), entity });
+			} else {
+				count[entity.getSynonym()]++;
+			}
+		}
+		it++;
+	}
+
+	int min = list.size() * 2 + 1;
+	std::string selected;
+	for (auto& it : count) {
+		if (min >= it.second && selected_set.find(it.first) != selected_set.end()) {
+			min = it.second;
+			selected = it.first;
+		}
+	}
+
+	return entity_map[selected];
+}
+
+std::list<std::pair<Entity, Entity>> Utility::splitEntityPairs(std::list<std::pair<Entity, Entity>>& list, Entity selected) {
+	std::list<std::pair<Entity, Entity>> select_list;
+
+	auto& it = list.begin();
+	while (it != list.end()) {
+		if (selected.getSynonym() == it->first.getSynonym() || selected.getSynonym() == it->second.getSynonym()) {
+			select_list.emplace_back(*it);
+			it = list.erase(it);
+		} else {
+			it++;
+		}
+	}
+
+	return select_list;
+}
+
+std::string Utility::getSortedEntityName(std::vector<Entity> list) {
+	std::vector<std::string> names;
+	for (auto& e : list) {
+		names.push_back(e.getSynonym());
+	}
+	std::sort(names.begin(), names.end());
+	std::string name = names.front();
+	for (int i = 1; i < names.size(); i++) {
+		name += SPACE + names[i];
+	}
+	return name;
+}
+
+std::string Utility::getSortedEntityName(std::pair<Entity, Entity> p) {
+	std::vector<Entity> list = { p.first, p.second };
+	return getSortedEntityName(list);
 }

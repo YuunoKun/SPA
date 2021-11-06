@@ -101,7 +101,21 @@ void QueryResult::mergeResultTable(ResultTable& t, std::list<ResultTable*>& affe
 }
 
 void QueryResult::getSelectedEntitiesMergedTable(std::vector<Entity> selected, std::list<ResultTable>& out) {
-	
+	/*
+	std::list<std::pair<Entity, Entity>> headers = getAllTableHeaderWithTwoSynonym();
+	std::list<std::list<std::pair<Entity, Entity>>> grouped_header = { headers };
+
+	for (auto& group : grouped_header) {
+		std::vector<Entity> group_entity_list = Utility::getEntityListFromPair(group);
+		std::vector<Entity> list_selected_group = Utility::getEntitiesInclude(selected, group_entity_list);
+		if (list_selected_group.empty()) {
+			continue;
+		}
+
+		out.emplace_back(ResultTable());
+		joinResultTables(group, list_selected_group, out.back());
+	}
+	*/
 	out.emplace_back(ResultTable());
 	std::list<ResultTable*> result_list;
 	for (auto& it = results.begin(); it != results.end(); ++it) {
@@ -194,10 +208,75 @@ void QueryResult::updateAllAffectedTable(std::list<ResultTable*>& affected) {
 	}
 }
 
+
+bool QueryResult::joinResultTables(std::list<std::pair<Entity, Entity>>& table_names) {
+	return joinResultTables(table_names, {}, ResultTable());
+}
+
+bool QueryResult::joinResultTables(std::list<std::pair<Entity, Entity>>& table_names, std::vector<Entity> selected_list, ResultTable& out) {
+	Entity selected = Utility::getEntityNameWithLeastFrequency(table_names);
+	
+	ResultTable result;
+	while (!table_names.empty()) {
+		std::list<std::pair<Entity, Entity>> selected_table = Utility::splitEntityPairs(table_names, selected);
+		for (auto& selected : selected_table) {
+			if (joinResultTable(result, selected)) {
+				continue;
+			}
+			return false;
+		}
+
+		std::vector<Entity> remaining_entity_to_keep = Utility::getEntityListFromPair(table_names);
+		remaining_entity_to_keep.insert(remaining_entity_to_keep.end(), selected_list.begin(), selected_list.end());
+		std::vector<Entity> table_headers_without_unnecessary_header = Utility::getEntitiesInclude(result.getHeaders(), remaining_entity_to_keep);
+
+		if (table_headers_without_unnecessary_header.size() < result.getHeaders().size() && table_headers_without_unnecessary_header.size() > 0) {
+			result = result.getResultTable(table_headers_without_unnecessary_header);
+		}
+
+		if (table_names.empty()) {
+			break;
+		}
+
+		selected = Utility::getEntityNameWithLeastFrequency(table_names, table_headers_without_unnecessary_header);
+	}
+
+	if (!selected_list.empty()) {
+		out.joinTable(result);
+	}
+	return true;
+
+}
+
+bool QueryResult::joinResultTable(ResultTable& out, std::pair<Entity, Entity> to_join_header) {
+	std::string header_name = Utility::getSortedEntityName(to_join_header);
+	out.joinTable(*results[header_name]);
+	if (out.isEmpty()) {
+		have_result = false;
+		return false;
+	}
+	return true;
+}
+
 void QueryResult::addHeader(std::vector<Entity> v) {
 	for (auto& it : v) {
 		header_set.insert(it.getSynonym());
 	}
+}
+
+std::list<std::pair<Entity, Entity>> QueryResult::getAllTableHeaderWithTwoSynonym() {
+	std::list<std::pair<Entity, Entity>> headers_pair;
+
+	auto& it = results.begin();
+	while (it != results.end()) {
+		std::vector<Entity> headers = it->second->getHeaders();
+		if (headers.size() > 1) {
+			headers_pair.push_back({ headers[0], headers[1]});
+		}
+		it++;
+	}
+
+	return headers_pair;
 }
 
 void QueryResult::getResults(std::vector<Entity>& selected, ResultTable& out) {
@@ -222,5 +301,15 @@ void QueryResult::getResult(Entity e, std::list<std::string>& out) {
 		}
 	}
 	throw std::domain_error("Invalid Entity, Source: QueryResult.getResult");
+}
+
+void QueryResult::updateHaveResultAfterTableJoin() {
+	std::list<std::pair<Entity, Entity>> headers = getAllTableHeaderWithTwoSynonym();
+	std::list<std::list<std::pair<Entity, Entity>>> grouped_header = { headers };
+
+	for (auto& group : grouped_header) {
+		joinResultTables(group);
+	}
+
 }
 

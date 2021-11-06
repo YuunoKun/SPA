@@ -190,15 +190,7 @@ std::string ResultTable::getHeadersName() {
 }
 
 void ResultTable::generateHeaderName() {
-	std::vector<std::string> names;
-	for (auto& e : header) {
-		names.push_back(e.getSynonym());
-	}
-	std::sort(names.begin(), names.end());
-	header_name = names.front();
-	for (int i = 1; i < names.size(); i++) {
-		header_name += SPACE + names[i];
-	}
+	header_name = Utility::getSortedEntityName(header);
 	header_outdated = false;
 }
 

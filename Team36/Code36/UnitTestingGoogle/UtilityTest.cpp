@@ -981,6 +981,86 @@ namespace UnitTesting {
 		EXPECT_EQ(Utility::getEntitiesExclude(a, b), to);
 	}
 
+	TEST_F(UtilityTest, getEntitiesInclude) {
+		Entity e1 = { STMT,Synonym{"e1"} };
+		Entity e2 = { STMT,Synonym{"e2"} };
+		Entity e3 = { STMT,Synonym{"e3"} };
+		Entity e4 = { STMT,Synonym{"e4"} };
+		Entity e5 = { STMT,Synonym{"e5"} };
+
+		std::vector<Entity> a = { e1, e2, e3, e4, e5 };
+		std::vector<Entity> b = { e1 };
+		std::vector<Entity> to = { e1 };
+		EXPECT_EQ(Utility::getEntitiesInclude(a, b), to);
+
+		b = { e2, e4 };
+		to = b;
+		EXPECT_EQ(Utility::getEntitiesInclude(a, b), to);
+
+		a = { e1, e2, e3 };
+		b = { e1, e2, e3, e4, e5 };
+		to = a;
+		EXPECT_EQ(Utility::getEntitiesInclude(a, b), to);
+
+	}
+
+	TEST_F(UtilityTest, getSortedEntityName) {
+		Entity e1 = { STMT,Synonym{"e1"} };
+		Entity e2 = { STMT,Synonym{"e2"} };
+
+		std::vector<Entity> a = { e1, e2 };
+		std::pair<Entity, Entity> b = { e2, e1 };
+
+		EXPECT_EQ(Utility::getSortedEntityName(a), Utility::getSortedEntityName(b));
+
+	}
+
+	TEST_F(UtilityTest, getEntityListFromPair) {
+		Entity e1 = { STMT,Synonym{"e1"} };
+		Entity e2 = { STMT,Synonym{"e2"} };
+		Entity e3 = { STMT,Synonym{"e3"} };
+		Entity e4 = { STMT,Synonym{"e4"} };
+		Entity e5 = { STMT,Synonym{"e5"} };
+
+		std::list<std::pair<Entity, Entity>> p = { {e1,e2}, {e3, e4}, {e5, e1} };
+
+		std::vector<Entity> a = { e1, e2, e3, e4, e5 };
+
+		EXPECT_EQ(Utility::getEntityListFromPair(p), a);
+	}
+
+	TEST_F(UtilityTest, getEntityNameWithLeastFrequency) {
+		Entity e1 = { STMT,Synonym{"e1"} };
+		Entity e2 = { STMT,Synonym{"e2"} };
+		Entity e3 = { STMT,Synonym{"e3"} };
+		Entity e4 = { STMT,Synonym{"e4"} };
+		Entity e5 = { STMT,Synonym{"e5"} };
+
+		std::list<std::pair<Entity, Entity>> p = { {e1,e2}, {e1, e3}, {e3, e5}, {e2, e3},{e1,e2} };
+
+
+		EXPECT_EQ(Utility::getEntityNameWithLeastFrequency(p), e5);
+		EXPECT_EQ(Utility::getEntityNameWithLeastFrequency(p, { e1, e2, e3 }), e3);
+	}
+
+	TEST_F(UtilityTest, splitEntityPairs) {
+		Entity e1 = { STMT,Synonym{"e1"} };
+		Entity e2 = { STMT,Synonym{"e2"} };
+		Entity e3 = { STMT,Synonym{"e3"} };
+		Entity e4 = { STMT,Synonym{"e4"} };
+		Entity e5 = { STMT,Synonym{"e5"} };
+
+		std::list<std::pair<Entity, Entity>> p = { {e1,e2}, {e1, e3}, {e3, e5}, {e2, e3},{e1,e2} };
+
+		std::list<std::pair<Entity, Entity>> out = Utility::splitEntityPairs(p, e1);
+
+		std::list<std::pair<Entity, Entity>> a = { {e3, e5}, {e2, e3} };
+		std::list<std::pair<Entity, Entity>> b = { {e1,e2}, {e1, e3} , {e1,e2} };
+
+		EXPECT_EQ(p, a);
+		EXPECT_EQ(out, b);
+	}
+
 	TEST_F(UtilityTest, getEntitiesWithoutDuplicate) {
 		Entity e1 = { STMT,Synonym{"e1"} };
 		Entity e2 = { STMT,Synonym{"e2"} };
