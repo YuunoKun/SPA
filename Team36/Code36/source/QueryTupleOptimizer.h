@@ -9,6 +9,6 @@ public:
 
 private:
 	std::vector<std::pair<Entity, int>> entityToInt;
-	std::list<std::list<std::pair<Entity, Entity>>> result;
 	std::list<std::list<std::pair<Entity, Entity>>> processToEntityPairs(std::list<std::list<Entity>>, std::list<std::pair<Entity, Entity>> input);
+	void mapEntityToInt(std::list<std::pair<Entity, Entity>>&, int&);
 };

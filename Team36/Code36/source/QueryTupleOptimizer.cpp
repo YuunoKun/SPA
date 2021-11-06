@@ -9,33 +9,7 @@ QueryTupleOptimizer::QueryTupleOptimizer() {
 std::list<std::list<std::pair<Entity, Entity>>> QueryTupleOptimizer::groupCommonEntities(std::list<std::pair<Entity, Entity>> input)
 {
 	int counter = 0;
-	for (std::pair<Entity, Entity> element : input) {
-		Entity first_ent = element.first;
-		Entity second_ent = element.second;
-		bool is_first_exist = false;
-		for (std::pair<Entity, int> pr : entityToInt) {
-			if (pr.first == first_ent) {
-				is_first_exist = true;
-			}
-		}
-
-		if (!is_first_exist) {
-			entityToInt.push_back(std::make_pair(first_ent, counter));
-			counter++;
-		}
-
-		bool is_second_exist = false;
-		for (std::pair<Entity, int> pr : entityToInt) {
-			if (pr.first == second_ent) {
-				is_second_exist = true;
-			}
-		}
-
-		if (!is_second_exist) {
-			entityToInt.push_back(std::make_pair(second_ent, counter));
-			counter++;
-		}
-	}
+	QueryTupleOptimizer::mapEntityToInt(input, counter);
 
 	QueryTupleGraph g(counter);
 
@@ -77,23 +51,89 @@ std::list<std::list<std::pair<Entity, Entity>>> QueryTupleOptimizer::processToEn
 	std::list<std::pair<Entity, Entity>> input) {
 	std::list<std::list<std::pair<Entity, Entity>>> final_result;
 
-	std::list<Entity>::iterator i;
-	for (std::list<std::list<Entity>>::iterator i = entities.begin(); i != entities.end(); ++i) {
+	//std::list<Entity>::iterator i;
+	//for (std::list<std::list<Entity>>::iterator i = entities.begin(); i != entities.end(); ++i) {
+	//	std::list<std::pair<Entity, Entity>> list_of_pairs;
+	//	for (std::list<Entity>::iterator idx = i->begin(); idx != std::prev(i->end()); ++idx) {
+			//std::pair<Entity, Entity> pairing1 = std::make_pair(*idx, *std::next(idx));
+			//std::pair<Entity, Entity> pairing2 = std::make_pair(*std::next(idx), *idx);
+			//for (std::pair<Entity, Entity> input_pair : input) {
+			//	if (pairing1 == input_pair) {
+			//		list_of_pairs.push_back(pairing1);
+			//	}
+			//	if (pairing2 == input_pair) {
+			//		list_of_pairs.push_back(pairing2);
+			//	}
+			//	Entity first_ent = input_pair.first;
+			//	Entity second_ent = input_pair.second;
+			//	
+			//}
+	//	}
+	//	final_result.push_back(list_of_pairs);
+	//}
+	for (std::list<Entity> list_of_entities : entities) {
 		std::list<std::pair<Entity, Entity>> list_of_pairs;
-		for (std::list<Entity>::iterator idx = i->begin(); idx != std::prev(i->end()); ++idx) {
-			std::pair<Entity, Entity> pairing1 = std::make_pair(*idx, *std::next(idx));
-			std::pair<Entity, Entity> pairing2 = std::make_pair(*std::next(idx), *idx);
-			for (std::pair<Entity, Entity> input_pair : input) {
-				if (pairing1 == input_pair) {
-					list_of_pairs.push_back(pairing1);
+			//std::pair<Entity, Entity> pairing1 = std::make_pair(*idx, *std::next(idx));
+			//std::pair<Entity, Entity> pairing2 = std::make_pair(*std::next(idx), *idx);
+			//for (std::pair<Entity, Entity> input_pair : input) {
+			//	if (pairing1 == input_pair) {
+			//		list_of_pairs.push_back(pairing1);
+			//	}
+			//	if (pairing2 == input_pair) {
+			//		list_of_pairs.push_back(pairing2);
+			//	}
+			//	Entity first_ent = input_pair.first;
+			//	Entity second_ent = input_pair.second;
+			//	
+			//}
+		for (std::pair<Entity, Entity> input_pair : input) {
+			bool is_first_matching = false;
+			bool is_second_matching = false;
+			for (Entity ent : list_of_entities) {
+				if (input_pair.first == ent) {
+					is_first_matching = true;
 				}
-				if (pairing2 == input_pair) {
-					list_of_pairs.push_back(pairing2);
+				if (input_pair.second == ent) {
+					is_second_matching = true;
 				}
 			}
+			if (is_first_matching && is_second_matching) {
+				list_of_pairs.push_back(input_pair);
+			}
 		}
+		
 		final_result.push_back(list_of_pairs);
 	}
 
 	return final_result;
+}
+
+void QueryTupleOptimizer::mapEntityToInt(std::list<std::pair<Entity, Entity>>& input, int& counter) {
+	for (std::pair<Entity, Entity> element : input) {
+		Entity first_ent = element.first;
+		Entity second_ent = element.second;
+		bool is_first_exist = false;
+		for (std::pair<Entity, int> pr : entityToInt) {
+			if (pr.first == first_ent) {
+				is_first_exist = true;
+			}
+		}
+
+		if (!is_first_exist) {
+			entityToInt.push_back(std::make_pair(first_ent, counter));
+			counter++;
+		}
+
+		bool is_second_exist = false;
+		for (std::pair<Entity, int> pr : entityToInt) {
+			if (pr.first == second_ent) {
+				is_second_exist = true;
+			}
+		}
+
+		if (!is_second_exist) {
+			entityToInt.push_back(std::make_pair(second_ent, counter));
+			counter++;
+		}
+	}
 }
