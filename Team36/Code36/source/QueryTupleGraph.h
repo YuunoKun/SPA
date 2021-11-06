@@ -6,13 +6,13 @@
 class QueryTupleGraph {
 public:
 
-	QueryTupleGraph(int v, std::list<int>*);
+	QueryTupleGraph(int V);
 	void addEdge(int v, int w);
-	void connectedComponents();
+	void connectedComponents(std::list<std::list<std::pair<Entity, Entity>>>&);
 
 private:
 
 	int V;
 	std::list<int>* adj;
-	void DFSUtil(int, bool visited[]);
+	void DFSUtil(int, bool visited[], std::list<int>&);
 };
