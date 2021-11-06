@@ -8,7 +8,6 @@
 #include "PKBSourceInterface.h"
 #include "PKB.h"
 
-
 class MockPKB : public PKBSourceInterface {
 public:
 	void addConstant(constant constant) {
@@ -24,14 +23,13 @@ public:
 	}
 
 	void addStmt(StmtType stmt_type) {
-		mock_stmt_table.push_back({mock_curr_stmt_id, stmt_type});
+		mock_stmt_table.push_back({ mock_curr_stmt_id, stmt_type });
 		mock_curr_stmt_id++;
 	}
 
 	void addExprTree(stmt_index stmt_index, expr expr) {
 		mock_expr_table.push_back({ stmt_index, expr });
 	}
-
 
 	void addParent(stmt_index parent, stmt_index child) {
 		mock_parent_table.push_back({ parent, child });
@@ -89,7 +87,7 @@ public:
 		mock_cfgs.push_back(cfg);
 	}
 
-	void generateParentT() {}
+	//void generateParentT() {}
 	void generateFollowsT() {}
 	void generateCallsPT() {}
 
@@ -119,7 +117,6 @@ public:
 };
 
 namespace UnitTesting {
-
 	using namespace SourceProcessor;
 	TEST(DesignExtractor, full_behavior_test) {
 		MockPKB pkb;
@@ -602,22 +599,18 @@ namespace UnitTesting {
 		ASSERT_EQ(p2->getChild().size(), 1);
 		ASSERT_EQ(p2->getChild()[0], 14);
 
-
-
 		// Test Population of entities and relations
 
 		// test populate entites
 		extractor->populateEntities();
 
-
 		// test constants
-		std::vector<constant> expected_populated_constants = {1,13,2,4,15,11};
+		std::vector<constant> expected_populated_constants = { 1,13,2,4,15,11 };
 		auto actual_constants = std::vector<constant>(pkb.mock_const_table.begin(), pkb.mock_const_table.end());
 		sort(actual_constants.begin(), actual_constants.end());
 		sort(expected_populated_constants.begin(), expected_populated_constants.end());
 		ASSERT_EQ(actual_constants.size(), expected_populated_constants.size());
 		ASSERT_EQ(actual_constants, expected_populated_constants);
-
 
 		// test variables
 		std::vector<var_name> expected_populated_variables = {
@@ -631,7 +624,6 @@ namespace UnitTesting {
 		ASSERT_EQ(actual_variables.size(), expected_populated_variables.size());
 		ASSERT_EQ(actual_variables, expected_populated_variables);
 
-
 		// test procedures
 		std::vector<proc_name> expected_populated_procedures = { "main","p2" };
 		auto actual_procedures = std::vector<var_name>(pkb.mock_proc_table.begin(), pkb.mock_proc_table.end());
@@ -640,10 +632,9 @@ namespace UnitTesting {
 		ASSERT_EQ(actual_procedures.size(), expected_populated_procedures.size());
 		ASSERT_EQ(actual_procedures, expected_populated_procedures);
 
-
 		// test statements
-		std::vector<std::pair<stmt_index, StmtType>> expected_populated_stmt = 
-		{ 
+		std::vector<std::pair<stmt_index, StmtType>> expected_populated_stmt =
+		{
 			{1, STMT_ASSIGN},
 			{2, STMT_READ},
 			{3, STMT_PRINT},
@@ -665,17 +656,14 @@ namespace UnitTesting {
 		ASSERT_EQ(actual_statements.size(), expected_populated_stmt.size());
 		ASSERT_EQ(actual_statements, expected_populated_stmt);
 
-
-
 		// test populate relations
 		extractor->populateRelations();
-
 
 		// usesS
 		std::vector<std::pair<stmt_index, var_name>> expected_usesS =
 		{
 			{3, "printVar"},
-			{4, "beforeIf"}, 
+			{4, "beforeIf"},
 			{4,"mainX"},
 			{5, "mainIfCond"},
 			{5, "beforeCall"},
@@ -724,7 +712,6 @@ namespace UnitTesting {
 		sort(expected_usesP.begin(), expected_usesP.end());
 		ASSERT_EQ(actual_usesP.size(), expected_usesP.size());
 		ASSERT_EQ(actual_usesP, expected_usesP);
-
 
 		// modifiesS
 		std::vector<std::pair<stmt_index, var_name>> expected_modifiesS =
@@ -776,7 +763,7 @@ namespace UnitTesting {
 		ASSERT_EQ(actual_modifiesP, expected_modifiesP);
 
 		// Follows
-		std::vector<std::pair<stmt_index,stmt_index>> expected_follows =
+		std::vector<std::pair<stmt_index, stmt_index>> expected_follows =
 		{
 			{1,2},{2,3},{3,4},{4,5},{6,7},{7,8},
 			{9,10},{10,12},{5,13}
@@ -810,7 +797,6 @@ namespace UnitTesting {
 		ASSERT_EQ(actual_callsP.size(), expected_callsP.size());
 		ASSERT_EQ(actual_callsP, expected_callsP);
 
-
 		// CallsS
 		std::vector<std::pair<stmt_index, proc_name>> expected_callsS =
 		{
@@ -822,7 +808,6 @@ namespace UnitTesting {
 		ASSERT_EQ(actual_callsS.size(), expected_callsS.size());
 		ASSERT_EQ(actual_callsS, expected_callsS);
 
-
 		// Ifs
 		std::vector<std::pair<stmt_index, var_name>> expected_ifs =
 		{
@@ -833,7 +818,6 @@ namespace UnitTesting {
 		sort(expected_ifs.begin(), expected_ifs.end());
 		ASSERT_EQ(actual_ifs.size(), expected_ifs.size());
 		ASSERT_EQ(actual_ifs, expected_ifs);
-
 
 		// Whiles
 		std::vector<std::pair<stmt_index, var_name>> expected_whiles =
@@ -850,8 +834,8 @@ namespace UnitTesting {
 		std::vector<std::pair<stmt_index, stmt_index>> expected_nexts =
 		{
 			{1, 2}, {2, 3}, {3, 4}, {4, 5},
-			{5, 6}, {5, 9}, {6, 7}, {7, 8}, 
-			{8, 13}, {9, 10}, {10, 12}, {10, 11}, 
+			{5, 6}, {5, 9}, {6, 7}, {7, 8},
+			{8, 13}, {9, 10}, {10, 12}, {10, 11},
 			{11, 10}, {12, 13}
 		};
 		auto actual_nexts = pkb.mock_next_table;

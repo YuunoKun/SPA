@@ -152,7 +152,10 @@ namespace UnitTesting {
 		PKB::getInstance().addParent(2, 4);
 		PKB::getInstance().addParent(4, 5);
 		PKB::getInstance().addParent(5, 6);
-		PKB::getInstance().generateParentT();
+		PKB::getInstance().addParentT(2, 3);
+		PKB::getInstance().addParentT(2, 4);
+		PKB::getInstance().addParentT(2, 5);
+		PKB::getInstance().addParentT(2, 6);
 
 		auto output = PKB::getInstance().getParentT();
 		EXPECT_EQ(expected_table, output);

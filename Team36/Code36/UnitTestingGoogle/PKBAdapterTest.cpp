@@ -965,7 +965,12 @@ namespace UnitTesting {
 		PKB::getInstance().addParent(1, 3);
 		PKB::getInstance().addParent(2, 3);
 		PKB::getInstance().addParent(3, 4);
-		PKB::getInstance().generateParentT();
+		PKB::getInstance().addParentT(1, 2);
+		PKB::getInstance().addParentT(1, 3);
+		PKB::getInstance().addParentT(1, 4);
+		PKB::getInstance().addParentT(2, 3);
+		PKB::getInstance().addParentT(2, 4);
+		PKB::getInstance().addParentT(3, 4);
 
 		EXPECT_TRUE(pkb.isParentT(1, 2));
 		EXPECT_TRUE(pkb.isParentT(1, 3));
@@ -1010,7 +1015,12 @@ namespace UnitTesting {
 		PKB::getInstance().addParent(1, 3);
 		PKB::getInstance().addParent(2, 3);
 		PKB::getInstance().addParent(3, 4);
-		PKB::getInstance().generateParentT();
+		PKB::getInstance().addParentT(1, 2);
+		PKB::getInstance().addParentT(1, 3);
+		PKB::getInstance().addParentT(1, 4);
+		PKB::getInstance().addParentT(2, 3);
+		PKB::getInstance().addParentT(2, 4);
+		PKB::getInstance().addParentT(3, 4);
 
 		EXPECT_FALSE(pkb.isChildT(1));
 		EXPECT_TRUE(pkb.isChildT(2));
@@ -1035,7 +1045,12 @@ namespace UnitTesting {
 		PKB::getInstance().addParent(1, 3);
 		PKB::getInstance().addParent(2, 3);
 		PKB::getInstance().addParent(3, 4);
-		PKB::getInstance().generateParentT();
+		PKB::getInstance().addParentT(1, 2);
+		PKB::getInstance().addParentT(1, 3);
+		PKB::getInstance().addParentT(1, 4);
+		PKB::getInstance().addParentT(2, 3);
+		PKB::getInstance().addParentT(2, 4);
+		PKB::getInstance().addParentT(3, 4);
 
 		std::vector<StmtInfo> v1 = { p2, p3, p4 };
 		std::vector<StmtInfo> v2 = pkb.getChildT();
@@ -1080,7 +1095,12 @@ namespace UnitTesting {
 		PKB::getInstance().addParent(1, 3);
 		PKB::getInstance().addParent(2, 3);
 		PKB::getInstance().addParent(3, 4);
-		PKB::getInstance().generateParentT();
+		PKB::getInstance().addParentT(1, 2);
+		PKB::getInstance().addParentT(1, 3);
+		PKB::getInstance().addParentT(1, 4);
+		PKB::getInstance().addParentT(2, 3);
+		PKB::getInstance().addParentT(2, 4);
+		PKB::getInstance().addParentT(3, 4);
 
 		std::vector<StmtInfo> v1 = { p1, p2, p3 };
 		std::vector<StmtInfo> v2 = pkb.getParentT();
@@ -2340,7 +2360,6 @@ namespace UnitTesting {
 		PKB::getInstance().addModifiesS(2, y);
 		PKB::getInstance().addModifiesS(3, y);
 
-
 		EXPECT_TRUE(pkb.isReadVar(x));
 		EXPECT_TRUE(pkb.isReadVar(y));
 		EXPECT_FALSE(pkb.isReadVar("z"));
@@ -2378,7 +2397,6 @@ namespace UnitTesting {
 		PKB::getInstance().addUsesS(2, x);
 		PKB::getInstance().addUsesS(2, y);
 		PKB::getInstance().addUsesS(3, y);
-
 
 		EXPECT_TRUE(pkb.isPrintVar(x));
 		EXPECT_TRUE(pkb.isPrintVar(y));

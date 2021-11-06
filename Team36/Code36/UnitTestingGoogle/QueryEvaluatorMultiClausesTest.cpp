@@ -32,12 +32,22 @@ namespace UnitTesting {
 			PKB::getInstance().addStmt(STMT_ASSIGN);
 			PKB::getInstance().addStmt(STMT_CALL);
 			PKB::getInstance().addStmt(STMT_CALL);
+
 			PKB::getInstance().addFollows(std::stoi(FOLLOW_LEFT1), std::stoi(FOLLOW_RIGHT1));
 			PKB::getInstance().addFollows(std::stoi(FOLLOW_LEFT2), std::stoi(FOLLOW_RIGHT2));
+			PKB::getInstance().addFollowsT(std::stoi(FOLLOW_LEFT1), std::stoi(FOLLOW_RIGHT1));
+			PKB::getInstance().addFollowsT(std::stoi(FOLLOW_LEFT2), std::stoi(FOLLOW_RIGHT2));
+
 			PKB::getInstance().addParent(std::stoi(PARENT_LEFT1), std::stoi(PARENT_RIGHT1));
 			PKB::getInstance().addParent(std::stoi(PARENT_LEFT1), std::stoi(PARENT_RIGHT2));
 			PKB::getInstance().addParent(std::stoi(PARENT_LEFT2), std::stoi(PARENT_RIGHT2));
 			PKB::getInstance().addParent(std::stoi(PARENT_LEFT3), std::stoi(PARENT_RIGHT3));
+
+			PKB::getInstance().addParentT(std::stoi(PARENT_LEFT1), std::stoi(PARENT_RIGHT1));
+			PKB::getInstance().addParentT(std::stoi(PARENT_LEFT1), std::stoi(PARENT_RIGHT2));
+			PKB::getInstance().addParentT(std::stoi(PARENT_LEFT2), std::stoi(PARENT_RIGHT2));
+			PKB::getInstance().addParentT(std::stoi(PARENT_LEFT3), std::stoi(PARENT_RIGHT3));
+
 			PKB::getInstance().addModifiesS(std::stoi(MODIFIES_LEFT1), MODIFIES_RIGHT1);
 			PKB::getInstance().addModifiesS(std::stoi(MODIFIES_LEFT2), MODIFIES_RIGHT2);
 			PKB::getInstance().addModifiesS(std::stoi(MODIFIES_LEFT3), MODIFIES_RIGHT3);
@@ -46,8 +56,6 @@ namespace UnitTesting {
 			PKB::getInstance().addUsesS(std::stoi(USES_LEFT2), USES_RIGHT2);
 			PKB::getInstance().addExprTree(std::stoi(MODIFIES_LEFT3), EXPRESSIONNODE_1);
 			PKB::getInstance().addExprTree(std::stoi(MODIFIES_LEFT4), EXPRESSIONNODE_2);
-			PKB::getInstance().generateFollowsT();
-			PKB::getInstance().generateParentT();
 		}
 
 		~QueryEvaluatorMultiClausesTest() override {
@@ -94,7 +102,6 @@ namespace UnitTesting {
 		}
 
 		void validate(std::vector<RelRef> relations, std::vector<Pattern> patterns, int i, int j) {
-
 			validate(initQuery(relations, patterns, ALL_SELECT[i % ALL_SELECT.size()]), ALL_RESULT[i % ALL_SELECT.size()], i, j);
 			validate(initQuery(relations, patterns, SELECT_BOOLEAN), BOOLEAN_TRUE_RESULT, i, j);
 		}
@@ -300,7 +307,6 @@ namespace UnitTesting {
 			}
 
 			return relations;
-
 		}
 
 		std::vector<Pattern> getAllValidPattern(Synonym s1, Synonym s2) {
