@@ -201,6 +201,7 @@
     <ClInclude Include="..\source\AffectsBipTParser.h" />
     <ClInclude Include="..\source\NextBipParser.h" />
     <ClInclude Include="..\source\NextBipTParser.h" />
+    <ClInclude Include="..\source\TransitiveClosureHelper.h" />
     <ClInclude Include="..\source\QueryTupleGraph.h" />
     <ClInclude Include="..\source\QueryTupleOptimizer.h" />
   </ItemGroup>

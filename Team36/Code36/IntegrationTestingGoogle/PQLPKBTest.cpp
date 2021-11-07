@@ -50,8 +50,18 @@ namespace UnitTesting {
 			PKB::getInstance().addUsesP(USES_P_LEFT1, USES_RIGHT2);
 			PKB::getInstance().addExprTree(std::stoi(MODIFIES_LEFT3), EXPRESSIONNODE_1);
 			PKB::getInstance().addExprTree(std::stoi(MODIFIES_LEFT4), EXPRESSIONNODE_2);
-			PKB::getInstance().generateFollowsT();
-			PKB::getInstance().generateParentT();
+
+			PKB::getInstance().addFollowsT(std::stoi(FOLLOW_LEFT1), std::stoi(FOLLOW_RIGHT1));
+			PKB::getInstance().addFollowsT(std::stoi(FOLLOW_LEFT2), std::stoi(FOLLOW_RIGHT2));
+			PKB::getInstance().addFollowsT(std::stoi(FOLLOW_LEFT1), std::stoi(FOLLOW_RIGHT2));
+
+			PKB::getInstance().addParentT(std::stoi(PARENT_LEFT1), std::stoi(PARENT_RIGHT1));
+			PKB::getInstance().addParentT(std::stoi(PARENT_LEFT1), std::stoi(PARENT_RIGHT2));
+			PKB::getInstance().addParentT(std::stoi(PARENT_LEFT1), std::stoi(PARENT_RIGHT3));
+			PKB::getInstance().addParentT(std::stoi(PARENT_LEFT2), std::stoi(PARENT_RIGHT2));
+			PKB::getInstance().addParentT(std::stoi(PARENT_LEFT2), std::stoi(PARENT_RIGHT3));
+			PKB::getInstance().addParentT(std::stoi(PARENT_LEFT3), std::stoi(PARENT_RIGHT3));
+
 			PKB::getInstance().addIf(std::stoi(IF_LEFT1), IF_RIGHT1);
 			PKB::getInstance().addIf(std::stoi(IF_LEFT2), IF_RIGHT2);
 			PKB::getInstance().addWhile(std::stoi(WHILE_LEFT1), WHILE_RIGHT1);
@@ -74,7 +84,6 @@ namespace UnitTesting {
 				result_it++, expected_it++) {
 				EXPECT_EQ(*expected_it, *result_it);
 			}
-
 		}
 
 		const var_name x = "x";
@@ -182,7 +191,6 @@ namespace UnitTesting {
 
 		const std::string MODIFIES_P_LEFT1 = p1;
 
-
 		const std::string EXPRESSION1 = "x";
 		const std::string EXPRESSION2 = "x + (y * 5)";
 		const std::string EXPRESSION_CONSTANT = "5";
@@ -196,7 +204,6 @@ namespace UnitTesting {
 		const std::list<std::string> EXPECTED_ASSIGN_PATTERN4 = { ASSIGN2 };
 		const std::list<std::string> EXPECTED_ASSIGN_PATTERN5 = { ASSIGN2 };
 
-
 		const std::vector<std::string> MODIFIES_LEFTS = { MODIFIES_LEFT1, MODIFIES_LEFT2, MODIFIES_LEFT3, MODIFIES_LEFT4 };
 		const std::vector<std::string> MODIFIES_RIGHTS = { MODIFIES_RIGHT1, MODIFIES_RIGHT2, MODIFIES_RIGHT3, MODIFIES_RIGHT4 };
 
@@ -208,11 +215,9 @@ namespace UnitTesting {
 		const std::string USES_RIGHT2 = x;
 		const std::string USES_P_LEFT1 = p1;
 
-
 		const std::list<std::string> EXPECTED_USES1 = { y };
 		const std::list<std::string> EXPECTED_USES2 = { x };
 		const std::list<std::string> EXPECTED_USES3 = { y, x };
-
 
 		const std::vector<std::string> USES_LEFTS = { USES_LEFT1, USES_LEFT2 };
 		const std::vector<std::string> USES_RIGHTS = { USES_RIGHT1, USES_RIGHT2 };
@@ -232,7 +237,7 @@ namespace UnitTesting {
 		//const std::string IF_RIGHT_UNUSE = z;
 		const std::vector<std::string> IF_LEFTS = { IF_LEFT1, IF_LEFT2 };
 		const std::vector<std::string> IF_RIGHTS = { IF_RIGHT1, IF_RIGHT2 };
-		const std::list<std::string> EXPECTED_IFS1 = { IF_LEFT1};
+		const std::list<std::string> EXPECTED_IFS1 = { IF_LEFT1 };
 		const std::list<std::string> EXPECTED_IFS2 = { IF_LEFT2 };
 		const std::list<std::string> EXPECTED_IFS3 = { IF_LEFT1, IF_LEFT2 };
 
@@ -246,8 +251,6 @@ namespace UnitTesting {
 		const std::list<std::string> EXPECTED_WHILES1 = { WHILE_LEFT1 };
 		const std::list<std::string> EXPECTED_WHILES2 = { WHILE_LEFT2 };
 		const std::list<std::string> EXPECTED_WHILES3 = { WHILE_LEFT1, WHILE_LEFT2 };
-
-
 
 		const std::list<std::string> EMPTY_RESULT = {};
 
@@ -354,7 +357,6 @@ namespace UnitTesting {
 		validateAnswer(EXPECTED_USES3, ans);
 	}
 
-	
 	TEST_F(PQLPKBTest, SuchThatParentTest1) {
 		std::list<std::string> ans = qs.processQuery("stmt s; Select s such that Parent(1,s)");
 
@@ -403,7 +405,6 @@ namespace UnitTesting {
 
 		validateAnswer(EXPECTED_FOLLOWS_PARENT, ans);
 	}
-
 
 	// one pattern cl ----------------------------------------------------------------------------------------------------------------
 
@@ -472,7 +473,6 @@ namespace UnitTesting {
 
 		validateAnswer(EXPECTED_WHILES3, ans);
 	}
-
 
 	// one st and one pattern cl -----------------------------------------------------------------------------------------------------
 	TEST_F(PQLPKBTest, SuchThatPatternTest1) {

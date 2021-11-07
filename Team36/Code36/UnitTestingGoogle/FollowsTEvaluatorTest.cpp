@@ -18,7 +18,9 @@ namespace UnitTesting {
 			PKB::getInstance().addStmt(STMT_IF);
 			PKB::getInstance().addFollows(1, 2);
 			PKB::getInstance().addFollows(2, 3);
-			PKB::getInstance().generateFollowsT();
+			PKB::getInstance().addFollowsT(1, 2);
+			PKB::getInstance().addFollowsT(1, 3);
+			PKB::getInstance().addFollowsT(2, 3);
 		}
 
 		PKBAdapter pkb;
@@ -42,7 +44,7 @@ namespace UnitTesting {
 		PKB::getInstance().addStmt(STMT_IF);
 		EXPECT_FALSE(evaluator.evaluateWildAndWild());
 		PKB::getInstance().addFollows(1, 2);
-		PKB::getInstance().generateFollowsT();
+		PKB::getInstance().addFollowsT(1, 2);
 		EXPECT_TRUE(evaluator.evaluateWildAndWild());
 	}
 
@@ -80,7 +82,6 @@ namespace UnitTesting {
 	}
 
 	TEST_F(FollowsTEvaluatorTest, evaluateSynonymAndSynonym) {
-
 		std::vector<std::pair<StmtInfo, StmtInfo>> v = pkb.getFollowsT();
 		Entity left = { STMT, Synonym{"a"} };
 		Entity right = { STMT, Synonym{"b"} };
@@ -124,7 +125,6 @@ namespace UnitTesting {
 	}
 
 	TEST_F(FollowsTEvaluatorTest, evaluateWildAndSynonym) {
-
 		std::vector<StmtInfo> v = pkb.getFollowingT();
 		Entity header = { STMT, Synonym{"a"} };
 		ResultTable t(header, v);
@@ -156,7 +156,6 @@ namespace UnitTesting {
 	}
 
 	TEST_F(FollowsTEvaluatorTest, evaluateSynonymAndWild) {
-
 		std::vector<StmtInfo> v = pkb.getFollowedT();
 		Entity header = { STMT, Synonym{"a"} };
 		ResultTable t(header, v);
@@ -188,7 +187,6 @@ namespace UnitTesting {
 	}
 
 	TEST_F(FollowsTEvaluatorTest, evaluateConstantAndSynonym) {
-
 		std::vector<StmtInfo> v = { p2, p3 };
 		Entity header = { STMT, Synonym{"a"} };
 		Entity match = { STMT, "1" };
@@ -243,7 +241,6 @@ namespace UnitTesting {
 	}
 
 	TEST_F(FollowsTEvaluatorTest, evaluateSynonymAndConstant) {
-
 		std::vector<StmtInfo> v = { p1, p2 };
 		Entity header = { STMT, Synonym{"a"} };
 		Entity match = { STMT, "3" };

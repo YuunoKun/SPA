@@ -692,5 +692,8 @@
     <ClInclude Include="..\source\QueryTupleOptimizer.h">
       <Filter>Header Files\PQL\QueryEvaluator</Filter>
     </ClInclude>
+    <ClInclude Include="..\source\TransitiveClosureHelper.h">
+      <Filter>Header Files\Common</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
