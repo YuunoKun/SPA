@@ -2601,7 +2601,7 @@ TRUE
 53 - valid NextBip
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
 Select BOOLEAN such that NextBip(c, r)
-FALSE
+TRUE
 5000
 54 - valid NextBip
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
