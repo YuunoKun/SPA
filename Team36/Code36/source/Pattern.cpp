@@ -1,5 +1,6 @@
-#include "Pattern.h"
 #include <iostream>
+
+#include "Pattern.h"
 #include "ExprParser.h"
 
 Pattern::Pattern(Entity pattern_type, Entity left_expression, std::string expr, bool is_wild) {

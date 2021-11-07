@@ -1,7 +1,8 @@
-#include "QueryResult.h"
 #include <stdexcept>
-#include "Utility.h"
 #include <algorithm>
+
+#include "QueryResult.h"
+#include "Utility.h"
 #include "QueryTupleOptimizer.h"
 
 QueryResult::QueryResult() {

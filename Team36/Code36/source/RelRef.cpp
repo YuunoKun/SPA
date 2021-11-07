@@ -1,5 +1,6 @@
-#include "RelRef.h"
 #include <iostream>
+
+#include "RelRef.h"
 
 RelRef::RelRef(RelType rel_type, Entity first_clause, Entity second_clause) {
 	std::vector<Entity> clauses{ first_clause, second_clause };

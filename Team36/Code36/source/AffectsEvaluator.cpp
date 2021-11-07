@@ -1,5 +1,3 @@
-#pragma once
-
 #include "Query.h"
 #include "QueryResult.h"
 #include "PKBAdapter.h"

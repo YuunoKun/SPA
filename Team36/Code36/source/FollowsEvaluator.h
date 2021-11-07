@@ -1,6 +1,5 @@
 #pragma once
 
-
 #include "RelationEvaluatorInterface.h"
 #include "Query.h"
 #include "QueryResult.h"
@@ -17,5 +16,4 @@ public:
 	ResultTable evaluateSynonymAndWild(Entity) override;
 	ResultTable evaluateConstantAndSynonym(Entity, Entity) override;
 	ResultTable evaluateSynonymAndConstant(Entity, Entity) override;
-
 };

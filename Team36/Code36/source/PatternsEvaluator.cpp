@@ -1,5 +1,4 @@
 #include "PatternsEvaluator.h"
-
 #include "Utility.h"
 #include "PatternAssignEvaluator.h"
 #include "PatternIfEvaluator.h"

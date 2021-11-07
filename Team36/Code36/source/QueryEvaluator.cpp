@@ -1,5 +1,4 @@
 #include "QueryEvaluator.h"
-
 #include "Utility.h"
 #include "ResultTable.h"
 #include "RelationsEvaluator.h"

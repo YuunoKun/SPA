@@ -3,7 +3,6 @@
 #include <unordered_map>
 #include "Entity.h"
 
-
 class ResultTable {
 public:
 	ResultTable();
@@ -40,7 +39,7 @@ private:
 	void addHeader(Entity&);
 	void addHeader(std::pair<Entity, Entity>&);
 	void addHeader(std::vector<Entity>&);
-	int removeHeader(Entity&);
+	void removeHeader(Entity&);
 	void removeColumn(Entity&);
 	void addHashToStringMap(std::unordered_map<value, std::string>&);
 

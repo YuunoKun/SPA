@@ -1,6 +1,7 @@
+#include <algorithm>
+
 #include "ResultTable.h"
 #include "Utility.h"
-#include <algorithm>
 
 ResultTable::ResultTable() {
 }
@@ -228,14 +229,13 @@ void ResultTable::addHeader(std::vector<Entity>& v) {
 	}
 }
 
-int ResultTable::removeHeader(Entity& entity) {
+void ResultTable::removeHeader(Entity& entity) {
 	int index = getHeaderIndex(entity);
 	if (index >= 0) {
 		header.erase(header.begin() + index);
 		header_set.erase(entity.getSynonym());
 		header_outdated = true;
 	}
-	return index;
 }
 
 void ResultTable::removeColumn(Entity& entity) {

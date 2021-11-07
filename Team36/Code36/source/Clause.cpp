@@ -27,5 +27,3 @@ bool Clause::operator==(const Clause& other) const {
 		((type == ClauseType::RELATION && rel == other.rel) ||
 		(type == ClauseType::PATTERN && pattern == other.pattern));
 }
-
-

@@ -1,6 +1,7 @@
+#include <unordered_map>
+
 #include "QueryTupleOptimizer.h"
 #include "QueryTupleGraph.h"
-#include <unordered_map>
 #include "Entity.h"
 
 QueryTupleOptimizer::QueryTupleOptimizer() {

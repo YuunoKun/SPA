@@ -1,5 +1,4 @@
 #include "RelationsEvaluator.h"
-
 #include "Utility.h"
 #include "FollowsEvaluator.h"
 #include "FollowsTEvaluator.h"

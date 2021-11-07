@@ -1,5 +1,3 @@
-#include <vector>
-#include <list>
 #include "QueryTupleGraph.h"
 #include "QueryTupleNode.h"
 

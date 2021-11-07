@@ -1,6 +1,5 @@
 #pragma once
 
-
 #include "RelationEvaluatorInterface.h"
 #include "Query.h"
 #include "QueryResult.h"

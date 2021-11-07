@@ -18,11 +18,8 @@ private:
 	void getTupleResult(Query&, QueryResult&, std::list<std::string>&);
 
 	std::string getEntitySecondaryAttribute(std::string, Entity&);
-
 	void convertToSecondaryAttribute(std::list<std::string>&, Entity&);
 
-
 	void mergeTable(ResultTable&, std::vector<Entity>&, std::list<std::string>&);
-
 	PKBAdapter pkb;
 };
