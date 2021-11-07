@@ -12,7 +12,7 @@
 
 class Utility {
 public:
-	
+
 	static void unorderedSetToStringList(std::unordered_set<std::string>&, std::list<std::string>&);
 
 
@@ -51,6 +51,10 @@ public:
 	static void joinTable(std::list<std::vector<value>>&,
 		std::list<std::vector<value>>&, std::list<std::vector<value>>&);
 
+	static void joinTableExcludeJoinColumn(std::list<std::vector<value>>&, int,
+		std::unordered_multimap<value, std::vector<value>>&, int,
+		std::list<std::vector<value>>&);
+
 	static std::vector<Entity> getEntitiesExclude(std::vector<Entity>&, std::vector<Entity>&);
 	static std::vector<Entity> getEntitiesInclude(std::vector<Entity>&, std::vector<Entity>&);
 	static std::vector<Entity> getEntitiesWithoutDuplicate(std::vector<Entity>&);
@@ -62,7 +66,7 @@ public:
 	static EntityType queryTokenTypeToEntityType(QueryToken::QueryTokenType&);
 	static AttrRef queryTokenTypeToAttrRef(QueryToken::QueryTokenType&);
 	static std::string Utility::queryTokenTypeToExprString(std::vector<QueryToken>);
-	
+
 	static void isSyntacticValidpattern(std::vector<QueryToken>);
 	static bool isStmtRef(Query&, std::vector<QueryToken>);
 	static bool isStmtRef(Query&, std::vector<QueryToken>, EntityType);
@@ -104,8 +108,9 @@ private:
 	static bool isStmt(EntityType);
 
 	static void joinRow(std::vector<value>&, std::vector<value>&, std::vector<value>&);
-	static void joinRow(std::vector<value>&, std::vector<value>&, int, std::vector<value>&);	
-	
+	static void joinRow(std::vector<value>&, std::vector<value>&, int, std::vector<value>&);
+	static void joinRowExcludeJoinColumn(std::vector<value>&, int, std::vector<value>&, int, std::vector<value>&, std::string&);
+
 	static Entity getEntityNameWithLeastFrequency(std::list<std::pair<Entity, Entity>>&, std::unordered_set<std::string> selected);
 
 

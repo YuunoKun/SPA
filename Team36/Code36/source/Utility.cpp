@@ -287,7 +287,7 @@ void Utility::joinTable(std::list<std::vector<value>>& main, int main_header_ind
 }
 
 void Utility::joinTable(std::list<std::vector<value>>& main, std::list<std::vector<value>>& to_join, std::list<std::vector<value>>& out) {
-	try{
+	try {
 		while (!main.empty()) {
 			for (auto& to_join_row : to_join) {
 				std::vector<value> joined_row;
@@ -303,6 +303,37 @@ void Utility::joinTable(std::list<std::vector<value>>& main, std::list<std::vect
 	}
 }
 
+
+void Utility::joinTableExcludeJoinColumn(std::list<std::vector<value>>& main, int main_header_index,
+	std::unordered_multimap<value, std::vector<value>>& to_join, int to_join_header_index,
+	std::list<std::vector<value>>& out) {
+
+	std::unordered_set<std::string> unique;
+
+	try {
+		for (auto& it : main) {
+			if (to_join.count(it[main_header_index]) == 0) {
+				continue;
+			}
+			auto& ret = to_join.equal_range(it[main_header_index]);
+
+			for (auto& itr1 = ret.first; itr1 != ret.second; ++itr1) {
+				std::vector<value> joined_row;
+				std::string rowString;
+				joinRowExcludeJoinColumn(it, main_header_index, itr1->second, to_join_header_index, joined_row, rowString);
+
+				if (unique.count(rowString) == 0) {
+					out.emplace_back(joined_row);
+					unique.insert(rowString);
+				}
+			}
+		}
+	} catch (std::exception& e) {
+		std::cout << "joinTableExcludeJoinColumn(1 common column) size: " << out.size() << " cause: " << e.what() << std::endl;
+		out.clear();
+		throw e;
+	}
+}
 void Utility::joinRow(std::vector<value>& main, std::vector<value>& to_join, std::vector<value>& out) {
 	out.insert(out.end(), main.begin(), main.end());
 	for (unsigned int i = 0; i < to_join.size(); i++) {
@@ -317,6 +348,24 @@ void Utility::joinRow(std::vector<value>& main, std::vector<value>& to_join, int
 			continue;
 		}
 		out.push_back(to_join[i]);
+	}
+}
+
+void Utility::joinRowExcludeJoinColumn(std::vector<value>& main, int main_join_index, std::vector<value>& to_join, int to_join_index, std::vector<value>& out, std::string& out_string) {
+
+	for (unsigned int i = 0; i < main.size(); i++) {
+		if (i == main_join_index) {
+			continue;
+		}
+		out.push_back(main[i]);
+		out_string += std::to_string(main[i]) + SPACE;
+	}
+	for (unsigned int i = 0; i < to_join.size(); i++) {
+		if (i == to_join_index) {
+			continue;
+		}
+		out.push_back(to_join[i]);
+		out_string += std::to_string(to_join[i]) + SPACE;
 	}
 }
 

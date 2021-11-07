@@ -757,6 +757,86 @@ namespace UnitTesting {
 		EXPECT_TRUE(t1.isEmpty());
 	}
 
+	TEST(ResultTable, mergeJoinTableSingleColumnExcludeCommon) {
+		Entity e1 = { STMT, Synonym{"x"} };
+		Entity e2 = { STMT, Synonym{"y"} };
+		Entity e3 = { STMT, Synonym{"z"} };
+		std::pair<Entity, Entity> h1{ e1, e2 };
+		std::pair<Entity, Entity> h2{ e2, e3 };
+		std::vector<std::pair<value, value>> a1{
+			{ 1, 4, },
+			{ 2, 5, },
+			{ 3, 6, },
+		};
+		std::vector<std::pair<value, value>> a2{
+			{ 4, 7, },
+			{ 5, 8, },
+			{ 6, 9, }
+		};
+
+		ResultTable t1(h1, a1);
+		ResultTable t2(h2, a2);
+		t1.tryJoinTableExcludeJoinColumn(t2, e2);
+		std::list<std::string> b1 = { "1", "2", "3" };
+		std::list<std::string> b2 = { "4", "5", "6" };
+		std::list<std::string> b3 = { "7", "8", "9" };
+		std::list<std::string> out;
+		t1.getEntityResult(e1, out);
+		EXPECT_EQ(out, b1);
+		out.clear();
+		t1.getEntityResult(e3, out);
+		EXPECT_EQ(out, b3);
+
+		h1 = { e1, e2 };
+		h2 = { e3, e2 };
+		a1 = {
+			{ 1, 4, },
+			{ 2, 5, },
+			{ 3, 6, },
+		};
+		a2 = {
+			{ 7, 4, },
+			{ 8, 5, },
+			{ 9, 6, }
+		};
+
+		t1 = ResultTable(h1, a1);
+		t2 = ResultTable(h2, a2);
+
+		t1.tryJoinTableExcludeJoinColumn(t2, e2);
+		out.clear();
+		t1.getEntityResult(e1, out);
+		EXPECT_EQ(out, b1);
+		out.clear();
+		t1.getEntityResult(e3, out);
+		EXPECT_EQ(out, b3);
+
+		h1 = { e1, e2 };
+		h2 = { e1, e3 };
+		a1 = {
+			{ 1, 4, },
+			{ 2, 5, },
+			{ 3, 6, },
+		};
+		a2 = {
+			{ 1, 7, },
+			{ 2, 8, },
+			{ 3, 9, }
+		};
+
+
+		t1 = ResultTable(h1, a1);
+		t2 = ResultTable(h2, a2);
+		t1.tryJoinTableExcludeJoinColumn(t2, e1);
+		out.clear();
+		t1.getEntityResult(e2, out);
+		EXPECT_EQ(out, b2);
+		out.clear();
+		t1.getEntityResult(e3, out);
+		EXPECT_EQ(out, b3);
+	}
+
+
 	TEST(ResultTable, mergeJoinTableSingleColumn) {
 		Entity e1 = { STMT, Synonym{"x"} };
 		Entity e2 = { STMT, Synonym{"y"} };

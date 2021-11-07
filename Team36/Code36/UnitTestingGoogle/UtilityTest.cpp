@@ -924,6 +924,233 @@ namespace UnitTesting {
 		EXPECT_EQ(out, to);
 	}
 
+
+	TEST_F(UtilityTest, joinTableExcludeJoinColumn) {
+		std::list<std::vector<value>> from = {
+			{1, 1},
+			{1, 2},
+			{1, 3},
+			{2, 1},
+			{2, 2},
+			{2, 3},
+			{3, 1},
+			{3, 2},
+			{3, 3},
+		};
+
+		std::unordered_multimap<value, std::vector<value>> to_join = {
+			{1, { 1, 1 } },
+			{2, { 2, 2 } },
+			{3, { 3, 3 } },
+			{4, { 4, 4 } },
+			{5, { 5, 5 } }
+		};
+
+		int fromIndex = 0;
+		int to_join_index = 0;
+
+		std::list<std::vector<value>> to = {
+			{1, 1},
+			{2, 1},
+			{3, 1},
+			{1, 2},
+			{2, 2},
+			{3, 2},
+			{1, 3},
+			{2, 3},
+			{3, 3},
+		};
+
+		std::list<std::vector<value>> out;
+		Utility::joinTableExcludeJoinColumn(from, fromIndex, to_join, to_join_index, out);
+		EXPECT_EQ(out, to);
+
+		fromIndex = 1;
+		to_join_index = 0;
+
+		to = {
+			{1, 1},
+			{1, 2},
+			{1, 3},
+			{2, 1},
+			{2, 2},
+			{2, 3},
+			{3, 1},
+			{3, 2},
+			{3, 3},
+		};
+
+		out.clear();
+		Utility::joinTableExcludeJoinColumn(from, fromIndex, to_join, to_join_index, out);
+		EXPECT_EQ(out, to);
+
+		from = {
+			{1},
+			{2},
+			{3}
+		};
+
+		to_join = {
+			{1, { 1, 1 } },
+			{1, { 1, 2 } },
+			{2, { 2, 3 } },
+			{1, { 1, 4 } },
+			{1, { 1, 5 } }
+		};
+
+		fromIndex = 0;
+		to_join_index = 0;
+
+		to = {
+			{1},
+			{2},
+			{4},
+			{5},
+			{3}
+		};
+
+		out.clear();
+		Utility::joinTableExcludeJoinColumn(from, fromIndex, to_join, to_join_index, out);
+		EXPECT_EQ(out, to);
+
+		from = {
+			{1},
+			{2},
+			{3}
+		};
+
+		to_join = {
+			{1, { 1, 1, 5 } },
+			{1, { 1, 2, 4 } },
+			{2, { 2, 3, 3 } },
+			{1, { 1, 4, 2 } },
+			{1, { 1, 5, 1 } }
+		};
+
+		fromIndex = 0;
+		to_join_index = 0;
+
+		to = {
+			{1, 5 },
+			{2, 4 },
+			{4, 2 },
+			{5, 1 },
+			{3, 3 }
+		};
+
+		out.clear();
+		Utility::joinTableExcludeJoinColumn(from, fromIndex, to_join, to_join_index, out);
+		EXPECT_EQ(out, to);
+
+		from = {
+			{1, 1},
+			{1, 2},
+			{1, 3},
+			{2, 1},
+			{2, 2},
+			{2, 3},
+			{3, 1},
+			{3, 2},
+			{3, 3}
+		};
+
+		to_join = {
+			{1, { 1, 1, 5 } },
+			{1, { 1, 2, 4 } },
+			{2, { 2, 3, 3 } },
+			{1, { 1, 4, 2 } },
+			{1, { 1, 5, 1 } }
+		};
+
+		fromIndex = 0;
+		to_join_index = 0;
+
+		to = {
+			{1, 1, 5 },
+			{1, 2, 4 },
+			{1, 4, 2 },
+			{1, 5, 1 },
+			{2, 1, 5 },
+			{2, 2, 4 },
+			{2, 4, 2 },
+			{2, 5, 1 },
+			{3, 1, 5 },
+			{3, 2, 4 },
+			{3, 4, 2 },
+			{3, 5, 1 },
+			{1, 3, 3 },
+			{2, 3, 3 },
+			{3, 3, 3 }
+		};
+
+		out.clear();
+		Utility::joinTableExcludeJoinColumn(from, fromIndex, to_join, to_join_index, out);
+		EXPECT_EQ(out, to);
+
+		from = { {1}, {2}, {3},
+			{4}, {5}, {6},
+			{7}, {8}, {9}
+		};
+
+		to_join = {
+			{1, { 1, 1, 5 } },
+			{1, { 1, 2, 4 } },
+			{1, { 1, 4, 2 } },
+			{1, { 1, 5, 1 } }
+		};
+
+		fromIndex = 0;
+		to_join_index = 0;
+
+		to = {
+			{1, 5 },
+			{2, 4 },
+			{4, 2 },
+			{5, 1 }
+		};
+
+		out.clear();
+		Utility::joinTableExcludeJoinColumn(from, fromIndex, to_join, to_join_index, out);
+		EXPECT_EQ(out, to);
+
+		fromIndex = 0;
+		to_join_index = 1;
+
+		to = {
+			{1, 5 },
+			{1, 4 },
+			{1, 2 },
+			{1, 1 }
+		};
+
+		out.clear();
+		Utility::joinTableExcludeJoinColumn(from, fromIndex, to_join, to_join_index, out);
+		EXPECT_EQ(out, to);
+
+		from = {
+		{1, 1},
+		{1, 2},
+		{1, 3}
+		};
+
+		to_join = {
+			{1, { 1, 1 } },
+			{2, { 1, 2 } },
+			{3, { 1, 3 } }
+		};
+
+		fromIndex = 1;
+		to_join_index = 1;
+
+		to = {
+			{1, 1}
+		};
+
+		out.clear();
+		Utility::joinTableExcludeJoinColumn(from, fromIndex, to_join, to_join_index, out);
+		EXPECT_EQ(out, to);
+	}
+
 	TEST_F(UtilityTest, joinTable) {
 		std::list<std::vector<value>> a = { {1}, {2}, {3} };
 		std::list<std::vector<value>> b = { {1} };

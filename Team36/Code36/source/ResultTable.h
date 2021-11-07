@@ -19,6 +19,7 @@ public:
 	ResultTable(std::pair<Entity, Entity>, std::vector<std::pair<StmtInfo, std::string>>&);
 
 	void joinTable(ResultTable&);
+	void tryJoinTableExcludeJoinColumn(ResultTable&, Entity);
 	bool merge(ResultTable&);
 	bool filter(ResultTable&);
 	bool isInTable(Entity);
@@ -34,9 +35,13 @@ public:
 	bool operator==(const ResultTable&) const;
 
 private:
+	void init(ResultTable&);
+
 	void addHeader(Entity&);
 	void addHeader(std::pair<Entity, Entity>&);
 	void addHeader(std::vector<Entity>&);
+	int removeHeader(Entity&);
+	void removeColumn(Entity&);
 	void addHashToStringMap(std::unordered_map<value, std::string>&);
 
 
@@ -55,6 +60,7 @@ private:
 	void filter_table(ResultTable&, Entity, Entity);
 
 	void joinTable(ResultTable&, Entity);
+	void joinTableExcludeJoinColumn(ResultTable&, Entity);
 
 	void getStringEntityResult(int, std::unordered_set<std::string>&);
 	void getIntEntityResult(int, std::unordered_set<std::string>&);
