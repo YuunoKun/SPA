@@ -38,11 +38,7 @@ std::list<std::list<std::pair<Entity, Entity>>> QueryTupleOptimizer::processToEn
 	for (std::list<Entity> list_of_entities : entities) {
 		std::list<std::pair<Entity, Entity>> list_of_pairs;
 		for (std::pair<Entity, Entity> input_pair : input) {
-			for (Entity ent : list_of_entities) {
-				if (input_pair.first == ent) {
-					list_of_pairs.push_back(input_pair);
-				}
-			}
+			QueryTupleOptimizer::addListPairs(input_pair, list_of_pairs, list_of_entities);
 		}
 
 		final_result.push_back(list_of_pairs);
@@ -53,31 +49,8 @@ std::list<std::list<std::pair<Entity, Entity>>> QueryTupleOptimizer::processToEn
 
 void QueryTupleOptimizer::mapEntityToInt(std::list<std::pair<Entity, Entity>>& input, int& counter) {
 	for (std::pair<Entity, Entity> element : input) {
-		Entity first_ent = element.first;
-		Entity second_ent = element.second;
-		bool is_first_exist = false;
-		for (std::pair<Entity, int> pr : entityToInt) {
-			if (pr.first == first_ent) {
-				is_first_exist = true;
-			}
-		}
-
-		if (!is_first_exist) {
-			entityToInt.push_back(std::make_pair(first_ent, counter));
-			counter++;
-		}
-
-		bool is_second_exist = false;
-		for (std::pair<Entity, int> pr : entityToInt) {
-			if (pr.first == second_ent) {
-				is_second_exist = true;
-			}
-		}
-
-		if (!is_second_exist) {
-			entityToInt.push_back(std::make_pair(second_ent, counter));
-			counter++;
-		}
+		QueryTupleOptimizer::addNonExistingEntity(element.first, counter);
+		QueryTupleOptimizer::addNonExistingEntity(element.second, counter);
 	}
 }
 
@@ -102,5 +75,27 @@ void QueryTupleOptimizer::addEntityToInt(int integer, std::list<Entity>& entitie
 		if (pr.second == integer) {
 			entities.push_back(pr.first);
 		}
+	}
+}
+
+void QueryTupleOptimizer::addListPairs(std::pair<Entity, Entity>& input_pair, std::list<std::pair<Entity, Entity>>& list_of_pairs, std::list<Entity>& list_of_entities) {
+	for (Entity ent : list_of_entities) {
+		if (input_pair.first == ent) {
+			list_of_pairs.push_back(input_pair);
+		}
+	}
+}
+
+void QueryTupleOptimizer::addNonExistingEntity(Entity& entity, int& counter) {
+	bool is_exist = false;
+	for (std::pair<Entity, int> pr : entityToInt) {
+		if (pr.first == entity) {
+			is_exist = true;
+		}
+	}
+
+	if (!is_exist) {
+		entityToInt.push_back(std::make_pair(entity, counter));
+		counter++;
 	}
 }
