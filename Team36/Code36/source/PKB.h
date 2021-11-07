@@ -25,12 +25,15 @@ public:
 	void addExprTree(stmt_index stmt_index, expr expr);
 
 	void addParent(stmt_index parent, stmt_index child);
+	void addParentT(stmt_index parent, stmt_index child);
 	void addFollows(stmt_index first, stmt_index second);
+	void addFollowsT(stmt_index first, stmt_index second);
 	void addUsesS(stmt_index user, var_name used);
 	void addModifiesS(stmt_index modifier, var_name modified);
 	void addModifiesP(proc_name proc, var_name modified);
 	void addUsesP(proc_name proc, var_name used);
 	void addCallsP(proc_name caller_proc_name, proc_name callee_proc_name);
+	void addCallsPT(proc_name caller_proc_name, proc_name callee_proc_name);
 	void addCallsS(stmt_index caller_stmt_index, proc_name callee_proc_name);
 	void addIf(stmt_index if_stmt_index, var_name control_var);
 	void addWhile(stmt_index while_stmt_index, var_name control_var);
@@ -38,10 +41,6 @@ public:
 	void addProcContains(proc_name proc, stmt_index index);
 	void addCFGsToDestroy(std::vector<CFG*>);
 	void addCFGBip(CFG*);
-
-	void generateParentT();
-	void generateFollowsT();
-	void generateCallsPT();
 
 	const std::vector<StmtInfo>& getStmts();
 	const std::unordered_map<stmt_index, expr>& getExpr();

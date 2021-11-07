@@ -17,7 +17,9 @@ namespace UnitTesting {
 			PKB::getInstance().addStmt(STMT_IF);
 			PKB::getInstance().addParent(1, 2);
 			PKB::getInstance().addParent(2, 3);
-			PKB::getInstance().generateParentT();
+			PKB::getInstance().addParentT(1, 2);
+			PKB::getInstance().addParentT(1, 3);
+			PKB::getInstance().addParentT(2, 3);
 		}
 
 		PKBAdapter pkb;
@@ -42,7 +44,7 @@ namespace UnitTesting {
 		PKB::getInstance().addStmt(STMT_IF);
 		EXPECT_FALSE(evaluator.evaluateWildAndWild());
 		PKB::getInstance().addParent(1, 2);
-		PKB::getInstance().generateParentT();
+		PKB::getInstance().addParentT(1, 2);
 		EXPECT_TRUE(evaluator.evaluateWildAndWild());
 	}
 
@@ -124,7 +126,6 @@ namespace UnitTesting {
 	}
 
 	TEST_F(ParentTEvaluatorTest, evaluateWildAndSynonym) {
-
 		std::vector<StmtInfo> v = pkb.getChildT();
 		Entity header = { STMT, Synonym{"a"} };
 		ResultTable t(header, v);
@@ -156,7 +157,6 @@ namespace UnitTesting {
 	}
 
 	TEST_F(ParentTEvaluatorTest, evaluateSynonymAndWild) {
-
 		std::vector<StmtInfo> v = pkb.getParentT();
 		Entity header = { STMT, Synonym{"a"} };
 		ResultTable t(header, v);
@@ -188,7 +188,6 @@ namespace UnitTesting {
 	}
 
 	TEST_F(ParentTEvaluatorTest, evaluateConstantAndSynonym) {
-
 		std::vector<StmtInfo> v = { p2, p3 };
 		Entity header = { STMT, Synonym{"a"} };
 		Entity match = { STMT, "1" };
@@ -243,7 +242,6 @@ namespace UnitTesting {
 	}
 
 	TEST_F(ParentTEvaluatorTest, evaluateSynonymAndConstant) {
-
 		std::vector<StmtInfo> v = { p1, p2 };
 		Entity header = { STMT, Synonym{"a"} };
 		Entity match = { STMT, "3" };
