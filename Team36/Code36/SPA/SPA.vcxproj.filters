@@ -28,9 +28,6 @@
     <Filter Include="Header Files\SP">
       <UniqueIdentifier>{c378a91f-c549-401e-ada0-5f6f8160d2a6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\PKB">
-      <UniqueIdentifier>{3d599b16-4269-49f5-a655-f4fcf01aa7a5}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\PKB">
       <UniqueIdentifier>{93d5b8fd-c47f-4c67-af92-aa1bef18c9ef}</UniqueIdentifier>
     </Filter>
@@ -79,14 +76,17 @@
     <Filter Include="Header Files\PQL\QueryEvaluator\RelationEvaluator">
       <UniqueIdentifier>{c25711b4-12ef-49b2-a273-01893fdc508a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\PKB\RelationPreprocessor">
-      <UniqueIdentifier>{b9384b05-16a0-4d44-9108-e1e886e14b72}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\PKB\RelationPreprocessor">
       <UniqueIdentifier>{e2572ef7-b040-4343-a034-7c18e6de7970}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\PKB\RelationTables">
       <UniqueIdentifier>{f957a021-55f2-4b7b-9944-6a4eca9469b3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\PKB">
+      <UniqueIdentifier>{3d599b16-4269-49f5-a655-f4fcf01aa7a5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\PKB\RelationPreprocessor">
+      <UniqueIdentifier>{b9384b05-16a0-4d44-9108-e1e886e14b72}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\PKB\RelationTables">
       <UniqueIdentifier>{1dfc2e37-cdb3-4da1-a698-b0ffca623e2b}</UniqueIdentifier>
@@ -306,9 +306,6 @@
     <ClCompile Include="..\source\PatternsEvaluator.cpp">
       <Filter>Source Files\PQL\QueryEvaluator</Filter>
     </ClCompile>
-    <ClCompile Include="..\source\RelationPreprocessorManager.cpp">
-      <Filter>Source Files\PKB</Filter>
-    </ClCompile>
     <ClCompile Include="..\source\NextTPreprocessor.cpp">
       <Filter>Source Files\PKB\RelationPreprocessor</Filter>
     </ClCompile>
@@ -359,6 +356,15 @@
     </ClCompile>
     <ClCompile Include="..\source\NextBipTPreprocessor.cpp">
       <Filter>Source Files\PKB\RelationPreprocessor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\RelationPreprocessorManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\QueryTupleGraph.cpp">
+      <Filter>Source Files\PQL\QueryObject</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\QueryTupleOptimizer.cpp">
+      <Filter>Source Files\PQL\QueryEvaluator</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -679,6 +685,12 @@
     </ClInclude>
     <ClInclude Include="..\source\PKBQueryInterface.h">
       <Filter>Header Files\PKB</Filter>
+	</ClInclude>
+    <ClInclude Include="..\source\QueryTupleGraph.h">
+      <Filter>Header Files\PQL\QueryObject</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\QueryTupleOptimizer.h">
+      <Filter>Header Files\PQL\QueryEvaluator</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

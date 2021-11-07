@@ -99,6 +99,8 @@
     <ClCompile Include="..\source\AffectsBipTParser.cpp" />
     <ClCompile Include="..\source\NextBipParser.cpp" />
     <ClCompile Include="..\source\NextBipTParser.cpp" />
+    <ClCompile Include="..\source\QueryTupleGraph.cpp" />
+    <ClCompile Include="..\source\QueryTupleOptimizer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\source\AffectsBipPreprocessor.h" />
@@ -199,6 +201,8 @@
     <ClInclude Include="..\source\AffectsBipTParser.h" />
     <ClInclude Include="..\source\NextBipParser.h" />
     <ClInclude Include="..\source\NextBipTParser.h" />
+    <ClInclude Include="..\source\QueryTupleGraph.h" />
+    <ClInclude Include="..\source\QueryTupleOptimizer.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{DC21A1EA-D2C6-4D14-A2B4-E025B64BDE81}</ProjectGuid>
