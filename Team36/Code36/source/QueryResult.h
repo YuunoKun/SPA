@@ -35,7 +35,8 @@ private:
 
 	bool joinResultTables(std::list<std::pair<Entity, Entity >> &);
 	bool joinResultTables(std::list<std::pair<Entity, Entity >> &, std::vector<Entity> selected_list, ResultTable& out);
-	bool joinResultTable(ResultTable&, std::pair<Entity,Entity>);
+	bool joinResultTable(ResultTable&, std::pair<Entity, Entity>);
+	bool joinResultTableExcludeJoinColumn(ResultTable&, std::pair<Entity, Entity>, Entity);
 
 	void getSelectedEntitiesMergedTable(std::vector<Entity>, std::list<ResultTable>&);
 	

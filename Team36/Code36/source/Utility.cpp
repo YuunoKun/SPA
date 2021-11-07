@@ -370,13 +370,8 @@ void Utility::joinRowExcludeJoinColumn(std::vector<value>& main, int main_join_i
 }
 
 std::vector<Entity> Utility::getEntitiesExclude(std::vector<Entity>& main, std::vector<Entity>& to_remove) {
-	std::unordered_set<std::string> to_remove_set;
-	for (auto& e : to_remove) {
-		to_remove_set.insert(e.getSynonym());
-	}
-
+	std::unordered_set<std::string> to_remove_set = getEntityNameUnorderedSetFromEntityList(to_remove);
 	std::vector<Entity> result;
-
 	for (auto& e : main) {
 		if (to_remove_set.find(e.getSynonym()) == to_remove_set.end()) {
 			result.emplace_back(e);
@@ -387,13 +382,8 @@ std::vector<Entity> Utility::getEntitiesExclude(std::vector<Entity>& main, std::
 }
 
 std::vector<Entity> Utility::getEntitiesInclude(std::vector<Entity>& main, std::vector<Entity>& to_include) {
-	std::unordered_set<std::string> to_include_set;
-	for (auto& e : to_include) {
-		to_include_set.insert(e.getSynonym());
-	}
-
+	std::unordered_set<std::string> to_include_set = getEntityNameUnorderedSetFromEntityList(to_include);
 	std::vector<Entity> result;
-
 	for (auto& e : main) {
 		if (to_include_set.find(e.getSynonym()) != to_include_set.end()) {
 			result.emplace_back(e);
@@ -1130,10 +1120,7 @@ Entity Utility::getEntityNameWithLeastFrequency(std::list<std::pair<Entity, Enti
 }
 
 Entity Utility::getEntityNameWithLeastFrequency(std::list<std::pair<Entity, Entity>>& list, std::vector<Entity> selected) {
-	std::unordered_set<std::string> selected_name;
-	for (auto& e : selected) {
-		selected_name.insert(e.getSynonym());
-	}
+	std::unordered_set<std::string> selected_name = getEntityNameUnorderedSetFromEntityList(selected);
 	return getEntityNameWithLeastFrequency(list, selected_name);
 }
 
@@ -1199,4 +1186,12 @@ std::string Utility::getSortedEntityName(std::vector<Entity> list) {
 std::string Utility::getSortedEntityName(std::pair<Entity, Entity> p) {
 	std::vector<Entity> list = { p.first, p.second };
 	return getSortedEntityName(list);
+}
+
+std::unordered_set<std::string> Utility::getEntityNameUnorderedSetFromEntityList(std::vector<Entity>& list) {
+	std::unordered_set<std::string> set;
+	for (auto& e : list) {
+		set.insert(e.getSynonym());
+	}
+	return set;
 }

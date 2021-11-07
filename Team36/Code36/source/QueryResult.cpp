@@ -195,35 +195,51 @@ bool QueryResult::joinResultTables(std::list<std::pair<Entity, Entity>>& table_n
 
 bool QueryResult::joinResultTables(std::list<std::pair<Entity, Entity>>& table_names, std::vector<Entity> selected_list, ResultTable& out) {
 	Entity selected = Utility::getEntityNameWithLeastFrequency(table_names);
-	
+	std::unordered_set<std::string> selected_set = Utility::getEntityNameUnorderedSetFromEntityList(selected_list);
+
 	ResultTable result;
 	while (!table_names.empty()) {
-		std::list<std::pair<Entity, Entity>> selected_table = Utility::splitEntityPairs(table_names, selected);
-		for (auto& selected : selected_table) {
-			if (joinResultTable(result, selected)) {
-				continue;
+		std::list<std::pair<Entity, Entity>> selected_tables = Utility::splitEntityPairs(table_names, selected);
+
+		while (!selected_tables.empty()) {
+			std::pair<Entity, Entity> selected_pair = selected_tables.front();
+			selected_tables.pop_front();
+			bool successful = false;
+			if (selected_tables.empty() && selected_set.count(selected.getSynonym()) == 0) {
+				successful = joinResultTableExcludeJoinColumn(result, selected_pair, selected);
+			} else {
+				successful = joinResultTable(result, selected_pair);
 			}
-			return false;
-		}
 
-		std::vector<Entity> remaining_entity_to_keep = Utility::getEntityListFromPair(table_names);
-		remaining_entity_to_keep.insert(remaining_entity_to_keep.end(), selected_list.begin(), selected_list.end());
-		std::vector<Entity> table_headers_without_unnecessary_header = Utility::getEntitiesInclude(result.getHeaders(), remaining_entity_to_keep);
+			if (!successful) {
+				return false;
+			}
 
-		if (table_headers_without_unnecessary_header.size() == 0) {
-			result = ResultTable();
-		} else if (table_headers_without_unnecessary_header.size() < result.getHeaders().size()) {
-			result = result.getResultTable(table_headers_without_unnecessary_header);
+			std::vector<Entity> remaining_entity_to_keep = Utility::getEntityListFromPair(table_names);
+			std::vector<Entity> remaining_entity_to_keep_local = Utility::getEntityListFromPair(selected_tables);
+			remaining_entity_to_keep.insert(remaining_entity_to_keep.end(), remaining_entity_to_keep_local.begin(), remaining_entity_to_keep_local.end());
+			remaining_entity_to_keep.insert(remaining_entity_to_keep.end(), selected_list.begin(), selected_list.end());
+			std::vector<Entity> table_headers_without_unnecessary_header = Utility::getEntitiesInclude(result.getHeaders(), remaining_entity_to_keep);
+
+			if (table_headers_without_unnecessary_header.size() == 0) {
+				result = ResultTable();
+			} else if (table_headers_without_unnecessary_header.size() < result.getHeaders().size()) {
+				result = result.getResultTable(table_headers_without_unnecessary_header);
+			}
 		}
 
 		if (table_names.empty()) {
 			break;
 		}
 
+
 		std::vector<Entity> common_entity = Utility::getEntitiesInclude(result.getHeaders(), Utility::getEntityListFromPair(table_names));
 		if (common_entity.empty()) {
 			selected = Utility::getEntityNameWithLeastFrequency(table_names);
 		} else {
+			std::vector<Entity> remaining_entity = Utility::getEntityListFromPair(table_names);
+			remaining_entity.insert(remaining_entity.end(), selected_list.begin(), selected_list.end());
+			std::vector<Entity> table_headers_without_unnecessary_header = Utility::getEntitiesInclude(result.getHeaders(), remaining_entity);
 			selected = Utility::getEntityNameWithLeastFrequency(table_names, table_headers_without_unnecessary_header);
 		}
 	}
@@ -238,6 +254,16 @@ bool QueryResult::joinResultTables(std::list<std::pair<Entity, Entity>>& table_n
 bool QueryResult::joinResultTable(ResultTable& out, std::pair<Entity, Entity> to_join_header) {
 	std::string header_name = Utility::getSortedEntityName(to_join_header);
 	out.joinTable(*results[header_name]);
+	if (out.isEmpty()) {
+		have_result = false;
+		return false;
+	}
+	return true;
+}
+
+bool QueryResult::joinResultTableExcludeJoinColumn(ResultTable& out, std::pair<Entity, Entity> to_join_header, Entity to_exclude) {
+	std::string header_name = Utility::getSortedEntityName(to_join_header);
+	out.tryJoinTableExcludeJoinColumn(*results[header_name], to_exclude);
 	if (out.isEmpty()) {
 		have_result = false;
 		return false;

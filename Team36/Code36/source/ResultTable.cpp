@@ -387,7 +387,7 @@ void ResultTable::joinTable(ResultTable& t) {
 	addHashToStringMap(t.hash_map);
 }
 
-void ResultTable::joinTableExcludeJoinColumn(ResultTable& t, Entity join_entity) {
+void ResultTable::tryJoinTableExcludeJoinColumn(ResultTable& t, Entity join_entity) {
 	if (this->header.empty()) {
 		init(t);
 		return;

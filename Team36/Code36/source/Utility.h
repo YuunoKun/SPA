@@ -102,6 +102,7 @@ public:
 	static std::string getSortedEntityName(std::vector<Entity>);
 	static std::string getSortedEntityName(std::pair<Entity, Entity>);
 
+	static std::unordered_set<std::string> getEntityNameUnorderedSetFromEntityList(std::vector<Entity>& list);
 
 private:
 	static StmtType convertType(EntityType);
