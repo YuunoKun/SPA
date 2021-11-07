@@ -30,16 +30,8 @@ bool WithEvaluator::evaluateWildAndConstant(Entity e) {
 ResultTable WithEvaluator::evaluateSynonymAndSynonym(Entity left, Entity right) {
 	ResultTable rt1 = getEntity(left);
 	ResultTable rt2 = getEntity(right);
-
-	if (!rt1.merge(rt2)) {
-		return ResultTable();
-	}
-
-	std::vector<Entity> header = { left, right };
-	if (left == right) {
-		header = { left };
-	}
-	return rt1.getResultTable(header);
+	rt1.tryJoinTableExcludeJoinColumn(rt2, rt1.getHeaders().at(1));
+	return rt1;
 }
 
 ResultTable WithEvaluator::evaluateWildAndSynonym(Entity header) {

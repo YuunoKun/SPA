@@ -116,7 +116,7 @@ std::list<Clause> QueryOptimizer::sortTwoSynonymClausesByCommonSynonym(std::list
 		}
 		std::vector<std::string> synonym_name = { left_entity.getSynonym(), right_entity.getSynonym() };
 		sort(synonym_name.begin(), synonym_name.end());
-		synonym_name.push_back(synonym_name[0] + " " + synonym_name[1]);
+		synonym_name.push_back(synonym_name[0] + SPACE + synonym_name[1]);
 		for (std::string name : synonym_name) {
 			std::unordered_map<std::string, int>::iterator it = synonym_count.find(name);
 			if (it != synonym_count.end()) {

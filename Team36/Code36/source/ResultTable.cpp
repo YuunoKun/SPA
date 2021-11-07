@@ -1,14 +1,12 @@
 #include "ResultTable.h"
 #include "Utility.h"
+#include <algorithm>
 
 ResultTable::ResultTable() {
 }
 
 ResultTable::ResultTable(ResultTable& t) {
-	this->table = t.table;
-	this->header = t.header;
-	this->header_set = t.header_set;
-	this->hash_map = t.hash_map;
+	init(t);
 }
 
 ResultTable::ResultTable(Entity& header, std::vector<StmtInfo>& table) {
@@ -71,12 +69,28 @@ bool ResultTable::merge(ResultTable& t) {
 	} else if (common_headers.size() == 2 && (t.header.size() == 2 || header.size() == 2)) {
 		//If table a or b only have 2 column, and both synonym is in the common_header, filter the result
 		filter_table(t, common_headers[0], common_headers[1]);
-	} else if (common_headers.size() == 1) {
-		//If table a and b have more than 1 column and there is 1 common header, join table
-		joinTable(t, common_headers[0]);
 	} else {
-		throw std::exception("Error: table merging scenario is not handled!!!");
+		return false;
 	}
+
+	return true;
+}
+
+//Return true if fliter is successful
+bool ResultTable::filter(ResultTable& t) {
+	std::vector<Entity> common_headers = getCommonHeaders(t.header);
+	//No common header, abandon merge.
+	if (common_headers.empty()) {
+		return false;
+	} else if (common_headers.size() > 1) {
+		throw std::exception("There shouldn't be any pair table with more than 1 common header size!!!");
+	}
+
+	int header_index = getHeaderIndex(common_headers[0]);
+	int to_join_index = t.getHeaderIndex(common_headers[0]);
+
+
+	Utility::filterBothResults(table, header_index, t.table, to_join_index);
 
 	return true;
 }
@@ -89,8 +103,15 @@ bool ResultTable::isEmpty() {
 	return table.empty();
 }
 
+size_t  ResultTable::size() {
+	return table.size();
+}
+
 void ResultTable::getEntityResult(Entity& e, std::list<std::string>& out) {
 	int columnIndex = Utility::getIndex(header, e);
+	if (columnIndex < 0) {
+		throw std::exception("getEntityResult(), Entity not found in result table");
+	}
 	bool isStringEntityType = Utility::isStringEntityType(e.getType());
 	std::unordered_set<std::string> result_set;
 	if (Utility::isStringEntityType(e.getType())) {
@@ -100,6 +121,7 @@ void ResultTable::getEntityResult(Entity& e, std::list<std::string>& out) {
 	}
 	Utility::unorderedSetToStringList(result_set, out);
 }
+
 void ResultTable::getStringEntityResult(int columnIndex, std::unordered_set<std::string>& out) {
 	for (auto row : table) {
 		out.insert(hash_map[row[columnIndex]]);
@@ -159,6 +181,19 @@ std::vector<Entity> ResultTable::getHeaders() {
 	return header;
 }
 
+std::string ResultTable::getHeadersName() {
+	if (header_outdated) {
+		generateHeaderName();
+	}
+	return header_name;
+}
+
+void ResultTable::generateHeaderName() {
+	header_name = Utility::getSortedEntityName(header);
+	header_outdated = false;
+}
+
+
 bool ResultTable::operator==(const ResultTable& other) const {
 	return header == other.header && table == other.table;
 }
@@ -173,16 +208,50 @@ void ResultTable::addHeader(std::pair<Entity, Entity>& header) {
 	}
 }
 
+void ResultTable::init(ResultTable& t) {
+	this->table = t.table;
+	addHeader(t.header);
+	addHashToStringMap(t.hash_map);
+}
+
 void ResultTable::addHeader(Entity& entity) {
 	if (header_set.count(entity.getSynonym()) == 0) {
 		header.push_back(entity);
 		header_set.insert(entity.getSynonym());
+		header_outdated = true;
 	}
 }
 
 void ResultTable::addHeader(std::vector<Entity>& v) {
 	for (auto& it : v) {
 		addHeader(it);
+	}
+}
+
+int ResultTable::removeHeader(Entity& entity) {
+	int index = getHeaderIndex(entity);
+	if (index >= 0) {
+		header.erase(header.begin() + index);
+		header_set.erase(entity.getSynonym());
+		header_outdated = true;
+	}
+	return index;
+}
+
+void ResultTable::removeColumn(Entity& entity) {
+	int index = getHeaderIndex(entity);
+	if (index >= 0) {
+
+		std::vector<int> indexes;
+		for (int i = 0; i < header.size(); i++) {
+			indexes.push_back(i);
+		}
+		indexes.erase(indexes.begin() + index);
+
+		removeHeader(entity);
+		std::list<std::vector<value>> main = table;
+		table = std::list<std::vector<value>>();
+		Utility::getColumnsWithoutDuplicate(main, indexes, table);
 	}
 }
 
@@ -282,21 +351,62 @@ void ResultTable::joinTable(ResultTable& t, Entity common_header) {
 	}
 
 	Utility::joinTable(main, header_index, to_join, to_join_index, table);
-	addHeader(t.header);
-	addHashToStringMap(t.hash_map);
+}
+
+void ResultTable::joinTableExcludeJoinColumn(ResultTable& t, Entity common_header) {
+	int header_index = getHeaderIndex(common_header);
+	int to_join_index = t.getHeaderIndex(common_header);
+
+	std::list<std::vector<value>> main = table;
+	table = std::list<std::vector<value>>();
+	std::unordered_multimap<value, std::vector<value>> to_join;
+
+	for (auto& it : t.table) {
+		to_join.insert({ it[to_join_index], it });
+	}
+
+	Utility::joinTableExcludeJoinColumn(main, header_index, to_join, to_join_index, table);
 }
 
 void ResultTable::joinTable(ResultTable& t) {
 	if (this->header.empty()) {
-		this->table = t.table;
-		addHeader(t.header);
-		addHashToStringMap(t.hash_map);
+		init(t);
 		return;
 	}
+	std::vector<Entity> common_headers = getCommonHeaders(t.header);
 
-	std::list<std::vector<value>> main = this->table;
-	table = std::list<std::vector<value>>();
-	Utility::joinTable(main, t.table, table);
+	if (common_headers.empty()) {
+		std::list<std::vector<value>> main = this->table;
+		table = std::list<std::vector<value>>();
+		Utility::joinTable(main, t.table, table);
+	} else if (!merge(t)){
+		joinTable(t, common_headers[0]);
+	}
+
 	addHeader(t.header);
+	addHashToStringMap(t.hash_map);
+}
+
+void ResultTable::tryJoinTableExcludeJoinColumn(ResultTable& t, Entity join_entity) {
+	if (this->header.empty()) {
+		init(t);
+		return;
+	}
+	std::vector<Entity> common_headers = getCommonHeaders(t.header);
+
+	if (common_headers.empty()) {
+		std::list<std::vector<value>> main = this->table;
+		table = std::list<std::vector<value>>();
+		Utility::joinTable(main, t.table, table);
+		addHeader(t.header);
+	} else if (merge(t)) {
+		removeColumn(join_entity);
+	} else {
+		joinTableExcludeJoinColumn(t, common_headers[0]);
+		addHeader(t.header);
+		removeHeader(common_headers[0]);
+
+	}
+
 	addHashToStringMap(t.hash_map);
 }
