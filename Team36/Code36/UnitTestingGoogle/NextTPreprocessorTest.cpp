@@ -1,8 +1,8 @@
 #include <iostream>
 
 #include "pch.h"
-#include "PKB.h"
-#include <NextTPreprocessor.h>
+#include "PKB/PKB.h"
+#include "PKB/RelationPreprocessor/NextTPreprocessor.h"
 
 namespace UnitTesting {
 	class NextTPreprocessorTest : public testing::Test {

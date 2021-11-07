@@ -1,8 +1,8 @@
 #include "pch.h"
 
-#include "NextBipTEvaluator.h"
-#include "PKB.h"
-#include "RelationPreprocessorManager.h"
+#include "PQL/QueryEvaluator/RelationEvaluator/NextBipTEvaluator.h"
+#include "PKB/PKB.h"
+#include "PKB/RelationPreprocessorManager.h"
 
 namespace UnitTesting {
 	class NextBipTEvaluatorTest : public testing::Test {

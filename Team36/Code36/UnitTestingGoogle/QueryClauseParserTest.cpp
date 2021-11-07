@@ -1,8 +1,8 @@
-#include "pch.h"
-
-#include "QueryClauseParser.h"
-#include "Common.h"
 #include <iostream>
+
+#include "pch.h"
+#include "PQL/QueryPreprocessor/QueryClauseParser/QueryClauseParser.h"
+#include "Common/Common.h"
 
 namespace UnitTesting {
 	class QueryClauseParserTest : public ::testing::Test {
@@ -97,7 +97,7 @@ namespace UnitTesting {
 		/*============================================================================*/
 		temp_token_chain.clear();
 
-		//‘"’ IDENT ‘"’
+		//??IDENT ??
 		//Result
 		QueryToken quotation_open_token = QueryToken(QueryToken::QUOTATION_OPEN, "");
 		QueryToken proc_name_token = QueryToken(QueryToken::IDENTIFIER, "procName");

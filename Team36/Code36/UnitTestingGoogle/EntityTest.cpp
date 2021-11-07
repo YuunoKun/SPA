@@ -1,7 +1,7 @@
 #include "pch.h"
 
-#include "Entity.h"
-#include "Common.h"
+#include "PQL/QueryObject/Entity.h"
+#include "Common/Common.h"
 
 namespace UnitTesting {
 	TEST(Entity, getType) {

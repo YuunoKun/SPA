@@ -1,9 +1,9 @@
 #include <iostream>
 
 #include "pch.h"
-#include "PKB.h"
-#include "CFG.h"
-#include "RelationPreprocessorManager.h"
+#include "PKB/PKB.h"
+#include "Common/CFG.h"
+#include "PKB/RelationPreprocessorManager.h"
 
 namespace UnitTesting {
 	class RelationPreprocessorManagerTest_AffectsBip : public testing::Test {

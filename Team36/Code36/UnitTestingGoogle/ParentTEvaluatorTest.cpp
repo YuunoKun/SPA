@@ -1,7 +1,7 @@
 #include "pch.h"
 
-#include "ParentTEvaluator.h"
-#include "PKB.h"
+#include "PQL/QueryEvaluator/RelationEvaluator/ParentTEvaluator.h"
+#include "PKB/PKB.h"
 
 namespace UnitTesting {
 	class ParentTEvaluatorTest : public testing::Test {

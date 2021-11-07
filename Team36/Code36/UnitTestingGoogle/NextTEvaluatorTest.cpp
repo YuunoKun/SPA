@@ -1,8 +1,8 @@
 #include "pch.h"
 
-#include "NextTEvaluator.h"
-#include "PKB.h"
-#include "RelationPreprocessorManager.h"
+#include "PQL/QueryEvaluator/RelationEvaluator/NextTEvaluator.h"
+#include "PKB/PKB.h"
+#include "PKB/RelationPreprocessorManager.h"
 
 namespace UnitTesting {
 	class NextTEvaluatorTest : public testing::Test {

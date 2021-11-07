@@ -1,7 +1,7 @@
 #include "pch.h"
 
 #include <iostream>
-#include "../../source/CFG.h"
+#include "Common/CFG.h"
 
 namespace UnitTesting {
 	TEST(CFG, add) {

@@ -1,7 +1,7 @@
 #include "pch.h"
 
-#include "NextEvaluator.h"
-#include "PKB.h"
+#include "PQL/QueryEvaluator/RelationEvaluator/NextEvaluator.h"
+#include "PKB/PKB.h"
 
 namespace UnitTesting {
 	class NextEvaluatorTest : public testing::Test {

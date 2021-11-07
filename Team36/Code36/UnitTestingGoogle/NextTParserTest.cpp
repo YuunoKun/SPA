@@ -1,8 +1,8 @@
-#include "pch.h"
+#include <iostream> 
 
-#include "QueryClauseParser.h"
-#include "Common.h"
-#include <iostream>
+#include "pch.h"
+#include "PQL/QueryPreprocessor/QueryClauseParser/QueryClauseParser.h"
+#include "Common/Common.h"
 
 namespace UnitTesting {
 	class NextTParserTest : public ::testing::Test {

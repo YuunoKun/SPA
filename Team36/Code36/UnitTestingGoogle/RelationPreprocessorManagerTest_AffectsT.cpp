@@ -1,8 +1,8 @@
 #include <iostream>
 
 #include "pch.h"
-#include "PKB.h"
-#include "RelationPreprocessorManager.h"
+#include "PKB/PKB.h"
+#include "PKB/RelationPreprocessorManager.h"
 
 namespace UnitTesting {
 	class RelationPreprocessorManagerTest_AffectsT : public testing::Test {

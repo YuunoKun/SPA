@@ -1,8 +1,7 @@
 #include "pch.h"
 
 #include <iostream>
-#include "../../source/CFGNode.h"
-#include "../../source/CFGNode.cpp"
+#include "Common/CFGNode.h"
 
 namespace UnitTesting {
 	TEST(CFGNode, setters_and_getters) {

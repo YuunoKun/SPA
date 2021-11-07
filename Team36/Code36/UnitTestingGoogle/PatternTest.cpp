@@ -1,8 +1,8 @@
 #include "pch.h"
 
-#include "Pattern.h"
-#include "Common.h"
-#include "ExprParser.h"
+#include "PQL/QueryObject/Pattern.h"
+#include "Common/Common.h"
+#include "Common/ExprParser.h"
 
 namespace UnitTesting {
 	ExprParser expr_parser;

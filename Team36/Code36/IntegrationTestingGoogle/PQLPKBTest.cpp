@@ -1,9 +1,9 @@
 #include <iostream>
 
 #include "pch.h"
-#include "PKB.h"
-#include "QuerySystem.h"
-#include "ExprParser.h"
+#include "PKB/PKB.h"
+#include "PQL/QuerySystem.h"
+#include "Common/ExprParser.h"
 
 namespace UnitTesting {
 	class PQLPKBTest : public testing::Test {

@@ -2,7 +2,7 @@
 #include <iostream>
 #include <stdexcept>
 #include <vector>
-#include "../../source/Tokenizer.h"
+#include "SP/Tokenizer.h"
 
 namespace UnitTesting {
 	using namespace SourceProcessor;

@@ -2,8 +2,8 @@
 
 #include <iostream>
 
-#include "..\source\QuerySystem.h"
-#include "..\source\Parser.h"
+#include "../source/PQL/QuerySystem.h"
+#include "../source/SP/Parser.h"
 
 // implementation code of WrapperFactory - do NOT modify the next 5 lines
 AbstractWrapper* WrapperFactory::wrapper = 0;

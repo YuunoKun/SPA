@@ -1,9 +1,9 @@
 #include "pch.h"
 
-#include "pkb.h"
-#include "PatternIfEvaluator.h"
-#include "ExprParser.h"
-#include "PKBAdapter.h"
+#include "PKB/PKB.h"
+#include "PQL/QueryEvaluator/PatternEvaluator/PatternIfEvaluator.h"
+#include "Common/ExprParser.h"
+#include "PKB/PKBAdapter.h"
 
 namespace UnitTesting {
 	class PatternIfEvaluatorTest : public testing::Test {

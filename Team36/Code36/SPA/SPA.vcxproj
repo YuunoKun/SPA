@@ -1,250 +1,250 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-	<ItemGroup Label="ProjectConfigurations">
-		<ProjectConfiguration Include="Debug|Win32">
-			<Configuration>Debug</Configuration>
-			<Platform>Win32</Platform>
-		</ProjectConfiguration>
-		<ProjectConfiguration Include="Release|Win32">
-			<Configuration>Release</Configuration>
-			<Platform>Win32</Platform>
-		</ProjectConfiguration>
-	</ItemGroup>
-	<ItemGroup>
-		<ClCompile Include="..\source\AffectsBipPreprocessor.cpp" />
-		<ClCompile Include="..\source\AffectsBipTPreprocessor.cpp" />
-		<ClCompile Include="..\source\AffectsPreprocessor.cpp" />
-		<ClCompile Include="..\source\AffectsTPreprocessor.cpp" />
-		<ClCompile Include="..\source\DesignExtractor.cpp" />
-		<ClCompile Include="..\source\ExprNode.cpp" />
-		<ClCompile Include="..\source\ExprParser.cpp" />
-		<ClCompile Include="..\source\FSM.cpp" />
-		<ClCompile Include="..\source\IterativeDataflowSolver.cpp" />
-		<ClCompile Include="..\source\IterativeDataflowSolverBip.cpp" />
-		<ClCompile Include="..\source\NextBipPreprocessor.cpp" />
-		<ClCompile Include="..\source\NextBipTPreprocessor.cpp" />
-		<ClCompile Include="..\source\Parser.cpp" />
-		<ClCompile Include="..\source\Procedure.cpp" />
-		<ClCompile Include="..\source\RelationPreprocessor.cpp" />
-		<ClCompile Include="..\source\RelationTableUtility.cpp" />
-		<ClCompile Include="..\source\RelationTable.cpp" />
-		<ClCompile Include="..\source\PKB.cpp" />
-		<ClCompile Include="..\source\Statement.cpp" />
-		<ClCompile Include="..\source\Entity.cpp" />
-		<ClCompile Include="..\source\Pattern.cpp" />
-		<ClCompile Include="..\source\PKBAdapter.cpp" />
-		<ClCompile Include="..\source\QueryResult.cpp" />
-		<ClCompile Include="..\source\Query.cpp" />
-		<ClCompile Include="..\source\QueryEvaluator.cpp" />
-		<ClCompile Include="..\source\QueryPreprocessor.cpp" />
-		<ClCompile Include="..\source\QueryToken.cpp" />
-		<ClCompile Include="..\source\QueryTokenizer.cpp" />
-		<ClCompile Include="..\source\QuerySystem.cpp" />
-		<ClCompile Include="..\source\QueryValidator.cpp" />
-		<ClCompile Include="..\source\RelRef.cpp" />
-		<ClCompile Include="..\source\Token.cpp" />
-		<ClCompile Include="..\source\Tokenizer.cpp" />
-		<ClCompile Include="..\source\RelationsEvaluator.cpp" />
-		<ClCompile Include="..\source\FollowsEvaluator.cpp" />
-		<ClCompile Include="..\source\FollowsTEvaluator.cpp" />
-		<ClCompile Include="..\source\ParentEvaluator.cpp" />
-		<ClCompile Include="..\source\ParentTEvaluator.cpp" />
-		<ClCompile Include="..\source\ModifiesSEvaluator.cpp" />
-		<ClCompile Include="..\source\ModifiesPEvaluator.cpp" />
-		<ClCompile Include="..\source\UsesSEvaluator.cpp" />
-		<ClCompile Include="..\source\UsesPEvaluator.cpp" />
-		<ClCompile Include="..\source\CallsEvaluator.cpp" />
-		<ClCompile Include="..\source\CallsTEvaluator.cpp" />
-		<ClCompile Include="..\source\NextEvaluator.cpp" />
-		<ClCompile Include="..\source\NextTEvaluator.cpp" />
-		<ClCompile Include="..\source\AffectsEvaluator.cpp" />
-		<ClCompile Include="..\source\AffectsTEvaluator.cpp" />
-		<ClCompile Include="..\source\WithEvaluator.cpp" />
-		<ClCompile Include="..\source\NextBipEvaluator.cpp" />
-		<ClCompile Include="..\source\NextBipTEvaluator.cpp" />
-		<ClCompile Include="..\source\AffectsBipEvaluator.cpp" />
-		<ClCompile Include="..\source\AffectsBipTEvaluator.cpp" />
-		<ClCompile Include="..\source\PatternsEvaluator.cpp" />
-		<ClCompile Include="..\source\PatternAssignEvaluator.cpp" />
-		<ClCompile Include="..\source\PatternIfEvaluator.cpp" />
-		<ClCompile Include="..\source\PatternWhileEvaluator.cpp" />
-		<ClCompile Include="..\source\ResultTable.cpp" />
-		<ClCompile Include="..\source\Utility.cpp" />
-		<ClCompile Include="..\source\QueryClauseParser.cpp" />
-		<ClCompile Include="..\source\Clause.cpp" />
-		<ClCompile Include="..\source\QueryOptimizer.cpp" />
-		<ClCompile Include="..\source\SemanticErrorException.cpp" />
-		<ClCompile Include="..\source\SyntacticErrorException.cpp" />
-		<ClCompile Include="..\source\CFGNode.cpp" />
-		<ClCompile Include="..\source\CFG.cpp" />
-		<ClCompile Include="..\source\AssignPatternParser.cpp" />
-		<ClCompile Include="..\source\IfPatternParser.cpp" />
-		<ClCompile Include="..\source\WhilePatternParser.cpp" />
-		<ClCompile Include="..\source\NextParser.cpp" />
-		<ClCompile Include="..\source\UsesParser.cpp" />
-		<ClCompile Include="..\source\ModifiesParser.cpp" />
-		<ClCompile Include="..\source\FollowsParser.cpp" />
-		<ClCompile Include="..\source\ParentParser.cpp" />
-		<ClCompile Include="..\source\CallsParser.cpp" />
-		<ClCompile Include="..\source\AffectsParser.cpp" />
-		<ClCompile Include="..\source\WithParser.cpp" />
-		<ClCompile Include="..\source\RelationPreprocessorManager.cpp" />
-		<ClCompile Include="..\source\NextTPreprocessor.cpp" />
-		<ClCompile Include="..\source\QueryTupleGraph.cpp" />
-		<ClCompile Include="..\source\QueryTupleOptimizer.cpp" />
-	</ItemGroup>
-	<ItemGroup>
-		<ClInclude Include="..\source\AffectsBipPreprocessor.h" />
-		<ClInclude Include="..\source\AffectsBipTPreprocessor.h" />
-		<ClInclude Include="..\source\AffectsTPreprocessor.h" />
-		<ClInclude Include="..\source\DesignExtractor.h" />
-		<ClInclude Include="..\source\ExprNode.h" />
-		<ClInclude Include="..\source\ExprParser.h" />
-		<ClInclude Include="..\source\Extractor.h" />
-		<ClInclude Include="..\source\FSM.h" />
-		<ClInclude Include="..\source\AffectsPreprocessor.h" />
-		<ClInclude Include="..\source\NextBipPreprocessor.h" />
-		<ClInclude Include="..\source\IterativeDataflowSolver.h" />
-		<ClInclude Include="..\source\IterativeDataflowSolverBip.h" />
-		<ClInclude Include="..\source\MonotypeRelationTable.h" />
-		<ClInclude Include="..\source\NextBipTPreprocessor.h" />
-		<ClInclude Include="..\source\PKB.h" />
-		<ClInclude Include="..\source\Parser.h" />
-		<ClInclude Include="..\source\PKBQueryInterface.h" />
-		<ClInclude Include="..\source\PKBSourceInterface.h" />
-		<ClInclude Include="..\source\Procedure.h" />
-		<ClInclude Include="..\source\RelationTableUtility.h" />
-		<ClInclude Include="..\source\RelationTable.h" />
-		<ClInclude Include="..\source\SPCommon.h" />
-		<ClInclude Include="..\source\Statement.h" />
-		<ClInclude Include="..\source\Common.h" />
-		<ClInclude Include="..\source\QueryResult.h" />
-		<ClInclude Include="..\source\Entity.h" />
-		<ClInclude Include="..\source\Pattern.h" />
-		<ClInclude Include="..\source\PKBAdapter.h" />
-		<ClInclude Include="..\source\Query.h" />
-		<ClInclude Include="..\source\QueryEvaluator.h" />
-		<ClInclude Include="..\source\QueryPreprocessor.h" />
-		<ClInclude Include="..\source\QueryToken.h" />
-		<ClInclude Include="..\source\QueryTokenizer.h" />
-		<ClInclude Include="..\source\QuerySystem.h" />
-		<ClInclude Include="..\source\QueryValidator.h" />
-		<ClInclude Include="..\source\RelRef.h" />
-		<ClInclude Include="..\source\Token.h" />
-		<ClInclude Include="..\source\Tokenizer.h" />
-		<ClInclude Include="..\source\RelationsEvaluator.h" />
-		<ClInclude Include="..\source\RelationEvaluatorInterface.h" />
-		<ClInclude Include="..\source\FollowsEvaluator.h" />
-		<ClInclude Include="..\source\PatternsEvaluator.h" />
-		<ClInclude Include="..\source\PatternEvaluatorInterface.h" />
-		<ClInclude Include="..\source\PatternAssignEvaluator.h" />
-		<ClInclude Include="..\source\PatternIfEvaluator.h" />
-		<ClInclude Include="..\source\PatternWhileEvaluator.h" />
-		<ClInclude Include="..\source\FollowsTEvaluator.h" />
-		<ClInclude Include="..\source\ParentEvaluator.h" />
-		<ClInclude Include="..\source\ParentTEvaluator.h" />
-		<ClInclude Include="..\source\ModifiesSEvaluator.h" />
-		<ClInclude Include="..\source\ModifiesPEvaluator.h" />
-		<ClInclude Include="..\source\UsesSEvaluator.h" />
-		<ClInclude Include="..\source\UsesPEvaluator.h" />
-		<ClInclude Include="..\source\CallsEvaluator.h" />
-		<ClInclude Include="..\source\CallsTEvaluator.h" />
-		<ClInclude Include="..\source\NextEvaluator.h" />
-		<ClInclude Include="..\source\NextTEvaluator.h" />
-		<ClInclude Include="..\source\AffectsEvaluator.h" />
-		<ClInclude Include="..\source\AffectsTEvaluator.h" />
-		<ClInclude Include="..\source\WithEvaluator.h" />
-		<ClInclude Include="..\source\NextBipEvaluator.h" />
-		<ClInclude Include="..\source\NextBipTEvaluator.h" />
-		<ClInclude Include="..\source\AffectsBipEvaluator.h" />
-		<ClInclude Include="..\source\AffectsBipTEvaluator.h" />
-		<ClInclude Include="..\source\ResultTable.h" />
-		<ClInclude Include="..\source\Utility.h" />
-		<ClInclude Include="..\source\QueryClauseParser.h" />
-		<ClInclude Include="..\source\Clause.h" />
-		<ClInclude Include="..\source\QueryOptimizer.h" />
-		<ClInclude Include="..\source\SyntacticErrorException.h" />
-		<ClInclude Include="..\source\SemanticErrorException.h" />
-		<ClInclude Include="..\source\CFGNode.h" />
-		<ClInclude Include="..\source\CFG.h" />
-		<ClInclude Include="..\source\AssignPatternParser.h" />
-		<ClInclude Include="..\source\IfPatternParser.h" />
-		<ClInclude Include="..\source\WhilePatternParser.h" />
-		<ClInclude Include="..\source\NextParser.h" />
-		<ClInclude Include="..\source\UsesParser.h" />
-		<ClInclude Include="..\source\ModifiesParser.h" />
-		<ClInclude Include="..\source\FollowsParser.h" />
-		<ClInclude Include="..\source\ParentParser.h" />
-		<ClInclude Include="..\source\CallsParser.h" />
-		<ClInclude Include="..\source\AffectsParser.h" />
-		<ClInclude Include="..\source\WithParser.h" />
-		<ClInclude Include="..\source\RelationParserInterface.h" />
-		<ClInclude Include="..\source\PatternParserInterface.h" />
-		<ClInclude Include="..\source\WithParserInterface.h" />
-		<ClInclude Include="..\source\RelationPreprocessorManager.h" />
-		<ClInclude Include="..\source\NextTPreprocessor.h" />
-		<ClInclude Include="..\source\RelationPreprocessor.h" />
-		<ClInclude Include="..\source\TransitiveClosureHelper.h" />
-		<ClInclude Include="..\source\QueryTupleGraph.h" />
-		<ClInclude Include="..\source\QueryTupleOptimizer.h" />
-	</ItemGroup>
-	<PropertyGroup Label="Globals">
-		<ProjectGuid>{DC21A1EA-D2C6-4D14-A2B4-E025B64BDE81}</ProjectGuid>
-		<RootNamespace>SPA</RootNamespace>
-		<WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
-	</PropertyGroup>
-	<Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
-	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-		<ConfigurationType>StaticLibrary</ConfigurationType>
-		<UseDebugLibraries>true</UseDebugLibraries>
-		<CharacterSet>MultiByte</CharacterSet>
-		<PlatformToolset>v142</PlatformToolset>
-	</PropertyGroup>
-	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
-		<ConfigurationType>StaticLibrary</ConfigurationType>
-		<UseDebugLibraries>false</UseDebugLibraries>
-		<WholeProgramOptimization>true</WholeProgramOptimization>
-		<CharacterSet>MultiByte</CharacterSet>
-		<PlatformToolset>v142</PlatformToolset>
-	</PropertyGroup>
-	<Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
-	<ImportGroup Label="ExtensionSettings">
-	</ImportGroup>
-	<ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-		<Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-	</ImportGroup>
-	<ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-		<Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-	</ImportGroup>
-	<PropertyGroup Label="UserMacros" />
-	<PropertyGroup />
-	<ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-		<ClCompile>
-			<WarningLevel>Level3</WarningLevel>
-			<Optimization>Disabled</Optimization>
-			<RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
-			<LanguageStandard>stdcpp17</LanguageStandard>
-		</ClCompile>
-		<Link>
-			<GenerateDebugInformation>true</GenerateDebugInformation>
-		</Link>
-	</ItemDefinitionGroup>
-	<ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-		<ClCompile>
-			<WarningLevel>Level3</WarningLevel>
-			<Optimization>MaxSpeed</Optimization>
-			<FunctionLevelLinking>true</FunctionLevelLinking>
-			<IntrinsicFunctions>true</IntrinsicFunctions>
-			<RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
-			<LanguageStandard>stdcpp17</LanguageStandard>
-		</ClCompile>
-		<Link>
-			<GenerateDebugInformation>true</GenerateDebugInformation>
-			<EnableCOMDATFolding>true</EnableCOMDATFolding>
-			<OptimizeReferences>true</OptimizeReferences>
-		</Link>
-	</ItemDefinitionGroup>
-	<Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
-	<ImportGroup Label="ExtensionTargets">
-	</ImportGroup>
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\source\Common\CFG.h" />
+    <ClInclude Include="..\source\Common\CFGNode.h" />
+    <ClInclude Include="..\source\Common\Common.h" />
+    <ClInclude Include="..\source\Common\ExprNode.h" />
+    <ClInclude Include="..\source\Common\ExprParser.h" />
+    <ClInclude Include="..\source\Common\SemanticErrorException.h" />
+    <ClInclude Include="..\source\Common\SyntacticErrorException.h" />
+    <ClInclude Include="..\source\Common\TransitiveClosureHelper.h" />
+    <ClInclude Include="..\source\PKB\PKB.h" />
+    <ClInclude Include="..\source\PKB\PKBAdapter.h" />
+    <ClInclude Include="..\source\PKB\PKBQueryInterface.h" />
+    <ClInclude Include="..\source\PKB\PKBSourceInterface.h" />
+    <ClInclude Include="..\source\PKB\RelationPreprocessorManager.h" />
+    <ClInclude Include="..\source\PKB\RelationPreprocessor\AffectsBipPreprocessor.h" />
+    <ClInclude Include="..\source\PKB\RelationPreprocessor\AffectsBipTPreprocessor.h" />
+    <ClInclude Include="..\source\PKB\RelationPreprocessor\AffectsPreprocessor.h" />
+    <ClInclude Include="..\source\PKB\RelationPreprocessor\AffectsTPreprocessor.h" />
+    <ClInclude Include="..\source\PKB\RelationPreprocessor\IterativeDataflowSolver.h" />
+    <ClInclude Include="..\source\PKB\RelationPreprocessor\IterativeDataflowSolverBip.h" />
+    <ClInclude Include="..\source\PKB\RelationPreprocessor\NextBipPreprocessor.h" />
+    <ClInclude Include="..\source\PKB\RelationPreprocessor\NextBipTPreprocessor.h" />
+    <ClInclude Include="..\source\PKB\RelationPreprocessor\NextTPreprocessor.h" />
+    <ClInclude Include="..\source\PKB\RelationPreprocessor\RelationPreprocessor.h" />
+    <ClInclude Include="..\source\PKB\RelationTables\MonotypeRelationTable.h" />
+    <ClInclude Include="..\source\PKB\RelationTables\RelationTable.h" />
+    <ClInclude Include="..\source\PKB\RelationTables\RelationTableUtility.h" />
+    <ClInclude Include="..\source\PQL\Helper\Utility.h" />
+    <ClInclude Include="..\source\PQL\QueryEvaluator\PatternEvaluator\PatternAssignEvaluator.h" />
+    <ClInclude Include="..\source\PQL\QueryEvaluator\PatternEvaluator\PatternEvaluatorInterface.h" />
+    <ClInclude Include="..\source\PQL\QueryEvaluator\PatternEvaluator\PatternIfEvaluator.h" />
+    <ClInclude Include="..\source\PQL\QueryEvaluator\PatternEvaluator\PatternWhileEvaluator.h" />
+    <ClInclude Include="..\source\PQL\QueryEvaluator\PatternsEvaluator.h" />
+    <ClInclude Include="..\source\PQL\QueryEvaluator\QueryEvaluator.h" />
+    <ClInclude Include="..\source\PQL\QueryEvaluator\QueryResult.h" />
+    <ClInclude Include="..\source\PQL\QueryEvaluator\QueryTupleOptimizer.h" />
+    <ClInclude Include="..\source\PQL\QueryEvaluator\RelationEvaluator\AffectsBipEvaluator.h" />
+    <ClInclude Include="..\source\PQL\QueryEvaluator\RelationEvaluator\AffectsBipTEvaluator.h" />
+    <ClInclude Include="..\source\PQL\QueryEvaluator\RelationEvaluator\AffectsEvaluator.h" />
+    <ClInclude Include="..\source\PQL\QueryEvaluator\RelationEvaluator\AffectsTEvaluator.h" />
+    <ClInclude Include="..\source\PQL\QueryEvaluator\RelationEvaluator\CallsEvaluator.h" />
+    <ClInclude Include="..\source\PQL\QueryEvaluator\RelationEvaluator\CallsTEvaluator.h" />
+    <ClInclude Include="..\source\PQL\QueryEvaluator\RelationEvaluator\FollowsEvaluator.h" />
+    <ClInclude Include="..\source\PQL\QueryEvaluator\RelationEvaluator\FollowsTEvaluator.h" />
+    <ClInclude Include="..\source\PQL\QueryEvaluator\RelationEvaluator\ModifiesPEvaluator.h" />
+    <ClInclude Include="..\source\PQL\QueryEvaluator\RelationEvaluator\ModifiesSEvaluator.h" />
+    <ClInclude Include="..\source\PQL\QueryEvaluator\RelationEvaluator\NextBipEvaluator.h" />
+    <ClInclude Include="..\source\PQL\QueryEvaluator\RelationEvaluator\NextBipTEvaluator.h" />
+    <ClInclude Include="..\source\PQL\QueryEvaluator\RelationEvaluator\NextEvaluator.h" />
+    <ClInclude Include="..\source\PQL\QueryEvaluator\RelationEvaluator\NextTEvaluator.h" />
+    <ClInclude Include="..\source\PQL\QueryEvaluator\RelationEvaluator\ParentEvaluator.h" />
+    <ClInclude Include="..\source\PQL\QueryEvaluator\RelationEvaluator\ParentTEvaluator.h" />
+    <ClInclude Include="..\source\PQL\QueryEvaluator\RelationEvaluator\RelationEvaluatorInterface.h" />
+    <ClInclude Include="..\source\PQL\QueryEvaluator\RelationEvaluator\UsesPEvaluator.h" />
+    <ClInclude Include="..\source\PQL\QueryEvaluator\RelationEvaluator\UsesSEvaluator.h" />
+    <ClInclude Include="..\source\PQL\QueryEvaluator\RelationEvaluator\WithEvaluator.h" />
+    <ClInclude Include="..\source\PQL\QueryEvaluator\RelationsEvaluator.h" />
+    <ClInclude Include="..\source\PQL\QueryEvaluator\ResultTable.h" />
+    <ClInclude Include="..\source\PQL\QueryObject\Clause.h" />
+    <ClInclude Include="..\source\PQL\QueryObject\Entity.h" />
+    <ClInclude Include="..\source\PQL\QueryObject\Pattern.h" />
+    <ClInclude Include="..\source\PQL\QueryObject\Query.h" />
+    <ClInclude Include="..\source\PQL\QueryObject\QueryTupleGraph.h" />
+    <ClInclude Include="..\source\PQL\QueryObject\RelRef.h" />
+    <ClInclude Include="..\source\PQL\QueryOptimizer.h" />
+    <ClInclude Include="..\source\PQL\QueryPreprocessor\QueryClauseParser\AffectsParser.h" />
+    <ClInclude Include="..\source\PQL\QueryPreprocessor\QueryClauseParser\AssignPatternParser.h" />
+    <ClInclude Include="..\source\PQL\QueryPreprocessor\QueryClauseParser\CallsParser.h" />
+    <ClInclude Include="..\source\PQL\QueryPreprocessor\QueryClauseParser\FollowsParser.h" />
+    <ClInclude Include="..\source\PQL\QueryPreprocessor\QueryClauseParser\IfPatternParser.h" />
+    <ClInclude Include="..\source\PQL\QueryPreprocessor\QueryClauseParser\ModifiesParser.h" />
+    <ClInclude Include="..\source\PQL\QueryPreprocessor\QueryClauseParser\NextParser.h" />
+    <ClInclude Include="..\source\PQL\QueryPreprocessor\QueryClauseParser\ParentParser.h" />
+    <ClInclude Include="..\source\PQL\QueryPreprocessor\QueryClauseParser\PatternParserInterface.h" />
+    <ClInclude Include="..\source\PQL\QueryPreprocessor\QueryClauseParser\QueryClauseParser.h" />
+    <ClInclude Include="..\source\PQL\QueryPreprocessor\QueryClauseParser\RelationParserInterface.h" />
+    <ClInclude Include="..\source\PQL\QueryPreprocessor\QueryClauseParser\UsesParser.h" />
+    <ClInclude Include="..\source\PQL\QueryPreprocessor\QueryClauseParser\WhilePatternParser.h" />
+    <ClInclude Include="..\source\PQL\QueryPreprocessor\QueryClauseParser\WithParser.h" />
+    <ClInclude Include="..\source\PQL\QueryPreprocessor\QueryClauseParser\WithParserInterface.h" />
+    <ClInclude Include="..\source\PQL\QueryPreprocessor\QueryPreprocessor.h" />
+    <ClInclude Include="..\source\PQL\QueryPreprocessor\QueryToken.h" />
+    <ClInclude Include="..\source\PQL\QueryPreprocessor\QueryTokenizer.h" />
+    <ClInclude Include="..\source\PQL\QueryPreprocessor\QueryValidator.h" />
+    <ClInclude Include="..\source\PQL\QuerySystem.h" />
+    <ClInclude Include="..\source\SP\DesignExtractor.h" />
+    <ClInclude Include="..\source\SP\Extractor.h" />
+    <ClInclude Include="..\source\SP\FSM.h" />
+    <ClInclude Include="..\source\SP\Parser.h" />
+    <ClInclude Include="..\source\SP\Procedure.h" />
+    <ClInclude Include="..\source\SP\SPCommon.h" />
+    <ClInclude Include="..\source\SP\Statement.h" />
+    <ClInclude Include="..\source\SP\Token.h" />
+    <ClInclude Include="..\source\SP\Tokenizer.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\source\Common\CFG.cpp" />
+    <ClCompile Include="..\source\Common\CFGNode.cpp" />
+    <ClCompile Include="..\source\Common\ExprNode.cpp" />
+    <ClCompile Include="..\source\Common\ExprParser.cpp" />
+    <ClCompile Include="..\source\PKB\PKB.cpp" />
+    <ClCompile Include="..\source\PKB\PKBAdapter.cpp" />
+    <ClCompile Include="..\source\PKB\RelationPreprocessorManager.cpp" />
+    <ClCompile Include="..\source\PKB\RelationPreprocessor\AffectsBipPreprocessor.cpp" />
+    <ClCompile Include="..\source\PKB\RelationPreprocessor\AffectsBipTPreprocessor.cpp" />
+    <ClCompile Include="..\source\PKB\RelationPreprocessor\AffectsPreprocessor.cpp" />
+    <ClCompile Include="..\source\PKB\RelationPreprocessor\AffectsTPreprocessor.cpp" />
+    <ClCompile Include="..\source\PKB\RelationPreprocessor\IterativeDataflowSolver.cpp" />
+    <ClCompile Include="..\source\PKB\RelationPreprocessor\IterativeDataflowSolverBip.cpp" />
+    <ClCompile Include="..\source\PKB\RelationPreprocessor\NextBipPreprocessor.cpp" />
+    <ClCompile Include="..\source\PKB\RelationPreprocessor\NextBipTPreprocessor.cpp" />
+    <ClCompile Include="..\source\PKB\RelationPreprocessor\NextTPreprocessor.cpp" />
+    <ClCompile Include="..\source\PKB\RelationPreprocessor\RelationPreprocessor.cpp" />
+    <ClCompile Include="..\source\PKB\RelationTables\RelationTable.cpp" />
+    <ClCompile Include="..\source\PKB\RelationTables\RelationTableUtility.cpp" />
+    <ClCompile Include="..\source\PQL\Helper\Utility.cpp" />
+    <ClCompile Include="..\source\PQL\QueryEvaluator\PatternEvaluator\PatternAssignEvaluator.cpp" />
+    <ClCompile Include="..\source\PQL\QueryEvaluator\PatternEvaluator\PatternIfEvaluator.cpp" />
+    <ClCompile Include="..\source\PQL\QueryEvaluator\PatternEvaluator\PatternWhileEvaluator.cpp" />
+    <ClCompile Include="..\source\PQL\QueryEvaluator\PatternsEvaluator.cpp" />
+    <ClCompile Include="..\source\PQL\QueryEvaluator\QueryEvaluator.cpp" />
+    <ClCompile Include="..\source\PQL\QueryEvaluator\QueryResult.cpp" />
+    <ClCompile Include="..\source\PQL\QueryEvaluator\QueryTupleOptimizer.cpp" />
+    <ClCompile Include="..\source\PQL\QueryEvaluator\RelationEvaluator\AffectsBipEvaluator.cpp" />
+    <ClCompile Include="..\source\PQL\QueryEvaluator\RelationEvaluator\AffectsBipTEvaluator.cpp" />
+    <ClCompile Include="..\source\PQL\QueryEvaluator\RelationEvaluator\AffectsEvaluator.cpp" />
+    <ClCompile Include="..\source\PQL\QueryEvaluator\RelationEvaluator\AffectsTEvaluator.cpp" />
+    <ClCompile Include="..\source\PQL\QueryEvaluator\RelationEvaluator\CallsEvaluator.cpp" />
+    <ClCompile Include="..\source\PQL\QueryEvaluator\RelationEvaluator\CallsTEvaluator.cpp" />
+    <ClCompile Include="..\source\PQL\QueryEvaluator\RelationEvaluator\FollowsEvaluator.cpp" />
+    <ClCompile Include="..\source\PQL\QueryEvaluator\RelationEvaluator\FollowsTEvaluator.cpp" />
+    <ClCompile Include="..\source\PQL\QueryEvaluator\RelationEvaluator\ModifiesPEvaluator.cpp" />
+    <ClCompile Include="..\source\PQL\QueryEvaluator\RelationEvaluator\ModifiesSEvaluator.cpp" />
+    <ClCompile Include="..\source\PQL\QueryEvaluator\RelationEvaluator\NextBipEvaluator.cpp" />
+    <ClCompile Include="..\source\PQL\QueryEvaluator\RelationEvaluator\NextBipTEvaluator.cpp" />
+    <ClCompile Include="..\source\PQL\QueryEvaluator\RelationEvaluator\NextEvaluator.cpp" />
+    <ClCompile Include="..\source\PQL\QueryEvaluator\RelationEvaluator\NextTEvaluator.cpp" />
+    <ClCompile Include="..\source\PQL\QueryEvaluator\RelationEvaluator\ParentEvaluator.cpp" />
+    <ClCompile Include="..\source\PQL\QueryEvaluator\RelationEvaluator\ParentTEvaluator.cpp" />
+    <ClCompile Include="..\source\PQL\QueryEvaluator\RelationEvaluator\UsesPEvaluator.cpp" />
+    <ClCompile Include="..\source\PQL\QueryEvaluator\RelationEvaluator\UsesSEvaluator.cpp" />
+    <ClCompile Include="..\source\PQL\QueryEvaluator\RelationEvaluator\WithEvaluator.cpp" />
+    <ClCompile Include="..\source\PQL\QueryEvaluator\RelationsEvaluator.cpp" />
+    <ClCompile Include="..\source\PQL\QueryEvaluator\ResultTable.cpp" />
+    <ClCompile Include="..\source\PQL\QueryObject\Clause.cpp" />
+    <ClCompile Include="..\source\PQL\QueryObject\Entity.cpp" />
+    <ClCompile Include="..\source\PQL\QueryObject\Pattern.cpp" />
+    <ClCompile Include="..\source\PQL\QueryObject\Query.cpp" />
+    <ClCompile Include="..\source\PQL\QueryObject\QueryTupleGraph.cpp" />
+    <ClCompile Include="..\source\PQL\QueryObject\RelRef.cpp" />
+    <ClCompile Include="..\source\PQL\QueryOptimizer.cpp" />
+    <ClCompile Include="..\source\PQL\QueryPreprocessor\QueryClauseParser\AffectsParser.cpp" />
+    <ClCompile Include="..\source\PQL\QueryPreprocessor\QueryClauseParser\AssignPatternParser.cpp" />
+    <ClCompile Include="..\source\PQL\QueryPreprocessor\QueryClauseParser\CallsParser.cpp" />
+    <ClCompile Include="..\source\PQL\QueryPreprocessor\QueryClauseParser\FollowsParser.cpp" />
+    <ClCompile Include="..\source\PQL\QueryPreprocessor\QueryClauseParser\IfPatternParser.cpp" />
+    <ClCompile Include="..\source\PQL\QueryPreprocessor\QueryClauseParser\ModifiesParser.cpp" />
+    <ClCompile Include="..\source\PQL\QueryPreprocessor\QueryClauseParser\NextParser.cpp" />
+    <ClCompile Include="..\source\PQL\QueryPreprocessor\QueryClauseParser\ParentParser.cpp" />
+    <ClCompile Include="..\source\PQL\QueryPreprocessor\QueryClauseParser\QueryClauseParser.cpp" />
+    <ClCompile Include="..\source\PQL\QueryPreprocessor\QueryClauseParser\UsesParser.cpp" />
+    <ClCompile Include="..\source\PQL\QueryPreprocessor\QueryClauseParser\WhilePatternParser.cpp" />
+    <ClCompile Include="..\source\PQL\QueryPreprocessor\QueryClauseParser\WithParser.cpp" />
+    <ClCompile Include="..\source\PQL\QueryPreprocessor\QueryPreprocessor.cpp" />
+    <ClCompile Include="..\source\PQL\QueryPreprocessor\QueryToken.cpp" />
+    <ClCompile Include="..\source\PQL\QueryPreprocessor\QueryTokenizer.cpp" />
+    <ClCompile Include="..\source\PQL\QueryPreprocessor\QueryValidator.cpp" />
+    <ClCompile Include="..\source\PQL\QuerySystem.cpp" />
+    <ClCompile Include="..\source\SP\DesignExtractor.cpp" />
+    <ClCompile Include="..\source\SP\FSM.cpp" />
+    <ClCompile Include="..\source\SP\Parser.cpp" />
+    <ClCompile Include="..\source\SP\Procedure.cpp" />
+    <ClCompile Include="..\source\SP\Statement.cpp" />
+    <ClCompile Include="..\source\SP\Token.cpp" />
+    <ClCompile Include="..\source\SP\Tokenizer.cpp" />
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{DC21A1EA-D2C6-4D14-A2B4-E025B64BDE81}</ProjectGuid>
+    <RootNamespace>SPA</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup />
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <AdditionalIncludeDirectories>$(SolutionDir)/source;</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+      <AdditionalIncludeDirectories>$(SolutionDir)/source;</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
 </Project>

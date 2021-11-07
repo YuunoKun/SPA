@@ -1,8 +1,8 @@
-#include "pch.h"
-
-#include "QueryClauseParser.h"
-#include "Common.h"
 #include <iostream>
+
+#include "pch.h"
+#include "PQL/QueryPreprocessor/QueryClauseParser/QueryClauseParser.h"
+#include "Common/Common.h"
 
 namespace UnitTesting {
 	class ParentTParserTest : public ::testing::Test {

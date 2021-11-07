@@ -1,10 +1,10 @@
 #include "pch.h"
 
-#include "QueryEvaluator.h"
-#include "PKBAdapter.h"
-#include "PKB.h"
-#include "Common.h"
-#include "ExprParser.h"
+#include "PQL/QueryEvaluator/QueryEvaluator.h"
+#include "PKB/PKBAdapter.h"
+#include "PKB/PKB.h"
+#include "Common/Common.h"
+#include "Common/ExprParser.h"
 
 namespace UnitTesting {
 	class QueryEvaluatorRelationTest : public testing::Test {

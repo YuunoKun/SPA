@@ -4,9 +4,9 @@
 #include <vector>
 #include <unordered_set>
 #include <algorithm>
-#include "DesignExtractor.h"
-#include "PKBSourceInterface.h"
-#include "PKB.h"
+#include "SP/DesignExtractor.h"
+#include "PKB/PKBSourceInterface.h"
+#include "PKB/PKB.h"
 
 class MockPKB : public PKBSourceInterface {
 public:

@@ -1,7 +1,7 @@
 #include "pch.h"
 
-#include "RelRef.h"
-#include "Common.h"
+#include "PQL/QueryObject/RelRef.h"
+#include "Common/Common.h"
 
 namespace UnitTesting {
 	TEST(RelRef, getType) {

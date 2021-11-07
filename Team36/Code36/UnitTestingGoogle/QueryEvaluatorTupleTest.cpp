@@ -1,9 +1,9 @@
 #include "pch.h"
 
-#include "QueryEvaluator.h"
-#include "PKBAdapter.h"
-#include "PKB.h"
-#include "Common.h"
+#include "PQL/QueryEvaluator/QueryEvaluator.h"
+#include "PKB/PKBAdapter.h"
+#include "PKB/PKB.h"
+#include "Common/Common.h"
 
 namespace UnitTesting {
 	class QueryEvaluatorTupleTest : public testing::Test {

@@ -1,6 +1,6 @@
 #include "pch.h"
 
-#include "TransitiveClosureHelper.h"
+#include "Common/TransitiveClosureHelper.h"
 
 namespace UnitTesting {
 	TEST(TransitiveClosureHelperTest, findTransitiveClosure) {

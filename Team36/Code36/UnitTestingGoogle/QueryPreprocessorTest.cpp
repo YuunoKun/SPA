@@ -1,10 +1,10 @@
 #include "pch.h"
 
-#include "QueryPreprocessor.h"
-#include "Entity.h"
-#include "RelRef.h"
-#include "SyntacticErrorException.h"
-#include "SemanticErrorException.h"
+#include "PQL/QueryPreprocessor/QueryPreprocessor.h"
+#include "PQL/QueryObject/Entity.h"
+#include "PQL/QueryObject/RelRef.h"
+#include "Common/SyntacticErrorException.h"
+#include "Common/SemanticErrorException.h"
 
 namespace UnitTesting {
 	TEST(QueryPreprocessor, addSingleStatement) {

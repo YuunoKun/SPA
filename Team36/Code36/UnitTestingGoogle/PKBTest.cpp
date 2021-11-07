@@ -1,10 +1,10 @@
-#include "pch.h"
-
-#include "PKB.h"
-#include "PKB.cpp"
-#include "Common.h"
-#include "ExprParser.h"
 #include <iostream>
+
+#include "pch.h"
+#include "PKB/PKB.h"
+#include "PKB/PKB.cpp"
+#include "Common/Common.h"
+#include "Common/ExprParser.h"
 
 namespace UnitTesting {
 	class PKBTest : public ::testing::Test {

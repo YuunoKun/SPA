@@ -1,8 +1,8 @@
 #include "pch.h"
 
-#include "pkb.h"
-#include "PatternsEvaluator.h"
-#include "ExprParser.h"
+#include "PKB/PKB.h"
+#include "PQL/QueryEvaluator/PatternsEvaluator.h"
+#include "Common/ExprParser.h"
 
 namespace UnitTesting {
 	TEST(PatternsEvaluator, evaluateAssignPattern) {

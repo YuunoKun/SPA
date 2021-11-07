@@ -1,10 +1,9 @@
 #include "pch.h"
 
-#include "QueryTokenizer.h"
-#include "Common.h"
 #include <iostream>
 
-
+#include "PQL/QueryPreprocessor/QueryTokenizer.h"
+#include "Common/Common.h"
 
 namespace UnitTesting {
 	class QueryTokenizerTest : public ::testing::Test {

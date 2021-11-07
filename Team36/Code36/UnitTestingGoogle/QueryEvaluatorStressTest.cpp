@@ -2,12 +2,12 @@
 
 #include <chrono>
 
-#include "QueryEvaluator.h"
-#include "PKBAdapter.h"
-#include "PKB.h"
-#include "Common.h"
-#include "ExprParser.h"
-#include "Utility.h"
+#include "PQL/QueryEvaluator/QueryEvaluator.h"
+#include "PKB/PKBAdapter.h"
+#include "PKB/PKB.h"
+#include "Common/Common.h"
+#include "Common/ExprParser.h"
+#include "PQL/Helper/Utility.h"
 
 namespace UnitTesting {
 	class QueryEvaluatorStressTest : public testing::Test {

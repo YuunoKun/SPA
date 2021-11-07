@@ -1,8 +1,8 @@
 #include "pch.h"
 
-#include "AffectsBipEvaluator.h"
-#include "PKB.h"
-#include "RelationPreprocessorManager.h"
+#include "PQL/QueryEvaluator/RelationEvaluator/AffectsBipEvaluator.h"
+#include "PKB/PKB.h"
+#include "PKB/RelationPreprocessorManager.h"
 
 namespace UnitTesting {
 	class AffectsBipEvaluatorTest : public testing::Test {

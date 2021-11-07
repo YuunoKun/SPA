@@ -1,7 +1,7 @@
 #include "pch.h"
 
-#include "ModifiesSEvaluator.h"
-#include "PKB.h"
+#include "PQL/QueryEvaluator/RelationEvaluator/ModifiesSEvaluator.h"
+#include "PKB/PKB.h"
 
 namespace UnitTesting {
 	class ModifiesSEvaluatorTest : public testing::Test {

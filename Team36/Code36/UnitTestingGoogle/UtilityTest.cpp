@@ -1,7 +1,7 @@
 #include "pch.h"
 
-#include "Utility.h"
-#include "Common.h"
+#include "PQL/Helper/Utility.h"
+#include "Common/Common.h"
 
 namespace UnitTesting {
 	class UtilityTest : public testing::Test {

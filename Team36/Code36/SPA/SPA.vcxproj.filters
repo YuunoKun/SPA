@@ -93,568 +93,523 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\source\QuerySystem.cpp">
-      <Filter>Source Files\PQL</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\PKB.cpp">
-      <Filter>Source Files\PKB</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\Tokenizer.cpp">
-      <Filter>Source Files\SP</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\Parser.cpp">
-      <Filter>Source Files\SP</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\DesignExtractor.cpp">
-      <Filter>Source Files\SP</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\Token.cpp">
-      <Filter>Source Files\SP</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\FSM.cpp">
-      <Filter>Source Files\SP</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\Procedure.cpp">
-      <Filter>Source Files\SP</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\Statement.cpp">
-      <Filter>Source Files\SP</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\QueryTokenizer.cpp">
-      <Filter>Source Files\PQL\QueryPreprocessor</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\QueryToken.cpp">
-      <Filter>Source Files\PQL\QueryPreprocessor</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\Pattern.cpp">
-      <Filter>Source Files\PQL\QueryObject</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\Entity.cpp">
-      <Filter>Source Files\PQL\QueryObject</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\RelRef.cpp">
-      <Filter>Source Files\PQL\QueryObject</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\Query.cpp">
-      <Filter>Source Files\PQL\QueryObject</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\Utility.cpp">
-      <Filter>Source Files\PQL\Helper</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\FollowsEvaluator.cpp">
-      <Filter>Source Files\PQL\QueryEvaluator\RelationEvaluator</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\FollowsTEvaluator.cpp">
-      <Filter>Source Files\PQL\QueryEvaluator\RelationEvaluator</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\ModifiesPEvaluator.cpp">
-      <Filter>Source Files\PQL\QueryEvaluator\RelationEvaluator</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\ModifiesSEvaluator.cpp">
-      <Filter>Source Files\PQL\QueryEvaluator\RelationEvaluator</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\ParentEvaluator.cpp">
-      <Filter>Source Files\PQL\QueryEvaluator\RelationEvaluator</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\ParentTEvaluator.cpp">
-      <Filter>Source Files\PQL\QueryEvaluator\RelationEvaluator</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\QueryResult.cpp">
-      <Filter>Source Files\PQL\QueryEvaluator</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\QueryEvaluator.cpp">
-      <Filter>Source Files\PQL\QueryEvaluator</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\QueryValidator.cpp">
-      <Filter>Source Files\PQL\QueryPreprocessor</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\QueryValidator.cpp">
-      <Filter>Source Files\PQL\QueryPreprocessor</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\ResultTable.cpp">
-      <Filter>Source Files\PQL\QueryEvaluator</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\UsesPEvaluator.cpp">
-      <Filter>Source Files\PQL\QueryEvaluator\RelationEvaluator</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\UsesSEvaluator.cpp">
-      <Filter>Source Files\PQL\QueryEvaluator\RelationEvaluator</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\PKBAdapter.cpp">
-      <Filter>Source Files\PKB</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\RelationsEvaluator.cpp">
-      <Filter>Source Files\PQL\QueryEvaluator</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\QueryOptimizer.cpp">
-      <Filter>Source Files\PQL</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\Clause.cpp">
-      <Filter>Source Files\PQL\QueryObject</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\AffectsEvaluator.cpp">
-      <Filter>Source Files\PQL\QueryEvaluator\RelationEvaluator</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\AffectsTEvaluator.cpp">
-      <Filter>Source Files\PQL\QueryEvaluator\RelationEvaluator</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\CallsTEvaluator.cpp">
-      <Filter>Source Files\PQL\QueryEvaluator\RelationEvaluator</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\CallsEvaluator.cpp">
-      <Filter>Source Files\PQL\QueryEvaluator\RelationEvaluator</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\NextEvaluator.cpp">
-      <Filter>Source Files\PQL\QueryEvaluator\RelationEvaluator</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\NextTEvaluator.cpp">
-      <Filter>Source Files\PQL\QueryEvaluator\RelationEvaluator</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\WithEvaluator.cpp">
-      <Filter>Source Files\PQL\QueryEvaluator\RelationEvaluator</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\NextBipEvaluator.cpp">
-      <Filter>Source Files\PQL\QueryEvaluator\RelationEvaluator</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\NextBipTEvaluator.cpp">
-      <Filter>Source Files\PQL\QueryEvaluator\RelationEvaluator</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\AffectsBipEvaluator.cpp">
-      <Filter>Source Files\PQL\QueryEvaluator\RelationEvaluator</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\AffectsBipTEvaluator.cpp">
-      <Filter>Source Files\PQL\QueryEvaluator\RelationEvaluator</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\SemanticErrorException.cpp">
-      <Filter>Source Files\PQL\Helper</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\SyntacticErrorException.cpp">
-      <Filter>Source Files\PQL\Helper</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\ExprParser.cpp">
-      <Filter>Source Files\Common</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\ExprNode.cpp">
-      <Filter>Source Files\Common</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\CFGNode.cpp">
-      <Filter>Source Files\Common</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\CFG.cpp">
-      <Filter>Source Files\Common</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\QueryClauseParser.cpp">
-      <Filter>Source Files\PQL\QueryPreprocessor\QueryClauseParser</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\AssignPatternParser.cpp">
-      <Filter>Source Files\PQL\QueryPreprocessor\QueryClauseParser</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\IfPatternParser.cpp">
-      <Filter>Source Files\PQL\QueryPreprocessor\QueryClauseParser</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\WhilePatternParser.cpp">
-      <Filter>Source Files\PQL\QueryPreprocessor\QueryClauseParser</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\NextParser.cpp">
-      <Filter>Source Files\PQL\QueryPreprocessor\QueryClauseParser</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\UsesParser.cpp">
-      <Filter>Source Files\PQL\QueryPreprocessor\QueryClauseParser</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\ModifiesParser.cpp">
-      <Filter>Source Files\PQL\QueryPreprocessor\QueryClauseParser</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\FollowsParser.cpp">
-      <Filter>Source Files\PQL\QueryPreprocessor\QueryClauseParser</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\ParentParser.cpp">
-      <Filter>Source Files\PQL\QueryPreprocessor\QueryClauseParser</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\CallsParser.cpp">
-      <Filter>Source Files\PQL\QueryPreprocessor\QueryClauseParser</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\AffectsParser.cpp">
-      <Filter>Source Files\PQL\QueryPreprocessor\QueryClauseParser</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\WithParser.cpp">
-      <Filter>Source Files\PQL\QueryPreprocessor\QueryClauseParser</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\PatternAssignEvaluator.cpp">
-      <Filter>Source Files\PQL\QueryEvaluator\PatternEvaluator</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\PatternIfEvaluator.cpp">
-      <Filter>Source Files\PQL\QueryEvaluator\PatternEvaluator</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\PatternWhileEvaluator.cpp">
-      <Filter>Source Files\PQL\QueryEvaluator\PatternEvaluator</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\PatternsEvaluator.cpp">
-      <Filter>Source Files\PQL\QueryEvaluator</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\NextTPreprocessor.cpp">
-      <Filter>Source Files\PKB\RelationPreprocessor</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\RelationPreprocessor.cpp">
-      <Filter>Source Files\PKB\RelationPreprocessor</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\AffectsPreprocessor.cpp">
-      <Filter>Source Files\PKB\RelationPreprocessor</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\IterativeDataflowSolver.cpp">
-      <Filter>Source Files\PKB\RelationPreprocessor</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\RelationTable.cpp">
-      <Filter>Source Files\PKB\RelationTables</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\AffectsTPreprocessor.cpp">
-      <Filter>Source Files\PKB\RelationPreprocessor</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\QueryPreprocessor.cpp">
-      <Filter>Source Files\PQL\QueryPreprocessor</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\AffectsBipPreprocessor.cpp">
-      <Filter>Source Files\PKB\RelationPreprocessor</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\AffectsBipTPreprocessor.cpp">
-      <Filter>Source Files\PKB\RelationPreprocessor</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\IterativeDataflowSolverBip.cpp">
-      <Filter>Source Files\PKB\RelationPreprocessor</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\RelationTableUtility.cpp">
-      <Filter>Source Files\PKB\RelationTables</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\NextBipPreprocessor.cpp">
-      <Filter>Source Files\PKB\RelationPreprocessor</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\NextBipTPreprocessor.cpp">
-      <Filter>Source Files\PKB\RelationPreprocessor</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\RelationPreprocessorManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\QueryTupleGraph.cpp">
-      <Filter>Source Files\PQL\QueryObject</Filter>
-    </ClCompile>
-    <ClCompile Include="..\source\QueryTupleOptimizer.cpp">
-      <Filter>Source Files\PQL\QueryEvaluator</Filter>
-    </ClCompile>
+    <ClInclude Include="..\source\Common\CFG.h">
+      <Filter>Header Files\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\Common\CFGNode.h">
+      <Filter>Header Files\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\Common\Common.h">
+      <Filter>Header Files\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\Common\ExprNode.h">
+      <Filter>Header Files\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\Common\ExprParser.h">
+      <Filter>Header Files\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\Common\SemanticErrorException.h">
+      <Filter>Header Files\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\Common\SyntacticErrorException.h">
+      <Filter>Header Files\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\Common\TransitiveClosureHelper.h">
+      <Filter>Header Files\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\PKB\PKB.h">
+      <Filter>Header Files\PKB</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\PKB\PKBAdapter.h">
+      <Filter>Header Files\PKB</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\PKB\PKBQueryInterface.h">
+      <Filter>Header Files\PKB</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\PKB\PKBSourceInterface.h">
+      <Filter>Header Files\PKB</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\PKB\RelationPreprocessorManager.h">
+      <Filter>Header Files\PKB</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\PKB\RelationPreprocessor\AffectsBipPreprocessor.h">
+      <Filter>Header Files\PKB\RelationPreprocessor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\PKB\RelationPreprocessor\AffectsBipTPreprocessor.h">
+      <Filter>Header Files\PKB\RelationPreprocessor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\PKB\RelationPreprocessor\AffectsPreprocessor.h">
+      <Filter>Header Files\PKB\RelationPreprocessor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\PKB\RelationPreprocessor\AffectsTPreprocessor.h">
+      <Filter>Header Files\PKB\RelationPreprocessor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\PKB\RelationPreprocessor\IterativeDataflowSolver.h">
+      <Filter>Header Files\PKB\RelationPreprocessor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\PKB\RelationPreprocessor\IterativeDataflowSolverBip.h">
+      <Filter>Header Files\PKB\RelationPreprocessor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\PKB\RelationPreprocessor\NextBipPreprocessor.h">
+      <Filter>Header Files\PKB\RelationPreprocessor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\PKB\RelationPreprocessor\NextBipTPreprocessor.h">
+      <Filter>Header Files\PKB\RelationPreprocessor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\PKB\RelationPreprocessor\NextTPreprocessor.h">
+      <Filter>Header Files\PKB\RelationPreprocessor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\PKB\RelationPreprocessor\RelationPreprocessor.h">
+      <Filter>Header Files\PKB\RelationPreprocessor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\PKB\RelationTables\MonotypeRelationTable.h">
+      <Filter>Header Files\PKB\RelationTables</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\PKB\RelationTables\RelationTable.h">
+      <Filter>Header Files\PKB\RelationTables</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\PKB\RelationTables\RelationTableUtility.h">
+      <Filter>Header Files\PKB\RelationTables</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\PQL\Helper\Utility.h">
+      <Filter>Header Files\PQL\Helper</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\PQL\QueryEvaluator\PatternsEvaluator.h">
+      <Filter>Header Files\PQL\QueryEvaluator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\PQL\QueryEvaluator\QueryEvaluator.h">
+      <Filter>Header Files\PQL\QueryEvaluator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\PQL\QueryEvaluator\QueryResult.h">
+      <Filter>Header Files\PQL\QueryEvaluator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\PQL\QueryEvaluator\QueryTupleOptimizer.h">
+      <Filter>Header Files\PQL\QueryEvaluator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\PQL\QueryEvaluator\RelationsEvaluator.h">
+      <Filter>Header Files\PQL\QueryEvaluator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\PQL\QueryEvaluator\ResultTable.h">
+      <Filter>Header Files\PQL\QueryEvaluator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\PQL\QueryEvaluator\PatternEvaluator\PatternAssignEvaluator.h">
+      <Filter>Header Files\PQL\QueryEvaluator\PatternEvaluator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\PQL\QueryEvaluator\PatternEvaluator\PatternEvaluatorInterface.h">
+      <Filter>Header Files\PQL\QueryEvaluator\PatternEvaluator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\PQL\QueryEvaluator\PatternEvaluator\PatternIfEvaluator.h">
+      <Filter>Header Files\PQL\QueryEvaluator\PatternEvaluator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\PQL\QueryEvaluator\PatternEvaluator\PatternWhileEvaluator.h">
+      <Filter>Header Files\PQL\QueryEvaluator\PatternEvaluator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\PQL\QueryEvaluator\RelationEvaluator\AffectsBipEvaluator.h">
+      <Filter>Header Files\PQL\QueryEvaluator\RelationEvaluator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\PQL\QueryEvaluator\RelationEvaluator\AffectsBipTEvaluator.h">
+      <Filter>Header Files\PQL\QueryEvaluator\RelationEvaluator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\PQL\QueryEvaluator\RelationEvaluator\AffectsEvaluator.h">
+      <Filter>Header Files\PQL\QueryEvaluator\RelationEvaluator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\PQL\QueryEvaluator\RelationEvaluator\AffectsTEvaluator.h">
+      <Filter>Header Files\PQL\QueryEvaluator\RelationEvaluator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\PQL\QueryEvaluator\RelationEvaluator\CallsEvaluator.h">
+      <Filter>Header Files\PQL\QueryEvaluator\RelationEvaluator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\PQL\QueryEvaluator\RelationEvaluator\CallsTEvaluator.h">
+      <Filter>Header Files\PQL\QueryEvaluator\RelationEvaluator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\PQL\QueryEvaluator\RelationEvaluator\FollowsEvaluator.h">
+      <Filter>Header Files\PQL\QueryEvaluator\RelationEvaluator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\PQL\QueryEvaluator\RelationEvaluator\FollowsTEvaluator.h">
+      <Filter>Header Files\PQL\QueryEvaluator\RelationEvaluator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\PQL\QueryEvaluator\RelationEvaluator\ModifiesPEvaluator.h">
+      <Filter>Header Files\PQL\QueryEvaluator\RelationEvaluator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\PQL\QueryEvaluator\RelationEvaluator\ModifiesSEvaluator.h">
+      <Filter>Header Files\PQL\QueryEvaluator\RelationEvaluator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\PQL\QueryEvaluator\RelationEvaluator\NextBipEvaluator.h">
+      <Filter>Header Files\PQL\QueryEvaluator\RelationEvaluator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\PQL\QueryEvaluator\RelationEvaluator\NextBipTEvaluator.h">
+      <Filter>Header Files\PQL\QueryEvaluator\RelationEvaluator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\PQL\QueryEvaluator\RelationEvaluator\NextEvaluator.h">
+      <Filter>Header Files\PQL\QueryEvaluator\RelationEvaluator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\PQL\QueryEvaluator\RelationEvaluator\NextTEvaluator.h">
+      <Filter>Header Files\PQL\QueryEvaluator\RelationEvaluator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\PQL\QueryEvaluator\RelationEvaluator\ParentEvaluator.h">
+      <Filter>Header Files\PQL\QueryEvaluator\RelationEvaluator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\PQL\QueryEvaluator\RelationEvaluator\ParentTEvaluator.h">
+      <Filter>Header Files\PQL\QueryEvaluator\RelationEvaluator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\PQL\QueryEvaluator\RelationEvaluator\RelationEvaluatorInterface.h">
+      <Filter>Header Files\PQL\QueryEvaluator\RelationEvaluator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\PQL\QueryEvaluator\RelationEvaluator\UsesPEvaluator.h">
+      <Filter>Header Files\PQL\QueryEvaluator\RelationEvaluator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\PQL\QueryEvaluator\RelationEvaluator\UsesSEvaluator.h">
+      <Filter>Header Files\PQL\QueryEvaluator\RelationEvaluator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\PQL\QueryEvaluator\RelationEvaluator\WithEvaluator.h">
+      <Filter>Header Files\PQL\QueryEvaluator\RelationEvaluator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\PQL\QueryObject\Clause.h">
+      <Filter>Header Files\PQL\QueryObject</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\PQL\QueryObject\Entity.h">
+      <Filter>Header Files\PQL\QueryObject</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\PQL\QueryObject\Pattern.h">
+      <Filter>Header Files\PQL\QueryObject</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\PQL\QueryObject\Query.h">
+      <Filter>Header Files\PQL\QueryObject</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\PQL\QueryObject\QueryTupleGraph.h">
+      <Filter>Header Files\PQL\QueryObject</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\PQL\QueryObject\RelRef.h">
+      <Filter>Header Files\PQL\QueryObject</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\PQL\QueryPreprocessor\QueryPreprocessor.h">
+      <Filter>Header Files\PQL\QueryPreprocessor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\PQL\QueryPreprocessor\QueryToken.h">
+      <Filter>Header Files\PQL\QueryPreprocessor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\PQL\QueryPreprocessor\QueryTokenizer.h">
+      <Filter>Header Files\PQL\QueryPreprocessor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\PQL\QueryPreprocessor\QueryValidator.h">
+      <Filter>Header Files\PQL\QueryPreprocessor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\PQL\QueryPreprocessor\QueryClauseParser\AffectsParser.h">
+      <Filter>Header Files\PQL\QueryPreprocessor\QueryClauseParser</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\PQL\QueryPreprocessor\QueryClauseParser\AssignPatternParser.h">
+      <Filter>Header Files\PQL\QueryPreprocessor\QueryClauseParser</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\PQL\QueryPreprocessor\QueryClauseParser\CallsParser.h">
+      <Filter>Header Files\PQL\QueryPreprocessor\QueryClauseParser</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\PQL\QueryPreprocessor\QueryClauseParser\FollowsParser.h">
+      <Filter>Header Files\PQL\QueryPreprocessor\QueryClauseParser</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\PQL\QueryPreprocessor\QueryClauseParser\IfPatternParser.h">
+      <Filter>Header Files\PQL\QueryPreprocessor\QueryClauseParser</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\PQL\QueryPreprocessor\QueryClauseParser\ModifiesParser.h">
+      <Filter>Header Files\PQL\QueryPreprocessor\QueryClauseParser</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\PQL\QueryPreprocessor\QueryClauseParser\NextParser.h">
+      <Filter>Header Files\PQL\QueryPreprocessor\QueryClauseParser</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\PQL\QueryPreprocessor\QueryClauseParser\ParentParser.h">
+      <Filter>Header Files\PQL\QueryPreprocessor\QueryClauseParser</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\PQL\QueryPreprocessor\QueryClauseParser\PatternParserInterface.h">
+      <Filter>Header Files\PQL\QueryPreprocessor\QueryClauseParser</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\PQL\QueryPreprocessor\QueryClauseParser\QueryClauseParser.h">
+      <Filter>Header Files\PQL\QueryPreprocessor\QueryClauseParser</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\PQL\QueryPreprocessor\QueryClauseParser\RelationParserInterface.h">
+      <Filter>Header Files\PQL\QueryPreprocessor\QueryClauseParser</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\PQL\QueryPreprocessor\QueryClauseParser\UsesParser.h">
+      <Filter>Header Files\PQL\QueryPreprocessor\QueryClauseParser</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\PQL\QueryPreprocessor\QueryClauseParser\WhilePatternParser.h">
+      <Filter>Header Files\PQL\QueryPreprocessor\QueryClauseParser</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\PQL\QueryPreprocessor\QueryClauseParser\WithParser.h">
+      <Filter>Header Files\PQL\QueryPreprocessor\QueryClauseParser</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\PQL\QueryPreprocessor\QueryClauseParser\WithParserInterface.h">
+      <Filter>Header Files\PQL\QueryPreprocessor\QueryClauseParser</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\SP\DesignExtractor.h">
+      <Filter>Header Files\SP</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\SP\Extractor.h">
+      <Filter>Header Files\SP</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\SP\FSM.h">
+      <Filter>Header Files\SP</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\SP\Parser.h">
+      <Filter>Header Files\SP</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\SP\Procedure.h">
+      <Filter>Header Files\SP</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\SP\SPCommon.h">
+      <Filter>Header Files\SP</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\SP\Statement.h">
+      <Filter>Header Files\SP</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\SP\Token.h">
+      <Filter>Header Files\SP</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\SP\Tokenizer.h">
+      <Filter>Header Files\SP</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\PQL\QueryOptimizer.h">
+      <Filter>Header Files\PQL</Filter>
+    </ClInclude>
+    <ClInclude Include="..\source\PQL\QuerySystem.h">
+      <Filter>Header Files\PQL</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\source\Parser.h">
-      <Filter>Header Files\SP</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\Tokenizer.h">
-      <Filter>Header Files\SP</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\Token.h">
-      <Filter>Header Files\SP</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\DesignExtractor.h">
-      <Filter>Header Files\SP</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\Extractor.h">
-      <Filter>Header Files\SP</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\FSM.h">
-      <Filter>Header Files\SP</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\Procedure.h">
-      <Filter>Header Files\SP</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\Statement.h">
-      <Filter>Header Files\SP</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\QuerySystem.h">
-      <Filter>Header Files\PQL</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\Common.h">
-      <Filter>Header Files\Common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\PKB.h">
-      <Filter>Header Files\PKB</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\QueryPreprocessor.h">
-      <Filter>Header Files\PQL\QueryPreprocessor</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\QueryTokenizer.h">
-      <Filter>Header Files\PQL\QueryPreprocessor</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\QueryToken.h">
-      <Filter>Header Files\PQL\QueryPreprocessor</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\QueryValidator.h">
-      <Filter>Header Files\PQL\QueryPreprocessor</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\QueryValidator.h">
-      <Filter>Header Files\PQL\QueryPreprocessor</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\QueryResult.h">
-      <Filter>Header Files\PQL\QueryEvaluator</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\ResultTable.h">
-      <Filter>Header Files\PQL\QueryEvaluator</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\Utility.h">
-      <Filter>Header Files\PQL\Helper</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\PKBAdapter.h">
-      <Filter>Header Files\PKB</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\Entity.h">
-      <Filter>Header Files\PQL\QueryObject</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\Pattern.h">
-      <Filter>Header Files\PQL\QueryObject</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\Query.h">
-      <Filter>Header Files\PQL\QueryObject</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\RelRef.h">
-      <Filter>Header Files\PQL\QueryObject</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\Pattern.h">
-      <Filter>Header Files\PQL\QueryObject</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\Query.h">
-      <Filter>Header Files\PQL\QueryObject</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\RelRef.h">
-      <Filter>Header Files\PQL\QueryObject</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\QueryEvaluator.h">
-      <Filter>Header Files\PQL\QueryEvaluator</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\FollowsEvaluator.h">
-      <Filter>Header Files\PQL\QueryEvaluator\RelationEvaluator</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\FollowsTEvaluator.h">
-      <Filter>Header Files\PQL\QueryEvaluator\RelationEvaluator</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\ModifiesPEvaluator.h">
-      <Filter>Header Files\PQL\QueryEvaluator\RelationEvaluator</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\ModifiesSEvaluator.h">
-      <Filter>Header Files\PQL\QueryEvaluator\RelationEvaluator</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\ParentEvaluator.h">
-      <Filter>Header Files\PQL\QueryEvaluator\RelationEvaluator</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\ParentTEvaluator.h">
-      <Filter>Header Files\PQL\QueryEvaluator\RelationEvaluator</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\RelationEvaluatorInterface.h">
-      <Filter>Header Files\PQL\QueryEvaluator\RelationEvaluator</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\UsesSEvaluator.h">
-      <Filter>Header Files\PQL\QueryEvaluator\RelationEvaluator</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\UsesPEvaluator.h">
-      <Filter>Header Files\PQL\QueryEvaluator\RelationEvaluator</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\RelationsEvaluator.h">
-      <Filter>Header Files\PQL\QueryEvaluator</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\QueryOptimizer.h">
-      <Filter>Header Files\PQL</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\Clause.h">
-      <Filter>Header Files\PQL\QueryObject</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\NextTEvaluator.h">
-      <Filter>Header Files\PQL\QueryEvaluator\RelationEvaluator</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\NextEvaluator.h">
-      <Filter>Header Files\PQL\QueryEvaluator\RelationEvaluator</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\CallsTEvaluator.h">
-      <Filter>Header Files\PQL\QueryEvaluator\RelationEvaluator</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\CallsEvaluator.h">
-      <Filter>Header Files\PQL\QueryEvaluator\RelationEvaluator</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\AffectsTEvaluator.h">
-      <Filter>Header Files\PQL\QueryEvaluator\RelationEvaluator</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\AffectsEvaluator.h">
-      <Filter>Header Files\PQL\QueryEvaluator\RelationEvaluator</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\WithEvaluator.h">
-      <Filter>Header Files\PQL\QueryEvaluator\RelationEvaluator</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\NextBipEvaluator.h">
-      <Filter>Header Files\PQL\QueryEvaluator\RelationEvaluator</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\NextBipTEvaluator.h">
-      <Filter>Header Files\PQL\QueryEvaluator\RelationEvaluator</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\AffectsBipEvaluator.h">
-      <Filter>Header Files\PQL\QueryEvaluator\RelationEvaluator</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\AffectsBipTEvaluator.h">
-      <Filter>Header Files\PQL\QueryEvaluator\RelationEvaluator</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\SyntacticErrorException.h">
-      <Filter>Header Files\PQL\Helper</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\SemanticErrorException.h">
-      <Filter>Header Files\PQL\Helper</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\ExprNode.h">
-      <Filter>Header Files\Common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\ExprParser.h">
-      <Filter>Header Files\Common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\CFGNode.h">
-      <Filter>Header Files\Common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\CFG.h">
-      <Filter>Header Files\Common</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\QueryClauseParser.h">
-      <Filter>Header Files\PQL\QueryPreprocessor\QueryClauseParser</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\AssignPatternParser.h">
-      <Filter>Header Files\PQL\QueryPreprocessor\QueryClauseParser</Filter>
-	</ClInclude>
-	<ClInclude Include="..\source\IfPatternParser.h">
-      <Filter>Header Files\PQL\QueryPreprocessor\QueryPatternRelRefParser</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\WhilePatternParser.h">
-      <Filter>Header Files\PQL\QueryPreprocessor\QueryPatternRelRefParser</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\NextParser.h">
-      <Filter>Header Files\PQL\QueryPreprocessor\QueryPatternRelRefParser</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\NextTParser.h">
-      <Filter>Header Files\PQL\QueryPreprocessor\QueryPatternRelRefParser</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\UsesParser.h">
-      <Filter>Header Files\PQL\QueryPreprocessor\QueryClauseParser</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\ModifiesParser.h">
-      <Filter>Header Files\PQL\QueryPreprocessor\QueryClauseParser</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\FollowsParser.h">
-      <Filter>Header Files\PQL\QueryPreprocessor\QueryClauseParser</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\ParentParser.h">
-      <Filter>Header Files\PQL\QueryPreprocessor\QueryClauseParser</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\CallsParser.h">
-      <Filter>Header Files\PQL\QueryPreprocessor\QueryClauseParser</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\AffectsParser.h">
-      <Filter>Header Files\PQL\QueryPreprocessor\QueryClauseParser</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\AssignPatternParser.h">
-      <Filter>Header Files\PQL\QueryPreprocessor\QueryPatternRelRefParser</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\WithParser.h">
-      <Filter>Header Files\PQL\QueryPreprocessor\QueryClauseParser</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\RelationParserInterface.h">
-      <Filter>Header Files\PQL\QueryPreprocessor\QueryClauseParser</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\WithParserInterface.h">
-      <Filter>Header Files\PQL\QueryPreprocessor\QueryClauseParser</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\PatternParserInterface.h">
-      <Filter>Header Files\PQL\QueryPreprocessor\QueryClauseParser</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\IfPatternParser.h">
-      <Filter>Header Files\PQL\QueryPreprocessor\QueryPatternRelRefParser</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\WhilePatternParser.h">
-      <Filter>Header Files\PQL\QueryPreprocessor\QueryPatternRelRefParser</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\NextParser.h">
-      <Filter>Header Files\PQL\QueryPreprocessor\QueryPatternRelRefParser</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\PatternsEvaluator.h">
-      <Filter>Header Files\PQL\QueryEvaluator</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\PatternIfEvaluator.h">
-      <Filter>Header Files\PQL\QueryEvaluator\PatternEvaluator</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\PatternEvaluatorInterface.h">
-      <Filter>Header Files\PQL\QueryEvaluator\PatternEvaluator</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\PatternAssignEvaluator.h">
-      <Filter>Header Files\PQL\QueryEvaluator\PatternEvaluator</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\PatternWhileEvaluator.h">
-      <Filter>Header Files\PQL\QueryEvaluator\PatternEvaluator</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\RelationPreprocessorManager.h">
-      <Filter>Header Files\PKB</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\NextTPreprocessor.h">
-      <Filter>Header Files\PKB\RelationPreprocessor</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\RelationPreprocessor.h">
-      <Filter>Header Files\PKB\RelationPreprocessor</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\AffectsPreprocessor.h">
-      <Filter>Header Files\PKB\RelationPreprocessor</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\IterativeDataflowSolver.h">
-      <Filter>Header Files\PKB\RelationPreprocessor</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\MonotypeRelationTable.h">
-      <Filter>Header Files\PKB\RelationTables</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\RelationTable.h">
-      <Filter>Header Files\PKB\RelationTables</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\AffectsTPreprocessor.h">
-      <Filter>Header Files\PKB\RelationPreprocessor</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\AffectsBipPreprocessor.h">
-      <Filter>Header Files\PKB\RelationPreprocessor</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\AffectsBipTPreprocessor.h">
-      <Filter>Header Files\PKB\RelationPreprocessor</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\IterativeDataflowSolverBip.h">
-      <Filter>Header Files\PKB\RelationPreprocessor</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\RelationTableUtility.h">
-      <Filter>Header Files\PKB\RelationTables</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\SPCommon.h">
-      <Filter>Header Files\SP</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\NextBipPreprocessor.h">
-      <Filter>Header Files\PKB\RelationPreprocessor</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\NextBipTPreprocessor.h">
-      <Filter>Header Files\PKB\RelationPreprocessor</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\NextParser.h">
-      <Filter>Header Files\PQL\QueryPreprocessor\QueryClauseParser</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\IfPatternParser.h">
-      <Filter>Header Files\PQL\QueryPreprocessor\QueryClauseParser</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\WhilePatternParser.h">
-      <Filter>Header Files\PQL\QueryPreprocessor\QueryClauseParser</Filter>
-	</ClInclude>
-    <ClInclude Include="..\source\PKBSourceInterface.h">
-      <Filter>Header Files\PKB</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\PKBQueryInterface.h">
-      <Filter>Header Files\PKB</Filter>
-	</ClInclude>
-    <ClInclude Include="..\source\QueryTupleGraph.h">
-      <Filter>Header Files\PQL\QueryObject</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\QueryTupleOptimizer.h">
-      <Filter>Header Files\PQL\QueryEvaluator</Filter>
-    </ClInclude>
-    <ClInclude Include="..\source\TransitiveClosureHelper.h">
-      <Filter>Header Files\Common</Filter>
-    </ClInclude>
+    <ClCompile Include="..\source\Common\CFG.cpp">
+      <Filter>Source Files\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\Common\CFGNode.cpp">
+      <Filter>Source Files\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\Common\ExprNode.cpp">
+      <Filter>Source Files\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\Common\ExprParser.cpp">
+      <Filter>Source Files\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\PKB\PKB.cpp">
+      <Filter>Source Files\PKB</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\PKB\PKBAdapter.cpp">
+      <Filter>Source Files\PKB</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\PKB\RelationPreprocessorManager.cpp">
+      <Filter>Source Files\PKB</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\PKB\RelationPreprocessor\AffectsBipPreprocessor.cpp">
+      <Filter>Source Files\PKB\RelationPreprocessor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\PKB\RelationPreprocessor\AffectsBipTPreprocessor.cpp">
+      <Filter>Source Files\PKB\RelationPreprocessor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\PKB\RelationPreprocessor\AffectsPreprocessor.cpp">
+      <Filter>Source Files\PKB\RelationPreprocessor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\PKB\RelationPreprocessor\AffectsTPreprocessor.cpp">
+      <Filter>Source Files\PKB\RelationPreprocessor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\PKB\RelationPreprocessor\IterativeDataflowSolver.cpp">
+      <Filter>Source Files\PKB\RelationPreprocessor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\PKB\RelationPreprocessor\IterativeDataflowSolverBip.cpp">
+      <Filter>Source Files\PKB\RelationPreprocessor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\PKB\RelationPreprocessor\NextBipPreprocessor.cpp">
+      <Filter>Source Files\PKB\RelationPreprocessor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\PKB\RelationPreprocessor\NextBipTPreprocessor.cpp">
+      <Filter>Source Files\PKB\RelationPreprocessor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\PKB\RelationPreprocessor\NextTPreprocessor.cpp">
+      <Filter>Source Files\PKB\RelationPreprocessor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\PKB\RelationPreprocessor\RelationPreprocessor.cpp">
+      <Filter>Source Files\PKB\RelationPreprocessor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\PKB\RelationTables\RelationTable.cpp">
+      <Filter>Source Files\PKB\RelationTables</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\PKB\RelationTables\RelationTableUtility.cpp">
+      <Filter>Source Files\PKB\RelationTables</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\PQL\Helper\Utility.cpp">
+      <Filter>Source Files\PQL\Helper</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\PQL\QueryEvaluator\PatternsEvaluator.cpp">
+      <Filter>Source Files\PQL\QueryEvaluator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\PQL\QueryEvaluator\QueryEvaluator.cpp">
+      <Filter>Source Files\PQL\QueryEvaluator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\PQL\QueryEvaluator\QueryResult.cpp">
+      <Filter>Source Files\PQL\QueryEvaluator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\PQL\QueryEvaluator\QueryTupleOptimizer.cpp">
+      <Filter>Source Files\PQL\QueryEvaluator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\PQL\QueryEvaluator\RelationsEvaluator.cpp">
+      <Filter>Source Files\PQL\QueryEvaluator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\PQL\QueryEvaluator\ResultTable.cpp">
+      <Filter>Source Files\PQL\QueryEvaluator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\PQL\QueryEvaluator\PatternEvaluator\PatternAssignEvaluator.cpp">
+      <Filter>Source Files\PQL\QueryEvaluator\PatternEvaluator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\PQL\QueryEvaluator\PatternEvaluator\PatternIfEvaluator.cpp">
+      <Filter>Source Files\PQL\QueryEvaluator\PatternEvaluator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\PQL\QueryEvaluator\PatternEvaluator\PatternWhileEvaluator.cpp">
+      <Filter>Source Files\PQL\QueryEvaluator\PatternEvaluator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\PQL\QueryEvaluator\RelationEvaluator\AffectsBipEvaluator.cpp">
+      <Filter>Source Files\PQL\QueryEvaluator\RelationEvaluator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\PQL\QueryEvaluator\RelationEvaluator\AffectsBipTEvaluator.cpp">
+      <Filter>Source Files\PQL\QueryEvaluator\RelationEvaluator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\PQL\QueryEvaluator\RelationEvaluator\AffectsEvaluator.cpp">
+      <Filter>Source Files\PQL\QueryEvaluator\RelationEvaluator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\PQL\QueryEvaluator\RelationEvaluator\AffectsTEvaluator.cpp">
+      <Filter>Source Files\PQL\QueryEvaluator\RelationEvaluator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\PQL\QueryEvaluator\RelationEvaluator\CallsEvaluator.cpp">
+      <Filter>Source Files\PQL\QueryEvaluator\RelationEvaluator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\PQL\QueryEvaluator\RelationEvaluator\CallsTEvaluator.cpp">
+      <Filter>Source Files\PQL\QueryEvaluator\RelationEvaluator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\PQL\QueryEvaluator\RelationEvaluator\FollowsEvaluator.cpp">
+      <Filter>Source Files\PQL\QueryEvaluator\RelationEvaluator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\PQL\QueryEvaluator\RelationEvaluator\FollowsTEvaluator.cpp">
+      <Filter>Source Files\PQL\QueryEvaluator\RelationEvaluator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\PQL\QueryEvaluator\RelationEvaluator\ModifiesPEvaluator.cpp">
+      <Filter>Source Files\PQL\QueryEvaluator\RelationEvaluator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\PQL\QueryEvaluator\RelationEvaluator\ModifiesSEvaluator.cpp">
+      <Filter>Source Files\PQL\QueryEvaluator\RelationEvaluator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\PQL\QueryEvaluator\RelationEvaluator\NextBipEvaluator.cpp">
+      <Filter>Source Files\PQL\QueryEvaluator\RelationEvaluator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\PQL\QueryEvaluator\RelationEvaluator\NextBipTEvaluator.cpp">
+      <Filter>Source Files\PQL\QueryEvaluator\RelationEvaluator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\PQL\QueryEvaluator\RelationEvaluator\NextEvaluator.cpp">
+      <Filter>Source Files\PQL\QueryEvaluator\RelationEvaluator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\PQL\QueryEvaluator\RelationEvaluator\NextTEvaluator.cpp">
+      <Filter>Source Files\PQL\QueryEvaluator\RelationEvaluator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\PQL\QueryEvaluator\RelationEvaluator\ParentEvaluator.cpp">
+      <Filter>Source Files\PQL\QueryEvaluator\RelationEvaluator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\PQL\QueryEvaluator\RelationEvaluator\ParentTEvaluator.cpp">
+      <Filter>Source Files\PQL\QueryEvaluator\RelationEvaluator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\PQL\QueryEvaluator\RelationEvaluator\UsesPEvaluator.cpp">
+      <Filter>Source Files\PQL\QueryEvaluator\RelationEvaluator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\PQL\QueryEvaluator\RelationEvaluator\UsesSEvaluator.cpp">
+      <Filter>Source Files\PQL\QueryEvaluator\RelationEvaluator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\PQL\QueryEvaluator\RelationEvaluator\WithEvaluator.cpp">
+      <Filter>Source Files\PQL\QueryEvaluator\RelationEvaluator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\PQL\QueryObject\Clause.cpp">
+      <Filter>Source Files\PQL\QueryObject</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\PQL\QueryObject\Entity.cpp">
+      <Filter>Source Files\PQL\QueryObject</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\PQL\QueryObject\Pattern.cpp">
+      <Filter>Source Files\PQL\QueryObject</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\PQL\QueryObject\Query.cpp">
+      <Filter>Source Files\PQL\QueryObject</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\PQL\QueryObject\QueryTupleGraph.cpp">
+      <Filter>Source Files\PQL\QueryObject</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\PQL\QueryObject\RelRef.cpp">
+      <Filter>Source Files\PQL\QueryObject</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\PQL\QueryPreprocessor\QueryPreprocessor.cpp">
+      <Filter>Source Files\PQL\QueryPreprocessor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\PQL\QueryPreprocessor\QueryToken.cpp">
+      <Filter>Source Files\PQL\QueryPreprocessor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\PQL\QueryPreprocessor\QueryTokenizer.cpp">
+      <Filter>Source Files\PQL\QueryPreprocessor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\PQL\QueryPreprocessor\QueryValidator.cpp">
+      <Filter>Source Files\PQL\QueryPreprocessor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\PQL\QueryPreprocessor\QueryClauseParser\AffectsParser.cpp">
+      <Filter>Source Files\PQL\QueryPreprocessor\QueryClauseParser</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\PQL\QueryPreprocessor\QueryClauseParser\AssignPatternParser.cpp">
+      <Filter>Source Files\PQL\QueryPreprocessor\QueryClauseParser</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\PQL\QueryPreprocessor\QueryClauseParser\CallsParser.cpp">
+      <Filter>Source Files\PQL\QueryPreprocessor\QueryClauseParser</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\PQL\QueryPreprocessor\QueryClauseParser\FollowsParser.cpp">
+      <Filter>Source Files\PQL\QueryPreprocessor\QueryClauseParser</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\PQL\QueryPreprocessor\QueryClauseParser\IfPatternParser.cpp">
+      <Filter>Source Files\PQL\QueryPreprocessor\QueryClauseParser</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\PQL\QueryPreprocessor\QueryClauseParser\ModifiesParser.cpp">
+      <Filter>Source Files\PQL\QueryPreprocessor\QueryClauseParser</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\PQL\QueryPreprocessor\QueryClauseParser\NextParser.cpp">
+      <Filter>Source Files\PQL\QueryPreprocessor\QueryClauseParser</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\PQL\QueryPreprocessor\QueryClauseParser\ParentParser.cpp">
+      <Filter>Source Files\PQL\QueryPreprocessor\QueryClauseParser</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\PQL\QueryPreprocessor\QueryClauseParser\QueryClauseParser.cpp">
+      <Filter>Source Files\PQL\QueryPreprocessor\QueryClauseParser</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\PQL\QueryPreprocessor\QueryClauseParser\UsesParser.cpp">
+      <Filter>Source Files\PQL\QueryPreprocessor\QueryClauseParser</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\PQL\QueryPreprocessor\QueryClauseParser\WhilePatternParser.cpp">
+      <Filter>Source Files\PQL\QueryPreprocessor\QueryClauseParser</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\PQL\QueryPreprocessor\QueryClauseParser\WithParser.cpp">
+      <Filter>Source Files\PQL\QueryPreprocessor\QueryClauseParser</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\SP\DesignExtractor.cpp">
+      <Filter>Source Files\SP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\SP\FSM.cpp">
+      <Filter>Source Files\SP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\SP\Parser.cpp">
+      <Filter>Source Files\SP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\SP\Procedure.cpp">
+      <Filter>Source Files\SP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\SP\Statement.cpp">
+      <Filter>Source Files\SP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\SP\Token.cpp">
+      <Filter>Source Files\SP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\SP\Tokenizer.cpp">
+      <Filter>Source Files\SP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\PQL\QueryOptimizer.cpp">
+      <Filter>Source Files\PQL</Filter>
+    </ClCompile>
+    <ClCompile Include="..\source\PQL\QuerySystem.cpp">
+      <Filter>Source Files\PQL</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

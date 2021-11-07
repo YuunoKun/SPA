@@ -1,9 +1,9 @@
 #include "pch.h"
 
-#include "PKBAdapter.h"
-#include "PKB.h"
-#include "RelationTable.cpp"
-#include <ExprParser.h>
+#include "PKB/PKBAdapter.h"
+#include "PKB/PKB.h"
+#include "PKB/RelationTables/RelationTable.cpp"
+#include "Common/ExprParser.h"
 
 namespace UnitTesting {
 	class MockPKB : public PKBQueryInterface {

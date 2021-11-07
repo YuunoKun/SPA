@@ -1,8 +1,8 @@
 #include "pch.h"
 #include <iostream>
-#include "../../source/ExprNode.h"
-#include "../../source/ExprParser.h"
-#include "SyntacticErrorException.h"
+#include "Common/ExprNode.h"
+#include "Common/ExprParser.h"
+#include "Common/SyntacticErrorException.h"
 
 namespace UnitTesting {
 	TEST(ExprParser, parse_identifier) {

@@ -2,8 +2,8 @@
 
 #include <iostream>
 
-#include "..\source\QuerySystem.h"
-#include "..\source\Parser.h"
+#include "../source/PQL/QuerySystem.h"
+#include "../source/SP/Parser.h"
 
 // a default constructor
 GUIWrapper::GUIWrapper() {

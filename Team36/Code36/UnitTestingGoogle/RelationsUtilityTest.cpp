@@ -1,8 +1,8 @@
 #include "pch.h"
 
-#include "MonotypeRelationTable.h"
-#include "Common.h"
-#include "RelationTableUtility.cpp"
+#include "PKB/RelationTables/MonotypeRelationTable.h"
+#include "Common/Common.h"
+#include "PKB/RelationTables/RelationTableUtility.cpp"
 
 namespace UnitTesting {
 	TEST(RelationTableUtilityTest, findTransitiveClosure) {

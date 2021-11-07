@@ -1,9 +1,9 @@
 #include "pch.h"
 
-#include "Common.h"
-#include "Entity.h"
-#include "Query.h"
-#include <Query.cpp>
+#include "Common/Common.h"
+#include "PQL/QueryObject/Entity.h"
+#include "PQL/QueryObject/Query.h"
+#include "PQL/QueryObject/Query.cpp"
 
 namespace UnitTesting {
 	TEST(Query, entities) {

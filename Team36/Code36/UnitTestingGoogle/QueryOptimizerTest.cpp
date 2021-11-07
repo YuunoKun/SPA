@@ -1,7 +1,7 @@
 #include "pch.h"
 
-#include "QueryOptimizer.h"
-#include <PKB.h>
+#include "PQL/QueryOptimizer.h"
+#include "PKB/PKB.h"
 
 namespace UnitTesting {
 

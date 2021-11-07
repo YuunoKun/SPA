@@ -1,7 +1,7 @@
 #include "pch.h"
 
-#include "Clause.h"
-#include "Common.h"
+#include "PQL/QueryObject/Clause.h"
+#include "Common/Common.h"
 
 namespace UnitTesting {
 	TEST(Clause, PatternClause) {

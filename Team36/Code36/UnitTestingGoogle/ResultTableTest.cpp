@@ -1,6 +1,6 @@
 #include "pch.h"
 
-#include "ResultTable.h"
+#include "PQL/QueryEvaluator/ResultTable.h"
 
 namespace UnitTesting {
 	std::pair<Entity, Entity> result_table_header1{ {WHILE, Synonym{"test"} } , { READ,Synonym{"hello"} } };

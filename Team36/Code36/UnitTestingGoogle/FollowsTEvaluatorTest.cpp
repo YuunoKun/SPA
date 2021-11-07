@@ -1,7 +1,7 @@
 #include "pch.h"
 
-#include "FollowsTEvaluator.h"
-#include "PKB.h"
+#include "PQL/QueryEvaluator/RelationEvaluator/FollowsTEvaluator.h"
+#include "PKB/PKB.h"
 
 namespace UnitTesting {
 	class FollowsTEvaluatorTest : public testing::Test {

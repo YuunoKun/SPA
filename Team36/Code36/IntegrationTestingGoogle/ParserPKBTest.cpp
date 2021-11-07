@@ -1,11 +1,11 @@
 #include <iostream>
 
 #include "pch.h"
-#include "Parser.h"
-#include "PKB.h"
-#include "RelationTable.h"
-#include "RelationTable.cpp"
-#include "ExprParser.h"
+#include "SP/Parser.h"
+#include "PKB/PKB.h"
+#include "PKB/RelationTables/RelationTable.h"
+#include "PKB/RelationTables/RelationTable.cpp"
+#include "Common/ExprParser.h"
 
 namespace IntegrationTesting {
 	class ParserPKBTest : public testing::Test {

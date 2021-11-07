@@ -1,7 +1,7 @@
 #include "pch.h"
 
-#include "RelationsEvaluator.h"
-#include "pkb.h"
+#include "PQL/QueryEvaluator/RelationsEvaluator.h"
+#include "PKB/PKB.h"
 
 namespace UnitTesting {
 	//Type 1 test relation that take in stmt (left) and stmt (right)

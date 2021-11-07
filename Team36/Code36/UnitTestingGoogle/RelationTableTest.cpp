@@ -1,8 +1,8 @@
 #include "pch.h"
 
-#include "RelationTable.h"
-#include "RelationTable.cpp"
-#include "Common.h"
+#include "PKB/RelationTables/RelationTable.h"
+#include "PKB/RelationTables/RelationTable.cpp"
+#include "Common/Common.h"
 
 namespace UnitTesting {
 	TEST(RelationTable, equal) {

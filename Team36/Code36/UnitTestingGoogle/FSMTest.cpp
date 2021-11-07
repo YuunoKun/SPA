@@ -2,9 +2,9 @@
 #include <iostream>
 #include <stdexcept>
 #include <vector>
-#include "../../source/Extractor.h"
-#include "../../source/FSM.h"
-#include "../../source/Tokenizer.h"
+#include "SP/Extractor.h"
+#include "SP/FSM.h"
+#include "SP/Tokenizer.h"
 
 namespace UnitTesting {
 	using namespace SourceProcessor;

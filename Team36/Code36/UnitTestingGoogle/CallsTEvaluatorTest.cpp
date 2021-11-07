@@ -1,7 +1,7 @@
 #include "pch.h"
 
-#include "CallsTEvaluator.h"
-#include "PKB.h"
+#include "PQL/QueryEvaluator/RelationEvaluator/CallsTEvaluator.h"
+#include "PKB/PKB.h"
 
 namespace UnitTesting {
 	class CallsTEvaluatorTest : public testing::Test {

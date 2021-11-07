@@ -1,8 +1,8 @@
 #include <iostream>
 
 #include "pch.h"
-#include "PKB.h"
-#include <NextBipTPreprocessor.h>
+#include "PKB/PKB.h"
+#include "PKB/RelationPreprocessor/NextBipTPreprocessor.h"
 
 namespace UnitTesting {
 	class NextBipTPreprocessorTest : public testing::Test {

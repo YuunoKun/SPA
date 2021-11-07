@@ -1,7 +1,7 @@
 #include "pch.h"
 #include <iostream>
-#include "../../source/Parser.h"
-#include "../../source/PKB.h"
+#include "SP/Parser.h"
+#include "PKB/PKB.h"
 
 namespace UnitTesting {
 
