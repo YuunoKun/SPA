@@ -82,7 +82,6 @@ namespace UnitTesting {
 			PKB::getInstance().addCFGBip(cfg2);
 			PKB::getInstance().addCFGBip(cfg3);
 
-
 			cfg1->addLine(1);
 			cfg1->addLine(2);
 			cfg1->addLine(3);
