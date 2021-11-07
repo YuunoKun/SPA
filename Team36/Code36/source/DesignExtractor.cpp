@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <numeric>
 #include "DesignExtractor.h"
+#include "TransitiveClosureHelper.h"
 
 using namespace SourceProcessor;
 
@@ -184,8 +185,7 @@ void DesignExtractor::validate() {
 			proc_name callee = s->getCallee();
 			if (proc_name_to_id.find(callee) != proc_name_to_id.end()) {
 				call_cache.push_back({ proc_name_to_id[s->getProcName()], proc_name_to_id[callee] });
-			}
-			else {
+			} else {
 				throw std::runtime_error("Call statement calls undefined procedure.");
 			}
 		}
@@ -273,13 +273,10 @@ void DesignExtractor::populateEntities() {
 
 void DesignExtractor::populateRelations() {
 	populateFollows();
-	pkb_instance.generateFollowsT();
 	populateParent();
-	pkb_instance.generateParentT();
 	populateUses();
 	populateModifies();
 	populateCalls();
-	pkb_instance.generateCallsPT();
 	populateIfs();
 	populateWhiles();
 	populateNext();
@@ -319,22 +316,40 @@ void DesignExtractor::populateConstants() {
 }
 
 void DesignExtractor::populateFollows() {
-	std::unordered_map<int, stmt_index> um;
-
+	std::unordered_map<stmt_index, stmt_index> um;
+	std::vector<std::pair<stmt_index, stmt_index>> follows;
 	for (Statement* s : de_statements) {
-		int list_id = s->getStmtList();
+		stmt_index list_id = s->getStmtList();
 		if (um.find(list_id) != um.end()) {
-			pkb_instance.addFollows(um[list_id], s->getIndex());
+			follows.push_back({ um[list_id], s->getIndex() });
 		}
 		um[list_id] = s->getIndex();
+	}
+
+	std::vector<std::pair<stmt_index, stmt_index>> follows_T = TransitiveClosureHelper<stmt_index>::findTransitiveClosure(follows);
+
+	for (auto p : follows) {
+		pkb_instance.addFollows(p.first, p.second);
+	}
+	for (auto p : follows_T) {
+		pkb_instance.addFollowsT(p.first, p.second);
 	}
 }
 
 void DesignExtractor::populateParent() {
+	std::vector<std::pair<stmt_index, stmt_index>> parent;
 	for (Statement* s : de_statements) {
 		for (stmt_index id : s->getDirectChild()) {
-			pkb_instance.addParent(s->getIndex(), id);
+			parent.push_back({ s->getIndex(), id });
 		}
+	}
+
+	std::vector<std::pair<stmt_index, stmt_index>> parent_T = TransitiveClosureHelper<stmt_index>::findTransitiveClosure(parent);
+	for (auto p : parent) {
+		pkb_instance.addParent(p.first, p.second);
+	}
+	for (auto p : parent_T) {
+		pkb_instance.addParentT(p.first, p.second);
 	}
 }
 
@@ -367,16 +382,24 @@ void DesignExtractor::populateModifies() {
 }
 
 void DesignExtractor::populateCalls() {
+	std::vector<std::pair<proc_name, proc_name>> calls_P;
 	for (Statement* s : de_statements) {
 		if (s->getType() == StmtType::STMT_CALL) {
 			pkb_instance.addCallsS(s->getIndex(), s->getCallee());
-			pkb_instance.addCallsP(s->getProcName(), s->getCallee());
+			calls_P.push_back({ s->getProcName(), s->getCallee() });
 		}
+	}
+
+	std::vector<std::pair<proc_name, proc_name>> calls_PT = TransitiveClosureHelper<proc_name>::findTransitiveClosure(calls_P);
+	for (auto p : calls_P) {
+		pkb_instance.addCallsP(p.first, p.second);
+	}
+	for (auto p : calls_PT) {
+		pkb_instance.addCallsPT(p.first, p.second);
 	}
 }
 
 void DesignExtractor::populateNext() {
-
 	std::vector<CFG*> cfgs;
 	for (Procedure* p : de_procedures) {
 		CFG* cfg = generateCFG(p->getChild());
@@ -388,15 +411,15 @@ void DesignExtractor::populateNext() {
 	}
 
 	for (proc_index p : call_sequence) {
-		for (stmt_index s: de_procedures[p - OFFSET]->getChild()) {
+		for (stmt_index s : de_procedures[p - OFFSET]->getChild()) {
 			Statement* stmt = de_statements[s - OFFSET];
 			if (stmt->getType() == StmtType::STMT_CALL) {
-				cfgs[p - OFFSET]->call(cfgs[proc_name_to_id[stmt->getCallee()] - OFFSET], s);
+				cfgs[p - OFFSET]->addCallAt(cfgs[proc_name_to_id[stmt->getCallee()] - OFFSET], s);
 			}
 		}
 	}
 
-	for (CFG* cfg: cfgs) {
+	for (CFG* cfg : cfgs) {
 		if (cfg->getHeadLabelledProgLine().labels.front() == NON_EXISTING_STMT_NO) {
 			pkb_instance.addCFGBip(cfg);
 		}
@@ -434,23 +457,22 @@ CFG* DesignExtractor::generateCFG(std::vector<stmt_index> indexes) {
 
 	stmt_index parent = de_statements[indexes.front() - OFFSET]->getDirectParent();
 	std::vector<stmt_index> main;
-	for (stmt_index id: indexes) {
-		if (de_statements[id - OFFSET]->getDirectParent() == parent 
+	for (stmt_index id : indexes) {
+		if (de_statements[id - OFFSET]->getDirectParent() == parent
 			&& de_statements[id - OFFSET]->getStmtList() == indexes.front()) {
 			main.push_back(id);
 		}
 	}
 
 	for (stmt_index id : main) {
-		cfg->add(id);
+		cfg->addLine(id);
 	}
 
 	for (size_t i = 0; i < main.size(); i++) {
 		prog_line curr = main[i], next;
 		if (i == main.size() - 1) {
 			next = indexes.back() + 1;
-		}
-		else {
+		} else {
 			next = main[i + 1];
 		}
 
@@ -482,20 +504,18 @@ CFG* DesignExtractor::generateCFG(std::vector<stmt_index> indexes) {
 			std::iota(else_scope.begin(), else_scope.end(), else_start);
 			CFG* cfg_else = generateCFG(else_scope);
 
-			cfg->fork(cfg_then, cfg_else, curr);
+			cfg->addForkAt(cfg_then, cfg_else, curr);
 
 			delete cfg_then, cfg_else;
-		}
-		else if (container->getType() == StmtType::STMT_WHILE) {
+		} else if (container->getType() == StmtType::STMT_WHILE) {
 			std::vector<stmt_index> scope(next - curr - 1);
 			std::iota(scope.begin(), scope.end(), curr + 1);
 			CFG* cfg_while = generateCFG(scope);
 
-			cfg->loop(cfg_while, curr);
+			cfg->addLoopAt(cfg_while, curr);
 
 			delete cfg_while;
-		}
-		else {
+		} else {
 			throw std::runtime_error("CFG build failure. Gap involved non-container statement.");
 		}
 	}

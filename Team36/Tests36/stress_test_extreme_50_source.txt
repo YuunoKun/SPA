@@ -1,6 +1,6 @@
 procedure a {
 while(x < 0) {
- x = y;
+ a = b;
  y = z;
  z = v;
  v = w;

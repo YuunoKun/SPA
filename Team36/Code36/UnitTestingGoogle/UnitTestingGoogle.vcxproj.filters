@@ -596,7 +596,6 @@
     <ClCompile Include="CFGTest.cpp">
       <Filter>Common</Filter>
     </ClCompile>
-    <ClCompile Include="pch.cpp" />
     <ClCompile Include="NextBipPreprocessorTest.cpp">
       <Filter>PKB\RelationPreprocessor</Filter>
     </ClCompile>
@@ -623,6 +622,12 @@
     </ClCompile>
     <ClCompile Include="RelationPreprocessorManagerTest_NextT.cpp">
       <Filter>PKB\RelationPreprocessorManager</Filter>
+    </ClCompile>
+    <ClCompile Include="TransitiveClosureHelperTest.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="QueryTupleOptimizerTest.cpp">
+      <Filter>PQL\QueryEvaluator</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

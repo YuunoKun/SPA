@@ -643,6 +643,84 @@ namespace UnitTesting {
 		EXPECT_EQ(t3, r3);
 	}
 
+
+
+	TEST_F(UtilityTest, filterBothResults) {
+		std::list<std::vector<value>> from1 = {
+			{1, 1},
+			{1, 2},
+			{1, 3},
+			{2, 1},
+			{2, 2},
+			{2, 3},
+			{3, 1},
+			{3, 2},
+			{3, 3},
+		};
+
+		std::list<std::vector<value>> from2 = {
+			{1, 3},
+			{1, 4},
+			{1, 5},
+		};
+
+		int fromIndex = 0;
+		int to_join_index = 0;
+
+		std::list<std::vector<value>> to1 = {
+			{1, 1},
+			{1, 2},
+			{1, 3},
+		};
+
+		std::list<std::vector<value>> to2 = {
+			{1, 3},
+			{1, 4},
+			{1, 5},
+		};
+
+		Utility::filterBothResults(from1, fromIndex, from2, to_join_index);
+		EXPECT_EQ(from1, to1);
+		EXPECT_EQ(from2, to2);
+
+
+		from1 = {
+			{1, 1},
+			{1, 2},
+			{1, 3},
+			{2, 1},
+			{2, 2},
+			{2, 3},
+			{3, 1},
+			{3, 2},
+			{3, 3},
+		};
+
+		from2 = {
+			{1, 3},
+			{1, 4},
+			{1, 5},
+		};
+
+		fromIndex = 0;
+		to_join_index = 1;
+
+		to1 = {
+			{3, 1},
+			{3, 2},
+			{3, 3}
+		};
+
+		to2 = {
+			{1, 3}
+		};
+
+		Utility::filterBothResults(from1, fromIndex, from2, to_join_index);
+		EXPECT_EQ(from1, to1);
+		EXPECT_EQ(from2, to2);
+	}
+
+
 	TEST_F(UtilityTest, joinTableSingleColumn) {
 		std::list<std::vector<value>> from = {
 			{1, 1},
@@ -846,6 +924,233 @@ namespace UnitTesting {
 		EXPECT_EQ(out, to);
 	}
 
+
+	TEST_F(UtilityTest, joinTableExcludeJoinColumn) {
+		std::list<std::vector<value>> from = {
+			{1, 1},
+			{1, 2},
+			{1, 3},
+			{2, 1},
+			{2, 2},
+			{2, 3},
+			{3, 1},
+			{3, 2},
+			{3, 3},
+		};
+
+		std::unordered_multimap<value, std::vector<value>> to_join = {
+			{1, { 1, 1 } },
+			{2, { 2, 2 } },
+			{3, { 3, 3 } },
+			{4, { 4, 4 } },
+			{5, { 5, 5 } }
+		};
+
+		int fromIndex = 0;
+		int to_join_index = 0;
+
+		std::list<std::vector<value>> to = {
+			{1, 1},
+			{2, 1},
+			{3, 1},
+			{1, 2},
+			{2, 2},
+			{3, 2},
+			{1, 3},
+			{2, 3},
+			{3, 3},
+		};
+
+		std::list<std::vector<value>> out;
+		Utility::joinTableExcludeJoinColumn(from, fromIndex, to_join, to_join_index, out);
+		EXPECT_EQ(out, to);
+
+		fromIndex = 1;
+		to_join_index = 0;
+
+		to = {
+			{1, 1},
+			{1, 2},
+			{1, 3},
+			{2, 1},
+			{2, 2},
+			{2, 3},
+			{3, 1},
+			{3, 2},
+			{3, 3},
+		};
+
+		out.clear();
+		Utility::joinTableExcludeJoinColumn(from, fromIndex, to_join, to_join_index, out);
+		EXPECT_EQ(out, to);
+
+		from = {
+			{1},
+			{2},
+			{3}
+		};
+
+		to_join = {
+			{1, { 1, 1 } },
+			{1, { 1, 2 } },
+			{2, { 2, 3 } },
+			{1, { 1, 4 } },
+			{1, { 1, 5 } }
+		};
+
+		fromIndex = 0;
+		to_join_index = 0;
+
+		to = {
+			{1},
+			{2},
+			{4},
+			{5},
+			{3}
+		};
+
+		out.clear();
+		Utility::joinTableExcludeJoinColumn(from, fromIndex, to_join, to_join_index, out);
+		EXPECT_EQ(out, to);
+
+		from = {
+			{1},
+			{2},
+			{3}
+		};
+
+		to_join = {
+			{1, { 1, 1, 5 } },
+			{1, { 1, 2, 4 } },
+			{2, { 2, 3, 3 } },
+			{1, { 1, 4, 2 } },
+			{1, { 1, 5, 1 } }
+		};
+
+		fromIndex = 0;
+		to_join_index = 0;
+
+		to = {
+			{1, 5 },
+			{2, 4 },
+			{4, 2 },
+			{5, 1 },
+			{3, 3 }
+		};
+
+		out.clear();
+		Utility::joinTableExcludeJoinColumn(from, fromIndex, to_join, to_join_index, out);
+		EXPECT_EQ(out, to);
+
+		from = {
+			{1, 1},
+			{1, 2},
+			{1, 3},
+			{2, 1},
+			{2, 2},
+			{2, 3},
+			{3, 1},
+			{3, 2},
+			{3, 3}
+		};
+
+		to_join = {
+			{1, { 1, 1, 5 } },
+			{1, { 1, 2, 4 } },
+			{2, { 2, 3, 3 } },
+			{1, { 1, 4, 2 } },
+			{1, { 1, 5, 1 } }
+		};
+
+		fromIndex = 0;
+		to_join_index = 0;
+
+		to = {
+			{1, 1, 5 },
+			{1, 2, 4 },
+			{1, 4, 2 },
+			{1, 5, 1 },
+			{2, 1, 5 },
+			{2, 2, 4 },
+			{2, 4, 2 },
+			{2, 5, 1 },
+			{3, 1, 5 },
+			{3, 2, 4 },
+			{3, 4, 2 },
+			{3, 5, 1 },
+			{1, 3, 3 },
+			{2, 3, 3 },
+			{3, 3, 3 }
+		};
+
+		out.clear();
+		Utility::joinTableExcludeJoinColumn(from, fromIndex, to_join, to_join_index, out);
+		EXPECT_EQ(out, to);
+
+		from = { {1}, {2}, {3},
+			{4}, {5}, {6},
+			{7}, {8}, {9}
+		};
+
+		to_join = {
+			{1, { 1, 1, 5 } },
+			{1, { 1, 2, 4 } },
+			{1, { 1, 4, 2 } },
+			{1, { 1, 5, 1 } }
+		};
+
+		fromIndex = 0;
+		to_join_index = 0;
+
+		to = {
+			{1, 5 },
+			{2, 4 },
+			{4, 2 },
+			{5, 1 }
+		};
+
+		out.clear();
+		Utility::joinTableExcludeJoinColumn(from, fromIndex, to_join, to_join_index, out);
+		EXPECT_EQ(out, to);
+
+		fromIndex = 0;
+		to_join_index = 1;
+
+		to = {
+			{1, 5 },
+			{1, 4 },
+			{1, 2 },
+			{1, 1 }
+		};
+
+		out.clear();
+		Utility::joinTableExcludeJoinColumn(from, fromIndex, to_join, to_join_index, out);
+		EXPECT_EQ(out, to);
+
+		from = {
+		{1, 1},
+		{1, 2},
+		{1, 3}
+		};
+
+		to_join = {
+			{1, { 1, 1 } },
+			{2, { 1, 2 } },
+			{3, { 1, 3 } }
+		};
+
+		fromIndex = 1;
+		to_join_index = 1;
+
+		to = {
+			{1, 1}
+		};
+
+		out.clear();
+		Utility::joinTableExcludeJoinColumn(from, fromIndex, to_join, to_join_index, out);
+		EXPECT_EQ(out, to);
+	}
+
 	TEST_F(UtilityTest, joinTable) {
 		std::list<std::vector<value>> a = { {1}, {2}, {3} };
 		std::list<std::vector<value>> b = { {1} };
@@ -901,6 +1206,86 @@ namespace UnitTesting {
 		b = { e1, e2, e3, e4, e5 };
 		to = { };
 		EXPECT_EQ(Utility::getEntitiesExclude(a, b), to);
+	}
+
+	TEST_F(UtilityTest, getEntitiesInclude) {
+		Entity e1 = { STMT,Synonym{"e1"} };
+		Entity e2 = { STMT,Synonym{"e2"} };
+		Entity e3 = { STMT,Synonym{"e3"} };
+		Entity e4 = { STMT,Synonym{"e4"} };
+		Entity e5 = { STMT,Synonym{"e5"} };
+
+		std::vector<Entity> a = { e1, e2, e3, e4, e5 };
+		std::vector<Entity> b = { e1 };
+		std::vector<Entity> to = { e1 };
+		EXPECT_EQ(Utility::getEntitiesInclude(a, b), to);
+
+		b = { e2, e4 };
+		to = b;
+		EXPECT_EQ(Utility::getEntitiesInclude(a, b), to);
+
+		a = { e1, e2, e3 };
+		b = { e1, e2, e3, e4, e5 };
+		to = a;
+		EXPECT_EQ(Utility::getEntitiesInclude(a, b), to);
+
+	}
+
+	TEST_F(UtilityTest, getSortedEntityName) {
+		Entity e1 = { STMT,Synonym{"e1"} };
+		Entity e2 = { STMT,Synonym{"e2"} };
+
+		std::vector<Entity> a = { e1, e2 };
+		std::pair<Entity, Entity> b = { e2, e1 };
+
+		EXPECT_EQ(Utility::getSortedEntityName(a), Utility::getSortedEntityName(b));
+
+	}
+
+	TEST_F(UtilityTest, getEntityListFromPair) {
+		Entity e1 = { STMT,Synonym{"e1"} };
+		Entity e2 = { STMT,Synonym{"e2"} };
+		Entity e3 = { STMT,Synonym{"e3"} };
+		Entity e4 = { STMT,Synonym{"e4"} };
+		Entity e5 = { STMT,Synonym{"e5"} };
+
+		std::list<std::pair<Entity, Entity>> p = { {e1,e2}, {e3, e4}, {e5, e1} };
+
+		std::vector<Entity> a = { e1, e2, e3, e4, e5 };
+
+		EXPECT_EQ(Utility::getEntityListFromPair(p), a);
+	}
+
+	TEST_F(UtilityTest, getEntityNameWithLeastFrequency) {
+		Entity e1 = { STMT,Synonym{"e1"} };
+		Entity e2 = { STMT,Synonym{"e2"} };
+		Entity e3 = { STMT,Synonym{"e3"} };
+		Entity e4 = { STMT,Synonym{"e4"} };
+		Entity e5 = { STMT,Synonym{"e5"} };
+
+		std::list<std::pair<Entity, Entity>> p = { {e1,e2}, {e1, e3}, {e3, e5}, {e2, e3},{e1,e2} };
+
+
+		EXPECT_EQ(Utility::getEntityNameWithLeastFrequency(p), e5);
+		EXPECT_EQ(Utility::getEntityNameWithLeastFrequency(p, { e1, e2, e3 }), e3);
+	}
+
+	TEST_F(UtilityTest, splitEntityPairs) {
+		Entity e1 = { STMT,Synonym{"e1"} };
+		Entity e2 = { STMT,Synonym{"e2"} };
+		Entity e3 = { STMT,Synonym{"e3"} };
+		Entity e4 = { STMT,Synonym{"e4"} };
+		Entity e5 = { STMT,Synonym{"e5"} };
+
+		std::list<std::pair<Entity, Entity>> p = { {e1,e2}, {e1, e3}, {e3, e5}, {e2, e3},{e1,e2} };
+
+		std::list<std::pair<Entity, Entity>> out = Utility::splitEntityPairs(p, e1);
+
+		std::list<std::pair<Entity, Entity>> a = { {e3, e5}, {e2, e3} };
+		std::list<std::pair<Entity, Entity>> b = { {e1,e2}, {e1, e3} , {e1,e2} };
+
+		EXPECT_EQ(p, a);
+		EXPECT_EQ(out, b);
 	}
 
 	TEST_F(UtilityTest, getEntitiesWithoutDuplicate) {

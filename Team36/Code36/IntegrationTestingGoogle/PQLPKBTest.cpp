@@ -52,21 +52,29 @@ namespace UnitTesting {
 			PKB::getInstance().addUsesP(USES_P_LEFT1, USES_RIGHT2);
 			PKB::getInstance().addExprTree(std::stoi(MODIFIES_LEFT3), EXPRESSIONNODE_1);
 			PKB::getInstance().addExprTree(std::stoi(MODIFIES_LEFT4), EXPRESSIONNODE_2);
-			PKB::getInstance().generateFollowsT();
-			PKB::getInstance().generateParentT();
+			PKB::getInstance().addFollowsT(std::stoi(FOLLOW_LEFT1), std::stoi(FOLLOW_RIGHT1));
+			PKB::getInstance().addFollowsT(std::stoi(FOLLOW_LEFT2), std::stoi(FOLLOW_RIGHT2));
+			PKB::getInstance().addFollowsT(std::stoi(FOLLOW_LEFT1), std::stoi(FOLLOW_RIGHT2));
+			PKB::getInstance().addParentT(std::stoi(PARENT_LEFT1), std::stoi(PARENT_RIGHT1));
+			PKB::getInstance().addParentT(std::stoi(PARENT_LEFT1), std::stoi(PARENT_RIGHT2));
+			PKB::getInstance().addParentT(std::stoi(PARENT_LEFT1), std::stoi(PARENT_RIGHT3));
+			PKB::getInstance().addParentT(std::stoi(PARENT_LEFT2), std::stoi(PARENT_RIGHT2));
+			PKB::getInstance().addParentT(std::stoi(PARENT_LEFT2), std::stoi(PARENT_RIGHT3));
+			PKB::getInstance().addParentT(std::stoi(PARENT_LEFT3), std::stoi(PARENT_RIGHT3));
 			PKB::getInstance().addIf(std::stoi(IF_LEFT1), IF_RIGHT1);
 			PKB::getInstance().addIf(std::stoi(IF_LEFT2), IF_RIGHT2);
 			PKB::getInstance().addWhile(std::stoi(WHILE_LEFT1), WHILE_RIGHT1);
 			PKB::getInstance().addWhile(std::stoi(WHILE_LEFT2), WHILE_RIGHT2);
 			PKB::getInstance().addCallsP(proc1, proc2);
 			PKB::getInstance().addCallsP(proc2, proc3);
-			PKB::getInstance().generateCallsPT();
+			PKB::getInstance().addCallsPT(proc1, proc2);
+			PKB::getInstance().addCallsPT(proc1, proc3);
+			PKB::getInstance().addCallsPT(proc2, proc3);
 			PKB::getInstance().addNext(1, 2);
 			PKB::getInstance().addNext(2, 3);
 			PKB::getInstance().addNext(9, 10);
 			PKB::getInstance().addProcContains(proc1, 9);
 			PKB::getInstance().addProcContains(proc1, 10);
-			//PKB::getInstance().addVariable(v);
 			PKB::getInstance().addVariable(w);
 			PKB::getInstance().addModifiesS(9, w);
 			PKB::getInstance().addUsesS(10, w);
@@ -75,12 +83,12 @@ namespace UnitTesting {
 			PKB::getInstance().addCFGBip(cfg3);
 
 
-			cfg1->add(1);
-			cfg1->add(2);
-			cfg1->add(3);
-			cfg2->add(4);
-			cfg3->add(9);
-			cfg3->add(10);
+			cfg1->addLine(1);
+			cfg1->addLine(2);
+			cfg1->addLine(3);
+			cfg2->addLine(4);
+			cfg3->addLine(9);
+			cfg3->addLine(10);
 
 		}
 
@@ -102,9 +110,7 @@ namespace UnitTesting {
 				result_it++, expected_it++) {
 				EXPECT_EQ(*expected_it, *result_it);
 			}
-
 		}
-		//const var_name v = "v";
 		const var_name w = "w";
 		const var_name x = "x";
 		const var_name y = "y";
@@ -215,7 +221,6 @@ namespace UnitTesting {
 
 		const std::string MODIFIES_P_LEFT1 = proc1;
 
-
 		const std::string EXPRESSION1 = "x";
 		const std::string EXPRESSION2 = "x + (y * 5)";
 		const std::string EXPRESSION_CONSTANT = "5";
@@ -229,7 +234,6 @@ namespace UnitTesting {
 		const std::list<std::string> EXPECTED_ASSIGN_PATTERN4 = { ASSIGN2 };
 		const std::list<std::string> EXPECTED_ASSIGN_PATTERN5 = { ASSIGN2 };
 
-
 		const std::vector<std::string> MODIFIES_LEFTS = { MODIFIES_LEFT1, MODIFIES_LEFT2, MODIFIES_LEFT3, MODIFIES_LEFT4 };
 		const std::vector<std::string> MODIFIES_RIGHTS = { MODIFIES_RIGHT1, MODIFIES_RIGHT2, MODIFIES_RIGHT3, MODIFIES_RIGHT4 };
 
@@ -241,11 +245,9 @@ namespace UnitTesting {
 		const std::string USES_RIGHT2 = x;
 		const std::string USES_P_LEFT1 = proc1;
 
-
 		const std::list<std::string> EXPECTED_USES1 = { y };
 		const std::list<std::string> EXPECTED_USES2 = { x };
 		const std::list<std::string> EXPECTED_USES3 = { y, x };
-
 
 		const std::vector<std::string> USES_LEFTS = { USES_LEFT1, USES_LEFT2 };
 		const std::vector<std::string> USES_RIGHTS = { USES_RIGHT1, USES_RIGHT2 };
@@ -395,7 +397,7 @@ namespace UnitTesting {
 		validateAnswer(EXPECTED_USES3, ans);
 	}
 
-
+	
 	TEST_F(PQLPKBTest, SuchThatParentTest1) {
 		std::list<std::string> ans = qs.processQuery("stmt s; Select s such that Parent(1,s)");
 
@@ -444,7 +446,6 @@ namespace UnitTesting {
 
 		validateAnswer(EXPECTED_FOLLOWS_PARENT, ans);
 	}
-
 
 	// one pattern cl ----------------------------------------------------------------------------------------------------------------
 
@@ -513,7 +514,6 @@ namespace UnitTesting {
 
 		validateAnswer(EXPECTED_WHILES3, ans);
 	}
-
 
 	// one st and one pattern cl -----------------------------------------------------------------------------------------------------
 	TEST_F(PQLPKBTest, SuchThatPatternTest1) {

@@ -29,9 +29,15 @@ void GUIWrapper::evaluate(std::string query, std::list<std::string>& results) {
 	std::cout << "query=  " << query << std::endl;
 	QuerySystem querySystem;
 	std::list<std::string> queryResult = querySystem.processQuery(query);
-	for each (std::string s in queryResult) {
-		results.push_back(s);
-		std::cout << s << ", " << std::endl;
+	if (queryResult.size() > 0) {
+		std::string result = queryResult.front();
+		results.push_back(queryResult.front());
+		queryResult.pop_front();
+		for each (std::string s in queryResult) {
+			results.push_back(s);
+			result += ", " + s;
+		}
+		std::cout << result << std::endl;
 	}
 	// store the answers to the query in the results list (it is initially empty)
 	// each result must be a string.

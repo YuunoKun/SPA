@@ -17,7 +17,9 @@ namespace UnitTesting {
 			PKB::getInstance().addProcedure(main4);
 			PKB::getInstance().addCallsP(main1, main2);
 			PKB::getInstance().addCallsP(main2, main3);
-			PKB::getInstance().generateCallsPT();
+			PKB::getInstance().addCallsPT(main1, main2);
+			PKB::getInstance().addCallsPT(main1, main3);
+			PKB::getInstance().addCallsPT(main2, main3);
 		}
 
 		PKBAdapter pkb;
@@ -42,13 +44,11 @@ namespace UnitTesting {
 		EXPECT_FALSE(evaluator.evaluateWildAndWild());
 
 		PKB::getInstance().addCallsP(main1, main2);
-		PKB::getInstance().generateCallsPT();
-
+		PKB::getInstance().addCallsPT(main1, main2);
 		EXPECT_TRUE(evaluator.evaluateWildAndWild());
 	}
 
 	TEST_F(CallsTEvaluatorTest, evaluateConstantAndConstant) {
-
 		EXPECT_TRUE(evaluator.evaluateConstantAndConstant(e1, e2));
 		EXPECT_TRUE(evaluator.evaluateConstantAndConstant(e2, e3));
 		EXPECT_FALSE(evaluator.evaluateConstantAndConstant(e1, e1));
@@ -68,7 +68,6 @@ namespace UnitTesting {
 	}
 
 	TEST_F(CallsTEvaluatorTest, evaluateConstantAndWild) {
-
 		EXPECT_TRUE(evaluator.evaluateConstantAndWild(e1));
 		EXPECT_TRUE(evaluator.evaluateConstantAndWild(e2));
 		EXPECT_FALSE(evaluator.evaluateConstantAndWild(e3));
@@ -76,7 +75,6 @@ namespace UnitTesting {
 	}
 
 	TEST_F(CallsTEvaluatorTest, evaluateWildAndConstant) {
-
 		EXPECT_FALSE(evaluator.evaluateWildAndConstant(e1));
 		EXPECT_TRUE(evaluator.evaluateWildAndConstant(e2));
 		EXPECT_TRUE(evaluator.evaluateWildAndConstant(e3));
@@ -84,7 +82,6 @@ namespace UnitTesting {
 	}
 
 	TEST_F(CallsTEvaluatorTest, evaluateSynonymAndSynonym) {
-
 		std::vector<std::pair<proc_name, var_name>> v = pkb.getCallsPTRelation();
 		Entity left = { PROCEDURE, Synonym{"a"} };
 		Entity right = { PROCEDURE, Synonym{"b"} };
@@ -94,7 +91,6 @@ namespace UnitTesting {
 	}
 
 	TEST_F(CallsTEvaluatorTest, evaluateWildAndSynonym) {
-
 		std::vector<std::string> v = pkb.getCalleePT();
 		Entity header = { PROCEDURE, Synonym{"a"} };
 		ResultTable t(header, v);
@@ -102,7 +98,6 @@ namespace UnitTesting {
 	}
 
 	TEST_F(CallsTEvaluatorTest, evaluateSynonymAndWild) {
-
 		std::vector<std::string> v = pkb.getCallerPT();
 		Entity header = { PROCEDURE, Synonym{"a"} };
 		ResultTable t(header, v);
@@ -110,7 +105,6 @@ namespace UnitTesting {
 	}
 
 	TEST_F(CallsTEvaluatorTest, evaluateConstantAndSynonym) {
-
 		std::vector<proc_name> v = { main2, main3 };
 		Entity header = { PROCEDURE, Synonym{"a"} };
 		Entity match = e1;
@@ -134,7 +128,6 @@ namespace UnitTesting {
 	}
 
 	TEST_F(CallsTEvaluatorTest, evaluateSynonymAndConstant) {
-
 		std::vector<proc_name> v = { main1 };
 		Entity header = { PROCEDURE, Synonym{"a"} };
 		Entity match = e2;
@@ -155,6 +148,5 @@ namespace UnitTesting {
 		match = e4;
 		t = ResultTable(header, v);
 		EXPECT_EQ(evaluator.evaluateSynonymAndConstant(header, match), t);
-
 	}
 }

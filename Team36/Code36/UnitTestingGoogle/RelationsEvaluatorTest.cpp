@@ -46,8 +46,8 @@ namespace UnitTesting {
 		PKB::getInstance().addFollows(1, 2);
 		PKB::getInstance().addParent(1, 2);
 		PKB::getInstance().addNext(1, 2);
-		PKB::getInstance().generateFollowsT();
-		PKB::getInstance().generateParentT();
+		PKB::getInstance().addFollowsT(1, 2);
+		PKB::getInstance().addParentT(1, 2);
 		PKB::getInstance().addProcContains(p, 1);
 		PKB::getInstance().addProcContains(p, 2);
 		pkb.getRelationManager().reset();
@@ -263,7 +263,7 @@ namespace UnitTesting {
 			}
 		}
 		PKB::getInstance().addCallsP(main1, main2);
-		PKB::getInstance().generateCallsPT();
+		PKB::getInstance().addCallsPT(main1, main2);
 
 		//Positive Test Case
 		for (auto type : types) {
