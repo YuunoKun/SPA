@@ -24,11 +24,7 @@ std::list<std::list<std::pair<Entity, Entity>>> QueryTupleOptimizer::groupCommon
 	for (std::list<int> el : raw_result) {
 		std::list<Entity> entities;
 		for (int integer : el) {
-			for (std::pair<Entity, int> pr : entityToInt) {
-				if (pr.second == integer) {
-					entities.push_back(pr.first);
-				}
-			}
+			QueryTupleOptimizer::addEntityToInt(integer, entities);
 		}
 		intermediary_result.push_back(entities);
 	}
@@ -42,18 +38,10 @@ std::list<std::list<std::pair<Entity, Entity>>> QueryTupleOptimizer::processToEn
 	for (std::list<Entity> list_of_entities : entities) {
 		std::list<std::pair<Entity, Entity>> list_of_pairs;
 		for (std::pair<Entity, Entity> input_pair : input) {
-			bool is_first_matching = false;
-			bool is_second_matching = false;
 			for (Entity ent : list_of_entities) {
 				if (input_pair.first == ent) {
-					is_first_matching = true;
+					list_of_pairs.push_back(input_pair);
 				}
-				if (input_pair.second == ent) {
-					is_second_matching = true;
-				}
-			}
-			if (is_first_matching && is_second_matching) {
-				list_of_pairs.push_back(input_pair);
 			}
 		}
 
@@ -107,4 +95,12 @@ std::pair<int, int> QueryTupleOptimizer::mapEntity(std::pair<Entity, Entity> ele
 		}
 	}
 	return std::pair(std::make_pair(first_ent_no, second_ent_no));
+}
+
+void QueryTupleOptimizer::addEntityToInt(int integer, std::list<Entity>& entities) {
+	for (std::pair<Entity, int> pr : entityToInt) {
+		if (pr.second == integer) {
+			entities.push_back(pr.first);
+		}
+	}
 }
