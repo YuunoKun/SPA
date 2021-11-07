@@ -13,5 +13,5 @@
 
 class FollowsParser : public RelationParserInterface {
 public:
-    void parse(Query&, std::vector<QueryToken>) override;
+    void parse(Query&, std::vector<QueryToken>, QueryToken::QueryTokenType&) override;
 };

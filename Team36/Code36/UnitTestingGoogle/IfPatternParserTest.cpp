@@ -1,6 +1,6 @@
 #include "pch.h"
 
-#include "QueryPatternRelRefParser.h"
+#include "QueryClauseParser.h"
 #include "Common.h"
 #include <iostream>
 
@@ -19,7 +19,7 @@ namespace UnitTesting {
 	};
 
 	TEST(IfPatternParserTest, IFIdentWildCardTest) {
-		QueryPatternRelRefParser validator;
+		QueryClauseParser validator;
 
 		Query query;
 
@@ -59,7 +59,7 @@ namespace UnitTesting {
 	}
 
 	TEST(IfPatternParserTest, ifSynWildCardTest) {
-		QueryPatternRelRefParser validator;
+		QueryClauseParser validator;
 
 		Query query;
 
@@ -97,7 +97,7 @@ namespace UnitTesting {
 	}
 
 	TEST(IfPatternParserTest, IfWildCardWildCardTest) {
-		QueryPatternRelRefParser validator;
+		QueryClauseParser validator;
 
 		Query query;
 
@@ -130,7 +130,7 @@ namespace UnitTesting {
 	}
 
 	TEST(IfPatternParserTest, syntacticInvalidConstantParams) {
-		QueryPatternRelRefParser validator;
+		QueryClauseParser validator;
 
 		Query query;
 
@@ -155,7 +155,7 @@ namespace UnitTesting {
 	}
 
 	TEST(AssignPatternParserTest, semanticInvalidMissingParams) {
-		QueryPatternRelRefParser validator;
+		QueryClauseParser validator;
 
 		Query query;
 
@@ -177,7 +177,7 @@ namespace UnitTesting {
 	}
 
 	TEST(IfPatternParserTest, syntacticInvalidVarParams) {
-		QueryPatternRelRefParser validator;
+		QueryClauseParser validator;
 
 		Query query;
 

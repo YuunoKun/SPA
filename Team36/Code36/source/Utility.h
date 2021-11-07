@@ -65,6 +65,7 @@ public:
 
 	static EntityType queryTokenTypeToEntityType(QueryToken::QueryTokenType&);
 	static AttrRef queryTokenTypeToAttrRef(QueryToken::QueryTokenType&);
+	static RelType queryTokenTypeToRelType(QueryToken::QueryTokenType&);
 	static std::string Utility::queryTokenTypeToExprString(std::vector<QueryToken>);
 
 	static void isSyntacticValidpattern(std::vector<QueryToken>);

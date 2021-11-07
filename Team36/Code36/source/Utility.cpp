@@ -466,6 +466,66 @@ AttrRef Utility::queryTokenTypeToAttrRef(QueryToken::QueryTokenType& query_token
 	}
 }
 
+RelType Utility::queryTokenTypeToRelType(QueryToken::QueryTokenType& query_token_type) {
+	if (query_token_type == QueryToken::MODIFIES_S) {
+		return RelType::MODIFIES_S;
+	}
+	else if (query_token_type == QueryToken::MODIFIES_P) {
+		return RelType::MODIFIES_P;
+	}
+	else if (query_token_type == QueryToken::USES_S) {
+		return RelType::USES_S;
+	}
+	else if (query_token_type == QueryToken::USES_P) {
+		return RelType::USES_P;
+	}
+	else if (query_token_type == QueryToken::PARENT) {
+		return RelType::PARENT;
+	}
+	else if (query_token_type == QueryToken::PARENT_T) {
+		return RelType::PARENT_T;
+	}
+	else if (query_token_type == QueryToken::FOLLOWS) {
+		return RelType::FOLLOWS;
+	}
+	else if (query_token_type == QueryToken::FOLLOWS_T) {
+		return RelType::FOLLOWS_T;
+	}
+	else if (query_token_type == QueryToken::CALLS) {
+		return RelType::CALLS;
+	}
+	else if (query_token_type == QueryToken::CALLS_T) {
+		return RelType::CALLS_T;
+	}
+	else if (query_token_type == QueryToken::NEXT) {
+		return RelType::NEXT;
+	}
+	else if (query_token_type == QueryToken::NEXT_T) {
+		return RelType::NEXT_T;
+	}
+	else if (query_token_type == QueryToken::AFFECTS) {
+		return RelType::AFFECT;
+	}
+	else if (query_token_type == QueryToken::AFFECTS_T) {
+		return RelType::AFFECT_T;
+	}
+	else if (query_token_type == QueryToken::WITH) {
+		return RelType::WITH;
+	}
+	else if (query_token_type == QueryToken::NEXT_BIP) {
+		return RelType::NEXT_BIP;
+	}
+	else if (query_token_type == QueryToken::NEXT_BIP_T) {
+		return RelType::NEXT_BIP_T;
+	}
+	else if (query_token_type == QueryToken::AFFECTS_BIP) {
+		return RelType::AFFECT_BIP;
+	}
+	else if (query_token_type == QueryToken::AFFECTS_BIP_T) {
+		return RelType::AFFECT_BIP_T;
+	}
+}
+
 std::string Utility::queryTokenTypeToExprString(std::vector<QueryToken> token_chain) {
 	std::string result = "";
 	for (QueryToken q : token_chain) {

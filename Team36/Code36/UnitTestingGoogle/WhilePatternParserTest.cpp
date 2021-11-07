@@ -1,6 +1,6 @@
 #include "pch.h"
 
-#include "QueryPatternRelRefParser.h"
+#include "QueryClauseParser.h"
 #include "Common.h"
 #include <iostream>
 
@@ -19,7 +19,7 @@ namespace UnitTesting {
 	};
 
 	TEST(WhilePatternParserTest, WhileIdentWildCardTest) {
-		QueryPatternRelRefParser validator;
+		QueryClauseParser validator;
 
 		Query query;
 
@@ -57,7 +57,7 @@ namespace UnitTesting {
 	}
 
 	TEST(WhilePatternParserTest, WhileSynWildCardTest) {
-		QueryPatternRelRefParser validator;
+		QueryClauseParser validator;
 
 		Query query;
 
@@ -93,7 +93,7 @@ namespace UnitTesting {
 	}
 
 	TEST(WhilePatternParserTest, WhileWildCardWildCardTest) {
-		QueryPatternRelRefParser validator;
+		QueryClauseParser validator;
 
 		Query query;
 

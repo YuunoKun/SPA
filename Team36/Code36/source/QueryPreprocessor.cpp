@@ -9,7 +9,7 @@
 #include "QueryTokenizer.h"
 #include "QueryValidator.h"
 #include "Query.h"
-#include "QueryPatternRelRefParser.h"
+#include "QueryClauseParser.h"
 #include "Utility.h"
 #include "SemanticErrorException.h"
 #include "SyntacticErrorException.h"
@@ -291,8 +291,8 @@ void QueryPreprocessor::checkParseWith(QueryToken& token) {
 			this->nextToken.token_value == AND_STR ||
 			this->nextToken.token_value == PATTERN_STR ||
 			this->nextToken.type == QueryToken::QueryTokenType::SUCH_THAT)) {
-		QueryPatternRelRefParser validator;
-		validator.parseWith(query, parameterClause);
+		QueryClauseParser clauseParser;
+		clauseParser.parseWith(query, parameterClause);
 		parameterClause.clear();
 		isParameter = false;
 		endOfCurrentClauses = true;
@@ -306,14 +306,14 @@ void QueryPreprocessor::handleValidatePatternAndSuchThat(QueryToken& token) {
 			queryValidator.validatePatternType(patternTypeEntity, query);
 			isParameter = false;
 			endOfCurrentClauses = true;
-			QueryPatternRelRefParser validator;
-			validator.parseParameterPattern(this->query, patternTypeEntity, parameterClause);
+			QueryClauseParser clauseParser;
+			clauseParser.parseParameterPattern(this->query, patternTypeEntity, parameterClause);
 			parameterClause.clear();
 			parenthesis_counter = 0;
 		} else if (patternOrSuchThat.type == QueryToken::QueryTokenType::SUCH_THAT) {
 			isParameter = false;
-			QueryPatternRelRefParser validator;
-			validator.parseParameterSuchThat(this->query, queryParameter.type, parameterClause);
+			QueryClauseParser clauseParser;
+			clauseParser.parseParameterSuchThat(this->query, queryParameter.type, parameterClause);
 			parameterClause.clear();
 			endOfCurrentClauses = true;
 			parenthesis_counter = 0;

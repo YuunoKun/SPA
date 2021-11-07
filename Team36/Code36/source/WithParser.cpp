@@ -1,9 +1,7 @@
 #include "WithParser.h"
 
 void WithParser::parse(Query& query, std::vector<QueryToken> token_chain) {
-	EntityType ident_type = EntityType::NONE_ENTITY;
-	AttrRef attr_name = AttrRef::NONE;
-	std::unordered_map<std::string, Entity> ent_chain = query.getEntities();
+    std::unordered_map<std::string, Entity> ent_chain = query.getEntities();
 
 	std::vector<std::vector<QueryToken>> separated_params = Utility::splitTokenChain(2, QueryToken::EQUAL, token_chain);
 
@@ -15,9 +13,12 @@ void WithParser::parse(Query& query, std::vector<QueryToken> token_chain) {
 		query.setIsSemanticError("Invalid parameters for With");
 	}
 
-	if (!Utility::checkIsSemanticError(query)) {
-		EntityType ent_type_1 = getEntityType(query, separated_params[0]);
-		EntityType ent_type_2 = getEntityType(query, separated_params[1]);
+    EntityType ident_type = EntityType::NONE_ENTITY;
+    AttrRef attr_name = AttrRef::NONE;
+    if (!Utility::checkIsSemanticError(query)) {
+
+        EntityType ent_type_1 = getEntityType(query, separated_params[0]);
+        EntityType ent_type_2 = getEntityType(query, separated_params[1]);
 
 		if (ent_type_1 == EntityType::NONE_ENTITY &&
 			ent_type_2 == EntityType::NONE_ENTITY) {

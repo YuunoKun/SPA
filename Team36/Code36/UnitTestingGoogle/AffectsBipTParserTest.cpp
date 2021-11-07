@@ -1,6 +1,6 @@
 #include "pch.h"
 
-#include "QueryPatternRelRefParser.h"
+#include "QueryClauseParser.h"
 #include "Common.h"
 #include <iostream>
 
@@ -35,7 +35,7 @@ namespace UnitTesting {
 		RelRef expected_rel = RelRef(RelType::AFFECT_BIP_T, expected_stmt_1, expected_stmt_2);
 
 		//Result
-		QueryPatternRelRefParser validator;
+		QueryClauseParser validator;
 		std::vector<QueryToken> temp_token_chain;
 		temp_token_chain.push_back({ QueryToken::IDENTIFIER, "s" });
 		temp_token_chain.push_back({ QueryToken::COMMA, "" });
@@ -59,7 +59,7 @@ namespace UnitTesting {
 		RelRef expected_rel = RelRef(RelType::AFFECT_BIP_T, expected_stmt_1, expected_stmt_2);
 
 		//Result
-		QueryPatternRelRefParser validator;
+		QueryClauseParser validator;
 		std::vector<QueryToken> temp_token_chain;
 		temp_token_chain.push_back({ QueryToken::IDENTIFIER, "s" });
 		temp_token_chain.push_back({ QueryToken::COMMA, "" });
@@ -84,7 +84,7 @@ namespace UnitTesting {
 		RelRef expected_rel = RelRef(RelType::AFFECT_BIP_T, expected_stmt_1, expected_stmt_2);
 
 		//Result
-		QueryPatternRelRefParser validator;
+		QueryClauseParser validator;
 		std::vector<QueryToken> temp_token_chain;
 		temp_token_chain.push_back({ QueryToken::IDENTIFIER, "s" });
 		temp_token_chain.push_back({ QueryToken::COMMA, "" });
@@ -109,7 +109,7 @@ namespace UnitTesting {
 		RelRef expected_rel = RelRef(RelType::AFFECT_BIP_T, expected_stmt_1, expected_stmt_2);
 
 		//Result
-		QueryPatternRelRefParser validator;
+		QueryClauseParser validator;
 		std::vector<QueryToken> temp_token_chain;
 		temp_token_chain.push_back({ QueryToken::WILDCARD, "" });
 		temp_token_chain.push_back({ QueryToken::COMMA, "" });
@@ -130,7 +130,7 @@ namespace UnitTesting {
 		RelRef expected_rel = RelRef(RelType::AFFECT_BIP_T, expected_stmt_1, expected_stmt_2);
 
 		//Result
-		QueryPatternRelRefParser validator;
+		QueryClauseParser validator;
 		std::vector<QueryToken> temp_token_chain;
 		temp_token_chain.push_back({ QueryToken::WILDCARD, "" });
 		temp_token_chain.push_back({ QueryToken::COMMA, "" });
@@ -151,7 +151,7 @@ namespace UnitTesting {
 		RelRef expected_rel = RelRef(RelType::AFFECT_BIP_T, expected_stmt_1, expected_stmt_2);
 
 		//Result
-		QueryPatternRelRefParser validator;
+		QueryClauseParser validator;
 		std::vector<QueryToken> temp_token_chain;
 		temp_token_chain.push_back({ QueryToken::WILDCARD, "" });
 		temp_token_chain.push_back({ QueryToken::COMMA, "" });
@@ -175,7 +175,7 @@ namespace UnitTesting {
 		RelRef expected_rel = RelRef(RelType::AFFECT_BIP_T, expected_stmt_1, expected_stmt_2);
 
 		//Result
-		QueryPatternRelRefParser validator;
+		QueryClauseParser validator;
 		std::vector<QueryToken> temp_token_chain;
 		temp_token_chain.push_back({ QueryToken::CONSTANT, "3" });
 		temp_token_chain.push_back({ QueryToken::COMMA, "" });
@@ -196,7 +196,7 @@ namespace UnitTesting {
 		RelRef expected_rel = RelRef(RelType::AFFECT_BIP_T, expected_stmt_1, expected_stmt_2);
 
 		//Result
-		QueryPatternRelRefParser validator;
+		QueryClauseParser validator;
 		std::vector<QueryToken> temp_token_chain;
 		temp_token_chain.push_back({ QueryToken::CONSTANT, "3" });
 		temp_token_chain.push_back({ QueryToken::COMMA, "" });
@@ -217,7 +217,7 @@ namespace UnitTesting {
 		RelRef expected_rel = RelRef(RelType::AFFECT_BIP_T, expected_stmt_1, expected_stmt_2);
 
 		//Result
-		QueryPatternRelRefParser validator;
+		QueryClauseParser validator;
 		std::vector<QueryToken> temp_token_chain;
 		temp_token_chain.push_back({ QueryToken::CONSTANT, "3" });
 		temp_token_chain.push_back({ QueryToken::COMMA, "" });
@@ -229,7 +229,7 @@ namespace UnitTesting {
 
 	//Invalid Test -------------------------------------------------------------------------------------------------------------------
 	TEST(AffectsBipTParserTest, syntacticInvalidAffectsBipTIdentWildTest) {
-		QueryPatternRelRefParser validator;
+		QueryClauseParser validator;
 
 		Query query;
 		std::vector<QueryToken> temp_token_chain;
@@ -245,7 +245,7 @@ namespace UnitTesting {
 
 
 	TEST(AffectsBipTParserTest, semanticInvalidAffectsBipTVarWildTest) {
-		QueryPatternRelRefParser validator;
+		QueryClauseParser validator;
 
 		Query query;
 		Synonym synonym;
@@ -263,7 +263,7 @@ namespace UnitTesting {
 	}
 
 	TEST(AffectsBipTParserTest, semanticInvalidAffectsBipTUndeclaredSynTest) {
-		QueryPatternRelRefParser validator;
+		QueryClauseParser validator;
 
 		Query query;
 		std::vector<QueryToken> temp_token_chain;
@@ -275,7 +275,7 @@ namespace UnitTesting {
 	}
 
 	TEST(AffectsBipTParserTest, semanticInvalidAffectsBipTUndeclaredSynTest2) {
-		QueryPatternRelRefParser validator;
+		QueryClauseParser validator;
 
 		Query query;
 		Synonym synonym;
@@ -292,7 +292,7 @@ namespace UnitTesting {
 	}
 
 	TEST(AffectsBipTParserTest, semanticInvalidAffectsBipTUndeclaredSynTest3) {
-		QueryPatternRelRefParser validator;
+		QueryClauseParser validator;
 
 		Query query;
 		Synonym synonym;
@@ -309,7 +309,7 @@ namespace UnitTesting {
 	}
 
 	TEST(AffectsBipTParserTest, syntaticInvalidAffectsBipTEmptyParamTest) {
-		QueryPatternRelRefParser validator;
+		QueryClauseParser validator;
 
 		Query query;
 		Synonym synonym;
@@ -327,7 +327,7 @@ namespace UnitTesting {
 	}
 
 	TEST(AffectsBipTParserTest, syntaticInvalidAffectsBipTEmptyParamTest2) {
-		QueryPatternRelRefParser validator;
+		QueryClauseParser validator;
 
 		Query query;
 		Synonym synonym;
@@ -344,7 +344,7 @@ namespace UnitTesting {
 	}
 
 	TEST(AffectsBipTParserTest, syntaticInvalidAffectsBipTEmptyParamTest3) {
-		QueryPatternRelRefParser validator;
+		QueryClauseParser validator;
 
 		Query query;
 		Synonym synonym;
@@ -362,7 +362,7 @@ namespace UnitTesting {
 	}
 
 	TEST(AffectsBipTParserTest, syntaticInvalidAffectsBipTEmptyParamTest4) {
-		QueryPatternRelRefParser validator;
+		QueryClauseParser validator;
 
 		Query query;
 		Synonym synonym;

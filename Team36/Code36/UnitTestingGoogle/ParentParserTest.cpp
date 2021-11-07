@@ -1,6 +1,6 @@
 #include "pch.h"
 
-#include "QueryPatternRelRefParser.h"
+#include "QueryClauseParser.h"
 #include "Common.h"
 #include <iostream>
 
@@ -37,7 +37,7 @@ namespace UnitTesting {
 		RelRef expected_rel = RelRef(RelType::PARENT, expected_stmt_1, expected_stmt_2);
 
 		//Result
-		QueryPatternRelRefParser validator;
+		QueryClauseParser validator;
 		std::vector<QueryToken> temp_token_chain;
 		temp_token_chain.push_back({ QueryToken::IDENTIFIER, "s" });
 		temp_token_chain.push_back({ QueryToken::COMMA, "" });
@@ -62,7 +62,7 @@ namespace UnitTesting {
 		RelRef expected_rel = RelRef(RelType::PARENT, expected_stmt_1, expected_stmt_2);
 
 		//Result
-		QueryPatternRelRefParser validator;
+		QueryClauseParser validator;
 		std::vector<QueryToken> temp_token_chain;
 		temp_token_chain.push_back({ QueryToken::IDENTIFIER, "s" });
 		temp_token_chain.push_back({ QueryToken::COMMA, "" });
@@ -87,7 +87,7 @@ namespace UnitTesting {
 		RelRef expected_rel = RelRef(RelType::PARENT, expected_stmt_1, expected_stmt_2);
 
 		//Result
-		QueryPatternRelRefParser validator;
+		QueryClauseParser validator;
 		std::vector<QueryToken> temp_token_chain;
 		temp_token_chain.push_back({ QueryToken::IDENTIFIER, "s" });
 		temp_token_chain.push_back({ QueryToken::COMMA, "" });
@@ -112,7 +112,7 @@ namespace UnitTesting {
 		RelRef expected_rel = RelRef(RelType::PARENT, expected_stmt_1, expected_stmt_2);
 
 		//Result
-		QueryPatternRelRefParser validator;
+		QueryClauseParser validator;
 		std::vector<QueryToken> temp_token_chain;
 		temp_token_chain.push_back({ QueryToken::WILDCARD, "" });
 		temp_token_chain.push_back({ QueryToken::COMMA, "" });
@@ -133,7 +133,7 @@ namespace UnitTesting {
 		RelRef expected_rel = RelRef(RelType::PARENT, expected_stmt_1, expected_stmt_2);
 
 		//Result
-		QueryPatternRelRefParser validator;
+		QueryClauseParser validator;
 		std::vector<QueryToken> temp_token_chain;
 		temp_token_chain.push_back({ QueryToken::WILDCARD, "" });
 		temp_token_chain.push_back({ QueryToken::COMMA, "" });
@@ -154,7 +154,7 @@ namespace UnitTesting {
 		RelRef expected_rel = RelRef(RelType::PARENT, expected_stmt_1, expected_stmt_2);
 
 		//Result
-		QueryPatternRelRefParser validator;
+		QueryClauseParser validator;
 		std::vector<QueryToken> temp_token_chain;
 		temp_token_chain.push_back({ QueryToken::WILDCARD, "" });
 		temp_token_chain.push_back({ QueryToken::COMMA, "" });
@@ -178,7 +178,7 @@ namespace UnitTesting {
 		RelRef expected_rel = RelRef(RelType::PARENT, expected_stmt_1, expected_stmt_2);
 
 		//Result
-		QueryPatternRelRefParser validator;
+		QueryClauseParser validator;
 		std::vector<QueryToken> temp_token_chain;
 		temp_token_chain.push_back({ QueryToken::CONSTANT, "3" });
 		temp_token_chain.push_back({ QueryToken::COMMA, "" });
@@ -199,7 +199,7 @@ namespace UnitTesting {
 		RelRef expected_rel = RelRef(RelType::PARENT, expected_stmt_1, expected_stmt_2);
 
 		//Result
-		QueryPatternRelRefParser validator;
+		QueryClauseParser validator;
 		std::vector<QueryToken> temp_token_chain;
 		temp_token_chain.push_back({ QueryToken::CONSTANT, "3" });
 		temp_token_chain.push_back({ QueryToken::COMMA, "" });
@@ -220,7 +220,7 @@ namespace UnitTesting {
 		RelRef expected_rel = RelRef(RelType::PARENT, expected_stmt_1, expected_stmt_2);
 
 		//Result
-		QueryPatternRelRefParser validator;
+		QueryClauseParser validator;
 		std::vector<QueryToken> temp_token_chain;
 		temp_token_chain.push_back({ QueryToken::CONSTANT, "3" });
 		temp_token_chain.push_back({ QueryToken::COMMA, "" });

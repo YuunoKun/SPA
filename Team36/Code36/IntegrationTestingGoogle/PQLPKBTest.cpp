@@ -11,15 +11,17 @@ namespace UnitTesting {
 
 		PQLPKBTest() {
 			PKB::getInstance().resetCache();
+			PKB::getInstance().addVariable({ w });
 			PKB::getInstance().addVariable({ x });
 			PKB::getInstance().addVariable({ y });
 			PKB::getInstance().addVariable({ z });
 			PKB::getInstance().addConstant({ c1 });
 			PKB::getInstance().addConstant({ c2 });
 			PKB::getInstance().addConstant({ c3 });
-			PKB::getInstance().addProcedure(p1);
-			PKB::getInstance().addProcedure(p2);
-			PKB::getInstance().addProcedure(p3);
+			PKB::getInstance().addProcedure(proc1);
+			PKB::getInstance().addProcedure(proc2);
+			PKB::getInstance().addProcedure(proc3);
+			PKB::getInstance().addProcedure(proc4);
 			PKB::getInstance().addStmt(STMT_IF);
 			PKB::getInstance().addStmt(STMT_IF);
 			PKB::getInstance().addStmt(STMT_WHILE);
@@ -50,28 +52,51 @@ namespace UnitTesting {
 			PKB::getInstance().addUsesP(USES_P_LEFT1, USES_RIGHT2);
 			PKB::getInstance().addExprTree(std::stoi(MODIFIES_LEFT3), EXPRESSIONNODE_1);
 			PKB::getInstance().addExprTree(std::stoi(MODIFIES_LEFT4), EXPRESSIONNODE_2);
-
 			PKB::getInstance().addFollowsT(std::stoi(FOLLOW_LEFT1), std::stoi(FOLLOW_RIGHT1));
 			PKB::getInstance().addFollowsT(std::stoi(FOLLOW_LEFT2), std::stoi(FOLLOW_RIGHT2));
 			PKB::getInstance().addFollowsT(std::stoi(FOLLOW_LEFT1), std::stoi(FOLLOW_RIGHT2));
-
 			PKB::getInstance().addParentT(std::stoi(PARENT_LEFT1), std::stoi(PARENT_RIGHT1));
 			PKB::getInstance().addParentT(std::stoi(PARENT_LEFT1), std::stoi(PARENT_RIGHT2));
 			PKB::getInstance().addParentT(std::stoi(PARENT_LEFT1), std::stoi(PARENT_RIGHT3));
 			PKB::getInstance().addParentT(std::stoi(PARENT_LEFT2), std::stoi(PARENT_RIGHT2));
 			PKB::getInstance().addParentT(std::stoi(PARENT_LEFT2), std::stoi(PARENT_RIGHT3));
 			PKB::getInstance().addParentT(std::stoi(PARENT_LEFT3), std::stoi(PARENT_RIGHT3));
-
 			PKB::getInstance().addIf(std::stoi(IF_LEFT1), IF_RIGHT1);
 			PKB::getInstance().addIf(std::stoi(IF_LEFT2), IF_RIGHT2);
 			PKB::getInstance().addWhile(std::stoi(WHILE_LEFT1), WHILE_RIGHT1);
 			PKB::getInstance().addWhile(std::stoi(WHILE_LEFT2), WHILE_RIGHT2);
-			PKB::getInstance().addCallsP(p1, p2);
+			PKB::getInstance().addCallsP(proc1, proc2);
+			PKB::getInstance().addCallsP(proc2, proc3);
+			PKB::getInstance().addCallsPT(proc1, proc2);
+			PKB::getInstance().addCallsPT(proc1, proc3);
+			PKB::getInstance().addCallsPT(proc2, proc3);
+			PKB::getInstance().addNext(1, 2);
+			PKB::getInstance().addNext(2, 3);
+			PKB::getInstance().addNext(9, 10);
+			PKB::getInstance().addProcContains(proc1, 9);
+			PKB::getInstance().addProcContains(proc1, 10);
+			PKB::getInstance().addVariable(w);
+			PKB::getInstance().addModifiesS(9, w);
+			PKB::getInstance().addUsesS(10, w);
+			PKB::getInstance().addCFGBip(cfg1);
+			PKB::getInstance().addCFGBip(cfg2);
+			PKB::getInstance().addCFGBip(cfg3);
+
+			cfg1->addLine(1);
+			cfg1->addLine(2);
+			cfg1->addLine(3);
+			cfg2->addLine(4);
+			cfg3->addLine(9);
+			cfg3->addLine(10);
+
 		}
 
 		QuerySystem qs;
 		PKBAdapter pkb;
 		ExprParser expr_parser;
+		CFG* cfg1 = new CFG();
+		CFG* cfg2 = new CFG();
+		CFG* cfg3 = new CFG();
 
 		void validateAnswer(std::list<std::string> expected, std::list<std::string> result) {
 			std::list<std::string>::iterator result_it;
@@ -85,11 +110,11 @@ namespace UnitTesting {
 				EXPECT_EQ(*expected_it, *result_it);
 			}
 		}
-
+		const var_name w = "w";
 		const var_name x = "x";
 		const var_name y = "y";
 		const var_name z = "z";
-		const std::list<std::string> VARS = { x, y, z };
+		const std::list<std::string> VARS = { w, x, y, z };
 
 		const constant c1 = 1;
 		const constant c2 = 2;
@@ -99,10 +124,11 @@ namespace UnitTesting {
 		const std::string c3s = std::to_string(c3);
 		const std::list<std::string> CONSTANTS = { c1s, c2s, c3s };
 
-		const proc_name p1 = "main";
-		const proc_name p2 = "sub";
-		const proc_name p3 = "sub1";
-		const std::list<std::string> PROCEDURES = { p1, p2, p3 };
+		const proc_name proc1 = "main";
+		const proc_name proc2 = "sub1";
+		const proc_name proc3 = "sub2";
+		const proc_name proc4 = "sub3";
+		const std::list<std::string> PROCEDURES = { proc1, proc2, proc3, proc4 };
 
 		const std::string IF1 = "1";
 		const std::string IF2 = "2";
@@ -116,6 +142,9 @@ namespace UnitTesting {
 		const std::string ASSIGN2 = "10";
 		const std::string CALL1 = "11";
 		const std::string CALL2 = "12";
+		const std::string READ3 = "13";
+
+		const std::list<std::string> EMPTY_RESULT = {};
 
 		const std::list<std::string> STMTS = { IF1, IF2, WHILE1, WHILE2, READ1, READ2,
 			PRINT1, PRINT2, ASSIGN1, ASSIGN2, CALL1, CALL2 };
@@ -189,7 +218,7 @@ namespace UnitTesting {
 		const std::string MODIFIES_RIGHT3 = x;
 		const std::string MODIFIES_RIGHT4 = y;
 
-		const std::string MODIFIES_P_LEFT1 = p1;
+		const std::string MODIFIES_P_LEFT1 = proc1;
 
 		const std::string EXPRESSION1 = "x";
 		const std::string EXPRESSION2 = "x + (y * 5)";
@@ -213,7 +242,7 @@ namespace UnitTesting {
 		const std::string USES_LEFT2 = "3";
 		const std::string USES_RIGHT1 = y;
 		const std::string USES_RIGHT2 = x;
-		const std::string USES_P_LEFT1 = p1;
+		const std::string USES_P_LEFT1 = proc1;
 
 		const std::list<std::string> EXPECTED_USES1 = { y };
 		const std::list<std::string> EXPECTED_USES2 = { x };
@@ -225,16 +254,11 @@ namespace UnitTesting {
 		// for ST and pattern clauses
 		const std::list<std::string> EXPECTED_ST_PATTERN1 = { ASSIGN1 };
 
-		//const Synonym COMMON_SYNONYM1 = { "cs1" };
-		//const Synonym COMMON_SYNONYM2 = { "cs2" };
-
-		const std::list<std::string> EXPECTED_P_CALLS = { p1 };
-
 		const std::string IF_LEFT1 = IF1;
 		const std::string IF_LEFT2 = IF2;
 		const std::string IF_RIGHT1 = x;
 		const std::string IF_RIGHT2 = y;
-		//const std::string IF_RIGHT_UNUSE = z;
+
 		const std::vector<std::string> IF_LEFTS = { IF_LEFT1, IF_LEFT2 };
 		const std::vector<std::string> IF_RIGHTS = { IF_RIGHT1, IF_RIGHT2 };
 		const std::list<std::string> EXPECTED_IFS1 = { IF_LEFT1 };
@@ -245,14 +269,29 @@ namespace UnitTesting {
 		const std::string WHILE_LEFT2 = WHILE2;
 		const std::string WHILE_RIGHT1 = x;
 		const std::string WHILE_RIGHT2 = y;
-		//const std::string WHILE_RIGHT_UNUSE = z;
+
 		const std::vector<std::string> WHILE_LEFTS = { WHILE_LEFT1, WHILE_LEFT2 };
 		const std::vector<std::string> WHILE_RIGHTS = { WHILE_RIGHT1, WHILE_RIGHT2 };
 		const std::list<std::string> EXPECTED_WHILES1 = { WHILE_LEFT1 };
 		const std::list<std::string> EXPECTED_WHILES2 = { WHILE_LEFT2 };
 		const std::list<std::string> EXPECTED_WHILES3 = { WHILE_LEFT1, WHILE_LEFT2 };
 
-		const std::list<std::string> EMPTY_RESULT = {};
+		const std::list<std::string> EXPECTED_P_CALLS = { proc1, proc2 };
+		const std::list<std::string> EXPECTED_P_CALLS_T = { proc2, proc3 };
+
+		const std::list<std::string> EXPECTED_NEXT = { IF2 };
+		const std::list<std::string> EXPECTED_NEXT_T = { IF2, WHILE1 };
+
+		const std::list<std::string> EXPECTED_AFFECT = { ASSIGN2 };
+		const std::list<std::string> EXPECTED_AFFECT_T = { ASSIGN2 };
+		const std::list<std::string> EXPECTED_AFFECT_BIP = { ASSIGN2 };
+		const std::list<std::string> EXPECTED_AFFECT_BIP_T = { ASSIGN2 };
+
+		const std::list<std::string> EXPECTED_WITH_AND = { IF2 };
+
+		const std::list<std::string> EXPECTED_TUPLE = { "1 2" };
+
+		const std::list<std::string> EXPECTED_BOOLEAN = { "TRUE" };
 
 		virtual void SetUp() override {
 		}
@@ -357,6 +396,7 @@ namespace UnitTesting {
 		validateAnswer(EXPECTED_USES3, ans);
 	}
 
+	
 	TEST_F(PQLPKBTest, SuchThatParentTest1) {
 		std::list<std::string> ans = qs.processQuery("stmt s; Select s such that Parent(1,s)");
 
@@ -493,4 +533,74 @@ namespace UnitTesting {
 
 		validateAnswer(EXPECTED_P_CALLS, ans);
 	}
+
+	TEST_F(PQLPKBTest, CallsTTest) {
+		std::list<std::string> ans = qs.processQuery("procedure q; Select q such that Calls*(\"main\", q) ");
+
+		validateAnswer(EXPECTED_P_CALLS_T, ans);
+	}
+
+	TEST_F(PQLPKBTest, NextTest) {
+		std::list<std::string> ans = qs.processQuery("prog_line p, q; Select q such that Next(1, q) ");
+
+		validateAnswer(EXPECTED_NEXT, ans);
+	}
+
+	TEST_F(PQLPKBTest, NextTTest) {
+		std::list<std::string> ans = qs.processQuery("prog_line p; Select p such that Next*(1, p) ");
+
+		validateAnswer(EXPECTED_NEXT_T, ans);
+	}
+
+	TEST_F(PQLPKBTest, AffectsTest) {
+		std::list<std::string> ans = qs.processQuery("stmt s, s1; Select s1 such that Affects(9, s1) ");
+
+		validateAnswer(EXPECTED_AFFECT, ans);
+	}
+
+	TEST_F(PQLPKBTest, AffectsTTest) {
+		std::list<std::string> ans = qs.processQuery("stmt s, s1; Select s1 such that Affects*(9, s1) ");
+
+		validateAnswer(EXPECTED_AFFECT_T, ans);
+	}
+
+	TEST_F(PQLPKBTest, NextBipTest) {
+		std::list<std::string> ans = qs.processQuery("prog_line p, q; Select q such that NextBip(1, q) ");
+
+		validateAnswer(EXPECTED_NEXT, ans);
+	}
+
+	TEST_F(PQLPKBTest, NextBipTTest) {
+		std::list<std::string> ans = qs.processQuery("prog_line p; Select p such that NextBip*(1, p) ");
+
+		validateAnswer(EXPECTED_NEXT_T, ans);
+	}
+
+	TEST_F(PQLPKBTest, AffectsBipTest) {
+		std::list<std::string> ans = qs.processQuery("stmt s, s1; Select s1 such that AffectsBip(9, s1) ");
+
+		validateAnswer(EXPECTED_AFFECT_BIP, ans);
+	}
+
+	TEST_F(PQLPKBTest, AffectsBipTTest) {
+		std::list<std::string> ans = qs.processQuery("stmt s, s1; Select s1 such that AffectsBip*(9, s1) ");
+
+		validateAnswer(EXPECTED_AFFECT_BIP_T, ans);
+	}
+
+	TEST_F(PQLPKBTest, WithAndTest) {
+		std::list<std::string> ans = qs.processQuery("stmt s, s1; Select s1 such that Parent(s,s1) with s.stmt# = 1 and s1.stmt# = 2");
+		validateAnswer(EXPECTED_WITH_AND, ans);
+	}
+
+	TEST_F(PQLPKBTest, TupleTest) {
+		std::list<std::string> ans = qs.processQuery("stmt s, s1; Select <s, s1> such that Parent(s,s1) with s.stmt# = 1 and s1.stmt# = 2");
+		validateAnswer(EXPECTED_TUPLE, ans);
+	}
+
+	TEST_F(PQLPKBTest, BooleanTest) {
+		std::list<std::string> ans = qs.processQuery("stmt s, s1; Select BOOLEAN such that Parent(s,s1)");
+		validateAnswer(EXPECTED_BOOLEAN, ans);
+	}
 }
+
