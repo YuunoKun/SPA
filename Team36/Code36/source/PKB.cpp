@@ -187,8 +187,8 @@ void PKB::addCallsP(proc_name caller_proc_name, proc_name callee_proc_name) {
 }
 
 void PKB::addCallsPT(proc_name caller_proc_name, proc_name callee_proc_name) {
-	std::vector<proc_name>::iterator it_proc_caller = std::find(proc_table.begin(), proc_table.end(), caller_proc_name);
-	std::vector<proc_name>::iterator it_proc_callee = std::find(proc_table.begin(), proc_table.end(), callee_proc_name);
+	auto it_proc_caller = proc_table.find(caller_proc_name);
+	auto it_proc_callee = proc_table.find(callee_proc_name);
 
 	if (it_proc_caller == proc_table.end()) {
 		throw std::invalid_argument("addCallsPT: Invalid caller proc: " + caller_proc_name);
@@ -360,18 +360,15 @@ expr PKB::getExpression(stmt_index stmt_index) {
 }
 
 const std::vector<proc_name> PKB::getProcedures() {
-	std::vector<proc_name> v(proc_table.begin(), proc_table.end());
-	return v;
+	return std::vector<proc_name>(proc_table.begin(), proc_table.end());
 }
 
 const std::vector<var_name> PKB::getVariables() {
-	std::vector<var_name> v(var_table.begin(), var_table.end());
-	return v;
+	return std::vector<var_name>(var_table.begin(), var_table.end());
 }
 
 const std::vector<constant> PKB::getConstants() {
-	std::vector<constant> v(const_table.begin(), const_table.end());
-	return v;
+	return std::vector<constant>(const_table.begin(), const_table.end());
 }
 
 const std::unordered_set<proc_name>& PKB::getProceduresSet() {
