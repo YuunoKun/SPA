@@ -14,19 +14,8 @@ std::list<std::list<std::pair<Entity, Entity>>> QueryTupleOptimizer::groupCommon
 	QueryTupleGraph g(counter);
 
 	for (auto element : input) {
-		Entity first_ent = element.first;
-		Entity second_ent = element.second;
-		int first_ent_no = -1;
-		int second_ent_no = -1;
-		for (std::pair<Entity, int> pr : entityToInt) {
-			if (pr.first == first_ent) {
-				first_ent_no = pr.second;
-			}
-			if (pr.first == second_ent) {
-				second_ent_no = pr.second;
-			}
-		}
-		g.addEdge(first_ent_no, second_ent_no);
+		std::pair<int, int> pair_numbers = QueryTupleOptimizer::mapEntity(element);
+		g.addEdge(pair_numbers.first, pair_numbers.second);
 	}
 
 	std::list<std::list<int>> raw_result = g.connectedComponents();
@@ -102,4 +91,20 @@ void QueryTupleOptimizer::mapEntityToInt(std::list<std::pair<Entity, Entity>>& i
 			counter++;
 		}
 	}
+}
+
+std::pair<int, int> QueryTupleOptimizer::mapEntity(std::pair<Entity, Entity> element) {
+	Entity first_ent = element.first;
+	Entity second_ent = element.second;
+	int first_ent_no = -1;
+	int second_ent_no = -1;
+	for (std::pair<Entity, int> pr : entityToInt) {
+		if (pr.first == first_ent) {
+			first_ent_no = pr.second;
+		}
+		if (pr.first == second_ent) {
+			second_ent_no = pr.second;
+		}
+	}
+	return std::pair(std::make_pair(first_ent_no, second_ent_no));
 }
