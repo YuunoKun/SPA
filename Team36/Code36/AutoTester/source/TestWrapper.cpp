@@ -26,7 +26,7 @@ void TestWrapper::parse(std::string filename) {
   // ...rest of your code...
 	try {
 		SourceProcessor::Parser parser;
-		parser.load_file(filename);
+		parser.loadSourceFile(filename);
 		parser.parse();
 	}
 	catch (std::exception e) {

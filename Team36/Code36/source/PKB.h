@@ -8,80 +8,77 @@
 #include <unordered_map>
 #include <vector>
 
-#include "Common.h"
-#include "KnowledgeBase.h"
-#include "RelationTable.h"
-#include "MonotypeRelationTable.h"
+#include "PKBSourceInterface.h"
+#include "PKBQueryInterface.h"
 
-class PKB : public KnowledgeBase {
+class PKB : public PKBSourceInterface, public PKBQueryInterface {
 public:
 	static PKB& PKB::getInstance();
 	PKB(PKB const&) = delete;
 	void operator=(PKB const&) = delete;
 	~PKB();
 
-	void addConstant(constant constant) override;
-	void addProcedure(proc_name proc_name) override;
-	void addVariable(var_name var_name) override;
-	void addStmt(StmtType stmt_type) override;
-	void addExprTree(stmt_index stmt_index, expr expr) override;
+	void addConstant(constant constant);
+	void addProcedure(proc_name proc_name);
+	void addVariable(var_name var_name);
+	void addStmt(StmtType stmt_type);
+	void addExprTree(stmt_index stmt_index, expr expr);
 
-	void addParent(stmt_index parent, stmt_index child) override;
-	void addFollows(stmt_index first, stmt_index second) override;
-	void addUsesS(stmt_index user, var_name used) override;
-	void addModifiesS(stmt_index modifier, var_name modified) override;
-	void addModifiesP(proc_name proc, var_name modified) override;
-	void addUsesP(proc_name proc, var_name used) override;
-	void addCallsP(proc_name caller_proc_name, proc_name callee_proc_name) override;
-	void addCallsS(stmt_index caller_stmt_index, proc_name callee_proc_name) override;
-	void addIf(stmt_index if_stmt_index, var_name control_var) override;
-	void addWhile(stmt_index while_stmt_index, var_name control_var) override;
-	void addNext(prog_line prog_line1, prog_line prog_line2) override;
-	void addProcContains(proc_name proc, stmt_index index) override;
-	void addCFGsToDestroy(std::vector<CFG*>) override;
-	void addCFGBip(CFG*) override;
+	void addParent(stmt_index parent, stmt_index child);
+	void addParentT(stmt_index parent, stmt_index child);
+	void addFollows(stmt_index first, stmt_index second);
+	void addFollowsT(stmt_index first, stmt_index second);
+	void addUsesS(stmt_index user, var_name used);
+	void addModifiesS(stmt_index modifier, var_name modified);
+	void addModifiesP(proc_name proc, var_name modified);
+	void addUsesP(proc_name proc, var_name used);
+	void addCallsP(proc_name caller_proc_name, proc_name callee_proc_name);
+	void addCallsPT(proc_name caller_proc_name, proc_name callee_proc_name);
+	void addCallsS(stmt_index caller_stmt_index, proc_name callee_proc_name);
+	void addIf(stmt_index if_stmt_index, var_name control_var);
+	void addWhile(stmt_index while_stmt_index, var_name control_var);
+	void addNext(prog_line prog_line1, prog_line prog_line2);
+	void addProcContains(proc_name proc, stmt_index index);
+	void addCFGsToDestroy(std::vector<CFG*>);
+	void addCFGBip(CFG*);
 
-	void generateParentT() override;
-	void generateFollowsT() override;
-	void generateCallsPT() override;
-
-	const std::vector<proc_name>& getProcedures() override;
-	const std::vector<var_name>& getVariables() override;
-	const std::vector<StmtInfo>& getStmts() override;
-	const std::unordered_map<stmt_index, expr>& getExpr() override;
-	const StmtInfo getStmt(stmt_index stmt_index) override;
-	const var_name getAssignment(stmt_index stmt_index) override;
-	expr getExpression(stmt_index stmt_index) override;
-	const std::vector<constant> getConstants() override;
+	const std::vector<proc_name>& getProcedures();
+	const std::vector<var_name>& getVariables();
+	const std::vector<StmtInfo>& getStmts();
+	const std::unordered_map<stmt_index, expr>& getExpr();
+	const StmtInfo getStmt(stmt_index stmt_index);
+	const var_name getAssignment(stmt_index stmt_index);
+	expr getExpression(stmt_index stmt_index);
+	const std::vector<constant> getConstants();
 	const RelationTable<stmt_index, var_name>& getAssigns();
-	const MonotypeRelationTable<StmtInfo>& getFollows() override;
-	const MonotypeRelationTable<StmtInfo>& getParent() override;
-	const MonotypeRelationTable<StmtInfo>& getFollowsT() override;
-	const MonotypeRelationTable<StmtInfo>& getParentT() override;
-	const RelationTable<StmtInfo, var_name>& getUsesS() override;
-	const RelationTable<StmtInfo, var_name>& getModifiesS() override;
-	const RelationTable<proc_name, var_name>& getUsesP() override;
-	const RelationTable<proc_name, var_name>& getModifiesP() override;
-	const MonotypeRelationTable<proc_name>& getCallsP() override;
-	const MonotypeRelationTable<proc_name>& getCallsPT() override;
-	const RelationTable<stmt_index, var_name>& getRead() override;
-	const RelationTable<stmt_index, var_name>& getPrint() override;
-	const RelationTable<stmt_index, proc_name>& getCallsS() override;
-	const RelationTable<stmt_index, var_name>& getIf() override;
-	const RelationTable<stmt_index, var_name>& getWhile() override;
-	const MonotypeRelationTable<StmtInfo>& getNext() override;
-	const RelationTable<proc_name, stmt_index>& getProcContains() override;
-	std::vector<CFG*> getCFGBips() override;
+	const MonotypeRelationTable<StmtInfo>& getFollows();
+	const MonotypeRelationTable<StmtInfo>& getParent();
+	const MonotypeRelationTable<StmtInfo>& getFollowsT();
+	const MonotypeRelationTable<StmtInfo>& getParentT();
+	const RelationTable<StmtInfo, var_name>& getUsesS();
+	const RelationTable<StmtInfo, var_name>& getModifiesS();
+	const RelationTable<proc_name, var_name>& getUsesP();
+	const RelationTable<proc_name, var_name>& getModifiesP();
+	const MonotypeRelationTable<proc_name>& getCallsP();
+	const MonotypeRelationTable<proc_name>& getCallsPT();
+	const RelationTable<stmt_index, var_name>& getRead();
+	const RelationTable<stmt_index, var_name>& getPrint();
+	const RelationTable<stmt_index, proc_name>& getCallsS();
+	const RelationTable<stmt_index, var_name>& getIf();
+	const RelationTable<stmt_index, var_name>& getWhile();
+	const MonotypeRelationTable<StmtInfo>& getNext();
+	const RelationTable<proc_name, stmt_index>& getProcContains();
+	std::vector<CFG*> getCFGBips();
 
-	void resetCache() override;
-	void resetEntities() override;
+	void resetCache();
+	void resetEntities();
 
 private:
-	std::vector<proc_name> proc_table;
-	std::vector<var_name> var_table;
-	std::vector<StmtInfo> stmt_table;
-	std::unordered_set<constant> const_table;
-	std::unordered_map<stmt_index, expr> expr_table;
+	std::vector<proc_name> proc_table{};
+	std::vector<var_name> var_table{};
+	std::vector<StmtInfo> stmt_table{};
+	std::unordered_set<constant> const_table{};
+	std::unordered_map<stmt_index, expr> expr_table{};
 	RelationTable<stmt_index, var_name> assignment_table;
 	MonotypeRelationTable<StmtInfo> follows_table;
 	MonotypeRelationTable<StmtInfo> parent_table;

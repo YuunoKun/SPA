@@ -4,35 +4,25 @@
 #include <vector>
 #include <unordered_set>
 #include <set>
-#include "Common.h"
-
+#include "SPCommon.h"
 
 namespace SourceProcessor {
 
 	class Procedure {
 	public:
-
 		Procedure(proc_name, proc_index);
 
 		proc_name getName();
-
 		proc_index getIndex();
+		std::vector<stmt_index> getCaller();
+		std::vector<stmt_index> getChild();
+		std::vector<var_name> getUsedVariable();
+		std::vector<var_name> getModifiedVariable();
 
 		void addCaller(stmt_index);
-
-		std::vector<stmt_index> getCaller();
-
 		void addChild(stmt_index);
-
-		std::vector<stmt_index> getChild();
-
 		void addUsesVariable(var_name);
-
-		std::vector<var_name> getUsedVariable();
-
 		void addModifiesVariable(var_name);
-
-		std::vector<var_name> getModifiedVariable();
 
 	private:
 		proc_name procedure_name;

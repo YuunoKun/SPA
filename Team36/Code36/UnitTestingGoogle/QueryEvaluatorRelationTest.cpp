@@ -54,9 +54,22 @@ namespace UnitTesting {
 			PKB::getInstance().addUsesP(USESP_LEFT2, USESP_RIGHT2);
 			PKB::getInstance().addCallsP(CALLS_LEFT1, CALLS_RIGHT1);
 			PKB::getInstance().addCallsP(CALLS_LEFT2, CALLS_RIGHT2);
-			PKB::getInstance().generateFollowsT();
-			PKB::getInstance().generateParentT();
-			PKB::getInstance().generateCallsPT();
+			PKB::getInstance().addFollowsT(std::stoi(FOLLOW_LEFT1), std::stoi(FOLLOW_RIGHT1));
+			PKB::getInstance().addFollowsT(std::stoi(FOLLOW_LEFT1), std::stoi(FOLLOW_RIGHT2));
+			PKB::getInstance().addFollowsT(std::stoi(FOLLOW_LEFT2), std::stoi(FOLLOW_RIGHT2));
+			PKB::getInstance().addParentT(std::stoi(PARENT_LEFT1), std::stoi(PARENT_RIGHT1));
+			PKB::getInstance().addParentT(std::stoi(PARENT_LEFT1), std::stoi(PARENT_RIGHT2));
+			PKB::getInstance().addParentT(std::stoi(PARENT_LEFT1), std::stoi(PARENT_RIGHT3));
+			PKB::getInstance().addParentT(std::stoi(PARENT_LEFT2), std::stoi(PARENT_RIGHT2));
+			PKB::getInstance().addParentT(std::stoi(PARENT_LEFT2), std::stoi(PARENT_RIGHT3));
+			PKB::getInstance().addParentT(std::stoi(PARENT_LEFT3), std::stoi(PARENT_RIGHT3));
+			PKB::getInstance().addCallsPT(CALLS_LEFT1, CALLS_RIGHT1);
+			PKB::getInstance().addCallsPT(CALLS_LEFT1, CALLS_RIGHT2);
+			PKB::getInstance().addCallsPT(CALLS_LEFT2, CALLS_RIGHT2);
+
+			for (unsigned int i = 0; i < ALL_RESULT.size(); i++) {
+				ALL_RESULT[i].sort();
+			}
 		}
 
 		~QueryEvaluatorRelationTest() override {
@@ -89,7 +102,9 @@ namespace UnitTesting {
 		}
 
 		void validate(Query q, std::list<std::string> result, int i, int j) {
-			EXPECT_EQ(evaluator.evaluateQuery(q), result) << "Error at results : " << i + 1 << " : " << j + 1;
+			std::list<std::string> query_result = evaluator.evaluateQuery(q);
+			query_result.sort();
+			EXPECT_EQ(query_result, result) << "Error at results : " << i + 1 << " : " << j + 1;
 		}
 
 		void validate(RelRef relation, int i) {
@@ -97,7 +112,6 @@ namespace UnitTesting {
 				validate(initQuery(relation, ALL_SELECT[j]), ALL_RESULT[j], i, j);
 				validate(initQuery(relation, SELECT_BOOLEAN), BOOLEAN_TRUE_RESULT, i, j);
 			}
-
 		}
 
 		void validateEmpty(RelRef relation, int i) {
@@ -271,7 +285,7 @@ namespace UnitTesting {
 		// select Boolean
 		const Entity SELECT_BOOLEAN = { BOOLEAN };
 
-		const std::vector<std::list<std::string>> ALL_RESULT = {
+		std::vector<std::list<std::string>> ALL_RESULT = {
 			ALL_VARIABLE , ALL_CONSTANT , ALL_PROCEDURE, ALL_STMT, ALL_PROG_LINE, ALL_IF,
 			ALL_WHILE, ALL_READ, ALL_PRINT, ALL_ASSIGN, ALL_CALL };
 
@@ -299,7 +313,9 @@ namespace UnitTesting {
 			Query q;
 			Entity selected = ALL_SELECT[i];
 			q.addSelected(selected);
-			EXPECT_EQ(evaluator.evaluateQuery(q), ALL_RESULT[i]) << "Error at results : " << i + 1;
+			std::list<std::string> result = evaluator.evaluateQuery(q);
+			result.sort();
+			EXPECT_EQ(result, ALL_RESULT[i]) << "Error at results : " << i + 1;
 		}
 	}
 
@@ -1964,13 +1980,11 @@ namespace UnitTesting {
 		q = initQuery(relation, selected);
 		EXPECT_EQ(evaluator.evaluateQuery(q), result);
 
-
 		//Test case for Select selected such that MODIFIES_P(selected, "z")
 		result = {  };
 		relation = { type, selected, { VARIABLE, MODIFIESP_RIGHT_UNUSE } };
 		q = initQuery(relation, selected);
 		EXPECT_EQ(evaluator.evaluateQuery(q), result);
-
 
 		//Test case for Select selected such that MODIFIES_P(a, selected)
 		result = { right1, right2 };
@@ -1978,7 +1992,6 @@ namespace UnitTesting {
 		relation = { type, { PROCEDURE, COMMON_SYNONYM2 }, selected };
 		q = initQuery(relation, selected);
 		EXPECT_EQ(evaluator.evaluateQuery(q), result);
-
 
 		//Test case for Select selected such that MODIFIES_P("main1", selected)
 		result = { right1 };
@@ -2085,13 +2098,11 @@ namespace UnitTesting {
 		q = initQuery(relation, selected);
 		EXPECT_EQ(evaluator.evaluateQuery(q), result);
 
-
 		//Test case for Select selected such that Uses(selected, "z")
 		result = {  };
 		relation = { type, selected, { VARIABLE, USESP_RIGHT_UNUSE } };
 		q = initQuery(relation, selected);
 		EXPECT_EQ(evaluator.evaluateQuery(q), result);
-
 
 		//Test case for Select selected such that Uses(a, selected)
 		result = { right1, right2 };
@@ -2099,7 +2110,6 @@ namespace UnitTesting {
 		relation = { type, { PROCEDURE, COMMON_SYNONYM2 }, selected };
 		q = initQuery(relation, selected);
 		EXPECT_EQ(evaluator.evaluateQuery(q), result);
-
 
 		//Test case for Select selected such that Uses("main1", selected)
 		result = { right1 };
@@ -2119,7 +2129,6 @@ namespace UnitTesting {
 		relation = { type, { PROCEDURE, p3 }, selected };
 		q = initQuery(relation, selected);
 		EXPECT_EQ(evaluator.evaluateQuery(q), result);
-
 	}
 
 	//Calls Relation Test ----------------------------------------------------------------------------------------------------
@@ -2129,7 +2138,6 @@ namespace UnitTesting {
 		std::string left2 = CALLS_LEFT2;
 		std::string right1 = CALLS_RIGHT1;
 		std::string right2 = CALLS_RIGHT2;
-
 
 		std::vector<RelRef> relations;
 		//Test true boolean equation
@@ -2223,7 +2231,6 @@ namespace UnitTesting {
 		q = initQuery(relation, selected);
 		EXPECT_EQ(evaluator.evaluateQuery(q), result);
 
-
 		//Test case for Select selected such that CALLS(_, selected)
 		result = { right1, right2 };
 		relation = { type, WILD_CARD, selected };
@@ -2256,7 +2263,6 @@ namespace UnitTesting {
 		EXPECT_EQ(evaluator.evaluateQuery(q), result);
 	}
 
-
 	//CallsT Relation Test ----------------------------------------------------------------------------------------------------
 	TEST_F(QueryEvaluatorRelationTest, evaluateQueryCallsTBooleanTrue) {
 		RelType type = CALLS_T;
@@ -2264,7 +2270,6 @@ namespace UnitTesting {
 		std::string left2 = CALLS_LEFT2;
 		std::string right1 = CALLS_RIGHT1;
 		std::string right2 = CALLS_RIGHT2;
-
 
 		std::vector<RelRef> relations;
 		//Test true boolean equation
@@ -2326,7 +2331,6 @@ namespace UnitTesting {
 		std::string right1 = CALLS_RIGHT1;
 		std::string right2 = CALLS_RIGHT2;
 
-
 		Entity selected = { PROCEDURE, COMMON_SYNONYM1 };
 
 		std::list<std::string> result = { left1, left2 };
@@ -2358,7 +2362,6 @@ namespace UnitTesting {
 		relation = { type, selected, { PROCEDURE, p1 } };
 		q = initQuery(relation, selected);
 		EXPECT_EQ(evaluator.evaluateQuery(q), result);
-
 
 		//Test case for Select selected such that CALLS_T(_, selected)
 		result = { right1, right2 };

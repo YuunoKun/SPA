@@ -2,7 +2,7 @@
 
 #include "AffectsTEvaluator.h"
 #include "PKB.h"
-#include "CFGRelationsManager.h"
+#include "RelationPreprocessorManager.h"
 
 namespace UnitTesting {
 	class AffectsTEvaluatorTest : public testing::Test {
@@ -38,7 +38,7 @@ namespace UnitTesting {
 			PKB::getInstance().addUsesS(2, v1);
 			PKB::getInstance().addModifiesS(2, v2);
 			PKB::getInstance().addUsesS(3, v2);
-			pkb.getRelationManager().update();
+			pkb.getRelationManager().reset();
 		}
 
 		PKBAdapter pkb;
@@ -61,21 +61,20 @@ namespace UnitTesting {
 	};
 	TEST_F(AffectsTEvaluatorTest, evaluateWildAndWild) {
 		PKB::getInstance().resetCache();
-
 		PKB::getInstance().addStmt(STMT_ASSIGN);
 		PKB::getInstance().addStmt(STMT_ASSIGN);
 		PKB::getInstance().addProcedure(p);
 		PKB::getInstance().addProcContains(p, 1);
 		PKB::getInstance().addProcContains(p, 2);
+		pkb.getRelationManager().reset();
 		EXPECT_FALSE(evaluator.evaluateWildAndWild());
 		PKB::getInstance().addNext(1, 2);
 		PKB::getInstance().addVariable(v1);
 		PKB::getInstance().addModifiesS(1, v1);
 		PKB::getInstance().addUsesS(2, v1);
-		pkb.getRelationManager().update();
+		pkb.getRelationManager().reset();
 		EXPECT_TRUE(evaluator.evaluateWildAndWild());
 	}
-
 
 	TEST_F(AffectsTEvaluatorTest, evaluateConstantAndConstant) {
 		EXPECT_TRUE(evaluator.evaluateConstantAndConstant(e1, e2));
@@ -111,7 +110,6 @@ namespace UnitTesting {
 	}
 
 	TEST_F(AffectsTEvaluatorTest, evaluateSynonymAndSynonym) {
-
 		std::vector<std::pair<StmtInfo, StmtInfo>> v = pkb.getRelationManager().getAllAffectsTRelation();
 		Entity left = { STMT, Synonym{"a"} };
 		Entity right = { STMT, Synonym{"b"} };
@@ -174,7 +172,6 @@ namespace UnitTesting {
 	}
 
 	TEST_F(AffectsTEvaluatorTest, evaluateSynonymAndWild) {
-
 		std::vector<StmtInfo> v = pkb.getRelationManager().getAffectingT();
 		Entity header = { STMT, Synonym{"a"} };
 		ResultTable t(header, v);
@@ -202,10 +199,9 @@ namespace UnitTesting {
 	}
 
 	TEST_F(AffectsTEvaluatorTest, evaluateConstantAndSynonym) {
-
 		std::vector<StmtInfo> v = { p2, p3 };
 		Entity header = { STMT, Synonym{"a"} };
-		Entity match = {ASSIGN, "1" };
+		Entity match = { ASSIGN, "1" };
 		ResultTable t(header, v);
 		EXPECT_EQ(evaluator.evaluateConstantAndSynonym(match, header), t);
 		header = { ASSIGN, Synonym{"a"} };
@@ -214,7 +210,7 @@ namespace UnitTesting {
 
 		v = { p3 };
 		header = { STMT, Synonym{"a"} };
-		match = {ASSIGN, "2" };
+		match = { ASSIGN, "2" };
 		t = ResultTable(header, v);
 		EXPECT_EQ(evaluator.evaluateConstantAndSynonym(match, header), t);
 		match = { ASSIGN, "2" };
@@ -223,17 +219,17 @@ namespace UnitTesting {
 
 		v = { };
 		header = { PRINT, Synonym{"a"} };
-		match = {ASSIGN, "1" };
+		match = { ASSIGN, "1" };
 		t = ResultTable(header, v);
 		EXPECT_EQ(evaluator.evaluateConstantAndSynonym(match, header), t);
 
 		header = { READ, Synonym{"a"} };
-		match = {ASSIGN, "1" };
+		match = { ASSIGN, "1" };
 		t = ResultTable(header, v);
 		EXPECT_EQ(evaluator.evaluateConstantAndSynonym(match, header), t);
 
 		header = { READ, Synonym{"a"} };
-		match = {ASSIGN, "2" };
+		match = { ASSIGN, "2" };
 		t = ResultTable(header, v);
 		EXPECT_EQ(evaluator.evaluateConstantAndSynonym(match, header), t);
 
@@ -261,10 +257,9 @@ namespace UnitTesting {
 	}
 
 	TEST_F(AffectsTEvaluatorTest, evaluateSynonymAndConstant) {
-
 		std::vector<StmtInfo> v = { p2, p1 };
 		Entity header = { STMT, Synonym{"a"} };
-		Entity match = {ASSIGN, "3" };
+		Entity match = { ASSIGN, "3" };
 		ResultTable t(header, v);
 		EXPECT_EQ(evaluator.evaluateSynonymAndConstant(header, match), t);
 		header = { ASSIGN, Synonym{"a"} };
@@ -273,7 +268,7 @@ namespace UnitTesting {
 
 		v = { p1 };
 		header = { STMT, Synonym{"a"} };
-		match = {ASSIGN, "2" };
+		match = { ASSIGN, "2" };
 		t = ResultTable(header, v);
 		EXPECT_EQ(evaluator.evaluateSynonymAndConstant(header, match), t);
 
@@ -296,5 +291,4 @@ namespace UnitTesting {
 		t = ResultTable(header, v);
 		EXPECT_EQ(evaluator.evaluateSynonymAndConstant(header, match), t);
 	}
-
 }

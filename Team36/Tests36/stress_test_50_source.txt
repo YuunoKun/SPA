@@ -1,5 +1,5 @@
 procedure a {
- x = y;
+ a = b;
  y = z;
  z = v;
  v = w;

@@ -3,7 +3,6 @@
 
 #include "PKB.h"
 #include "Common.h"
-#include "RelationTable.h"
 #include "RelationTable.cpp"
 #include "RelationPreprocessor.h"
 
@@ -25,8 +24,5 @@ public:
 	NextTPreprocessor() = default;
 
 private:
-	const MonotypeRelationTable<StmtInfo>* next_table;
-	std::vector<StmtInfo> stmt_info_list;
-
-	void checkCache();
+	const MonotypeRelationTable<StmtInfo>* next_table = nullptr;
 };

@@ -1,24 +1,19 @@
 #pragma once
 
 #include <string>
+#include "SPCommon.h"
 #include "Tokenizer.h"
+#include "FSM.h"
 
 namespace SourceProcessor {
 
 	class Parser {
 	public:
-
 		Parser();
 
-		// Load source file
-		void load_file(std::string file);
-
-		// Return input string
+		void loadSourceFile(std::string file);
 		std::string getSourceProgram();
-			
-		// Load and parse source file
 		void parse();
-
 
 	private:
 		std::string source_program;

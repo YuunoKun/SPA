@@ -1,30 +1,25 @@
 #include "FSM.h"
-
+#include "DesignExtractor.h"
 
 using namespace SourceProcessor;
 
-
 FSM::FSM(Tokenizer& t) {
 	tokenizer = t;
-	design_extractor = new DesignExtractor();
+	design_extractor = new DesignExtractor(PKB::getInstance());
 }
 
-
-FSM::FSM(Tokenizer& t, Extractor *extractor) {
+FSM::FSM(Tokenizer& t, Extractor* extractor) {
 	tokenizer = t;
 	design_extractor = extractor;
 }
-
 
 FSM::~FSM() {
 	if (design_extractor) design_extractor->~Extractor();
 }
 
-
 Tokenizer& FSM::getTokenizer() {
 	return tokenizer;
 }
-
 
 void FSM::build() {
 	tokenizer.initTokenStack();
@@ -35,12 +30,11 @@ void FSM::build() {
 		expectProcedure();
 	}
 
-	design_extractor->populateEntities(PKB::getInstance());
+	design_extractor->populateEntities();
 	design_extractor->validate();
 	design_extractor->populatePostValidation();
-	design_extractor->populateRelations(PKB::getInstance());
+	design_extractor->populateRelations();
 }
-
 
 void FSM::expectProcedure() {
 	expectTokenAndPop(TokenType::PROCEDURE);
@@ -54,7 +48,6 @@ void FSM::expectProcedure() {
 	expectTokenAndPop(TokenType::STATEMENT_LIST_CLOSE);
 }
 
-
 void FSM::expectStatementList() {
 	expectStatement();
 
@@ -62,7 +55,6 @@ void FSM::expectStatementList() {
 		expectStatement();
 	}
 }
-
 
 void FSM::expectStatement() {
 	if (!optionalIdentifier()) {
@@ -72,8 +64,7 @@ void FSM::expectStatement() {
 	if (probeAndPeek(TokenType::ASSIGN)) {
 		design_extractor->addStatement(TokenType::ASSIGN);
 		expectStatementTypeAssign();
-	}
-	else if (probeAndPeek(TokenType::PARENTHESIS_OPEN)) {
+	} else if (probeAndPeek(TokenType::PARENTHESIS_OPEN)) {
 		switch (tokenizer.peekToken().getTokenType()) {
 		case TokenType::WHILE:
 			design_extractor->addStatement(TokenType::WHILE);
@@ -87,8 +78,7 @@ void FSM::expectStatement() {
 			unexpectedToken("error starting of statement.");
 			break;
 		}
-	}
-	else {
+	} else {
 		switch (tokenizer.peekToken().getTokenType()) {
 		case TokenType::READ:
 			design_extractor->addStatement(TokenType::READ);
@@ -109,7 +99,6 @@ void FSM::expectStatement() {
 	}
 }
 
-
 void FSM::expectStatementTypeRead() {
 	expectTokenAndPop(TokenType::READ);
 
@@ -119,7 +108,6 @@ void FSM::expectStatementTypeRead() {
 
 	expectTokenAndPop(TokenType::TERMINATOR);
 }
-
 
 void FSM::expectStatementTypePrint() {
 	expectTokenAndPop(TokenType::PRINT);
@@ -131,7 +119,6 @@ void FSM::expectStatementTypePrint() {
 	expectTokenAndPop(TokenType::TERMINATOR);
 }
 
-
 void FSM::expectStatementTypeCall() {
 	expectTokenAndPop(TokenType::CALL);
 
@@ -140,7 +127,6 @@ void FSM::expectStatementTypeCall() {
 
 	expectTokenAndPop(TokenType::TERMINATOR);
 }
-
 
 void FSM::expectStatementTypeWhile() {
 	expectTokenAndPop(TokenType::WHILE);
@@ -157,7 +143,6 @@ void FSM::expectStatementTypeWhile() {
 	expectTokenAndPop(TokenType::STATEMENT_LIST_CLOSE);
 	design_extractor->endNesting();
 }
-
 
 void FSM::expectStatementTypeIf() {
 	// make if stmt
@@ -185,7 +170,6 @@ void FSM::expectStatementTypeIf() {
 	design_extractor->endNesting();
 }
 
-
 void FSM::expectStatementTypeAssign() {
 	// make assign stmt
 	Token var_name_token = expectIdentifier();
@@ -198,7 +182,6 @@ void FSM::expectStatementTypeAssign() {
 	design_extractor->endExpr();
 	expectTokenAndPop(TokenType::TERMINATOR);
 }
-
 
 void FSM::expectConditionalExpression() {
 	if (optionalRelationalExpression()) {
@@ -218,7 +201,7 @@ void FSM::expectConditionalExpression() {
 		expectTokenAndPop(TokenType::PARENTHESIS_OPEN);
 		expectConditionalExpression();
 		expectTokenAndPop(TokenType::PARENTHESIS_CLOSE);
-		
+
 		switch (tokenizer.peekToken().getTokenType()) {
 		case TokenType::BOOL_AND:
 		case TokenType::BOOL_OR:
@@ -231,14 +214,13 @@ void FSM::expectConditionalExpression() {
 			unexpectedToken("expectConditionalExpression error. Expecting '&&' or '||'.");
 			break;
 		}
-		
+
 		break;
 	default:
 		unexpectedToken("expectConditionalExpression error.");
 		break;
 	}
 }
-
 
 void FSM::expectRelationalExpression() {
 	expectRelationalFactor();
@@ -259,23 +241,9 @@ void FSM::expectRelationalExpression() {
 	expectRelationalFactor();
 }
 
-
 void FSM::expectRelationalFactor() {
 	expectExpression();
-	//switch (tokenizer.peekToken().getTokenType()) {
-	//case TokenType::IDENTIFIER:
-	//	design_extractor.addVariable(expectTokenAndPop(TokenType::IDENTIFIER).getTokenValue());
-	//	break;
-	//case TokenType::CONSTANT:
-	//	design_extractor.addConstant(std::stoul(expectTokenAndPop(TokenType::CONSTANT).getTokenValue(), nullptr, 0));
-	//	break;
-	//default:
-	//	// start of expression
-	//	expectExpression();
-	//	break;
-	//}
 }
-
 
 void FSM::expectExpression() {
 	expectTerm();
@@ -290,7 +258,6 @@ void FSM::expectExpression() {
 		break;
 	}
 }
-
 
 void FSM::expectTerm() {
 	expectFactor();
@@ -307,7 +274,6 @@ void FSM::expectTerm() {
 	}
 }
 
-
 void FSM::expectFactor() {
 	if (optionalIdentifier()) {
 		Token identifier_token = expectIdentifier();
@@ -320,7 +286,11 @@ void FSM::expectFactor() {
 	switch (tokenizer.peekToken().getTokenType()) {
 	case TokenType::CONSTANT:
 		design_extractor->addExprSegment(tokenizer.peekToken().getTokenValue());
-		design_extractor->addConstant(std::stoul(expectTokenAndPop(TokenType::CONSTANT).getTokenValue(), nullptr, 0));
+		if (tokenizer.peekToken().getTokenValue().size() > 1 && tokenizer.peekToken().getTokenValue().front() == '0') {
+			throw std::runtime_error("Semantic violation. Constant with leading zero detected.");
+		}
+		design_extractor->addConstant(std::stoul(tokenizer.peekToken().getTokenValue(), nullptr, 0));
+		expectTokenAndPop(TokenType::CONSTANT);
 		break;
 	case TokenType::PARENTHESIS_OPEN:
 		design_extractor->addExprSegment(tokenizer.peekToken().getTokenValue());
@@ -334,7 +304,6 @@ void FSM::expectFactor() {
 		break;
 	}
 }
-
 
 Token FSM::expectIdentifier() {
 	switch (tokenizer.peekToken().getTokenType()) {
@@ -355,7 +324,6 @@ Token FSM::expectIdentifier() {
 
 	return expectTokenAndPop(tokenizer.peekToken().getTokenType());
 }
-
 
 bool FSM::optionalRelationalExpression() {
 	if (!optionalRelationalFactor()) {
@@ -378,23 +346,9 @@ bool FSM::optionalRelationalExpression() {
 	return true;
 }
 
-
 bool FSM::optionalRelationalFactor() {
 	return optionalExpression();
-	//switch (tokenizer.peekToken().getTokenType()) {
-	//case TokenType::IDENTIFIER:
-	//	design_extractor.addVariable(expectTokenAndPop(TokenType::IDENTIFIER).getTokenValue());
-	//	break;
-	//case TokenType::CONSTANT:
-	//	design_extractor.addConstant(std::stoul(expectTokenAndPop(TokenType::CONSTANT).getTokenValue(), nullptr, 0));
-	//	break;
-	//default:
-	//	// start of expression
-	//	expectExpression();
-	//	break;
-	//}
 }
-
 
 bool FSM::optionalExpression() {
 	if (!optionalTerm()) {
@@ -408,7 +362,6 @@ bool FSM::optionalExpression() {
 	return true;
 }
 
-
 bool FSM::optionalTerm() {
 	if (!optionalFactor()) {
 		return false;
@@ -421,19 +374,15 @@ bool FSM::optionalTerm() {
 	return true;
 }
 
-
 bool FSM::optionalFactor() {
-	if(optionalIdentifier() || probeAndPop(TokenType::CONSTANT)) {
+	if (optionalIdentifier() || probeAndPop(TokenType::CONSTANT)) {
 		return true;
-	}
-	else if (probeAndPop(TokenType::PARENTHESIS_OPEN)) {
+	} else if (probeAndPop(TokenType::PARENTHESIS_OPEN)) {
 		return optionalExpression() && probeAndPop(TokenType::PARENTHESIS_CLOSE);
-	}
-	else {
+	} else {
 		return false;
 	}
 }
-
 
 bool FSM::optionalIdentifier() {
 	switch (tokenizer.peekProbe().getTokenType()) {
@@ -457,42 +406,35 @@ bool FSM::optionalIdentifier() {
 	return false;
 }
 
-
 Token FSM::expectTokenAndPop(TokenType token_type) {
 	tokenizer.resetProbe();
 	if (peekToken(token_type)) {
 		return tokenizer.popToken();
-	}
-	else {
+	} else {
 		unexpectedToken("");
-		return Token(TokenType::INVAL, "");
+		return Token(TokenType::INVAL, TOKENVALUE_PLACEHOLDER);
 	}
 }
-
 
 bool FSM::peekToken(TokenType token_type) {
 	return tokenizer.peekToken().getTokenType() == token_type;
 }
 
-
 bool FSM::probeAndPop(TokenType token_type) {
 	if (probeAndPeek(token_type)) {
 		tokenizer.popProbe();
 		return true;
-	}
-	else {
+	} else {
 		return false;
 	}
 }
-
 
 bool FSM::probeAndPeek(TokenType token_type) {
 	return tokenizer.peekProbe().getTokenType() == token_type;
 }
 
-
 void FSM::unexpectedToken(std::string message) {
-	throw std::runtime_error(message + std::string(" Unexpected token: ") 
-		+ tokenTypeStrings[tokenizer.peekToken().getTokenType()] 
+	throw std::runtime_error(message + std::string("Unexpected token: ")
+		+ tokenTypeStrings[tokenizer.peekToken().getTokenType()]
 		+ " = " + tokenizer.peekToken().getTokenValue());
 }

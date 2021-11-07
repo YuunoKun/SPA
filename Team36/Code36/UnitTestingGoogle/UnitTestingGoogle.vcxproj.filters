@@ -104,12 +104,6 @@
     <ClCompile Include="QueryEvaluatorTupleTest.cpp">
       <Filter>PQL\QueryEvaluator</Filter>
     </ClCompile>
-    <ClCompile Include="AffectsParserTest.cpp" />
-    <ClCompile Include="AffectsTParserTest.cpp" />
-    <ClCompile Include="NextBipParserTest.cpp" />
-    <ClCompile Include="NextBipTParserTest.cpp" />
-    <ClCompile Include="AffectsBipParserTest.cpp" />
-    <ClCompile Include="AffectsBipTParserTest.cpp" />
     <ClCompile Include="NextEvaluatorTest.cpp">
       <Filter>PQL\QueryEvaluator\RelationEvaluator</Filter>
     </ClCompile>
@@ -146,18 +140,6 @@
     <ClCompile Include="CallsTEvaluatorTest.cpp">
       <Filter>PQL\QueryEvaluator\RelationEvaluator</Filter>
     </ClCompile>
-    <ClCompile Include="CFGNodeTest.cpp">
-      <Filter>PKB</Filter>
-    </ClCompile>
-    <ClCompile Include="CFGRelationManagerTest_Affects.cpp">
-      <Filter>PKB</Filter>
-    </ClCompile>
-    <ClCompile Include="CFGRelationsManagerTest_AffectsT.cpp">
-      <Filter>PKB</Filter>
-    </ClCompile>
-    <ClCompile Include="CFGRelationsManagerTest_NextT.cpp">
-      <Filter>PKB</Filter>
-    </ClCompile>
     <ClCompile Include="RelationTableTest.cpp">
       <Filter>PKB\RelationTables</Filter>
     </ClCompile>
@@ -190,12 +172,6 @@
     </ClCompile>
     <ClCompile Include="WhilePatternParserTest.cpp">
       <Filter>PQL\QueryPreprocessor\QueryPatternRelRefParser</Filter>
-    </ClCompile>
-    <ClCompile Include="CFGTest.cpp">
-      <Filter>PKB</Filter>
-    </ClCompile>
-    <ClCompile Include="MonotypeRelationTableTest.cpp">
-      <Filter>PKB\RelationTables</Filter>
     </ClCompile>
     <ClCompile Include="ParentParserTest.cpp">
       <Filter>PQL\QueryPreprocessor\QueryPatternRelRefParser</Filter>
@@ -240,6 +216,75 @@
       <Filter>PQL\QueryEvaluator\RelationEvaluator</Filter>
     </ClCompile>
     <ClCompile Include="QueryEvaluatorCFGBipRelationTest.cpp">
+      <Filter>PQL\QueryEvaluator</Filter>
+    </ClCompile>
+    <ClCompile Include="QueryEvaluatorStressTest.cpp">
+      <Filter>PQL\QueryEvaluator</Filter>
+    </ClCompile>
+    <ClCompile Include="NextBipTParserTest.cpp">
+      <Filter>PQL\QueryPreprocessor\QueryPatternRelRefParser</Filter>
+    </ClCompile>
+    <ClCompile Include="NextBipParserTest.cpp">
+      <Filter>PQL\QueryPreprocessor\QueryPatternRelRefParser</Filter>
+    </ClCompile>
+    <ClCompile Include="AffectsTParserTest.cpp">
+      <Filter>PQL\QueryPreprocessor\QueryPatternRelRefParser</Filter>
+    </ClCompile>
+    <ClCompile Include="AffectsParserTest.cpp">
+      <Filter>PQL\QueryPreprocessor\QueryPatternRelRefParser</Filter>
+    </ClCompile>
+    <ClCompile Include="AffectsBipTParserTest.cpp">
+      <Filter>PQL\QueryPreprocessor\QueryPatternRelRefParser</Filter>
+    </ClCompile>
+    <ClCompile Include="AffectsBipParserTest.cpp">
+      <Filter>PQL\QueryPreprocessor\QueryPatternRelRefParser</Filter>
+    </ClCompile>
+    <ClCompile Include="AffectsBipPreprocessorTest.cpp">
+      <Filter>PKB\RelationPreprocessor</Filter>
+    </ClCompile>
+    <ClCompile Include="AffectsBipTPreprocessorTest.cpp">
+      <Filter>PKB\RelationPreprocessor</Filter>
+    </ClCompile>
+    <ClCompile Include="RelationsUtilityTest.cpp">
+      <Filter>PKB\RelationTables</Filter>
+    </ClCompile>
+    <ClCompile Include="CFGNodeTest.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="CFGTest.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="NextBipPreprocessorTest.cpp">
+      <Filter>PKB\RelationPreprocessor</Filter>
+    </ClCompile>
+    <ClCompile Include="NextBipTPreprocessorTest.cpp">
+      <Filter>PKB\RelationPreprocessor</Filter>
+    </ClCompile>
+    <ClCompile Include="RelationPreprocessorManagerTest_Affects.cpp">
+      <Filter>PKB\RelationPreprocessorManager</Filter>
+    </ClCompile>
+    <ClCompile Include="RelationPreprocessorManagerTest_AffectsBip.cpp">
+      <Filter>PKB\RelationPreprocessorManager</Filter>
+    </ClCompile>
+    <ClCompile Include="RelationPreprocessorManagerTest_AffectsBipT.cpp">
+      <Filter>PKB\RelationPreprocessorManager</Filter>
+    </ClCompile>
+    <ClCompile Include="RelationPreprocessorManagerTest_AffectsT.cpp">
+      <Filter>PKB\RelationPreprocessorManager</Filter>
+    </ClCompile>
+    <ClCompile Include="RelationPreprocessorManagerTest_NextBip.cpp">
+      <Filter>PKB\RelationPreprocessorManager</Filter>
+    </ClCompile>
+    <ClCompile Include="RelationPreprocessorManagerTest_NextBipT.cpp">
+      <Filter>PKB\RelationPreprocessorManager</Filter>
+    </ClCompile>
+    <ClCompile Include="RelationPreprocessorManagerTest_NextT.cpp">
+      <Filter>PKB\RelationPreprocessorManager</Filter>
+    </ClCompile>
+    <ClCompile Include="TransitiveClosureHelperTest.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="QueryTupleOptimizerTest.cpp">
       <Filter>PQL\QueryEvaluator</Filter>
     </ClCompile>
   </ItemGroup>
@@ -288,6 +333,9 @@
     </Filter>
     <Filter Include="PQL\QueryPreprocessor\QueryPatternRelRefParser">
       <UniqueIdentifier>{02759e7f-c0fc-4177-b5a7-6ad19b337bea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PKB\RelationPreprocessorManager">
+      <UniqueIdentifier>{02bb02c6-2c41-49f9-b2f0-ed1c33295826}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

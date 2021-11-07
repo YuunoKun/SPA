@@ -32,12 +32,25 @@ namespace UnitTesting {
 			PKB::getInstance().addStmt(STMT_ASSIGN);
 			PKB::getInstance().addStmt(STMT_CALL);
 			PKB::getInstance().addStmt(STMT_CALL);
+
 			PKB::getInstance().addFollows(std::stoi(FOLLOW_LEFT1), std::stoi(FOLLOW_RIGHT1));
 			PKB::getInstance().addFollows(std::stoi(FOLLOW_LEFT2), std::stoi(FOLLOW_RIGHT2));
+			PKB::getInstance().addFollowsT(std::stoi(FOLLOW_LEFT1), std::stoi(FOLLOW_RIGHT1));
+			PKB::getInstance().addFollowsT(std::stoi(FOLLOW_LEFT2), std::stoi(FOLLOW_RIGHT2));
+			PKB::getInstance().addFollowsT(std::stoi(FOLLOW_LEFT1), std::stoi(FOLLOW_RIGHT2));
+
 			PKB::getInstance().addParent(std::stoi(PARENT_LEFT1), std::stoi(PARENT_RIGHT1));
 			PKB::getInstance().addParent(std::stoi(PARENT_LEFT1), std::stoi(PARENT_RIGHT2));
 			PKB::getInstance().addParent(std::stoi(PARENT_LEFT2), std::stoi(PARENT_RIGHT2));
 			PKB::getInstance().addParent(std::stoi(PARENT_LEFT3), std::stoi(PARENT_RIGHT3));
+
+			PKB::getInstance().addParentT(std::stoi(PARENT_LEFT1), std::stoi(PARENT_RIGHT1));
+			PKB::getInstance().addParentT(std::stoi(PARENT_LEFT1), std::stoi(PARENT_RIGHT2));
+			PKB::getInstance().addParentT(std::stoi(PARENT_LEFT1), std::stoi(PARENT_RIGHT3));
+			PKB::getInstance().addParentT(std::stoi(PARENT_LEFT2), std::stoi(PARENT_RIGHT2));
+			PKB::getInstance().addParentT(std::stoi(PARENT_LEFT2), std::stoi(PARENT_RIGHT3));
+			PKB::getInstance().addParentT(std::stoi(PARENT_LEFT3), std::stoi(PARENT_RIGHT3));
+
 			PKB::getInstance().addModifiesS(std::stoi(MODIFIES_LEFT1), MODIFIES_RIGHT1);
 			PKB::getInstance().addModifiesS(std::stoi(MODIFIES_LEFT2), MODIFIES_RIGHT2);
 			PKB::getInstance().addModifiesS(std::stoi(MODIFIES_LEFT3), MODIFIES_RIGHT3);
@@ -46,8 +59,6 @@ namespace UnitTesting {
 			PKB::getInstance().addUsesS(std::stoi(USES_LEFT2), USES_RIGHT2);
 			PKB::getInstance().addExprTree(std::stoi(MODIFIES_LEFT3), EXPRESSIONNODE_1);
 			PKB::getInstance().addExprTree(std::stoi(MODIFIES_LEFT4), EXPRESSIONNODE_2);
-			PKB::getInstance().generateFollowsT();
-			PKB::getInstance().generateParentT();
 		}
 
 		~QueryEvaluatorMultiClausesTest() override {
@@ -87,13 +98,15 @@ namespace UnitTesting {
 		}
 
 		void validate(Query q, std::list<std::string> result, int i, int j) {
-			EXPECT_EQ(evaluator.evaluateQuery(q), result) << "Error at results : " << i + 1 << " : " << j + 1;
+			std::list<std::string> query_result = evaluator.evaluateQuery(q);
+			result.sort();
+			query_result.sort();
+			EXPECT_EQ(query_result, result) << "Error at results : " << i + 1 << " : " << j + 1;
 		}
 
 		void validate(std::vector<RelRef> relations, std::vector<Pattern> patterns, int i, int j) {
-
 			validate(initQuery(relations, patterns, ALL_SELECT[i % ALL_SELECT.size()]), ALL_RESULT[i % ALL_SELECT.size()], i, j);
-			validate(initQuery(relations, patterns, SELECT_BOOLEAN), BOOLEAN_TRUE_RESULT, i, j); 
+			validate(initQuery(relations, patterns, SELECT_BOOLEAN), BOOLEAN_TRUE_RESULT, i, j);
 		}
 
 		void validateEmpty(std::vector<RelRef> relations, std::vector<Pattern> patterns, int i, int j) {
@@ -112,7 +125,7 @@ namespace UnitTesting {
 		void validate(std::vector<Pattern>& patterns1, std::vector<Pattern>& patterns2) {
 			for (unsigned int i = 0; i < patterns1.size(); i++) {
 				for (unsigned int j = 0; j < patterns2.size(); j++) {
-					validate({ },  { patterns1[i], patterns2[j] }, i, j);
+					validate({ }, { patterns1[i], patterns2[j] }, i, j);
 				}
 			}
 		}
@@ -141,7 +154,7 @@ namespace UnitTesting {
 			}
 		}
 
-		void validateEmpty(std::vector<RelRef>& relations1, std::vector<RelRef>& relations2)  {
+		void validateEmpty(std::vector<RelRef>& relations1, std::vector<RelRef>& relations2) {
 			for (unsigned int i = 0; i < relations1.size(); i++) {
 				for (unsigned int j = 0; j < relations2.size(); j++) {
 					validateEmpty({ relations1[i], relations2[j] }, { }, i, j);
@@ -265,7 +278,7 @@ namespace UnitTesting {
 
 			relations.push_back(RelRef(type, { STMT, "2" }, { STMT, "2" }));
 			relations.push_back(RelRef(type, { STMT, "3" }, { STMT, "3" }));
-			
+
 			type = MODIFIES_S;
 			left1 = MODIFIES_LEFT1;
 			left2 = MODIFIES_LEFT2;
@@ -281,7 +294,7 @@ namespace UnitTesting {
 					relations.push_back(RelRef(type, synonyms[k], ALL_VARIABLES[j]));
 				}
 			}
-			
+
 			type = USES_S;
 			left1 = USES_LEFT1;
 			left2 = USES_LEFT2;
@@ -295,9 +308,8 @@ namespace UnitTesting {
 					relations.push_back(RelRef(type, VALID_CONSTANT_STMT_ENTITY[i], invalid_rights[k]));
 				}
 			}
-			
+
 			return relations;
-			
 		}
 
 		std::vector<Pattern> getAllValidPattern(Synonym s1, Synonym s2) {
@@ -804,11 +816,11 @@ namespace UnitTesting {
 		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation }, { pattern }, selected)), result);
 
 		selected = lhs_common;
-		result = { MODIFIES_RIGHT3, MODIFIES_RIGHT4 };
+		result = { MODIFIES_RIGHT4, MODIFIES_RIGHT3 };
 		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation }, { pattern }, selected)), result);
 
 		selected = stmt_common;
-		result = { USES_LEFT2, USES_LEFT1 };
+		result = { USES_LEFT1, USES_LEFT2 };
 		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation }, { pattern }, selected)), result);
 
 		//Handle result for Select a pattern a(v, _"y"_) such that uses(s,v)
@@ -835,11 +847,11 @@ namespace UnitTesting {
 		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation }, { pattern }, selected)), result);
 
 		selected = lhs_common;
-		result = { MODIFIES_RIGHT3, MODIFIES_RIGHT4 };
+		result = { MODIFIES_RIGHT4, MODIFIES_RIGHT3 };
 		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation }, { pattern }, selected)), result);
 
 		selected = stmt_common;
-		result = { USES_LEFT2, USES_LEFT1 };
+		result = { USES_LEFT1, USES_LEFT2 };
 		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ relation }, { pattern }, selected)), result);
 
 		//Handle result for Select a pattern a(v, "x") such that modifies(s,v)

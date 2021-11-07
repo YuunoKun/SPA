@@ -5,7 +5,7 @@
 
 using namespace SourceProcessor;
 
-Tokenizer::Tokenizer(void) {
+Tokenizer::Tokenizer() {
 	token_cache = {};
 }
 
@@ -15,137 +15,125 @@ void Tokenizer::parseIntoTokens(const char* input) {
 
 	std::string source(input);
 	for (char c : source) {
-		//std::cout << (int)c << " ";
 		switch (c) {
-		case '{':
+		case SYMBOL_LEFT_BRACE:
 			addToken(current_token);
 			current_token.setTokenType(TokenType::STATEMENT_LIST_OPEN);
-			current_token.setTokenValue("{");
+			current_token.appendTokenValue(SYMBOL_LEFT_BRACE);
 			addToken(current_token);
 			break;
-		case '}':
+		case SYMBOL_RIGHT_BRACE:
 			addToken(current_token);
 			current_token.setTokenType(TokenType::STATEMENT_LIST_CLOSE);
-			current_token.setTokenValue("}");
+			current_token.appendTokenValue(SYMBOL_RIGHT_BRACE);
 			addToken(current_token);
 			break;
-		case '(':
+		case SYMBOL_LEFT_PARENTHESIS:
 			addToken(current_token);
 			current_token.setTokenType(TokenType::PARENTHESIS_OPEN);
-			current_token.setTokenValue("(");
+			current_token.appendTokenValue(SYMBOL_LEFT_PARENTHESIS);
 			addToken(current_token);
 			break;
-		case ')':
+		case SYMBOL_RIGHT_PARENTHESIS:
 			addToken(current_token);
 			current_token.setTokenType(TokenType::PARENTHESIS_CLOSE);
-			current_token.setTokenValue(")");
+			current_token.appendTokenValue(SYMBOL_RIGHT_PARENTHESIS);
 			addToken(current_token);
 			break;
-		case ';':
+		case SYMBOL_SEMICOLON:
 			addToken(current_token);
 			current_token.setTokenType(TokenType::TERMINATOR);
-			current_token.setTokenValue(";");
+			current_token.appendTokenValue(SYMBOL_SEMICOLON);
 			addToken(current_token);
 			break;
-		case ' ':
-		case '	':
-			// Ignore extra white spaces, also terminates forming of potential identifiers
-			// This also ensure that token values does not contain extra whitespaces.
+		case SYMBOL_SPACE:
+		case SYMBOL_TAB:
 			addToken(current_token);
 			current_token.setTokenType(TokenType::WHITESPACE);
 			break;
-		case '&':
+		case SYMBOL_AMPERSAND:
 			if (current_token.getTokenType() == TokenType::BIT_AND) {
 				current_token.setTokenType(TokenType::BOOL_AND);
-				current_token.setTokenValue("&&");
+				current_token.appendTokenValue(SYMBOL_AMPERSAND);
 				addToken(current_token);
-			}
-			else {
+			} else {
 				addToken(current_token);
 				current_token.setTokenType(TokenType::BIT_AND);
-				current_token.setTokenValue("&");
+				current_token.appendTokenValue(SYMBOL_AMPERSAND);
 			}
 			break;
-		case '|':
+		case SYMBOL_VERTICAL_BAR:
 			if (current_token.getTokenType() == TokenType::BIT_OR) {
 				current_token.setTokenType(TokenType::BOOL_OR);
-				current_token.setTokenValue("||");
+				current_token.appendTokenValue(SYMBOL_VERTICAL_BAR);
 				addToken(current_token);
-			}
-			else {
+			} else {
 				addToken(current_token);
 				current_token.setTokenType(TokenType::BIT_OR);
-				current_token.setTokenValue("|");
+				current_token.appendTokenValue(SYMBOL_VERTICAL_BAR);
 			}
 			break;
-		case '!':
+		case SYMBOL_EXCLAMATION_MARK:
 			addToken(current_token);
 			current_token.setTokenType(TokenType::BOOL_NEGATE);
-			current_token.setTokenValue("!");
+			current_token.appendTokenValue(SYMBOL_EXCLAMATION_MARK);
 			break;
-		case '>':
+		case SYMBOL_GREATER_THAN_SIGN:
 			addToken(current_token);
 			current_token.setTokenType(TokenType::BOOL_GT);
-			current_token.setTokenValue(">");
+			current_token.appendTokenValue(SYMBOL_GREATER_THAN_SIGN);
 			break;
-		case '<':
+		case SYMBOL_LESS_THAN_SIGN:
 			addToken(current_token);
 			current_token.setTokenType(TokenType::BOOL_LT);
-			current_token.setTokenValue("<");
+			current_token.appendTokenValue(SYMBOL_LESS_THAN_SIGN);
 			break;
-		case '=':
+		case SYMBOL_EQUAL_SIGN:
 			if (current_token.getTokenType() == TokenType::BOOL_NEGATE) {
 				current_token.setTokenType(TokenType::BOOL_NEQUIV);
-				current_token.setTokenValue("!=");
-			}
-			else if (current_token.getTokenType() == TokenType::BOOL_LT) {
+			} else if (current_token.getTokenType() == TokenType::BOOL_LT) {
 				current_token.setTokenType(TokenType::BOOL_LTEQ);
-				current_token.setTokenValue("<=");
-			}
-			else if (current_token.getTokenType() == TokenType::BOOL_GT) {
+			} else if (current_token.getTokenType() == TokenType::BOOL_GT) {
 				current_token.setTokenType(TokenType::BOOL_GTEQ);
-				current_token.setTokenValue(">=");
-			}
-			else if (current_token.getTokenType() == TokenType::ASSIGN) {
+			} else if (current_token.getTokenType() == TokenType::ASSIGN) {
 				current_token.setTokenType(TokenType::BOOL_EQUIV);
-				current_token.setTokenValue("==");
-			}
-			else {
+			} else {
 				addToken(current_token);
 				current_token.setTokenType(TokenType::ASSIGN);
-				current_token.setTokenValue("=");
+				current_token.appendTokenValue(SYMBOL_EQUAL_SIGN);
 				break;
 			}
+			current_token.appendTokenValue(SYMBOL_EQUAL_SIGN);
 			addToken(current_token);
 			break;
-		case '+':
+		case SYMBOL_PLUS_SIGN:
 			addToken(current_token);
 			current_token.setTokenType(TokenType::PLUS);
-			current_token.setTokenValue("+");
+			current_token.appendTokenValue(SYMBOL_PLUS_SIGN);
 			addToken(current_token);
 			break;
-		case '-':
+		case SYMBOL_MINUS_SIGN:
 			addToken(current_token);
 			current_token.setTokenType(TokenType::MINUS);
-			current_token.setTokenValue("-");
+			current_token.appendTokenValue(SYMBOL_MINUS_SIGN);
 			addToken(current_token);
 			break;
-		case '*':
+		case SYMBOL_ASTERISK:
 			addToken(current_token);
 			current_token.setTokenType(TokenType::MUL);
-			current_token.setTokenValue("*");
+			current_token.appendTokenValue(SYMBOL_ASTERISK);
 			addToken(current_token);
 			break;
-		case '/':
+		case SYMBOL_SLASH:
 			addToken(current_token);
 			current_token.setTokenType(TokenType::DIV);
-			current_token.setTokenValue("/");
+			current_token.appendTokenValue(SYMBOL_SLASH);
 			addToken(current_token);
 			break;
-		case '%':
+		case SYMBOL_PERCENT_SIGN:
 			addToken(current_token);
 			current_token.setTokenType(TokenType::MOD);
-			current_token.setTokenValue("%");
+			current_token.appendTokenValue(SYMBOL_PERCENT_SIGN);
 			addToken(current_token);
 			break;
 		default:
@@ -155,29 +143,24 @@ void Tokenizer::parseIntoTokens(const char* input) {
 
 			if (isdigit(c)) {
 				if (current_token.getTokenType() == TokenType::IDENTIFIER) {
-					current_token.getTokenValue().push_back(c);
-				}
-				else if (current_token.getTokenType() == TokenType::WHITESPACE || current_token.getTokenType() == TokenType::CONSTANT) {
+					current_token.appendTokenValue(c);
+				} else if (current_token.getTokenType() == TokenType::WHITESPACE || current_token.getTokenType() == TokenType::CONSTANT) {
 					current_token.setTokenType(TokenType::CONSTANT);
-					current_token.getTokenValue().push_back(c);
-				}
-				else {
+					current_token.appendTokenValue(c);
+				} else {
 					addToken(current_token);
 					current_token.setTokenType(TokenType::CONSTANT);
-					current_token.getTokenValue().push_back(c);
+					current_token.appendTokenValue(c);
 				}
-			}
-			else if (isalpha(c)) {
+			} else if (isalpha(c)) {
 				if (current_token.getTokenType() == TokenType::IDENTIFIER) {
-					current_token.getTokenValue().push_back(c);
-				}
-				else {
+					current_token.appendTokenValue(c);
+				} else {
 					addToken(current_token);
 					current_token.setTokenType(TokenType::IDENTIFIER);
-					current_token.getTokenValue().push_back(c);
+					current_token.appendTokenValue(c);
 				}
-			}
-			else {
+			} else {
 				throw std::runtime_error("Unknown symbol : \'" + c + '\'');
 			}
 			break;
@@ -187,104 +170,82 @@ void Tokenizer::parseIntoTokens(const char* input) {
 	addToken(current_token);
 }
 
-
 std::vector<Token> Tokenizer::getTokenChain() {
 	return token_cache;
 }
 
-
 void Tokenizer::addToken(Token& token) {
-
 	if (token.getTokenType() == TokenType::WHITESPACE) {
-		//discard whitespace
 		return;
 	}
 
 	if (token.getTokenType() == TokenType::IDENTIFIER) {
-		if (token.getTokenValue() == "procedure") {
+		if (token.getTokenValue() == KEYWORD_PROCEDURE) {
 			token.setTokenType(TokenType::PROCEDURE);
-		}
-		else if (token.getTokenValue() == "read") {
+		} else if (token.getTokenValue() == KEYWORD_READ) {
 			token.setTokenType(TokenType::READ);
-		}
-		else if (token.getTokenValue() == "print") {
+		} else if (token.getTokenValue() == KEYWORD_PRINT) {
 			token.setTokenType(TokenType::PRINT);
-		}
-		else if (token.getTokenValue() == "call") {
+		} else if (token.getTokenValue() == KEYWORD_CALL) {
 			token.setTokenType(TokenType::CALL);
-		}
-		else if (token.getTokenValue() == "if") {
+		} else if (token.getTokenValue() == KEYWORD_IF) {
 			token.setTokenType(TokenType::IF);
-		}
-		else if (token.getTokenValue() == "while") {
+		} else if (token.getTokenValue() == KEYWORD_WHILE) {
 			token.setTokenType(TokenType::WHILE);
-		}
-		else if (token.getTokenValue() == "then") {
+		} else if (token.getTokenValue() == KEYWORD_THEN) {
 			token.setTokenType(TokenType::THEN);
-		}
-		else if (token.getTokenValue() == "else") {
+		} else if (token.getTokenValue() == KEYWORD_ELSE) {
 			token.setTokenType(TokenType::ELSE);
 		}
 	}
 
 	token_cache.push_back(token);
 	token.setTokenType(TokenType::WHITESPACE);
-	token.setTokenValue("");
+	token.resetTokenValue();
 }
-
 
 void Tokenizer::initTokenStack() {
 	pos = 0;
 	probe = 0;
 }
 
-
 bool Tokenizer::hasToken() {
 	return pos < token_cache.size();
 }
 
-
 Token Tokenizer::peekToken() {
 	if (!hasToken()) {
-		return Token(TokenType::INVAL, "");
-	}
-	else {
+		return Token(TokenType::INVAL, TOKENVALUE_PLACEHOLDER);
+	} else {
 		probe = pos;
 		return token_cache[pos];
 	}
 }
 
-
 Token Tokenizer::popToken() {
 	if (!hasToken()) {
-		return Token(TokenType::INVAL, "");
-	}
-	else {
+		return Token(TokenType::INVAL, TOKENVALUE_PLACEHOLDER);
+	} else {
 		probe = pos + 1;
 		return token_cache[pos++];
 	}
 }
 
-
 Token Tokenizer::peekProbe() {
 	if (probe >= token_cache.size()) {
-		return Token(TokenType::INVAL, "");
-	}
-	else {
+		return Token(TokenType::INVAL, TOKENVALUE_PLACEHOLDER);
+	} else {
 		return token_cache[probe];
 	}
 }
 
-
 Token Tokenizer::popProbe() {
 	if (probe >= token_cache.size()) {
-		return Token(TokenType::INVAL, "");
-	}
-	else {
+		return Token(TokenType::INVAL, TOKENVALUE_PLACEHOLDER);
+	} else {
 		return token_cache[probe++];
 	}
 }
-
 
 void Tokenizer::resetProbe() {
 	probe = pos;

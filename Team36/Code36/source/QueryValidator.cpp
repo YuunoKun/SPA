@@ -1,3 +1,4 @@
+#include "Common.h"
 #include "Query.h"
 #include "QueryToken.h"
 #include "QueryValidator.h"
@@ -13,27 +14,23 @@ void QueryValidator::validateSelectMultipleClauses(QueryToken& token, QueryToken
 		prevTokenSelect.type != QueryToken::QueryTokenType::TUPLE_OPEN &&
 		prevTokenSelect.type != QueryToken::QueryTokenType::COMMA) {
 		throw SyntacticErrorException("During multiple selects, identifier can only come after '<' or ','");
-	}
-	else if (token.type == QueryToken::QueryTokenType::DOT &&
+	} else if (token.type == QueryToken::QueryTokenType::DOT &&
 		prevTokenSelect.type != QueryToken::QueryTokenType::IDENTIFIER) {
 		throw SyntacticErrorException("During multiple selects, '.' can only come after identifier");
-	}
-	else if ((token.type == QueryToken::QueryTokenType::PROC_NAME ||
+	} else if ((token.type == QueryToken::QueryTokenType::PROC_NAME ||
 		token.type == QueryToken::QueryTokenType::VAR_NAME ||
 		token.type == QueryToken::QueryTokenType::VALUE ||
 		token.type == QueryToken::QueryTokenType::STMT_INDEX) &&
 		prevTokenSelect.type != QueryToken::QueryTokenType::DOT) {
 		throw SyntacticErrorException("During multiple selects, attributes can only come after '.'");
-	}
-	else if (token.type == QueryToken::QueryTokenType::COMMA &&
+	} else if (token.type == QueryToken::QueryTokenType::COMMA &&
 		(prevTokenSelect.type != QueryToken::QueryTokenType::PROC_NAME &&
 			prevTokenSelect.type != QueryToken::QueryTokenType::VAR_NAME &&
 			prevTokenSelect.type != QueryToken::QueryTokenType::VALUE &&
 			prevTokenSelect.type != QueryToken::QueryTokenType::IDENTIFIER &&
 			prevTokenSelect.type != QueryToken::QueryTokenType::STMT_INDEX)) {
 		throw SyntacticErrorException("During multiple selects, comma can only come after attributes");
-	}
-	else if (token.type == QueryToken::QueryTokenType::TUPLE_CLOSE &&
+	} else if (token.type == QueryToken::QueryTokenType::TUPLE_CLOSE &&
 		prevTokenSelect.type != QueryToken::QueryTokenType::PROC_NAME &&
 		prevTokenSelect.type != QueryToken::QueryTokenType::VAR_NAME &&
 		prevTokenSelect.type != QueryToken::QueryTokenType::VALUE &&
@@ -52,7 +49,7 @@ void QueryValidator::validateSelecting(QueryToken& token, QueryToken& prevTokenS
 		(token.type != QueryToken::QueryTokenType::DOT &&
 			token.type != QueryToken::QueryTokenType::SUCH_THAT &&
 			token.type != QueryToken::QueryTokenType::PATTERN &&
-			token.token_value != "with")) {
+			token.token_value != WITH_STR)) {
 		throw SyntacticErrorException("After selection needs to have such that or pattern clause or with");
 	}
 }
@@ -60,9 +57,6 @@ void QueryValidator::validateSelecting(QueryToken& token, QueryToken& prevTokenS
 void QueryValidator::validateQuery(Query& query, bool& endOfCurrentClauses) {
 	if (query.getIsSemanticError() != "") {
 		throw SemanticErrorException(query.getIsSemanticError(), query);
-	}
-	if (query.getEntities().size() == 0) {
-		throw SyntacticErrorException("No declaration has been made in your query");
 	}
 	if (query.getSelected().size() == 0) {
 		throw SyntacticErrorException("There is no selected variable in your query");
@@ -72,7 +66,6 @@ void QueryValidator::validateQuery(Query& query, bool& endOfCurrentClauses) {
 	}
 
 	// Final check
-
 
 	for (std::pair<std::string, Entity> ent : query.getEntities()) {
 		if (ent.second.getType() != EntityType::STMT &&
@@ -99,11 +92,21 @@ void QueryValidator::validatePatternType(Entity& patternTypeEntity, Query& query
 	}
 }
 
-void QueryValidator::validateAnd(QueryToken& patternOrSuchThat) {
+void QueryValidator::validateAnd(QueryToken& patternOrSuchThat, QueryToken& nextToken, std::vector<QueryToken>& output) {
 	if (patternOrSuchThat.type != QueryToken::QueryTokenType::PATTERN &&
 		patternOrSuchThat.type != QueryToken::QueryTokenType::SUCH_THAT &&
 		patternOrSuchThat.type != QueryToken::QueryTokenType::WITH) {
 		throw SyntacticErrorException("The keyword 'and' should come after pattern/ relations have been initalized previously");
+	}
+
+	bool patternDeclared = false;
+	for (QueryToken declaredToken : output) {
+		if (declaredToken.token_value == PATTERN_STR) {
+			patternDeclared = true;
+		}
+	}
+	if (nextToken.token_value == PATTERN_STR && !patternDeclared) {
+		throw SyntacticErrorException("and pattern is syntactically valid unless pattern is a declared synonym");
 	}
 }
 
@@ -126,19 +129,28 @@ void QueryValidator::validateAttributeType(Query& query, QueryToken& prevToken, 
 	if (nextToken.type == QueryToken::QueryTokenType::PROC_NAME &&
 		(entType != EntityType::PROCEDURE && entType != EntityType::CALL)) {
 		query.setIsSemanticError("Only procedure and call can have a procName attribute");
-	}
-	else if (nextToken.type == QueryToken::QueryTokenType::VAR_NAME &&
+	} else if (nextToken.type == QueryToken::QueryTokenType::VAR_NAME &&
 		(entType != EntityType::VARIABLE && entType != EntityType::READ && entType != EntityType::PRINT)) {
 		query.setIsSemanticError("Only variable, read and print can have varName attribute");
-	}
-	else if (nextToken.type == QueryToken::QueryTokenType::VALUE &&
+	} else if (nextToken.type == QueryToken::QueryTokenType::VALUE &&
 		entType != EntityType::CONSTANT) {
 		query.setIsSemanticError("Only constant can have value attribute");
-	}
-	else if (nextToken.type == QueryToken::QueryTokenType::STMT_INDEX &&
+	} else if (nextToken.type == QueryToken::QueryTokenType::STMT_INDEX &&
 		(entType != EntityType::STMT && entType != EntityType::READ && entType != EntityType::PRINT &&
 			entType != EntityType::CALL && entType != EntityType::WHILE && entType != EntityType::IF &&
 			entType != EntityType::ASSIGN)) {
 		query.setIsSemanticError("Entity type for .stmt# attribute is not valid");
+	}
+}
+
+void QueryValidator::isExpectingIdentifier(QueryToken& nextToken) {
+	if (nextToken.type != QueryToken::QueryTokenType::IDENTIFIER) {
+		throw SyntacticErrorException("Expected identifier but receives a different token type");
+	}
+}
+
+void QueryValidator::validateNotSuchThat(QueryToken& token) {
+	if (token.type == QueryToken::QueryTokenType::SUCH_THAT) {
+		throw SyntacticErrorException("Invalid query, token cannot be such that");
 	}
 }

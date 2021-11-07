@@ -1,5 +1,5 @@
 #include "AffectsTPreprocessor.h"
-#include "MonotypeRelationTable.cpp"
+#include "RelationTableUtility.cpp"
 
 bool AffectsTPreprocessor::evaluateWildAndWild() {
 	return !affects_table->isEmpty();
@@ -16,23 +16,21 @@ bool AffectsTPreprocessor::evaluateWildAndConstant(int index) {
 }
 
 bool AffectsTPreprocessor::evaluateConstantAndConstant(int index1, int index2) {
-	checkCache();
 	StmtInfo s1 = stmt_info_list[index1 - 1];
 	StmtInfo s2 = stmt_info_list[index2 - 1];
 	if (is_fully_populated || calculated_matrix[index1 - 1][index2 - 1]) {
 		return cache.containsPair(s1, s2);
 	}
-	else {
-		auto dfs = cache.forwardDFS(s1);
-		calculated_matrix[index1 - 1][index2 - 1] = true;
-		for (StmtInfo indirect_value : dfs) {
-			cache.insert(s1, indirect_value);
-			if (indirect_value == s2) {
-				return true;
-			}
+
+	auto dfs = RelationTableUtility<StmtInfo>::forwardDFS(*affects_table, s1);
+	calculated_matrix[index1 - 1][index2 - 1] = true;
+	for (StmtInfo indirect_value : dfs) {
+		cache.insert(s1, indirect_value);
+		if (indirect_value == s2) {
+			return true;
 		}
-		return cache.containsPair(s1, s2);
 	}
+	return false;
 }
 
 std::vector<std::pair<StmtInfo, StmtInfo>> AffectsTPreprocessor::evaluateSynonymAndSynonym() {
@@ -50,13 +48,11 @@ std::vector<StmtInfo> AffectsTPreprocessor::evaluateSynonymAndWild() {
 }
 
 std::vector<StmtInfo> AffectsTPreprocessor::evaluateConstantAndSynonym(int index) {
-	checkCache();
 	StmtInfo s1 = stmt_info_list[index - 1];
 	if (is_fully_populated || calculated_dfs_forward[index - 1]) {
 		return cache.getValues(s1);
-	}
-	else {
-		std::vector<StmtInfo> res = cache.forwardDFS(s1);
+	} else {
+		std::vector<StmtInfo> res = RelationTableUtility<StmtInfo>::forwardDFS(*affects_table, s1);
 		for (auto& s2 : res) {
 			cache.insert(s1, s2);
 		}
@@ -66,13 +62,11 @@ std::vector<StmtInfo> AffectsTPreprocessor::evaluateConstantAndSynonym(int index
 }
 
 std::vector<StmtInfo> AffectsTPreprocessor::evaluateSynonymAndConstant(int index) {
-	checkCache();
 	StmtInfo s1 = stmt_info_list[index - 1];
 	if (is_fully_populated || calculated_dfs_backward[index - 1]) {
 		return cache.getKeys(s1);
-	}
-	else {
-		std::vector<StmtInfo> res = cache.backwardDFS(s1);
+	} else {
+		std::vector<StmtInfo> res = RelationTableUtility<StmtInfo>::backwardDFS(*affects_table, s1);
 		for (auto& s2 : res) {
 			cache.insert(s2, s1);
 		}
@@ -81,15 +75,9 @@ std::vector<StmtInfo> AffectsTPreprocessor::evaluateSynonymAndConstant(int index
 	}
 }
 
-void AffectsTPreprocessor::checkCache() {
-	if (isCacheEmpty()) {
-		cache = affects_table->copy();
-	}
-}
-
 void AffectsTPreprocessor::fullyPopulate() {
 	if (!is_fully_populated) {
-		cache = affects_table->findTransitiveClosure();
+		cache = RelationTableUtility<StmtInfo>::findTransitiveClosure(*affects_table);
 		is_fully_populated = true;
 	}
 }

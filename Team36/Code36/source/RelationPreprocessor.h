@@ -1,6 +1,7 @@
 #pragma once
 
 #include "PKB.h"
+#include "RelationTableUtility.h"
 
 enum BooleanStatus {
 	STATUS_UNKNOWN = 2,
@@ -23,12 +24,10 @@ public:
 	virtual void reset();
 	virtual void fullyPopulate() = 0;
 
-	void setDFSForwardTrue(int);
-	void setDFSBackwardTrue(int);
 	bool isFullyPopulated();
 	const MonotypeRelationTable<StmtInfo>& getCache();
 	bool isCacheEmpty();
-	std::vector<std::vector<bool>> getCalculatedMatrix();
+	bool isCalculated(int, int);
 	bool isDFSForwardComputed(int);
 	bool isDFSBackwardComputed(int);
 
@@ -38,4 +37,8 @@ protected:
 	std::vector<std::vector<bool>> calculated_matrix;
 	std::vector<bool> calculated_dfs_forward;
 	std::vector<bool> calculated_dfs_backward;
+	std::vector<StmtInfo> stmt_info_list;
+
+	void setDFSForwardTrue(int);
+	void setDFSBackwardTrue(int);
 };

@@ -367,6 +367,27 @@ namespace UnitTesting {
 		EXPECT_EQ(test3, q3);
 	}
 
+	TEST(QueryPreprocessor, noDeclaration) {
+		QueryPreprocessor qp;
+		Query test = qp.parse("Select BOOLEAN");
+
+		EXPECT_EQ(test.getSelected()[0], Entity(EntityType::BOOLEAN));
+
+		Query test2 = qp.parse("Select BOOLEAN with 1 = 1");
+
+		EXPECT_EQ(test2.getSelected()[0], Entity(EntityType::BOOLEAN));
+
+		Query test3 = qp.parse("Select BOOLEAN with \"test\" = \"test\"");
+
+		EXPECT_EQ(test3.getSelected()[0], Entity(EntityType::BOOLEAN));
+
+		EXPECT_THROW(qp.parse("Select BOOLEAN pattern a(v, _)"), SemanticErrorException);
+		qp.resetQuery();
+
+		EXPECT_THROW(qp.parse("Select BOOLEAN such that Modifies(_,v)"), SemanticErrorException);
+		qp.resetQuery();
+	}
+
 	TEST(QueryPreprocessor, selectBOOLEAN) {
 		QueryPreprocessor qp;
 		Query test = qp.parse("procedure p; Select BOOLEAN");
@@ -1142,64 +1163,147 @@ namespace UnitTesting {
 
 		EXPECT_EQ(test1, q1);
 
-		//Query test2 = qp.parse("stmt s; assign a, a1; variable v; Select a such that Parent(s, a) and Uses(a, v)");
+		Query test2 = qp.parse("stmt s; assign a, a1; variable v; Select a such that Parent(s, a) and Uses(a, v)");
 
-		//Query q2;
-		//q2.addEntity(Entity(EntityType::STMT, Synonym{ "s" }));
-		//q2.addEntity(Entity(EntityType::ASSIGN, Synonym{ "a" }));
-		//q2.addEntity(Entity(EntityType::ASSIGN, Synonym{ "a1" }));
-		//q2.addEntity(Entity(EntityType::VARIABLE, Synonym{ "v" }));
-		//q2.addSelected(Entity(EntityType::ASSIGN, Synonym{ "a" }));
-		//q2.addRelation(RelRef(RelType::PARENT, Entity(EntityType::STMT, Synonym{ "s" }), Entity(EntityType::ASSIGN, Synonym{ "a" })));
-		//q2.addRelation(RelRef(RelType::USES_S, Entity(EntityType::ASSIGN, Synonym{ "a" }), Entity(EntityType::VARIABLE, Synonym{ "v" })));
+		Query q2;
+		q2.addEntity(Entity(EntityType::STMT, Synonym{ "s" }));
+		q2.addEntity(Entity(EntityType::ASSIGN, Synonym{ "a" }));
+		q2.addEntity(Entity(EntityType::ASSIGN, Synonym{ "a1" }));
+		q2.addEntity(Entity(EntityType::VARIABLE, Synonym{ "v" }));
+		q2.addSelected(Entity(EntityType::ASSIGN, Synonym{ "a" }));
+		q2.addRelation(RelRef(RelType::PARENT, Entity(EntityType::STMT, Synonym{ "s" }), Entity(EntityType::ASSIGN, Synonym{ "a" })));
+		q2.addRelation(RelRef(RelType::USES_S, Entity(EntityType::ASSIGN, Synonym{ "a" }), Entity(EntityType::VARIABLE, Synonym{ "v" })));
 
-		//EXPECT_EQ(test2, q2);
+		EXPECT_EQ(test2, q2);
 
-		//Query test3 = qp.parse("stmt s; assign a, a1; variable v; Select a pattern a(\"q\", _\"p\"_) and a1(v, _)");
+		Query test3 = qp.parse("stmt s; assign a, a1; variable v; Select a pattern a(\"q\", _\"p\"_) and a1(v, _)");
 
-		//Query q3;
-		//q3.addEntity(Entity(EntityType::STMT, Synonym{ "s" }));
-		//q3.addEntity(Entity(EntityType::ASSIGN, Synonym{ "a" }));
-		//q3.addEntity(Entity(EntityType::ASSIGN, Synonym{ "a1" }));
-		//q3.addEntity(Entity(EntityType::VARIABLE, Synonym{ "v" }));
-		//q3.addSelected(Entity(EntityType::ASSIGN, Synonym{ "a" }));
-		//q3.addPattern(Pattern(Entity(EntityType::ASSIGN, Synonym{ "a" }), Entity(EntityType::VARIABLE, "q"), "p", true));
-		//q3.addPattern(Pattern(Entity(EntityType::ASSIGN, Synonym{ "a1" }), Entity(EntityType::VARIABLE, Synonym{ "v" }), "", true));
+		Query q3;
+		q3.addEntity(Entity(EntityType::STMT, Synonym{ "s" }));
+		q3.addEntity(Entity(EntityType::ASSIGN, Synonym{ "a" }));
+		q3.addEntity(Entity(EntityType::ASSIGN, Synonym{ "a1" }));
+		q3.addEntity(Entity(EntityType::VARIABLE, Synonym{ "v" }));
+		q3.addSelected(Entity(EntityType::ASSIGN, Synonym{ "a" }));
+		q3.addPattern(Pattern(Entity(EntityType::ASSIGN, Synonym{ "a" }), Entity(EntityType::VARIABLE, "q"), "p", true));
+		q3.addPattern(Pattern(Entity(EntityType::ASSIGN, Synonym{ "a1" }), Entity(EntityType::VARIABLE, Synonym{ "v" }), "", true));
 
-		//EXPECT_EQ(test3, q3);
+		EXPECT_EQ(test3, q3);
 
-		//Query test4 = qp.parse("stmt s; assign a, a1; variable v; Select a pattern a(\"q\", _\"p\"_) and a1(v, _) such that Parent(s, a) and Uses(a, v)");
+		Query test4 = qp.parse("stmt s; assign a, a1; variable v; Select a pattern a(\"q\", _\"p\"_) and a1(v, _) such that Parent(s, a) and Uses(a, v)");
 
-		//Query q4;
-		//q4.addEntity(Entity(EntityType::STMT, Synonym{ "s" }));
-		//q4.addEntity(Entity(EntityType::ASSIGN, Synonym{ "a" }));
-		//q4.addEntity(Entity(EntityType::ASSIGN, Synonym{ "a1" }));
-		//q4.addEntity(Entity(EntityType::VARIABLE, Synonym{ "v" }));
-		//q4.addSelected(Entity(EntityType::ASSIGN, Synonym{ "a" }));
-		//q4.addPattern(Pattern(Entity(EntityType::ASSIGN, Synonym{ "a" }), Entity(EntityType::VARIABLE, "q"), "p", true));
-		//q4.addPattern(Pattern(Entity(EntityType::ASSIGN, Synonym{ "a1" }), Entity(EntityType::VARIABLE, Synonym{ "v" }), "", true));
-		//q4.addRelation(RelRef(RelType::PARENT, Entity(EntityType::STMT, Synonym{ "s" }), Entity(EntityType::ASSIGN, Synonym{ "a" })));
-		//q4.addRelation(RelRef(RelType::USES_S, Entity(EntityType::ASSIGN, Synonym{ "a" }), Entity(EntityType::VARIABLE, Synonym{ "v" })));
+		Query q4;
+		q4.addEntity(Entity(EntityType::STMT, Synonym{ "s" }));
+		q4.addEntity(Entity(EntityType::ASSIGN, Synonym{ "a" }));
+		q4.addEntity(Entity(EntityType::ASSIGN, Synonym{ "a1" }));
+		q4.addEntity(Entity(EntityType::VARIABLE, Synonym{ "v" }));
+		q4.addSelected(Entity(EntityType::ASSIGN, Synonym{ "a" }));
+		q4.addPattern(Pattern(Entity(EntityType::ASSIGN, Synonym{ "a" }), Entity(EntityType::VARIABLE, "q"), "p", true));
+		q4.addPattern(Pattern(Entity(EntityType::ASSIGN, Synonym{ "a1" }), Entity(EntityType::VARIABLE, Synonym{ "v" }), "", true));
+		q4.addRelation(RelRef(RelType::PARENT, Entity(EntityType::STMT, Synonym{ "s" }), Entity(EntityType::ASSIGN, Synonym{ "a" })));
+		q4.addRelation(RelRef(RelType::USES_S, Entity(EntityType::ASSIGN, Synonym{ "a" }), Entity(EntityType::VARIABLE, Synonym{ "v" })));
 
-		//EXPECT_EQ(test4, q4);
+		EXPECT_EQ(test4, q4);
 
-		//Query test5 = qp.parse("prog_line n; stmt s; assign a, a1; variable v; Select a pattern a(\"q\", _\"p\"_) and a1(v, _) such that Parent(s, a) and Uses(a, v) with s.stmt# = n and n = 10");
+		Query test5 = qp.parse("prog_line n; stmt s; assign a, a1; variable v; Select a pattern a(\"q\", _\"p\"_) and a1(v, _) such that Parent(s, a) and Uses(a, v) with s.stmt# = n and n = 10");
 
-		//Query q5;
-		//q5.addEntity(Entity(EntityType::PROG_LINE, Synonym{ "n" }));
-		//q5.addEntity(Entity(EntityType::STMT, Synonym{ "s" }));
-		//q5.addEntity(Entity(EntityType::ASSIGN, Synonym{ "a" }));
-		//q5.addEntity(Entity(EntityType::ASSIGN, Synonym{ "a1" }));
-		//q5.addEntity(Entity(EntityType::VARIABLE, Synonym{ "v" }));
-		//q5.addSelected(Entity(EntityType::ASSIGN, Synonym{ "a" }));
-		//q5.addPattern(Pattern(Entity(EntityType::ASSIGN, Synonym{ "a" }), Entity(EntityType::VARIABLE, "q"), "p", true));
-		//q5.addPattern(Pattern(Entity(EntityType::ASSIGN, Synonym{ "a1" }), Entity(EntityType::VARIABLE, Synonym{ "v" }), "", true));
-		//q5.addRelation(RelRef(RelType::PARENT, Entity(EntityType::STMT, Synonym{ "s" }), Entity(EntityType::ASSIGN, Synonym{ "a" })));
-		//q5.addRelation(RelRef(RelType::USES_S, Entity(EntityType::ASSIGN, Synonym{ "a" }), Entity(EntityType::VARIABLE, Synonym{ "v" })));
-		//q5.addRelation(RelRef(RelType::WITH, Entity(EntityType::STMT, Synonym{ "s" }), Entity(EntityType::PROG_LINE, Synonym{ "n" })));
-		//q5.addRelation(RelRef(RelType::WITH, Entity(EntityType::PROG_LINE, Synonym{ "n" }), Entity(EntityType::PROG_LINE, "10")));
+		Query q5;
+		q5.addEntity(Entity(EntityType::PROG_LINE, Synonym{ "n" }));
+		q5.addEntity(Entity(EntityType::STMT, Synonym{ "s" }));
+		q5.addEntity(Entity(EntityType::ASSIGN, Synonym{ "a" }));
+		q5.addEntity(Entity(EntityType::ASSIGN, Synonym{ "a1" }));
+		q5.addEntity(Entity(EntityType::VARIABLE, Synonym{ "v" }));
+		q5.addSelected(Entity(EntityType::ASSIGN, Synonym{ "a" }));
+		q5.addPattern(Pattern(Entity(EntityType::ASSIGN, Synonym{ "a" }), Entity(EntityType::VARIABLE, "q"), "p", true));
+		q5.addPattern(Pattern(Entity(EntityType::ASSIGN, Synonym{ "a1" }), Entity(EntityType::VARIABLE, Synonym{ "v" }), "", true));
+		q5.addRelation(RelRef(RelType::PARENT, Entity(EntityType::STMT, Synonym{ "s" }), Entity(EntityType::ASSIGN, Synonym{ "a" })));
+		q5.addRelation(RelRef(RelType::USES_S, Entity(EntityType::ASSIGN, Synonym{ "a" }), Entity(EntityType::VARIABLE, Synonym{ "v" })));
+		q5.addRelation(RelRef(RelType::WITH, Entity(EntityType::STMT, Synonym{ "s" }), Entity(EntityType::PROG_LINE, Synonym{ "n" })));
+		q5.addRelation(RelRef(RelType::WITH, Entity(EntityType::PROG_LINE, Synonym{ "n" }), Entity(EntityType::PROG_LINE, "10")));
 
-		//EXPECT_EQ(test5, q5);
+		EXPECT_EQ(test5, q5);
+
+		Query test6 = qp.parse("prog_line n; stmt s; assign a, a1; variable v; Select a with s.stmt# = n and n = 10 pattern a(\"q\", _\"p\"_) and a1(v, _) such that Parent(s, a) and Uses(a, v)");
+
+		Query q6;
+		q6.addEntity(Entity(EntityType::PROG_LINE, Synonym{ "n" }));
+		q6.addEntity(Entity(EntityType::STMT, Synonym{ "s" }));
+		q6.addEntity(Entity(EntityType::ASSIGN, Synonym{ "a" }));
+		q6.addEntity(Entity(EntityType::ASSIGN, Synonym{ "a1" }));
+		q6.addEntity(Entity(EntityType::VARIABLE, Synonym{ "v" }));
+		q6.addSelected(Entity(EntityType::ASSIGN, Synonym{ "a" }));
+		q6.addRelation(RelRef(RelType::WITH, Entity(EntityType::STMT, Synonym{ "s" }), Entity(EntityType::PROG_LINE, Synonym{ "n" })));
+		q6.addRelation(RelRef(RelType::WITH, Entity(EntityType::PROG_LINE, Synonym{ "n" }), Entity(EntityType::PROG_LINE, "10")));
+		q6.addPattern(Pattern(Entity(EntityType::ASSIGN, Synonym{ "a" }), Entity(EntityType::VARIABLE, "q"), "p", true));
+		q6.addPattern(Pattern(Entity(EntityType::ASSIGN, Synonym{ "a1" }), Entity(EntityType::VARIABLE, Synonym{ "v" }), "", true));
+		q6.addRelation(RelRef(RelType::PARENT, Entity(EntityType::STMT, Synonym{ "s" }), Entity(EntityType::ASSIGN, Synonym{ "a" })));
+		q6.addRelation(RelRef(RelType::USES_S, Entity(EntityType::ASSIGN, Synonym{ "a" }), Entity(EntityType::VARIABLE, Synonym{ "v" })));
+
+		EXPECT_EQ(test6, q6);
+
+		Query test7 = qp.parse("procedure p; assign a; Select BOOLEAN with p.procName = \"pattern\" pattern a(_, _)");
+
+		Query q7;
+		q6.addEntity(Entity(EntityType::PROG_LINE, Synonym{ "n" }));
+		q6.addEntity(Entity(EntityType::STMT, Synonym{ "s" }));
+		q6.addEntity(Entity(EntityType::ASSIGN, Synonym{ "a" }));
+		q6.addEntity(Entity(EntityType::ASSIGN, Synonym{ "a1" }));
+		q6.addEntity(Entity(EntityType::VARIABLE, Synonym{ "v" }));
+		q6.addSelected(Entity(EntityType::ASSIGN, Synonym{ "a" }));
+		q6.addRelation(RelRef(RelType::WITH, Entity(EntityType::STMT, Synonym{ "s" }), Entity(EntityType::PROG_LINE, Synonym{ "n" })));
+		q6.addRelation(RelRef(RelType::WITH, Entity(EntityType::PROG_LINE, Synonym{ "n" }), Entity(EntityType::PROG_LINE, "10")));
+		q6.addPattern(Pattern(Entity(EntityType::ASSIGN, Synonym{ "a" }), Entity(EntityType::VARIABLE, "q"), "p", true));
+		q6.addPattern(Pattern(Entity(EntityType::ASSIGN, Synonym{ "a1" }), Entity(EntityType::VARIABLE, Synonym{ "v" }), "", true));
+		q6.addRelation(RelRef(RelType::PARENT, Entity(EntityType::STMT, Synonym{ "s" }), Entity(EntityType::ASSIGN, Synonym{ "a" })));
+		q6.addRelation(RelRef(RelType::USES_S, Entity(EntityType::ASSIGN, Synonym{ "a" }), Entity(EntityType::VARIABLE, Synonym{ "v" })));
+	}
+
+	TEST(QueryPreprocessor, specialKeyWordInWithClause) {
+		QueryPreprocessor qp;
+
+		Query test1 = qp.parse("procedure p; assign a; Select p with p.procName = \"pattern\" pattern a(\"q\", _\"p\"_)");
+
+		Query q1;
+		q1.addEntity(Entity(EntityType::PROCEDURE, Synonym{ "p" }));
+		q1.addEntity(Entity(EntityType::ASSIGN, Synonym{ "a" }));
+		q1.addSelected(Entity(EntityType::PROCEDURE, Synonym{ "p" }));
+		q1.addRelation(RelRef(RelType::WITH, Entity(EntityType::PROCEDURE, Synonym{ "p" }), Entity(EntityType::PROCEDURE, "pattern")));
+		q1.addPattern(Pattern(Entity(EntityType::ASSIGN, Synonym{ "a" }), Entity(EntityType::VARIABLE, "q"), "p", true));
+
+		EXPECT_EQ(test1, q1);
+
+		Query test2 = qp.parse("procedure p; assign a; Select p with p.procName = \"and\" pattern a(\"q\", _\"p\"_)");
+
+		Query q2;
+		q2.addEntity(Entity(EntityType::PROCEDURE, Synonym{ "p" }));
+		q2.addEntity(Entity(EntityType::ASSIGN, Synonym{ "a" }));
+		q2.addSelected(Entity(EntityType::PROCEDURE, Synonym{ "p" }));
+		q2.addRelation(RelRef(RelType::WITH, Entity(EntityType::PROCEDURE, Synonym{ "p" }), Entity(EntityType::PROCEDURE, "and")));
+		q2.addPattern(Pattern(Entity(EntityType::ASSIGN, Synonym{ "a" }), Entity(EntityType::VARIABLE, "q"), "p", true));
+
+		EXPECT_EQ(test2, q2);
+
+		Query test3 = qp.parse("procedure p; assign a; Select p with p.procName = \"and\" and a.stmt# = 5");
+
+		Query q3;
+		q3.addEntity(Entity(EntityType::PROCEDURE, Synonym{ "p" }));
+		q3.addEntity(Entity(EntityType::ASSIGN, Synonym{ "a" }));
+		q3.addSelected(Entity(EntityType::PROCEDURE, Synonym{ "p" }));
+		q3.addRelation(RelRef(RelType::WITH, Entity(EntityType::PROCEDURE, Synonym{ "p" }), Entity(EntityType::PROCEDURE, "and")));
+		q3.addRelation(RelRef(RelType::WITH, Entity(EntityType::ASSIGN, Synonym{ "a" }, AttrRef{ STMT_INDEX }), Entity(EntityType::ASSIGN, "5")));
+
+		EXPECT_EQ(test3, q3);
+
+		Query test4 = qp.parse("procedure p; assign a; Select p with p.procName = \"and\" and a.stmt# = 5 pattern a(\"q\", _\"p\"_)");
+
+		Query q4;
+		q4.addEntity(Entity(EntityType::PROCEDURE, Synonym{ "p" }));
+		q4.addEntity(Entity(EntityType::ASSIGN, Synonym{ "a" }));
+		q4.addSelected(Entity(EntityType::PROCEDURE, Synonym{ "p" }));
+		q4.addRelation(RelRef(RelType::WITH, Entity(EntityType::PROCEDURE, Synonym{ "p" }), Entity(EntityType::PROCEDURE, "and")));
+		q4.addRelation(RelRef(RelType::WITH, Entity(EntityType::ASSIGN, Synonym{ "a" }, AttrRef{ STMT_INDEX }), Entity(EntityType::ASSIGN, "5")));
+		q4.addPattern(Pattern(Entity(EntityType::ASSIGN, Synonym{ "a" }), Entity(EntityType::VARIABLE, "q"), "p", true));
+
+		EXPECT_EQ(test4, q4);
 	}
 
 	TEST(QueryPreprocessor, tupleSelect) {
@@ -1348,6 +1452,33 @@ namespace UnitTesting {
 		q2.addRelation(RelRef(RelType::WITH, Entity(EntityType::PROCEDURE, Synonym{ "p" }), Entity(EntityType::VARIABLE, Synonym{ "v" })));
 
 		EXPECT_EQ(test2, q2);
+
+		Query test3 = qp.parse("stmt with; Select with with with.stmt# = 5");
+
+		Query q3;
+		q3.addEntity(Entity(EntityType::STMT, Synonym{ "with" }));
+		q3.addSelected(Entity(EntityType::STMT, Synonym{ "with" }));
+		q3.addRelation(RelRef(RelType::WITH, Entity(EntityType::STMT, Synonym{ "with" }), Entity(EntityType::STMT, "5")));
+
+		EXPECT_EQ(test3, q3);
+
+		Query test4 = qp.parse("stmt and; Select and with and.stmt# = 5");
+
+		Query q4;
+		q4.addEntity(Entity(EntityType::STMT, Synonym{ "and" }));
+		q4.addSelected(Entity(EntityType::STMT, Synonym{ "and" }));
+		q4.addRelation(RelRef(RelType::WITH, Entity(EntityType::STMT, Synonym{ "and" }), Entity(EntityType::STMT, "5")));
+
+		EXPECT_EQ(test4, q4);
+
+		Query test5 = qp.parse("stmt pattern; Select pattern with pattern.stmt# = 5");
+
+		Query q5;
+		q5.addEntity(Entity(EntityType::STMT, Synonym{ "pattern" }));
+		q5.addSelected(Entity(EntityType::STMT, Synonym{ "pattern" }));
+		q5.addRelation(RelRef(RelType::WITH, Entity(EntityType::STMT, Synonym{ "pattern" }), Entity(EntityType::STMT, "5")));
+
+		EXPECT_EQ(test5, q5);
 	}
 
 	TEST(QueryPreprocessor, multipleWithClauses) {
@@ -1506,6 +1637,12 @@ namespace UnitTesting {
 		qp.resetQuery();
 
 		EXPECT_THROW(qp.parse("stmt s; assign a, a1; variable v; Select a pattern a(v, _) and pattern a1(v, _)"), SyntacticErrorException);
+		qp.resetQuery();
+
+		EXPECT_THROW(qp.parse("stmt s; assign a, a1; variable v;* Select a pattern a(v, _) and pattern a1(v, _)"), SyntacticErrorException);
+		qp.resetQuery();
+
+		EXPECT_THROW(qp.parse("stmt s; assign a, a1; variable v;; Select a pattern a(v, _) and pattern a1(v, _)"), SyntacticErrorException);
 		qp.resetQuery();
 	}
 

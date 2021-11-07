@@ -6,15 +6,314 @@
 #include <ExprParser.h>
 
 namespace UnitTesting {
+	class MockPKB : public PKBQueryInterface {
+	public:
+		const std::vector<proc_name>& MockPKB::getProcedures() {
+			return mock_proc_table;
+		}
+
+		const std::vector<var_name>& MockPKB::getVariables() {
+			return mock_var_table;
+		}
+
+		const std::vector<StmtInfo>& MockPKB::getStmts() {
+			return mock_stmt_table;
+		}
+
+		const StmtInfo MockPKB::getStmt(stmt_index stmt_index) {
+			if (stmt_index <= 0) {
+				throw std::invalid_argument("Stmt index must be greater than zero. ");
+			} else if (stmt_index > mock_stmt_table.size()) {
+				throw std::invalid_argument("Invalid stmt index. ");
+			}
+			return mock_stmt_table[stmt_index - 1];
+		}
+
+		const var_name MockPKB::getAssignment(stmt_index stmt_index) {
+			if (stmt_index <= 0) {
+				throw std::invalid_argument("Stmt index must be greater than zero: " + std::to_string(stmt_index));
+			} else if (stmt_index > mock_stmt_table.size()) {
+				throw std::invalid_argument("Invalid stmt index: " + std::to_string(stmt_index));
+			} else if (mock_stmt_table[stmt_index - 1].stmt_type != STMT_ASSIGN) {
+				throw std::invalid_argument("Stmt index does not belong to an assignment statement: " + std::to_string(stmt_index));
+			} else if (!mock_assignment_table.containsKey(stmt_index)) {
+				throw std::invalid_argument("Stmt-related assignment has not been initiated: " + std::to_string(stmt_index));
+			}
+			return mock_assignment_table.getValues(stmt_index)[0];
+		}
+
+		expr MockPKB::getExpression(stmt_index stmt_index) {
+			if (stmt_index <= 0) {
+				throw std::invalid_argument("Stmt index must be greater than zero: " + std::to_string(stmt_index));
+			} else if (stmt_index > mock_stmt_table.size()) {
+				throw std::invalid_argument("Invalid stmt index: " + std::to_string(stmt_index));
+			} else if (mock_stmt_table[stmt_index - 1].stmt_type != STMT_ASSIGN) {
+				throw std::invalid_argument("Stmt index does not belong to an assignment statement: " + std::to_string(stmt_index));
+			} else if (mock_expr_table.find(stmt_index) == mock_expr_table.end()) {
+				throw std::invalid_argument("Stmt-related expression has not been initiated: " + std::to_string(stmt_index));
+			}
+			return mock_expr_table.at(stmt_index);
+		}
+
+		const std::vector<constant> MockPKB::getConstants() {
+			std::vector<constant> v(mock_const_table.begin(), mock_const_table.end());
+			return v;
+		}
+
+		const RelationTable<stmt_index, var_name>& MockPKB::getAssigns() {
+			return mock_assignment_table;
+		}
+
+		const std::unordered_map<stmt_index, expr>& MockPKB::getExpr() {
+			return mock_expr_table;
+		}
+
+		const MonotypeRelationTable<StmtInfo>& MockPKB::getFollows() {
+			return mock_follows_table;
+		}
+
+		const MonotypeRelationTable<StmtInfo>& MockPKB::getParent() {
+			return mock_parent_table;
+		}
+
+		const MonotypeRelationTable<StmtInfo>& MockPKB::getFollowsT() {
+			return mock_followsT_table;
+		}
+
+		const MonotypeRelationTable<StmtInfo>& MockPKB::getParentT() {
+			return mock_parentT_table;
+		}
+
+		const RelationTable<StmtInfo, var_name>& MockPKB::getUsesS() {
+			return mock_usesS_table;
+		}
+
+		const RelationTable<StmtInfo, var_name>& MockPKB::getModifiesS() {
+			return mock_modifiesS_table;
+		}
+
+		const RelationTable<proc_name, var_name>& MockPKB::getUsesP() {
+			return mock_usesP_table;
+		}
+
+		const RelationTable<proc_name, var_name>& MockPKB::getModifiesP() {
+			return mock_modifiesP_table;
+		}
+
+		const MonotypeRelationTable<proc_name>& MockPKB::getCallsP() {
+			return mock_callsP_table;
+		}
+
+		const MonotypeRelationTable<proc_name>& MockPKB::getCallsPT() {
+			return mock_callsPT_table;
+		}
+
+		const RelationTable<stmt_index, var_name>& MockPKB::getRead() {
+			return mock_read_table;
+		}
+
+		const RelationTable<stmt_index, var_name>& MockPKB::getPrint() {
+			return mock_print_table;
+		}
+
+		const RelationTable<stmt_index, proc_name>& MockPKB::getCallsS() {
+			return mock_callsS_table;
+		}
+
+		const RelationTable<stmt_index, var_name>& MockPKB::getIf() {
+			return mock_if_table;
+		}
+
+		const RelationTable<stmt_index, var_name>& MockPKB::getWhile() {
+			return mock_while_table;
+		}
+
+		const MonotypeRelationTable<StmtInfo>& MockPKB::getNext() {
+			return mock_next_table;
+		}
+
+		const RelationTable<proc_name, stmt_index>& MockPKB::getProcContains() {
+			return mock_proc_contains_table;
+		}
+
+		std::vector<CFG*> getCFGBips() {
+			return mock_cfgs;
+		};
+
+		void resetCache() {
+			mock_const_table.clear();
+			mock_proc_table.clear();
+			mock_var_table.clear();
+			mock_stmt_table.clear();
+			mock_assignment_table.clear();
+			mock_follows_table.clear();
+			mock_parent_table.clear();
+			mock_followsT_table.clear();
+			mock_parentT_table.clear();
+			mock_usesS_table.clear();
+			mock_modifiesS_table.clear();
+			mock_usesP_table.clear();
+			mock_modifiesP_table.clear();
+			mock_callsP_table.clear();
+			mock_callsS_table.clear();
+			mock_callsPT_table.clear();
+			mock_if_table.clear();
+			mock_while_table.clear();
+			mock_next_table.clear();
+			mock_read_table.clear();
+			mock_print_table.clear();
+			mock_expr_table.clear();
+			mock_proc_contains_table.clear();
+			mock_cfgs = {};
+		};
+
+		void resetEntities() {
+			mock_const_table.clear();
+			mock_proc_table.clear();
+			mock_var_table.clear();
+			mock_stmt_table.clear();
+		};
+
+		void addConstant(constant constant) {
+			mock_const_table.push_back(constant);
+		}
+
+		void addProcedure(proc_name proc_name) {
+			mock_proc_table.push_back(proc_name);
+		}
+
+		void addVariable(var_name var_name) {
+			mock_var_table.push_back(var_name);
+		}
+
+		void addStmt(StmtType stmt_type) {
+			mock_stmt_table.push_back({ mock_curr_stmt_id, stmt_type });
+			mock_curr_stmt_id++;
+		}
+
+		void addExprTree(stmt_index stmt_index, expr expr) {
+			mock_expr_table.insert({ stmt_index, expr });
+		}
+
+		void addParent(stmt_index parent, stmt_index child) {
+			mock_parent_table.insert(mock_stmt_table[parent - 1], mock_stmt_table[child - 1]);
+		}
+
+		void addParentT(stmt_index parent, stmt_index child) {
+			mock_parentT_table.insert(mock_stmt_table[parent - 1], mock_stmt_table[child - 1]);
+		}
+
+		void addFollows(stmt_index first, stmt_index second) {
+			mock_follows_table.insert(mock_stmt_table[first - 1], mock_stmt_table[second - 1]);
+		}
+
+		void addFollowsT(stmt_index first, stmt_index second) {
+			mock_followsT_table.insert(mock_stmt_table[first - 1], mock_stmt_table[second - 1]);
+		}
+
+		void addUsesS(stmt_index user, var_name used) {
+			StmtType user_stmt_type = mock_stmt_table[user - 1].stmt_type;
+			if (user_stmt_type == STMT_PRINT) {
+				mock_print_table.insert(user, used);
+			}
+			mock_usesS_table.insert(mock_stmt_table[user - 1], used);
+		}
+
+		void addModifiesS(stmt_index modifier, var_name modified) {
+			StmtType modifier_stmt_type = mock_stmt_table[modifier - 1].stmt_type;
+			if (modifier_stmt_type == STMT_ASSIGN) {
+				mock_assignment_table.insert(modifier, modified);
+			} else if (modifier_stmt_type == STMT_READ) {
+				mock_read_table.insert(modifier, modified);
+			}
+			mock_modifiesS_table.insert(mock_stmt_table[modifier - 1], modified);
+		}
+
+		void addModifiesP(proc_name proc, var_name modified) {
+			mock_modifiesP_table.insert(proc, modified);
+		}
+
+		void addUsesP(proc_name proc, var_name used) {
+			mock_usesP_table.insert(proc, used);
+		}
+
+		void addNext(prog_line prog_line1, prog_line prog_line2) {
+			mock_next_table.insert(mock_stmt_table[prog_line1 - 1], mock_stmt_table[prog_line2 - 1]);
+		}
+
+		void addCallsP(proc_name caller, proc_name callee) {
+			mock_callsP_table.insert(caller, callee);
+		}
+
+		void addCallsPT(proc_name caller, proc_name callee) {
+			mock_callsPT_table.insert(caller, callee);
+		}
+
+		void addCallsS(stmt_index caller_stmt, proc_name callee) {
+			mock_callsS_table.insert(caller_stmt, callee);
+		}
+
+		void addIf(stmt_index if_stmt_index, var_name control_var) {
+			mock_if_table.insert(if_stmt_index, control_var);
+		}
+
+		void addWhile(stmt_index while_stmt_index, var_name control_var) {
+			mock_while_table.insert(while_stmt_index, control_var);
+		}
+
+		void addProcContains(proc_name proc, stmt_index index) {
+			mock_proc_contains_table.insert(proc, index);
+		}
+
+		void addCFGsToDestroy(std::vector<CFG*> cfgs) {
+			mock_cfgs_to_destroy = cfgs;
+		}
+
+		void addCFGBip(CFG* cfg) {
+			mock_cfgs.push_back(cfg);
+		}
+
+		std::vector<proc_name> mock_proc_table;
+		std::vector<StmtInfo> mock_stmt_table;
+		std::vector<var_name> mock_var_table;
+		std::vector<constant> mock_const_table;
+
+		std::unordered_map<stmt_index, expr> mock_expr_table;
+		RelationTable<stmt_index, var_name> mock_assignment_table;
+
+		MonotypeRelationTable<StmtInfo> mock_parent_table;
+		MonotypeRelationTable<StmtInfo> mock_parentT_table;
+		MonotypeRelationTable<StmtInfo> mock_follows_table;
+		MonotypeRelationTable<StmtInfo> mock_followsT_table;
+		RelationTable<StmtInfo, var_name> mock_usesS_table;
+		RelationTable<proc_name, var_name> mock_usesP_table;
+		RelationTable<StmtInfo, var_name> mock_modifiesS_table;
+		RelationTable<proc_name, var_name> mock_modifiesP_table;
+		RelationTable<stmt_index, proc_name> mock_callsS_table;
+		MonotypeRelationTable<proc_name> mock_callsP_table;
+		MonotypeRelationTable<proc_name> mock_callsPT_table;
+		MonotypeRelationTable<StmtInfo> mock_next_table;
+		std::vector<CFG*> mock_cfgs;
+		std::vector<CFG*> mock_cfgs_to_destroy;
+		RelationTable<proc_name, stmt_index> mock_proc_contains_table;
+		RelationTable<stmt_index, var_name> mock_if_table;
+		RelationTable<stmt_index, var_name> mock_while_table;
+		RelationTable<stmt_index, var_name> mock_read_table;
+		RelationTable<stmt_index, var_name> mock_print_table;
+
+		stmt_index mock_curr_stmt_id{ 1 };
+	};
+
 	class PKBAdapterTest : public testing::Test {
 	protected:
 		PKBAdapterTest() {
 		}
 
 		virtual void SetUp() override {
-			PKB::getInstance().resetCache();
+			mock_pkb.resetCache();
 		}
-		PKBAdapter pkb;
+		MockPKB mock_pkb;
+		PKBAdapter pkb{ mock_pkb };
 	};
 
 	TEST_F(PKBAdapterTest, getVariables) {
@@ -22,28 +321,20 @@ namespace UnitTesting {
 		var_name b = "b";
 		var_name c = "c";
 		var_name d = "d";
-		var_name e = "e";
 		std::vector<var_name> v{ a };
-		PKB::getInstance().addVariable(a);
+		mock_pkb.addVariable(a);
 		EXPECT_EQ(pkb.getVariables(), v);
 
 		v.push_back(b);
-		PKB::getInstance().addVariable(b);
+		mock_pkb.addVariable(b);
 		EXPECT_EQ(pkb.getVariables(), v);
 
 		v.push_back(c);
-		PKB::getInstance().addVariable(c);
+		mock_pkb.addVariable(c);
 		EXPECT_EQ(pkb.getVariables(), v);
 
 		v.push_back(d);
-		PKB::getInstance().addVariable(d);
-		EXPECT_EQ(pkb.getVariables(), v);
-
-		v.push_back(e);
-		PKB::getInstance().addVariable(e);
-		EXPECT_EQ(pkb.getVariables(), v);
-
-		PKB::getInstance().addVariable(e);
+		mock_pkb.addVariable(d);
 		EXPECT_EQ(pkb.getVariables(), v);
 	}
 
@@ -51,13 +342,13 @@ namespace UnitTesting {
 		std::vector<StmtInfo> v = { { 1, STMT_WHILE }, { 2, STMT_IF} , { 3, STMT_READ },
 			{ 4, STMT_PRINT}, { 5, STMT_CALL }, { 6, STMT_ASSIGN}, { 7, STMT_ASSIGN} };
 
-		PKB::getInstance().addStmt(STMT_WHILE);
-		PKB::getInstance().addStmt(STMT_IF);
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_PRINT);
-		PKB::getInstance().addStmt(STMT_CALL);
-		PKB::getInstance().addStmt(STMT_ASSIGN);
-		PKB::getInstance().addStmt(STMT_ASSIGN);
+		mock_pkb.addStmt(STMT_WHILE);
+		mock_pkb.addStmt(STMT_IF);
+		mock_pkb.addStmt(STMT_READ);
+		mock_pkb.addStmt(STMT_PRINT);
+		mock_pkb.addStmt(STMT_CALL);
+		mock_pkb.addStmt(STMT_ASSIGN);
+		mock_pkb.addStmt(STMT_ASSIGN);
 
 		EXPECT_EQ(pkb.getStmts(), v);
 	}
@@ -67,28 +358,20 @@ namespace UnitTesting {
 		constant b = 2;
 		constant c = 3;
 		constant d = 4;
-		constant e = 5;
 		std::vector<constant> v{ a };
-		PKB::getInstance().addConstant(a);
+		mock_pkb.addConstant(a);
 		EXPECT_EQ(pkb.getConstants(), v);
 
 		v.push_back(b);
-		PKB::getInstance().addConstant(b);
+		mock_pkb.addConstant(b);
 		EXPECT_EQ(pkb.getConstants(), v);
 
 		v.push_back(c);
-		PKB::getInstance().addConstant(c);
+		mock_pkb.addConstant(c);
 		EXPECT_EQ(pkb.getConstants(), v);
 
 		v.push_back(d);
-		PKB::getInstance().addConstant(d);
-		EXPECT_EQ(pkb.getConstants(), v);
-
-		v.push_back(e);
-		PKB::getInstance().addConstant(e);
-		EXPECT_EQ(pkb.getConstants(), v);
-
-		PKB::getInstance().addConstant(e);
+		mock_pkb.addConstant(d);
 		EXPECT_EQ(pkb.getConstants(), v);
 	}
 
@@ -97,113 +380,32 @@ namespace UnitTesting {
 		proc_name b = "b";
 		proc_name c = "c";
 		proc_name d = "d";
-		proc_name e = "e";
 		std::vector<proc_name> v{ a };
-		PKB::getInstance().addProcedure(a);
+		mock_pkb.addProcedure(a);
 		EXPECT_EQ(pkb.getProcedures(), v);
 
 		v.push_back(b);
-		PKB::getInstance().addProcedure(b);
+		mock_pkb.addProcedure(b);
 		EXPECT_EQ(pkb.getProcedures(), v);
 
 		v.push_back(c);
-		PKB::getInstance().addProcedure(c);
+		mock_pkb.addProcedure(c);
 		EXPECT_EQ(pkb.getProcedures(), v);
 
 		v.push_back(d);
-		PKB::getInstance().addProcedure(d);
-		EXPECT_EQ(pkb.getProcedures(), v);
-
-		v.push_back(e);
-		PKB::getInstance().addProcedure(e);
-		EXPECT_EQ(pkb.getProcedures(), v);
-
-		PKB::getInstance().addProcedure(e);
+		mock_pkb.addProcedure(d);
 		EXPECT_EQ(pkb.getProcedures(), v);
 	}
-	TEST_F(PKBAdapterTest, getAssigns) {
-		std::vector<StmtInfo> v = { { 6, STMT_ASSIGN}, { 7, STMT_ASSIGN} };
-
-		PKB::getInstance().addStmt(STMT_WHILE);
-		PKB::getInstance().addStmt(STMT_IF);
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_PRINT);
-		PKB::getInstance().addStmt(STMT_CALL);
-		PKB::getInstance().addStmt(STMT_ASSIGN);
-		PKB::getInstance().addStmt(STMT_ASSIGN);
-
-		EXPECT_EQ(pkb.getAssigns(), v);
-	}
-
-	TEST_F(PKBAdapterTest, getCalls) {
-		std::vector<StmtInfo> v = { { 5, STMT_CALL }, { 6, STMT_CALL },{ 7, STMT_CALL },{ 10, STMT_CALL } };
-
-		PKB::getInstance().addStmt(STMT_WHILE);
-		PKB::getInstance().addStmt(STMT_IF);
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_PRINT);
-		PKB::getInstance().addStmt(STMT_CALL);
-		PKB::getInstance().addStmt(STMT_CALL);
-		PKB::getInstance().addStmt(STMT_CALL);
-		PKB::getInstance().addStmt(STMT_ASSIGN);
-		PKB::getInstance().addStmt(STMT_ASSIGN);
-		PKB::getInstance().addStmt(STMT_CALL);
-
-		EXPECT_EQ(pkb.getCalls(), v);
-	}
-
-	TEST_F(PKBAdapterTest, getReads) {
-		std::vector<StmtInfo> v = { { 3, STMT_READ } };
-
-		PKB::getInstance().addStmt(STMT_WHILE);
-		PKB::getInstance().addStmt(STMT_IF);
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_PRINT);
-		PKB::getInstance().addStmt(STMT_CALL);
-		PKB::getInstance().addStmt(STMT_ASSIGN);
-		PKB::getInstance().addStmt(STMT_ASSIGN);
-
-		EXPECT_EQ(pkb.getReads(), v);
-	}
-
-	TEST_F(PKBAdapterTest, getWhiles) {
-		std::vector<StmtInfo> v = { { 1, STMT_WHILE } };
-
-		PKB::getInstance().addStmt(STMT_WHILE);
-		PKB::getInstance().addStmt(STMT_IF);
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_PRINT);
-		PKB::getInstance().addStmt(STMT_CALL);
-		PKB::getInstance().addStmt(STMT_ASSIGN);
-		PKB::getInstance().addStmt(STMT_ASSIGN);
-
-		EXPECT_EQ(pkb.getWhiles(), v);
-	}
-
-	TEST_F(PKBAdapterTest, getIfs) {
-		std::vector<StmtInfo> v = { { 2, STMT_IF} };
-
-		PKB::getInstance().addStmt(STMT_WHILE);
-		PKB::getInstance().addStmt(STMT_IF);
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_PRINT);
-		PKB::getInstance().addStmt(STMT_CALL);
-		PKB::getInstance().addStmt(STMT_ASSIGN);
-		PKB::getInstance().addStmt(STMT_ASSIGN);
-
-		EXPECT_EQ(pkb.getIfs(), v);
-	}
-
 	TEST_F(PKBAdapterTest, isVariables) {
 		var_name a = "a";
 		var_name b = "b";
 		var_name c = "c";
 		var_name d = "d";
 		var_name e = "e";
-		PKB::getInstance().addVariable(a);
-		PKB::getInstance().addVariable(b);
-		PKB::getInstance().addVariable(c);
-		PKB::getInstance().addVariable(d);
+		mock_pkb.addVariable(a);
+		mock_pkb.addVariable(b);
+		mock_pkb.addVariable(c);
+		mock_pkb.addVariable(d);
 		EXPECT_TRUE(pkb.isVariable(a));
 		EXPECT_TRUE(pkb.isVariable(b));
 		EXPECT_TRUE(pkb.isVariable(c));
@@ -212,13 +414,13 @@ namespace UnitTesting {
 	}
 
 	TEST_F(PKBAdapterTest, istStmts) {
-		PKB::getInstance().addStmt(STMT_WHILE);
-		PKB::getInstance().addStmt(STMT_IF);
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_PRINT);
-		PKB::getInstance().addStmt(STMT_CALL);
-		PKB::getInstance().addStmt(STMT_ASSIGN);
-		PKB::getInstance().addStmt(STMT_ASSIGN);
+		mock_pkb.addStmt(STMT_WHILE);
+		mock_pkb.addStmt(STMT_IF);
+		mock_pkb.addStmt(STMT_READ);
+		mock_pkb.addStmt(STMT_PRINT);
+		mock_pkb.addStmt(STMT_CALL);
+		mock_pkb.addStmt(STMT_ASSIGN);
+		mock_pkb.addStmt(STMT_ASSIGN);
 
 		EXPECT_FALSE(pkb.isStmt(0));
 		EXPECT_TRUE(pkb.isStmt(1));
@@ -237,10 +439,10 @@ namespace UnitTesting {
 		constant c = 3;
 		constant d = 4;
 		constant e = 5;
-		PKB::getInstance().addConstant(a);
-		PKB::getInstance().addConstant(b);
-		PKB::getInstance().addConstant(c);
-		PKB::getInstance().addConstant(d);
+		mock_pkb.addConstant(a);
+		mock_pkb.addConstant(b);
+		mock_pkb.addConstant(c);
+		mock_pkb.addConstant(d);
 		EXPECT_TRUE(pkb.isConstant(a));
 		EXPECT_TRUE(pkb.isConstant(b));
 		EXPECT_TRUE(pkb.isConstant(c));
@@ -254,10 +456,10 @@ namespace UnitTesting {
 		proc_name c = "c";
 		proc_name d = "d";
 		proc_name e = "e";
-		PKB::getInstance().addProcedure(a);
-		PKB::getInstance().addProcedure(b);
-		PKB::getInstance().addProcedure(c);
-		PKB::getInstance().addProcedure(d);
+		mock_pkb.addProcedure(a);
+		mock_pkb.addProcedure(b);
+		mock_pkb.addProcedure(c);
+		mock_pkb.addProcedure(d);
 		EXPECT_TRUE(pkb.isProcedure(a));
 		EXPECT_TRUE(pkb.isProcedure(b));
 		EXPECT_TRUE(pkb.isProcedure(c));
@@ -266,13 +468,13 @@ namespace UnitTesting {
 	}
 
 	TEST_F(PKBAdapterTest, isAssigns) {
-		PKB::getInstance().addStmt(STMT_WHILE);
-		PKB::getInstance().addStmt(STMT_IF);
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_PRINT);
-		PKB::getInstance().addStmt(STMT_CALL);
-		PKB::getInstance().addStmt(STMT_ASSIGN);
-		PKB::getInstance().addStmt(STMT_ASSIGN);
+		mock_pkb.addStmt(STMT_WHILE);
+		mock_pkb.addStmt(STMT_IF);
+		mock_pkb.addStmt(STMT_READ);
+		mock_pkb.addStmt(STMT_PRINT);
+		mock_pkb.addStmt(STMT_CALL);
+		mock_pkb.addStmt(STMT_ASSIGN);
+		mock_pkb.addStmt(STMT_ASSIGN);
 
 		EXPECT_FALSE(pkb.isAssign(0));
 		EXPECT_FALSE(pkb.isAssign(1));
@@ -286,16 +488,16 @@ namespace UnitTesting {
 	}
 
 	TEST_F(PKBAdapterTest, isCalls) {
-		PKB::getInstance().addStmt(STMT_WHILE);
-		PKB::getInstance().addStmt(STMT_IF);
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_PRINT);
-		PKB::getInstance().addStmt(STMT_CALL);
-		PKB::getInstance().addStmt(STMT_CALL);
-		PKB::getInstance().addStmt(STMT_CALL);
-		PKB::getInstance().addStmt(STMT_ASSIGN);
-		PKB::getInstance().addStmt(STMT_ASSIGN);
-		PKB::getInstance().addStmt(STMT_CALL);
+		mock_pkb.addStmt(STMT_WHILE);
+		mock_pkb.addStmt(STMT_IF);
+		mock_pkb.addStmt(STMT_READ);
+		mock_pkb.addStmt(STMT_PRINT);
+		mock_pkb.addStmt(STMT_CALL);
+		mock_pkb.addStmt(STMT_CALL);
+		mock_pkb.addStmt(STMT_CALL);
+		mock_pkb.addStmt(STMT_ASSIGN);
+		mock_pkb.addStmt(STMT_ASSIGN);
+		mock_pkb.addStmt(STMT_CALL);
 
 		EXPECT_FALSE(pkb.isCall(0));
 		EXPECT_FALSE(pkb.isCall(1));
@@ -312,13 +514,13 @@ namespace UnitTesting {
 	}
 
 	TEST_F(PKBAdapterTest, isReads) {
-		PKB::getInstance().addStmt(STMT_WHILE);
-		PKB::getInstance().addStmt(STMT_IF);
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_PRINT);
-		PKB::getInstance().addStmt(STMT_CALL);
-		PKB::getInstance().addStmt(STMT_ASSIGN);
-		PKB::getInstance().addStmt(STMT_ASSIGN);
+		mock_pkb.addStmt(STMT_WHILE);
+		mock_pkb.addStmt(STMT_IF);
+		mock_pkb.addStmt(STMT_READ);
+		mock_pkb.addStmt(STMT_PRINT);
+		mock_pkb.addStmt(STMT_CALL);
+		mock_pkb.addStmt(STMT_ASSIGN);
+		mock_pkb.addStmt(STMT_ASSIGN);
 
 		EXPECT_FALSE(pkb.isRead(0));
 		EXPECT_FALSE(pkb.isRead(1));
@@ -332,13 +534,13 @@ namespace UnitTesting {
 	}
 
 	TEST_F(PKBAdapterTest, isWhiles) {
-		PKB::getInstance().addStmt(STMT_WHILE);
-		PKB::getInstance().addStmt(STMT_IF);
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_PRINT);
-		PKB::getInstance().addStmt(STMT_CALL);
-		PKB::getInstance().addStmt(STMT_ASSIGN);
-		PKB::getInstance().addStmt(STMT_ASSIGN);
+		mock_pkb.addStmt(STMT_WHILE);
+		mock_pkb.addStmt(STMT_IF);
+		mock_pkb.addStmt(STMT_READ);
+		mock_pkb.addStmt(STMT_PRINT);
+		mock_pkb.addStmt(STMT_CALL);
+		mock_pkb.addStmt(STMT_ASSIGN);
+		mock_pkb.addStmt(STMT_ASSIGN);
 
 		EXPECT_FALSE(pkb.isWhile(0));
 		EXPECT_TRUE(pkb.isWhile(1));
@@ -352,13 +554,13 @@ namespace UnitTesting {
 	}
 
 	TEST_F(PKBAdapterTest, isIf) {
-		PKB::getInstance().addStmt(STMT_WHILE);
-		PKB::getInstance().addStmt(STMT_IF);
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_PRINT);
-		PKB::getInstance().addStmt(STMT_CALL);
-		PKB::getInstance().addStmt(STMT_ASSIGN);
-		PKB::getInstance().addStmt(STMT_ASSIGN);
+		mock_pkb.addStmt(STMT_WHILE);
+		mock_pkb.addStmt(STMT_IF);
+		mock_pkb.addStmt(STMT_READ);
+		mock_pkb.addStmt(STMT_PRINT);
+		mock_pkb.addStmt(STMT_CALL);
+		mock_pkb.addStmt(STMT_ASSIGN);
+		mock_pkb.addStmt(STMT_ASSIGN);
 
 		EXPECT_FALSE(pkb.isIf(0));
 		EXPECT_FALSE(pkb.isIf(1));
@@ -381,11 +583,11 @@ namespace UnitTesting {
 		std::vector<pattern_info> a;
 
 		for (unsigned int i = 0; i < s.size(); i++) {
-			PKB::getInstance().addStmt(STMT_ASSIGN);
-			PKB::getInstance().addVariable(v[i]);
+			mock_pkb.addStmt(STMT_ASSIGN);
+			mock_pkb.addVariable(v[i]);
 			a.push_back(std::make_pair(s[i], v[i]));
-			PKB::getInstance().addModifiesS(s[i], v[i]);
-			PKB::getInstance().addExprTree(s[i], expr_parser.parse(e[i]));
+			mock_pkb.addModifiesS(s[i], v[i]);
+			mock_pkb.addExprTree(s[i], expr_parser.parse(e[i]));
 		}
 
 		EXPECT_EQ(pkb.getAssignInfo(), a);
@@ -444,11 +646,11 @@ namespace UnitTesting {
 		std::vector<stmt_index> a;
 
 		for (unsigned int i = 0; i < s.size(); i++) {
-			PKB::getInstance().addStmt(STMT_ASSIGN);
-			PKB::getInstance().addVariable(v[i]);
+			mock_pkb.addStmt(STMT_ASSIGN);
+			mock_pkb.addVariable(v[i]);
 			a.push_back(s[i]);
-			PKB::getInstance().addModifiesS(s[i], v[i]);
-			PKB::getInstance().addExprTree(s[i], expr_parser.parse(e[i]));
+			mock_pkb.addModifiesS(s[i], v[i]);
+			mock_pkb.addExprTree(s[i], expr_parser.parse(e[i]));
 		}
 
 		EXPECT_EQ(pkb.getAssignInfoFiltered(), a);
@@ -537,24 +739,24 @@ namespace UnitTesting {
 		EXPECT_EQ(pkb.getAssignInfoFiltered("z", expr_parser.parse("c"), true), result);
 	}
 	TEST_F(PKBAdapterTest, isFollowEmpty) {
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_PRINT);
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_IF);
+		mock_pkb.addStmt(STMT_READ);
+		mock_pkb.addStmt(STMT_PRINT);
+		mock_pkb.addStmt(STMT_READ);
+		mock_pkb.addStmt(STMT_IF);
 		EXPECT_TRUE(pkb.isFollowEmpty());
-		PKB::getInstance().addFollows(1, 2);
+		mock_pkb.addFollows(1, 2);
 		EXPECT_FALSE(pkb.isFollowEmpty());
-		PKB::getInstance().addFollows(2, 3);
+		mock_pkb.addFollows(2, 3);
 		EXPECT_FALSE(pkb.isFollowEmpty());
 	}
 
 	TEST_F(PKBAdapterTest, isFollow) {
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_PRINT);
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_IF);
-		PKB::getInstance().addFollows(1, 2);
-		PKB::getInstance().addFollows(2, 3);
+		mock_pkb.addStmt(STMT_READ);
+		mock_pkb.addStmt(STMT_PRINT);
+		mock_pkb.addStmt(STMT_READ);
+		mock_pkb.addStmt(STMT_IF);
+		mock_pkb.addFollows(1, 2);
+		mock_pkb.addFollows(2, 3);
 		EXPECT_TRUE(pkb.isFollow(1, 2));
 		EXPECT_TRUE(pkb.isFollow(2, 3));
 		EXPECT_FALSE(pkb.isFollow(1, 1));
@@ -574,12 +776,12 @@ namespace UnitTesting {
 	}
 
 	TEST_F(PKBAdapterTest, isFollowed) {
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_PRINT);
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_IF);
-		PKB::getInstance().addFollows(1, 2);
-		PKB::getInstance().addFollows(2, 3);
+		mock_pkb.addStmt(STMT_READ);
+		mock_pkb.addStmt(STMT_PRINT);
+		mock_pkb.addStmt(STMT_READ);
+		mock_pkb.addStmt(STMT_IF);
+		mock_pkb.addFollows(1, 2);
+		mock_pkb.addFollows(2, 3);
 		EXPECT_TRUE(pkb.isFollowed(1));
 		EXPECT_TRUE(pkb.isFollowed(2));
 		EXPECT_FALSE(pkb.isFollowed(3));
@@ -587,12 +789,12 @@ namespace UnitTesting {
 	}
 
 	TEST_F(PKBAdapterTest, isFollowing) {
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_PRINT);
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_IF);
-		PKB::getInstance().addFollows(1, 2);
-		PKB::getInstance().addFollows(2, 3);
+		mock_pkb.addStmt(STMT_READ);
+		mock_pkb.addStmt(STMT_PRINT);
+		mock_pkb.addStmt(STMT_READ);
+		mock_pkb.addStmt(STMT_IF);
+		mock_pkb.addFollows(1, 2);
+		mock_pkb.addFollows(2, 3);
 		EXPECT_FALSE(pkb.isFollowing(1));
 		EXPECT_TRUE(pkb.isFollowing(2));
 		EXPECT_TRUE(pkb.isFollowing(3));
@@ -605,12 +807,12 @@ namespace UnitTesting {
 		StmtInfo p3{ 3, STMT_READ };
 		StmtInfo p4{ 4, STMT_IF };
 
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_PRINT);
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_IF);
-		PKB::getInstance().addFollows(1, 2);
-		PKB::getInstance().addFollows(2, 3);
+		mock_pkb.addStmt(STMT_READ);
+		mock_pkb.addStmt(STMT_PRINT);
+		mock_pkb.addStmt(STMT_READ);
+		mock_pkb.addStmt(STMT_IF);
+		mock_pkb.addFollows(1, 2);
+		mock_pkb.addFollows(2, 3);
 
 		std::vector<StmtInfo> v1 = { p1, p2 };
 		std::vector<StmtInfo> v2 = pkb.getFollowed();
@@ -641,12 +843,12 @@ namespace UnitTesting {
 		StmtInfo p3{ 3, STMT_READ };
 		StmtInfo p4{ 4, STMT_IF };
 
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_PRINT);
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_IF);
-		PKB::getInstance().addFollows(1, 2);
-		PKB::getInstance().addFollows(2, 3);
+		mock_pkb.addStmt(STMT_READ);
+		mock_pkb.addStmt(STMT_PRINT);
+		mock_pkb.addStmt(STMT_READ);
+		mock_pkb.addStmt(STMT_IF);
+		mock_pkb.addFollows(1, 2);
+		mock_pkb.addFollows(2, 3);
 
 		std::vector<StmtInfo> v1 = { p2, p3 };
 		std::vector<StmtInfo> v2 = pkb.getFollowing();
@@ -676,39 +878,36 @@ namespace UnitTesting {
 		StmtInfo p3{ 3, STMT_READ };
 		StmtInfo p4{ 4, STMT_IF };
 
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_PRINT);
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_IF);
-		PKB::getInstance().addFollows(1, 2);
-		PKB::getInstance().addFollows(2, 3);
+		mock_pkb.addStmt(STMT_READ);
+		mock_pkb.addStmt(STMT_PRINT);
+		mock_pkb.addStmt(STMT_READ);
+		mock_pkb.addStmt(STMT_IF);
+		mock_pkb.addFollows(1, 2);
+		mock_pkb.addFollows(2, 3);
 		std::vector<std::pair<StmtInfo, StmtInfo>> v = { {p1, p2}, {p2, p3} };
 		EXPECT_EQ(pkb.getFollows(), v);
 	}
 
 	TEST_F(PKBAdapterTest, isFollowTEmpty) {
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_PRINT);
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_IF);
-		PKB::getInstance().generateFollowsT();
+		mock_pkb.addStmt(STMT_READ);
+		mock_pkb.addStmt(STMT_PRINT);
+		mock_pkb.addStmt(STMT_READ);
+		mock_pkb.addStmt(STMT_IF);
 		EXPECT_TRUE(pkb.isFollowTEmpty());
-		PKB::getInstance().addFollows(1, 2);
-		PKB::getInstance().generateFollowsT();
+		mock_pkb.addFollowsT(1, 2);
 		EXPECT_FALSE(pkb.isFollowTEmpty());
-		PKB::getInstance().addFollows(2, 3);
-		PKB::getInstance().generateFollowsT();
+		mock_pkb.addFollowsT(2, 3);
 		EXPECT_FALSE(pkb.isFollowTEmpty());
 	}
 
 	TEST_F(PKBAdapterTest, isFollowT) {
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_PRINT);
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_IF);
-		PKB::getInstance().addFollows(1, 2);
-		PKB::getInstance().addFollows(2, 3);
-		PKB::getInstance().generateFollowsT();
+		mock_pkb.addStmt(STMT_READ);
+		mock_pkb.addStmt(STMT_PRINT);
+		mock_pkb.addStmt(STMT_READ);
+		mock_pkb.addStmt(STMT_IF);
+		mock_pkb.addFollowsT(1, 2);
+		mock_pkb.addFollowsT(1, 3);
+		mock_pkb.addFollowsT(2, 3);
 
 		EXPECT_TRUE(pkb.isFollowT(1, 2));
 		EXPECT_TRUE(pkb.isFollowT(1, 3));
@@ -729,13 +928,15 @@ namespace UnitTesting {
 	}
 
 	TEST_F(PKBAdapterTest, isFollowedT) {
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_PRINT);
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_IF);
-		PKB::getInstance().addFollows(1, 2);
-		PKB::getInstance().addFollows(2, 3);
-		PKB::getInstance().generateFollowsT();
+		mock_pkb.addStmt(STMT_READ);
+		mock_pkb.addStmt(STMT_PRINT);
+		mock_pkb.addStmt(STMT_READ);
+		mock_pkb.addStmt(STMT_IF);
+		mock_pkb.addFollows(1, 2);
+		mock_pkb.addFollows(2, 3);
+		mock_pkb.addFollowsT(1, 2);
+		mock_pkb.addFollowsT(1, 3);
+		mock_pkb.addFollowsT(2, 3);
 
 		EXPECT_TRUE(pkb.isFollowedT(1));
 		EXPECT_TRUE(pkb.isFollowedT(2));
@@ -743,13 +944,16 @@ namespace UnitTesting {
 		EXPECT_FALSE(pkb.isFollowedT(4));
 	}
 	TEST_F(PKBAdapterTest, isFollowingT) {
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_PRINT);
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_IF);
-		PKB::getInstance().addFollows(1, 2);
-		PKB::getInstance().addFollows(2, 3);
-		PKB::getInstance().generateFollowsT();
+		mock_pkb.addStmt(STMT_READ);
+		mock_pkb.addStmt(STMT_PRINT);
+		mock_pkb.addStmt(STMT_READ);
+		mock_pkb.addStmt(STMT_IF);
+		mock_pkb.addFollows(1, 2);
+		mock_pkb.addFollows(2, 3);
+		mock_pkb.addFollowsT(1, 2);
+		mock_pkb.addFollowsT(1, 3);
+		mock_pkb.addFollowsT(2, 3);
+
 		EXPECT_FALSE(pkb.isFollowingT(1));
 		EXPECT_TRUE(pkb.isFollowingT(2));
 		EXPECT_TRUE(pkb.isFollowingT(3));
@@ -762,13 +966,15 @@ namespace UnitTesting {
 		StmtInfo p3{ 3, STMT_READ };
 		StmtInfo p4{ 4, STMT_IF };
 
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_PRINT);
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_IF);
-		PKB::getInstance().addFollows(1, 2);
-		PKB::getInstance().addFollows(2, 3);
-		PKB::getInstance().generateFollowsT();
+		mock_pkb.addStmt(STMT_READ);
+		mock_pkb.addStmt(STMT_PRINT);
+		mock_pkb.addStmt(STMT_READ);
+		mock_pkb.addStmt(STMT_IF);
+		mock_pkb.addFollows(1, 2);
+		mock_pkb.addFollows(2, 3);
+		mock_pkb.addFollowsT(1, 2);
+		mock_pkb.addFollowsT(1, 3);
+		mock_pkb.addFollowsT(2, 3);
 
 		std::vector<StmtInfo> v1 = { p1, p2 };
 		std::vector<StmtInfo> v2 = pkb.getFollowedT();
@@ -799,13 +1005,15 @@ namespace UnitTesting {
 		StmtInfo p3{ 3, STMT_READ };
 		StmtInfo p4{ 4, STMT_IF };
 
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_PRINT);
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_IF);
-		PKB::getInstance().addFollows(1, 2);
-		PKB::getInstance().addFollows(2, 3);
-		PKB::getInstance().generateFollowsT();
+		mock_pkb.addStmt(STMT_READ);
+		mock_pkb.addStmt(STMT_PRINT);
+		mock_pkb.addStmt(STMT_READ);
+		mock_pkb.addStmt(STMT_IF);
+		mock_pkb.addFollows(1, 2);
+		mock_pkb.addFollows(2, 3);
+		mock_pkb.addFollowsT(1, 2);
+		mock_pkb.addFollowsT(1, 3);
+		mock_pkb.addFollowsT(2, 3);
 
 		std::vector<StmtInfo> v1 = { p2, p3 };
 		std::vector<StmtInfo> v2 = pkb.getFollowingT();
@@ -835,13 +1043,16 @@ namespace UnitTesting {
 		StmtInfo p3{ 3, STMT_READ };
 		StmtInfo p4{ 4, STMT_IF };
 
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_PRINT);
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_IF);
-		PKB::getInstance().addFollows(1, 2);
-		PKB::getInstance().addFollows(2, 3);
-		PKB::getInstance().generateFollowsT();
+		mock_pkb.addStmt(STMT_READ);
+		mock_pkb.addStmt(STMT_PRINT);
+		mock_pkb.addStmt(STMT_READ);
+		mock_pkb.addStmt(STMT_IF);
+		mock_pkb.addFollows(1, 2);
+		mock_pkb.addFollows(2, 3);
+		mock_pkb.addFollowsT(1, 2);
+		mock_pkb.addFollowsT(1, 3);
+		mock_pkb.addFollowsT(2, 3);
+
 		std::vector<std::pair<StmtInfo, StmtInfo>> v1 = { {p1, p2}, {p1, p3}, {p2, p3} };
 		std::vector<std::pair<StmtInfo, StmtInfo>> v2 = pkb.getFollowsT();
 		std::sort(v2.begin(), v2.end());
@@ -849,26 +1060,26 @@ namespace UnitTesting {
 	}
 
 	TEST_F(PKBAdapterTest, isParentEmpty) {
-		PKB::getInstance().addStmt(STMT_IF);
-		PKB::getInstance().addStmt(STMT_WHILE);
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_IF);
+		mock_pkb.addStmt(STMT_IF);
+		mock_pkb.addStmt(STMT_WHILE);
+		mock_pkb.addStmt(STMT_READ);
+		mock_pkb.addStmt(STMT_IF);
 		EXPECT_TRUE(pkb.isParentEmpty());
-		PKB::getInstance().addParent(1, 2);
+		mock_pkb.addParent(1, 2);
 		EXPECT_FALSE(pkb.isParentEmpty());
-		PKB::getInstance().addParent(2, 3);
+		mock_pkb.addParent(2, 3);
 		EXPECT_FALSE(pkb.isParentEmpty());
 	}
 	TEST_F(PKBAdapterTest, isParent) {
-		PKB::getInstance().addStmt(STMT_IF);
-		PKB::getInstance().addStmt(STMT_WHILE);
-		PKB::getInstance().addStmt(STMT_IF);
-		PKB::getInstance().addStmt(STMT_IF);
-		PKB::getInstance().addStmt(STMT_WHILE);
-		PKB::getInstance().addParent(1, 2);
-		PKB::getInstance().addParent(1, 3);
-		PKB::getInstance().addParent(2, 3);
-		PKB::getInstance().addParent(3, 4);
+		mock_pkb.addStmt(STMT_IF);
+		mock_pkb.addStmt(STMT_WHILE);
+		mock_pkb.addStmt(STMT_IF);
+		mock_pkb.addStmt(STMT_IF);
+		mock_pkb.addStmt(STMT_WHILE);
+		mock_pkb.addParent(1, 2);
+		mock_pkb.addParent(1, 3);
+		mock_pkb.addParent(2, 3);
+		mock_pkb.addParent(3, 4);
 		EXPECT_TRUE(pkb.isParent(1, 2));
 		EXPECT_TRUE(pkb.isParent(1, 3));
 		EXPECT_TRUE(pkb.isParent(2, 3));
@@ -903,15 +1114,15 @@ namespace UnitTesting {
 	}
 
 	TEST_F(PKBAdapterTest, isChild) {
-		PKB::getInstance().addStmt(STMT_IF);
-		PKB::getInstance().addStmt(STMT_WHILE);
-		PKB::getInstance().addStmt(STMT_IF);
-		PKB::getInstance().addStmt(STMT_IF);
-		PKB::getInstance().addStmt(STMT_WHILE);
-		PKB::getInstance().addParent(1, 2);
-		PKB::getInstance().addParent(1, 3);
-		PKB::getInstance().addParent(2, 3);
-		PKB::getInstance().addParent(3, 4);
+		mock_pkb.addStmt(STMT_IF);
+		mock_pkb.addStmt(STMT_WHILE);
+		mock_pkb.addStmt(STMT_IF);
+		mock_pkb.addStmt(STMT_IF);
+		mock_pkb.addStmt(STMT_WHILE);
+		mock_pkb.addParent(1, 2);
+		mock_pkb.addParent(1, 3);
+		mock_pkb.addParent(2, 3);
+		mock_pkb.addParent(3, 4);
 		EXPECT_FALSE(pkb.isChild(1));
 		EXPECT_TRUE(pkb.isChild(2));
 		EXPECT_TRUE(pkb.isChild(3));
@@ -926,15 +1137,15 @@ namespace UnitTesting {
 		StmtInfo p4{ 4, STMT_IF };
 		StmtInfo p5{ 5, STMT_WHILE };
 
-		PKB::getInstance().addStmt(STMT_IF);
-		PKB::getInstance().addStmt(STMT_WHILE);
-		PKB::getInstance().addStmt(STMT_IF);
-		PKB::getInstance().addStmt(STMT_IF);
-		PKB::getInstance().addStmt(STMT_WHILE);
-		PKB::getInstance().addParent(1, 2);
-		PKB::getInstance().addParent(1, 3);
-		PKB::getInstance().addParent(2, 3);
-		PKB::getInstance().addParent(3, 4);
+		mock_pkb.addStmt(STMT_IF);
+		mock_pkb.addStmt(STMT_WHILE);
+		mock_pkb.addStmt(STMT_IF);
+		mock_pkb.addStmt(STMT_IF);
+		mock_pkb.addStmt(STMT_WHILE);
+		mock_pkb.addParent(1, 2);
+		mock_pkb.addParent(1, 3);
+		mock_pkb.addParent(2, 3);
+		mock_pkb.addParent(3, 4);
 
 		std::vector<StmtInfo> v1 = { p2, p3, p4 };
 		std::vector<StmtInfo> v2 = pkb.getChild();
@@ -970,15 +1181,15 @@ namespace UnitTesting {
 		StmtInfo p4{ 4, STMT_IF };
 		StmtInfo p5{ 5, STMT_WHILE };
 
-		PKB::getInstance().addStmt(STMT_IF);
-		PKB::getInstance().addStmt(STMT_WHILE);
-		PKB::getInstance().addStmt(STMT_IF);
-		PKB::getInstance().addStmt(STMT_IF);
-		PKB::getInstance().addStmt(STMT_WHILE);
-		PKB::getInstance().addParent(1, 2);
-		PKB::getInstance().addParent(1, 3);
-		PKB::getInstance().addParent(2, 3);
-		PKB::getInstance().addParent(3, 4);
+		mock_pkb.addStmt(STMT_IF);
+		mock_pkb.addStmt(STMT_WHILE);
+		mock_pkb.addStmt(STMT_IF);
+		mock_pkb.addStmt(STMT_IF);
+		mock_pkb.addStmt(STMT_WHILE);
+		mock_pkb.addParent(1, 2);
+		mock_pkb.addParent(1, 3);
+		mock_pkb.addParent(2, 3);
+		mock_pkb.addParent(3, 4);
 
 		std::vector<StmtInfo> v1 = { p1, p2, p3 };
 		std::vector<StmtInfo> v2 = pkb.getParent();
@@ -1014,31 +1225,36 @@ namespace UnitTesting {
 		StmtInfo p4{ 4, STMT_IF };
 		StmtInfo p5{ 5, STMT_WHILE };
 
-		PKB::getInstance().addStmt(STMT_IF);
-		PKB::getInstance().addStmt(STMT_WHILE);
-		PKB::getInstance().addStmt(STMT_IF);
-		PKB::getInstance().addStmt(STMT_IF);
-		PKB::getInstance().addStmt(STMT_WHILE);
-		PKB::getInstance().addParent(1, 2);
-		PKB::getInstance().addParent(1, 3);
-		PKB::getInstance().addParent(2, 3);
-		PKB::getInstance().addParent(3, 4);
+		mock_pkb.addStmt(STMT_IF);
+		mock_pkb.addStmt(STMT_WHILE);
+		mock_pkb.addStmt(STMT_IF);
+		mock_pkb.addStmt(STMT_IF);
+		mock_pkb.addStmt(STMT_WHILE);
+		mock_pkb.addParent(1, 2);
+		mock_pkb.addParent(1, 3);
+		mock_pkb.addParent(2, 3);
+		mock_pkb.addParent(3, 4);
 
 		std::vector<std::pair<StmtInfo, StmtInfo>> v = { {p1, p2}, {p1, p3}, {p2, p3}, {p3, p4} };
 		EXPECT_EQ(pkb.getAllParentRelation(), v);
 	}
 
 	TEST_F(PKBAdapterTest, isParentT) {
-		PKB::getInstance().addStmt(STMT_IF);
-		PKB::getInstance().addStmt(STMT_WHILE);
-		PKB::getInstance().addStmt(STMT_IF);
-		PKB::getInstance().addStmt(STMT_IF);
-		PKB::getInstance().addStmt(STMT_WHILE);
-		PKB::getInstance().addParent(1, 2);
-		PKB::getInstance().addParent(1, 3);
-		PKB::getInstance().addParent(2, 3);
-		PKB::getInstance().addParent(3, 4);
-		PKB::getInstance().generateParentT();
+		mock_pkb.addStmt(STMT_IF);
+		mock_pkb.addStmt(STMT_WHILE);
+		mock_pkb.addStmt(STMT_IF);
+		mock_pkb.addStmt(STMT_IF);
+		mock_pkb.addStmt(STMT_WHILE);
+		mock_pkb.addParent(1, 2);
+		mock_pkb.addParent(1, 3);
+		mock_pkb.addParent(2, 3);
+		mock_pkb.addParent(3, 4);
+		mock_pkb.addParentT(1, 2);
+		mock_pkb.addParentT(1, 3);
+		mock_pkb.addParentT(1, 4);
+		mock_pkb.addParentT(2, 3);
+		mock_pkb.addParentT(2, 4);
+		mock_pkb.addParentT(3, 4);
 
 		EXPECT_TRUE(pkb.isParentT(1, 2));
 		EXPECT_TRUE(pkb.isParentT(1, 3));
@@ -1074,16 +1290,21 @@ namespace UnitTesting {
 	}
 
 	TEST_F(PKBAdapterTest, isChildT) {
-		PKB::getInstance().addStmt(STMT_IF);
-		PKB::getInstance().addStmt(STMT_WHILE);
-		PKB::getInstance().addStmt(STMT_IF);
-		PKB::getInstance().addStmt(STMT_IF);
-		PKB::getInstance().addStmt(STMT_WHILE);
-		PKB::getInstance().addParent(1, 2);
-		PKB::getInstance().addParent(1, 3);
-		PKB::getInstance().addParent(2, 3);
-		PKB::getInstance().addParent(3, 4);
-		PKB::getInstance().generateParentT();
+		mock_pkb.addStmt(STMT_IF);
+		mock_pkb.addStmt(STMT_WHILE);
+		mock_pkb.addStmt(STMT_IF);
+		mock_pkb.addStmt(STMT_IF);
+		mock_pkb.addStmt(STMT_WHILE);
+		mock_pkb.addParent(1, 2);
+		mock_pkb.addParent(1, 3);
+		mock_pkb.addParent(2, 3);
+		mock_pkb.addParent(3, 4);
+		mock_pkb.addParentT(1, 2);
+		mock_pkb.addParentT(1, 3);
+		mock_pkb.addParentT(1, 4);
+		mock_pkb.addParentT(2, 3);
+		mock_pkb.addParentT(2, 4);
+		mock_pkb.addParentT(3, 4);
 
 		EXPECT_FALSE(pkb.isChildT(1));
 		EXPECT_TRUE(pkb.isChildT(2));
@@ -1099,16 +1320,21 @@ namespace UnitTesting {
 		StmtInfo p4{ 4, STMT_IF };
 		StmtInfo p5{ 5, STMT_WHILE };
 
-		PKB::getInstance().addStmt(STMT_IF);
-		PKB::getInstance().addStmt(STMT_WHILE);
-		PKB::getInstance().addStmt(STMT_IF);
-		PKB::getInstance().addStmt(STMT_IF);
-		PKB::getInstance().addStmt(STMT_WHILE);
-		PKB::getInstance().addParent(1, 2);
-		PKB::getInstance().addParent(1, 3);
-		PKB::getInstance().addParent(2, 3);
-		PKB::getInstance().addParent(3, 4);
-		PKB::getInstance().generateParentT();
+		mock_pkb.addStmt(STMT_IF);
+		mock_pkb.addStmt(STMT_WHILE);
+		mock_pkb.addStmt(STMT_IF);
+		mock_pkb.addStmt(STMT_IF);
+		mock_pkb.addStmt(STMT_WHILE);
+		mock_pkb.addParent(1, 2);
+		mock_pkb.addParent(1, 3);
+		mock_pkb.addParent(2, 3);
+		mock_pkb.addParent(3, 4);
+		mock_pkb.addParentT(1, 2);
+		mock_pkb.addParentT(1, 3);
+		mock_pkb.addParentT(1, 4);
+		mock_pkb.addParentT(2, 3);
+		mock_pkb.addParentT(2, 4);
+		mock_pkb.addParentT(3, 4);
 
 		std::vector<StmtInfo> v1 = { p2, p3, p4 };
 		std::vector<StmtInfo> v2 = pkb.getChildT();
@@ -1144,16 +1370,21 @@ namespace UnitTesting {
 		StmtInfo p4{ 4, STMT_IF };
 		StmtInfo p5{ 5, STMT_WHILE };
 
-		PKB::getInstance().addStmt(STMT_IF);
-		PKB::getInstance().addStmt(STMT_WHILE);
-		PKB::getInstance().addStmt(STMT_IF);
-		PKB::getInstance().addStmt(STMT_IF);
-		PKB::getInstance().addStmt(STMT_WHILE);
-		PKB::getInstance().addParent(1, 2);
-		PKB::getInstance().addParent(1, 3);
-		PKB::getInstance().addParent(2, 3);
-		PKB::getInstance().addParent(3, 4);
-		PKB::getInstance().generateParentT();
+		mock_pkb.addStmt(STMT_IF);
+		mock_pkb.addStmt(STMT_WHILE);
+		mock_pkb.addStmt(STMT_IF);
+		mock_pkb.addStmt(STMT_IF);
+		mock_pkb.addStmt(STMT_WHILE);
+		mock_pkb.addParent(1, 2);
+		mock_pkb.addParent(1, 3);
+		mock_pkb.addParent(2, 3);
+		mock_pkb.addParent(3, 4);
+		mock_pkb.addParentT(1, 2);
+		mock_pkb.addParentT(1, 3);
+		mock_pkb.addParentT(1, 4);
+		mock_pkb.addParentT(2, 3);
+		mock_pkb.addParentT(2, 4);
+		mock_pkb.addParentT(3, 4);
 
 		std::vector<StmtInfo> v1 = { p1, p2, p3 };
 		std::vector<StmtInfo> v2 = pkb.getParentT();
@@ -1189,16 +1420,21 @@ namespace UnitTesting {
 		StmtInfo p4{ 4, STMT_IF };
 		StmtInfo p5{ 5, STMT_WHILE };
 
-		PKB::getInstance().addStmt(STMT_IF);
-		PKB::getInstance().addStmt(STMT_WHILE);
-		PKB::getInstance().addStmt(STMT_IF);
-		PKB::getInstance().addStmt(STMT_IF);
-		PKB::getInstance().addStmt(STMT_WHILE);
-		PKB::getInstance().addParent(1, 2);
-		PKB::getInstance().addParent(1, 3);
-		PKB::getInstance().addParent(2, 3);
-		PKB::getInstance().addParent(3, 4);
-		PKB::getInstance().generateParentT();
+		mock_pkb.addStmt(STMT_IF);
+		mock_pkb.addStmt(STMT_WHILE);
+		mock_pkb.addStmt(STMT_IF);
+		mock_pkb.addStmt(STMT_IF);
+		mock_pkb.addStmt(STMT_WHILE);
+		mock_pkb.addParent(1, 2);
+		mock_pkb.addParent(1, 3);
+		mock_pkb.addParent(2, 3);
+		mock_pkb.addParent(3, 4);
+		mock_pkb.addParentT(1, 2);
+		mock_pkb.addParentT(1, 3);
+		mock_pkb.addParentT(1, 4);
+		mock_pkb.addParentT(2, 3);
+		mock_pkb.addParentT(2, 4);
+		mock_pkb.addParentT(3, 4);
 
 		std::vector<std::pair<StmtInfo, StmtInfo>> v = { {p1, p2}, {p1, p3}, {p1, p4}, {p2, p3}, {p2, p4}, {p3, p4} };
 		EXPECT_EQ(pkb.getAllParentTRelation(), v);
@@ -1212,14 +1448,14 @@ namespace UnitTesting {
 		var_name y = "y";
 		var_name z = "z";
 
-		PKB::getInstance().addProcedure(main1);
-		PKB::getInstance().addProcedure(main2);
-		PKB::getInstance().addProcedure(sub1);
-		PKB::getInstance().addProcedure(sub2);
-		PKB::getInstance().addVariable(x);
-		PKB::getInstance().addModifiesP(main1, x);
-		PKB::getInstance().addVariable(y);
-		PKB::getInstance().addModifiesP(main2, y);
+		mock_pkb.addProcedure(main1);
+		mock_pkb.addProcedure(main2);
+		mock_pkb.addProcedure(sub1);
+		mock_pkb.addProcedure(sub2);
+		mock_pkb.addVariable(x);
+		mock_pkb.addModifiesP(main1, x);
+		mock_pkb.addVariable(y);
+		mock_pkb.addModifiesP(main2, y);
 
 		EXPECT_TRUE(pkb.isModifiesP(main1, x));
 		EXPECT_FALSE(pkb.isModifiesP(sub1, x));
@@ -1244,14 +1480,14 @@ namespace UnitTesting {
 		var_name y = "y";
 		var_name z = "z";
 
-		PKB::getInstance().addProcedure(main1);
-		PKB::getInstance().addProcedure(main2);
-		PKB::getInstance().addProcedure(sub1);
-		PKB::getInstance().addProcedure(sub2);
-		PKB::getInstance().addVariable(x);
-		PKB::getInstance().addModifiesP(main1, x);
-		PKB::getInstance().addVariable(y);
-		PKB::getInstance().addModifiesP(main2, y);
+		mock_pkb.addProcedure(main1);
+		mock_pkb.addProcedure(main2);
+		mock_pkb.addProcedure(sub1);
+		mock_pkb.addProcedure(sub2);
+		mock_pkb.addVariable(x);
+		mock_pkb.addModifiesP(main1, x);
+		mock_pkb.addVariable(y);
+		mock_pkb.addModifiesP(main2, y);
 
 		std::vector<std::pair<proc_name, var_name>> v = { {main1, x}, {main2, y} };
 		EXPECT_EQ(pkb.getModifiesPRelation(), v);
@@ -1265,15 +1501,15 @@ namespace UnitTesting {
 		var_name y = "y";
 		var_name z = "z";
 
-		PKB::getInstance().addProcedure(main1);
-		PKB::getInstance().addProcedure(main2);
-		PKB::getInstance().addProcedure(sub1);
-		PKB::getInstance().addProcedure(sub2);
-		PKB::getInstance().addVariable(x);
-		PKB::getInstance().addModifiesP(main1, x);
-		PKB::getInstance().addVariable(y);
-		PKB::getInstance().addModifiesP(sub1, y);
-		PKB::getInstance().addModifiesP(main2, y);
+		mock_pkb.addProcedure(main1);
+		mock_pkb.addProcedure(main2);
+		mock_pkb.addProcedure(sub1);
+		mock_pkb.addProcedure(sub2);
+		mock_pkb.addVariable(x);
+		mock_pkb.addModifiesP(main1, x);
+		mock_pkb.addVariable(y);
+		mock_pkb.addModifiesP(sub1, y);
+		mock_pkb.addModifiesP(main2, y);
 
 		std::vector<proc_name> v1 = { main1, sub1, main2 };
 		std::vector<proc_name> v2 = pkb.getModifiesP();
@@ -1306,15 +1542,15 @@ namespace UnitTesting {
 		var_name y = "y";
 		var_name z = "z";
 
-		PKB::getInstance().addProcedure(main1);
-		PKB::getInstance().addProcedure(main2);
-		PKB::getInstance().addProcedure(sub1);
-		PKB::getInstance().addProcedure(sub2);
-		PKB::getInstance().addVariable(x);
-		PKB::getInstance().addModifiesP(main1, x);
-		PKB::getInstance().addVariable(y);
-		PKB::getInstance().addModifiesP(main2, x);
-		PKB::getInstance().addModifiesP(main2, y);
+		mock_pkb.addProcedure(main1);
+		mock_pkb.addProcedure(main2);
+		mock_pkb.addProcedure(sub1);
+		mock_pkb.addProcedure(sub2);
+		mock_pkb.addVariable(x);
+		mock_pkb.addModifiesP(main1, x);
+		mock_pkb.addVariable(y);
+		mock_pkb.addModifiesP(main2, x);
+		mock_pkb.addModifiesP(main2, y);
 
 		std::vector<var_name> v1 = { x };
 		std::vector<var_name> v2 = pkb.getModifiedP(main1);
@@ -1342,14 +1578,14 @@ namespace UnitTesting {
 		var_name y = "y";
 		var_name z = "z";
 
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_PRINT);
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_PRINT);
-		PKB::getInstance().addVariable(x);
-		PKB::getInstance().addModifiesS(1, x);
-		PKB::getInstance().addVariable(y);
-		PKB::getInstance().addModifiesS(3, y);
+		mock_pkb.addStmt(STMT_READ);
+		mock_pkb.addStmt(STMT_PRINT);
+		mock_pkb.addStmt(STMT_READ);
+		mock_pkb.addStmt(STMT_PRINT);
+		mock_pkb.addVariable(x);
+		mock_pkb.addModifiesS(1, x);
+		mock_pkb.addVariable(y);
+		mock_pkb.addModifiesS(3, y);
 
 		EXPECT_TRUE(pkb.isModifiesS(1, x));
 		EXPECT_FALSE(pkb.isModifiesS(2, x));
@@ -1374,14 +1610,14 @@ namespace UnitTesting {
 		var_name y = "y";
 		var_name z = "z";
 
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_PRINT);
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_PRINT);
-		PKB::getInstance().addVariable(x);
-		PKB::getInstance().addModifiesS(1, x);
-		PKB::getInstance().addVariable(y);
-		PKB::getInstance().addModifiesS(3, y);
+		mock_pkb.addStmt(STMT_READ);
+		mock_pkb.addStmt(STMT_PRINT);
+		mock_pkb.addStmt(STMT_READ);
+		mock_pkb.addStmt(STMT_PRINT);
+		mock_pkb.addVariable(x);
+		mock_pkb.addModifiesS(1, x);
+		mock_pkb.addVariable(y);
+		mock_pkb.addModifiesS(3, y);
 
 		std::vector<std::pair<StmtInfo, var_name>> v = { {p1, x}, {p3, y} };
 		EXPECT_EQ(pkb.getModifiesSRelation(), v);
@@ -1395,15 +1631,15 @@ namespace UnitTesting {
 		var_name y = "y";
 		var_name z = "z";
 
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_PRINT);
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_PRINT);
-		PKB::getInstance().addVariable(x);
-		PKB::getInstance().addModifiesS(1, x);
-		PKB::getInstance().addVariable(y);
-		PKB::getInstance().addModifiesS(2, y);
-		PKB::getInstance().addModifiesS(3, y);
+		mock_pkb.addStmt(STMT_READ);
+		mock_pkb.addStmt(STMT_PRINT);
+		mock_pkb.addStmt(STMT_READ);
+		mock_pkb.addStmt(STMT_PRINT);
+		mock_pkb.addVariable(x);
+		mock_pkb.addModifiesS(1, x);
+		mock_pkb.addVariable(y);
+		mock_pkb.addModifiesS(2, y);
+		mock_pkb.addModifiesS(3, y);
 
 		std::vector<StmtInfo> v1 = { p1, p2, p3 };
 		std::vector<StmtInfo> v2 = pkb.getModifiesS();
@@ -1435,15 +1671,15 @@ namespace UnitTesting {
 		var_name y = "y";
 		var_name z = "z";
 
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_PRINT);
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_PRINT);
-		PKB::getInstance().addVariable(x);
-		PKB::getInstance().addModifiesS(1, x);
-		PKB::getInstance().addVariable(y);
-		PKB::getInstance().addModifiesS(2, x);
-		PKB::getInstance().addModifiesS(2, y);
+		mock_pkb.addStmt(STMT_READ);
+		mock_pkb.addStmt(STMT_PRINT);
+		mock_pkb.addStmt(STMT_READ);
+		mock_pkb.addStmt(STMT_PRINT);
+		mock_pkb.addVariable(x);
+		mock_pkb.addModifiesS(1, x);
+		mock_pkb.addVariable(y);
+		mock_pkb.addModifiesS(2, x);
+		mock_pkb.addModifiesS(2, y);
 
 		std::vector<var_name> v1 = { x };
 		std::vector<var_name> v2 = pkb.getModifiedS(1);
@@ -1471,14 +1707,14 @@ namespace UnitTesting {
 		var_name y = "y";
 		var_name z = "z";
 
-		PKB::getInstance().addProcedure(main1);
-		PKB::getInstance().addProcedure(main2);
-		PKB::getInstance().addProcedure(sub1);
-		PKB::getInstance().addProcedure(sub2);
-		PKB::getInstance().addVariable(x);
-		PKB::getInstance().addUsesP(main1, x);
-		PKB::getInstance().addVariable(y);
-		PKB::getInstance().addUsesP(main2, y);
+		mock_pkb.addProcedure(main1);
+		mock_pkb.addProcedure(main2);
+		mock_pkb.addProcedure(sub1);
+		mock_pkb.addProcedure(sub2);
+		mock_pkb.addVariable(x);
+		mock_pkb.addUsesP(main1, x);
+		mock_pkb.addVariable(y);
+		mock_pkb.addUsesP(main2, y);
 
 		EXPECT_TRUE(pkb.isUsesP(main1, x));
 		EXPECT_FALSE(pkb.isUsesP(sub1, x));
@@ -1503,14 +1739,14 @@ namespace UnitTesting {
 		var_name y = "y";
 		var_name z = "z";
 
-		PKB::getInstance().addProcedure(main1);
-		PKB::getInstance().addProcedure(main2);
-		PKB::getInstance().addProcedure(sub1);
-		PKB::getInstance().addProcedure(sub2);
-		PKB::getInstance().addVariable(x);
-		PKB::getInstance().addUsesP(main1, x);
-		PKB::getInstance().addVariable(y);
-		PKB::getInstance().addUsesP(main2, y);
+		mock_pkb.addProcedure(main1);
+		mock_pkb.addProcedure(main2);
+		mock_pkb.addProcedure(sub1);
+		mock_pkb.addProcedure(sub2);
+		mock_pkb.addVariable(x);
+		mock_pkb.addUsesP(main1, x);
+		mock_pkb.addVariable(y);
+		mock_pkb.addUsesP(main2, y);
 
 		std::vector<std::pair<proc_name, var_name>> v = { {main1, x}, {main2, y} };
 		EXPECT_EQ(pkb.getUsesPRelation(), v);
@@ -1525,15 +1761,15 @@ namespace UnitTesting {
 		var_name y = "y";
 		var_name z = "z";
 
-		PKB::getInstance().addProcedure(main1);
-		PKB::getInstance().addProcedure(main2);
-		PKB::getInstance().addProcedure(sub1);
-		PKB::getInstance().addProcedure(sub2);
-		PKB::getInstance().addVariable(x);
-		PKB::getInstance().addUsesP(main1, x);
-		PKB::getInstance().addVariable(y);
-		PKB::getInstance().addUsesP(sub1, y);
-		PKB::getInstance().addUsesP(main2, y);
+		mock_pkb.addProcedure(main1);
+		mock_pkb.addProcedure(main2);
+		mock_pkb.addProcedure(sub1);
+		mock_pkb.addProcedure(sub2);
+		mock_pkb.addVariable(x);
+		mock_pkb.addUsesP(main1, x);
+		mock_pkb.addVariable(y);
+		mock_pkb.addUsesP(sub1, y);
+		mock_pkb.addUsesP(main2, y);
 
 		std::vector<proc_name> v1 = { main1, sub1, main2 };
 		std::vector<proc_name> v2 = pkb.getUsesP();
@@ -1566,15 +1802,15 @@ namespace UnitTesting {
 		var_name y = "y";
 		var_name z = "z";
 
-		PKB::getInstance().addProcedure(main1);
-		PKB::getInstance().addProcedure(main2);
-		PKB::getInstance().addProcedure(sub1);
-		PKB::getInstance().addProcedure(sub2);
-		PKB::getInstance().addVariable(x);
-		PKB::getInstance().addUsesP(main1, x);
-		PKB::getInstance().addVariable(y);
-		PKB::getInstance().addUsesP(main2, x);
-		PKB::getInstance().addUsesP(main2, y);
+		mock_pkb.addProcedure(main1);
+		mock_pkb.addProcedure(main2);
+		mock_pkb.addProcedure(sub1);
+		mock_pkb.addProcedure(sub2);
+		mock_pkb.addVariable(x);
+		mock_pkb.addUsesP(main1, x);
+		mock_pkb.addVariable(y);
+		mock_pkb.addUsesP(main2, x);
+		mock_pkb.addUsesP(main2, y);
 
 		std::vector<var_name> v1 = { x };
 		std::vector<var_name> v2 = pkb.getUsedP(main1);
@@ -1602,14 +1838,14 @@ namespace UnitTesting {
 		var_name y = "y";
 		var_name z = "z";
 
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_PRINT);
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_PRINT);
-		PKB::getInstance().addVariable(x);
-		PKB::getInstance().addUsesS(1, x);
-		PKB::getInstance().addVariable(y);
-		PKB::getInstance().addUsesS(3, y);
+		mock_pkb.addStmt(STMT_READ);
+		mock_pkb.addStmt(STMT_PRINT);
+		mock_pkb.addStmt(STMT_READ);
+		mock_pkb.addStmt(STMT_PRINT);
+		mock_pkb.addVariable(x);
+		mock_pkb.addUsesS(1, x);
+		mock_pkb.addVariable(y);
+		mock_pkb.addUsesS(3, y);
 
 		EXPECT_TRUE(pkb.isUsesS(1, x));
 		EXPECT_FALSE(pkb.isUsesS(2, x));
@@ -1635,14 +1871,14 @@ namespace UnitTesting {
 		var_name y = "y";
 		var_name z = "z";
 
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_PRINT);
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_PRINT);
-		PKB::getInstance().addVariable(x);
-		PKB::getInstance().addUsesS(1, x);
-		PKB::getInstance().addVariable(y);
-		PKB::getInstance().addUsesS(3, y);
+		mock_pkb.addStmt(STMT_READ);
+		mock_pkb.addStmt(STMT_PRINT);
+		mock_pkb.addStmt(STMT_READ);
+		mock_pkb.addStmt(STMT_PRINT);
+		mock_pkb.addVariable(x);
+		mock_pkb.addUsesS(1, x);
+		mock_pkb.addVariable(y);
+		mock_pkb.addUsesS(3, y);
 
 		std::vector<std::pair<StmtInfo, var_name>> v = { {p1, x}, {p3, y} };
 		EXPECT_EQ(pkb.getUsesSRelation(), v);
@@ -1657,15 +1893,15 @@ namespace UnitTesting {
 		var_name y = "y";
 		var_name z = "z";
 
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_PRINT);
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_PRINT);
-		PKB::getInstance().addVariable(x);
-		PKB::getInstance().addUsesS(1, x);
-		PKB::getInstance().addVariable(y);
-		PKB::getInstance().addUsesS(2, y);
-		PKB::getInstance().addUsesS(3, y);
+		mock_pkb.addStmt(STMT_READ);
+		mock_pkb.addStmt(STMT_PRINT);
+		mock_pkb.addStmt(STMT_READ);
+		mock_pkb.addStmt(STMT_PRINT);
+		mock_pkb.addVariable(x);
+		mock_pkb.addUsesS(1, x);
+		mock_pkb.addVariable(y);
+		mock_pkb.addUsesS(2, y);
+		mock_pkb.addUsesS(3, y);
 
 		std::vector<StmtInfo> v1 = { p1, p2, p3 };
 		std::vector<StmtInfo> v2 = pkb.getUsesS();
@@ -1694,15 +1930,15 @@ namespace UnitTesting {
 		var_name y = "y";
 		var_name z = "z";
 
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_PRINT);
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_PRINT);
-		PKB::getInstance().addVariable(x);
-		PKB::getInstance().addUsesS(1, x);
-		PKB::getInstance().addVariable(y);
-		PKB::getInstance().addUsesS(2, x);
-		PKB::getInstance().addUsesS(2, y);
+		mock_pkb.addStmt(STMT_READ);
+		mock_pkb.addStmt(STMT_PRINT);
+		mock_pkb.addStmt(STMT_READ);
+		mock_pkb.addStmt(STMT_PRINT);
+		mock_pkb.addVariable(x);
+		mock_pkb.addUsesS(1, x);
+		mock_pkb.addVariable(y);
+		mock_pkb.addUsesS(2, x);
+		mock_pkb.addUsesS(2, y);
 
 		std::vector<var_name> v1 = { x };
 		std::vector<var_name> v2 = pkb.getUsedS(1);
@@ -1726,14 +1962,14 @@ namespace UnitTesting {
 		proc_name first = "first";
 		proc_name second = "second";
 		proc_name third = "third";
-		PKB::getInstance().addProcedure(first);
-		PKB::getInstance().addProcedure(second);
-		PKB::getInstance().addProcedure(third);
+		mock_pkb.addProcedure(first);
+		mock_pkb.addProcedure(second);
+		mock_pkb.addProcedure(third);
 
 		EXPECT_TRUE(pkb.isCallsPEmpty());
-		PKB::getInstance().addCallsP(first, second);
+		mock_pkb.addCallsP(first, second);
 		EXPECT_FALSE(pkb.isCallsPEmpty());
-		PKB::getInstance().addCallsP(second, third);
+		mock_pkb.addCallsP(second, third);
 		EXPECT_FALSE(pkb.isCallsPEmpty());
 	}
 
@@ -1743,12 +1979,12 @@ namespace UnitTesting {
 		proc_name third = "third";
 		proc_name fourth = "fourth";
 
-		PKB::getInstance().addProcedure(first);
-		PKB::getInstance().addProcedure(second);
-		PKB::getInstance().addProcedure(third);
+		mock_pkb.addProcedure(first);
+		mock_pkb.addProcedure(second);
+		mock_pkb.addProcedure(third);
 
-		PKB::getInstance().addCallsP(first, second);
-		PKB::getInstance().addCallsP(second, third);
+		mock_pkb.addCallsP(first, second);
+		mock_pkb.addCallsP(second, third);
 		EXPECT_TRUE(pkb.isCallsP(first, second));
 		EXPECT_TRUE(pkb.isCallsP(second, third));
 
@@ -1771,12 +2007,12 @@ namespace UnitTesting {
 		proc_name third = "third";
 		proc_name fourth = "fourth";
 
-		PKB::getInstance().addProcedure(first);
-		PKB::getInstance().addProcedure(second);
-		PKB::getInstance().addProcedure(third);
+		mock_pkb.addProcedure(first);
+		mock_pkb.addProcedure(second);
+		mock_pkb.addProcedure(third);
 
-		PKB::getInstance().addCallsP(first, second);
-		PKB::getInstance().addCallsP(second, third);
+		mock_pkb.addCallsP(first, second);
+		mock_pkb.addCallsP(second, third);
 
 		EXPECT_TRUE(pkb.isCallerP(first));
 		EXPECT_TRUE(pkb.isCallerP(second));
@@ -1790,12 +2026,12 @@ namespace UnitTesting {
 		proc_name third = "third";
 		proc_name fourth = "fourth";
 
-		PKB::getInstance().addProcedure(first);
-		PKB::getInstance().addProcedure(second);
-		PKB::getInstance().addProcedure(third);
+		mock_pkb.addProcedure(first);
+		mock_pkb.addProcedure(second);
+		mock_pkb.addProcedure(third);
 
-		PKB::getInstance().addCallsP(first, second);
-		PKB::getInstance().addCallsP(second, third);
+		mock_pkb.addCallsP(first, second);
+		mock_pkb.addCallsP(second, third);
 
 		EXPECT_FALSE(pkb.isCalleeP(first));
 		EXPECT_TRUE(pkb.isCalleeP(second));
@@ -1809,12 +2045,12 @@ namespace UnitTesting {
 		proc_name third = "third";
 		proc_name fourth = "fourth";
 
-		PKB::getInstance().addProcedure(first);
-		PKB::getInstance().addProcedure(second);
-		PKB::getInstance().addProcedure(third);
+		mock_pkb.addProcedure(first);
+		mock_pkb.addProcedure(second);
+		mock_pkb.addProcedure(third);
 
-		PKB::getInstance().addCallsP(first, second);
-		PKB::getInstance().addCallsP(second, third);
+		mock_pkb.addCallsP(first, second);
+		mock_pkb.addCallsP(second, third);
 
 		std::vector<proc_name> v1 = { first, second };
 		std::vector<proc_name> v2 = pkb.getCallerP();
@@ -1843,12 +2079,12 @@ namespace UnitTesting {
 		proc_name third = "third";
 		proc_name fourth = "fourth";
 
-		PKB::getInstance().addProcedure(first);
-		PKB::getInstance().addProcedure(second);
-		PKB::getInstance().addProcedure(third);
+		mock_pkb.addProcedure(first);
+		mock_pkb.addProcedure(second);
+		mock_pkb.addProcedure(third);
 
-		PKB::getInstance().addCallsP(first, second);
-		PKB::getInstance().addCallsP(second, third);
+		mock_pkb.addCallsP(first, second);
+		mock_pkb.addCallsP(second, third);
 
 		std::vector<proc_name> v1 = { second, third };
 		std::vector<proc_name> v2 = pkb.getCalleeP();
@@ -1876,12 +2112,12 @@ namespace UnitTesting {
 		proc_name second = "second";
 		proc_name third = "third";
 
-		PKB::getInstance().addProcedure(first);
-		PKB::getInstance().addProcedure(second);
-		PKB::getInstance().addProcedure(third);
+		mock_pkb.addProcedure(first);
+		mock_pkb.addProcedure(second);
+		mock_pkb.addProcedure(third);
 
-		PKB::getInstance().addCallsP(first, second);
-		PKB::getInstance().addCallsP(second, third);
+		mock_pkb.addCallsP(first, second);
+		mock_pkb.addCallsP(second, third);
 		std::vector<std::pair<proc_name, proc_name>> v = { {first, second}, {second, third} };
 		EXPECT_EQ(pkb.getCallsPRelation(), v);
 	}
@@ -1890,19 +2126,19 @@ namespace UnitTesting {
 		proc_name first = "first";
 		proc_name second = "second";
 		proc_name third = "third";
-		PKB::getInstance().addProcedure(first);
-		PKB::getInstance().addProcedure(second);
-		PKB::getInstance().addProcedure(third);
-		PKB::getInstance().generateCallsPT();
+		mock_pkb.addProcedure(first);
+		mock_pkb.addProcedure(second);
+		mock_pkb.addProcedure(third);
 
 		EXPECT_TRUE(pkb.isCallsPTEmpty());
 
-		PKB::getInstance().addCallsP(first, second);
-		PKB::getInstance().generateCallsPT();
+		mock_pkb.addCallsP(first, second);
+		mock_pkb.addCallsPT(first, second);
 		EXPECT_FALSE(pkb.isCallsPTEmpty());
 
-		PKB::getInstance().addCallsP(second, third);
-		PKB::getInstance().generateCallsPT();
+		mock_pkb.addCallsP(second, third);
+		mock_pkb.addCallsPT(second, third);
+		mock_pkb.addCallsPT(first, third);
 		EXPECT_FALSE(pkb.isCallsPTEmpty());
 	}
 
@@ -1910,36 +2146,25 @@ namespace UnitTesting {
 		proc_name first = "first";
 		proc_name second = "second";
 		proc_name third = "third";
-		proc_name fourth = "fourth";
-		proc_name fifth = "fifth";
 
-		PKB::getInstance().addProcedure(first);
-		PKB::getInstance().addProcedure(second);
-		PKB::getInstance().addProcedure(third);
-		PKB::getInstance().addProcedure(fourth);
+		mock_pkb.addProcedure(first);
+		mock_pkb.addProcedure(second);
+		mock_pkb.addProcedure(third);
 
-		PKB::getInstance().addCallsP(first, second);
-		PKB::getInstance().addCallsP(second, third);
-		PKB::getInstance().addCallsP(third, fourth);
-		PKB::getInstance().generateCallsPT();
+		mock_pkb.addCallsP(first, second);
+		mock_pkb.addCallsP(second, third);
+
+		mock_pkb.addCallsPT(first, second);
+		mock_pkb.addCallsPT(first, third);
+		mock_pkb.addCallsPT(second, third);
 
 		EXPECT_TRUE(pkb.isCallsPT(first, second));
 		EXPECT_TRUE(pkb.isCallsPT(first, third));
-		EXPECT_TRUE(pkb.isCallsPT(first, fourth));
 		EXPECT_TRUE(pkb.isCallsPT(second, third));
-		EXPECT_TRUE(pkb.isCallsPT(second, fourth));
-		EXPECT_TRUE(pkb.isCallsPT(third, fourth));
-
-		EXPECT_FALSE(pkb.isCallsPT(first, fifth));
-		EXPECT_FALSE(pkb.isCallsPT(second, fifth));
-		EXPECT_FALSE(pkb.isCallsPT(third, fifth));
-		EXPECT_FALSE(pkb.isCallsPT(fourth, fifth));
 
 		EXPECT_FALSE(pkb.isCallsPT(first, first));
 		EXPECT_FALSE(pkb.isCallsPT(second, second));
 		EXPECT_FALSE(pkb.isCallsPT(third, third));
-		EXPECT_FALSE(pkb.isCallsPT(fourth, fourth));
-		EXPECT_FALSE(pkb.isCallsPT(fifth, fifth));
 	}
 
 	TEST_F(PKBAdapterTest, isCallerPT) {
@@ -1948,13 +2173,15 @@ namespace UnitTesting {
 		proc_name third = "third";
 		proc_name fourth = "fourth";
 
-		PKB::getInstance().addProcedure(first);
-		PKB::getInstance().addProcedure(second);
-		PKB::getInstance().addProcedure(third);
+		mock_pkb.addProcedure(first);
+		mock_pkb.addProcedure(second);
+		mock_pkb.addProcedure(third);
 
-		PKB::getInstance().addCallsP(first, second);
-		PKB::getInstance().addCallsP(second, third);
-		PKB::getInstance().generateCallsPT();
+		mock_pkb.addCallsP(first, second);
+		mock_pkb.addCallsP(second, third);
+		mock_pkb.addCallsPT(first, second);
+		mock_pkb.addCallsPT(first, third);
+		mock_pkb.addCallsPT(second, third);
 
 		EXPECT_TRUE(pkb.isCallerPT(first));
 		EXPECT_TRUE(pkb.isCallerPT(second));
@@ -1968,13 +2195,15 @@ namespace UnitTesting {
 		proc_name third = "third";
 		proc_name fourth = "fourth";
 
-		PKB::getInstance().addProcedure(first);
-		PKB::getInstance().addProcedure(second);
-		PKB::getInstance().addProcedure(third);
+		mock_pkb.addProcedure(first);
+		mock_pkb.addProcedure(second);
+		mock_pkb.addProcedure(third);
 
-		PKB::getInstance().addCallsP(first, second);
-		PKB::getInstance().addCallsP(second, third);
-		PKB::getInstance().generateCallsPT();
+		mock_pkb.addCallsP(first, second);
+		mock_pkb.addCallsP(second, third);
+		mock_pkb.addCallsPT(first, second);
+		mock_pkb.addCallsPT(first, third);
+		mock_pkb.addCallsPT(second, third);
 
 		EXPECT_FALSE(pkb.isCalleePT(first));
 		EXPECT_TRUE(pkb.isCalleePT(second));
@@ -1988,13 +2217,15 @@ namespace UnitTesting {
 		proc_name third = "third";
 		proc_name fourth = "fourth";
 
-		PKB::getInstance().addProcedure(first);
-		PKB::getInstance().addProcedure(second);
-		PKB::getInstance().addProcedure(third);
+		mock_pkb.addProcedure(first);
+		mock_pkb.addProcedure(second);
+		mock_pkb.addProcedure(third);
 
-		PKB::getInstance().addCallsP(first, second);
-		PKB::getInstance().addCallsP(second, third);
-		PKB::getInstance().generateCallsPT();
+		mock_pkb.addCallsP(first, second);
+		mock_pkb.addCallsP(second, third);
+		mock_pkb.addCallsPT(first, second);
+		mock_pkb.addCallsPT(first, third);
+		mock_pkb.addCallsPT(second, third);
 
 		std::vector<proc_name> v1 = { first, second };
 		std::vector<proc_name> v2 = pkb.getCallerPT();
@@ -2025,13 +2256,15 @@ namespace UnitTesting {
 		proc_name third = "third";
 		proc_name fourth = "fourth";
 
-		PKB::getInstance().addProcedure(first);
-		PKB::getInstance().addProcedure(second);
-		PKB::getInstance().addProcedure(third);
+		mock_pkb.addProcedure(first);
+		mock_pkb.addProcedure(second);
+		mock_pkb.addProcedure(third);
 
-		PKB::getInstance().addCallsP(first, second);
-		PKB::getInstance().addCallsP(second, third);
-		PKB::getInstance().generateCallsPT();
+		mock_pkb.addCallsP(first, second);
+		mock_pkb.addCallsP(second, third);
+		mock_pkb.addCallsPT(first, second);
+		mock_pkb.addCallsPT(first, third);
+		mock_pkb.addCallsPT(second, third);
 
 		std::vector<proc_name> v1 = { second, third };
 		std::vector<proc_name> v2 = pkb.getCalleePT();
@@ -2061,41 +2294,43 @@ namespace UnitTesting {
 		proc_name second = "second";
 		proc_name third = "third";
 
-		PKB::getInstance().addProcedure(first);
-		PKB::getInstance().addProcedure(second);
-		PKB::getInstance().addProcedure(third);
+		mock_pkb.addProcedure(first);
+		mock_pkb.addProcedure(second);
+		mock_pkb.addProcedure(third);
 
-		PKB::getInstance().addCallsP(first, second);
-		PKB::getInstance().addCallsP(second, third);
-		PKB::getInstance().generateCallsPT();
+		mock_pkb.addCallsP(first, second);
+		mock_pkb.addCallsP(second, third);
+		mock_pkb.addCallsPT(first, second);
+		mock_pkb.addCallsPT(first, third);
+		mock_pkb.addCallsPT(second, third);
 
 		std::vector<std::pair<proc_name, proc_name>> v = { {first, second}, {first, third}, {second, third} };
 		EXPECT_EQ(pkb.getCallsPTRelation(), v);
 	}
 
 	TEST_F(PKBAdapterTest, isNextEmpty) {
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_PRINT);
-		PKB::getInstance().addStmt(STMT_READ);
+		mock_pkb.addStmt(STMT_READ);
+		mock_pkb.addStmt(STMT_PRINT);
+		mock_pkb.addStmt(STMT_READ);
 		EXPECT_TRUE(pkb.isNextEmpty());
-		PKB::getInstance().addNext(1, 2);
+		mock_pkb.addNext(1, 2);
 		EXPECT_FALSE(pkb.isNextEmpty());
-		PKB::getInstance().addNext(2, 3);
+		mock_pkb.addNext(2, 3);
 		EXPECT_FALSE(pkb.isNextEmpty());
 	}
 
 	TEST_F(PKBAdapterTest, isNext) {
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_WHILE);
-		PKB::getInstance().addStmt(STMT_IF);
-		PKB::getInstance().addStmt(STMT_PRINT);
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addNext(1, 2);
-		PKB::getInstance().addNext(2, 3);
-		PKB::getInstance().addNext(3, 4);
-		PKB::getInstance().addNext(3, 5);
-		PKB::getInstance().addNext(4, 2);
-		PKB::getInstance().addNext(5, 2);
+		mock_pkb.addStmt(STMT_READ);
+		mock_pkb.addStmt(STMT_WHILE);
+		mock_pkb.addStmt(STMT_IF);
+		mock_pkb.addStmt(STMT_PRINT);
+		mock_pkb.addStmt(STMT_READ);
+		mock_pkb.addNext(1, 2);
+		mock_pkb.addNext(2, 3);
+		mock_pkb.addNext(3, 4);
+		mock_pkb.addNext(3, 5);
+		mock_pkb.addNext(4, 2);
+		mock_pkb.addNext(5, 2);
 
 		EXPECT_FALSE(pkb.isNext(1, 1));
 		EXPECT_TRUE(pkb.isNext(1, 2));
@@ -2135,18 +2370,18 @@ namespace UnitTesting {
 	}
 
 	TEST_F(PKBAdapterTest, isPrevious) {
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_WHILE);
-		PKB::getInstance().addStmt(STMT_IF);
-		PKB::getInstance().addStmt(STMT_PRINT);
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addNext(1, 2);
-		PKB::getInstance().addNext(2, 3);
-		PKB::getInstance().addNext(3, 4);
-		PKB::getInstance().addNext(3, 5);
-		PKB::getInstance().addNext(4, 2);
-		PKB::getInstance().addNext(5, 2);
+		mock_pkb.addStmt(STMT_READ);
+		mock_pkb.addStmt(STMT_WHILE);
+		mock_pkb.addStmt(STMT_IF);
+		mock_pkb.addStmt(STMT_PRINT);
+		mock_pkb.addStmt(STMT_READ);
+		mock_pkb.addStmt(STMT_READ);
+		mock_pkb.addNext(1, 2);
+		mock_pkb.addNext(2, 3);
+		mock_pkb.addNext(3, 4);
+		mock_pkb.addNext(3, 5);
+		mock_pkb.addNext(4, 2);
+		mock_pkb.addNext(5, 2);
 		EXPECT_TRUE(pkb.isPrevious(1));
 		EXPECT_TRUE(pkb.isPrevious(2));
 		EXPECT_TRUE(pkb.isPrevious(3));
@@ -2163,20 +2398,20 @@ namespace UnitTesting {
 		StmtInfo s5{ 5, STMT_READ };
 		StmtInfo s6{ 6, STMT_READ };
 
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_WHILE);
-		PKB::getInstance().addStmt(STMT_IF);
-		PKB::getInstance().addStmt(STMT_PRINT);
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_READ);
+		mock_pkb.addStmt(STMT_READ);
+		mock_pkb.addStmt(STMT_WHILE);
+		mock_pkb.addStmt(STMT_IF);
+		mock_pkb.addStmt(STMT_PRINT);
+		mock_pkb.addStmt(STMT_READ);
+		mock_pkb.addStmt(STMT_READ);
 
-		PKB::getInstance().addNext(1, 2);
-		PKB::getInstance().addNext(2, 3);
-		PKB::getInstance().addNext(3, 4);
-		PKB::getInstance().addNext(3, 5);
-		PKB::getInstance().addNext(4, 2);
-		PKB::getInstance().addNext(5, 2);
-		PKB::getInstance().addNext(2, 6);
+		mock_pkb.addNext(1, 2);
+		mock_pkb.addNext(2, 3);
+		mock_pkb.addNext(3, 4);
+		mock_pkb.addNext(3, 5);
+		mock_pkb.addNext(4, 2);
+		mock_pkb.addNext(5, 2);
+		mock_pkb.addNext(2, 6);
 
 		std::vector<StmtInfo> v1 = { s2, s3, s4, s5, s6 };
 		std::vector<StmtInfo> v2 = pkb.getNext();
@@ -2217,20 +2452,20 @@ namespace UnitTesting {
 		StmtInfo s5{ 5, STMT_READ };
 		StmtInfo s6{ 6, STMT_READ };
 
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_WHILE);
-		PKB::getInstance().addStmt(STMT_IF);
-		PKB::getInstance().addStmt(STMT_PRINT);
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_READ);
+		mock_pkb.addStmt(STMT_READ);
+		mock_pkb.addStmt(STMT_WHILE);
+		mock_pkb.addStmt(STMT_IF);
+		mock_pkb.addStmt(STMT_PRINT);
+		mock_pkb.addStmt(STMT_READ);
+		mock_pkb.addStmt(STMT_READ);
 
-		PKB::getInstance().addNext(1, 2);
-		PKB::getInstance().addNext(2, 3);
-		PKB::getInstance().addNext(3, 4);
-		PKB::getInstance().addNext(3, 5);
-		PKB::getInstance().addNext(4, 2);
-		PKB::getInstance().addNext(5, 2);
-		PKB::getInstance().addNext(2, 6);
+		mock_pkb.addNext(1, 2);
+		mock_pkb.addNext(2, 3);
+		mock_pkb.addNext(3, 4);
+		mock_pkb.addNext(3, 5);
+		mock_pkb.addNext(4, 2);
+		mock_pkb.addNext(5, 2);
+		mock_pkb.addNext(2, 6);
 
 		std::vector<StmtInfo> v1 = { s2, s3, s4, s5, s6 };
 		std::vector<StmtInfo> v2 = pkb.getNext();
@@ -2269,20 +2504,20 @@ namespace UnitTesting {
 		StmtInfo s5{ 5, STMT_READ };
 		StmtInfo s6{ 6, STMT_READ };
 
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_WHILE);
-		PKB::getInstance().addStmt(STMT_IF);
-		PKB::getInstance().addStmt(STMT_PRINT);
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_READ);
+		mock_pkb.addStmt(STMT_READ);
+		mock_pkb.addStmt(STMT_WHILE);
+		mock_pkb.addStmt(STMT_IF);
+		mock_pkb.addStmt(STMT_PRINT);
+		mock_pkb.addStmt(STMT_READ);
+		mock_pkb.addStmt(STMT_READ);
 
-		PKB::getInstance().addNext(1, 2);
-		PKB::getInstance().addNext(2, 3);
-		PKB::getInstance().addNext(3, 4);
-		PKB::getInstance().addNext(3, 5);
-		PKB::getInstance().addNext(4, 2);
-		PKB::getInstance().addNext(5, 2);
-		PKB::getInstance().addNext(2, 6);
+		mock_pkb.addNext(1, 2);
+		mock_pkb.addNext(2, 3);
+		mock_pkb.addNext(3, 4);
+		mock_pkb.addNext(3, 5);
+		mock_pkb.addNext(4, 2);
+		mock_pkb.addNext(5, 2);
+		mock_pkb.addNext(2, 6);
 		std::vector<std::pair<StmtInfo, StmtInfo>> v1 = { {s1, s2}, {s2, s3}, {s3, s4}, {s3, s5}, {s4, s2}, {s5, s2}, {s2, s6} };
 		std::vector<std::pair<StmtInfo, StmtInfo>> v2 = pkb.getAllNextRelation();
 		std::sort(v1.begin(), v1.end());
@@ -2296,13 +2531,13 @@ namespace UnitTesting {
 		var_name z = "z";
 		var_name a = "a";
 
-		PKB::getInstance().addStmt(STMT_IF);
-		PKB::getInstance().addStmt(STMT_WHILE);
-		PKB::getInstance().addStmt(STMT_IF);
-		PKB::getInstance().addVariable(x);
-		PKB::getInstance().addIf(1, x);
-		PKB::getInstance().addVariable(y);
-		PKB::getInstance().addIf(3, y);
+		mock_pkb.addStmt(STMT_IF);
+		mock_pkb.addStmt(STMT_WHILE);
+		mock_pkb.addStmt(STMT_IF);
+		mock_pkb.addVariable(x);
+		mock_pkb.addIf(1, x);
+		mock_pkb.addVariable(y);
+		mock_pkb.addIf(3, y);
 
 		std::vector<std::pair<stmt_index, var_name>> v = { {1, x}, {3, y} };
 		EXPECT_EQ(pkb.getAllIfUses(), v);
@@ -2313,14 +2548,14 @@ namespace UnitTesting {
 		var_name y = "y";
 		var_name z = "z";
 
-		PKB::getInstance().addStmt(STMT_IF);
-		PKB::getInstance().addStmt(STMT_WHILE);
-		PKB::getInstance().addStmt(STMT_IF);
-		PKB::getInstance().addVariable(x);
-		PKB::getInstance().addIf(1, x);
-		PKB::getInstance().addVariable(y);
-		PKB::getInstance().addIf(1, y);
-		PKB::getInstance().addIf(3, y);
+		mock_pkb.addStmt(STMT_IF);
+		mock_pkb.addStmt(STMT_WHILE);
+		mock_pkb.addStmt(STMT_IF);
+		mock_pkb.addVariable(x);
+		mock_pkb.addIf(1, x);
+		mock_pkb.addVariable(y);
+		mock_pkb.addIf(1, y);
+		mock_pkb.addIf(3, y);
 
 		std::vector<stmt_index> v1 = { 1, 3 };
 		std::vector<stmt_index> v2 = pkb.getIfUses();
@@ -2350,13 +2585,13 @@ namespace UnitTesting {
 		var_name z = "z";
 		var_name a = "a";
 
-		PKB::getInstance().addStmt(STMT_WHILE);
-		PKB::getInstance().addStmt(STMT_IF);
-		PKB::getInstance().addStmt(STMT_WHILE);
-		PKB::getInstance().addVariable(x);
-		PKB::getInstance().addWhile(1, x);
-		PKB::getInstance().addVariable(y);
-		PKB::getInstance().addWhile(3, y);
+		mock_pkb.addStmt(STMT_WHILE);
+		mock_pkb.addStmt(STMT_IF);
+		mock_pkb.addStmt(STMT_WHILE);
+		mock_pkb.addVariable(x);
+		mock_pkb.addWhile(1, x);
+		mock_pkb.addVariable(y);
+		mock_pkb.addWhile(3, y);
 
 		std::vector<std::pair<stmt_index, var_name>> v = { {1, x}, {3, y} };
 		EXPECT_EQ(pkb.getAllWhileUses(), v);
@@ -2367,14 +2602,14 @@ namespace UnitTesting {
 		var_name y = "y";
 		var_name z = "z";
 
-		PKB::getInstance().addStmt(STMT_WHILE);
-		PKB::getInstance().addStmt(STMT_IF);
-		PKB::getInstance().addStmt(STMT_WHILE);
-		PKB::getInstance().addVariable(x);
-		PKB::getInstance().addWhile(1, x);
-		PKB::getInstance().addVariable(y);
-		PKB::getInstance().addWhile(1, y);
-		PKB::getInstance().addWhile(3, y);
+		mock_pkb.addStmt(STMT_WHILE);
+		mock_pkb.addStmt(STMT_IF);
+		mock_pkb.addStmt(STMT_WHILE);
+		mock_pkb.addVariable(x);
+		mock_pkb.addWhile(1, x);
+		mock_pkb.addVariable(y);
+		mock_pkb.addWhile(1, y);
+		mock_pkb.addWhile(3, y);
 
 		std::vector<stmt_index> v1 = { 1, 3 };
 		std::vector<stmt_index> v2 = pkb.getWhileUses();
@@ -2398,21 +2633,20 @@ namespace UnitTesting {
 		EXPECT_EQ(v1, v2);
 	}
 	TEST_F(PKBAdapterTest, getRead) {
-		PKB::getInstance().resetCache();
+		mock_pkb.resetCache();
 
 		var_name x = "x";
 		var_name y = "y";
 
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addStmt(STMT_ASSIGN);
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addVariable(x);
-		PKB::getInstance().addModifiesS(1, x);
-		PKB::getInstance().addVariable(y);
-		PKB::getInstance().addModifiesS(2, x);
-		PKB::getInstance().addModifiesS(2, y);
-		PKB::getInstance().addModifiesS(3, y);
-
+		mock_pkb.addStmt(STMT_READ);
+		mock_pkb.addStmt(STMT_ASSIGN);
+		mock_pkb.addStmt(STMT_READ);
+		mock_pkb.addVariable(x);
+		mock_pkb.addModifiesS(1, x);
+		mock_pkb.addVariable(y);
+		mock_pkb.addModifiesS(2, x);
+		mock_pkb.addModifiesS(2, y);
+		mock_pkb.addModifiesS(3, y);
 
 		EXPECT_TRUE(pkb.isReadVar(x));
 		EXPECT_TRUE(pkb.isReadVar(y));
@@ -2433,25 +2667,24 @@ namespace UnitTesting {
 		std::vector<std::pair<stmt_index, var_name>> expectedPairs = { {1, x}, {3, y} };
 		EXPECT_EQ(expectedPairs, pkb.getAllReadVars());
 
-		PKB::getInstance().resetCache();
+		mock_pkb.resetCache();
 	}
 
 	TEST_F(PKBAdapterTest, getPrint) {
-		PKB::getInstance().resetCache();
+		mock_pkb.resetCache();
 
 		var_name x = "x";
 		var_name y = "y";
 
-		PKB::getInstance().addStmt(STMT_PRINT);
-		PKB::getInstance().addStmt(STMT_ASSIGN);
-		PKB::getInstance().addStmt(STMT_PRINT);
-		PKB::getInstance().addVariable(x);
-		PKB::getInstance().addUsesS(1, x);
-		PKB::getInstance().addVariable(y);
-		PKB::getInstance().addUsesS(2, x);
-		PKB::getInstance().addUsesS(2, y);
-		PKB::getInstance().addUsesS(3, y);
-
+		mock_pkb.addStmt(STMT_PRINT);
+		mock_pkb.addStmt(STMT_ASSIGN);
+		mock_pkb.addStmt(STMT_PRINT);
+		mock_pkb.addVariable(x);
+		mock_pkb.addUsesS(1, x);
+		mock_pkb.addVariable(y);
+		mock_pkb.addUsesS(2, x);
+		mock_pkb.addUsesS(2, y);
+		mock_pkb.addUsesS(3, y);
 
 		EXPECT_TRUE(pkb.isPrintVar(x));
 		EXPECT_TRUE(pkb.isPrintVar(y));
@@ -2472,23 +2705,23 @@ namespace UnitTesting {
 		std::vector<std::pair<stmt_index, var_name>> expectedPairs = { {1, x}, {3, y} };
 		EXPECT_EQ(expectedPairs, pkb.getAllPrintVars());
 
-		PKB::getInstance().resetCache();
+		mock_pkb.resetCache();
 	}
 
 	TEST_F(PKBAdapterTest, getCallS) {
-		PKB::getInstance().resetCache();
+		mock_pkb.resetCache();
 
 		proc_name first = "first";
 		proc_name second = "second";
 		proc_name third = "third";
 
-		PKB::getInstance().addStmt(STMT_CALL);
-		PKB::getInstance().addStmt(STMT_CALL);
-		PKB::getInstance().addStmt(STMT_READ);
-		PKB::getInstance().addProcedure(first);
-		PKB::getInstance().addProcedure(second);
-		PKB::getInstance().addCallsS(1, first);
-		PKB::getInstance().addCallsS(2, second);
+		mock_pkb.addStmt(STMT_CALL);
+		mock_pkb.addStmt(STMT_CALL);
+		mock_pkb.addStmt(STMT_READ);
+		mock_pkb.addProcedure(first);
+		mock_pkb.addProcedure(second);
+		mock_pkb.addCallsS(1, first);
+		mock_pkb.addCallsS(2, second);
 
 		EXPECT_TRUE(pkb.isCalledS(first));
 		EXPECT_TRUE(pkb.isCalledS(second));
@@ -2509,6 +2742,6 @@ namespace UnitTesting {
 		std::vector<std::pair<stmt_index, var_name>> expectedPairs = { {1, first}, {2, second} };
 		EXPECT_EQ(expectedPairs, pkb.getAllCallS());
 
-		PKB::getInstance().resetCache();
+		mock_pkb.resetCache();
 	}
 }

@@ -25,8 +25,8 @@ Select n2 such that NextBip(n1, n2)
 5000
 6 - NextBip, LHS wildcard, RHS synonym
 prog_line n1, n2; stmt s1, s2; assign a1, a2; call c1, c2; read r1, r2; print pn1, pn2; while w1, w2; if ifs1, ifs2;
-2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38 ,39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50
 Select n2 such that NextBip(_, n2)
+2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38 ,39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50
 5000
 7 - NextBip, LHS synonym, RHS wildcard
 prog_line n1, n2; stmt s1, s2; assign a1, a2; call c1, c2; read r1, r2; print pn1, pn2; while w1, w2; if ifs1, ifs2;
@@ -191,7 +191,7 @@ Select s1 such that NextBip(s1, c1)
 39 - NextBip, LHS stmt, RHS read
 prog_line n1, n2; stmt s1, s2; assign a1, a2; call c1, c2; read r1, r2; print pn1, pn2; while w1, w2; if ifs1, ifs2;
 Select s1 such that NextBip(s1, r1)
-3, 10, 13, 8, 20, 23, 32, 19, 48, 30, 50
+3, 10, 8, 20, 23, 19, 48, 30, 50, 49
 5000
 40 - NextBip, LHS stmt, RHS print
 prog_line n1, n2; stmt s1, s2; assign a1, a2; call c1, c2; read r1, r2; print pn1, pn2; while w1, w2; if ifs1, ifs2;
@@ -206,17 +206,17 @@ Select s1 such that NextBip(s1, w1)
 42 - NextBip, LHS stmt, RHS if
 prog_line n1, n2; stmt s1, s2; assign a1, a2; call c1, c2; read r1, r2; print pn1, pn2; while w1, w2; if ifs1, ifs2;
 Select s1 such that NextBip(s1, ifs1)
-7, 19, 22, 41, 47, 26, 27, 29, 47
+7, 19, 22, 41, 47, 26, 27, 29
 5000
 43 - NextBip, LHS assign, RHS stmt
 prog_line n1, n2; stmt s1, s2; assign a1, a2; call c1, c2; read r1, r2; print pn1, pn2; while w1, w2; if ifs1, ifs2;
 Select a1 such that NextBip(a1, s1)
-2, 3, 10, 15, 17, 22, 26, 34, 35, 39, 41, 8, 48
+2, 3, 10, 15, 17, 22, 26, 34, 35, 39, 41
 5000
 44 - NextBip, LHS assign, RHS call
 prog_line n1, n2; stmt s1, s2; assign a1, a2; call c1, c2; read r1, r2; print pn1, pn2; while w1, w2; if ifs1, ifs2;
 Select a1 such that NextBip(a1, c1)
-48
+26
 5000
 45 - NextBip, LHS assign, RHS read
 prog_line n1, n2; stmt s1, s2; assign a1, a2; call c1, c2; read r1, r2; print pn1, pn2; while w1, w2; if ifs1, ifs2;
@@ -236,7 +236,7 @@ Select a1 such that NextBip(a1, w1)
 48 - NextBip, LHS assign, RHS if
 prog_line n1, n2; stmt s1, s2; assign a1, a2; call c1, c2; read r1, r2; print pn1, pn2; while w1, w2; if ifs1, ifs2;
 Select a1 such that NextBip(a1, ifs1)
-22, 41, 26, 8
+22, 41, 26
 5000
 49 - NextBip, LHS call, RHS stmt
 prog_line n1, n2; stmt s1, s2; assign a1, a2; call c1, c2; read r1, r2; print pn1, pn2; while w1, w2; if ifs1, ifs2;
@@ -311,7 +311,7 @@ Select pn1 such that NextBip(pn1, a1)
 63 - NextBip, LHS print, RHS call
 prog_line n1, n2; stmt s1, s2; assign a1, a2; call c1, c2; read r1, r2; print pn1, pn2; while w1, w2; if ifs1, ifs2;
 Select pn1 such that NextBip(pn1, c1)
-48
+27, 29
 5000
 64 - NextBip, LHS print, RHS read
 prog_line n1, n2; stmt s1, s2; assign a1, a2; call c1, c2; read r1, r2; print pn1, pn2; while w1, w2; if ifs1, ifs2;
@@ -326,7 +326,7 @@ Select pn1 such that NextBip(pn1, w1)
 66 - NextBip, LHS print, RHS if
 prog_line n1, n2; stmt s1, s2; assign a1, a2; call c1, c2; read r1, r2; print pn1, pn2; while w1, w2; if ifs1, ifs2;
 Select pn1 such that NextBip(pn1, ifs1)
-27, 29, 8
+27, 29
 5000
 67 - NextBip, LHS while, RHS stmt
 prog_line n1, n2; stmt s1, s2; assign a1, a2; call c1, c2; read r1, r2; print pn1, pn2; while w1, w2; if ifs1, ifs2;

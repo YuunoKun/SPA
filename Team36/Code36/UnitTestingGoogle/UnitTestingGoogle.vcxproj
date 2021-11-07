@@ -40,8 +40,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AffectsBipEvaluatorTest.cpp" />
-    <ClCompile Include="AffectsBipParserTest.cpp" />
+    <ClCompile Include="AffectsBipPreprocessorTest.cpp" />
     <ClCompile Include="AffectsBipTEvaluatorTest.cpp" />
+    <ClCompile Include="AffectsBipTPreprocessorTest.cpp" />
+    <ClCompile Include="AffectsBipParserTest.cpp" />
     <ClCompile Include="AffectsBipTParserTest.cpp" />
     <ClCompile Include="AffectsEvaluatorTest.cpp" />
     <ClCompile Include="AffectsTParserTest.cpp" />
@@ -52,9 +54,13 @@
     <ClCompile Include="CallsParserTest.cpp" />
     <ClCompile Include="CallsTEvaluatorTest.cpp" />
     <ClCompile Include="CallsTParserTest.cpp" />
-    <ClCompile Include="CFGRelationManagerTest_Affects.cpp" />
-    <ClCompile Include="CFGRelationsManagerTest_AffectsT.cpp" />
-    <ClCompile Include="CFGRelationsManagerTest_NextT.cpp" />
+    <ClCompile Include="RelationPreprocessorManagerTest_Affects.cpp" />
+    <ClCompile Include="RelationPreprocessorManagerTest_AffectsBip.cpp" />
+    <ClCompile Include="RelationPreprocessorManagerTest_NextBip.cpp" />
+    <ClCompile Include="RelationPreprocessorManagerTest_AffectsBipT.cpp" />
+    <ClCompile Include="RelationPreprocessorManagerTest_AffectsT.cpp" />
+    <ClCompile Include="RelationPreprocessorManagerTest_NextBipT.cpp" />
+    <ClCompile Include="RelationPreprocessorManagerTest_NextT.cpp" />
     <ClCompile Include="ClauseTest.cpp" />
     <ClCompile Include="DesignExtractorTest.cpp" />
     <ClCompile Include="EntityTest.cpp" />
@@ -64,10 +70,11 @@
     <ClCompile Include="FollowsTParserTest.cpp" />
     <ClCompile Include="FSMTest.cpp" />
     <ClCompile Include="NextBipParserTest.cpp" />
+    <ClCompile Include="NextBipPreprocessorTest.cpp" />
     <ClCompile Include="NextBipTParserTest.cpp" />
-    <ClCompile Include="MonotypeRelationTableTest.cpp" />
     <ClCompile Include="NextBipEvaluatorTest.cpp" />
     <ClCompile Include="NextBipTEvaluatorTest.cpp" />
+    <ClCompile Include="NextBipTPreprocessorTest.cpp" />
     <ClCompile Include="NextEvaluatorTest.cpp" />
     <ClCompile Include="ParentParserTest.cpp" />
     <ClCompile Include="ParentTParserTest.cpp" />
@@ -85,11 +92,13 @@
     <ClCompile Include="QueryEvaluatorPatternTest.cpp" />
     <ClCompile Include="QueryEvaluatorRelationTest.cpp" />
     <ClCompile Include="PatternTest.cpp" />
+    <ClCompile Include="QueryEvaluatorStressTest.cpp" />
     <ClCompile Include="QueryEvaluatorTupleTest.cpp" />
     <ClCompile Include="QueryEvaluatorWithTest.cpp" />
     <ClCompile Include="QueryResultTest.cpp" />
     <ClCompile Include="QueryPreprocessorTest.cpp" />
     <ClCompile Include="QueryTest.cpp" />
+    <ClCompile Include="QueryTupleOptimizerTest.cpp" />
     <ClCompile Include="RelationsEvaluatorTest.cpp" />
     <ClCompile Include="FollowsEvaluatorTest.cpp" />
     <ClCompile Include="FollowsTEvaluatorTest.cpp" />
@@ -104,6 +113,8 @@
     <ClCompile Include="IfPatternParserTest.cpp" />
     <ClCompile Include="ModifiesParserTest.cpp" />
     <ClCompile Include="AffectsParserTest.cpp" />
+    <ClCompile Include="RelationsUtilityTest.cpp" />
+    <ClCompile Include="TransitiveClosureHelperTest.cpp" />
     <ClCompile Include="UsesParserTest.cpp" />
     <ClCompile Include="WithParserTest.cpp" />
     <ClCompile Include="WhilePatternParserTest.cpp" />

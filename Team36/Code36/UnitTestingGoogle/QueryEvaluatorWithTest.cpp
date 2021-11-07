@@ -58,30 +58,30 @@ namespace UnitTesting {
 	};
 
 
-	TEST_F(QueryEvaluatorWithTest, evaluateQueryWithClausesSynonymAndConstant) {
+	TEST_F(QueryEvaluatorWithTest, evaluateQueryWithClausesConstantAndConstant) {
 		Entity c1 = { STMT, "1" };
 		Entity c2 = { STMT, "2" };
 		Entity c3 = { STMT, "3" };
 		Entity c4 = { STMT, "1" };
 
 
-		Query q = initQuery({WITH, c1, c1}, { BOOLEAN });
+		Query q = initQuery({ WITH, c1, c1 }, { BOOLEAN });
 		std::list<std::string> result = { BOOLEAN_TRUE };
 		EXPECT_EQ(evaluator.evaluateQuery(q), result);
 
-		q = initQuery({WITH, c1, c4}, { BOOLEAN });
+		q = initQuery({ WITH, c1, c4 }, { BOOLEAN });
 		EXPECT_EQ(evaluator.evaluateQuery(q), result);
 
 		result = { BOOLEAN_FALSE };
-		q = initQuery({WITH, c1, c2}, { BOOLEAN });
+		q = initQuery({ WITH, c1, c2 }, { BOOLEAN });
 		EXPECT_EQ(evaluator.evaluateQuery(q), result);
-		q = initQuery({WITH, c1, c3}, { BOOLEAN });
+		q = initQuery({ WITH, c1, c3 }, { BOOLEAN });
 		EXPECT_EQ(evaluator.evaluateQuery(q), result);
-		q = initQuery({WITH, c2, c3}, { BOOLEAN });
+		q = initQuery({ WITH, c2, c3 }, { BOOLEAN });
 		EXPECT_EQ(evaluator.evaluateQuery(q), result);
 	}
 
-	TEST_F(QueryEvaluatorWithTest, evaluateQueryWithClausesConstantAndConstant) {
+	TEST_F(QueryEvaluatorWithTest, evaluateQueryWithClausesSynonymAndConstant) {
 		Entity s = { STMT, Synonym{"a"} };
 		Query q = initQuery({ WITH, s , { STMT, "1" } }, { s });
 		std::list<std::string> result = { "1" };
@@ -221,7 +221,7 @@ namespace UnitTesting {
 
 		std::vector<Entity> headers = { { WHILE, Synonym{"a"} }, { WHILE, Synonym{"a"} } };
 		Query q = initQuery({ WITH, headers[0], headers[1] }, headers);
-		std::list<std::string> result = { "1 1", "2 2"};
+		std::list<std::string> result = { "1 1", "2 2" };
 		EXPECT_EQ(evaluator.evaluateQuery(initQuery({ WITH, headers[0], headers[1] }, headers)), result);
 
 

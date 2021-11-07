@@ -2,26 +2,20 @@
 
 #include <stdexcept>
 #include <string>
+#include "SPCommon.h"
 #include "PKB.h"
 #include "Tokenizer.h"
-#include "Common.h"
-#include "DesignExtractor.h"
-
+#include "Extractor.h"
 
 namespace SourceProcessor {
-
 	class FSM {
 	public:
 		FSM(Tokenizer&);
-
 		FSM(Tokenizer&, Extractor*);
 
 		~FSM();
 
 		Tokenizer& getTokenizer();
-
-		// Build data structure with the given tokenizer
-		// TODO: Dependency injection of KnowledgeBase, done on parser side
 		void build();
 
 		// Expects a procedure.
@@ -61,18 +55,18 @@ namespace SourceProcessor {
 		void expectStatementTypeAssign();
 
 		// Expects a conditional expression.
-		// cond_expr: rel_expr 
-		//			| '!' '(' cond_expr ')' 
-		//			| '(' cond_expr ')' '&&' '(' cond_expr ')' 
+		// cond_expr: rel_expr
+		//			| '!' '(' cond_expr ')'
+		//			| '(' cond_expr ')' '&&' '(' cond_expr ')'
 		//			| '(' cond_expr ')' '||' '(' cond_expr ')'
 		void expectConditionalExpression();
 
 		// Expects a relational expression.
 		// rel_expr : rel_factor '>' rel_factor
-		//			| rel_factor '>=' rel_factor 
-		//			| rel_factor '<' rel_factor 
-		//			| rel_factor '<=' rel_factor 
-		//			| rel_factor '==' rel_factor 
+		//			| rel_factor '>=' rel_factor
+		//			| rel_factor '<' rel_factor
+		//			| rel_factor '<=' rel_factor
+		//			| rel_factor '==' rel_factor
 		//			| rel_factor '!=' rel_factor
 		void expectRelationalExpression();
 
@@ -95,42 +89,26 @@ namespace SourceProcessor {
 		// Expects an identifier.
 		Token expectIdentifier();
 
-		// Optional relational expression.
 		bool optionalRelationalExpression();
-
-		// Optional replational factor.
 		bool optionalRelationalFactor();
-
-		// Optional expression.
 		bool optionalExpression();
-
-		// Optional term.
 		bool optionalTerm();
-
-		// Optional factor.
 		bool optionalFactor();
-
-		// Optional identifier.
 		bool optionalIdentifier();
 
 	private:
 		Tokenizer tokenizer;
-		Extractor *design_extractor;
+		Extractor* design_extractor;
 
 		// Expects a compulsory token with given token type, or else the build fails.
 		Token expectTokenAndPop(TokenType);
 
 		// This token can be optional, will return a boolean value indicating if that token exists
 		bool peekToken(TokenType);
-
-		// Expects an optional token with given token type.
 		bool probeAndPop(TokenType);
-
-		// Expects an optional token with given token type.
 		bool probeAndPeek(TokenType);
 
 		// Throws exception
 		void unexpectedToken(std::string);
 	};
-
-} // namespace SourceProcessor
+}

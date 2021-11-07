@@ -2,12 +2,21 @@
 
 #include "NextBipTEvaluator.h"
 #include "PKB.h"
-#include "CFGRelationsManager.h"
+#include "RelationPreprocessorManager.h"
 
 namespace UnitTesting {
 	class NextBipTEvaluatorTest : public testing::Test {
 	protected:
 		NextBipTEvaluatorTest() {
+			cfg1->addLine(1);
+			cfg1->addLine(2);
+			cfg1->addLine(3);
+			cfg2->addLine(4);
+		}
+
+		~NextBipTEvaluatorTest() {
+			delete cfg1;
+			delete cfg2;
 		}
 
 		virtual void SetUp() override {
@@ -20,13 +29,19 @@ namespace UnitTesting {
 			PKB::getInstance().addNext(1, 2);
 			PKB::getInstance().addNext(2, 3);
 
-			PKB::getInstance().addProcedure(p);
-			PKB::getInstance().addProcContains(p, 1);
-			PKB::getInstance().addProcContains(p, 2);
-			PKB::getInstance().addProcContains(p, 3);
-			PKB::getInstance().addProcContains(p, 4);
-			pkb.getRelationManager().update();
+			PKB::getInstance().addProcedure(pr1);
+			PKB::getInstance().addProcedure(pr2);
+			PKB::getInstance().addProcContains(pr1, 1);
+			PKB::getInstance().addProcContains(pr1, 2);
+			PKB::getInstance().addProcContains(pr1, 3);
+			PKB::getInstance().addProcContains(pr2, 4);
+			PKB::getInstance().addCFGBip(cfg1);
+			PKB::getInstance().addCFGBip(cfg2);
+			pkb.getRelationManager().reset();
 		}
+
+		CFG* cfg1 = new CFG();
+		CFG* cfg2 = new CFG();
 
 		PKBAdapter pkb;
 		NextBipTEvaluator evaluator;
@@ -42,7 +57,8 @@ namespace UnitTesting {
 		Entity e4 = { STMT, "4" };
 
 		proc_name p = "p";
-
+		proc_name pr1 = "p";
+		proc_name pr2 = "s";
 	};
 	TEST_F(NextBipTEvaluatorTest, evaluateWildAndWild) {
 		PKB::getInstance().resetCache();
@@ -52,13 +68,13 @@ namespace UnitTesting {
 		PKB::getInstance().addStmt(STMT_IF);
 		EXPECT_FALSE(evaluator.evaluateWildAndWild());
 		PKB::getInstance().addNext(1, 2);
-		pkb.getRelationManager().update();
+		PKB::getInstance().addCFGBip(cfg1);
+		PKB::getInstance().addCFGBip(cfg2);
+		pkb.getRelationManager().reset();
 		EXPECT_TRUE(evaluator.evaluateWildAndWild());
 	}
 
-
 	TEST_F(NextBipTEvaluatorTest, evaluateConstantAndConstant) {
-
 		EXPECT_TRUE(evaluator.evaluateConstantAndConstant(e1, e2));
 		EXPECT_TRUE(evaluator.evaluateConstantAndConstant(e1, e3));
 		EXPECT_TRUE(evaluator.evaluateConstantAndConstant(e2, e3));
@@ -78,7 +94,6 @@ namespace UnitTesting {
 	}
 
 	TEST_F(NextBipTEvaluatorTest, evaluateConstantAndWild) {
-
 		EXPECT_TRUE(evaluator.evaluateConstantAndWild(e1));
 		EXPECT_TRUE(evaluator.evaluateConstantAndWild(e2));
 		EXPECT_FALSE(evaluator.evaluateConstantAndWild(e3));
@@ -86,7 +101,6 @@ namespace UnitTesting {
 	}
 
 	TEST_F(NextBipTEvaluatorTest, evaluateWildAndConstant) {
-
 		EXPECT_FALSE(evaluator.evaluateWildAndConstant(e1));
 		EXPECT_TRUE(evaluator.evaluateWildAndConstant(e2));
 		EXPECT_TRUE(evaluator.evaluateWildAndConstant(e3));
@@ -94,8 +108,7 @@ namespace UnitTesting {
 	}
 
 	TEST_F(NextBipTEvaluatorTest, evaluateSynonymAndSynonym) {
-
-		std::vector<std::pair<StmtInfo, StmtInfo>> v = pkb.getRelationManager().getAllNextTRelation();
+		std::vector<std::pair<StmtInfo, StmtInfo>> v = pkb.getRelationManager().getAllNextBipTRelation();
 		Entity left = { STMT, Synonym{"a"} };
 		Entity right = { STMT, Synonym{"b"} };
 		std::pair<Entity, Entity> header = { left, right };
@@ -138,8 +151,7 @@ namespace UnitTesting {
 	}
 
 	TEST_F(NextBipTEvaluatorTest, evaluateWildAndSynonym) {
-
-		std::vector<StmtInfo> v = pkb.getRelationManager().getNextT();
+		std::vector<StmtInfo> v = pkb.getRelationManager().getNextBipT();
 		Entity header = { STMT, Synonym{"a"} };
 		ResultTable t(header, v);
 		EXPECT_EQ(evaluator.evaluateWildAndSynonym(header), t);
@@ -170,8 +182,7 @@ namespace UnitTesting {
 	}
 
 	TEST_F(NextBipTEvaluatorTest, evaluateSynonymAndWild) {
-
-		std::vector<StmtInfo> v = pkb.getRelationManager().getPreviousT();
+		std::vector<StmtInfo> v = pkb.getRelationManager().getPreviousBipT();
 		Entity header = { STMT, Synonym{"a"} };
 		ResultTable t(header, v);
 		EXPECT_EQ(evaluator.evaluateSynonymAndWild(header), t);
@@ -202,7 +213,6 @@ namespace UnitTesting {
 	}
 
 	TEST_F(NextBipTEvaluatorTest, evaluateConstantAndSynonym) {
-
 		std::vector<StmtInfo> v = { p2, p3 };
 		Entity header = { STMT, Synonym{"a"} };
 		Entity match = { STMT, "1" };
@@ -257,8 +267,7 @@ namespace UnitTesting {
 	}
 
 	TEST_F(NextBipTEvaluatorTest, evaluateSynonymAndConstant) {
-
-		std::vector<StmtInfo> v = { p2, p1 };
+		std::vector<StmtInfo> v = { p1, p2 };
 		Entity header = { STMT, Synonym{"a"} };
 		Entity match = { STMT, "3" };
 		ResultTable t(header, v);
@@ -305,5 +314,4 @@ namespace UnitTesting {
 		t = ResultTable(header, v);
 		EXPECT_EQ(evaluator.evaluateSynonymAndConstant(header, match), t);
 	}
-
 }

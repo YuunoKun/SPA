@@ -14,14 +14,14 @@ void RelationPreprocessor::reset() {
 }
 
 void RelationPreprocessor::setDFSForwardTrue(int index) {
-	for (int i = 0; i < PKB::getInstance().getStmts().size(); i++) {
+	for (int i = 0; i < stmt_info_list.size(); i++) {
 		calculated_matrix[index - 1][i] = true;
 	}
 	calculated_dfs_forward[index - 1] = true;
 }
 
 void RelationPreprocessor::setDFSBackwardTrue(int index) {
-	for (int i = 0; i < PKB::getInstance().getStmts().size(); i++) {
+	for (int i = 0; i < stmt_info_list.size(); i++) {
 		calculated_matrix[i][index - 1] = true;
 	}
 	calculated_dfs_backward[index - 1] = true;
@@ -39,8 +39,8 @@ bool RelationPreprocessor::isCacheEmpty() {
 	return cache.isEmpty();
 }
 
-std::vector<std::vector<bool>> RelationPreprocessor::getCalculatedMatrix() {
-	return calculated_matrix;
+bool RelationPreprocessor::isCalculated(int key, int value) {
+	return calculated_matrix[key][value];
 }
 
 bool RelationPreprocessor::isDFSForwardComputed(int index) {

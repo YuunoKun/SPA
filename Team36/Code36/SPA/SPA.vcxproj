@@ -11,6 +11,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\source\AffectsBipPreprocessor.cpp" />
+    <ClCompile Include="..\source\AffectsBipTPreprocessor.cpp" />
     <ClCompile Include="..\source\AffectsPreprocessor.cpp" />
     <ClCompile Include="..\source\AffectsTPreprocessor.cpp" />
     <ClCompile Include="..\source\DesignExtractor.cpp" />
@@ -18,12 +20,15 @@
     <ClCompile Include="..\source\ExprParser.cpp" />
     <ClCompile Include="..\source\FSM.cpp" />
     <ClCompile Include="..\source\IterativeDataflowSolver.cpp" />
+    <ClCompile Include="..\source\IterativeDataflowSolverBip.cpp" />
+    <ClCompile Include="..\source\NextBipPreprocessor.cpp" />
+    <ClCompile Include="..\source\NextBipTPreprocessor.cpp" />
     <ClCompile Include="..\source\Parser.cpp" />
     <ClCompile Include="..\source\Procedure.cpp" />
     <ClCompile Include="..\source\RelationPreprocessor.cpp" />
+    <ClCompile Include="..\source\RelationTableUtility.cpp" />
     <ClCompile Include="..\source\RelationTable.cpp" />
     <ClCompile Include="..\source\PKB.cpp" />
-    <ClCompile Include="..\source\MonotypeRelationTable.cpp" />
     <ClCompile Include="..\source\Statement.cpp" />
     <ClCompile Include="..\source\Entity.cpp" />
     <ClCompile Include="..\source\Pattern.cpp" />
@@ -88,14 +93,18 @@
     <ClCompile Include="..\source\AffectsParser.cpp" />
     <ClCompile Include="..\source\AffectsTParser.cpp" />
     <ClCompile Include="..\source\WithParser.cpp" />
-    <ClCompile Include="..\source\CFGRelationsManager.cpp" />
+    <ClCompile Include="..\source\RelationPreprocessorManager.cpp" />
     <ClCompile Include="..\source\NextTPreprocessor.cpp" />
-	<ClCompile Include="..\source\AffectsBipParser.cpp" />
-	<ClCompile Include="..\source\AffectsBipTParser.cpp" />
-	<ClCompile Include="..\source\NextBipParser.cpp" />
-	<ClCompile Include="..\source\NextBipTParser.cpp" />
+    <ClCompile Include="..\source\AffectsBipParser.cpp" />
+    <ClCompile Include="..\source\AffectsBipTParser.cpp" />
+    <ClCompile Include="..\source\NextBipParser.cpp" />
+    <ClCompile Include="..\source\NextBipTParser.cpp" />
+    <ClCompile Include="..\source\QueryTupleGraph.cpp" />
+    <ClCompile Include="..\source\QueryTupleOptimizer.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\source\AffectsBipPreprocessor.h" />
+    <ClInclude Include="..\source\AffectsBipTPreprocessor.h" />
     <ClInclude Include="..\source\AffectsTPreprocessor.h" />
     <ClInclude Include="..\source\DesignExtractor.h" />
     <ClInclude Include="..\source\ExprNode.h" />
@@ -103,13 +112,19 @@
     <ClInclude Include="..\source\Extractor.h" />
     <ClInclude Include="..\source\FSM.h" />
     <ClInclude Include="..\source\AffectsPreprocessor.h" />
+    <ClInclude Include="..\source\NextBipPreprocessor.h" />
     <ClInclude Include="..\source\IterativeDataflowSolver.h" />
+    <ClInclude Include="..\source\IterativeDataflowSolverBip.h" />
     <ClInclude Include="..\source\MonotypeRelationTable.h" />
+    <ClInclude Include="..\source\NextBipTPreprocessor.h" />
     <ClInclude Include="..\source\PKB.h" />
     <ClInclude Include="..\source\Parser.h" />
+    <ClInclude Include="..\source\PKBQueryInterface.h" />
+    <ClInclude Include="..\source\PKBSourceInterface.h" />
     <ClInclude Include="..\source\Procedure.h" />
-    <ClInclude Include="..\source\KnowledgeBase.h" />
+    <ClInclude Include="..\source\RelationTableUtility.h" />
     <ClInclude Include="..\source\RelationTable.h" />
+    <ClInclude Include="..\source\SPCommon.h" />
     <ClInclude Include="..\source\Statement.h" />
     <ClInclude Include="..\source\Common.h" />
     <ClInclude Include="..\source\QueryResult.h" />
@@ -179,13 +194,16 @@
     <ClInclude Include="..\source\WithParser.h" />
     <ClInclude Include="..\source\RelationParserInterface.h" />
     <ClInclude Include="..\source\PatternParserInterface.h" />
-    <ClInclude Include="..\source\CFGRelationsManager.h" />
+    <ClInclude Include="..\source\RelationPreprocessorManager.h" />
     <ClInclude Include="..\source\NextTPreprocessor.h" />
     <ClInclude Include="..\source\RelationPreprocessor.h" />
-	<ClInclude Include="..\source\AffectsBipParser.h" />
-	<ClInclude Include="..\source\AffectsBipTParser.h" />
-	<ClInclude Include="..\source\NextBipParser.h" />
-	<ClInclude Include="..\source\NextBipTParser.h" />
+    <ClInclude Include="..\source\AffectsBipParser.h" />
+    <ClInclude Include="..\source\AffectsBipTParser.h" />
+    <ClInclude Include="..\source\NextBipParser.h" />
+    <ClInclude Include="..\source\NextBipTParser.h" />
+    <ClInclude Include="..\source\TransitiveClosureHelper.h" />
+    <ClInclude Include="..\source\QueryTupleGraph.h" />
+    <ClInclude Include="..\source\QueryTupleOptimizer.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{DC21A1EA-D2C6-4D14-A2B4-E025B64BDE81}</ProjectGuid>

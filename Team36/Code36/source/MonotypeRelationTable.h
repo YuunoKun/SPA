@@ -21,13 +21,4 @@ public:
 			insert(pair.first, pair.second);
 		}
 	};
-	std::vector<T>forwardDFS(T);
-	std::vector<T>backwardDFS(T);
-	MonotypeRelationTable<T> copy() const;
-
-	MonotypeRelationTable<T> findTransitiveClosure() const;
-
-protected:
-	std::unordered_set<T> calculated_dfs_forward;
-	std::unordered_set<T> calculated_dfs_backward;
 };
