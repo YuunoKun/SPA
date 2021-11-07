@@ -76,14 +76,14 @@ std::vector<pattern_info> PKBAdapter::getAssignInfo() {
 	return a.getPairs();
 }
 
-std::vector<pattern_info> PKBAdapter::getAssignInfo(expr matchExpression, bool isWild) {
+std::vector<pattern_info> PKBAdapter::getAssignInfo(expr match_expression, bool is_wild) {
 	std::vector<pattern_info> temp = getAssignInfo();
 	std::vector<pattern_info> a;
 	for (auto s : temp) {
 		expr expression = pkb_instance.getExpression(s.first);
-		if (isWild && expression.contains(&matchExpression)) {
+		if (is_wild && expression.contains(&match_expression)) {
 			a.push_back(s);
-		} else if (expression.equals(&matchExpression)) {
+		} else if (expression.equals(&match_expression)) {
 			a.push_back(s);
 		}
 	}
@@ -95,8 +95,8 @@ std::vector<stmt_index> PKBAdapter::getAssignInfoFiltered() {
 	return a.getKeys();
 }
 
-std::vector<stmt_index> PKBAdapter::getAssignInfoFiltered(expr matchExpression, bool isWild) {
-	return getAssignInfoFiltered(getAssignInfoFiltered(), matchExpression, isWild);
+std::vector<stmt_index> PKBAdapter::getAssignInfoFiltered(expr match_expression, bool is_wild) {
+	return getAssignInfoFiltered(getAssignInfoFiltered(), match_expression, is_wild);
 }
 
 std::vector<stmt_index> PKBAdapter::getAssignInfoFiltered(var_name var) {
@@ -104,17 +104,17 @@ std::vector<stmt_index> PKBAdapter::getAssignInfoFiltered(var_name var) {
 	return a.getKeys(var);
 }
 
-std::vector<stmt_index> PKBAdapter::getAssignInfoFiltered(var_name var, expr matchExpression, bool isWild) {
-	return getAssignInfoFiltered(getAssignInfoFiltered(var), matchExpression, isWild);
+std::vector<stmt_index> PKBAdapter::getAssignInfoFiltered(var_name var, expr match_expression, bool is_wild) {
+	return getAssignInfoFiltered(getAssignInfoFiltered(var), match_expression, is_wild);
 }
 
-std::vector<stmt_index> PKBAdapter::getAssignInfoFiltered(std::vector<stmt_index>& temp, expr matchExpression, bool isWild) {
+std::vector<stmt_index> PKBAdapter::getAssignInfoFiltered(std::vector<stmt_index>& temp, expr match_expression, bool is_wild) {
 	std::vector<stmt_index> a;
 	for (auto s : temp) {
 		expr expression = pkb_instance.getExpression(s);
-		if (isWild && expression.contains(&matchExpression)) {
+		if (is_wild && expression.contains(&match_expression)) {
 			a.push_back(s);
-		} else if (expression.equals(&matchExpression)) {
+		} else if (expression.equals(&match_expression)) {
 			a.push_back(s);
 		}
 	}
@@ -128,7 +128,6 @@ bool PKBAdapter::isFollowEmpty() {
 
 bool PKBAdapter::isFollow(stmt_index index1, stmt_index index2) {
 	auto a = pkb_instance.getFollows();
-	//// Need better method to find stmt_info
 	StmtInfo s1 = getStmt(index1);
 	StmtInfo s2 = getStmt(index2);
 	return a.containsPair(s1, s2);
