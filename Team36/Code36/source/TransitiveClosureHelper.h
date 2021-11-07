@@ -1,6 +1,8 @@
 #pragma once
 #include <vector>
+#include <set>
 #include <unordered_set>
+#include <unordered_map>
 #include <stack>
 #include <algorithm>
 
@@ -9,20 +11,21 @@ class TransitiveClosureHelper {
 public:
 	static std::vector<std::pair<T, T>> findTransitiveClosure(std::vector<std::pair<T, T>> input);
 private:
-	static std::vector<T> transitiveClosureDFS(std::vector<std::pair<T, T>> input, T start);
+	static std::vector<T> transitiveClosureDFS(std::unordered_map<T, std::set<T>>&, T start);
 };
 
 template<class T>
 inline std::vector<std::pair<T, T>> TransitiveClosureHelper<T>::findTransitiveClosure(std::vector<std::pair<T, T>> input) {
 	std::vector<std::pair<T, T>> res;
-	std::unordered_set<T> keys;
+	std::unordered_map<T, std::set<T>> input_map;
 
-	for (auto& it : input) {
-		keys.emplace(it.first);
+	for (auto const& it : input) {
+		input_map[it.first].emplace(it.second);
 	}
 
-	for (const T& k : keys) {
-		std::vector<T> dfs_val = transitiveClosureDFS(input, k);
+	for (const auto& pair : input_map) {
+		T k = pair.first;
+		std::vector<T> dfs_val = transitiveClosureDFS(input_map, k);
 		for (T value : dfs_val) {
 			res.push_back({ k, value });
 		}
@@ -31,16 +34,14 @@ inline std::vector<std::pair<T, T>> TransitiveClosureHelper<T>::findTransitiveCl
 }
 
 template<class T>
-inline std::vector<T> TransitiveClosureHelper<T>::transitiveClosureDFS(std::vector<std::pair<T, T>> input, T start) {
+inline std::vector<T> TransitiveClosureHelper<T>::transitiveClosureDFS(std::unordered_map<T, std::set<T>>& input, T start) {
 	std::vector<T> res;
 
 	std::unordered_set<T> visited;
 	std::stack<T> stack;
 
-	for (auto& it : input) {
-		if (it.first == start && !visited.count(it.second)) {
-			stack.push(it.second);
-		}
+	for (auto& val : input[start]) {
+		stack.push(val);
 	}
 
 	while (!stack.empty()) {
@@ -52,10 +53,8 @@ inline std::vector<T> TransitiveClosureHelper<T>::transitiveClosureDFS(std::vect
 			res.push_back(s);
 		}
 
-		for (auto& it : input) {
-			if (it.first == s && !visited.count(it.second)) {
-				stack.push(it.second);
-			}
+		for (auto& val : input[s]) {
+			if (!visited.count(val)) stack.push(val);
 		}
 	}
 	std::sort(res.begin(), res.end());
