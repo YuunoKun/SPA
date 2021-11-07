@@ -8,10 +8,10 @@ namespace UnitTesting {
 	class NextBipTEvaluatorTest : public testing::Test {
 	protected:
 		NextBipTEvaluatorTest() {
-			cfg1->add(1);
-			cfg1->add(2);
-			cfg1->add(3);
-			cfg2->add(4);
+			cfg1->addLine(1);
+			cfg1->addLine(2);
+			cfg1->addLine(3);
+			cfg2->addLine(4);
 		}
 
 		~NextBipTEvaluatorTest() {
