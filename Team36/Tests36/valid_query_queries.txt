@@ -2611,22 +2611,22 @@ TRUE
 55 - valid NextBip
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
 Select BOOLEAN such that NextBip(c, w)
-FALSE
+TRUE
 5000
 56 - valid NextBip
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
 Select BOOLEAN such that NextBip(c, ifs)
-FALSE
+TRUE
 5000
 57 - valid NextBip
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c;
 Select BOOLEAN such that NextBip(c, a)
-FALSE
+TRUE
 5000
 58 - valid NextBip
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c, c1;
 Select BOOLEAN such that NextBip(c, c1)
-FALSE
+TRUE
 5000
 59 - valid NextBip
 stmt sc, s; read r; print p; while w; if ifs; assign a; variable v; constant co; procedure pr; call c; prog_line pl;

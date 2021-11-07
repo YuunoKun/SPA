@@ -59,14 +59,14 @@ procedure prints {
   print x;
 }
 procedure calls {
-  call c;
-  call c;
+  call assigns;
+  call reads;
   read x;
-  call c;
+  call prints;
   print x;
-  call c;
+  call ifs;
   print x;
-  call c;
+  call whiles;
   y = 1 * x;
   call c;
   if (q!= 1) then {
@@ -182,4 +182,7 @@ procedure whiles{
 procedure c {
     print x;
     read x;
+}
+procedure callsbips{
+    call calls;
 }
