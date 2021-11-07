@@ -144,46 +144,46 @@
       <Filter>PKB\RelationTables</Filter>
     </ClCompile>
     <ClCompile Include="AssignPatternParserTest.cpp">
-      <Filter>PQL\QueryPreprocessor\QueryPatternRelRefParser</Filter>
+      <Filter>PQL\QueryPreprocessor\QueryClauseParser</Filter>
     </ClCompile>
     <ClCompile Include="CallsParserTest.cpp">
-      <Filter>PQL\QueryPreprocessor\QueryPatternRelRefParser</Filter>
+      <Filter>PQL\QueryPreprocessor\QueryClauseParser</Filter>
     </ClCompile>
     <ClCompile Include="CallsTParserTest.cpp">
-      <Filter>PQL\QueryPreprocessor\QueryPatternRelRefParser</Filter>
+      <Filter>PQL\QueryPreprocessor\QueryClauseParser</Filter>
     </ClCompile>
     <ClCompile Include="FollowsParserTest.cpp">
-      <Filter>PQL\QueryPreprocessor\QueryPatternRelRefParser</Filter>
+      <Filter>PQL\QueryPreprocessor\QueryClauseParser</Filter>
     </ClCompile>
     <ClCompile Include="FollowsTParserTest.cpp">
-      <Filter>PQL\QueryPreprocessor\QueryPatternRelRefParser</Filter>
+      <Filter>PQL\QueryPreprocessor\QueryClauseParser</Filter>
     </ClCompile>
     <ClCompile Include="IfPatternParserTest.cpp">
-      <Filter>PQL\QueryPreprocessor\QueryPatternRelRefParser</Filter>
+      <Filter>PQL\QueryPreprocessor\QueryClauseParser</Filter>
     </ClCompile>
     <ClCompile Include="ModifiesParserTest.cpp">
-      <Filter>PQL\QueryPreprocessor\QueryPatternRelRefParser</Filter>
+      <Filter>PQL\QueryPreprocessor\QueryClauseParser</Filter>
     </ClCompile>
     <ClCompile Include="NextParserTest.cpp">
-      <Filter>PQL\QueryPreprocessor\QueryPatternRelRefParser</Filter>
+      <Filter>PQL\QueryPreprocessor\QueryClauseParser</Filter>
     </ClCompile>
     <ClCompile Include="NextTParserTest.cpp">
-      <Filter>PQL\QueryPreprocessor\QueryPatternRelRefParser</Filter>
+      <Filter>PQL\QueryPreprocessor\QueryClauseParser</Filter>
     </ClCompile>
     <ClCompile Include="WhilePatternParserTest.cpp">
-      <Filter>PQL\QueryPreprocessor\QueryPatternRelRefParser</Filter>
+      <Filter>PQL\QueryPreprocessor\QueryClauseParser</Filter>
     </ClCompile>
     <ClCompile Include="ParentParserTest.cpp">
-      <Filter>PQL\QueryPreprocessor\QueryPatternRelRefParser</Filter>
+      <Filter>PQL\QueryPreprocessor\QueryClauseParser</Filter>
     </ClCompile>
     <ClCompile Include="ParentTParserTest.cpp">
-      <Filter>PQL\QueryPreprocessor\QueryPatternRelRefParser</Filter>
+      <Filter>PQL\QueryPreprocessor\QueryClauseParser</Filter>
     </ClCompile>
     <ClCompile Include="WithParserTest.cpp">
-      <Filter>PQL\QueryPreprocessor\QueryPatternRelRefParser</Filter>
+      <Filter>PQL\QueryPreprocessor\QueryClauseParser</Filter>
     </ClCompile>
     <ClCompile Include="UsesParserTest.cpp">
-      <Filter>PQL\QueryPreprocessor\QueryPatternRelRefParser</Filter>
+      <Filter>PQL\QueryPreprocessor\QueryClauseParser</Filter>
     </ClCompile>
     <ClCompile Include="NextTPreprocessorTest.cpp">
       <Filter>PKB\RelationPreprocessor</Filter>
@@ -219,22 +219,22 @@
       <Filter>PQL\QueryEvaluator</Filter>
     </ClCompile>
     <ClCompile Include="NextBipTParserTest.cpp">
-      <Filter>PQL\QueryPreprocessor\QueryPatternRelRefParser</Filter>
+      <Filter>PQL\QueryPreprocessor\QueryClauseParser</Filter>
     </ClCompile>
     <ClCompile Include="NextBipParserTest.cpp">
-      <Filter>PQL\QueryPreprocessor\QueryPatternRelRefParser</Filter>
+      <Filter>PQL\QueryPreprocessor\QueryClauseParser</Filter>
     </ClCompile>
     <ClCompile Include="AffectsTParserTest.cpp">
-      <Filter>PQL\QueryPreprocessor\QueryPatternRelRefParser</Filter>
+      <Filter>PQL\QueryPreprocessor\QueryClauseParser</Filter>
     </ClCompile>
     <ClCompile Include="AffectsParserTest.cpp">
-      <Filter>PQL\QueryPreprocessor\QueryPatternRelRefParser</Filter>
+      <Filter>PQL\QueryPreprocessor\QueryClauseParser</Filter>
     </ClCompile>
     <ClCompile Include="AffectsBipTParserTest.cpp">
-      <Filter>PQL\QueryPreprocessor\QueryPatternRelRefParser</Filter>
+      <Filter>PQL\QueryPreprocessor\QueryClauseParser</Filter>
     </ClCompile>
     <ClCompile Include="AffectsBipParserTest.cpp">
-      <Filter>PQL\QueryPreprocessor\QueryPatternRelRefParser</Filter>
+      <Filter>PQL\QueryPreprocessor\QueryClauseParser</Filter>
     </ClCompile>
     <ClCompile Include="AffectsBipPreprocessorTest.cpp">
       <Filter>PKB\RelationPreprocessor</Filter>
@@ -284,7 +284,9 @@
     <ClCompile Include="QueryTupleOptimizerTest.cpp">
       <Filter>PQL\QueryEvaluator</Filter>
     </ClCompile>
-    <ClCompile Include="QueryClauseParserTest.cpp" />
+    <ClCompile Include="QueryClauseParserTest.cpp">
+      <Filter>PQL\QueryPreprocessor\QueryClauseParser</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -329,11 +331,11 @@
     <Filter Include="PKB\RelationTables">
       <UniqueIdentifier>{51ac644e-6300-4f55-bfaf-9be8076a0699}</UniqueIdentifier>
     </Filter>
-    <Filter Include="PQL\QueryPreprocessor\QueryPatternRelRefParser">
-      <UniqueIdentifier>{02759e7f-c0fc-4177-b5a7-6ad19b337bea}</UniqueIdentifier>
-    </Filter>
     <Filter Include="PKB\RelationPreprocessorManager">
       <UniqueIdentifier>{02bb02c6-2c41-49f9-b2f0-ed1c33295826}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PQL\QueryPreprocessor\QueryClauseParser">
+      <UniqueIdentifier>{02759e7f-c0fc-4177-b5a7-6ad19b337bea}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
