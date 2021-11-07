@@ -34,12 +34,12 @@ namespace UnitTesting {
 			PKB::getInstance().addUsesS(3, y);
 
 			cfg1 = new CFG();
-			cfg1->add(1);
-			cfg1->add(2);
-			cfg1->add(3);
+			cfg1->addLine(1);
+			cfg1->addLine(2);
+			cfg1->addLine(3);
 
 			cfg2 = new CFG();
-			cfg2->add(4);
+			cfg2->addLine(4);
 			PKB::getInstance().addCFGBip(cfg1);
 			PKB::getInstance().addCFGBip(cfg2);
 

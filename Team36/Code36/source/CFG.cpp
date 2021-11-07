@@ -53,7 +53,7 @@ bool CFG::isInvalidCFG() {
 	return getTail()->isInvalid();
 }
 
-void CFG::add(prog_line new_line) {
+void CFG::addLine(prog_line new_line) {
 	checkValidity();
 
 	if (isEmptyCFG()) {
@@ -102,7 +102,7 @@ CFGNode* CFG::findNode(CFGNode* curr, prog_line line) {
 	return result;
 }
 
-void CFG::loop(CFG* cfg, prog_line line_attached) {
+void CFG::addLoop(CFG* cfg, prog_line line_attached) {
 	checkValidity();
 
 	CFGNode* target = makeStandalone(line_attached);
@@ -118,7 +118,7 @@ void CFG::loop(CFG* cfg, prog_line line_attached) {
 	cfg->setHead(nullptr);
 }
 
-void CFG::fork(CFG* cfg_if, CFG* cfg_else, prog_line line_attached) {
+void CFG::addFork(CFG* cfg_if, CFG* cfg_else, prog_line line_attached) {
 	checkValidity();
 
 	CFGNode* fork_start = makeStandalone(line_attached);
@@ -153,7 +153,7 @@ void CFG::fork(CFG* cfg_if, CFG* cfg_else, prog_line line_attached) {
 	}
 }
 
-void CFG::call(CFG* cfg_call, prog_line call_node) {
+void CFG::addCall(CFG* cfg_call, prog_line call_node) {
 	checkValidity();
 
 	if (!cfg_call) {
