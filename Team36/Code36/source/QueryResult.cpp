@@ -320,6 +320,9 @@ void QueryResult::getResult(Entity e, std::list<std::string>& out) {
 }
 
 void QueryResult::updateHaveResultAfterTableJoin() {
+	if (!have_result) {
+		return;
+	}
 	QueryTupleOptimizer optimizer;
 	std::list<std::pair<Entity, Entity>> headers = getAllTableHeaderWithTwoSynonym();
 	std::list<std::list<std::pair<Entity, Entity>>> grouped_header = optimizer.groupCommonEntities(headers);
