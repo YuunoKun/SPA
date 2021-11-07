@@ -1,4 +1,3 @@
-
 #include "PatternIfEvaluator.h"
 #include "Query.h"
 #include "QueryResult.h"
@@ -15,4 +14,3 @@ ResultTable PatternIfEvaluator::evaluateWild(Pattern& pattern) {
 ResultTable PatternIfEvaluator::evaluateConstant(Pattern& pattern) {
 	return ResultTable(pattern.getPatternType(), pkb.getIfUses(pattern.getLeftExpression().getValue()));
 }
-

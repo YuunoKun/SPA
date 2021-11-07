@@ -1,4 +1,3 @@
-
 #include "Pattern.h"
 #include "ResultTable.h"
 #include "PKBAdapter.h"

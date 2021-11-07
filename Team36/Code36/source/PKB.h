@@ -42,14 +42,17 @@ public:
 	void addCFGsToDestroy(std::vector<CFG*>);
 	void addCFGBip(CFG*);
 
-	const std::vector<proc_name>& getProcedures();
-	const std::vector<var_name>& getVariables();
 	const std::vector<StmtInfo>& getStmts();
 	const std::unordered_map<stmt_index, expr>& getExpr();
 	const StmtInfo getStmt(stmt_index stmt_index);
 	const var_name getAssignment(stmt_index stmt_index);
 	expr getExpression(stmt_index stmt_index);
+	const std::vector<proc_name> getProcedures();
+	const std::vector<var_name> getVariables();
 	const std::vector<constant> getConstants();
+	const std::unordered_set<proc_name>& getProceduresSet();
+	const std::unordered_set<var_name>& getVariablesSet();
+	const std::unordered_set<constant>& getConstantsSet();
 	const RelationTable<stmt_index, var_name>& getAssigns();
 	const MonotypeRelationTable<StmtInfo>& getFollows();
 	const MonotypeRelationTable<StmtInfo>& getParent();
@@ -74,9 +77,9 @@ public:
 	void resetEntities();
 
 private:
-	std::vector<proc_name> proc_table{};
-	std::vector<var_name> var_table{};
 	std::vector<StmtInfo> stmt_table{};
+	std::unordered_set<proc_name> proc_table{};
+	std::unordered_set<var_name> var_table{};
 	std::unordered_set<constant> const_table{};
 	std::unordered_map<stmt_index, expr> expr_table{};
 	RelationTable<stmt_index, var_name> assignment_table;

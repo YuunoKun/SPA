@@ -8,12 +8,12 @@
 namespace UnitTesting {
 	class MockPKB : public PKBQueryInterface {
 	public:
-		const std::vector<proc_name>& MockPKB::getProcedures() {
-			return mock_proc_table;
+		const std::vector<proc_name> MockPKB::getProcedures() {
+			return std::vector<proc_name>(mock_proc_table.begin(), mock_proc_table.end());
 		}
 
-		const std::vector<var_name>& MockPKB::getVariables() {
-			return mock_var_table;
+		const std::vector<var_name> MockPKB::getVariables() {
+			return std::vector<proc_name>(mock_var_table.begin(), mock_var_table.end());
 		}
 
 		const std::vector<StmtInfo>& MockPKB::getStmts() {
@@ -56,8 +56,19 @@ namespace UnitTesting {
 		}
 
 		const std::vector<constant> MockPKB::getConstants() {
-			std::vector<constant> v(mock_const_table.begin(), mock_const_table.end());
-			return v;
+			return std::vector<constant>(mock_const_table.begin(), mock_const_table.end());
+		}
+
+		const std::unordered_set<proc_name>& getProceduresSet() {
+			return mock_proc_table;
+		}
+
+		const std::unordered_set<var_name>& getVariablesSet() {
+			return mock_var_table;
+		}
+
+		const std::unordered_set<constant>& getConstantsSet() {
+			return mock_const_table;
 		}
 
 		const RelationTable<stmt_index, var_name>& MockPKB::getAssigns() {
@@ -175,15 +186,15 @@ namespace UnitTesting {
 		};
 
 		void addConstant(constant constant) {
-			mock_const_table.push_back(constant);
+			mock_const_table.emplace(constant);
 		}
 
 		void addProcedure(proc_name proc_name) {
-			mock_proc_table.push_back(proc_name);
+			mock_proc_table.emplace(proc_name);
 		}
 
 		void addVariable(var_name var_name) {
-			mock_var_table.push_back(var_name);
+			mock_var_table.emplace(var_name);
 		}
 
 		void addStmt(StmtType stmt_type) {
@@ -273,10 +284,10 @@ namespace UnitTesting {
 			mock_cfgs.push_back(cfg);
 		}
 
-		std::vector<proc_name> mock_proc_table;
 		std::vector<StmtInfo> mock_stmt_table;
-		std::vector<var_name> mock_var_table;
-		std::vector<constant> mock_const_table;
+		std::unordered_set<proc_name> mock_proc_table;
+		std::unordered_set<var_name> mock_var_table;
+		std::unordered_set<constant> mock_const_table;
 
 		std::unordered_map<stmt_index, expr> mock_expr_table;
 		RelationTable<stmt_index, var_name> mock_assignment_table;

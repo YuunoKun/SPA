@@ -7,9 +7,7 @@
 
 class PatternIfEvaluator : public PatternEvaluatorInterface {
 public:
-    ResultTable evaluateSynonym(Pattern&) override;
-    ResultTable evaluateWild(Pattern&) override;
-    ResultTable evaluateConstant(Pattern&) override;
-protected:
-    PKBAdapter pkb;
+	ResultTable evaluateSynonym(Pattern&) override;
+	ResultTable evaluateWild(Pattern&) override;
+	ResultTable evaluateConstant(Pattern&) override;
 };

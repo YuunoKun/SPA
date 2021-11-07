@@ -1,5 +1,7 @@
 #pragma once
+
 #include <map>
+
 #include "Entity.h"
 
 class QueryTupleOptimizer {

@@ -4,48 +4,6 @@
 #include "Common.h"
 
 namespace UnitTesting {
-	TEST(RelRef, invalidUsesP) {
-		// invalid UsesP
-		std::vector<Entity> assign_entity;
-		assign_entity.push_back({ ASSIGN, Synonym{ "assign" } });
-		assign_entity.push_back({ READ, Synonym{ "read" } });
-		assign_entity.push_back({ IF, Synonym{ "if" } });
-		assign_entity.push_back({ WHILE, Synonym{ "while" } });
-		assign_entity.push_back({ CALL, Synonym{ "call" } });
-		for (auto& it : assign_entity) {
-			try {
-				RelRef invalidEntityUseP(USES_P, it, it);
-				FAIL();
-			} catch (std::invalid_argument const& err) {
-				EXPECT_EQ(err.what(), std::string("Clause Type is invalid for USES_P type"));
-			} catch (...) {
-				// Test case should fail if not caught as std::invalid argument
-				FAIL();
-			}
-		}
-	}
-
-	TEST(RelRef, invalidModifiesP) {
-
-		// invalid ModifiesP
-		std::vector<Entity> assign_entity;
-		assign_entity.push_back({ ASSIGN, Synonym{ "assign" } });
-		assign_entity.push_back({ READ, Synonym{ "read" } });
-		assign_entity.push_back({ IF, Synonym{ "if" } });
-		assign_entity.push_back({ WHILE, Synonym{ "while" } });
-		assign_entity.push_back({ CALL, Synonym{ "call" } });
-		for (auto& it : assign_entity) {
-			try {
-				RelRef invalidEntityUseP(MODIFIES_P, it, it);
-				FAIL();
-			} catch (std::invalid_argument const& err) {
-				EXPECT_EQ(err.what(), std::string("Clause Type is invalid for MODIFIES_P type"));
-			} catch (...) {
-				// Test case should fail if not caught as std::invalid argument
-				FAIL();
-			}
-		}
-	}
 	TEST(RelRef, getType) {
 		Entity entity1(PROCEDURE, Synonym{ "test" });
 		Entity entity2(VARIABLE, Synonym{ "test1" });

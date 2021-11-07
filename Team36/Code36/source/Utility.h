@@ -15,7 +15,6 @@ public:
 
 	static void unorderedSetToStringList(std::unordered_set<std::string>&, std::list<std::string>&);
 
-
 	static std::vector<std::pair<std::string, std::string>> duplicateColumn(std::vector<std::string>&);
 	static std::vector<std::pair<value, value>> duplicateColumn(std::vector<value>&);
 	static std::vector<std::pair<StmtInfo, StmtInfo>> duplicateColumn(std::vector<StmtInfo>&);
@@ -37,10 +36,8 @@ public:
 	static void filterResults(EntityType, std::vector<StmtInfo>&, std::list<std::vector<value>>&);
 	static void filterResults(EntityType, std::vector<std::pair<StmtInfo, std::string>>&, std::list<std::vector<value>>&, std::unordered_map<value, std::string>&);
 	static void filterResults(std::pair<EntityType, EntityType>, std::vector<std::pair<StmtInfo, StmtInfo>>&, std::list<std::vector<value>>&);
-
 	static void filterResults(std::list<std::vector<value>>&, std::unordered_set<value>&, int, std::list<std::vector<value>>&);
 	static void filterResults(std::list<std::vector<value>>&, std::unordered_map<value, std::unordered_set<value>>&, int, int, std::list<std::vector<value>>&);
-
 	static void filterBothResults(std::list<std::vector<value>>&, int, std::list<std::vector<value>>&, int);
 
 	static void mergeColumnEqual(std::list<std::vector<value>>&);
@@ -50,7 +47,6 @@ public:
 		std::list<std::vector<value>>&);
 	static void joinTable(std::list<std::vector<value>>&,
 		std::list<std::vector<value>>&, std::list<std::vector<value>>&);
-
 	static void joinTableExcludeJoinColumn(std::list<std::vector<value>>&, int,
 		std::unordered_multimap<value, std::vector<value>>&, int,
 		std::list<std::vector<value>>&);
@@ -91,12 +87,9 @@ public:
 	static bool isStringEntityType(EntityType);
 	static value hashString(std::string, std::unordered_map<value, std::string>&);
 
-
 	static std::vector<Entity> getEntityListFromPair(std::list<std::pair<Entity, Entity>>&);
-
 	static Entity getEntityNameWithLeastFrequency(std::list<std::pair<Entity, Entity>>&);
 	static Entity getEntityNameWithLeastFrequency(std::list<std::pair<Entity, Entity>>&, std::vector<Entity> selected);
-
 
 	static std::list<std::pair<Entity, Entity>> splitEntityPairs(std::list<std::pair<Entity, Entity>>&, Entity);
 
@@ -114,6 +107,4 @@ private:
 	static void joinRowExcludeJoinColumn(std::vector<value>&, int, std::vector<value>&, int, std::vector<value>&, std::string&);
 
 	static Entity getEntityNameWithLeastFrequency(std::list<std::pair<Entity, Entity>>&, std::unordered_set<std::string> selected);
-
-
 };

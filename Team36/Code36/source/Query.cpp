@@ -1,6 +1,6 @@
 #include <iostream>
+
 #include "Query.h"
-#include <vector>
 
 Query::Query() {
 	this->isSemanticError = "";
