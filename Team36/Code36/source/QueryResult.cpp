@@ -281,9 +281,11 @@ void QueryResult::getResults(std::vector<Entity>& selected, ResultTable& out) {
 }
 
 void QueryResult::getResult(Entity e, std::list<std::string>& out) {
-	for (auto& table : results) {
-		if (table.second->isInTable(e)) {
-			table.second->getEntityResult(e, out);
+	std::list<ResultTable> merged_table;
+	getSelectedEntitiesMergedTable({ e }, merged_table);
+	for (auto& table : merged_table) {
+		if (table.isInTable(e)) {
+			table.getEntityResult(e, out);
 			return;
 		}
 	}
