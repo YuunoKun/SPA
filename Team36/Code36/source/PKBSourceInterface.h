@@ -24,6 +24,7 @@ public:
 
 	virtual void addNext(prog_line prog_line1, prog_line prog_line2) = 0;
 	virtual void addCallsP(proc_name caller_proc_name, proc_name callee_proc_name) = 0;
+	virtual void addCallsPT(proc_name caller_proc_name, proc_name callee_proc_name) = 0;
 	virtual void addCallsS(stmt_index caller_stmt_index, proc_name callee_proc_name) = 0;
 	virtual void addIf(stmt_index if_stmt_index, var_name control_var) = 0;
 	virtual void addWhile(stmt_index while_stmt_index, var_name control_var) = 0;
