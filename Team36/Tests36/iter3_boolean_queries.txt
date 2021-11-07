@@ -51,7 +51,7 @@ FALSE
 11 - invalid pattern, semantically invalid
 if w;
 Select BOOLEAN pattern w(_,_)
-FAlSE
+FALSE
 5000
 12 - invalid pattern, syntactically invalid
 if ifs; variable v;
