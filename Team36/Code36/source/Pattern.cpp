@@ -59,7 +59,6 @@ bool Pattern::isWild() {
 	return is_wild;
 }
 
-//TODO: compare expression when == TNode is updated
 bool Pattern::operator==(const Pattern& pattern) const {
 	return pattern_type == pattern.pattern_type
 		&& left_expression == pattern.left_expression

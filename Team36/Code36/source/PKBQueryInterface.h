@@ -13,15 +13,17 @@
 
 class PKBQueryInterface {
 public:
-	virtual const std::vector<proc_name>& getProcedures() = 0;
-	virtual const std::vector<var_name>& getVariables() = 0;
 	virtual const std::vector<StmtInfo>& getStmts() = 0;
 	virtual const std::unordered_map<stmt_index, expr>& getExpr() = 0;
 	virtual const StmtInfo getStmt(stmt_index stmt_index) = 0;
 	virtual const var_name getAssignment(stmt_index stmt_index) = 0;
 	virtual expr getExpression(stmt_index stmt_index) = 0;
+	virtual const std::vector<proc_name> getProcedures() = 0;
+	virtual const std::vector<var_name> getVariables() = 0;
 	virtual const std::vector<constant> getConstants() = 0;
-
+	virtual const std::unordered_set<proc_name>& getProceduresSet() = 0;
+	virtual const std::unordered_set<var_name>& getVariablesSet() = 0;
+	virtual const std::unordered_set<constant>& getConstantsSet() = 0;
 	virtual const RelationTable<stmt_index, var_name>& getAssigns() = 0;
 	virtual const MonotypeRelationTable<StmtInfo>& getFollows() = 0;
 	virtual const MonotypeRelationTable<StmtInfo>& getParent() = 0;

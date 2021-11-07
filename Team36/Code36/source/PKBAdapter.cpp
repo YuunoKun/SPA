@@ -34,14 +34,8 @@ std::vector<proc_name> PKBAdapter::getProcedures() {
 }
 
 bool PKBAdapter::isVariable(var_name var) {
-	//TODO Optimize
-	auto a = getVariables();
-	for (auto v : a) {
-		if (v == var) {
-			return true;
-		}
-	}
-	return false;
+	auto a = pkb_instance.getVariablesSet();
+	return a.count(var) != 0;
 }
 
 bool PKBAdapter::isStmt(stmt_index index) {
@@ -49,25 +43,13 @@ bool PKBAdapter::isStmt(stmt_index index) {
 }
 
 bool PKBAdapter::isConstant(constant c) {
-	//TODO Optimize
-	auto a = getConstants();
-	for (auto c1 : a) {
-		if (c1 == c) {
-			return true;
-		}
-	}
-	return false;
+	auto a = pkb_instance.getConstantsSet();
+	return a.count(c) != 0;
 }
 
 bool PKBAdapter::isProcedure(proc_name proc) {
-	//TODO Optimize
-	auto a = getProcedures();
-	for (auto p : a) {
-		if (p == proc) {
-			return true;
-		}
-	}
-	return false;
+	auto a = pkb_instance.getProceduresSet();
+	return a.count(proc) != 0;
 }
 
 bool PKBAdapter::isAssign(stmt_index index) {

@@ -22,25 +22,14 @@ PKB::~PKB() {
 
 void PKB::addConstant(constant constant) {
 	const_table.emplace(constant);
-	return;
 }
 
 void PKB::addProcedure(proc_name proc_name) {
-	for (auto const& element : proc_table) {
-		if (element == proc_name) {
-			return;
-		}
-	};
-	proc_table.push_back(proc_name);
+	proc_table.emplace(proc_name);
 }
 
 void PKB::addVariable(var_name var_name) {
-	for (auto const& element : var_table) {
-		if (element == var_name) {
-			return;
-		}
-	};
-	var_table.push_back(var_name);
+	var_table.emplace(var_name);
 }
 
 void PKB::addStmt(StmtType stmt_type) {
@@ -90,7 +79,7 @@ void PKB::addFollows(stmt_index first, stmt_index second) {
 
 void PKB::addUsesS(stmt_index user, var_name used) {
 	try {
-		std::vector<var_name>::iterator it = std::find(var_table.begin(), var_table.end(), used);
+		auto it = var_table.find(used);
 		if (it != var_table.end()) {
 			StmtType user_stmt_type = stmt_table[user - 1].stmt_type;
 			StmtInfo user_stmt_info{ user, user_stmt_type };
@@ -110,7 +99,7 @@ void PKB::addUsesS(stmt_index user, var_name used) {
 void PKB::addModifiesS(stmt_index modifier, var_name modified) {
 	try {
 		StmtInfo modifier_stmt_info{ modifier, stmt_table.at(modifier - 1).stmt_type };
-		std::vector<var_name>::iterator it = std::find(var_table.begin(), var_table.end(), modified);
+		auto it = var_table.find(modified);
 		if (it != var_table.end()) {
 			modifiesS_table.insert(modifier_stmt_info, modified);
 			StmtType modifier_stmt_type = stmt_table[modifier - 1].stmt_type;
@@ -129,9 +118,8 @@ void PKB::addModifiesS(stmt_index modifier, var_name modified) {
 }
 
 void PKB::addModifiesP(proc_name proc, var_name modified) {
-	std::vector<var_name>::iterator it_var = std::find(var_table.begin(), var_table.end(), modified);
-	std::vector<proc_name>::iterator it_proc = std::find(proc_table.begin(), proc_table.end(), proc);
-
+	auto it_var = var_table.find(modified);
+	auto it_proc = proc_table.find(proc);
 	if (it_var == var_table.end()) {
 		throw std::invalid_argument("addModifiesP: Invalid var name: " + modified);
 	} else if (it_proc == proc_table.end()) {
@@ -141,9 +129,8 @@ void PKB::addModifiesP(proc_name proc, var_name modified) {
 }
 
 void PKB::addUsesP(proc_name proc, var_name used) {
-	std::vector<var_name>::iterator it_var = std::find(var_table.begin(), var_table.end(), used);
-	std::vector<proc_name>::iterator it_proc = std::find(proc_table.begin(), proc_table.end(), proc);
-
+	auto it_var = var_table.find(used);
+	auto it_proc = proc_table.find(proc);
 	if (it_var == var_table.end()) {
 		throw std::invalid_argument("addUsesP: Invalid var name: " + used);
 	} else if (it_proc == proc_table.end()) {
@@ -153,9 +140,8 @@ void PKB::addUsesP(proc_name proc, var_name used) {
 }
 
 void PKB::addCallsP(proc_name caller_proc_name, proc_name callee_proc_name) {
-	std::vector<proc_name>::iterator it_proc_caller = std::find(proc_table.begin(), proc_table.end(), caller_proc_name);
-	std::vector<proc_name>::iterator it_proc_callee = std::find(proc_table.begin(), proc_table.end(), callee_proc_name);
-
+	auto it_proc_caller = proc_table.find(caller_proc_name);
+	auto it_proc_callee = proc_table.find(callee_proc_name);
 	if (it_proc_caller == proc_table.end()) {
 		throw std::invalid_argument("addCallsP: Invalid caller proc: " + caller_proc_name);
 	} else if (it_proc_callee == proc_table.end()) {
@@ -169,7 +155,8 @@ void PKB::addCallsS(stmt_index caller_stmt_index, proc_name callee_proc_name) {
 		if (stmt_table.at(caller_stmt_index - 1).stmt_type != STMT_CALL) {
 			throw std::invalid_argument("addCallsS: Stmt index does not belong to an call statement: " + std::to_string(caller_stmt_index));
 		}
-		std::vector<var_name>::iterator it = std::find(proc_table.begin(), proc_table.end(), callee_proc_name);
+
+		auto it = proc_table.find(callee_proc_name);
 		if (it == proc_table.end()) {
 			throw std::invalid_argument("addCallsS: Invalid proc name: " + callee_proc_name);
 		}
@@ -185,7 +172,8 @@ void PKB::addIf(stmt_index if_stmt_index, var_name control_var) {
 		if (stmt_table.at(if_stmt_index - 1).stmt_type != STMT_IF) {
 			throw std::invalid_argument("addIf: Stmt index does not belong to an if statement: " + std::to_string(if_stmt_index));
 		}
-		std::vector<var_name>::iterator it = std::find(var_table.begin(), var_table.end(), control_var);
+
+		auto it = var_table.find(control_var);
 		if (it == var_table.end()) {
 			throw std::invalid_argument("addIf: Invalid var name: " + control_var);
 		}
@@ -201,7 +189,8 @@ void PKB::addWhile(stmt_index while_stmt_index, var_name control_var) {
 		if (stmt_table.at(while_stmt_index - 1).stmt_type != STMT_WHILE) {
 			throw std::invalid_argument("addWhile: Stmt index does not belong to an while statement: " + std::to_string(while_stmt_index));
 		}
-		std::vector<var_name>::iterator it = std::find(var_table.begin(), var_table.end(), control_var);
+
+		auto it = var_table.find(control_var);
 		if (it == var_table.end()) {
 			throw std::invalid_argument("addWhile: Invalid var name: " + control_var);
 		}
@@ -226,7 +215,7 @@ void PKB::addNext(prog_line prog_line1, prog_line prog_line2) {
 
 void PKB::addProcContains(proc_name proc, stmt_index index) {
 	try {
-		std::vector<var_name>::iterator it = std::find(proc_table.begin(), proc_table.end(), proc);
+		auto it = proc_table.find(proc);
 		if (it == proc_table.end()) {
 			throw std::invalid_argument("addProcContains: Invalid proc name: " + proc);
 		}
@@ -291,14 +280,6 @@ void PKB::resetEntities() {
 	const_table.clear();
 }
 
-const std::vector<proc_name>& PKB::getProcedures() {
-	return proc_table;
-}
-
-const std::vector<var_name>& PKB::getVariables() {
-	return var_table;
-}
-
 const std::vector<StmtInfo>& PKB::getStmts() {
 	return stmt_table;
 }
@@ -338,9 +319,31 @@ expr PKB::getExpression(stmt_index stmt_index) {
 	return expr_table.at(stmt_index);
 }
 
+const std::vector<proc_name> PKB::getProcedures() {
+	std::vector<proc_name> v(proc_table.begin(), proc_table.end());
+	return v;
+}
+
+const std::vector<var_name> PKB::getVariables() {
+	std::vector<var_name> v(var_table.begin(), var_table.end());
+	return v;
+}
+
 const std::vector<constant> PKB::getConstants() {
 	std::vector<constant> v(const_table.begin(), const_table.end());
 	return v;
+}
+
+const std::unordered_set<proc_name>& PKB::getProceduresSet() {
+	return proc_table;
+}
+
+const std::unordered_set<var_name>& PKB::getVariablesSet() {
+	return var_table;
+}
+
+const std::unordered_set<constant>& PKB::getConstantsSet() {
+	return const_table;
 }
 
 const RelationTable<stmt_index, var_name>& PKB::getAssigns() {

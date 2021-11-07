@@ -95,7 +95,7 @@ namespace IntegrationTesting {
 		parser.loadSourceFile("../UnitTestingGoogle/SPTest/TestSource/Sample5.txt");
 		parser.parse();
 
-		std::vector<proc_name> proc_v = { "main", "readPoint", "printResults", "computeCentroid" };
+		std::vector<proc_name> proc_v = { "main", "readPoint", "computeCentroid", "printResults" };
 		std::vector<constant> const_v = { 0, 1 };
 		std::vector<var_name> var_v = { "flag", "x", "y", "count", "cenX", "cenY", "normSq" };
 
