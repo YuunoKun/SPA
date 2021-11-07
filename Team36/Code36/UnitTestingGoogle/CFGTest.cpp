@@ -4,24 +4,24 @@
 #include "../../source/CFG.h"
 
 namespace UnitTesting {
-	TEST(CFG, addLine) {
+	TEST(CFG, add) {
 		CFG* cfg = new CFG();
 		std::vector<prog_line> v1 = { 1, 2, 3};
 		std::vector<prog_line> v2 = { 5, 6 };
 		std::vector<prog_line> v3 = { 9, 10 };
 		std::vector<prog_line> v4 = { 12 };
 
-		cfg->addLine(v1[0]);
-		cfg->addLine(v1[1]);
-		cfg->addLine(v1[2]);
+		cfg->add(v1[0]);
+		cfg->add(v1[1]);
+		cfg->add(v1[2]);
 
-		cfg->addLine(v2[0]);
-		cfg->addLine(v2[1]);
+		cfg->add(v2[0]);
+		cfg->add(v2[1]);
 
-		cfg->addLine(v3[0]);
-		cfg->addLine(v3[1]);
+		cfg->add(v3[0]);
+		cfg->add(v3[1]);
 
-		cfg->addLine(v4[0]);
+		cfg->add(v4[0]);
 
 		ASSERT_EQ(cfg->getHead()->getProgramLines(), v1);
 		ASSERT_EQ(cfg->getHead()->getNextMain()->getProgramLines(), v2);
@@ -38,17 +38,17 @@ namespace UnitTesting {
 		std::vector<prog_line> v3 = { 9, 10 };
 		std::vector<prog_line> v4 = { 12 };
 
-		cfg->addLine(v1[0]);
-		cfg->addLine(v1[1]);
-		cfg->addLine(v1[2]);
+		cfg->add(v1[0]);
+		cfg->add(v1[1]);
+		cfg->add(v1[2]);
 
-		cfg->addLine(v2[0]);
-		cfg->addLine(v2[1]);
+		cfg->add(v2[0]);
+		cfg->add(v2[1]);
 
-		cfg->addLine(v3[0]);
-		cfg->addLine(v3[1]);
+		cfg->add(v3[0]);
+		cfg->add(v3[1]);
 
-		cfg->addLine(v4[0]);
+		cfg->add(v4[0]);
 
 		ASSERT_EQ(cfg->findNode(cfg->getHead(), 3)->getProgramLines(), v1);
 		ASSERT_EQ(cfg->findNode(cfg->getHead(), 9)->getProgramLines(), v3);
@@ -57,7 +57,7 @@ namespace UnitTesting {
 		delete cfg;
 	}
 
-	TEST(CFG, addLoop) {
+	TEST(CFG, loop) {
 		CFG* cfg1 = new CFG();
 		CFG* cfg2 = new CFG();
 		std::vector<prog_line> v1 = { 1, 2, 3 };
@@ -69,17 +69,17 @@ namespace UnitTesting {
 		std::vector<prog_line> target_v3 = { 4, 5, 6 };
 		std::vector<prog_line> target_v4 = { 7, 8 };
 
-		cfg1->addLine(v1[0]);
-		cfg1->addLine(v1[1]);
-		cfg1->addLine(v1[2]);
-		cfg1->addLine(v3[0]);
-		cfg1->addLine(v3[1]);
+		cfg1->add(v1[0]);
+		cfg1->add(v1[1]);
+		cfg1->add(v1[2]);
+		cfg1->add(v3[0]);
+		cfg1->add(v3[1]);
 
-		cfg2->addLine(v2[0]);
-		cfg2->addLine(v2[1]);
-		cfg2->addLine(v2[2]);
+		cfg2->add(v2[0]);
+		cfg2->add(v2[1]);
+		cfg2->add(v2[2]);
 
-		cfg1->addLoop(cfg2, 3);
+		cfg1->loop(cfg2, 3);
 
 		CFGNode* target_node1 = new CFGNode();
 		target_node1->setProgramLines(target_v1);
@@ -101,7 +101,7 @@ namespace UnitTesting {
 		delete cfg1, cfg2;
 	}
 
-	TEST(CFG, addFork) {
+	TEST(CFG, fork) {
 		CFG* cfg1 = new CFG();
 		CFG* cfg2 = new CFG();
 		CFG* cfg3 = new CFG();
@@ -116,20 +116,20 @@ namespace UnitTesting {
 		std::vector<prog_line> target_v4 = { 7, 8 };
 		std::vector<prog_line> target_v5 = { 9, 10 };
 
-		cfg1->addLine(v1[0]);
-		cfg1->addLine(v1[1]);
-		cfg1->addLine(v1[2]);
-		cfg1->addLine(v4[0]);
-		cfg1->addLine(v4[1]);
+		cfg1->add(v1[0]);
+		cfg1->add(v1[1]);
+		cfg1->add(v1[2]);
+		cfg1->add(v4[0]);
+		cfg1->add(v4[1]);
 
-		cfg2->addLine(v2[0]);
-		cfg2->addLine(v2[1]);
-		cfg2->addLine(v2[2]);
+		cfg2->add(v2[0]);
+		cfg2->add(v2[1]);
+		cfg2->add(v2[2]);
 
-		cfg3->addLine(v3[0]);
-		cfg3->addLine(v3[1]);
+		cfg3->add(v3[0]);
+		cfg3->add(v3[1]);
 
-		cfg1->addFork(cfg2, cfg3, 3);
+		cfg1->fork(cfg2, cfg3, 3);
 
 		CFGNode* target_node1 = new CFGNode();
 		target_node1->setProgramLines(target_v1);
@@ -183,24 +183,24 @@ namespace UnitTesting {
 		CFGNode* target_node12 = new CFGNode();
 		target_node12->setProgramLines(target_v12);
 
-		cfg4->addLine(v5[0]);
-		cfg4->addLine(v5[1]);
+		cfg4->add(v5[0]);
+		cfg4->add(v5[1]);
 
-		cfg5->addLine(v6[0]);
-		cfg5->addLine(v6[1]);
-		cfg5->addLine(v6[2]);
-		cfg5->addLine(v6[3]);
+		cfg5->add(v6[0]);
+		cfg5->add(v6[1]);
+		cfg5->add(v6[2]);
+		cfg5->add(v6[3]);
 
-		cfg6->addLine(v7[0]);
-		cfg6->addLine(v7[1]);
-		cfg6->addLine(v7[2]);
+		cfg6->add(v7[0]);
+		cfg6->add(v7[1]);
+		cfg6->add(v7[2]);
 
-		cfg7->addLine(v8[0]);
-		cfg7->addLine(v8[1]);
-		cfg7->addLine(v8[2]);
+		cfg7->add(v8[0]);
+		cfg7->add(v8[1]);
+		cfg7->add(v8[2]);
 
-		cfg5->addLoop(cfg6, 12);
-		cfg4->addFork(cfg5, cfg7, 8);
+		cfg5->loop(cfg6, 12);
+		cfg4->fork(cfg5, cfg7, 8);
 		ASSERT_EQ(cfg4->getHead()->getProgramLines(), target_node7->getProgramLines());
 		ASSERT_EQ(cfg4->getHead()->getNextMain()->getProgramLines(), target_node8->getProgramLines());
 		ASSERT_EQ(cfg4->getHead()->getNextMain()->getNextMain()->getProgramLines(), target_node9->getProgramLines());
@@ -234,40 +234,40 @@ namespace UnitTesting {
 		sort(target2.begin(), target2.end());
 		sort(target3.begin(), target3.end());
 
-		cfg1->addLine(v1[0]);
-		cfg1->addLine(v1[1]);
-		cfg1->addLine(v1[2]);
-		cfg1->addLine(v1[3]);
-		cfg1->addLine(v1[4]);
-		cfg1->addLine(v1[5]);
+		cfg1->add(v1[0]);
+		cfg1->add(v1[1]);
+		cfg1->add(v1[2]);
+		cfg1->add(v1[3]);
+		cfg1->add(v1[4]);
+		cfg1->add(v1[5]);
 
-		cfg2->addLine(v2[0]);
-		cfg2->addLine(v2[1]);
+		cfg2->add(v2[0]);
+		cfg2->add(v2[1]);
 		
-		cfg3->addLine(v3[0]);
-		cfg3->addLine(v3[1]);
-		cfg3->addLine(v3[2]);
-		cfg3->addLine(v3[3]);
+		cfg3->add(v3[0]);
+		cfg3->add(v3[1]);
+		cfg3->add(v3[2]);
+		cfg3->add(v3[3]);
 
-		cfg4->addLine(v4[0]);
-		cfg4->addLine(v4[1]);
-		cfg4->addLine(v4[2]);
+		cfg4->add(v4[0]);
+		cfg4->add(v4[1]);
+		cfg4->add(v4[2]);
 
-		cfg5->addLine(v5[0]);
-		cfg5->addLine(v5[1]);
-		cfg5->addLine(v5[2]);
+		cfg5->add(v5[0]);
+		cfg5->add(v5[1]);
+		cfg5->add(v5[2]);
 
-		cfg3->addLoop(cfg4, 12);
+		cfg3->loop(cfg4, 12);
 		auto test1 = cfg3->getNexts();
 		sort(test1.begin(), test1.end());
 		ASSERT_EQ(test1, target1);
 
-		cfg2->addFork(cfg3, cfg5, 8);
+		cfg2->fork(cfg3, cfg5, 8);
 		auto test2 = cfg2->getNexts();
 		sort(test2.begin(), test2.end());
 		ASSERT_EQ(test2, target2);
 
-		cfg1->addLoop(cfg2, 6);
+		cfg1->loop(cfg2, 6);
 		auto test3 = cfg1->getNexts();
 		sort(test3.begin(), test3.end());
 		ASSERT_EQ(test3, target3);
@@ -296,35 +296,35 @@ namespace UnitTesting {
 
 
 
-		cfg6->addLine(v6[0]);
+		cfg6->add(v6[0]);
 
-		cfg7->addLine(v7[0]);
+		cfg7->add(v7[0]);
 
-		cfg8->addLine(v8[0]);
-		cfg8->addLine(v8[1]);
-		cfg8->addLine(v8[2]);
-		cfg8->addLine(v8[3]);
+		cfg8->add(v8[0]);
+		cfg8->add(v8[1]);
+		cfg8->add(v8[2]);
+		cfg8->add(v8[3]);
 
-		cfg9->addLine(v9[0]);
+		cfg9->add(v9[0]);
 
-		cfg10->addLine(v10[0]);
+		cfg10->add(v10[0]);
 
-		cfg11->addLine(v11[0]);
+		cfg11->add(v11[0]);
 
-		cfg12->addLine(v12[0]);
-		cfg12->addLine(v12[1]);
+		cfg12->add(v12[0]);
+		cfg12->add(v12[1]);
 
-		cfg8->addFork(cfg9, cfg10, 23);
+		cfg8->fork(cfg9, cfg10, 23);
 		auto test4 = cfg8->getNexts();
 		sort(test4.begin(), test4.end());
 		ASSERT_EQ(test4, target4);
 
-		cfg7->addFork(cfg8, cfg11, 20);
+		cfg7->fork(cfg8, cfg11, 20);
 		auto test5 = cfg7->getNexts();
 		sort(test5.begin(), test5.end());
 		ASSERT_EQ(test5, target5);
 
-		cfg6->addFork(cfg7, cfg12, 19);
+		cfg6->fork(cfg7, cfg12, 19);
 		auto test6 = cfg6->getNexts();
 		sort(test6.begin(), test6.end());
 		ASSERT_EQ(test6, target6);
@@ -346,32 +346,32 @@ namespace UnitTesting {
 		sort(target9.begin(), target9.end());
 
 
-		cfg13->addLine(v13[0]);
+		cfg13->add(v13[0]);
 
-		cfg14->addLine(v14[0]);
+		cfg14->add(v14[0]);
 
-		cfg15->addLine(v15[0]);
-		cfg15->addLine(v15[1]);
-		cfg15->addLine(v15[2]);
-		cfg15->addLine(v15[3]);
-		cfg15->addLine(v15[4]);
-		cfg15->addLine(v15[5]);
-		cfg15->addLine(v15[6]);
+		cfg15->add(v15[0]);
+		cfg15->add(v15[1]);
+		cfg15->add(v15[2]);
+		cfg15->add(v15[3]);
+		cfg15->add(v15[4]);
+		cfg15->add(v15[5]);
+		cfg15->add(v15[6]);
 
-		cfg16->addLine(v16[0]);
-		cfg16->addLine(v16[1]);
+		cfg16->add(v16[0]);
+		cfg16->add(v16[1]);
 
-		cfg15->addLoop(cfg16, 38);
+		cfg15->loop(cfg16, 38);
 		auto test7 = cfg15->getNexts();
 		sort(test7.begin(), test7.end());
 		ASSERT_EQ(test7, target7);
 
-		cfg14->addLoop(cfg15, 31);
+		cfg14->loop(cfg15, 31);
 		auto test8 = cfg14->getNexts();
 		sort(test8.begin(), test8.end());
 		ASSERT_EQ(test8, target8);
 
-		cfg13->addLoop(cfg14, 30);
+		cfg13->loop(cfg14, 30);
 		auto test9 = cfg13->getNexts();
 		sort(test9.begin(), test9.end());
 		ASSERT_EQ(test9, target9);
@@ -382,7 +382,7 @@ namespace UnitTesting {
 	TEST(CFG, makeStandalone) {
 
 		CFG* cfg_null = new CFG();
-		cfg_null->addLine(1);
+		cfg_null->add(1);
 		ASSERT_THROW(cfg_null->makeStandalone(2), std::runtime_error);
 
 		ASSERT_EQ(cfg_null->getHead()->getProgramLines().size(), 1);
@@ -393,7 +393,7 @@ namespace UnitTesting {
 
 		
 		CFG* cfg_def = new CFG();
-		cfg_def->addLine(1);
+		cfg_def->add(1);
 		CFGNode* ptr_def = cfg_def->makeStandalone(1); // 1
 
 		ASSERT_EQ(cfg_def->getHead()->getProgramLines().size(), 1);
@@ -405,8 +405,8 @@ namespace UnitTesting {
 
 		
 		CFG* cfg1 = new CFG();
-		cfg1->addLine(1);
-		cfg1->addLine(2);
+		cfg1->add(1);
+		cfg1->add(2);
 		CFGNode* ptr1 = cfg1->makeStandalone(1); // 1 -> 2
 		
 		ASSERT_EQ(cfg1->getHead()->getProgramLines().size(), 1);
@@ -420,8 +420,8 @@ namespace UnitTesting {
 		
 		
 		CFG* cfg2 = new CFG();
-		cfg2->addLine(1);
-		cfg2->addLine(2);
+		cfg2->add(1);
+		cfg2->add(2);
 		CFGNode* ptr2 = cfg2->makeStandalone(2); // 1 -> 2
 		
 		ASSERT_EQ(cfg2->getHead()->getProgramLines().size(), 1);
@@ -436,9 +436,9 @@ namespace UnitTesting {
 
 		
 		CFG* cfg3 = new CFG();
-		cfg3->addLine(1);
-		cfg3->addLine(2);
-		cfg3->addLine(3);
+		cfg3->add(1);
+		cfg3->add(2);
+		cfg3->add(3);
 		CFGNode* ptr3 = cfg3->makeStandalone(1); // 1 -> 2 3
 
 		ASSERT_EQ(cfg3->getHead()->getProgramLines().size(), 1);
@@ -454,9 +454,9 @@ namespace UnitTesting {
 
 		
 		CFG* cfg4 = new CFG();
-		cfg4->addLine(1);
-		cfg4->addLine(2);
-		cfg4->addLine(3);
+		cfg4->add(1);
+		cfg4->add(2);
+		cfg4->add(3);
 		CFGNode* ptr4 = cfg4->makeStandalone(3); // 1 2 -> 3
 
 		ASSERT_EQ(cfg4->getHead()->getProgramLines().size(), 2);
@@ -472,9 +472,9 @@ namespace UnitTesting {
 
 		
 		CFG* cfg5 = new CFG();
-		cfg5->addLine(1);
-		cfg5->addLine(2);
-		cfg5->addLine(3);
+		cfg5->add(1);
+		cfg5->add(2);
+		cfg5->add(3);
 		CFGNode* ptr5 = cfg5->makeStandalone(2); // 1 -> 2 -> 3
 
 		ASSERT_EQ(cfg5->getHead()->getProgramLines().size(), 1);
@@ -492,11 +492,11 @@ namespace UnitTesting {
 
 		
 		CFG* cfg6 = new CFG();
-		cfg6->addLine(1);
-		cfg6->addLine(3);
-		cfg6->addLine(4);
-		cfg6->addLine(5);
-		cfg6->addLine(7);
+		cfg6->add(1);
+		cfg6->add(3);
+		cfg6->add(4);
+		cfg6->add(5);
+		cfg6->add(7);
 		CFGNode* cfg6_node2 = new CFGNode();
 		cfg6_node2->setProgramLines({2});
 		cfg6_node2->setNextMain(cfg6->getHead()->getNextMain());
@@ -541,11 +541,11 @@ namespace UnitTesting {
 		
 		
 		CFG* cfg7 = new CFG();
-		cfg7->addLine(1);
-		cfg7->addLine(3);
-		cfg7->addLine(4);
-		cfg7->addLine(5);
-		cfg7->addLine(7);
+		cfg7->add(1);
+		cfg7->add(3);
+		cfg7->add(4);
+		cfg7->add(5);
+		cfg7->add(7);
 		CFGNode* cfg7_node2 = new CFGNode();
 		cfg7_node2->setProgramLines({ 2 });
 		cfg7_node2->setNextMain(cfg7->getHead()->getNextMain());
@@ -595,11 +595,11 @@ namespace UnitTesting {
 		
 
 		CFG* cfg8 = new CFG();
-		cfg8->addLine(1);
-		cfg8->addLine(3);
-		cfg8->addLine(4);
-		cfg8->addLine(5);
-		cfg8->addLine(7);
+		cfg8->add(1);
+		cfg8->add(3);
+		cfg8->add(4);
+		cfg8->add(5);
+		cfg8->add(7);
 		CFGNode* cfg8_node2 = new CFGNode();
 		cfg8_node2->setProgramLines({ 2 });
 		cfg8_node2->setNextMain(cfg8->getHead()->getNextMain());
@@ -646,20 +646,20 @@ namespace UnitTesting {
 		delete cfg8;
 	}
 	
-	TEST(CFG, addCall) {
+	TEST(CFG, call) {
 
 		CFG* cfg1 = new CFG();
-		cfg1->addLine(1);
-		cfg1->addLine(2);
-		cfg1->addLine(3);
+		cfg1->add(1);
+		cfg1->add(2);
+		cfg1->add(3);
 
-		CFG* cfg1_addCalls = new CFG();
-		cfg1_addCalls->addLine(4);
-		cfg1_addCalls->addLine(6);
+		CFG* cfg1_calls = new CFG();
+		cfg1_calls->add(4);
+		cfg1_calls->add(6);
 
-		cfg1->addCall(cfg1_addCalls, 1);
-		cfg1->addCall(cfg1_addCalls, 2);
-		cfg1->addCall(cfg1_addCalls, 3);
+		cfg1->call(cfg1_calls, 1);
+		cfg1->call(cfg1_calls, 2);
+		cfg1->call(cfg1_calls, 3);
 
 		CFGNode* cfg1_node1 = cfg1->getHead();
 		ASSERT_NE(cfg1_node1, nullptr);
@@ -667,7 +667,7 @@ namespace UnitTesting {
 		ASSERT_NE(cfg1_node2, nullptr);
 		CFGNode* cfg1_node3 = cfg1_node2->getNextMain();
 		ASSERT_NE(cfg1_node3, nullptr);
-		CFGNode* cfg1_node4 = cfg1_addCalls->getHead();
+		CFGNode* cfg1_node4 = cfg1_calls->getHead();
 		ASSERT_NE(cfg1_node4, nullptr);
 		CFGNode* cfg1_node5 = cfg1_node4->getNextMain();
 		ASSERT_NE(cfg1_node5, nullptr);
@@ -698,11 +698,11 @@ namespace UnitTesting {
 		ASSERT_EQ(map.find(3)->second, cfg1_node3->getNextMain());
 
 		CFG* first = new CFG();
-		first->addLine(11);
-		first->addLine(13);
-		first->addLine(15);
-		first->addLine(17);
-		first->addLine(19);
+		first->add(11);
+		first->add(13);
+		first->add(15);
+		first->add(17);
+		first->add(19);
 
 		CFGNode* first_node1 = first->getHead();
 		ASSERT_NE(first_node1, nullptr);
@@ -717,40 +717,40 @@ namespace UnitTesting {
 		CFGNode* first_node6 = first_node5->getNextMain();
 		ASSERT_NE(first_node6, nullptr);
 
-		first->addCall(cfg1, 11);
-		first->addCall(cfg1, 19);
-		first->addCall(cfg1_addCalls, 15);
+		first->call(cfg1, 11);
+		first->call(cfg1, 19);
+		first->call(cfg1_calls, 15);
 
 		ASSERT_TRUE(first_node1->isCall());
 		ASSERT_TRUE(first_node3->isCall());
 		ASSERT_TRUE(first_node5->isCall());
 
 		std::vector<prog_line> expected_labels = { 11, 19 };
-		std::vector<prog_line> expected_labels_addCall = { 1, 2, 3, 15 };
+		std::vector<prog_line> expected_labels_call = { 1, 2, 3, 15 };
 		ASSERT_EQ(cfg1_node1->getLabels(), expected_labels);
 		ASSERT_EQ(cfg1_node2->getLabels(), expected_labels);
 		ASSERT_EQ(cfg1_node3->getLabels(), expected_labels);
-		ASSERT_EQ(cfg1_node4->getLabels(), expected_labels_addCall);
-		ASSERT_EQ(cfg1_node5->getLabels(), expected_labels_addCall);
+		ASSERT_EQ(cfg1_node4->getLabels(), expected_labels_call);
+		ASSERT_EQ(cfg1_node5->getLabels(), expected_labels_call);
 
 		std::unordered_map<prog_line, CFGNode*> map_cfg1 = cfg1_node3->getNextMain()->getNextReturn();
-		std::unordered_map<prog_line, CFGNode*> map_cfg1_addCall = cfg1_node5->getNextMain()->getNextReturn();
+		std::unordered_map<prog_line, CFGNode*> map_cfg1_call = cfg1_node5->getNextMain()->getNextReturn();
 		ASSERT_EQ(map_cfg1.size(), 2);
 		ASSERT_TRUE(map_cfg1.find(11) != map_cfg1.end());
 		ASSERT_TRUE(map_cfg1.find(19) != map_cfg1.end());
-		ASSERT_EQ(map_cfg1_addCall.size(), 4);
-		ASSERT_TRUE(map_cfg1_addCall.find(1) != map_cfg1_addCall.end());
-		ASSERT_TRUE(map_cfg1_addCall.find(2) != map_cfg1_addCall.end());
-		ASSERT_TRUE(map_cfg1_addCall.find(3) != map_cfg1_addCall.end());
-		ASSERT_TRUE(map_cfg1_addCall.find(15) != map_cfg1_addCall.end());
+		ASSERT_EQ(map_cfg1_call.size(), 4);
+		ASSERT_TRUE(map_cfg1_call.find(1) != map_cfg1_call.end());
+		ASSERT_TRUE(map_cfg1_call.find(2) != map_cfg1_call.end());
+		ASSERT_TRUE(map_cfg1_call.find(3) != map_cfg1_call.end());
+		ASSERT_TRUE(map_cfg1_call.find(15) != map_cfg1_call.end());
 		
 		ASSERT_EQ(map_cfg1.find(11)->second, first_node2);
 		ASSERT_EQ(map_cfg1.find(19)->second, first_node5->getNextMain());
 		ASSERT_TRUE(first_node5->getNextMain()->isTermination());
-		ASSERT_EQ(map_cfg1_addCall.find(1)->second, cfg1_node2);
-		ASSERT_EQ(map_cfg1_addCall.find(2)->second, cfg1_node3);
+		ASSERT_EQ(map_cfg1_call.find(1)->second, cfg1_node2);
+		ASSERT_EQ(map_cfg1_call.find(2)->second, cfg1_node3);
 		ASSERT_TRUE(cfg1_node3->getNextMain()->isTermination());
-		ASSERT_EQ(map_cfg1_addCall.find(15)->second, first_node4);
+		ASSERT_EQ(map_cfg1_call.find(15)->second, first_node4);
 	}
 	
 
@@ -759,31 +759,31 @@ namespace UnitTesting {
 		CFG* cfg2 = new CFG();
 		CFG* cfg3 = new CFG();
 
-		cfg1->addLine(1);
-		cfg1->addLine(2);
-		cfg1->addLine(3);
-		cfg1->addLine(4);
-		cfg1->addLine(5);
+		cfg1->add(1);
+		cfg1->add(2);
+		cfg1->add(3);
+		cfg1->add(4);
+		cfg1->add(5);
 
-		cfg2->addLine(6);
-		cfg2->addLine(7);
-		cfg2->addLine(8);
+		cfg2->add(6);
+		cfg2->add(7);
+		cfg2->add(8);
 
-		cfg3->addLine(9);
+		cfg3->add(9);
 
 		CFG* cfg3_if = new CFG();
-		cfg3_if->addLine(10);
+		cfg3_if->add(10);
 		CFG* cfg3_else = new CFG();
-		cfg3_else->addLine(11);
+		cfg3_else->add(11);
 
-		CFG* cfg_3_else_addLoop = new CFG();
-		cfg_3_else_addLoop->addLine(12);
-		cfg3_else->addLoop(cfg_3_else_addLoop, 11);
-		cfg3->addFork(cfg3_if, cfg3_else, 9);
+		CFG* cfg_3_else_loop = new CFG();
+		cfg_3_else_loop->add(12);
+		cfg3_else->loop(cfg_3_else_loop, 11);
+		cfg3->fork(cfg3_if, cfg3_else, 9);
 
-		cfg2->addCall(cfg3, 7);
-		cfg1->addCall(cfg2, 2);
-		cfg1->addCall(cfg3, 4);
+		cfg2->call(cfg3, 7);
+		cfg1->call(cfg2, 2);
+		cfg1->call(cfg3, 4);
 		std::vector<std::pair<prog_line, prog_line>> nextbip_actual = cfg1->getNextBip();
 		std::vector<std::pair<prog_line, prog_line>> nextbip_expected = {
 			{1, 2}, {2, 6}, {6, 7}, {7, 9}, {9, 10}, {9, 11},
@@ -795,39 +795,39 @@ namespace UnitTesting {
 		sort(nextbip_expected.begin(), nextbip_expected.end());
 		ASSERT_EQ(nextbip_actual, nextbip_expected);
 
-		delete cfg_3_else_addLoop, cfg3_if, cfg3_else, cfg3, cfg2, cfg1;
+		delete cfg_3_else_loop, cfg3_if, cfg3_else, cfg3, cfg2, cfg1;
 
 
 		CFG* cfg4 = new CFG();
 		CFG* cfg5 = new CFG();
 		CFG* cfg6 = new CFG();
 		CFG* cfg7 = new CFG();
-		CFG* cfg7_addLoop = new CFG();
+		CFG* cfg7_loop = new CFG();
 		CFG* cfg6_if = new CFG();
 		CFG* cfg6_else = new CFG();
 
-		cfg4->addLine(50);
-		cfg4->addLine(51);
+		cfg4->add(50);
+		cfg4->add(51);
 
-		cfg5->addLine(1);
-		cfg5->addLine(2);
+		cfg5->add(1);
+		cfg5->add(2);
 
-		cfg6->addLine(3);
-		cfg6->addLine(4);
+		cfg6->add(3);
+		cfg6->add(4);
 
-		cfg7->addLine(5);
+		cfg7->add(5);
 
-		cfg7_addLoop->addLine(6);
+		cfg7_loop->add(6);
 
-		cfg6_if->addLine(7);
-		cfg6_else->addLine(8);
+		cfg6_if->add(7);
+		cfg6_else->add(8);
 
-		cfg6->addFork(cfg6_if, cfg6_else, 3);
-		cfg7->addLoop(cfg7_addLoop, 5);
+		cfg6->fork(cfg6_if, cfg6_else, 3);
+		cfg7->loop(cfg7_loop, 5);
 
-		cfg6->addCall(cfg7, 4);
-		cfg5->addCall(cfg6, 2);
-		cfg4->addCall(cfg5, 50);
+		cfg6->call(cfg7, 4);
+		cfg5->call(cfg6, 2);
+		cfg4->call(cfg5, 50);
 
 		std::vector<std::pair<prog_line, prog_line>> nextbip_actual_2 = cfg4->getNextBip();
 		std::vector<std::pair<prog_line, prog_line>> nextbip_expected_2 = {
@@ -840,7 +840,7 @@ namespace UnitTesting {
 		sort(nextbip_expected_2.begin(), nextbip_expected_2.end());
 		ASSERT_EQ(nextbip_actual_2, nextbip_expected_2);
 
-		delete cfg6_if, cfg6_else, cfg7_addLoop, cfg4, cfg5, cfg6, cfg7;
+		delete cfg6_if, cfg6_else, cfg7_loop, cfg4, cfg5, cfg6, cfg7;
 	}
 
 	TEST(CFG, getNextBipWithLabels) {
@@ -848,31 +848,31 @@ namespace UnitTesting {
 		CFG* cfg2 = new CFG();
 		CFG* cfg3 = new CFG();
 
-		cfg1->addLine(1);
-		cfg1->addLine(2);
-		cfg1->addLine(3);
-		cfg1->addLine(4);
-		cfg1->addLine(5);
+		cfg1->add(1);
+		cfg1->add(2);
+		cfg1->add(3);
+		cfg1->add(4);
+		cfg1->add(5);
 
-		cfg2->addLine(6);
-		cfg2->addLine(7);
-		cfg2->addLine(8);
+		cfg2->add(6);
+		cfg2->add(7);
+		cfg2->add(8);
 
-		cfg3->addLine(9);
+		cfg3->add(9);
 
 		CFG* cfg3_if = new CFG();
-		cfg3_if->addLine(10);
+		cfg3_if->add(10);
 		CFG* cfg3_else = new CFG();
-		cfg3_else->addLine(11);
+		cfg3_else->add(11);
 
-		CFG* cfg_3_else_addLoop = new CFG();
-		cfg_3_else_addLoop->addLine(12);
-		cfg3_else->addLoop(cfg_3_else_addLoop, 11);
-		cfg3->addFork(cfg3_if, cfg3_else, 9);
+		CFG* cfg_3_else_loop = new CFG();
+		cfg_3_else_loop->add(12);
+		cfg3_else->loop(cfg_3_else_loop, 11);
+		cfg3->fork(cfg3_if, cfg3_else, 9);
 
-		cfg2->addCall(cfg3, 7);
-		cfg1->addCall(cfg2, 2);
-		cfg1->addCall(cfg3, 4);
+		cfg2->call(cfg3, 7);
+		cfg1->call(cfg2, 2);
+		cfg1->call(cfg3, 4);
 		std::vector<std::pair<LabelledProgLine, LabelledProgLine>> nextbip_actual = cfg1->getNextBipWithLabel();
 		std::vector<std::pair<LabelledProgLine, LabelledProgLine>> nextbip_expected = {
 			{{1, {0}}, {2, {0}}},
@@ -900,39 +900,39 @@ namespace UnitTesting {
 		sort(nextbip_expected.begin(), nextbip_expected.end());
 		ASSERT_EQ(nextbip_actual, nextbip_expected);
 
-		delete cfg_3_else_addLoop, cfg3_if, cfg3_else, cfg3, cfg2, cfg1;
+		delete cfg_3_else_loop, cfg3_if, cfg3_else, cfg3, cfg2, cfg1;
 
 
 		CFG* cfg4 = new CFG();
 		CFG* cfg5 = new CFG();
 		CFG* cfg6 = new CFG();
 		CFG* cfg7 = new CFG();
-		CFG* cfg7_addLoop = new CFG();
+		CFG* cfg7_loop = new CFG();
 		CFG* cfg6_if = new CFG();
 		CFG* cfg6_else = new CFG();
 
-		cfg4->addLine(50);
-		cfg4->addLine(51);
+		cfg4->add(50);
+		cfg4->add(51);
 
-		cfg5->addLine(1);
-		cfg5->addLine(2);
+		cfg5->add(1);
+		cfg5->add(2);
 
-		cfg6->addLine(3);
-		cfg6->addLine(4);
+		cfg6->add(3);
+		cfg6->add(4);
 
-		cfg7->addLine(5);
+		cfg7->add(5);
 
-		cfg7_addLoop->addLine(6);
+		cfg7_loop->add(6);
 
-		cfg6_if->addLine(7);
-		cfg6_else->addLine(8);
+		cfg6_if->add(7);
+		cfg6_else->add(8);
 
-		cfg6->addFork(cfg6_if, cfg6_else, 3);
-		cfg7->addLoop(cfg7_addLoop, 5);
+		cfg6->fork(cfg6_if, cfg6_else, 3);
+		cfg7->loop(cfg7_loop, 5);
 
-		cfg6->addCall(cfg7, 4);
-		cfg5->addCall(cfg6, 2);
-		cfg4->addCall(cfg5, 50);
+		cfg6->call(cfg7, 4);
+		cfg5->call(cfg6, 2);
+		cfg4->call(cfg5, 50);
 
 		std::vector<std::pair<LabelledProgLine, LabelledProgLine>> nextbip_actual_2 = cfg4->getNextBipWithLabel();
 		std::vector<std::pair<LabelledProgLine, LabelledProgLine>> nextbip_expected_2 = {
@@ -960,6 +960,6 @@ namespace UnitTesting {
 		sort(nextbip_expected_2.begin(), nextbip_expected_2.end());
 		ASSERT_EQ(nextbip_actual_2, nextbip_expected_2);
 
-		delete cfg6_if, cfg6_else, cfg7_addLoop, cfg4, cfg5, cfg6, cfg7;
+		delete cfg6_if, cfg6_else, cfg7_loop, cfg4, cfg5, cfg6, cfg7;
 	}
 }

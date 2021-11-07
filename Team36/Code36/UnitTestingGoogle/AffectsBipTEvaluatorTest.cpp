@@ -8,10 +8,10 @@ namespace UnitTesting {
 	class AffectsBipTEvaluatorTest : public testing::Test {
 	protected:
 		AffectsBipTEvaluatorTest() {
-			cfg->addLine(1);
-			cfg->addLine(2);
-			cfg->addLine(3);
-			cfg->addLine(4);
+			cfg->add(1);
+			cfg->add(2);
+			cfg->add(3);
+			cfg->add(4);
 		}
 
 		~AffectsBipTEvaluatorTest() {

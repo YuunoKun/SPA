@@ -11,33 +11,33 @@ namespace UnitTesting {
 		RelationPreprocessorManagerTest_AffectsBip() {
 			PKB::getInstance().resetCache();
 
-			cfg1->addLine(1);
-			cfg1->addLine(2);
-			cfg1->addLine(3);
+			cfg1->add(1);
+			cfg1->add(2);
+			cfg1->add(3);
 
-			cfg2->addLine(4);
-			cfg2->addLine(5);
-			cfg2->addLine(6);
-			cfg2->addLine(7);
-			cfg2->addLine(8);
+			cfg2->add(4);
+			cfg2->add(5);
+			cfg2->add(6);
+			cfg2->add(7);
+			cfg2->add(8);
 
-			cfg3->addLine(9);
-			cfg3->addLine(10);
-			cfg3->addLine(11);
+			cfg3->add(9);
+			cfg3->add(10);
+			cfg3->add(11);
 
-			cfg4->addLine(12);
+			cfg4->add(12);
 
-			cfg4_if->addLine(13);
-			cfg4_if->addLine(14);
+			cfg4_if->add(13);
+			cfg4_if->add(14);
 
-			cfg4_else->addLine(15);
-			cfg4_else_loop->addLine(16);
+			cfg4_else->add(15);
+			cfg4_else_loop->add(16);
 
-			cfg4_else->addLoop(cfg4_else_loop, 15);
-			cfg4->addFork(cfg4_if, cfg4_else, 12);
-			cfg2->addCall(cfg3, 5);
-			cfg2->addCall(cfg4, 7);
-			cfg3->addCall(cfg4, 10);
+			cfg4_else->loop(cfg4_else_loop, 15);
+			cfg4->fork(cfg4_if, cfg4_else, 12);
+			cfg2->call(cfg3, 5);
+			cfg2->call(cfg4, 7);
+			cfg3->call(cfg4, 10);
 
 			for (auto& stmt : stmt_list) {
 				PKB::getInstance().addStmt(stmt.stmt_type);

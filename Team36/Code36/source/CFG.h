@@ -20,10 +20,10 @@ public:
 	std::vector<std::pair<prog_line, prog_line>> getNextBip();
 	std::vector<std::pair<LabelledProgLine, LabelledProgLine>> getNextBipWithLabel();
 	
-	void addLine(prog_line);
-	void addLoop(CFG*, prog_line);
-	void addFork(CFG*, CFG*, prog_line);
-	void addCall(CFG*, prog_line);
+	void add(prog_line);
+	void loop(CFG*, prog_line);
+	void fork(CFG*, CFG*, prog_line);
+	void call(CFG*, prog_line);
 
 	CFGNode* findNode(CFGNode*, prog_line);
 	CFGNode* makeStandalone(prog_line);
