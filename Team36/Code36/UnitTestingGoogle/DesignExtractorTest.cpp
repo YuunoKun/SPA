@@ -35,17 +35,13 @@ public:
 		mock_parent_table.push_back({ parent, child });
 	}
 
-	void addParentT(stmt_index parent, stmt_index child) {
-		mock_parentT_table.push_back({ parent, child });
-	}
+	void addParentT(stmt_index parent, stmt_index child) {}
 
 	void addFollows(stmt_index first, stmt_index second) {
 		mock_follows_table.push_back({ first, second });
 	}
 
-	void addFollowsT(stmt_index first, stmt_index second) {
-		mock_followsT_table.push_back({ first, second });
-	}
+	void addFollowsT(stmt_index first, stmt_index second) {}
 
 	void addUsesS(stmt_index user, var_name used) {
 		mock_usesS_table.push_back({ user, used });
@@ -70,6 +66,8 @@ public:
 	void addCallsP(proc_name caller, proc_name callee) {
 		mock_callsP_table.push_back({ caller, callee });
 	}
+
+	void addCallsPT(proc_name, proc_name) {}
 
 	void addCallsS(stmt_index caller_stmt, proc_name callee) {
 		mock_callsS_table.push_back({ caller_stmt, callee });
@@ -103,9 +101,7 @@ public:
 	std::vector<std::pair<stmt_index, expr>> mock_expr_table;
 
 	std::vector<std::pair<stmt_index, stmt_index>> mock_parent_table;
-	std::vector<std::pair<stmt_index, stmt_index>> mock_parentT_table;
 	std::vector<std::pair<stmt_index, stmt_index>> mock_follows_table;
-	std::vector<std::pair<stmt_index, stmt_index>> mock_followsT_table;
 	std::vector<std::pair<stmt_index, var_name>> mock_usesS_table;
 	std::vector<std::pair<proc_name, var_name>> mock_usesP_table;
 	std::vector<std::pair<stmt_index, var_name>> mock_modifiesS_table;

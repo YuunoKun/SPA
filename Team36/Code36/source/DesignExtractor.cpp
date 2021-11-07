@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <numeric>
 #include "DesignExtractor.h"
+#include "TransitiveClosureHelper.h"
 
 using namespace SourceProcessor;
 
@@ -272,13 +273,10 @@ void DesignExtractor::populateEntities() {
 
 void DesignExtractor::populateRelations() {
 	populateFollows();
-	//pkb_instance.generateFollowsT();
 	populateParent();
-	//pkb_instance.generateParentT();
 	populateUses();
 	populateModifies();
 	populateCalls();
-	//pkb_instance.generateCallsPT();
 	populateIfs();
 	populateWhiles();
 	populateNext();
@@ -318,22 +316,40 @@ void DesignExtractor::populateConstants() {
 }
 
 void DesignExtractor::populateFollows() {
-	std::unordered_map<int, stmt_index> um;
-
+	std::unordered_map<stmt_index, stmt_index> um;
+	std::vector<std::pair<stmt_index, stmt_index>> follows;
 	for (Statement* s : de_statements) {
-		int list_id = s->getStmtList();
+		stmt_index list_id = s->getStmtList();
 		if (um.find(list_id) != um.end()) {
-			pkb_instance.addFollows(um[list_id], s->getIndex());
+			follows.push_back({ um[list_id], s->getIndex() });
 		}
 		um[list_id] = s->getIndex();
+	}
+
+	std::vector<std::pair<stmt_index, stmt_index>> follows_T = TransitiveClosureHelper<stmt_index>::findTransitiveClosure(follows);
+
+	for (auto p : follows) {
+		pkb_instance.addFollows(p.first, p.second);
+	}
+	for (auto p : follows_T) {
+		pkb_instance.addFollowsT(p.first, p.second);
 	}
 }
 
 void DesignExtractor::populateParent() {
+	std::vector<std::pair<stmt_index, stmt_index>> parent;
 	for (Statement* s : de_statements) {
 		for (stmt_index id : s->getDirectChild()) {
-			pkb_instance.addParent(s->getIndex(), id);
+			parent.push_back({ s->getIndex(), id });
 		}
+	}
+
+	std::vector<std::pair<stmt_index, stmt_index>> parent_T = TransitiveClosureHelper<stmt_index>::findTransitiveClosure(parent);
+	for (auto p : parent) {
+		pkb_instance.addParent(p.first, p.second);
+	}
+	for (auto p : parent_T) {
+		pkb_instance.addParentT(p.first, p.second);
 	}
 }
 
@@ -366,11 +382,20 @@ void DesignExtractor::populateModifies() {
 }
 
 void DesignExtractor::populateCalls() {
+	std::vector<std::pair<proc_name, proc_name>> calls_P;
 	for (Statement* s : de_statements) {
 		if (s->getType() == StmtType::STMT_CALL) {
 			pkb_instance.addCallsS(s->getIndex(), s->getCallee());
-			pkb_instance.addCallsP(s->getProcName(), s->getCallee());
+			calls_P.push_back({ s->getProcName(), s->getCallee() });
 		}
+	}
+
+	std::vector<std::pair<proc_name, proc_name>> calls_PT = TransitiveClosureHelper<proc_name>::findTransitiveClosure(calls_P);
+	for (auto p : calls_P) {
+		pkb_instance.addCallsP(p.first, p.second);
+	}
+	for (auto p : calls_PT) {
+		pkb_instance.addCallsPT(p.first, p.second);
 	}
 }
 
