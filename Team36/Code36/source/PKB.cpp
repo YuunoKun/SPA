@@ -84,6 +84,10 @@ void PKB::addParentT(stmt_index parent, stmt_index child) {
 		if (parent_stmt_type != STMT_WHILE && parent_stmt_type != STMT_IF) {
 			throw std::invalid_argument("Parent stmt index does not belong to an while/if statement: " + std::to_string(parent));
 		}
+		if (!parent_table.containsKey(parent_stmt_info) || !parent_table.containsValue(child_stmt_info)) {
+			throw std::invalid_argument("addParentT: Stmts must have Parent relation: [" + std::to_string(parent)
+				+ "," + std::to_string(child) + "]");
+		}
 		parentT_table.insert(parent_stmt_info, child_stmt_info);
 	}
 	catch (std::out_of_range&) {
@@ -108,6 +112,10 @@ void PKB::addFollowsT(stmt_index first, stmt_index second) {
 	try {
 		StmtInfo first_stmt_info{ first, stmt_table.at(first - 1).stmt_type };
 		StmtInfo second_stmt_info{ second, stmt_table.at(second - 1).stmt_type };
+		if (!follows_table.containsKey(first_stmt_info) || !follows_table.containsValue(second_stmt_info)) {
+			throw std::invalid_argument("addFollowsT: Stmts must have Follows relation: [" + std::to_string(first)
+				+ "," + std::to_string(second) + "]");
+		}
 		followsT_table.insert(first_stmt_info, second_stmt_info);
 	}
 	catch (std::out_of_range&) {
@@ -200,6 +208,10 @@ void PKB::addCallsPT(proc_name caller_proc_name, proc_name callee_proc_name) {
 		throw std::invalid_argument("addCallsPT: Invalid caller proc: " + caller_proc_name);
 	} else if (it_proc_callee == proc_table.end()) {
 		throw std::invalid_argument("addCallsPT: Invalid callee proc: " + callee_proc_name);
+	}
+	if (!callsP_table.containsKey(caller_proc_name) || !callsP_table.containsValue(callee_proc_name)) {
+		throw std::invalid_argument("addCallsPT: Procedures must have Calls relation: [" + caller_proc_name
+			+ "," + callee_proc_name + "]");
 	}
 	callsPT_table.insert(caller_proc_name, callee_proc_name);
 }

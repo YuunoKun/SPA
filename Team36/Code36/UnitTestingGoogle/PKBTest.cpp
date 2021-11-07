@@ -148,9 +148,11 @@ namespace UnitTesting {
 		PKB::getInstance().addStmt(STMT_IF);
 		PKB::getInstance().addStmt(STMT_IF);
 		PKB::getInstance().addStmt(STMT_READ);
+		EXPECT_THROW(PKB::getInstance().addParentT(5, 6), std::invalid_argument);
 		PKB::getInstance().addParent(2, 3);
 		PKB::getInstance().addParent(2, 4);
 		PKB::getInstance().addParent(4, 5);
+		EXPECT_THROW(PKB::getInstance().addParentT(5, 6), std::invalid_argument);
 		PKB::getInstance().addParent(5, 6);
 		PKB::getInstance().addParentT(2, 3);
 		PKB::getInstance().addParentT(2, 4);
@@ -207,6 +209,12 @@ namespace UnitTesting {
 		PKB::getInstance().addStmt(STMT_IF);
 		PKB::getInstance().addStmt(STMT_IF);
 		PKB::getInstance().addStmt(STMT_READ);
+		EXPECT_THROW(PKB::getInstance().addFollowsT(4, 5), std::invalid_argument);
+		PKB::getInstance().addFollows(1, 2);
+		PKB::getInstance().addFollows(3, 4);
+		EXPECT_THROW(PKB::getInstance().addFollowsT(4, 5), std::invalid_argument);
+		PKB::getInstance().addFollows(4, 5);
+
 		PKB::getInstance().addFollowsT(1, 2);
 		PKB::getInstance().addFollowsT(3, 4);
 		PKB::getInstance().addFollowsT(3, 5);
@@ -374,8 +382,10 @@ namespace UnitTesting {
 		PKB::getInstance().addProcedure(second);
 		PKB::getInstance().addProcedure(third);
 		PKB::getInstance().addProcedure(fourth);
+		EXPECT_THROW(PKB::getInstance().addCallsPT(third, fourth), std::invalid_argument);
 		PKB::getInstance().addCallsP(first, second);
 		PKB::getInstance().addCallsP(second, third);
+		EXPECT_THROW(PKB::getInstance().addCallsPT(third, fourth), std::invalid_argument);
 		PKB::getInstance().addCallsP(third, fourth);
 		PKB::getInstance().addCallsPT(first, second);
 		PKB::getInstance().addCallsPT(first, third);

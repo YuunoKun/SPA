@@ -212,10 +212,20 @@ namespace UnitTesting {
 		}
 
 		void addUsesS(stmt_index user, var_name used) {
+			StmtType user_stmt_type = mock_stmt_table[user - 1].stmt_type;
+			if (user_stmt_type == STMT_PRINT) {
+				mock_print_table.insert(user, used);
+			}
 			mock_usesS_table.insert(mock_stmt_table[user - 1], used);
 		}
 
 		void addModifiesS(stmt_index modifier, var_name modified) {
+			StmtType modifier_stmt_type = mock_stmt_table[modifier - 1].stmt_type;
+			if (modifier_stmt_type == STMT_ASSIGN) {
+				mock_assignment_table.insert(modifier, modified);
+			} else if (modifier_stmt_type == STMT_READ) {
+				mock_read_table.insert(modifier, modified);
+			}
 			mock_modifiesS_table.insert(mock_stmt_table[modifier - 1], modified);
 		}
 
@@ -311,7 +321,6 @@ namespace UnitTesting {
 		var_name b = "b";
 		var_name c = "c";
 		var_name d = "d";
-		var_name e = "e";
 		std::vector<var_name> v{ a };
 		mock_pkb.addVariable(a);
 		EXPECT_EQ(pkb.getVariables(), v);
@@ -326,13 +335,6 @@ namespace UnitTesting {
 
 		v.push_back(d);
 		mock_pkb.addVariable(d);
-		EXPECT_EQ(pkb.getVariables(), v);
-
-		v.push_back(e);
-		mock_pkb.addVariable(e);
-		EXPECT_EQ(pkb.getVariables(), v);
-
-		mock_pkb.addVariable(e);
 		EXPECT_EQ(pkb.getVariables(), v);
 	}
 
@@ -356,7 +358,6 @@ namespace UnitTesting {
 		constant b = 2;
 		constant c = 3;
 		constant d = 4;
-		constant e = 5;
 		std::vector<constant> v{ a };
 		mock_pkb.addConstant(a);
 		EXPECT_EQ(pkb.getConstants(), v);
@@ -372,13 +373,6 @@ namespace UnitTesting {
 		v.push_back(d);
 		mock_pkb.addConstant(d);
 		EXPECT_EQ(pkb.getConstants(), v);
-
-		v.push_back(e);
-		mock_pkb.addConstant(e);
-		EXPECT_EQ(pkb.getConstants(), v);
-
-		mock_pkb.addConstant(e);
-		EXPECT_EQ(pkb.getConstants(), v);
 	}
 
 	TEST_F(PKBAdapterTest, getProcedures) {
@@ -386,7 +380,6 @@ namespace UnitTesting {
 		proc_name b = "b";
 		proc_name c = "c";
 		proc_name d = "d";
-		proc_name e = "e";
 		std::vector<proc_name> v{ a };
 		mock_pkb.addProcedure(a);
 		EXPECT_EQ(pkb.getProcedures(), v);
@@ -401,13 +394,6 @@ namespace UnitTesting {
 
 		v.push_back(d);
 		mock_pkb.addProcedure(d);
-		EXPECT_EQ(pkb.getProcedures(), v);
-
-		v.push_back(e);
-		mock_pkb.addProcedure(e);
-		EXPECT_EQ(pkb.getProcedures(), v);
-
-		mock_pkb.addProcedure(e);
 		EXPECT_EQ(pkb.getProcedures(), v);
 	}
 	TEST_F(PKBAdapterTest, isVariables) {
